@@ -343,7 +343,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             Assert.IsTrue(CurrentCustomer.Basket().IsEmpty);
 
             #endregion // completed checkout preparation
-
+ 
             // capture the payment
             invoice.CapturePayment(paymentResult.Payment.Result, paymentMethods.FirstOrDefault(), invoice.Total);
 

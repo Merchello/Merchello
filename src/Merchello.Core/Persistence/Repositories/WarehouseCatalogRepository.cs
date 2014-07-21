@@ -146,14 +146,17 @@
         /// The collection of delete clauses.
         /// </returns>
         /// <remarks>
-        /// This is a complex delete so most of the operation is handled
+        /// This is a complex delete so the ProductVariant (Inventory) of the operation is handled
         /// in the service so that the caching and Lucene indexes do not get messed up.
         /// </remarks>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
                 {                    
-                    "DELETE FROM merchInvoiceStatus WHERE pk = @Key"
+                    "DELETE FROM merchCatalogInventory WHERE catalogKey = @Key",
+                    "DELETE FROM merchShipMethod WHERE shipCountryKey IN (SELECT pk FROM merchShipCountry WHERE catalogKey = @Key)",
+                    "DELETE FROM merchShipCountry WHERE catalogKey = @Key",
+                    "DELETE FROM merchWarehouseCatalog WHERE pk = @Key"
                 };
 
             return list;

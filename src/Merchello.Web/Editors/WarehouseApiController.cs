@@ -1,4 +1,8 @@
-﻿namespace Merchello.Web.Editors
+﻿using System.Configuration;
+using System.IO;
+using System.Linq;
+
+namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
@@ -72,6 +76,7 @@
         public WarehouseDisplay GetDefaultWarehouse()
         {
             IWarehouse warehouse = _warehouseService.GetDefaultWarehouse();
+
             if (warehouse == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -101,44 +106,7 @@
             }
 
             return warehouse.ToWarehouseDisplay();
-        }
-
-        /// <summary>
-        /// Returns Warehouses by keys separated by a comma
-        /// 
-        /// GET /umbraco/Merchello/WarehouseApi/GetWarehouses?keys={guid}&amp;keys={guid}
-        /// </summary>
-        /// <param name="keys">
-        /// Warehouse keys to retrieve
-        /// </param>
-        /// <returns>
-        /// The collection of warehouses.
-        /// </returns>
-        internal IEnumerable<WarehouseDisplay> GetWarehouses([FromUri]IEnumerable<Guid> keys)
-        {
-            if (keys != null)
-            {
-                var warehouses = _warehouseService.GetByKeys(keys);
-                if (warehouses == null)
-                {
-                    //throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-                }
-
-                foreach (IWarehouse warehouse in warehouses)
-                {
-                    yield return warehouse.ToWarehouseDisplay();
-                }
-            }
-            else
-            {
-                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    Content = new StringContent(string.Format("Parameter keys is null")),
-                    ReasonPhrase = "Invalid Parameter"
-                };
-                throw new HttpResponseException(resp);
-            }
-        }
+        }       
 
         /// <summary>
         /// Updates an existing warehouse
@@ -151,7 +119,7 @@
         /// <returns>
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
-        [AcceptVerbs("PUT","POST")]
+        [AcceptVerbs("PUT", "POST")]
         public HttpResponseMessage PutWarehouse(WarehouseDisplay warehouse)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -165,44 +133,98 @@
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
 
             return response;
         }
 
         /// <summary>
-        /// Updates an existing warehouse
-        ///
-        /// PUT /umbraco/Merchello/WarehouseApi/PutWarehouses
+        /// Returns the collection warehouse catalogs for a given warehouse key
+        /// 
+        /// GET /umbraco/Merchello/WarehouseApi/GetWarehouseCatalogs/{key}
         /// </summary>
-        /// <param name="warehouses">IEnumerable<WarehouseDisplay> object serialized from WebApi</param>
-        [AcceptVerbs("PUT")]
-        internal HttpResponseMessage PutWarehouses(IEnumerable<WarehouseDisplay> warehouses)
+        /// <param name="id">
+        /// Key of the warehouse return catalogs
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="WarehouseCatalogDisplay"/>.
+        /// </returns>
+        [AcceptVerbs("GET")]
+        public IEnumerable<WarehouseCatalogDisplay> GetWarehouseCatalogs(Guid id)
+        {
+            return _warehouseService.GetWarhouseCatalogByWarehouseKey(id).Select(x => x.ToWarehouseCatalogDisplay());
+        }
+
+
+        /// <summary>
+        /// Adds warehouse catalog.
+        /// POST /umbraco/Merchello/WarehouseApi/AddWarehouseCatalog
+        /// </summary>
+        /// <param name="catalog">
+        /// The catalog.
+        /// </param>
+        /// <returns>
+        /// The <see cref="WarehouseCatalogDisplay"/>.
+        /// </returns>
+        /// <exception cref="InvalidDataException">
+        /// Throws an exception if the warehouse catalog key is null
+        /// </exception>
+        [AcceptVerbs("POST")]
+        public WarehouseCatalogDisplay AddWarehouseCatalog(WarehouseCatalogDisplay catalog)
+        {
+            if (catalog.WarehouseKey.Equals(Guid.Empty)) throw new InvalidDataException("The warehouse key must be assigned");
+
+            var warehouseCatalog = _warehouseService.CreateWarehouseCatalogWithKey(catalog.WarehouseKey, catalog.Name, catalog.Description);
+
+            return warehouseCatalog.ToWarehouseCatalogDisplay();
+        }
+
+        /// <summary>
+        /// Saves a warehouse catalog.
+        /// PUT /umbraco/Merchello/WarehouseApi/PutWarehouseCatalog
+        /// </summary>
+        /// <param name="catalog">
+        /// The catalog.
+        /// </param>
+        /// <returns>
+        /// The <see cref="WarehouseCatalogDisplay"/>.
+        /// </returns>
+        [AcceptVerbs("POST", "PUT")]
+        public WarehouseCatalogDisplay PutWarehouseCatalog(WarehouseCatalogDisplay catalog)
+        {
+            var warehouseCatalog = _warehouseService.GetWarehouseCatalogByKey(catalog.Key);
+
+            warehouseCatalog = catalog.ToWarehouseCatalog(warehouseCatalog);
+
+            _warehouseService.Save(warehouseCatalog);
+
+            return warehouseCatalog.ToWarehouseCatalogDisplay();
+        }
+
+        /// <summary>
+        /// GET /umbraco/Merchello/WarehouseApi/DeleteWarehouseCatalog/{id}
+        /// Deletes a warehouse catalog.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [AcceptVerbs("GET", "POST")]
+        public HttpResponseMessage DeleteWarehouseCatalog(Guid id)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
-            if (warehouses != null)
+            if (Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey.Equals(id))
             {
-                try
-                {
-                    foreach (var warehouse in warehouses)
-                    {
-                        IWarehouse merchWarehouse = _warehouseService.GetByKey(warehouse.Key);
-                        merchWarehouse = warehouse.ToWarehouse(merchWarehouse);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new InvalidOperationException("Cannot delete the default warehouse catalog."));
+            }
 
-                        _warehouseService.Save(merchWarehouse);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
-                }
-            }
-            else
-            {
-                response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("Parameter warehouses in null"));
-            }
+            var catalog = _warehouseService.GetWarehouseCatalogByKey(id);
+
+            _warehouseService.Delete(catalog);
 
             return response;
         }

@@ -85,6 +85,7 @@
     <Compile Include="Formatters\IReplaceablePattern.cs" />
     <Compile Include="Formatters\PatternReplaceFormatter.cs" />
     <Compile Include="Formatters\ReplaceablePattern.cs" />
+    <Compile Include="Gateways\GatewayEvents.cs" />
     <Compile Include="Gateways\GatewayMethodUiAttribute.cs" />
     <Compile Include="Gateways\Notification\Monitors\INotificationMonitorBase.cs" />
     <Compile Include="Gateways\Notification\Monitors\NotificationMonitorEvents.cs" />

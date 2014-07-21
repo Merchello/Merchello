@@ -34,10 +34,15 @@
         private readonly RepositoryFactory _repositoryFactory;
 
         /// <summary>
+        /// The warehouse catalog service.
+        /// </summary>
+        private readonly IWarehouseCatalogService _warehouseCatalogService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="WarehouseService"/> class.
         /// </summary>
         public WarehouseService()
-            : this(new RepositoryFactory())
+            : this(new RepositoryFactory(), new WarehouseCatalogService())
         {            
         }
 
@@ -47,8 +52,11 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public WarehouseService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        /// <param name="warehouseCatalogService">
+        /// The warehouse Catalog Service.
+        /// </param>
+        public WarehouseService(RepositoryFactory repositoryFactory, IWarehouseCatalogService warehouseCatalogService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, warehouseCatalogService)
         {
         }
 
@@ -61,13 +69,18 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public WarehouseService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="warehouseCatalogService">
+        /// The warehouse Catalog Service.
+        /// </param>
+        public WarehouseService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IWarehouseCatalogService warehouseCatalogService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(warehouseCatalogService, "warehouseCatalogService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+            _warehouseCatalogService = warehouseCatalogService;
         }
 
         #region Event Handlers
@@ -192,6 +205,119 @@
                 return repository.GetAll(keys.ToArray());
             }
         }
+
+        #region Warehouse Catalog
+
+        /// <summary>
+        /// Creates warehouse catalog and persists it to the database.
+        /// </summary>
+        /// <param name="warehouseKey">
+        /// The warehouse key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWarehouseCatalog"/>.
+        /// </returns>
+        public IWarehouseCatalog CreateWarehouseCatalogWithKey(Guid warehouseKey, string name, string description = "")
+        {
+            return _warehouseCatalogService.CreateWarehouseCatalogWithKey(warehouseKey, name, description);
+        }
+
+        /// <summary>
+        /// Saves a single <see cref="IWarehouseCatalog"/>.
+        /// </summary>
+        /// <param name="warehouseCatalog">
+        /// The warehouse catalog.
+        /// </param>
+        public void Save(IWarehouseCatalog warehouseCatalog)
+        {
+            _warehouseCatalogService.Save(warehouseCatalog);
+        }
+
+        /// <summary>
+        /// Saves a collection of <see cref="IWarehouseCatalog"/>.
+        /// </summary>
+        /// <param name="warehouseCatalogs">
+        /// The warehouse catalogs.
+        /// </param>
+        public void Save(IEnumerable<IWarehouseCatalog> warehouseCatalogs)
+        {
+            _warehouseCatalogService.Save(warehouseCatalogs);
+        }
+
+        /// <summary>
+        /// Deletes a single <see cref="IWarehouseCatalog"/>.
+        /// </summary>
+        /// <param name="warehouseCatalog">
+        /// The warehouse catalog.
+        /// </param>
+        /// <remarks>
+        /// Cannot delete the default catalog in the default warehouse
+        /// </remarks>
+        public void Delete(IWarehouseCatalog warehouseCatalog)
+        {
+            _warehouseCatalogService.Delete(warehouseCatalog);
+        }
+
+        /// <summary>
+        /// Deletes a collection of <see cref="IWarehouseCatalog"/>.
+        /// </summary>
+        /// <param name="warehouseCatalogs">
+        /// The warehouse catalogs.
+        /// </param>
+        /// <remarks>
+        /// Cannot delete the default catalog in the default warehouse
+        /// </remarks>
+        public void Delete(IEnumerable<IWarehouseCatalog> warehouseCatalogs)
+        {
+            _warehouseCatalogService.Delete(warehouseCatalogs);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IWarehouseCatalog"/> by it's unique key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWarehouseCatalog"/>.
+        /// </returns>
+        public IWarehouseCatalog GetWarehouseCatalogByKey(Guid key)
+        {
+            return _warehouseCatalogService.GetByKey(key);
+        }
+
+        /// <summary>
+        /// Gets a collection of all <see cref="IWarehouseCatalog"/>.
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="IWarehouseCatalog"/>.
+        /// </returns>
+        public IEnumerable<IWarehouseCatalog> GetAllWarehouseCatalogs()
+        {
+            return _warehouseCatalogService.GetAll();
+        }
+
+        /// <summary>
+        /// Get a collection of <see cref="IWarehouseCatalog"/> by warehouse key.
+        /// </summary>
+        /// <param name="warehouseKey">
+        /// The warehouse key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IWarehouseCatalog"/>.
+        /// </returns>
+        public IEnumerable<IWarehouseCatalog> GetWarhouseCatalogByWarehouseKey(Guid warehouseKey)
+        {
+            return _warehouseCatalogService.GetByWarehouseKey(warehouseKey);
+        }
+
+        #endregion
 
         /// <summary>
         /// Creates an <see cref="IWarehouse"/> object

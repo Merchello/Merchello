@@ -632,30 +632,5 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#endregion
 
-		#region WarehouseCatalogDisplay
-
-		internal static WarehouseCatalogDisplay ToWarehouseCatalogDisplay(this IWarehouseCatalog warehouseCatalog)
-		{
-			return AutoMapper.Mapper.Map<WarehouseCatalogDisplay>(warehouseCatalog);
-		}
-
-		#endregion
-
-		#region IWarehouseCatalog
-
-		internal static IWarehouseCatalog ToWarehouseCatalog(this WarehouseCatalogDisplay warehouseCatalogDisplay, IWarehouseCatalog destination)
-		{
-			if (warehouseCatalogDisplay.Key != Guid.Empty)
-			{
-				destination.Key = warehouseCatalogDisplay.Key;
-			}
-			destination.Name = warehouseCatalogDisplay.Name;
-			destination.Description = warehouseCatalogDisplay.Description;
-
-			return destination;
-		}
-
-		#endregion
-
 	}
 }
