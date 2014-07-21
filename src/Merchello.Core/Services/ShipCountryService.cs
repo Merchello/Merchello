@@ -1,35 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Threading;
+    using Models;
+    using Models.Interfaces;
+    using Persistence;
+    using Persistence.Querying;
+    using Persistence.UnitOfWork;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
+    /// <summary>
+    /// The ship country service.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     internal class ShipCountryService : IShipCountryService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-        private readonly IStoreSettingService _storeSettingService;
-
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         public ShipCountryService()
-            : this(new RepositoryFactory(), new StoreSettingService())
-        { }
+        /// <summary>
+        /// The database unit of work provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
 
+        /// <summary>
+        /// The repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
+        private readonly IStoreSettingService _storeSettingService;
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipCountryService"/> class.
+        /// </summary>
+        public ShipCountryService()
+            : this(new RepositoryFactory(), new StoreSettingService())
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipCountryService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
         public ShipCountryService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
-        { }
+        {
+            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipCountryService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
         public ShipCountryService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -41,6 +88,21 @@ namespace Merchello.Core.Services
             _storeSettingService = storeSettingService;
         }
 
+        /// <summary>
+        /// The create ship country with key.
+        /// </summary>
+        /// <param name="warehouseCatalogKey">
+        /// The warehouse catalog key.
+        /// </param>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         internal Attempt<IShipCountry> CreateShipCountryWithKey(Guid warehouseCatalogKey, string countryCode, bool raiseEvents = true)
         {
             var country = _storeSettingService.GetCountryByCode(countryCode);
@@ -49,6 +111,21 @@ namespace Merchello.Core.Services
                 : CreateShipCountryWithKey(warehouseCatalogKey, country, raiseEvents);
         }
 
+        /// <summary>
+        /// The create ship country with key.
+        /// </summary>
+        /// <param name="warehouseCatalogKey">
+        /// The warehouse catalog key.
+        /// </param>
+        /// <param name="country">
+        /// The country.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         internal Attempt<IShipCountry> CreateShipCountryWithKey(Guid warehouseCatalogKey, ICountry country, bool raiseEvents = true)
         {
             Mandate.ParameterCondition(warehouseCatalogKey != Guid.Empty, "warehouseCatalog");
@@ -82,7 +159,7 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if(raiseEvents)
+            if (raiseEvents)
                 Created.RaiseEvent(new Events.NewEventArgs<IShipCountry>(shipCountry), this);
 
             return Attempt<IShipCountry>.Succeed(shipCountry);
@@ -92,7 +169,7 @@ namespace Merchello.Core.Services
         /// Saves a single <see cref="shipCountry"/>
         /// </summary>
         /// <param name="shipCountry"></param>
-        /// <param name="raiseEvents"></param>
+        /// <param name="raiseEvents"></param>        
         public void Save(IShipCountry shipCountry, bool raiseEvents = true)
         {
             if(raiseEvents)
@@ -169,7 +246,7 @@ namespace Merchello.Core.Services
             if (!shipCountries.Any()) return null;
             var specific = shipCountries.FirstOrDefault(x => x.CountryCode.Equals(countryCode));
 
-            return specific ?? shipCountries.FirstOrDefault(x => x.CountryCode.Equals(Constants.CountryCodes.EverywhereElse));
+            return specific ?? shipCountries.FirstOrDefault(x => x.CountryCode.Equals(Core.Constants.CountryCodes.EverywhereElse));
         }
 
 
