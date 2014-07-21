@@ -8,24 +8,61 @@
      * @description
      * The controller for the Customer view page
      */
-    controllers.CustomerViewController = function($scope, $routeParams, merchelloCustomerService, merchelloGravatarService, notificationsService) {
+    controllers.CustomerViewController = function($scope, $routeParams, merchelloCustomerService, merchelloGravatarService, merchelloSettingsService, notificationsService) {
 
         /**
          * @ngdoc method
-         * @name getDefaultAddress
+         * @name getDefaultAddresses
          * @function
          * 
          * @description
-         * Load the default address from the customer's list of addresses.
+         * Load the default addresses from the customer's list of addresses.
          */
-        $scope.getDefaultAddress = function() {
+        $scope.getDefaultAddresses = function() {
             var addresses = $scope.customer.addresses;
-            for (var i = 0; i < addresses.length; i++) {
-                if (addresses[i].isDefault) {
-                    $scope.defaultAddress = addresses[i];
+            var billingAddresses = [];
+            var haveBillingDefault = false;
+            var haveShippingDefault = false;
+            var i;
+            var promiseTypeFields = merchelloSettingsService.getTypeFields();
+            var shippingAddresses = [];
+            promiseTypeFields.then(function (typeFieldsResponse) {
+                for (i = 0; i < typeFieldsResponse.length; i++) {
+                    var typeField = typeFieldsResponse[i];
+                    if (typeField.alias === "Billing" & $scope.billingKey === false) {
+                        $scope.billingKey = typeField.typeKey;
+                    }
+                    if (typeField.alias == "Shipping" & $scope.shippingKey === false) {
+                        $scope.shippingKey = typeField.typeKey;
+                    }
                 }
-            }
-        }
+                if (addresses.length > 0) {
+                    for (i = 0; i < addresses.length; i++) {
+                        var newAddress = new merchello.Models.CustomerAddress(addresses[i]);
+                        if (newAddress.addressTypeFieldKey == $scope.billingKey) {
+                            if (newAddress.isDefault) {
+                                $scope.defaultBillingAddress = newAddress;
+                                haveBillingDefault = true;
+                            }
+                            billingAddresses.push(newAddress);
+                        } else if (newAddress.addressTypeFieldKey == $scope.shippingKey) {
+                            if (newAddress.isDefault) {
+                                $scope.defaultShippingAddress = newAddress;
+                                haveShippingDefault = true;
+                            }
+                            shippingAddresses.push(newAddress);
+                        }
+                    }
+                }
+                if (!haveBillingDefault && billingAddresses.length > 0) {
+                    $scope.defaultBillingAddress = billingAddresses[0];
+                }
+                if (!haveShippingDefault && shippingAddresses.length > 0) {
+                    $scope.defaultShippingAddress = shippingAddresses[0];
+                }
+                console.info($scope.defaultShippingAddress);
+            });
+        };
 
         /**
          * @ngdoc method
@@ -55,7 +92,7 @@
                 promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = new merchello.Models.Customer(customerResponse);
                     $scope.avatarUrl = merchelloGravatarService.avatarUrl($scope.customer.email);
-                    $scope.getDefaultAddress();
+                    $scope.getDefaultAddresses();
                     $scope.loaded = true;
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
@@ -92,10 +129,13 @@
          */
         $scope.setVariables = function () {
             $scope.avatarUrl = "";
+            $scope.billingKey = false;
             $scope.customer = new merchello.Models.Customer();
             $scope.customerKey = false;
-            $scope.defaultAddress = {};
+            $scope.defaultBillingAddress = {};
+            $scope.defaultShippingAddress = {};
             $scope.loaded = false;
+            $scope.shippingKey = false;
         };
 
         $scope.init();
@@ -103,6 +143,6 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'merchelloCustomerService', 'merchelloGravatarService', 'notificationsService', merchello.Controllers.CustomerViewController]);
+    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerViewController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

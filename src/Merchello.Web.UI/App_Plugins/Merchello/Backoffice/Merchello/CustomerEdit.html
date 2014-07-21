@@ -29,8 +29,6 @@
                             <label for="lastName">*Last Name:</label>
                             <div><span class="error validation-error" data-ng-show="wasFormSubmitted && customerForm.lastName.$invalid">Last Name is a required field.</span></div>
                             <input name="lastName" type="text" class="span5" data-ng-model="customer.lastName" required />
-                            <label for="tel">Phone Number:</label>
-                            <input name="tel" type="text" class="span5" />
                             <label for="email">*Login/Email Address:</label>
                             <div><span class="error validation-error" data-ng-show="wasFormSubmitted && customerForm.email.$invalid">Login/Email is a required field and must contain a valid email address.</span></div>
                             <input name="email" type="email" class="span5" data-ng-model="customer.email" required />
@@ -66,19 +64,24 @@
                             <input name="fullName" type="text" class="span5" data-ng-model="currentBillingAddress.fullName" />
                             <label for="org">Company:</label>
                             <input name="org" type="text" class="span5" data-ng-model="currentBillingAddress.company" />
+                            <label for="phone">Phone:</label>
+                            <input name="phone" type="tel" class="span5" data-ng-model="currentBillingAddress.phone"/>
                             <label for="streetAddress">*Address:</label>
                             <input name="streetAddress" type="text" class="span5" data-ng-model="currentBillingAddress.address1" />
                             <label for="extendedAddress">Address Line 2:</label>
                             <input name="extendedAddress" type="text" class="span5" data-ng-model="currentBillingAddress.address2" />
                             <label for="locality">*City:</label>
                             <input name="locality" type="text" class="span5" data-ng-model="currentBillingAddress.locality" />
-                            <label for="regionInput">*{{provinceLabel}}:</label>
+                            <label for="regionInput">{{provinceLabel}}:</label>
                             <input name="regionInput" type="text" class="span3" data-ng-show="!doesCountryHaveProvinces(filters.billingCountry)" data-ng-model="currentBillingAddress.region" />
                             <select name="regionSelect" class="span3" data-ng-show="doesCountryHaveProvinces(filters.billingCountry)" data-ng-model="filters.billingProvince" data-ng-change="updateProvince('billing')" data-ng-options="option.name for option in filters.billingCountry.provinces"></select>
                             <label for="postalCode">*Zip Code:</label>
                             <input name="postalCode" type="text" class="span3" data-ng-model="currentBillingAddress.postalCode" />
                             <label for="countryName">*Country:</label>
                             <select name="countryName" class="span3" data-ng-model="filters.billingCountry" data-ng-change="updateCountry('billing')" data-ng-options="option.name for option in countries"></select>
+                            <div>
+                                <input type="checkbox" data-ng-model="currentBillingAddress.isDefault" /> Primary Billing Address
+                            </div><br/>
                             <div>
                                 <!-- ACTION: Add Billing Address to Address List -->
                                 <a class="btn btn-primary" data-ng-show="currentBillingAddressId == -1" data-ng-click="addAddress('billing')">Add Address</a>
@@ -107,19 +110,24 @@
                             <input name="shippingFullName" type="text" class="span5" data-ng-model="currentShippingAddress.fullName" />
                             <label for="shippingOrg">Company:</label>
                             <input name="shippingOrg" type="text" class="span5" data-ng-model="currentShippingAddress.company" />
+                            <label for="shippingPhone">Phone:</label>
+                            <input name="shippingPhone" type="tel" class="span5" data-ng-model="currentShippingAddress.phone" />
                             <label for="shippingStreetAddress">*Address:</label>
                             <input name="shippingStreetAddress" type="text" class="span5" data-ng-model="currentShippingAddress.address1" />
                             <label for="shippingExtendedAddress">Address Line 2:</label>
                             <input name="shippingExtendedAddress" type="text" class="span5" data-ng-model="currentShippingAddress.address2" />
                             <label for="shippingLocality">*City:</label>
                             <input name="shippingLocality" type="text" class="span5" data-ng-model="currentShippingAddress.locality" />
-                            <label for="shippingRegionInput">*{{provinceLabel}}:</label>
+                            <label for="shippingRegionInput">{{provinceLabel}}:</label>
                             <input name="shippingRegionInput" type="text" class="span3" data-ng-show="!doesCountryHaveProvinces(filters.shippingCountry)" data-ng-model="currentShippingAddress.region" />
                             <select name="shippingRegionSelect" class="span3" data-ng-show="doesCountryHaveProvinces(filters.shippingCountry)" data-ng-model="filters.shippingProvince" data-ng-change="updateProvince('shipping')" data-ng-options="option.name for option in filters.shippingCountry.provinces"></select>
                             <label for="shippingPostalCode">*Zip Code:</label>
                             <input name="shippingPostalCode" type="text" class="span3" data-ng-model="currentShippingAddress.postalCode" />
                             <label for="shippingCountryName">*Country:</label>
                             <select name="shippingCountryName" class="span3" data-ng-model="filters.shippingCountry" data-ng-change="updateCountry('shipping')" data-ng-options="option.name for option in countries"></select>
+                            <div>
+                                <input type="checkbox" data-ng-model="currentShippingAddress.isDefault" /> Primary Shipping Address
+                            </div><br/>
                             <div>
                                 <!-- ACTION: Add Billing Address to Address List -->
                                 <a class="btn btn-primary" data-ng-show="currentShippingAddressId == -1" data-ng-click="addAddress('shipping')">Add Address</a>

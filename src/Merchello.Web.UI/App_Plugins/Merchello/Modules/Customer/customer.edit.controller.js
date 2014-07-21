@@ -19,12 +19,15 @@
          * Add an address to the customer's list of addresses. 
          */
         $scope.addAddress = function(type) {
-            // TODO: Add functionality to tag address with applicable billing or shipping flags.
             var newAddress;
             if (type === 'billing') {
                 newAddress = $scope.currentBillingAddress;
+                newAddress.addressTypeFieldKey = $scope.billingKey;
+                $scope.billingAddresses.push(newAddress);
             } else {
                 newAddress = $scope.currentShippingAddress;
+                newAddress.addressTypeFieldKey = $scope.shippingKey;
+                $scope.shippingAddresses.push(newAddress);
             }
             newAddress.customerKey = $scope.customer.key;
             newAddress.addressType = type;
@@ -34,38 +37,44 @@
 
         /**
          * @ngdoc method
-         * @name buildAddressList
+         * @name buildAddressLists
          * @function
          * 
          * @description
          * Build a list of addresses and assign to either billing or shipping address lists depending on passed parameters. 
          */
-        $scope.buildAddressList = function(type, addresses) {
-            // TODO: Modify this function to seperate out only billing addresses once there exists typefieldkeys to match against
-            var addressList = [];
-            var defaultAddress = false, defaultAddressId = -1;
-            if (addresses.length > 0) {
-                for (var i = 0; i < addresses.length; i++) {
-                    var newAddress = new merchello.Models.CustomerAddress(addresses[i]);
-                    if (newAddress.isDefault) {
-                        defaultAddress = newAddress;
-                        defaultAddressId = addressList.length;
+        $scope.buildAddressLists = function() {
+            var i, addresses = $scope.customer.addresses;
+            var promiseTypeFields = merchelloSettingsService.getTypeFields();
+            promiseTypeFields.then(function(typeFieldsResponse) {
+                for (i = 0; i < typeFieldsResponse.length; i++) {
+                    var typeField = typeFieldsResponse[i];
+                    if (typeField.alias === "Billing" & $scope.billingKey === "") {
+                        $scope.billingKey = typeField.typeKey;
                     }
-                    addressList.push(newAddress);
+                    if (typeField.alias == "Shipping" & $scope.shippingKey === "") {
+                        $scope.shippingKey = typeField.typeKey;
+                    }
                 }
-                if (!defaultAddress) {
-                    defaultAddress = addresses[0];
+                if (addresses.length > 0) {
+                    for (i = 0; i < addresses.length; i++) {
+                        var newAddress = new merchello.Models.CustomerAddress(addresses[i]);
+                        if (newAddress.addressTypeFieldKey == $scope.billingKey) {
+                            if (newAddress.isDefault) {
+                                $scope.currentBillingAddress = newAddress;
+                                $scope.currentBillingAddressId = $scope.billingAddresses.length;
+                            }
+                            $scope.billingAddresses.push(newAddress);
+                        } else if (newAddress.addressTypeFieldKey == $scope.shippingKey) {
+                            if (newAddress.isDefault) {
+                                $scope.currentShippingAddress = newAddress;
+                                $scope.currentShippingAddressId = $scope.shippingAddresses.length;
+                            }
+                            $scope.shippingAddresses.push(newAddress);
+                        }
+                    }
                 }
-                if (type === 'billing') {
-                    $scope.currentBillingAddress = defaultAddress;
-                    $scope.currentBillingAddressId = defaultAddressId;
-                    $scope.billingAddresses = addressList;
-                } else {
-                    $scope.currentShippingAddress = defaultAddress;
-                    $scope.shippingAddresses = addressList;
-                    $scope.currentShippingAddressId = defaultAddressId;
-                }
-            }
+            });
         };
 
         /**
@@ -76,7 +85,7 @@
          * @description
          * Delete an address and updated the associated lists. 
          */
-        $scope.deleteAddress = function (type) {
+        $scope.deleteAddress = function(type) {
             // TODO: This won't work properly until the address typekeys, and keys are existing (at which point it will need alteration).
             if (type === 'billing') {
                 if ($scope.currentBillingAddressId == -1) {
@@ -96,8 +105,7 @@
             var updatedAddressList = $scope.prepareAddressesForSave();
             $scope.buildAddressList('billing', updatedAddressList);
             $scope.buildAddressList('shipping', updatedAddressList);
-
-        }
+        };
 
         /**
          * @ngdoc method
@@ -125,7 +133,7 @@
          * @description
          * Inititalizes the scope.
          */
-        $scope.init = function() {
+        $scope.init = function () {
             $scope.setVariables();
             $scope.loadCustomer();
             $scope.loadCountries();
@@ -210,8 +218,7 @@
                 promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = new merchello.Models.Customer(customerResponse);
                     $scope.updateAvatarUrl();
-                    $scope.buildAddressList('billing', customerResponse.addresses);
-                    $scope.buildAddressList('shipping', customerResponse.addresses);
+                    $scope.buildAddressLists();
                     $scope.loaded = true;
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
@@ -283,56 +290,15 @@
         * Prepare a list of addresses to save with the customer
         */
         $scope.prepareAddressesForSave = function() {
-            // TODO: Currently all addresses have the same key, requiring much more thorough comparison between addresses to confirm uniqueness.
-            var addresses = [], addressToAdd, addressToCompare, isDuplicate, i, j;
+            var addresses = [], addressToAdd, i;
             for (i = 0; i < $scope.billingAddresses.length; i++) {
                 addressToAdd = new merchello.Models.CustomerAddress($scope.billingAddresses[i]);
                 addresses.push(addressToAdd);
-            }
-            // Because the customer keys are all the same, and there are no different type keys between shipping and billing addresses, logic must exist to double check that duplicates of each address are not being created.
+            };
             for (i = 0; i < $scope.shippingAddresses.length; i++) {
                 addressToAdd = new merchello.Models.CustomerAddress($scope.shippingAddresses[i]);
-                isDuplicate = false;
-                // TODO: Get rid of this when the above to-do is accomplished. This is ridiculous. <-- Kyle Weems
-                // AKA: I wrote it, but it's tacky and I hate it.
-                for (j = 0; j < $scope.billingAddresses.length; j++) {
-                    addressToCompare = $scope.billingAddresses[j];
-                    if (addressToAdd.address1 == addressToCompare.address1) {
-                        if (addressToAdd.address2 == addressToCompare.address2) {
-                            if (addressToAdd.addressType == addressToCompare.addressType) {
-                                if (addressToAdd.addressTypeFieldKey == addressToCompare.addressTypeFieldKey) {
-                                    if (addressToAdd.company == addressToCompare.company) {
-                                        if (addressToAdd.countryCode == addressToCompare.countryCode) {
-                                            if (addressToAdd.customerKey == addressToCompare.customerKey) {
-                                                if (addressToAdd.fullName == addressToCompare.fullName) {
-                                                    if (addressToAdd.isDefault == addressToCompare.isDefault) {
-                                                        if (addressToAdd.key == addressToCompare.key) {
-                                                            if (addressToAdd.label == addressToCompare.label) {
-                                                                if (addressToAdd.locality == addressToCompare.locality) {
-                                                                    if (addressToAdd.phone == addressToCompare.phone) {
-                                                                        if (addressToAdd.postalCode == addressToCompare.postalCode) {
-                                                                            if (addressToAdd.region == addressToCompare.region) {
-                                                                                isDuplicate = true;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!isDuplicate) {
-                    addresses.push(addressToAdd);
-                }
-            }
+                addresses.push(addressToAdd);
+            };
             return addresses;
         };
 
@@ -379,7 +345,7 @@
                 promiseSaveCustomer.then(function(customerResponse) {
                     $scope.customer = new merchello.Models.Customer(customerResponse);
                     notificationsService.success("Customer Saved", "");
-                    if ($routeParams.id === "") {
+                    if ($routeParams.id === "" || $routeParams.id === "new") {
                         window.location.hash = "#/merchello/merchello/CustomerList/manage";
                     } else {
                         window.location.hash = "#/merchello/merchello/CustomerView/" + $routeParams.id;
@@ -403,6 +369,7 @@
         $scope.setVariables = function () {
             $scope.avatarUrl = "";
             $scope.billingAddresses = [];
+            $scope.billingKey = "";
             $scope.countries = [];
             $scope.currentBillingAddress = new merchello.Models.CustomerAddress();
             $scope.currentBillingAddressId = -1;
@@ -419,6 +386,7 @@
             $scope.provinces = [];
             $scope.provinceLabel = "State/Province";
             $scope.shippingAddresses = [];
+            $scope.shippingKey = "";
             $scope.wasFormSubmitted = false;
         };
 
@@ -450,9 +418,9 @@
          */
         $scope.updateAddress = function (type) {
             if (type === 'billing') {
-                $scope.billingAddresses[$scope.currentBillingAddressId] = $scope.currentBillingAddress;
+                $scope.billingAddresses[$scope.currentBillingAddressId] = new merchello.Models.CustomerAddress($scope.currentBillingAddress);
             } else {
-                $scope.shippingAddresses[$scope.currentShippingAddressId] = $scope.currentShippingAddress;
+                $scope.shippingAddresses[$scope.currentShippingAddressId] = new merchello.Models.CustomerAddress($scope.currentShippingAddress);
             }
             notificationsService.success("Address updated. Customer must be saved to keep change", "");
         };
