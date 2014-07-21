@@ -23,6 +23,9 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
             // adjust the total weight
             TotalWeight += lineItem.ExtendedData.GetWeightValue() * lineItem.Quantity;
 
+            TotalLength += lineItem.ExtendedData.GetLengthValue() * lineItem.Quantity;
+            TotalWidth += lineItem.ExtendedData.GetWidthValue() * lineItem.Quantity;
+            TotalHeight += lineItem.ExtendedData.GetHeightValue() * lineItem.Quantity;
             // adjust the total price
             if (UseOnSalePriceIfOnSale)
             {
@@ -39,6 +42,21 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         /// Returns the TotalWeight from ExtendedData
         /// </summary>
         public decimal TotalWeight { get; private set; }
+
+        /// <summary>
+        /// Returns the TotalLength from ExtendedData
+        /// </summary>
+        public decimal TotalLength { get; private set; }
+
+        /// <summary>
+        /// Returns the TotalWidth from ExtendedData
+        /// </summary>
+        public decimal TotalWidth { get; private set; }
+
+        /// <summary>
+        /// Returns the TotalHeight from ExtendedData
+        /// </summary>
+        public decimal TotalHeight { get; private set; }
 
         /// <summary>
         /// Returns the TotalPrice form ExtendedData
