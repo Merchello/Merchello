@@ -38,15 +38,6 @@
         }
 
         /// <summary>
-        /// Gets the orders collection
-        /// </summary>
-        [ConfigurationProperty("orders", IsRequired = true), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "orders")]
-        public SettingsCollection Orders                     
-        {
-            get { return (SettingsCollection)this["orders"]; }
-        }
-
-        /// <summary>
         /// Gets the settings collection
         /// </summary>
         [ConfigurationProperty("settings", IsRequired = true), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "setting")]
