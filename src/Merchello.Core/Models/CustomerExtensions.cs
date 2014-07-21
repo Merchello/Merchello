@@ -155,7 +155,7 @@
         /// </returns>
         internal static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer, IMerchelloContext merchelloContext)
         {
-            return ((ServiceContext) merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key);
+            return ((ServiceContext)merchelloContext.Services).CustomerAddressService.GetByCustomerKey(customer.Key);
         }
 
         /// <summary>
