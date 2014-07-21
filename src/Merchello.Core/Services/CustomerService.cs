@@ -23,7 +23,7 @@
         /// <summary>
         /// The locker.
         /// </summary>
-        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         /// <summary>
         /// The unit of work provider.
@@ -81,6 +81,12 @@
         /// </param>
         /// <param name="customerAddressService">
         /// The customer Address Service.
+        /// </param>
+        /// <param name="invoiceService">
+        /// The invoice Service.
+        /// </param>
+        /// <param name="paymentService">
+        /// The payment Service.
         /// </param>
         public CustomerService(
             RepositoryFactory repositoryFactory, 
@@ -255,6 +261,8 @@
                 }
             }
 
+            SaveAddresses(customer);
+
             Created.RaiseEvent(new Events.NewEventArgs<ICustomer>(customer), this);
 
             return customer;
@@ -293,6 +301,8 @@
                 }                
             }
 
+            SaveAddresses(customer);
+
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomer>(customer), this);
         }
 
@@ -320,6 +330,11 @@
           
                     uow.Commit();
                 }               
+            }
+
+            foreach (var customer in customerArray)
+            {
+                SaveAddresses(customer);
             }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomer>(customerArray), this);
@@ -627,21 +642,36 @@
         /// </param>
         private void SaveAddresses(ICustomer customer)
         {
-            var existing = _customerAddressService.GetByCustomerKey(customer.Key);
+            if (!customer.Addresses.Any()) return;
 
-            var existingAddresses = existing as ICustomerAddress[] ?? existing.ToArray();
-            if (!existingAddresses.Any()) return;
-
-            foreach (var delete in existingAddresses.Where(address => customer.Addresses.All(x => x.Key != address.Key)).ToList())
-            {
-                _customerAddressService.Delete(delete);   
-            }
-
-            foreach (var address in customer.Addresses)
-            {
-                _customerAddressService.Save(address);
-            }
+            foreach (var address in customer.Addresses) SaveAddress(customer, address);            
         }
+
+        /// <summary>
+        /// Saves a customer address and updated the customer address collection on the customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        private void SaveAddress(ICustomer customer, ICustomerAddress address)
+        {
+            _customerAddressService.Save(address);
+
+            var addresses = customer.Addresses.ToList();
+
+            if (addresses.Any(x => x.Key == address.Key))
+            {
+                addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
+            }
+
+            addresses.Add(address);
+
+            ((Customer)customer).Addresses = addresses;
+        }
+
 
         /// <summary>
         /// Deletes invoices and payments associated with a customer

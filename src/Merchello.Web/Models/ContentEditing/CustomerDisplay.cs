@@ -103,7 +103,7 @@
             }
             
             destination.TaxExempt = customer.TaxExempt;
-            destination.LastActivityDate = customer.LastActivityDate;
+            destination.LastActivityDate = DateTime.Now;
 
             if (customer.ExtendedData != null)
             {
@@ -128,7 +128,9 @@
         /// </returns>
         internal static CustomerDisplay ToCustomerDisplay(this ICustomer customer)
         {
-            return AutoMapper.Mapper.Map<CustomerDisplay>(customer);
+            var display = AutoMapper.Mapper.Map<CustomerDisplay>(customer);
+
+            return display;
         }
     }
 
