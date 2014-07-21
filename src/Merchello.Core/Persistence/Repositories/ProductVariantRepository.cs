@@ -16,14 +16,17 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
 
+    /// <summary>
+    /// The product variant repository.
+    /// </summary>
     internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
 
         public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
-        { }
+        {            
+        }
 
-        #region Overrides MerchelloPetaPocoRepositoryBase
 
         protected override IProductVariant PerformGet(Guid key)
         {
@@ -177,8 +180,6 @@
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
         }
 
-        #endregion
-
         private static bool MandateProductVariantRules(IProductVariant entity)
         {
             // TODO these checks can probably be moved somewhere else but are here at the moment to enforce the rules as the API develops
@@ -210,7 +211,7 @@
             return collection;
         }
 
-        #region CatalogInventory
+
 
         // this merely asserts that an assoicate between the warehouse and the variant has been made
         internal void SaveCatalogInventory(IProductVariant productVariant)
@@ -334,8 +335,6 @@
             var variants = GetByProductKey(product.Key);
             return variants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
         }
-
-        #endregion
 
 
         /// <summary>

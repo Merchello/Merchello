@@ -36,6 +36,11 @@
         /// </summary>
         private readonly RepositoryFactory _repositoryFactory;
 
+        /// <summary>
+        /// The product variant service.
+        /// </summary>
+        private readonly IProductVariantService _productVariantService;
+
         #endregion
 
 
@@ -43,7 +48,7 @@
         /// Initializes a new instance of the <see cref="WarehouseCatalogService"/> class.
         /// </summary>
         internal WarehouseCatalogService()
-            : this(new RepositoryFactory())
+            : this(new RepositoryFactory(), new ProductVariantService())
         {
         }
 
@@ -53,8 +58,11 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        internal WarehouseCatalogService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        /// <param name="productVariantService">
+        /// The product Variant Service.
+        /// </param>
+        internal WarehouseCatalogService(RepositoryFactory repositoryFactory, IProductVariantService productVariantService)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, productVariantService)
         {
         }
 
@@ -67,7 +75,10 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        internal WarehouseCatalogService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="productVariantService">
+        /// The product Variant Service.
+        /// </param>
+        internal WarehouseCatalogService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IProductVariantService productVariantService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -258,6 +269,28 @@
         public IEnumerable<IWarehouseCatalog> GetByWarehouseKey(Guid warehouseKey)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Removes variants from catalog inventory.
+        /// </summary>
+        /// <param name="catalog">
+        /// The catalog.
+        /// </param>
+        private void RemoveVariantsFromCatalogInventoryBeforeDeleting(IWarehouseCatalog catalog)
+        {
+            var variants =
+                _productVariantService.GetByWarehouseKey(catalog.WarehouseKey)
+                    .Where(pv => pv.CatalogInventories.Any(inv => inv.CatalogKey == catalog.Key)).ToArray();
+
+            if (!variants.Any()) return;
+
+            foreach (var variant in variants)
+            {
+                variant.RemoveFromCatalogInventory(catalog);
+            }
+
+            _productVariantService.Save(variants);
         }
     }
 }
