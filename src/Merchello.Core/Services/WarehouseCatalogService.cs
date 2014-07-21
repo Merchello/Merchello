@@ -4,13 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using System.Web.UI.WebControls;
-
-    using Merchello.Core.Events;
-    using Merchello.Core.Models;
-    using Merchello.Core.Persistence;
-    using Merchello.Core.Persistence.UnitOfWork;
-
+    using Events;
+    using Models;
+    using Persistence;
+    using Persistence.Querying;
+    using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
 
@@ -82,9 +80,11 @@
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(productVariantService, "productVariantService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+            _productVariantService = productVariantService;
         }
 
         #region Event Handlers
@@ -230,6 +230,7 @@
                     {
                         repository.AddOrUpdate(catalog);
                     }
+
                     uow.Commit();
                 }
             }
@@ -237,6 +238,15 @@
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IWarehouseCatalog>(catalogsArray), this);
         }
 
+        /// <summary>
+        /// Deletes a single instance of a <see cref="IWarehouseCatalog"/>.
+        /// </summary>
+        /// <param name="warehouseCatalog">
+        /// The warehouse catalog.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
         public void Delete(IWarehouseCatalog warehouseCatalog, bool raiseEvents = true)
         {
             if (warehouseCatalog.Key == Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey) return;
@@ -248,27 +258,110 @@
                 return;
             }
 
+            RemoveVariantsFromCatalogInventoryBeforeDeleting(warehouseCatalog);
 
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateWarehouseCatalogRepository(uow))
+                {
+                    repository.Delete(warehouseCatalog);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents)
+            Deleted.RaiseEvent(new DeleteEventArgs<IWarehouseCatalog>(warehouseCatalog), this);
         }
 
+        /// <summary>
+        /// Deletes a collection of <see cref="IWarehouseCatalog"/>
+        /// </summary>
+        /// <param name="warehouseCatalogs">
+        /// The warehouse catalogs.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
         public void Delete(IEnumerable<IWarehouseCatalog> warehouseCatalogs, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            var catalogs = warehouseCatalogs.Where(x => x.Key != Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey).ToArray();
+            if (!catalogs.Any()) return;
+
+            if (raiseEvents)
+            Deleting.RaiseEvent(new DeleteEventArgs<IWarehouseCatalog>(catalogs), this);
+
+            foreach (var catalog in catalogs)
+            {
+                RemoveVariantsFromCatalogInventoryBeforeDeleting(catalog);
+            }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateWarehouseCatalogRepository(uow))
+                {
+                    foreach (var catalog in catalogs)
+                    {
+                        repository.Delete(catalog);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents)
+            Deleted.RaiseEvent(new DeleteEventArgs<IWarehouseCatalog>(catalogs), this);
         }
 
+        /// <summary>
+        /// Gets a <see cref="IWarehouseCatalog"/> by its key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWarehouseCatalog"/>.
+        /// </returns>
         public IWarehouseCatalog GetByKey(Guid key)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateWarehouseCatalogRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
         }
 
+        /// <summary>
+        /// Gets a collection of all <see cref="IWarehouseCatalog"/>.
+        /// </summary>
+        /// <returns>
+        /// The collection of <see cref="IWarehouseCatalog"/>.
+        /// </returns>
         public IEnumerable<IWarehouseCatalog> GetAll()
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateWarehouseCatalogRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IWarehouseCatalog"/> for a given <see cref="IWarehouse"/>.
+        /// </summary>
+        /// <param name="warehouseKey">
+        /// The warehouse key.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IWarehouseCatalog"/>.
+        /// </returns>
         public IEnumerable<IWarehouseCatalog> GetByWarehouseKey(Guid warehouseKey)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateWarehouseCatalogRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IWarehouseCatalog>.Builder.Where(x => x.WarehouseKey == warehouseKey);
+
+                return repository.GetByQuery(query);
+            }
         }
 
         /// <summary>

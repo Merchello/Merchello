@@ -6,13 +6,11 @@
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.UnitOfWork;
 
-    using Umbraco.Core.Persistence.Migrations.Syntax.Delete;
-
     /// <summary>
     /// The Merchello ServiceContext, which provides access to the following services:
-    /// <see cref="ICustomerService"/>, <see cref="IItemCacheService"/>, <see cref="IGatewayProviderService"/>, <see cref="IProductService"/>, 
-    /// <see cref="IProductVariantService"/>, <see cref="IStoreSettingService"/>, <see cref="IShipCountryService"/>, <see cref="IShipMethodService"/>
-    /// and <see cref="IWarehouseService"/>
+    /// <see cref="ICustomerService"/>, <see cref="IGatewayProviderService"/>, <see cref="IInvoiceService"/>, <see cref="IItemCacheService"/> 
+    /// <see cref="IOrderService"/>, <see cref="IPaymentService"/>, <see cref="IProductService"/>, <see cref="IProductVariantService"/>,
+    /// <see cref="IStoreSettingService"/>, <see cref="IShipmentService"/>, and <see cref="IWarehouseService"/>
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
     public class ServiceContext : IServiceContext
@@ -123,6 +121,11 @@
         /// The warehouse service.
         /// </summary>
         private Lazy<IWarehouseService> _warehouseService;
+
+        /// <summary>
+        /// The _warehouse catalog service.
+        /// </summary>
+        private Lazy<IWarehouseCatalogService> _warehouseCatalogService; 
 
         #endregion
 
@@ -291,6 +294,14 @@
             get { return _shipMethodService.Value; }
         }
 
+        /// <summary>
+        /// Gets the warehouse catalog service.
+        /// </summary>
+        internal IWarehouseCatalogService WarehouseCatalogService
+        {
+            get { return _warehouseCatalogService.Value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -360,8 +371,13 @@
             if (_gatewayProviderService == null)
                 _gatewayProviderService = new Lazy<IGatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _invoiceService.Value, _orderService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value, _notificationMethodService.Value, _notificationMessageService.Value));
 
+            if (_warehouseCatalogService == null)
+            {
+                _warehouseCatalogService = new Lazy<IWarehouseCatalogService>(() => new WarehouseCatalogService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _productVariantService.Value));
+            }
+
             if (_warehouseService == null)
-                _warehouseService = new Lazy<IWarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _warehouseService = new Lazy<IWarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _warehouseCatalogService.Value));
 
             if (_notificationMessageService == null)
                 _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
