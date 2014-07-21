@@ -1,4 +1,7 @@
-﻿namespace Merchello.Web.Trees
+﻿using umbraco.dialogs;
+using Umbraco.Web.Models.Trees;
+
+namespace Merchello.Web.Trees
 {
     using System.Linq;
     using System.Net.Http.Formatting;
@@ -8,7 +11,7 @@
 
     using umbraco;
     using umbraco.BusinessLogic.Actions;
-    using Umbraco.Web.Models.Trees;
+
     using Umbraco.Web.Mvc;
     using Umbraco.Web.Trees;
 
@@ -72,6 +75,10 @@
                 menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
             }
 
+            if (id == "orders")
+            {
+                menu.Items.Add(new MenuItem("createOrder", "Create Order"));
+            }
             ////if (id == "catalog")
             ////{
             //    //create product
