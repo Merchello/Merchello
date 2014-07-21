@@ -192,13 +192,13 @@
              */
             getTypeFields: function () {
 
-                //return getCachedOrApi("AllTypeFields", "GetTypeFields", "settings");
+                return getCachedOrApi("AllTypeFields", "GetTypeFields", "settings");
 
-                return umbRequestHelper.resourcePromise(
-                   $http.get(
-                        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'GetTypeFields')
-                    ),
-                    'Failed to get all settings');
+                //return umbRequestHelper.resourcePromise(
+                //   $http.get(
+                //        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'GetTypeFields')
+                //    ),
+                //    'Failed to get all settings');
 
             }
 
