@@ -218,7 +218,6 @@
                 }
 
                 if (includesStatusChange) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IInvoice>(invoice), this);
-
             }
 
             using (new WriteLock(Locker))

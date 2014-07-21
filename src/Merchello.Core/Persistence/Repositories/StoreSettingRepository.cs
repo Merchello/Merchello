@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using Factories;
+    using Models;
+    using Models.EntityBase;
+    using Models.Rdbms;
+    using Models.TypeFields;
+    using Querying;    
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+    using UnitOfWork;
+
     /// <summary>
     /// Represents the Store Settings Repository
     /// </summary>
     internal class StoreSettingRepository :  MerchelloPetaPocoRepositoryBase<IStoreSetting>, IStoreSettingRepository
     {
-        public StoreSettingRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
+        public StoreSettingRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
-        { }
+        {            
+        }
 
         protected override IStoreSetting PerformGet(Guid key)
         {
@@ -165,6 +165,12 @@ namespace Merchello.Core.Persistence.Repositories
             return orderNumber;
         }
 
+        /// <summary>
+        /// The get type fields.
+        /// </summary>
+        /// <returns>
+        /// The collection of all type fields.
+        /// </returns>
         public IEnumerable<ITypeField> GetTypeFields()
         {
             var dtos = Database.Fetch<TypeFieldDto>("SELECT * FROM merchTypeField");

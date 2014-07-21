@@ -541,7 +541,6 @@
 		        provider: gatewayProvider,
 		        gatewayResources: availableResources
 		    };
-
 		    dialogService.open({
 		        template: templatePage,
 		        show: true,

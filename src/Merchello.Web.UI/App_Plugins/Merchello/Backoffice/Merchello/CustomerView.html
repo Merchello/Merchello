@@ -102,20 +102,15 @@
                         Customer Notes
                         <small>Notes about the customer (not order specific)</small>
                     </label>
-                    
                     <div class="merchello-controls">
-
                         <div class="well new-note row-fluid">
                             <div class="form-group col-xs-12 span12">
-                                <textarea name="note-message" name="customer-note" rows="8" class="span12">Nulla mollis mauris nec erat ullamcorper, at vestibulum ipsum bibendum. Fusce leo lorem, tempor ac dapibus rhoncus, imperdiet at tellus. Quisque vel odio et dolor gravida sollicitudin et eu mi. Donec risus turpis, facilisis nec commodo sed, tempus sit amet enim. Sed vel eros vitae metus viverra ornare. Proin condimentum sodales elit eget elementum. Morbi adipiscing eget nisl ut lacinia. Ut molestie, ipsum auctor iaculis iaculis, mauris mi rutrum sapien, eget ultrices nulla justo ut lorem. Sed accumsan quis augue nec condimentum. Fusce ac iaculis felis. Duis viverra, eros eget varius molestie, metus felis mollis odio, sed rutrum nisi turpis quis quam. Mauris rutrum pellentesque sollicitudin.</textarea>
+                                <textarea name="note-message" name="customer-note" rows="8" class="span12" data-ng-model="customer.notes"></textarea>
                             </div>
-                            <input type="submit" class="btn btn-primary" value="Save Note" />
+                            <input type="submit" class="btn btn-primary" value="Save Note" data-ng-click="saveCustomer()" />
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
             <div class="merchello-pane secondary span3">
@@ -126,16 +121,15 @@
                     <div data-ng-show="customer.hasPrimaryAddress">{{primaryAddress.phone}}</div>
                 </div>
                 <div class="vcard well">
-                    <h4 class="fn">Heather Alvis</h4>
-                    <span class="org">Mindfly</span>
+                    <h4 class="fn">{{defaultAddress.fullName}}</h4>
+                    <span class="org" data-ng-show="defaultAddress.company!= ''">{{defaultAddress.company}}</span>
                     <span class="adr">
-                        <span class="street-address">114 W Magnolia St.</span>
-                        <span class="extended-address">Suite 504</span>
-                        <span class="locality">Bellingham</span>, <span class="region">WA</span>, <span class="postal-code">98225</span>
-                        <span class="country-name">USA</span>
+                        <span class="street-address">{{defaultAddress.address1}}</span>
+                        <span class="extended-address" data-ng-show="defaultAddress.address2 != ''">{{defaultAddress.address2}}</span>
+                        <span class="locality">{{defaultAddress.locality}}</span>, <span class="region">{{defaultAddress.region}}</span>, <span class="postal-code">{{defaultAddress.postalCode}}</span>
+                        <span class="country-name">{{defaultAddress.countryCode}}</span>
                     </span>
-                    <span class="tel">360-990-0090</span>
-                    <a href="mailto:heather@mindfly.com" class="email">heather@mindfly.com</a>
+                    <span class="tel" data-ng-show="defaultAddress.phone != ''">{{defaultAddress.phone}}</span>
                 </div>
 
 

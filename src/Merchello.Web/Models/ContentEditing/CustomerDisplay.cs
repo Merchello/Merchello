@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -90,14 +89,28 @@
 
             destination.FirstName = customer.FirstName;
             destination.LastName = customer.LastName;
-            destination.Email = customer.Email;
-            ((Customer)destination).LoginName = customer.LoginName;
+
+            // prevent setting email to empty string
+            if (!string.IsNullOrEmpty(customer.Email))
+            {
+                destination.Email = customer.Email;
+            }
+
+            // prevent setting login name to empty string
+            if (!string.IsNullOrEmpty(customer.LoginName))
+            {
+                ((Customer)destination).LoginName = customer.LoginName;
+            }
+            
             destination.TaxExempt = customer.TaxExempt;
-            destination.LastActivityDate = customer.LastActivityDate;
+            destination.LastActivityDate = DateTime.Now;
+
             if (customer.ExtendedData != null)
             {
                 ((Customer)destination).ExtendedData = customer.ExtendedData;
             }
+
+            destination.Notes = customer.Notes;
 
             ((Customer)destination).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress());
 
@@ -115,7 +128,9 @@
         /// </returns>
         internal static CustomerDisplay ToCustomerDisplay(this ICustomer customer)
         {
-            return AutoMapper.Mapper.Map<CustomerDisplay>(customer);
+            var display = AutoMapper.Mapper.Map<CustomerDisplay>(customer);
+
+            return display;
         }
     }
 

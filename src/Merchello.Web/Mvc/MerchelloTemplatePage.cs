@@ -27,7 +27,7 @@
             get
             {
                 if (_customerContext == null)
-                    _customerContext = new CustomerContext(MerchelloContext.Current, UmbracoContext);
+                    _customerContext = new CustomerContext(UmbracoContext);
 
                 return _customerContext.CurrentCustomer;
             }

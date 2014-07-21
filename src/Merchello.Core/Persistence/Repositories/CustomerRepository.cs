@@ -24,7 +24,7 @@
         /// <summary>
         /// The _customer address repository.
         /// </summary>
-        private ICustomerAddressRepository _customerAddressRepository;
+        private readonly ICustomerAddressRepository _customerAddressRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerRepository"/> class.

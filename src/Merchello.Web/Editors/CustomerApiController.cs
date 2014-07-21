@@ -180,12 +180,9 @@
             newCustomer.Notes = customer.Notes;
             newCustomer.LastActivityDate = DateTime.Today;
 
-            _customerService.Save(newCustomer);
+            ((Customer)newCustomer).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress());
 
-            foreach (var address in customer.Addresses)
-            {
-                newCustomer.SaveCustomerAddress(address.ToCustomerAddress());
-            }
+            _customerService.Save(newCustomer);
 
             return newCustomer.ToCustomerDisplay();
         }
@@ -208,11 +205,6 @@
             var merchCustomer = _customerService.GetByKey(customer.Key);
 
             merchCustomer = customer.ToCustomer(merchCustomer);
-
-            foreach (var address in customer.Addresses)
-            {
-                merchCustomer.SaveCustomerAddress(address.ToCustomerAddress());
-            }
 
            _customerService.Save(merchCustomer);
             
