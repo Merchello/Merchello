@@ -12,7 +12,7 @@
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class CustomerAddress : Entity, ICustomerAddress
+    public class CustomerAddress : Entity, ICustomerAddress
     {
         #region Fields
 
