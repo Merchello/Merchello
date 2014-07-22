@@ -149,7 +149,7 @@
         /// <param name="customerKey">
         /// The customer key.
         /// </param>
-        internal CustomerAddress(Guid customerKey)
+        public CustomerAddress(Guid customerKey)
         {
             Mandate.ParameterCondition(!customerKey.Equals(Guid.Empty), "customerKey");
 
