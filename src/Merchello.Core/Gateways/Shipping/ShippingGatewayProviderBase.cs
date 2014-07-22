@@ -127,6 +127,7 @@
         public virtual void DeleteShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod)
         {
             GatewayProviderService.Delete(shippingGatewayMethod.ShipMethod);
+            _shipMethods = null;
         }        
         
         /// <summary>
@@ -232,6 +233,9 @@
         /// <summary>
         /// Deletes all active shipMethods
         /// </summary>
+        /// <param name="shipCountry">
+        /// The ship Country.
+        /// </param>
         /// <remarks>
         /// Used for testing
         /// </remarks>
@@ -241,6 +245,14 @@
             {
                 DeleteShippingGatewayMethod(gatewayShipMethod);
             }
+        }
+
+        /// <summary>
+        /// The reset ship methods.
+        /// </summary>
+        internal virtual void ResetShipMethods()
+        {
+            _shipMethods = null;
         }
     }
 }
