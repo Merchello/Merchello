@@ -8,7 +8,8 @@
      * @description
      * The controller for the customers list page
      */
-    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService) {
+    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService, dialogService) {
+        $scope.customer = {};
 
         if ($routeParams.create) {
             $scope.loaded = true;
@@ -38,6 +39,38 @@
 
             //});
         }
+        
+        /**
+        * @ngdoc method
+        * @name addCountry
+        * @function
+        * 
+        * @description
+        * Opens the add country dialog via the Umbraco dialogService.
+        */
+        $scope.editCustomerInformation = function () {
+            var dialogData = {};
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Order/Dialogs/selectcustomer.html',
+                show: true,
+                callback: $scope.editCustomerInformationConfirm,
+                dialogData: dialogData
+            });
+        };
+
+        /**
+         * @ngdoc method
+         * @name addCountryDialogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the save after recieving the country to add from the dialog view/controller
+         */
+        $scope.editCustomerInformationConfirm = function (customer) {
+            alert(customer);
+            notificationsService.info("Saved!", "");
+        };
 
         $scope.save = function () {
 
@@ -60,6 +93,6 @@
     }
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', merchello.Controllers.OrderEditController]);
+    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', 'dialogService', merchello.Controllers.OrderEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
