@@ -45,6 +45,8 @@
          */
         $scope.buildAddressLists = function() {
             var i, addresses = $scope.customer.addresses;
+            $scope.billingAddresses = [];
+            $scope.shippingAddresses = [];
             var promiseTypeFields = merchelloSettingsService.getTypeFields();
             promiseTypeFields.then(function(typeFieldsResponse) {
                 for (i = 0; i < typeFieldsResponse.length; i++) {
@@ -75,36 +77,6 @@
                     }
                 }
             });
-        };
-
-        /**
-         * @ngdoc method
-         * @name deleteAddress
-         * @function
-         * 
-         * @description
-         * Delete an address and updated the associated lists. 
-         */
-        $scope.deleteAddress = function(type) {
-            // TODO: This won't work properly until the address typekeys, and keys are existing (at which point it will need alteration).
-            if (type === 'billing') {
-                if ($scope.currentBillingAddressId == -1) {
-                    $scope.newAddress('billing');
-                } else {
-                    $scope.billingAddresses.splice($scope.currentBillingAddressId, 1);
-                }
-            } else {
-                if ($scope.currentShippingAddressId == -1) {
-                    $scope.newAddress('shipping');
-                } else {
-                    $scope.shippingAddresses.splice($scope.currentShippingAddressId, 1);
-                }
-            }
-            notificationsService.info("Removing address.", "");
-            notificationsService.info("Updating address lists. Customer must be saved to preserve address removal.", "");
-            var updatedAddressList = $scope.prepareAddressesForSave();
-            $scope.buildAddressList('billing', updatedAddressList);
-            $scope.buildAddressList('shipping', updatedAddressList);
         };
 
         /**
@@ -248,6 +220,26 @@
 
         /**
         * @ngdoc method
+        * @name openDeleteAddressDialog
+        * @function
+        * 
+        * @description
+        * Opens the delete address dialog via the Umbraco dialogService.
+        */
+        $scope.openDeleteAddressDialog = function (type) {
+            var dialogData = {};
+            dialogData.type = type;
+            dialogData.name = type + ' address';
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.processDeleteAddressDialog,
+                dialogData: dialogData
+            });
+        };
+
+        /**
+        * @ngdoc method
         * @name openSelectAddressDialog
         * @function
         * 
@@ -303,6 +295,36 @@
         };
 
         /**
+         * @ngdoc method
+         * @name processDeleteAddressDialog
+         * @function
+         * 
+         * @description
+         * Delete an address and update the associated lists. 
+         */
+        $scope.processDeleteAddressDialog = function (dialogData) {
+            var type = dialogData.type;
+            if (type === 'billing') {
+                if ($scope.currentBillingAddressId == -1) {
+                    $scope.newAddress('billing');
+                } else {
+                    $scope.billingAddresses.splice($scope.currentBillingAddressId, 1);
+                }
+            } else {
+                if ($scope.currentShippingAddressId == -1) {
+                    $scope.newAddress('shipping');
+                } else {
+                    $scope.shippingAddresses.splice($scope.currentShippingAddressId, 1);
+                }
+            }
+            notificationsService.info("Removing address.", "");
+            notificationsService.info("Updating address lists. Customer must be saved to preserve address removal.", "");
+            $scope.customer.addresses = $scope.prepareAddressesForSave();
+            $scope.buildAddressLists();
+            $scope.newAddress(type);
+        };
+
+        /**
         * @ngdoc method
         * @name processSelectAddressDialog
         * @function
@@ -319,7 +341,6 @@
                 $scope.currentShippingAddress = $scope.shippingAddresses[dialogData.filter.id];
                 $scope.currentShippingAddressId = dialogData.filter.id;
             }
-
         };
 
         /**

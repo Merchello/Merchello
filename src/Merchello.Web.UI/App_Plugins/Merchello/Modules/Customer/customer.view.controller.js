@@ -8,7 +8,7 @@
      * @description
      * The controller for the Customer view page
      */
-    controllers.CustomerViewController = function($scope, $routeParams, merchelloCustomerService, merchelloGravatarService, merchelloSettingsService, notificationsService) {
+    controllers.CustomerViewController = function($scope, $routeParams, dialogService, merchelloCustomerService, merchelloGravatarService, merchelloInvoiceService, merchelloSettingsService, notificationsService) {
 
         /**
          * @ngdoc method
@@ -60,7 +60,6 @@
                 if (!haveShippingDefault && shippingAddresses.length > 0) {
                     $scope.defaultShippingAddress = shippingAddresses[0];
                 }
-                console.info($scope.defaultShippingAddress);
             });
         };
 
@@ -93,11 +92,71 @@
                     $scope.customer = new merchello.Models.Customer(customerResponse);
                     $scope.avatarUrl = merchelloGravatarService.avatarUrl($scope.customer.email);
                     $scope.getDefaultAddresses();
+                    $scope.loadInvoices();
                     $scope.loaded = true;
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
                 });
             }
+        };
+
+        /**
+         * @ngdoc method
+         * @name loadCustomer
+         * @function
+         * 
+         * @description
+         * Load the invoices for the customer.
+         */
+        $scope.loadInvoices = function() {
+            var promiseInvoices = merchelloInvoiceService.getByCustomerKey($scope.customer.key);
+            promiseInvoices.then(function(invoicesResponse) {
+                $scope.invoices = _.map(invoicesResponse, function (invoice) {
+                    return new merchello.Models.Invoice(invoice);
+                });
+                for (var i = 0; i < invoicesResponse.length; i++) {
+                    $scope.invoiceTotal += (invoicesResponse[i].total * 1);
+                }
+
+            });
+        };
+
+        /**
+        * @ngdoc method
+        * @name openDeleteCustomerDialog
+        * @function
+        * 
+        * @description
+        * Opens the delete customer dialog via the Umbraco dialogService.
+        */
+        $scope.openDeleteCustomerDialog = function () {
+            var dialogData = {};
+            dialogData.name = $scope.customer.firstName + ' ' + $scope.customer.lastName;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.processDeleteCustomerDialog,
+                dialogData: dialogData
+            });
+        };
+
+        /**
+         * @ngdoc method
+         * @name processDeleteCustomerDialog
+         * @function
+         * 
+         * @description
+         * Delete an address and update the associated lists. 
+         */
+        $scope.processDeleteCustomerDialog = function (dialogData) {
+            notificationsService.info("Deleting " + $scope.customer.firstName + " " + $scope.customer.lastName, "");
+            var promiseDeleteCustomer = merchelloCustomerService.DeleteCustomer($scope.customer.key);
+            promiseDeleteCustomer.then(function() {
+                notificationsService.success("Customer deleted.", "");
+                window.location.hash = "#/merchello/merchello/CustomerList/manage";
+            }, function(reason) {
+                notificationsService.error("Customer Deletion Failed", reason.message);
+            });
         };
 
         /**
@@ -132,8 +191,10 @@
             $scope.billingKey = false;
             $scope.customer = new merchello.Models.Customer();
             $scope.customerKey = false;
-            $scope.defaultBillingAddress = {};
-            $scope.defaultShippingAddress = {};
+            $scope.defaultBillingAddress = false;
+            $scope.defaultShippingAddress = false;
+            $scope.invoices = [];
+            $scope.invoiceTotal = 0;
             $scope.loaded = false;
             $scope.shippingKey = false;
         };
@@ -142,7 +203,6 @@
 
     };
 
-
-    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerViewController]);
+    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'dialogService', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloInvoiceService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerViewController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

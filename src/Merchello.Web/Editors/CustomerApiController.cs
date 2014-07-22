@@ -223,7 +223,7 @@
         /// <returns>
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
-        [HttpPost]
+        [HttpPost, HttpGet]
         public HttpResponseMessage DeleteCustomer(Guid id)
         {
             var customer = _customerService.GetByKey(id);

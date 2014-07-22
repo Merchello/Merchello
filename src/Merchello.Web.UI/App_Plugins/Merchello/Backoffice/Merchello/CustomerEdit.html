@@ -56,7 +56,7 @@
                                 <!-- ACTION: Create New Address -->
                                 <a class="btn btn-primary" data-ng-click="newAddress('billing')" ><i class="icon-add"></i> New</a>
                                 <!-- ACTION: Delete This Address -->
-                                <a class="btn-warning btn" data-ng-show="billingAddresses.length > 1" data-ng-click="deleteAddress('billing')"><i class="icon-trash"></i></a>
+                                <a class="btn-warning btn" data-ng-show="billingAddresses.length > 1" data-ng-click="openDeleteAddressDialog('billing')"><i class="icon-trash"></i></a>
                             </div>
                         </div>
                         <div class="form-group span12">
@@ -102,7 +102,7 @@
                                 <!-- ACTION: Create New Address -->
                                 <a class="btn btn-primary" data-ng-click="newAddress('shipping')"><i class="icon-add"></i> New</a>
                                 <!-- ACTION: Delete This Address -->
-                                <a class="btn-warning btn" data-ng-show="shippingAddresses.length > 1" data-ng-click="deleteAddress('shipping')"><i class="icon-trash"></i></a>
+                                <a class="btn-warning btn" data-ng-show="shippingAddresses.length > 1" data-ng-click="openDeleteAddressDialog('shipping')"><i class="icon-trash"></i></a>
                             </div>
                         </div>
                         <div class="form-group span12">

@@ -13,6 +13,8 @@
                     <div class="btn-group">
                         <!-- ACTION: Open Edit Customer View -->
                         <a href="#/merchello/merchello/CustomerEdit/{{customerKey}}" type="submit" class="btn btn-success">Edit</a>
+                        <a class="btn-warning btn" data-ng-click="openDeleteCustomerDialog()">Delete</a>
+
                     </div>
                 </div>
             </div>
@@ -37,42 +39,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
-                                    <td>Sep 01, 4:33pm PDT</td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1002</a></td>
-                                    <td>Sep 01, 4:57pm PDT</td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
-                                    <td>$45.50</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
-                                    <td>Sep 01, 5:11pm PDT</td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
-                                    <td>$210.00</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
-                                    <td>Sep 01, 5:36pm PDT</td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
-                                    <td>$25.98</td>
+                                <tr data-ng-repeat="invoice in invoices">
+                                    <td><input type="checkbox"/></td>
+                                    <td>#<a href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
+                                    <td>{{invoice.invoiceDate}}</td>
+                                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
+                                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
+                                    <td>{{invoice.total | currency : currencySymbol}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="4"></td>
                                     <td>Total Spent:</td>
-                                    <td>$301.48</td>
+                                    <td>{{invoiceTotal | currency : currencySymbol}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -100,7 +78,8 @@
                     <div><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
                     <div data-ng-show="customer.hasPrimaryAddress">{{primaryAddress.phone}}</div>
                 </div>
-                <div class="vcard well">
+                <!-- Billing Address -->
+                <div class="vcard well" data-ng-hide="defaultBillingAdddress == false">
                     <h3>Billing Address</h3>
                     <h4 class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</h4>
                     <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
@@ -112,7 +91,8 @@
                     </span>
                     <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
                 </div>
-                <div class="vcard well">
+                <!-- Shipping Address -->
+                <div class="vcard well" data-ng-hide="defaultShippingAddress == false">
                     <h3>Shipping Address</h3>
                     <h4 class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</h4>
                     <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
