@@ -12,7 +12,7 @@
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class CustomerAddress : Entity, ICustomerAddress
+    public class CustomerAddress : Entity, ICustomerAddress
     {
         #region Fields
 
@@ -149,7 +149,7 @@
         /// <param name="customerKey">
         /// The customer key.
         /// </param>
-        internal CustomerAddress(Guid customerKey)
+        public CustomerAddress(Guid customerKey)
         {
             Mandate.ParameterCondition(!customerKey.Equals(Guid.Empty), "customerKey");
 

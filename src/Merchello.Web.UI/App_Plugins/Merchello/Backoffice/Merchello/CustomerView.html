@@ -1,46 +1,32 @@
 ﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
 
-<form novalidate name="customerForm" 
-      data-ng-controller="Merchello.Editors.Customer.ViewController" 
-      data-ng-show="loaded" 
-      data-ng-submit="save()">
+<form novalidate name="customerForm" data-ng-controller="Merchello.Editors.Customer.ViewController" data-ng-show="loaded" data-ng-submit="save()">
     <umb-panel val-show-validation>
-
         <umb-header>
-
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
                     <h1 class="umb-headline">{{customer.firstName}} {{customer.lastName}}</h1>
                 </div>
             </div>
-
-
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    
                     <div class="btn-group">
                         <!-- ACTION: Open Edit Customer View -->
                         <a href="#/merchello/merchello/CustomerEdit/{{customerKey}}" type="submit" class="btn btn-success">Edit</a>
+                        <a class="btn-warning btn" data-ng-click="openDeleteCustomerDialog()">Delete</a>
 
                     </div>
                 </div>
             </div>
-
         </umb-header>
-        
         <merchello-panel class="row-fluid">
-
             <div class="merchello-pane primary span9">
-
                 <div class="control-group umb-control-group">
-                
                     <div class="merchello-section-label">
                         Order History
                         <small>A list of the customer's orders and their status</small>
                     </div>
-                    
                     <div class="merchello-controls">
-
                         <table class="table table-hover merchello-selectable-table customer-orders">
                             <thead>
                                 <tr>
@@ -53,51 +39,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
-                                    <td>Sep 01, 4:33pm PDT</td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1002</a></td>
-                                    <td>Sep 01, 4:57pm PDT</td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
-                                    <td>$45.50</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
-                                    <td>Sep 01, 5:11pm PDT</td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
-                                    <td>$210.00</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/OrderView/keygoeshere">1001</a></td>
-                                    <td>Sep 01, 5:36pm PDT</td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Paid</span></td>
-                                    <td><span class="label label-success"><i class="icon-check"></i> Fulfilled</span></td>
-                                    <td>$25.98</td>
+                                <tr data-ng-repeat="invoice in invoices">
+                                    <td><input type="checkbox"/></td>
+                                    <td>#<a href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
+                                    <td>{{invoice.invoiceDate}}</td>
+                                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
+                                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
+                                    <td>{{invoice.total | currency : currencySymbol}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="4"></td>
                                     <td>Total Spent:</td>
-                                    <td>$301.48</td>
+                                    <td>{{invoiceTotal | currency : currencySymbol}}</td>
                                 </tr>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
-
                 <div class="control-group umb-control-group">
-                
                     <label class="merchello-section-label" for="customer-note">
                         Customer Notes
                         <small>Notes about the customer (not order specific)</small>
@@ -112,7 +71,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="merchello-pane secondary span3">
                 <div class="well customer-info">
                     <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
@@ -120,22 +78,33 @@
                     <div><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
                     <div data-ng-show="customer.hasPrimaryAddress">{{primaryAddress.phone}}</div>
                 </div>
-                <div class="vcard well">
-                    <h4 class="fn">{{defaultAddress.fullName}}</h4>
-                    <span class="org" data-ng-show="defaultAddress.company!= ''">{{defaultAddress.company}}</span>
+                <!-- Billing Address -->
+                <div class="vcard well" data-ng-hide="defaultBillingAdddress == false">
+                    <h3>Billing Address</h3>
+                    <h4 class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</h4>
+                    <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
                     <span class="adr">
-                        <span class="street-address">{{defaultAddress.address1}}</span>
-                        <span class="extended-address" data-ng-show="defaultAddress.address2 != ''">{{defaultAddress.address2}}</span>
-                        <span class="locality">{{defaultAddress.locality}}</span>, <span class="region">{{defaultAddress.region}}</span>, <span class="postal-code">{{defaultAddress.postalCode}}</span>
-                        <span class="country-name">{{defaultAddress.countryCode}}</span>
+                        <span class="street-address">{{defaultBillingAddress.address1}}</span>
+                        <span class="extended-address" data-ng-show="defaultBillingAddress.address2 != ''">{{defaultBillingAddress.address2}}</span>
+                        <span class="locality">{{defaultBillingAddress.locality}}</span>, <span class="region">{{defaultBillingAddress.region}}</span>, <span class="postal-code">{{defaultBillingAddress.postalCode}}</span>
+                        <span class="country-name">{{defaultBillingAddress.countryCode}}</span>
                     </span>
-                    <span class="tel" data-ng-show="defaultAddress.phone != ''">{{defaultAddress.phone}}</span>
+                    <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
                 </div>
-
-
+                <!-- Shipping Address -->
+                <div class="vcard well" data-ng-hide="defaultShippingAddress == false">
+                    <h3>Shipping Address</h3>
+                    <h4 class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</h4>
+                    <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
+                    <span class="adr">
+                        <span class="street-address">{{defaultShippingAddress.address1}}</span>
+                        <span class="extended-address" data-ng-show="defaultShippingAddress.address2 != ''">{{defaultShippingAddress.address2}}</span>
+                        <span class="locality">{{defaultShippingAddress.locality}}</span>, <span class="region">{{defaultShippingAddress.region}}</span>, <span class="postal-code">{{defaultShippingAddress.postalCode}}</span>
+                        <span class="country-name">{{defaultShippingAddress.countryCode}}</span>
+                    </span>
+                    <span class="tel" data-ng-show="defaultShippingAddress.phone != ''">Phone: {{defaultShippingAddress.phone}}</span>
+                </div>
             </div>
-
         </merchello-panel>
-
     </umb-panel>
 </form>
