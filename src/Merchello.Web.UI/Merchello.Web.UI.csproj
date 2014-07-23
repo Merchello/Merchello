@@ -319,6 +319,8 @@
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editaddress.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editinfo.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editinfo.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.newcustomer.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.newcustomer.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectaddress.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.customer.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.gravatar.service.js" />
