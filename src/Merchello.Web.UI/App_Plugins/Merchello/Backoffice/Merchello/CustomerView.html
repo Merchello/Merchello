@@ -11,8 +11,7 @@
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <!-- ACTION: Open Edit Customer View -->
-                        <a href="#/merchello/merchello/CustomerEdit/{{customerKey}}" type="submit" class="btn btn-success">Edit</a>
+                        <!-- ACTION: Delete Customer -->
                         <a class="btn-warning btn" data-ng-click="openDeleteCustomerDialog()">Delete</a>
 
                     </div>
@@ -40,7 +39,7 @@
                             </thead>
                             <tbody>
                                 <tr data-ng-repeat="invoice in invoices">
-                                    <td><input type="checkbox"/></td>
+                                    <td><input type="checkbox" /></td>
                                     <td>#<a href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
                                     <td>{{invoice.invoiceDate}}</td>
                                     <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
@@ -72,37 +71,58 @@
                 </div>
             </div>
             <div class="merchello-pane secondary span3">
+                <!-- Customer Info -->
                 <div class="well customer-info">
                     <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
                     <h4>{{customer.firstName}} {{customer.lastName}}</h4>
                     <div><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
-                    <div data-ng-show="customer.hasPrimaryAddress">{{primaryAddress.phone}}</div>
+                    <br/>
+                    <!-- ACTION: Edit Info -->
+                    <a class="btn btn-primary" data-ng-click="openEditInfoDialog()">Edit Info</a>
                 </div>
                 <!-- Billing Address -->
-                <div class="vcard well" data-ng-hide="defaultBillingAdddress == false">
+                <div class="vcard well">
                     <h3>Billing Address</h3>
-                    <h4 class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</h4>
-                    <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
-                    <span class="adr">
-                        <span class="street-address">{{defaultBillingAddress.address1}}</span>
-                        <span class="extended-address" data-ng-show="defaultBillingAddress.address2 != ''">{{defaultBillingAddress.address2}}</span>
-                        <span class="locality">{{defaultBillingAddress.locality}}</span>, <span class="region">{{defaultBillingAddress.region}}</span>, <span class="postal-code">{{defaultBillingAddress.postalCode}}</span>
-                        <span class="country-name">{{defaultBillingAddress.countryCode}}</span>
-                    </span>
-                    <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
+                    <div data-ng-show="defaultBillingAddress != false">
+                        <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
+                        <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
+                        <span class="adr">
+                            <span class="street-address">{{defaultBillingAddress.address1}}</span>
+                            <span class="extended-address" data-ng-show="defaultBillingAddress.address2 != ''">{{defaultBillingAddress.address2}}</span>
+                            <span class="locality">{{defaultBillingAddress.locality}}</span>, <span class="region">{{defaultBillingAddress.region}}</span>, <span class="postal-code">{{defaultBillingAddress.postalCode}}</span>
+                            <span class="country-name">{{defaultBillingAddress.countryCode}}</span>
+                            <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
+                        </span>
+                    </div>
+                    <div data-ng-show="defaultBillingAddress == false">
+                        <h5>No Billing Address</h5>
+                    </div>
+                    <div>
+                        <!-- ACTION: Add or Edit Address -->
+                        <a class="btn btn-primary" data-ng-click="openAddressEditDialog('billing')">Add/Edit Address</a>
+                    </div>
                 </div>
                 <!-- Shipping Address -->
-                <div class="vcard well" data-ng-hide="defaultShippingAddress == false">
+                <div class="vcard well">
                     <h3>Shipping Address</h3>
-                    <h4 class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</h4>
-                    <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
-                    <span class="adr">
-                        <span class="street-address">{{defaultShippingAddress.address1}}</span>
-                        <span class="extended-address" data-ng-show="defaultShippingAddress.address2 != ''">{{defaultShippingAddress.address2}}</span>
-                        <span class="locality">{{defaultShippingAddress.locality}}</span>, <span class="region">{{defaultShippingAddress.region}}</span>, <span class="postal-code">{{defaultShippingAddress.postalCode}}</span>
-                        <span class="country-name">{{defaultShippingAddress.countryCode}}</span>
-                    </span>
-                    <span class="tel" data-ng-show="defaultShippingAddress.phone != ''">Phone: {{defaultShippingAddress.phone}}</span>
+                    <div data-ng-show="defaultShippingAddress != false">
+                        <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
+                        <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
+                        <span class="adr">
+                            <span class="street-address">{{defaultShippingAddress.address1}}</span>
+                            <span class="extended-address" data-ng-show="defaultShippingAddress.address2 != ''">{{defaultShippingAddress.address2}}</span>
+                            <span class="locality">{{defaultShippingAddress.locality}}</span>, <span class="region">{{defaultShippingAddress.region}}</span>, <span class="postal-code">{{defaultShippingAddress.postalCode}}</span>
+                            <span class="tel" data-ng-show="defaultShippingAddress.phone != ''">Phone: {{defaultShippingAddress.phone}}</span>
+                            <span class="country-name">{{defaultShippingAddress.countryCode}}</span>
+                        </span>
+                    </div>
+                    <div data-ng-show="defaultShippingAddress == false">
+                        <h5>No Shipping Address</h5>
+                    </div>
+                    <div>
+                        <!-- ACTION: Add or Edit Address -->
+                        <a class="btn btn-primary" data-ng-click="openAddressEditDialog('shipping')">Add/Edit Address</a>
+                    </div>
                 </div>
             </div>
         </merchello-panel>
