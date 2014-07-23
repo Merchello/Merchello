@@ -115,7 +115,9 @@
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductdialog.controller.js',
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js',
 		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.controller.js',
-		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.productedit.controller.js'
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.productedit.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.productcreate.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.producteditwithoptions.controller.js'
 	],
 	css: [
 		'~/App_Plugins/Merchello/Common/Css/merchello.css'
