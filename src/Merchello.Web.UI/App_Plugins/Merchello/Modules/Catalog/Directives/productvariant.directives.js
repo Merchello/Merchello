@@ -330,4 +330,29 @@
 
     angular.module("umbraco").directive('productOptionsManage', merchello.Directives.ProductOptionsManage);
 
+
+
+    /**
+     * @ngdoc directive
+     * @name ProductVariantMainSimpleCreate
+     * @function
+     * 
+     * @description
+     * directive to collect the main information for the product create (sku, price, etc)
+     */
+    directives.ProductVariantMainSimpleCreate = function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '=',
+                productVariant: '=',
+            },
+            templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-main-simple-create.html'
+        };
+    };
+
+    angular.module("umbraco").directive('productVariantMainSimpleCreate', merchello.Directives.ProductVariantMainSimpleCreate);
+
+
 }(window.merchello.Directives = window.merchello.Directives || {}));

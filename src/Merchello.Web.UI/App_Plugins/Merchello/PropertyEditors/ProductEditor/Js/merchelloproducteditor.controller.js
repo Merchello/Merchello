@@ -25,6 +25,9 @@
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
 
+        // Property to control the template to show for the product state (product, product with options, etc)
+        $scope.templatePath = "";
+
 
 
         //--------------------------------------------------------------------------------------
@@ -92,6 +95,12 @@
 
                 $scope.productVariant.copyFromProduct($scope.product);
 
+                if ($scope.product.hasVariants) {
+                    $scope.templatePath = "/App_Plugins/Merchello/PropertyEditors/ProductEditor/Views/merchelloproducteditor.producteditwithoptions.html";
+                } else {
+                    $scope.templatePath = "/App_Plugins/Merchello/PropertyEditors/ProductEditor/Views/merchelloproducteditor.productedit.html";
+                }
+
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
@@ -117,11 +126,13 @@
             // Load the product from the Guid key stored in the model.value
             if (_.isString($scope.model.value)) {
                 if ($scope.model.value.length > 0) {
+                    // editing a product or product with options
                     loadProduct($scope.model.value);
                     $scope.creatingProduct = false;
                     $scope.creatingVariant = false;
                     $scope.editingVariant = false;
                 } else {
+                    $scope.templatePath = "/App_Plugins/Merchello/PropertyEditors/ProductEditor/Views/merchelloproducteditor.productcreate.html";
                     $scope.creatingProduct = true;
                     $scope.creatingVariant = false;
                     $scope.editingVariant = false;
@@ -139,6 +150,20 @@
 
         /**
          * @ngdoc method
+         * @name changeTemplate
+         * @function
+         * 
+         * @description
+         * Handles the template switching for the edit / create / edit with options views
+         */
+        $scope.changeTemplate = function (templateUrl) {
+
+            $scope.templatePath = templateUrl;
+            $scope.creatingProduct = false;
+        };
+
+        /**
+         * @ngdoc method
          * @name selectedProductFromDialog
          * @function
          * 
@@ -148,9 +173,8 @@
         $scope.selectedProductFromDialog = function (selectedProduct) {
 
             $scope.model.value = selectedProduct.key;
-            $scope.product = selectedProduct;
-            $scope.productVariant.copyFromProduct($scope.product);
             $scope.creatingProduct = false;
+            loadProduct(selectedProduct.key);
         };
 
         /**
