@@ -313,6 +313,7 @@ $active: lighten($green, 50%);
     input[type="radio"] { margin-top: 0; }
     .active, .active:hover { background-color: $active; }
 	.active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
+    .error { color: #fff; background: #9d261d; display: inline-block; padding: 2px 8px; margin-bottom: 2px; }
 }
 
 .merchello-product-picker {

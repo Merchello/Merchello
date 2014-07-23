@@ -470,6 +470,12 @@
   background-color: #f0f9ee; }
 .merchello-side-panel .active td, .merchello-side-panel .active .merchello-panel-body .active td, .merchello-panel-body .active .merchello-side-panel .active td {
   border-top: solid 1px #d0ebc9; }
+.merchello-side-panel .error {
+  color: #fff;
+  background: #9d261d;
+  display: inline-block;
+  padding: 2px 8px;
+  margin-bottom: 2px; }
 
 .merchello-product-picker .selector {
   margin-bottom: 5px; }
