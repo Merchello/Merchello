@@ -283,7 +283,6 @@
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.css" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-main-simple-create.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-option-attributes-selection.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variants-view-table.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\productwithoptions.directives.js" />
@@ -316,6 +315,10 @@
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.view.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editaddress.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editaddress.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editinfo.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editinfo.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectaddress.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.customer.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.gravatar.service.js" />
@@ -412,13 +415,9 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Vendors\vendors.models.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
-    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.productcreate.controller.js" />
-    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.producteditwithoptions.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.productedit.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.html" />
-    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.productcreate.html" />
-    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.producteditwithoptions.html" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.productedit.html" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloproductdialog.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloproductselector.controller.js" />
