@@ -110,7 +110,7 @@
         }
 
         /// <summary>
-        /// The to customer address.
+        /// Maps a <see cref="CustomerAddressDisplay"/> to a <see cref="ICustomerAddress"/>
         /// </summary>
         /// <param name="address">
         /// The address.
@@ -120,9 +120,8 @@
         /// </returns>
         public static ICustomerAddress ToCustomerAddress(this CustomerAddressDisplay address)
         {
-            return new CustomerAddress(address.CustomerKey)
+            var customerAddress = new CustomerAddress(address.CustomerKey)
                        {
-                           Key = address.Key,
                            FullName = address.FullName,
                            Label = address.Label,
                            Address1 = address.Address1,
@@ -136,6 +135,9 @@
                            Phone = address.Phone,
                            IsDefault = address.IsDefault
                        };
+            if (!address.Key.Equals(Guid.Empty)) customerAddress.Key = address.Key;
+
+            return customerAddress;            
         }
     }
 

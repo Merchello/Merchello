@@ -72,6 +72,11 @@
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Phone);
 
         /// <summary>
+        /// The customer key selector.
+        /// </summary>
+        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, Guid>(x => x.CustomerKey);
+
+        /// <summary>
         /// The is default selector.
         /// </summary>
         private static readonly PropertyInfo IsDefaultSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, bool>(x => x.IsDefault);
@@ -79,7 +84,7 @@
         /// <summary>
         /// The customer key.
         /// </summary>
-        private readonly Guid _customerKey;
+        private Guid _customerKey;
 
         /// <summary>
         /// The label.
@@ -150,9 +155,7 @@
         /// The customer key.
         /// </param>
         public CustomerAddress(Guid customerKey)
-        {
-            Mandate.ParameterCondition(!customerKey.Equals(Guid.Empty), "customerKey");
-
+        {            
             _customerKey = customerKey;
 
             // Default to a shipping address
@@ -165,7 +168,22 @@
         [DataMember]
         public Guid CustomerKey
         {
-            get { return _customerKey; }
+            get
+            {
+                return _customerKey;
+            }
+
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                        {
+                            _customerKey = value;
+                            return _customerKey;
+                        },
+                    _customerKey,
+                    CustomerKeySelector);
+            }
         }
 
         /// <summary>
@@ -492,5 +510,4 @@
             }
         }
     }
-
 }
