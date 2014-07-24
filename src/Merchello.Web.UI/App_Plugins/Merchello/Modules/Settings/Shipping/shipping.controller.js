@@ -829,18 +829,19 @@
          * Handles the add/edit after recieving the dialogData from the dialog view/controller
          */
 		$scope.warehouseCatalogDialogConfirm = function (data) {
-
-		    var selectedCatalog = data.catalog;
-
-		    /* TODO: Add API call functionality to either save an edited catalog or create a new one */
-
+		    var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
+		    var promiseUpdateCatalog;
 		    if (selectedCatalog.key === "") {
-		        // TODO: Remove the following line. It's just there for mocking an unique key */
-		        selectedCatalog.key = Math.floor(Math.random() * 1000);
+		        promiseUpdateCatalog = merchelloWarehouseService.addWarehouseCatalog(selectedCatalog);
 		        selectedCatalog.warehouseKey = $scope.primaryWarehouse.key;
-		        $scope.primaryWarehouse.warehouseCatalogs.push(selectedCatalog);
+            } else {
+		        promiseUpdateCatalog = merchelloWarehouseService.putWarehouseCatalog(selectedCatalog);
 		    }
-
+		    promiseUpdateCatalog.then(function (responseCatalog) {
+		        $scope.loadWarehouses();
+		    }, function (reason) {
+		        notificationService.error('Catalog Update Failed', reason.message);
+		    });
 		};
 
 	};
