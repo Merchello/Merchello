@@ -362,6 +362,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
         }
 
+
         private void WriteBasketInfoToConsole()
         {
             Console.WriteLine("----------- Basket Item Info ---------------------");
