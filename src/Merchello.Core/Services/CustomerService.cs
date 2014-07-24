@@ -644,34 +644,18 @@
         {
             if (!customer.Addresses.Any()) return;
 
-            foreach (var address in customer.Addresses) SaveAddress(customer, address);            
-        }
+            var addresses = customer.Addresses.ToArray();
 
-        /// <summary>
-        /// Saves a customer address and updated the customer address collection on the customer.
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="address">
-        /// The address.
-        /// </param>
-        private void SaveAddress(ICustomer customer, ICustomerAddress address)
-        {
-            _customerAddressService.Save(address);
-
-            var addresses = customer.Addresses.ToList();
-
-            if (addresses.Any(x => x.Key == address.Key))
+            for (int i = 0; i < addresses.Count(); i++)
             {
-                addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
+                if (addresses[i].CustomerKey.Equals(Guid.Empty))
+                {
+                    ((CustomerAddress)addresses[i]).CustomerKey = customer.Key;
+                }
+
+                _customerAddressService.Save(addresses[i]);
             }
-
-            addresses.Add(address);
-
-            ((Customer)customer).Addresses = addresses;
         }
-
 
         /// <summary>
         /// Deletes invoices and payments associated with a customer
