@@ -8,8 +8,12 @@
      * @description
      * The controller for the customers list page
      */
-    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService, dialogService) {
+    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, merchelloCustomerService, merchelloSettingsService) {
         $scope.customer = {};
+        $scope.shippingAddress = {};
+        $scope.billingAddress = {};
+        $scope.customerSelected = false;
+        $scope.createCustomer = false;
 
         if ($routeParams.create) {
             $scope.loaded = true;
@@ -68,9 +72,28 @@
          * Handles the save after recieving the country to add from the dialog view/controller
          */
         $scope.editCustomerInformationConfirm = function (customer) {
-            alert(customer);
+            $scope.customer = new merchello.Models.Customer(customer);
+            $scope.customerSelected = true;
             notificationsService.info("Saved!", "");
         };
+
+        $scope.createCustomerDirective = function (newCustomer, newBillingAddress, newShippingAddress) {
+            $scope.toggleCreateCustomer();
+            $scope.customerSelected = true;
+            $scope.shippingAddressSelected();
+            $scope.billingAddressSelected();
+        }
+
+        $scope.toggleCreateCustomer = function() {   
+            $scope.createCustomer = !$scope.createCustomer;
+        }
+        $scope.shippingAddressSelected = function () {
+            $scope.shippingAddressSelected = true;
+        }
+
+        $scope.billingAddressSelected = function () {
+            $scope.billingAddressSelected = true;
+        }
 
         $scope.save = function () {
 
@@ -88,11 +111,10 @@
             //    notificationsService.error("Order Save Failed", reason.message);
 
             //});
-        };
+        };         
+    };
 
-    }
-
-
-    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', 'dialogService', merchello.Controllers.OrderEditController]);
+                                                                                  
+    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', 'dialogService', 'merchelloCustomerService', 'merchelloSettingsService', merchello.Controllers.OrderEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

@@ -74,8 +74,8 @@ namespace Merchello.Web.Trees
                 menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
             }
 
-            if (id == "orders")
-            {                                                                 
+            if (id == "orders")     
+            {                                                                                                 
                 menu.Items.Add<CreateChildEntity, ActionNew>("Create Order", true).Alias = "createOrder";
             }
 
