@@ -56,7 +56,6 @@
 		'~/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.deletevariants.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.duplicatevariants.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.models.js',
-		'~/App_Plugins/Merchello/Modules/Customer/customer.edit.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.list.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.view.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/merchello.customer.service.js',
