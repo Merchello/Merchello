@@ -271,6 +271,14 @@ $active: lighten($green, 50%);
         div { margin-left: 42px; }
     }
 
+    // Shipping Page
+    .merchello-shipping-country {
+        clear: both;
+        border-bottom: 1px solid #f8f8f8;
+        position: relative;
+        overflow: hidden;
+    }
+
     //Graphs and Charts
     li {
         .bar-graph & { display: inline-block; margin-right: .8%; text-align: center; color: #d9d9d9; margin-left: -4px;

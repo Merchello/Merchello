@@ -23,11 +23,9 @@
          * Method called on intial page load.  Loads in data from server and sets up scope.
          */
 	    $scope.init = function () {
-
 	        $scope.setVariables();
 	        $scope.loadWarehouses();
 	        $scope.loadAllAvailableCountries();
-
 	    };
 
 	    /**
@@ -212,20 +210,14 @@
          * in Merchello models and add to the scope via the provider in the shipMethods collection.
          */
 	    $scope.loadProviderMethods = function (shipProvider, country) {
-
 	        var promiseShipMethods = merchelloCatalogShippingService.getShippingProviderShipMethodsByCountry(shipProvider, country);
 	        promiseShipMethods.then(function (shipMethods) {
-
 	            shipProvider.shipMethods = _.map(shipMethods, function (method) {
 	                return new merchello.Models.ShippingMethod(method);
 	            });
-
 	        }, function (reason) {
-
 	            notificationsService.error("Available Shipping Methods Load Failed", reason.message);
-
 	        });
-
 	    };
 
 	    /**
@@ -239,22 +231,14 @@
          * Once loaded, it calls the loadCountries method.
          */
 	    $scope.loadWarehouses = function () {
-
 	        var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse(); // Only a default warehouse in v1
 	        promiseWarehouses.then(function (warehouseFromServer) {
-
 	            $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
-
 	            $scope.changePrimaryWarehouse();
-
 	            $scope.loadAllShipProviders();
-
 	        }, function (reason) {
-
 	            notificationsService.error("Warehouses Load Failed", reason.message);
-
 	        });
-
 	    };
 
 	    /**
@@ -271,7 +255,6 @@
 	        $scope.availableFixedRateGatewayResources = [];
 	        $scope.countries = [];
 	        $scope.warehouses = [];
-	        $scope.warehouseHasAddress = false;
 	        $scope.providers = [];
 	        $scope.newWarehouse = new merchello.Models.Warehouse();
 	        $scope.primaryWarehouse = new merchello.Models.Warehouse();
@@ -353,13 +336,31 @@
          * @description
          * Helper method to determine if the provided country has provinces or not.
          */
-        $scope.countryHasProvinces = function(country) {
-            var result = false;
-            if (country.provinces.length > 0) {
-                result = true;
+	    $scope.countryHasProvinces = function(country) {
+	        var result = false;
+	        if (country.provinces.length > 0) {
+	            result = true;
+	        }
+	        return result;
+	    };
+
+	    /**
+         * @ngdoc method
+         * @name doesWarehouseHaveAddress
+         * @function
+         * 
+         * @description
+         * Returns true if the warehouse has an address. Returns false if it does not.
+         */
+	    $scope.doesWarehouseHaveAddress = function() {
+	        var result = true;
+	        var warehouse = $scope.primaryWarehouse;
+            if (warehouse.address1 === '' || warehouse.locality == '') {
+                result = false;
             }
-            return result;
-        }
+	        return result;
+
+	    };
 
 	    //--------------------------------------------------------------------------------------
 	    // Event Handlers
@@ -398,12 +399,13 @@
          * 
          * @description
          * Calls the fixed rate shipping service to delete the method passed in via the method parameter.
+         * After method is deleted, reload the list of methods for that provider in that country.
          */
-		$scope.removeMethodFromProviderDialogConfirmation = function (dialogData) {
-		    var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(dialogData.method);
+		$scope.removeMethodFromProviderDialogConfirmation = function (data) {
+		    var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(data.method);
 		    promiseDelete.then(function () {
-		        provider.shipMethods = [];
-		        $scope.loadProviderMethods(dialogData.provider, dialogData.country);
+		        data.provider.shipMethods = [];
+		        $scope.loadProviderMethods(data.provider, data.country);
 		        notificationsService.success("Shipping Method Deleted");
 		    }, function (reason) {
 		        notificationsService.error("Shipping Method Delete Failed", reason.message);
@@ -418,13 +420,16 @@
          * 
          * @description
          * Opens the delete confirmation dialog via the Umbraco dialogService.
+         * Country and provider passed through dialogService so that on confirm the provider's 
+         * methods can be reloaded after the method is deleted.
          */
-		$scope.removeMethodFromProviderDialog = function (shippingGatewayProvider, shipMethod, country) {
-		    var dialogData = {};
-		    dialogData.name = shipMethod.name;
-		    dialogData.shippingGatewayProvider = shippingGatewayProvider;
-		    dialogData.shipMethod = shipMethod;
-		    dialogData.country = country;
+		$scope.removeMethodFromProviderDialog = function (country, provider, method) {
+		    var dialogData = {
+                country: country,
+                name: method.name,
+                method: method,
+                provider: provider
+    		};
 		    dialogService.open({
 		        template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
 		        show: true,
@@ -540,18 +545,15 @@
         * Opens the shipping provider dialog via the Umbraco dialogService.
         */
 		$scope.addEditShippingProviderDialogOpen = function (country, provider) {
-
 		    var dialogProvider = provider;
 		    if (!provider) {
 		        dialogProvider = new merchello.Models.ShippingGatewayProvider();
 		    }
-
 		    var myDialogData = {
 		        country: country,
 		        provider: dialogProvider,
 		        availableProviders: $scope.providers
 		    };
-
 		    dialogService.open({
 		        template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.html',
 		        show: true,
