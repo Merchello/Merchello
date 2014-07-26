@@ -36,6 +36,22 @@
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="IWarehouseCatalog"/> by a warehouse key.
+        /// </summary>
+        /// <param name="warehouseKey">
+        /// The warehouse key.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IWarehouseCatalog"/>.
+        /// </returns>
+        public IEnumerable<IWarehouseCatalog> GetWarehouseCatalogsByWarehouseKey(Guid warehouseKey)
+        {
+            var query = Querying.Query<IWarehouseCatalog>.Builder.Where(x => x.WarehouseKey == warehouseKey);
+
+            return this.GetByQuery(query);
+        }
+
+        /// <summary>
         /// Gets a <see cref="IWarehouseCatalog"/> by it's unique key.
         /// </summary>
         /// <param name="key">
