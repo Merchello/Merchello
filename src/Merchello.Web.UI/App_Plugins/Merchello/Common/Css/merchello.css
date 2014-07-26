@@ -415,6 +415,11 @@
     line-height: 32px; }
   .merchello-panel-body .customer-info div {
     margin-left: 42px; }
+  .merchello-panel-body .merchello-shipping-country {
+    clear: both;
+    border-bottom: 1px solid #f8f8f8;
+    position: relative;
+    overflow: hidden; }
   .bar-graph .merchello-panel-body li {
     display: inline-block;
     margin-right: 0.8%;

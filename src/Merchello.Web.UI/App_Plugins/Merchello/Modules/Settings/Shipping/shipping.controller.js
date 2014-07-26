@@ -23,11 +23,9 @@
          * Method called on intial page load.  Loads in data from server and sets up scope.
          */
 	    $scope.init = function () {
-
 	        $scope.setVariables();
 	        $scope.loadWarehouses();
 	        $scope.loadAllAvailableCountries();
-
 	    };
 
 	    /**
@@ -239,22 +237,14 @@
          * Once loaded, it calls the loadCountries method.
          */
 	    $scope.loadWarehouses = function () {
-
 	        var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse(); // Only a default warehouse in v1
 	        promiseWarehouses.then(function (warehouseFromServer) {
-
 	            $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
-
 	            $scope.changePrimaryWarehouse();
-
 	            $scope.loadAllShipProviders();
-
 	        }, function (reason) {
-
 	            notificationsService.error("Warehouses Load Failed", reason.message);
-
 	        });
-
 	    };
 
 	    /**
@@ -540,18 +530,15 @@
         * Opens the shipping provider dialog via the Umbraco dialogService.
         */
 		$scope.addEditShippingProviderDialogOpen = function (country, provider) {
-
 		    var dialogProvider = provider;
 		    if (!provider) {
 		        dialogProvider = new merchello.Models.ShippingGatewayProvider();
 		    }
-
 		    var myDialogData = {
 		        country: country,
 		        provider: dialogProvider,
 		        availableProviders: $scope.providers
 		    };
-
 		    dialogService.open({
 		        template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.html',
 		        show: true,
