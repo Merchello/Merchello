@@ -178,6 +178,8 @@
             Database.Insert(dto);
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.WarehouseKey));
         }
 
         /// <summary>
@@ -195,6 +197,25 @@
 
             Database.Update(dto);
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.WarehouseKey));
+        }
+
+        /// <summary>
+        /// Deletes a persisted warehouse catalog
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        protected override void PersistDeletedItem(IWarehouseCatalog entity)
+        {
+            var deletes = GetDeleteClauses();
+            foreach (var delete in deletes)
+            {
+                Database.Execute(delete, new { entity.Key });
+            }
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.WarehouseKey)); 
         }
     }
 }

@@ -389,7 +389,6 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-helper-directives.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-country.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\merchello.catalogfixedrateshipping.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\merchello.catalogshipping.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.settings.service.js" />
