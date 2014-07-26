@@ -266,6 +266,7 @@
     <Compile Include="PartialView\PartialViewFormatterTests.cs" />
     <Compile Include="PartialView\RazorEngineTests.cs" />
     <Compile Include="Payments\PaymentProcessingTests.cs" />
+    <Compile Include="Services\Warehouse\WarehhouseServiceTests.cs" />
     <Compile Include="TestHelpers\MigrationHelper.cs" />
     <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
     <Compile Include="Workflow\CheckoutProcessesTests.cs" />

@@ -358,9 +358,7 @@
         {
             using (var repository = _repositoryFactory.CreateWarehouseCatalogRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IWarehouseCatalog>.Builder.Where(x => x.WarehouseKey == warehouseKey);
-
-                return repository.GetByQuery(query);
+                return repository.GetWarehouseCatalogsByWarehouseKey(warehouseKey);
             }
         }
 
