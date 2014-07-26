@@ -83,7 +83,7 @@
                         <a class="btn btn-default btn-action pull-right" data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-edit"></i></a>
                     </h3>
                     <h4>{{primaryWarehouse.name}}</h4>
-                    <div class="adr" data-ng-show="warehouseHasAddress">
+                    <div class="adr" data-ng-show="doesWarehouseHaveAddress()">
                         <div class="street-address">{{primaryWarehouse.address1}}</div>
                         <div class="extended-address">{{primaryWarehouse.address2}}</div>
                         <span class="locality">{{primaryWarehouse.locality}}</span>, <span class="region">{{primaryWarehouse.region}}</span> <span class="postal-code">{{primaryWarehouse.postalCode}}</span>

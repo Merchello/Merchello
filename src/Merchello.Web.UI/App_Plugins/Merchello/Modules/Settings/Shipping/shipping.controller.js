@@ -255,7 +255,6 @@
 	        $scope.availableFixedRateGatewayResources = [];
 	        $scope.countries = [];
 	        $scope.warehouses = [];
-	        $scope.warehouseHasAddress = false;
 	        $scope.providers = [];
 	        $scope.newWarehouse = new merchello.Models.Warehouse();
 	        $scope.primaryWarehouse = new merchello.Models.Warehouse();
@@ -337,13 +336,31 @@
          * @description
          * Helper method to determine if the provided country has provinces or not.
          */
-        $scope.countryHasProvinces = function(country) {
-            var result = false;
-            if (country.provinces.length > 0) {
-                result = true;
+	    $scope.countryHasProvinces = function(country) {
+	        var result = false;
+	        if (country.provinces.length > 0) {
+	            result = true;
+	        }
+	        return result;
+	    };
+
+	    /**
+         * @ngdoc method
+         * @name doesWarehouseHaveAddress
+         * @function
+         * 
+         * @description
+         * Returns true if the warehouse has an address. Returns false if it does not.
+         */
+	    $scope.doesWarehouseHaveAddress = function() {
+	        var result = true;
+	        var warehouse = $scope.primaryWarehouse;
+            if (warehouse.address1 === '' || warehouse.locality == '') {
+                result = false;
             }
-            return result;
-        }
+	        return result;
+
+	    };
 
 	    //--------------------------------------------------------------------------------------
 	    // Event Handlers
