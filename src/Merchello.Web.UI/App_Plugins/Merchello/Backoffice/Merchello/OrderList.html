@@ -1,53 +1,38 @@
-﻿<div 
-    ng-controller="Merchello.Dashboards.Order.ListController"
-    ng-show="loaded">
-
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+<div ng-controller="Merchello.Dashboards.Order.ListController" ng-show="loaded">
     <umb-panel>
-
         <umb-header>
-
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
 	                <h1 class="umb-headline"><localize key="merchelloOrder_order"/></h1>
                 </div>
             </div>
-
-
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    
                     <!-- New Order Button
                     <div class="btn-group">
                         <a href="#/merchello/merchello/OrderEdit/do?create" class="btn btn-success">New Order</a>
                     </div>
-                         -->
+                    -->
                 </div>
             </div>
-
         </umb-header>
-        
         <merchello-panel>
-
-            <!-- Order Filters -->
             <div class="merchello-pane">
+                <!-- Order Filters -->
                 <form class="form-horizontal">
                     <div class="form-group control-group row-fluid">
-	                    <label for="orderFilter" class="col-xs-2 control-label"><localize key="merchelloOrder_filter"/>:</label>
+                        <label for="orderFilter" class="col-xs-2 control-label"><localize key="merchelloOrder_filter"/>:</label>
                         <div class="col-xs-10 controls">
-	                        <input id="orderFilter"
-								   class="form-control span6"
-	                               name="orderFilter"
-	                               data-ng-model="filtertext"
-								   localize="placeholder"
-								   placeholder="@merchelloPlaceholders_enterOrder" />
+                            <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filtertext" localize="placeholder" placeholder="@merchelloPlaceholders_enterOrder" />
+                            <!-- ACTION: Filter Orders -->
                             <button id="orderFilterGo" class="btn" data-ng-click="getFilteredInvoices(filtertext)"><localize key="merchelloGeneral_filter" /></button>
                         </div>
                     </div>
                 </form>
-                
                 <form class="form-horizontal" data-ng-show="invoices.length > 0">
                     <div class="form-group control-group row-fluid">
-	                    <label for="limitSelect" class="col-xs-2 control-label"><localize key="merchelloOrder_invoicesPerPage"/>:</label>
+                        <label for="limitSelect" class="col-xs-2 control-label"><localize key="merchelloOrder_invoicesPerPage"/>:</label>
                         <div class="col-xs-10 controls">
                             <select name="limitSelect" class="form-control span3 col-xs-3" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
                                 <option selected value="10">10</option>
@@ -58,18 +43,14 @@
                         </div>
                     </div>
                 </form>
-
                 <div class="row warning" data-ng-show="orderIssues.length > 0">
-	                <h2><i class="icon-alert"></i> <localize key="merchelloOrder_attentionRequired"/></h2>
-	                <p><a href="#">There is 1 payment authorization expiring</a>. <localize key="merchelloOrder_paymentExpirationWarning"/> </p>
+                    <h2><i class="icon-alert"></i> <localize key="merchelloOrder_attentionRequired"/></h2>
+                    <p><a href="#">There is 1 payment authorization expiring</a>. <localize key="merchelloOrder_paymentExpirationWarning"/> </p>
                 </div>
             </div>
-
             <!-- Tabular Order List -->
             <div class="merchello-pane">
-                
                 <merchello-pager></merchello-pager>
-
                 <table class="table table-hover merchello-selectable-table">
                     <thead>
                         <tr>
@@ -124,16 +105,11 @@
                         </tr>
                     </tbody>
                 </table>
-
                 <merchello-pager></merchello-pager>
-
                 <div class="pager well" data-ng-show="invoices.length == 0">
 	                <localize key="merchelloOrder_noOrders"/>
                 </div>
-                    
             </div>
-
         </merchello-panel>
-            
     </umb-panel>
 </div>

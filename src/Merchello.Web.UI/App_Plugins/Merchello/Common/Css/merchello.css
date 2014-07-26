@@ -20,6 +20,14 @@
     color: #000; }
   .merchello-panel-body .btn-primary {
     color: #fff; }
+  .merchello-panel-body .btn-trash:hover {
+    color: #fff;
+    background: #bd362f;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05); }
+  .merchello-panel-body .btn-action:hover {
+    color: #fff;
+    background: #53a93f;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05); }
   .merchello-panel-body .label {
     font-size: 1em;
     line-height: 20px;
@@ -36,12 +44,14 @@
     padding-top: 1px; }
   .merchello-panel-body .clear {
     clear: both; }
-  .merchello-panel-body .well h3 {
-    margin: 0; }
-  .merchello-panel-body .well h4 {
-    margin-bottom: 5px; }
-  .merchello-panel-body .well .add {
-    margin-bottom: 20px; }
+  .merchello-panel-body .well {
+    position: relative; }
+    .merchello-panel-body .well h3 {
+      margin: 0; }
+    .merchello-panel-body .well h4 {
+      margin-bottom: 5px; }
+    .merchello-panel-body .well .add {
+      margin-bottom: 20px; }
   .merchello-panel-body blockquote p {
     font-size: 1em;
     line-height: 1.5em; }
