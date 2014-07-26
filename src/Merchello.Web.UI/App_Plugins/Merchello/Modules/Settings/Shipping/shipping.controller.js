@@ -210,20 +210,14 @@
          * in Merchello models and add to the scope via the provider in the shipMethods collection.
          */
 	    $scope.loadProviderMethods = function (shipProvider, country) {
-
 	        var promiseShipMethods = merchelloCatalogShippingService.getShippingProviderShipMethodsByCountry(shipProvider, country);
 	        promiseShipMethods.then(function (shipMethods) {
-
 	            shipProvider.shipMethods = _.map(shipMethods, function (method) {
 	                return new merchello.Models.ShippingMethod(method);
 	            });
-
 	        }, function (reason) {
-
 	            notificationsService.error("Available Shipping Methods Load Failed", reason.message);
-
 	        });
-
 	    };
 
 	    /**
@@ -388,12 +382,13 @@
          * 
          * @description
          * Calls the fixed rate shipping service to delete the method passed in via the method parameter.
+         * After method is deleted, reload the list of methods for that provider in that country.
          */
-		$scope.removeMethodFromProviderDialogConfirmation = function (dialogData) {
-		    var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(dialogData.method);
+		$scope.removeMethodFromProviderDialogConfirmation = function (data) {
+		    var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(data.method);
 		    promiseDelete.then(function () {
-		        provider.shipMethods = [];
-		        $scope.loadProviderMethods(dialogData.provider, dialogData.country);
+		        data.provider.shipMethods = [];
+		        $scope.loadProviderMethods(data.provider, data.country);
 		        notificationsService.success("Shipping Method Deleted");
 		    }, function (reason) {
 		        notificationsService.error("Shipping Method Delete Failed", reason.message);
@@ -408,13 +403,16 @@
          * 
          * @description
          * Opens the delete confirmation dialog via the Umbraco dialogService.
+         * Country and provider passed through dialogService so that on confirm the provider's 
+         * methods can be reloaded after the method is deleted.
          */
-		$scope.removeMethodFromProviderDialog = function (shippingGatewayProvider, shipMethod, country) {
-		    var dialogData = {};
-		    dialogData.name = shipMethod.name;
-		    dialogData.shippingGatewayProvider = shippingGatewayProvider;
-		    dialogData.shipMethod = shipMethod;
-		    dialogData.country = country;
+		$scope.removeMethodFromProviderDialog = function (country, provider, method) {
+		    var dialogData = {
+                country: country,
+                name: method.name,
+                method: method,
+                provider: provider
+    		};
 		    dialogService.open({
 		        template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
 		        show: true,

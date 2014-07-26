@@ -31,27 +31,28 @@
                         </div>
                     </div>
                 </div>
-                <div class="countrol-group umb-control-group">
+                <div class="control-group umb-control-group">
+                    <!-- Shipping Countries -->
                     <div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
-                        <!-- Shipping Country -->
                         <div class="merchello-section-label">
-                            <h4>{{country.name}} <a data-ng-click="deleteCountryDialog(country)" class="btn btn-default btn-trash btn-xs btn-mini pull-right"><i class="icon-trash"></i></a></h4>
+                            <h4>
+                                {{country.name}}
+                                <!-- ACTION: Delete Country -->
+                                <a data-ng-click="deleteCountryDialog(country)" class="btn btn-default btn-trash btn-xs btn-mini pull-right"><i class="icon-trash"></i></a>
+                            </h4>
                             <!-- ACTION: Add Shipping Provider to Country -->
                             <a data-ng-click="addEditShippingProviderDialogOpen(country)"><i class="icon-add"></i> Add Provider</a><br /><br />
-                            <!-- ACTION: Delete Country -->
-
                         </div>
                         <!-- Shipping Provider -->
                         <div class="merchello-controls" data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider">
-                            <!-- Shipping Provider -->
                             <h5 class="row-fluid col-xs-5 span5">
                                 {{shippingGatewayProvider.name}}
                                 <!-- ACTION: Add Shipping Method to Provider -->
                                 <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider)" class="pull-right"><i class="icon-add"></i> Add Method</a>
                             </h5>
+                            <!-- Shipping Methods -->
                             <table class="table table-striped merchello-striped-table settings-table shipping-table">
                                 <tbody>
-                                    <!-- Shipping Methods -->
                                     <tr data-ng-repeat="shipMethod in shippingGatewayProvider.shipMethods">
                                         <td>{{shipMethod.name}}</td>
                                         <td></td>
@@ -63,7 +64,7 @@
                                                 <!-- ACTION: Edit Shipping Method -->
                                                 <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider, shipMethod)"><i class="icon-edit"></i></a>
                                                 <!-- ACTION: Remove Shipping Method -->
-                                                <a data-ng-click="removeMethodFromProviderDialog(shippingGatewayProvider, shipMethod, country)" class="btn btn-default btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
+                                                <a data-ng-click="removeMethodFromProviderDialog(country, shippingGatewayProvider, shipMethod)" class="btn btn-default btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
                                             </div>
                                         </td>
                                     </tr>
