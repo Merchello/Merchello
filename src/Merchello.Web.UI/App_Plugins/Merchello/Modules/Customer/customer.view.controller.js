@@ -162,6 +162,7 @@
             var dialogData = {};
             dialogData.addressToReturn = new merchello.Models.CustomerAddress();
             dialogData.countries = $scope.countries;
+            dialogData.shouldDelete = false;
             $scope.currentAddress = new merchello.Models.CustomerAddress();
             dialogData.addressType = type;
             if (type == 'billing') {
@@ -176,7 +177,7 @@
             var aliases = [];
             for (var i = 0; i < dialogData.addresses.length; i++) {
                 var address = dialogData.addresses[i];
-                var alias = address.address1 + ' ' + address.locality + ', ' + address.region;
+                var alias = address.label;
                 aliases.push({ id: i, name: alias });
             };
             aliases.unshift({ id: -1, name: 'New Address' });
@@ -269,33 +270,49 @@
 
         /**
         * @ngdoc method
-        * @name processDeleteCustomerDialog
+        * @name processEditAddressDialog
         * @function
         * 
         * @description
-        * Delete an address and update the associated lists. 
+        * Edit an address and update the associated lists. 
         */
         $scope.processEditAddressDialog = function (data) {
-            var newAddress;
-            if (data.filters.address.name != 'New Address') {
+            var newAddress, i;
+            if (data.shouldDelete) {
                 if (data.addressType === 'billing') {
-                    $scope.billingAddresses[data.filters.address.id] = new merchello.Models.CustomerAddress(data.addressToReturn);
+                    for (i = 0; i < $scope.billingAddresses.length; i++) {
+                        if ($scope.billingAddresses[i].key == data.addressToReturn.key) {
+                            $scope.billingAddresses.splice(i, 1);
+                        }
+                    }
                 } else {
-                    $scope.shippingAddresses[data.filters.address.id] = new merchello.Models.CustomerAddress(data.addressToReturn);
+                    for (i = 0; i < $scope.shippingAddresses.length; i++) {
+                        if ($scope.shippingAddresses[i].key == data.addressToReturn.key) {
+                            $scope.shippingAddresses.splice(i, 1);
+                        }
+                    }
                 }
-                notificationsService.success("Address updated.", "");
             } else {
-                newAddress = new merchello.Models.CustomerAddress(data.addressToReturn);
-                if (data.addressType === 'billing') {
-                    newAddress.addressTypeFieldKey = $scope.billingKey;
-                    $scope.billingAddresses.push(newAddress);
+                if (data.filters.address.name != 'New Address') {
+                    if (data.addressType === 'billing') {
+                        $scope.billingAddresses[data.filters.address.id] = new merchello.Models.CustomerAddress(data.addressToReturn);
+                    } else {
+                        $scope.shippingAddresses[data.filters.address.id] = new merchello.Models.CustomerAddress(data.addressToReturn);
+                    }
+                    notificationsService.success("Address updated.", "");
                 } else {
-                    newAddress.addressTypeFieldKey = $scope.shippingKey;
-                    $scope.shippingAddresses.push(newAddress);
+                    newAddress = new merchello.Models.CustomerAddress(data.addressToReturn);
+                    newAddress.customerKey = $scope.customer.key;
+                    newAddress.addressType = data.AddressType;
+                    if (data.addressType === 'billing') {
+                        newAddress.addressTypeFieldKey = $scope.billingKey;
+                        $scope.billingAddresses.push(newAddress);
+                    } else {
+                        newAddress.addressTypeFieldKey = $scope.shippingKey;
+                        $scope.shippingAddresses.push(newAddress);
+                    }
+                    notificationsService.success("Address added to list.", "");
                 }
-                newAddress.customerKey = $scope.customer.key;
-                newAddress.addressType = data.AddressType;
-                notificationsService.success("Address added to list.", "");
             }
             $scope.customer.addresses = $scope.prepareAddressesForSave();
             $scope.saveCustomer();
@@ -307,7 +324,7 @@
          * @function
          * 
          * @description
-         * Delete an address and update the associated lists. 
+         * Delete a customer. 
          */
         $scope.processDeleteCustomerDialog = function (dialogData) {
             notificationsService.info("Deleting " + $scope.customer.firstName + " " + $scope.customer.lastName, "");

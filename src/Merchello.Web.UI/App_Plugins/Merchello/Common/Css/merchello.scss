@@ -271,6 +271,10 @@ $active: lighten($green, 50%);
         div { margin-left: 42px; }
     }
 
+    .billing-address-info, .shipping-address-info {
+        .vcard { margin-top: 1em; }
+    }
+
     // Shipping Page
     .merchello-shipping-country {
         clear: both;
