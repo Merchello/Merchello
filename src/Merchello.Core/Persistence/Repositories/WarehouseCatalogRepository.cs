@@ -36,6 +36,22 @@
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="IWarehouseCatalog"/> by a warehouse key.
+        /// </summary>
+        /// <param name="warehouseKey">
+        /// The warehouse key.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IWarehouseCatalog"/>.
+        /// </returns>
+        public IEnumerable<IWarehouseCatalog> GetWarehouseCatalogsByWarehouseKey(Guid warehouseKey)
+        {
+            var query = Querying.Query<IWarehouseCatalog>.Builder.Where(x => x.WarehouseKey == warehouseKey);
+
+            return this.GetByQuery(query);
+        }
+
+        /// <summary>
         /// Gets a <see cref="IWarehouseCatalog"/> by it's unique key.
         /// </summary>
         /// <param name="key">
@@ -178,6 +194,8 @@
             Database.Insert(dto);
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.WarehouseKey));
         }
 
         /// <summary>
@@ -195,6 +213,25 @@
 
             Database.Update(dto);
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.WarehouseKey));
+        }
+
+        /// <summary>
+        /// Deletes a persisted warehouse catalog
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        protected override void PersistDeletedItem(IWarehouseCatalog entity)
+        {
+            var deletes = GetDeleteClauses();
+            foreach (var delete in deletes)
+            {
+                Database.Execute(delete, new { entity.Key });
+            }
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IWarehouse>(entity.WarehouseKey)); 
         }
     }
 }

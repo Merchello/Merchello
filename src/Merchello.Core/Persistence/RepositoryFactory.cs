@@ -418,7 +418,7 @@
         /// </returns>
         internal virtual IWarehouseRepository CreateWarehouseRepository(IDatabaseUnitOfWork uow)
         {
-            return new WarehouseRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+            return new WarehouseRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, this.CreateWarehouseCatalogRepository(uow));
         }
 
         /// <summary>

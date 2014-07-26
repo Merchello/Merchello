@@ -1,19 +1,25 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Mappers
+﻿namespace Merchello.Core.Persistence.Mappers
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
     /// <summary>
-    /// Represents a <see cref="Warehouse"/> to DTO mapper used to translate the properties of the public api 
-    /// implementation to that of the database's DTO as sql: [tableName].[columnName].
+    /// Represents a <see cref="Warehouse"/> to DTO mapper used to translate the properties of the public API 
+    /// implementation to that of the database's DTO as SQL: [tableName].[columnName].
     /// </summary>
     internal sealed class WarehouseMapper : MerchelloBaseMapper
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WarehouseMapper"/> class.
+        /// </summary>
         public WarehouseMapper()
         {
             BuildMap();
         }
 
+        /// <summary>
+        /// Maps a warehouse to the warehouse DTO.
+        /// </summary>
         internal override void BuildMap()
         {
             if (!PropertyInfoCache.IsEmpty) return;
