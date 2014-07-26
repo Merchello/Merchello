@@ -271,6 +271,7 @@
 	        $scope.availableFixedRateGatewayResources = [];
 	        $scope.countries = [];
 	        $scope.warehouses = [];
+	        $scope.warehouseHasAddress = false;
 	        $scope.providers = [];
 	        $scope.newWarehouse = new merchello.Models.Warehouse();
 	        $scope.primaryWarehouse = new merchello.Models.Warehouse();
