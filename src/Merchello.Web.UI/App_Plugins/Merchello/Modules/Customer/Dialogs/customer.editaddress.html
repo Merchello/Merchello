@@ -11,6 +11,9 @@
                 </div>
             </div>
             <div class="form-group row-fluid">
+                <label for="label">*Label:</label>
+                <div class="error" data-ng-show="editAddressForm.label.$invalid && wasFormSubmitted">Label is a required field.</div>
+                <input name="label" type="text" class="span12" placeholder="My House" data-ng-model="currentAddress.label" required />
                 <label for="fullName">Full Name:</label>
                 <input name="fullName" type="text" class="span12" data-ng-model="currentAddress.fullName" />
                 <label for="org">Company:</label>
@@ -44,9 +47,10 @@
                 <div class="btn-toolbar umb-btn-toolbar pull-right">
                     <!-- ACTION: Cancel -->
                     <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                    <!-- ACTION: Delete -->
+                    <button class="btn btn-primary btn-danger" data-ng-show="!currentAddress.isDefault" data-ng-click="openDeleteAddressDialog()">Delete</button>
                     <!-- ACTION: Submit DialogData -->
                     <button class="btn btn-primary" data-ng-click="saveAddress()">Save</button>
-
                 </div>
             </div>
         </div>

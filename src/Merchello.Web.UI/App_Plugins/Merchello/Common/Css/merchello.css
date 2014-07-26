@@ -415,6 +415,8 @@
     line-height: 32px; }
   .merchello-panel-body .customer-info div {
     margin-left: 42px; }
+  .merchello-panel-body .billing-address-info .vcard, .merchello-panel-body .shipping-address-info .vcard {
+    margin-top: 1em; }
   .merchello-panel-body .merchello-shipping-country {
     clear: both;
     border-bottom: 1px solid #f8f8f8;
