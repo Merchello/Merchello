@@ -840,7 +840,8 @@
          * @function
          * 
          * @description
-         * Handles the add/edit after recieving the dialogData from the dialog view/controller
+         * Handles the add/edit after recieving the dialogData from the dialog view/controller.
+         * If the selectedCatalog is set to be default, ensure that original default is no longer default.
          */
 		$scope.warehouseCatalogDialogConfirm = function (data) {
 		    var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
@@ -851,11 +852,32 @@
             } else {
 		        promiseUpdateCatalog = merchelloWarehouseService.putWarehouseCatalog(selectedCatalog);
 		    }
-		    promiseUpdateCatalog.then(function (responseCatalog) {
-		        $scope.loadWarehouses();
-		    }, function (reason) {
-		        notificationService.error('Catalog Update Failed', reason.message);
-		    });
+		    if (!selectedCatalog.isDefault) {
+		        promiseUpdateCatalog.then(function(responseCatalog) {
+		            $scope.loadWarehouses();
+		        }, function(reason) {
+		            notificationService.error('Catalog Update Failed', reason.message);
+		        });
+		    } else {
+		        var promiseUpdateOriginalDefaultCatalog = false;
+		        var originalDefaultCatalog = false;
+		        for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
+		            if ($scope.primaryWarehouse.warehouseCatalogs[i].key != selectedCatalog.key && $scope.primaryWarehouse.warehouseCatalogs[i].isDefault) {
+		                $scope.primaryWarehouse.warehouseCatalogs[i].isDefault = 0;
+		                originalDefaultCatalog = new merchello.Models.WarehouseCatalog($scope.primaryWarehouse.warehouseCatalogs[i]);
+		                promiseUpdateOriginalDefaultCatalog = merchelloWarehouseService.putWarehouseCatalog(originalDefaultCatalog);
+		            }
+		        }
+		        promiseUpdateCatalog.then(function (responseCatalog) {
+		            promiseUpdateOriginalDefaultCatalog.then(function(responseOtherCatalog) {
+		                $scope.loadWarehouses();
+		            }, function(reason) {
+		                notificationService.error('Catalog Update Failed', reason.message);
+		            });
+		        }, function (reason) {
+		            notificationService.error('Catalog Update Failed', reason.message);
+		        });
+		    }
 		};
 
 	};
