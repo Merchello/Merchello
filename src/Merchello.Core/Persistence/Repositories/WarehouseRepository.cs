@@ -22,6 +22,11 @@
     internal class WarehouseRepository : MerchelloPetaPocoRepositoryBase<IWarehouse>, IWarehouseRepository
     {
         /// <summary>
+        /// The _warehouse catalog repository.
+        /// </summary>
+        private readonly IWarehouseCatalogRepository _warehouseCatalogRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="WarehouseRepository"/> class.
         /// </summary>
         /// <param name="work">
@@ -30,9 +35,15 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public WarehouseRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+        /// <param name="warehouseCatalogRepository">
+        /// The warehouse Catalog Repository.
+        /// </param>
+        public WarehouseRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IWarehouseCatalogRepository warehouseCatalogRepository)
             : base(work, cache)
         {
+            Mandate.ParameterNotNull(warehouseCatalogRepository, "warehouseCatalogRepository");
+
+            _warehouseCatalogRepository = warehouseCatalogRepository;
         }
        
         protected override IWarehouse PerformGet(Guid key)
@@ -40,14 +51,14 @@
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<WarehouseDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
             var factory = new WarehouseFactory();
 
-            var warehouse = factory.BuildEntity(dto);
+            var warehouse = factory.BuildEntity(dto, _warehouseCatalogRepository.GetWarehouseCatalogsByWarehouseKey(key));
 
 
             return warehouse;
@@ -65,10 +76,10 @@
             else
             {
                 var factory = new WarehouseFactory();
-                var dtos = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<WarehouseDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
-                    yield return factory.BuildEntity(dto);
+                    yield return factory.BuildEntity(dto, _warehouseCatalogRepository.GetWarehouseCatalogsByWarehouseKey(dto.Key));
                 }
             }
         }
@@ -79,10 +90,8 @@
             // TODO VERSION NEXT: this will need to be refactored when we open up Multiple Warehouse Catalogs!!!
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<WarehouseDto>()
-                .InnerJoin<WarehouseCatalogDto>()
-                .On<WarehouseDto, WarehouseCatalogDto>(left => left.Key, right => right.WarehouseKey);
-
+                .From<WarehouseDto>();
+            
             return sql;
         }
 
@@ -145,7 +154,7 @@
             var translator = new SqlTranslator<IWarehouse>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(sql);
+            var dtos = Database.Fetch<WarehouseDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }

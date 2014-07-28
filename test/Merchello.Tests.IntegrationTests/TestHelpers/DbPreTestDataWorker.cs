@@ -463,6 +463,13 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         #region IWarehouse
 
+        public void DeleteWarehouseCatalogs()
+        {
+            var catalogs = WarehouseService.GetAllWarehouseCatalogs();
+
+            WarehouseService.Delete(catalogs);
+        }
+
         /// <summary>
         /// Gets <see cref="IWarehouseService"/>
         /// </summary>
