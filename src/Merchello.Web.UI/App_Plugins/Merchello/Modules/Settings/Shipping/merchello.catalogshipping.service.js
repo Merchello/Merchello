@@ -31,7 +31,6 @@
             },
 
             deleteShipMethod: function (shipMethod) {
-
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipMethod'),
                         shipMethod

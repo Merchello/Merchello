@@ -8,7 +8,7 @@
      * @description
      * The controller for adding or editing an address.
      */
-    controllers.CustomerEditAddressController = function ($scope) {
+    controllers.CustomerEditAddressController = function ($scope, dialogService) {
 
         /**
          * @ngdoc method
@@ -56,6 +56,26 @@
 
         /**
          * @ngdoc method
+         * @name openDeleteAddressDialog
+         * @function
+         * 
+         * @description
+         * Open a dialog to confirm whether to delete a selected address.
+         */
+        $scope.openDeleteAddressDialog = function () {
+            var dialogData = {};
+            dialogData.name = $scope.currentAddress.label;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.processDeleteAddressDialog,
+                dialogData: dialogData
+            });
+        };
+
+
+        /**
+         * @ngdoc method
          * @name prepareCountryDropdown
          * @function
          * 
@@ -88,6 +108,24 @@
             }
             $scope.updateProvince($scope.filters.province);
         };
+
+        /**
+         * @ngdoc method
+         * @name processDeleteAddressDialog
+         * @function
+         * 
+         * @description
+         * Get response from a dialog on whether the selected address is to be deleted.
+         */
+        $scope.processDeleteAddressDialog = function (dialogData) {
+            if ($scope.currentAddress.key === '') {
+                $scope.currentAddress = new merchello.Models.CustomerAddress();
+            } else {
+                $scope.dialogData.shouldDelete = true;
+                $scope.saveAddress();
+            }
+        };
+
 
         /**
          * @ngdoc method
@@ -188,7 +226,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Customer.Dialogs.CustomerEditAddressController", ['$scope', merchello.Controllers.CustomerEditAddressController]);
+    angular.module("umbraco").controller("Merchello.Dashboards.Customer.Dialogs.CustomerEditAddressController", ['$scope', 'dialogService', merchello.Controllers.CustomerEditAddressController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

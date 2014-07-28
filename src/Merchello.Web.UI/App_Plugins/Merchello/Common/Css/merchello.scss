@@ -16,6 +16,8 @@ $active: lighten($green, 50%);
     .active, .active:hover { background-color: $active; }
     .btn { line-height: 21px; color: #000; }
     .btn-primary { color: #fff; }
+    .btn-trash:hover { color: #fff; background: #bd362f; box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05); }
+    .btn-action:hover { color: #fff; background: #53a93f; box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05); }
  
     .label { font-size: 1em; line-height: 20px; text-shadow: none; }
     .label-success { background: lighten($green, 20%); }
@@ -24,7 +26,7 @@ $active: lighten($green, 50%);
     .icon-loading:before { font-size: 1.15em; vertical-align: top; padding-top: 1px; }
     .clear { clear: both; }
 
-    .well {
+    .well { position: relative;
         h3 { margin: 0; }
         h4 { margin-bottom: 5px; }
         .add { margin-bottom: 20px; } //spacing below add buttons inslide .well
@@ -267,6 +269,18 @@ $active: lighten($green, 50%);
         .customer-avatar { max-height: 32px; max-width: 32px; border-radius: 60px; float: left; margin-right: 10px; }
         h4 { margin: 0; height: 32px; line-height: 32px; } 
         div { margin-left: 42px; }
+    }
+
+    .billing-address-info, .shipping-address-info {
+        .vcard { margin-top: 1em; }
+    }
+
+    // Shipping Page
+    .merchello-shipping-country {
+        clear: both;
+        border-bottom: 1px solid #f8f8f8;
+        position: relative;
+        overflow: hidden;
     }
 
     //Graphs and Charts

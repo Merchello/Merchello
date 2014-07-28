@@ -12,7 +12,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
                         <!-- ACTION: Delete Customer -->
-                        <a class="btn-warning btn" data-ng-click="openDeleteCustomerDialog()">Delete</a>
+                        <a class="btn-danger btn" data-ng-click="openDeleteCustomerDialog()">Delete</a>
 
                     </div>
                 </div>
@@ -74,16 +74,21 @@
                 <!-- Customer Info -->
                 <div class="well customer-info">
                     <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
-                    <h4>{{customer.firstName}} {{customer.lastName}}</h4>
+                    <h4>
+                        {{customer.firstName}} {{customer.lastName}}
+                        <!-- ACTION: Edit Info -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="openEditInfoDialog()"><i class="icon icon-edit"></i></a>
+                    </h4>
                     <div><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
-                    <br/>
-                    <!-- ACTION: Edit Info -->
-                    <a class="btn btn-primary" data-ng-click="openEditInfoDialog()">Edit Info</a>
                 </div>
                 <!-- Billing Address -->
-                <div class="vcard well">
-                    <h3>Billing Address</h3>
-                    <div data-ng-show="defaultBillingAddress != false">
+                <div class="well billing-address-info">
+                    <h3>
+                        Billing Address
+                        <!-- ACTION: Add or Edit Address -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressEditDialog('billing')"><i class="icon icon-edit"></i></a>
+                    </h3>
+                    <div class="vcard" data-ng-show="defaultBillingAddress != false">
                         <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
                         <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
                         <span class="adr">
@@ -97,15 +102,15 @@
                     <div data-ng-show="defaultBillingAddress == false">
                         <h5>No Billing Address</h5>
                     </div>
-                    <div>
-                        <!-- ACTION: Add or Edit Address -->
-                        <a class="btn btn-primary" data-ng-click="openAddressEditDialog('billing')">Add/Edit Address</a>
-                    </div>
                 </div>
                 <!-- Shipping Address -->
-                <div class="vcard well">
-                    <h3>Shipping Address</h3>
-                    <div data-ng-show="defaultShippingAddress != false">
+                <div class="well shipping-address-info">
+                    <h3>
+                        Shipping Address
+                        <!-- ACTION: Add or Edit Address -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressEditDialog('shipping')"><i class="icon icon-edit"></i></a>
+                    </h3>
+                    <div class="vcard" data-ng-show="defaultShippingAddress != false">
                         <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
                         <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
                         <span class="adr">
@@ -118,10 +123,6 @@
                     </div>
                     <div data-ng-show="defaultShippingAddress == false">
                         <h5>No Shipping Address</h5>
-                    </div>
-                    <div>
-                        <!-- ACTION: Add or Edit Address -->
-                        <a class="btn btn-primary" data-ng-click="openAddressEditDialog('shipping')">Add/Edit Address</a>
                     </div>
                 </div>
             </div>
