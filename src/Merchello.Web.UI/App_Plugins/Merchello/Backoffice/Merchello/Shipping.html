@@ -95,7 +95,7 @@
                     <h3>
                         Current Catalog
                         <!-- ACTION: Delete Catalog -->
-                        <a class="btn btn-default btn-trash pull-right"><i class="icon-trash"></i></a>
+                        <a class="btn btn-default btn-trash pull-right" data-ng-show="!selectedCatalog.isDefault" data-ng-click="deleteCatalog()"><i class="icon-trash"></i></a>
                         <!-- ACTION: Edit Catalog -->
                         <a class="btn btn-default btn-action pull-right" data-ng-click="addEditWarehouseCatalogDialogOpen(primaryWarehouse, selectedCatalog)"><i class="icon icon-edit"></i></a>
                     </h3>

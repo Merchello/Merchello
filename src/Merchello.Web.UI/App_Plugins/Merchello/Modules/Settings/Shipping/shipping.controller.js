@@ -653,6 +653,44 @@
 
 	    /**
          * @ngdoc method
+         * @name deleteCatalog
+         * @function
+         * 
+         * @description
+         * Opens the delete catalog dialog via the Umbraco dialogService.
+         */
+	    $scope.deleteCatalog = function() {
+	        var dialogData = {};
+	        dialogData.name = $scope.selectedCatalog.name;
+	        dialogData.catalog = $scope.selectedCatalog;
+	        dialogService.open({
+	            template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+	            show: true,
+	            callback: $scope.deleteCatalogConfirm,
+	            dialogData: dialogData
+	        });
+	    };
+
+	    /**
+         * @ngdoc method
+         * @name deleteCatalogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the delete after recieving the catalog to delete from the dialog view/controller
+         */
+	    $scope.deleteCatalogConfirm = function (data) {
+	        var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
+	        var promiseDeleteCatalog = merchelloWarehouseService.deleteWarehouseCatalog(selectedCatalog.key);
+	        promiseDeleteCatalog.then(function (responseCatalog) {
+	            $scope.loadWarehouses();
+	        }, function (reason) {
+	            notificationsService.error('Catalog Delete Failed', reason.message);
+	        });
+        }
+
+	    /**
+         * @ngdoc method
          * @name addCountry
          * @function
          * 
@@ -852,32 +890,11 @@
             } else {
 		        promiseUpdateCatalog = merchelloWarehouseService.putWarehouseCatalog(selectedCatalog);
 		    }
-		    if (!selectedCatalog.isDefault) {
-		        promiseUpdateCatalog.then(function(responseCatalog) {
-		            $scope.loadWarehouses();
-		        }, function(reason) {
-		            notificationService.error('Catalog Update Failed', reason.message);
-		        });
-		    } else {
-		        var promiseUpdateOriginalDefaultCatalog = false;
-		        var originalDefaultCatalog = false;
-		        for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
-		            if ($scope.primaryWarehouse.warehouseCatalogs[i].key != selectedCatalog.key && $scope.primaryWarehouse.warehouseCatalogs[i].isDefault) {
-		                $scope.primaryWarehouse.warehouseCatalogs[i].isDefault = 0;
-		                originalDefaultCatalog = new merchello.Models.WarehouseCatalog($scope.primaryWarehouse.warehouseCatalogs[i]);
-		                promiseUpdateOriginalDefaultCatalog = merchelloWarehouseService.putWarehouseCatalog(originalDefaultCatalog);
-		            }
-		        }
-		        promiseUpdateCatalog.then(function (responseCatalog) {
-		            promiseUpdateOriginalDefaultCatalog.then(function(responseOtherCatalog) {
-		                $scope.loadWarehouses();
-		            }, function(reason) {
-		                notificationService.error('Catalog Update Failed', reason.message);
-		            });
-		        }, function (reason) {
-		            notificationService.error('Catalog Update Failed', reason.message);
-		        });
-		    }
+		    promiseUpdateCatalog.then(function(responseCatalog) {
+		        $scope.loadWarehouses();
+		    }, function(reason) {
+		        notificationsService.error('Catalog Update Failed', reason.message);
+		    });
 		};
 
 	};
