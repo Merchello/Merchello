@@ -499,7 +499,9 @@
         public static void AddAddress(this ExtendedDataCollection extendedData, IAddress address, string dictionaryKey)
         {
             var addressXml = SerializationHelper.SerializeToXml(address as Address);
-            
+
+            ////var addressJson = JsonConvert.SerializeObject(address);
+
             extendedData.SetValue(dictionaryKey, addressXml);
         }
 
@@ -541,6 +543,7 @@
             var attempt = SerializationHelper.DeserializeXml<Address>(extendedData.GetValue(dictionaryKey));
 
             return attempt.Success ? attempt.Result : null;
+            ////return JsonConvert.DeserializeObject<IAddress>(extendedData.GetValue(dictionaryKey));
         }
 
         #endregion
