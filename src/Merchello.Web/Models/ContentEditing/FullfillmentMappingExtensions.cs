@@ -57,17 +57,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#endregion
 
-		#region ICatalogInventory
 
-		internal static ICatalogInventory ToCatalogInventory(this CatalogInventoryDisplay catalogInventoryDisplay, ICatalogInventory destination)
-		{
-			destination.Count = catalogInventoryDisplay.Count;
-			destination.LowCount = catalogInventoryDisplay.LowCount;
-
-			return destination;
-		}
-
-		#endregion
 
 		#region ShipCountryDisplay
 
