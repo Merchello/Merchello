@@ -20,6 +20,8 @@
         <label class="merchello-section-label" for="customer-note">Shipping Address</label>
         <div class="merchello-controls row-fluid">
             <div class="form-group span12">
+                <label for="shippingFullName">Address Label:</label>
+                <input name="shippingFullName" type="text" class="span5" data-ng-model="shippingAddressCreate.label" />
                 <label for="shippingFullName">Full Name:</label>
                 <input name="shippingFullName" type="text" class="span5" data-ng-model="shippingAddressCreate.fullName" />
                 <label for="shippingOrg">Company:</label>
@@ -53,6 +55,8 @@
         <label class="merchello-section-label" for="customer-note">Billing Address</label>
         <div class="merchello-controls row-fluid">
             <div class="form-group span12">
+                <label for="shippingFullName">Address Label:</label>
+                <input name="shippingFullName" type="text" class="span5" data-ng-model="billingAddressCreate.label" />
                 <label for="fullName">Full Name:</label>
                 <input name="fullName" type="text" class="span5" data-ng-model="billingAddressCreate.fullName" />
                 <label for="org">Company:</label>
