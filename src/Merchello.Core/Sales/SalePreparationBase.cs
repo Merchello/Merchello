@@ -14,15 +14,38 @@
     using Umbraco.Core.Logging;
 
     /// <summary>
-    /// Represents an abstract SalesPreparation class resposible for temporarily persisting invoice and order information
+    /// Represents an abstract SalesPreparation class responsible for temporarily persisting invoice and order information
     /// while it's being collected
     /// </summary>
     public abstract class SalePreparationBase : ISalePreparationBase
     {
+        /// <summary>
+        /// The item cache.
+        /// </summary>
         private readonly IItemCache _itemCache;
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
         private readonly ICustomerBase _customer;
+
+        /// <summary>
+        /// The merchello context.
+        /// </summary>
         private readonly IMerchelloContext _merchelloContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SalePreparationBase"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="itemCache">
+        /// The item cache.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
         internal SalePreparationBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
         {                       
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
@@ -60,6 +83,9 @@
             get { return _itemCache; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to apply taxes to invoice.
+        /// </summary>
         internal bool ApplyTaxesToInvoice { get; set; }
 
         /// <summary>
@@ -191,11 +217,6 @@
         /// <summary>
         /// True/false indicating whether or not the <see cref="ISalePreparationBase"/> is ready to prepare an <see cref="IInvoice"/>
         /// </summary>
-        /// <remarks>
-        /// 
-        /// This ommits checking that 
-        /// 
-        /// </remarks>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
@@ -314,7 +335,7 @@
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
@@ -359,7 +380,7 @@
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
@@ -500,7 +521,7 @@
         private static string MakeCacheKey(ICustomerBase customer, Guid versionKey)
         {
             var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
-            return Cache.CacheKeys.ItemCacheCacheKey(customer.EntityKey, itemCacheTfKey, versionKey);
+            return Cache.CacheKeys.ItemCacheCacheKey(customer.Key, itemCacheTfKey, versionKey);
         }
 
         /// <summary>

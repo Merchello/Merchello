@@ -1,0 +1,37 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Plugin.GatewayProviders.Shipping.Dialogs.USPSShippingMethodController">
+    <div class="umb-modalcolumn-header">
+        <h4>Add/Edit a Shipping Method & Rate for <strong>{{dialogData.method.name}}</strong></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <!-- Add a Shipping Method Flyout -->
+        <div class="form-group row-fluid">
+            <label for="method-name">Name</label>
+            <input name="method-name" data-ng-model="dialogData.method.name" class="col-xs-12 span12" type="text" />
+        </div>
+
+        <div class="form-group row-fluid">
+            <label for="method-type">Method</label>
+            <div class="col-xs-6 span6 row-fluid">
+                <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0"></select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

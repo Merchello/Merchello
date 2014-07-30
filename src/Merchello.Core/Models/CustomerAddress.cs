@@ -1,240 +1,435 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
 
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.TypeFields;
+
+    /// <summary>
+    /// The customer address.
+    /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class CustomerAddress : Entity, ICustomerAddress
+    public class CustomerAddress : Entity, ICustomerAddress
     {
-        private readonly Guid _customerKey;
-        private string _label;
-        private string _fullName;
-        private string _company;
-        private Guid _addressTypeFieldKey;
-        private string _address1;
-        private string _address2;
-        private string _locality;
-        private string _region;
-        private string _postalCode;
-        private string _countryCode;
-        private string _phone;
+        #region Fields
 
-        internal CustomerAddress(Guid customerKey, string label)
-        {
-            _customerKey = customerKey;
-            _label = label;
-        }
-
-        ///TODO: We need to talk about the contstructor.  An empty address does not make a lot of sense.
-        internal CustomerAddress(ICustomer customer, string label)
-        {            
-            Mandate.ParameterNotNull(customer, "customer");
-            Mandate.ParameterNotNull(label, "label");
-            _customerKey = customer.Key;
-            _label = label;
-
-        }
-        
+        /// <summary>
+        /// The label selector.
+        /// </summary>
         private static readonly PropertyInfo LabelSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Label);
+
+        /// <summary>
+        /// The full name selector.
+        /// </summary>
         private static readonly PropertyInfo FullNameSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.FullName);
+
+        /// <summary>
+        /// The company selector.
+        /// </summary>
         private static readonly PropertyInfo CompanySelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Company);
+
+        /// <summary>
+        /// The address type field selector.
+        /// </summary>
         private static readonly PropertyInfo AddressTypeFieldSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, Guid>(x => x.AddressTypeFieldKey);
+
+        /// <summary>
+        /// The address 1 selector.
+        /// </summary>
         private static readonly PropertyInfo Address1Selector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Address1);
+
+        /// <summary>
+        /// The address 2 selector.
+        /// </summary>
         private static readonly PropertyInfo Address2Selector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Address2);
+
+        /// <summary>
+        /// The locality selector.
+        /// </summary>
         private static readonly PropertyInfo LocalitySelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Locality);
+
+        /// <summary>
+        /// The region selector.
+        /// </summary>
         private static readonly PropertyInfo RegionSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Region);
+
+        /// <summary>
+        /// The postal code selector.
+        /// </summary>
         private static readonly PropertyInfo PostalCodeSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.PostalCode);
+
+        /// <summary>
+        /// The country code selector.
+        /// </summary>
         private static readonly PropertyInfo CountryCodeSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.CountryCode);
+
+        /// <summary>
+        /// The phone selector.
+        /// </summary>
         private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, string>(x => x.Phone);
 
         /// <summary>
-        /// The customer id associated with the address
+        /// The customer key selector.
+        /// </summary>
+        private static readonly PropertyInfo CustomerKeySelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, Guid>(x => x.CustomerKey);
+
+        /// <summary>
+        /// The is default selector.
+        /// </summary>
+        private static readonly PropertyInfo IsDefaultSelector = ExpressionHelper.GetPropertyInfo<CustomerAddress, bool>(x => x.IsDefault);
+
+        /// <summary>
+        /// The customer key.
+        /// </summary>
+        private Guid _customerKey;
+
+        /// <summary>
+        /// The label.
+        /// </summary>
+        private string _label;
+
+        /// <summary>
+        /// The full name.
+        /// </summary>
+        private string _fullName;
+
+        /// <summary>
+        /// The company.
+        /// </summary>
+        private string _company;
+
+        /// <summary>
+        /// The address type field key.
+        /// </summary>
+        private Guid _addressTypeFieldKey;
+
+        /// <summary>
+        /// The address 1.
+        /// </summary>
+        private string _address1;
+
+        /// <summary>
+        /// The address 2.
+        /// </summary>
+        private string _address2;
+
+        /// <summary>
+        /// The locality.
+        /// </summary>
+        private string _locality;
+
+        /// <summary>
+        /// The region.
+        /// </summary>
+        private string _region;
+
+        /// <summary>
+        /// The postal code.
+        /// </summary>
+        private string _postalCode;
+
+        /// <summary>
+        /// The country code.
+        /// </summary>
+        private string _countryCode;
+
+        /// <summary>
+        /// The phone.
+        /// </summary>
+        private string _phone;
+
+        /// <summary>
+        /// The is default.
+        /// </summary>
+        private bool _isDefault;
+
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerAddress"/> class.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        public CustomerAddress(Guid customerKey)
+        {            
+            _customerKey = customerKey;
+
+            // Default to a shipping address
+            _addressTypeFieldKey = EnumTypeFieldConverter.Address.Shipping.TypeKey;
+        }
+
+        /// <summary>
+        /// Gets customer id associated with the address
         /// </summary>
         [DataMember]
         public Guid CustomerKey
         {
-            get { return _customerKey; }
+            get
+            {
+                return _customerKey;
+            }
+
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                        {
+                            _customerKey = value;
+                            return _customerKey;
+                        },
+                    _customerKey,
+                    CustomerKeySelector);
+            }
         }
 
         /// <summary>
-        /// The descriptive label for the address
+        /// Gets or sets the descriptive label for the address
         /// </summary>
         [DataMember]
         public string Label
         {
-            get { return _label; }
+            get
+            {
+                return _label;
+            }
+
             set 
             { 
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _label = value;
                     return _label;
-                }, _label, LabelSelector); 
+                }, 
+                _label, 
+                LabelSelector); 
             }
         }
 
         /// <summary>
-        /// The full name for the address
+        /// Gets or sets the full name for the address
         /// </summary>
         [DataMember]
         public string FullName
         {
-            get { return _fullName; }
+            get
+            {
+                return _fullName;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 { 
                     _fullName = value ;
                     return _label;
-                }, _fullName, FullNameSelector);
+                }, 
+                _fullName, 
+                FullNameSelector);
             }
         }
 
         /// <summary>
-        /// The company name associated with a company
+        /// Gets or sets the company name associated with a company
         /// </summary>
         [DataMember]
         public string Company
         {
-            get { return _company; }
+            get
+            {
+                return _company;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _company = value;
                     return _company;
-                }, _company, CompanySelector);
+                }, 
+                _company, 
+                CompanySelector);
             }
         }
 
         /// <summary>
-        /// The address type indicator
+        /// Gets or sets the address type indicator
         /// </summary>
         [DataMember]
         public Guid AddressTypeFieldKey
         {
-            get { return _addressTypeFieldKey; }
-            set 
+            get
             {
-                SetPropertyValueAndDetectChanges(o =>
+                return _addressTypeFieldKey;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _addressTypeFieldKey = value;
                     return _addressTypeFieldKey;
-                }, _addressTypeFieldKey, AddressTypeFieldSelector);
+                }, 
+                _addressTypeFieldKey, 
+                AddressTypeFieldSelector);
             }
         }
 
         /// <summary>
-        /// The first address line
+        /// Gets or sets the first address line
         /// </summary>
         [DataMember]
         public string Address1
         {
-            get { return _address1; }
+            get
+            {
+                return _address1;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _address1 = value;
                     return _address1;
-                }, _address1, Address1Selector);
+                }, 
+                _address1, 
+                Address1Selector);
             }
         }
 
         /// <summary>
-        /// The second address line 
+        /// Gets or sets the second address line 
         /// </summary>
         [DataMember]
         public string Address2
         {
-            get { return _address2; }
+            get
+            {
+                return _address2;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _address2 = value;
                     return _address2;
-                }, _address2, Address2Selector);
+                }, 
+                _address2, 
+                Address2Selector);
             }
         }
 
         /// <summary>
-        /// The locality or city of the address
+        /// Gets or sets the locality or city of the address
         /// </summary>
         [DataMember]
         public string Locality
         {
-            get { return _locality; }
+            get
+            {
+                return _locality;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _locality = value;
                     return _locality;
-                }, _locality, LocalitySelector);
+                }, 
+                _locality, 
+                LocalitySelector);
             }
         }
 
         /// <summary>
-        /// The region, state or province of the address
+        /// Gets or sets the region, state or province of the address
         /// </summary>
         [DataMember]
         public string Region
         {
-            get { return _region; }
+            get
+            {
+                return _region;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                        {
                     _region = value;
                     return _region;
-                }, _region, RegionSelector);
+                }, 
+                _region, 
+                RegionSelector);
             }
         }
 
         /// <summary>
-        /// The postal code of the address
+        /// Gets or sets the postal code of the address
         /// </summary>
         [DataMember]
         public string PostalCode
         {
-            get { return _postalCode; }
+            get
+            {
+                return _postalCode;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _postalCode = value;
                     return _postalCode;
-                }, _postalCode, PostalCodeSelector);
+                }, 
+                _postalCode, 
+                PostalCodeSelector);
             }
         }
 
         /// <summary>
-        /// The country code of the address
+        /// Gets or sets the country code of the address
         /// </summary>
         [DataMember]
         public string CountryCode
         {
-            get { return _countryCode; }
+            get
+            {
+                return _countryCode;
+            }
+
             set
             {
                 {
-                    SetPropertyValueAndDetectChanges(o =>
+                    SetPropertyValueAndDetectChanges(
+                        o =>
                     {
                         _countryCode = value;
                         return _countryCode;
-                    }, _countryCode, CountryCodeSelector);
+                    }, 
+                    _countryCode, 
+                    CountryCodeSelector);
                 }
             }
         }
 
         /// <summary>
-        /// The phone number associated with the address
+        /// Gets or sets the phone number associated with the address
         /// </summary>
         /// <remarks>
         /// This is sometimes required by shipping providers
@@ -242,33 +437,45 @@ namespace Merchello.Core.Models
         [DataMember]
         public string Phone
         {
-            get { return _phone; }
+            get
+            {
+                return _phone;
+            }
+
             set
             {
                 {
-                    SetPropertyValueAndDetectChanges(o =>
+                    SetPropertyValueAndDetectChanges(
+                        o =>
                     {
                         _phone = value;
                         return _phone;
-                    }, _phone, PhoneSelector);
+                    }, 
+                    _phone, 
+                    PhoneSelector);
                 }
             }
         }
 
         /// <summary>
-        /// Gets/sets the AddressType
+        /// Gets or sets the AddressType
         /// </summary>
         /// <remarks>
-        /// This property only allows internally defined AddressTypes to be set.  eg. no Custom types.  These will have
+        /// This property only allows internally defined AddressTypes to be set.  No Custom types.  These will have
         /// to be set through the AddressTypeFieldKey property directly.
         /// </remarks>
         [DataMember]
         public AddressType AddressType
         {
-            get { return EnumTypeFieldConverter.Address.GetTypeField(_addressTypeFieldKey); }
+            get
+            {
+                return EnumTypeFieldConverter.Address.GetTypeField(_addressTypeFieldKey);
+            }
+
             set
             {
                 var reference = EnumTypeFieldConverter.Address.GetTypeField(value);
+            
                 if (!ReferenceEquals(TypeFieldMapperBase.NotFound, reference))
                 { 
                     // call through the property to flag the dirty property
@@ -277,8 +484,30 @@ namespace Merchello.Core.Models
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether is default.
+        /// </summary>
+        [DataMember]
+        public bool IsDefault
+        {
+            get
+            {
+                return _isDefault;
+            }
 
-
+            set
+            {
+                {
+                    SetPropertyValueAndDetectChanges(
+                        o =>
+                        {
+                            _isDefault = value;
+                            return _isDefault;
+                        },
+                    _isDefault,
+                    IsDefaultSelector);
+                }
+            }
+        }
     }
-
 }

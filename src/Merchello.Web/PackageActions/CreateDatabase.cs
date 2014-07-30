@@ -85,13 +85,13 @@ namespace Merchello.Web.PackageActions
 
         private bool CreateInitialMerchelloData(BaseDataCreation baseDataCreation)
         {
-            baseDataCreation.InitializeBaseData("merchDBTypeField");
+            baseDataCreation.InitializeBaseData("merchTypeField");
             baseDataCreation.InitializeBaseData("merchInvoiceStatus");
             baseDataCreation.InitializeBaseData("merchOrderStatus");
             baseDataCreation.InitializeBaseData("merchWarehouse");
             baseDataCreation.InitializeBaseData("merchGatewayProviderSettings");
             baseDataCreation.InitializeBaseData("merchStoreSetting");
-            
+
             return true;
         }
     }

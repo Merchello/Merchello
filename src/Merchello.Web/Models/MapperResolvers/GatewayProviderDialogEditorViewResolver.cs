@@ -1,18 +1,27 @@
-﻿using System.Linq;
-using AutoMapper;
-using Merchello.Core.Gateways;
-using Merchello.Core.Models;
-using Merchello.Web.Models.ContentEditing;
-using Umbraco.Core;
-using Umbraco.Core.IO;
-
-namespace Merchello.Web.Models.MapperResolvers
+﻿namespace Merchello.Web.Models.MapperResolvers
 {
+    using System.Linq;
+    using AutoMapper;    
+    using ContentEditing;
+    using Core.Gateways;
+    using Core.Models;    
+    using Umbraco.Core;
+    using Umbraco.Core.IO;
+
     /// <summary>
     /// Resolves the custom DialogEditorView property from the <see cref="GatewayProviderEditorAttribute"/> for AutoMapper mappings
     /// </summary>
     public class GatewayProviderDialogEditorViewResolver : ValueResolver<IGatewayProviderSettings, DialogEditorViewDisplay>
     {
+        /// <summary>
+        /// The resolve core.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DialogEditorViewDisplay"/>.
+        /// </returns>
         protected override DialogEditorViewDisplay ResolveCore(IGatewayProviderSettings source)
         {
             // Check for custom attribute

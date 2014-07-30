@@ -269,8 +269,8 @@
       <key alias="paymentProviderHelper" >Activate/Deactivate your Payment Providers</key>
       <key alias="shippingProvider" >Proveedores de envíos</key>
       <key alias="shippingProviderHelper" >Activate/Deactivate your Shipping Providers</key>
-      <key alias="shippingProvider" >Proveedores de impuestos</key>
-      <key alias="shippingProviderHelper" >Activate/Deactivate your Taxation Providers</key>
+      <key alias="taxationProvider" >Proveedores de impuestos</key>
+      <key alias="taxationProviderHelper" >Activate/Deactivate your Taxation Providers</key>
       <key alias="host" >Servidor</key>
       <key alias="username" >Usuario</key>
       <key alias="password" >Contraseña</key>

@@ -18,7 +18,7 @@ describe('Merchello controllers', function(){
 	  beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
 		  $httpBackend = _$httpBackend_;	 
 		  scope = $rootScope.$new();
-		  ctrl = $controller('MerchelloSkuSelector', {$scope: scope});
+		  ctrl = $controller('MerchelloSkuSelector', {$scope: scope}); 
 		}));
 		
 		

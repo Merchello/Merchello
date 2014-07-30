@@ -7,13 +7,25 @@
     /// </summary>
     public class SmtpNotificationGatewayProviderSettings
     {
+        /// <summary>
+        /// The credentials.
+        /// </summary>
         private NetworkCredential _credentials;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmtpNotificationGatewayProviderSettings"/> class.
+        /// </summary>
         public SmtpNotificationGatewayProviderSettings()
             : this("127.0.0.1")
         {            
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmtpNotificationGatewayProviderSettings"/> class.
+        /// </summary>
+        /// <param name="host">
+        /// The host.
+        /// </param>
         public SmtpNotificationGatewayProviderSettings(string host)
         {
             Mandate.ParameterNotNullOrEmpty(host, "host");
@@ -37,7 +49,7 @@
         public string Password { get; set; }
 
         /// <summary>
-        /// Gets or sets the Enable SSL value
+        /// Gets or sets a value indicating whether or not to enable SSL
         /// </summary>
         public bool EnableSsl { get; set; }
         
@@ -47,13 +59,16 @@
         public int Port { get; set; }
 
         /// <summary>
-        /// Gets a bool indicating whether or not credentials are present
+        /// Gets a value indicating whether or not credentials are present
         /// </summary>
         public virtual bool HasCredentials
         {
             get { return !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password); }
         }
-        
+
+        /// <summary>
+        /// Gets the credentials.
+        /// </summary>
         public virtual NetworkCredential Credentials
         {
             get

@@ -11,9 +11,20 @@
     /// </summary>
     public class UmbracoApplicationEventListener : ApplicationEventHandler
     {
-        private static readonly ILog Log =
-            LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        
+        /// <summary>
+        /// The log.
+        /// </summary>
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
+        /// The Umbraco Application Starting event.
+        /// </summary>
+        /// <param name="umbracoApplication">
+        /// The umbraco application.
+        /// </param>
+        /// <param name="applicationContext">
+        /// The application context.
+        /// </param>
         protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationStarting(umbracoApplication, applicationContext);

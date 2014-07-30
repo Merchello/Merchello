@@ -45,7 +45,8 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             #region WarehouseCatalog
 
-            var defaultCatalog = DbPreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
+            var defaultWarehouse = DbPreTestDataWorker.WarehouseService.GetDefaultWarehouse();
+            var defaultCatalog = defaultWarehouse.WarehouseCatalogs.FirstOrDefault();
             if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");
 
             #endregion // WarehouseCatalog
@@ -343,7 +344,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             Assert.IsTrue(CurrentCustomer.Basket().IsEmpty);
 
             #endregion // completed checkout preparation
-
+ 
             // capture the payment
             invoice.CapturePayment(paymentResult.Payment.Result, paymentMethods.FirstOrDefault(), invoice.Total);
 
@@ -361,6 +362,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
 
         }
+
 
         private void WriteBasketInfoToConsole()
         {
@@ -389,7 +391,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
         private void WriteShipRateQuote(IShipmentRateQuote srq)
         {
             Console.WriteLine("---------- Shipment Rate Quote ---------------------");
-            Console.WriteLine("Name: {0}", srq.ShimpentLineItemName());
+            Console.WriteLine("Name: {0}", srq.ShipmentLineItemName());
             Console.WriteLine("Rate Quote: {0}", srq.Rate);            
         }
     }

@@ -1,11 +1,14 @@
-﻿using System.Configuration;
-
-namespace Merchello.Core.Configuration.Outline
+﻿namespace Merchello.Core.Configuration.Outline
 {
+    using System.Configuration;
+
+    /// <summary>
+    /// The region element.
+    /// </summary>
     public class RegionElement : ConfigurationElement
     {
         /// <summary>
-        /// Gets/sets the region 'code' (key) for the region collection element.  Presumably this is an enum value.
+        /// Gets or sets the region 'code' (key) for the region collection element.
         /// </summary>
         [ConfigurationProperty("code", IsKey = true)]
         public string Code
@@ -15,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets/sets the region 'requirePostalCode' for the region collection element.  Presumably this is an enum value.
+        /// Gets or sets a value indicating whether or not the region requires a postal code.
         /// </summary>
         [ConfigurationProperty("requirePostalCode", DefaultValue = false, IsRequired = false)]
         public bool RequirePostalCode
@@ -26,7 +29,7 @@ namespace Merchello.Core.Configuration.Outline
 
 
         /// <summary>
-        /// Gets/sets the label for provinces (eg. for US this may be 'States')
+        /// Gets or sets the label for provinces (for US this may be 'States')
         /// </summary>
         [ConfigurationProperty("provinceLabel", DefaultValue = "Provinces", IsRequired = false)]
         public string ProvinceLabel

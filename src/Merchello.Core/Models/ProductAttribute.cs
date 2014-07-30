@@ -1,20 +1,35 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+    using EntityBase;
+
     /// <summary>
     /// Defines a product attribute
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal sealed class ProductAttribute : Entity, IProductAttribute
+    public sealed class ProductAttribute : Entity, IProductAttribute
     {
+        /// <summary>
+        /// The name.
+        /// </summary>
         private string _name;
-        private string _sku;
-     
 
+        /// <summary>
+        /// The sku.
+        /// </summary>
+        private string _sku;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductAttribute"/> class.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
         public ProductAttribute(string name, string sku)
         {
             Mandate.ParameterNotNullOrEmpty(name, "name");
@@ -31,7 +46,7 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The id of the option which defines the attribute group this attribute belongs to
+        /// Gets or sets id of the option which defines the attribute group this attribute belongs to
         /// </summary>
         [DataMember]
         public Guid OptionKey { get; set; }
@@ -47,7 +62,6 @@ namespace Merchello.Core.Models
             {
                 _name = value;
             }
- 
         }
 
         /// <summary>

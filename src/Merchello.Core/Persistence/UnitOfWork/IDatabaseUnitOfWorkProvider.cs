@@ -9,6 +9,12 @@
 	/// </remarks>
 	public interface IDatabaseUnitOfWorkProvider
 	{
-		IDatabaseUnitOfWork GetUnitOfWork();
+	    /// <summary>
+	    /// Gets the database unit of work.
+	    /// </summary>
+	    /// <returns>
+	    /// The <see cref="IDatabaseUnitOfWork"/>.
+	    /// </returns>
+	    IDatabaseUnitOfWork GetUnitOfWork();
 	}
 }

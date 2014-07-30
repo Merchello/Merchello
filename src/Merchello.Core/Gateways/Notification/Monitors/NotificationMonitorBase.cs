@@ -16,10 +16,22 @@
     /// </typeparam>
     public abstract class NotificationMonitorBase<T> : MonitorBase<T>, INotificationMonitorBase
     {
+        /// <summary>
+        /// The notification context.
+        /// </summary>
         private readonly INotificationContext _notificationContext;
 
+        /// <summary>
+        /// The _messages.
+        /// </summary>
         private Lazy<List<INotificationMessage>> _messages;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMonitorBase{T}"/> class.
+        /// </summary>
+        /// <param name="notificationContext">
+        /// The notification context.
+        /// </param>
         protected NotificationMonitorBase(INotificationContext notificationContext)
         {
             Mandate.ParameterNotNull(notificationContext, "notificationContext");

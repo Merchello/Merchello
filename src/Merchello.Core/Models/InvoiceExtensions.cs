@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -19,6 +20,7 @@
     /// <summary>
     /// Extension methods for <see cref="IInvoice"/>
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class InvoiceExtensions
     {
         /// <summary>
@@ -134,7 +136,7 @@
         /// Prepares an <see cref="IOrder"/> without saving it to the database.  
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/> to base the order on</param>
-        /// <returns>The <see cref="IOrder"/></returns>
+        /// <returns>The <see cref="IOrder"/></returns>        
         public static IOrder PrepareOrder(this IInvoice invoice)
         {
             return invoice.PrepareOrder(MerchelloContext.Current);
@@ -167,7 +169,9 @@
         /// This method will save the invoice in the event it has not previously been saved
         /// 
         /// </remarks>
-        public static IOrder PrepareOrder(this IInvoice invoice, IMerchelloContext merchelloContext,
+        public static IOrder PrepareOrder(
+            this IInvoice invoice,
+            IMerchelloContext merchelloContext,
             IBuilderChain<IOrder> orderBuilder)
         {
             if (!invoice.HasIdentity) merchelloContext.Services.InvoiceService.Save(invoice);
@@ -199,7 +203,8 @@
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
-        internal static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice,
+        internal static IEnumerable<IAppliedPayment> AppliedPayments(
+            this IInvoice invoice,
             IMerchelloContext merchelloContext)
         {
             return invoice.AppliedPayments(merchelloContext.Services.GatewayProviderService);
@@ -211,7 +216,8 @@
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
         /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
-        public static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice,
+        public static IEnumerable<IAppliedPayment> AppliedPayments(
+            this IInvoice invoice,
             IGatewayProviderService gatewayProviderService)
         {
             return gatewayProviderService.GetAppliedPaymentsByInvoiceKey(invoice.Key);
@@ -653,9 +659,15 @@
         /// <summary>
         /// Serializes <see cref="IInvoice"/> object
         /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
         /// <remarks>
         /// Intended to be used by the Merchello.Examine.Providers.MerchelloInvoiceIndexer
         /// </remarks>
+        /// <returns>
+        /// The <see cref="XDocument"/>.
+        /// </returns>
         internal static XDocument SerializeToXml(this IInvoice invoice)
         {
             string xml;
@@ -702,6 +714,15 @@
             
         }
 
+        /// <summary>
+        /// The get invoice status JSON.
+        /// </summary>
+        /// <param name="invoiceStatus">
+        /// The invoice status.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         private static string GetInvoiceStatusJson(IInvoiceStatus invoiceStatus)
         {
             return JsonConvert.SerializeObject(
@@ -713,21 +734,31 @@
                             reportable = invoiceStatus.Reportable,
                             active = invoiceStatus.Active,
                             sortOrder = invoiceStatus.SortOrder
-                        }, Formatting.None);
+                        }, 
+                        Formatting.None);
         }
 
-
-
+        /// <summary>
+        /// The get orders jason.
+        /// </summary>
+        /// <param name="orders">
+        /// The orders.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         private static string GetOrdersJason(IEnumerable<IOrder> orders)
         {
             var json = "[{0}]";
-            var ojson = "";
+
+            var ojson = string.Empty;
 
             foreach (var order in orders)
             {
                 if (ojson.Length > 0) ojson += ",";
                 ojson += JsonConvert.SerializeObject(
-                new {
+                new 
+                {
                     key = order.Key,
                     invoiceKey = order.InvoiceKey,
                     orderNumberPrefix = order.OrderNumberPrefix,
@@ -759,15 +790,24 @@
                             quantity = x.Quantity,
                             backOrder = ((IOrderLineItem)x).BackOrder,
                             exported = x.Exported                            
-                        }
-                  )
-
-                }, Formatting.None);
+                        })
+                }, 
+                Formatting.None);
             }
+
             json = string.Format(json, ojson);
             return json;
         }
 
+        /// <summary>
+        /// The get generic items collection.
+        /// </summary>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         private static string GetGenericItemsCollection(IEnumerable<ILineItem> items)
         {
             return JsonConvert.SerializeObject(
@@ -782,8 +822,8 @@
                             price = x.Price,
                             quantity = x.Quantity,
                             exported = x.Exported
-                        }
-                ), Formatting.None);
+                        }), 
+                Formatting.None);
         }
 
         #endregion

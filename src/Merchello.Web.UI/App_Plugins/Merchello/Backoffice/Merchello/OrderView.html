@@ -1,42 +1,29 @@
-﻿<form novalidate name="orderForm"
-	  data-ng-controller="Merchello.Editors.Order.ViewController"
-	  data-ng-show="loaded">
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+<form novalidate name="orderForm" data-ng-controller="Merchello.Editors.Order.ViewController" data-ng-show="loaded">
 	<umb-panel val-show-validation>
-
 		<umb-header>
-
 			<div class="span4">
 				<div class="umb-headline-editor-wrapper">
 				    <h1 class="umb-headline"><localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
 				</div>
 			</div>
-
-
 			<div class="span8">
 				<div class="btn-toolbar pull-right umb-btn-toolbar">
 				</div>
 			</div>
-
 		</umb-header>
-
 		<merchello-panel>
-
 			<!-- Main content area -->
 			<div class="merchello-pane row-fluid">
-
 				<div class="control-group umb-control-group">
-
 					<div class="merchello-section-label">
                         <localize key="merchelloOrderView_customerInformation" />
                         <small><localize key="merchelloOrderView_billingAndShippingAddressHelper" /></small>
 					</div>
-
 					<div class="merchello-controls">
-
 						<div class="row-fluid span10 col-xs-10">
 							<div class="vcard span5">
 								<h3><localize key="merchelloOrderView_shippingAddress" /></h3>
-
 								<h4 class="fn">{{shippingAddress.name}}</h4>
 								<span class="org">{{shippingAddress.organization}}</span>
 								<span class="adr">
@@ -47,10 +34,8 @@
 								</span>
 								<span class="tel">{{shippingAddress.phone}}</span>
 							</div>
-
 							<div class="vcard span5 pull-right">
 								<h3><localize key="merchelloOrderView_billingAddress" /></h3>
-
 								<h4 class="fn">{{invoice.billToName}}</h4>
 								<span class="org">{{invoice.billToCompany}}</span>
 								<span class="adr">
@@ -62,18 +47,14 @@
 								<span class="tel">{{invoice.billToPhone}}</span>
 								<a data-ng-href="mailto:{{invoice.billToEmail}}" class="email">{{invoice.billToEmail}}</a>
 							</div>
-
 						</div>
 					</div>
 				</div>
-
 				<div class="control-group umb-control-group">
-
 					<div class="merchello-section-label">
                         <localize key="merchelloOrderView_orderInformation" />
                         <small><localize key="merchelloOrderView_orderInformationHelper" /></small>
 					</div>
-
 					<div class="merchello-controls">
 						<div class="row-fluid span10 col-xs-10">
 							<div class="row-fluid">
@@ -82,7 +63,6 @@
 								    <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()"><localize key="merchelloGeneral_fulfill"/> {{invoice.getProductLineItems().length}} <localize key="merchelloOrder_lineItems" /></a>
 								</div>
 							</div>
-
 							<table class="table table-striped merchello-striped-table order-items">
 								<tbody>
 									<tr data-ng-repeat="lineitem in invoice.getProductLineItems()">
@@ -114,16 +94,12 @@
 							</table>
 						</div>
 					</div>
-
 				</div>
-
 				<div class="control-group umb-control-group" data-ng-show="invoice.payments.length != 0 && invoice.payments[0].amount > 0">
-
 					<div class="merchello-section-label">
                         <localize key="merchelloOrderView_paymentHistory" />
                         <small><localize key="merchelloOrderView_paymentHistoryHelper" /></small>
 					</div>
-
 					<div class="merchello-controls">
 						<div class="row-fluid span10 col-xs-10" data-ng-repeat="(paymentMethodName, appliedPaymentList) in invoice.groupedAppliedPayments">
 							<div class="row-fluid">
@@ -131,7 +107,6 @@
 									<localize key="merchelloPayment_payment" /> - {{paymentMethodName}}
 								</div>
 							</div>
-
 							<table class="table table-striped merchello-striped-table invoice-payments">
 								<tbody>
 								<thead>
@@ -152,16 +127,10 @@
 							</table>
 						</div>
 					</div>
-
 				</div>
-
 				<merchello-shipping-history data-shipments="invoice.shipments"></merchello-shipping-history>
-
 				<merchello-debug-section data-props-to-debug="invoice"></merchello-debug-section>
-
 			</div>
-
 		</merchello-panel>
-
 	</umb-panel>
 </form>
