@@ -12,7 +12,7 @@
                     <!-- ACTION: Refund -->
                     <a class="btn btn-warning">Refund</a>
                     <!-- ACTION: Delete -->
-                    <a class="btn btn-danger" data-ng-click="">Delete</a>
+                    <a class="btn btn-danger" data-ng-click="openDeleteInvoiceDialog()">Delete</a>
                 </div>
             </div>
         </umb-header>
@@ -29,7 +29,7 @@
                         <div class="row-fluid" data-ng-hide="invoice.getPaymentStatus()=='Paid' && invoice.getFulfillmentStatus()=='Fulfilled'">
                             <div class="btn-toolbar pull-right umb-btn-toolbar">
                                 <a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureUpTo" /> {{invoice.total | currency : currencySymbol}}</a>
-                                <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="fulfillShipment()"><localize key="merchelloGeneral_fulfill" /> {{invoice.getProductLineItems().length}} <localize key="merchelloOrder_lineItems" /></a>
+                                <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="openFulfillPaymentDialog()"><localize key="merchelloGeneral_fulfill" /> {{invoice.getProductLineItems().length}} <localize key="merchelloOrder_lineItems" /></a>
                             </div>
                         </div>
                         <table class="table table-striped merchello-striped-table order-items">
@@ -109,6 +109,12 @@
             </div>
             <!-- Sidebar -->
             <div class="merchello-pane secondary span3">
+                <!-- Invoice & Order Status -->
+                <div class="well invoice-order-info">
+                    <h3>Invoice &amp; Order Statuses</h3><br/>
+                    <div>Payment Status: <strong>{{invoice.getPaymentStatus()}}</strong></div>
+                    <div>Fulfillment Status: <strong>{{invoice.getFulfillmentStatus()}}</strong></div>
+                </div>
                 <!-- Billing Address -->
                 <div class="well billing-address-info">
                     <h3><localize key="merchelloOrderView_billingAddress" /></h3>
