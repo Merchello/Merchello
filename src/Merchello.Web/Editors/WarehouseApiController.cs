@@ -1,23 +1,20 @@
-﻿using System.Configuration;
-using System.IO;
-using System.Linq;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
-
-    using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Core.Services;
-    using Merchello.Web.Models.ContentEditing;
-    using Merchello.Web.WebApi;
-
+    using Core;
+    using Core.Models;
+    using Core.Services;
+    using Models.ContentEditing;    
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
+    using WebApi;
 
     /// <summary>
     /// The warehouse API controller.

@@ -68,6 +68,11 @@
         public int LowCount { get; set; }
 
         /// <summary>
+        /// Gets or sets the location of the product.
+        /// </summary>
+        public string Location { get; set; }
+
+        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [DataMember]
