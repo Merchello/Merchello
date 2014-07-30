@@ -1,13 +1,14 @@
 ﻿namespace Merchello.Core.Configuration
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Configuration;
-    using System.Dynamic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Xml.Linq;
-    using Merchello.Core.Configuration.Outline;
+    using Outline;
     using Umbraco.Core.IO;
     using Umbraco.Core.Logging;
 
@@ -17,6 +18,19 @@
     public sealed class MerchelloConfiguration
     {
         /// <summary>
+        /// Gets the application name.
+        /// </summary>
+        public const string ApplicationName = "Merchello";
+
+        /// <summary>
+        /// Gets the merchello migration name.
+        /// </summary>
+        /// <remarks>
+        /// Configuration Status - (Upgrades) 
+        /// </remarks>
+        public const string MerchelloMigrationName = "Merchello";
+
+        /// <summary>
         /// The lazy loaded configuration section
         /// </summary>
         private static readonly Lazy<MerchelloConfiguration> Lazy = new Lazy<MerchelloConfiguration>(() => new MerchelloConfiguration());
@@ -24,7 +38,7 @@
         /// <summary>
         /// The root directory.
         /// </summary>
-        private string _rootDir = "";
+        private string _rootDir = string.Empty;
 
         /// <summary>
         /// Gets the current instance
@@ -35,11 +49,6 @@
         }
 
         /// <summary>
-        /// Gets the application name.
-        /// </summary>
-        public const string ApplicationName = "Merchello";
-
-        /// <summary>
         /// Gets the configuration name.
         /// </summary>
         public static string ConfigurationName
@@ -47,13 +56,6 @@
             get { return ApplicationName.ToLower(); }   
         } 
        
-        /// <summary>
-        /// Gets the merchello migration name.
-        /// </summary>
-        /// <remarks>
-        /// Configuration Status - (Upgrades) 
-        /// </remarks>
-        public const string MerchelloMigrationName = "Merchello";
 
         /// <summary>
         /// Gets or sets the configuration status. This will return the version number of the currently installed merchello instance.
@@ -70,7 +72,7 @@
 
             set
             {
-                SaveSetting("merchelloConfigurationStatus", value);
+                SaveAppSetting("merchelloConfigurationStatus", value);
             }
         }
         
@@ -80,6 +82,17 @@
         public MerchelloSection Section
         {
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
+        }
+
+        /// <summary>
+        /// Gets the customer member types.
+        /// </summary>
+        public IEnumerable<string> CustomerMemberTypes
+        {
+            get
+            {
+                return Section.Customer.MemberTypes.Split(',').Select(x => x.Trim());
+            }
         }
 
         /// <summary>
@@ -108,6 +121,17 @@
         public bool AutoUpdateDbSchema
         {
             get { return bool.Parse(Section.Settings["AutoUpdateDbSchema"].Value); }
+        }
+
+        /// <summary>
+        /// Gets the days beyond which the anonymous customers will be deleted via a scheduled task.
+        /// </summary>
+        /// <remarks>
+        /// The number of days beyond which the anonymous customers will be deleted via a scheduled task.
+        /// </remarks>
+        public int AnonymousCustomersMaxDays
+        {
+            get { return int.Parse(Section.Settings["AnonymousCustomersMaxDays"].Value); }
         }
 
         /// <summary>
@@ -199,11 +223,33 @@
         }
 
         /// <summary>
-        /// Saves a setting into the configuration file.
+        /// The get setting.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> value of the setting.
+        /// </returns>
+        public string GetSetting(string alias)
+        {
+            try
+            {
+                return Section.Settings[alias].Value;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Saves a setting into the web configuration file.
         /// </summary>
         /// <param name="key">Key of the setting to be saved.</param>
         /// <param name="value">Value of the setting to be saved.</param>
-        internal static void SaveSetting(string key, string value)
+        internal static void SaveAppSetting(string key, string value)
         {
             var fileName = IOHelper.MapPath(string.Format("{0}/web.config", SystemDirectories.Root));
             var xml = XDocument.Load(fileName, LoadOptions.PreserveWhitespace);

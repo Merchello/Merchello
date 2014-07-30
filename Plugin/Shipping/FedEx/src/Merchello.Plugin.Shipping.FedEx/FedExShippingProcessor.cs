@@ -13,46 +13,6 @@ namespace Merchello.Plugin.Shipping.FedEx
 {
     public class FedExShippingProcessor
     {
-        public const string FedEx2DayServiceType = "FEDEX_2_DAY";
-        public const string FedEx2DayServiceCode = "1";
-        public const string FedEx2DayAmServiceType = "FEDEX_2_DAY_AM";
-        public const string FedEx2DayAmServiceCode = "2";
-        public const string FedExExpressSaverServiceType = "FEDEX_EXPRESS_SAVER";
-        public const string FedExExpressSaverServiceCode = "3";
-        public const string FedExFirstOvernightServiceType = "FIRST_OVERNIGHT";
-        public const string FedExFirstOvernightServiceCode = "4";
-        public const string FedExPriorityOvernightServiceType = "PRIORITY_OVERNIGHT";
-        public const string FedExPriorityOvernightServiceCode = "5";
-        public const string FedExStandardOvernightServiceType = "STANDARD_OVERNIGHT";
-        public const string FedExStandardOvernightServiceCode = "6";
-        public const string FedEx1DayFreightServiceType = "FEDEX_1_DAY_FREIGHT";
-        public const string FedEx1DayFreightServiceCode = "7";
-        public const string FedEx2DayFreightServiceType = "FEDEX_2_DAY_FREIGHT";
-        public const string FedEx2DayFreightServiceCode = "8";
-        public const string FedEx3DayFreightServiceType = "FEDEX_3_DAY_FREIGHT";
-        public const string FedEx3DayFreightServiceCode = "9";
-        public const string FedExFirstFreightServiceType = "FEDEX_FIRST_DAY_FREIGHT";
-        public const string FedExFirstFreightServiceCode = "10";
-        public const string FedExInternationalDistributionFreightServiceType = "INTERNATIONAL_DISTRIBUTION_FREIGHT";
-        public const string FedExInternationalDistributionFreightServiceCode = "11";
-        public const string FedExEconomyFreightServiceType = "INTERNATIONAL_ECONOMY_FREIGHT";
-        public const string FedExEconomyFreightServiceCode = "12";
-        public const string FedExInternationalEconomyServiceType = "INTERNATIONAL_ECONOMY";
-        public const string FedExInternationalEconomyServiceCode = "13";
-        public const string FedExInternationalEconomyDistributionServiceType = "INTERNATIONAL_ECONOMY_DISTRIBUTION";
-        public const string FedExInternationalEconomyDistributionServiceCode = "14";
-        public const string FedExInternationalFirstServiceType = "INTERNATIONAL_FIRST";
-        public const string FedExInternationalFirstServiceCode = "15";
-        public const string FedExInternationalPriorityServiceType = "INTERNATIONAL_PRIORITY";
-        public const string FedExInternationalPriorityServiceCode = "16";
-        public const string FedExInternationalPriorityDistributionServiceType = "INTERNATIONAL_PRIORITY_DISTRIBUTION";
-        public const string FedExInternationalPriorityDistributionServiceCode = "17";
-        public const string FedExInternationalPriorityFreightServiceType = "INTERNATIONAL_PRIORITY_FREIGHT";
-        public const string FedExInternationalPriorityFreightServiceCode = "18";
-        public const string FedExEuropeFirstInternationalPriorityServiceType = "EUROPE_FIRST_INTERNATIONAL_PRIORITY";
-        public const string FedExEuropeFirstInternationalPriorityServiceCode = "19";
-
-
         private readonly FedExProcessorSettings _settings;
 
         public FedExShippingProcessor(FedExProcessorSettings settings)
@@ -70,7 +30,7 @@ namespace Merchello.Plugin.Shipping.FedEx
         }
 
         /// <summary>
-        /// Gets the Authorize.Net Url
+        /// Gets the FedEx Url
         /// </summary>
         private string GetFedExUrl()
         {
@@ -82,7 +42,7 @@ namespace Merchello.Plugin.Shipping.FedEx
 
 
         /// <summary>
-        /// The Authorize.Net API version
+        /// The FedEx API version
         /// </summary>
         public static string ApiVersion
         {
@@ -106,7 +66,7 @@ namespace Merchello.Plugin.Shipping.FedEx
                 {
                     var collection = BuildDeliveryOptions(reply, shipment);
 
-                    var firstCarrierRate = collection.FirstOrDefault(option => ConvertServiceNameToServiceCode(option.Service) == shipMethod.ServiceCode.Split('-').First());
+                    var firstCarrierRate = collection.FirstOrDefault(option => option.Service.Contains(shipMethod.ServiceCode.Split('-').First()));
                     if (firstCarrierRate != null)
                         shippingPrice = firstCarrierRate.Rate;
                 }
@@ -121,73 +81,6 @@ namespace Merchello.Plugin.Shipping.FedEx
             }
 
             return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, shipMethod) { Rate = shippingPrice });
-        }
-
-        private string ConvertServiceNameToServiceCode(string service)
-        {
-            switch (service)
-            {
-                case FedEx2DayServiceType:
-                    return FedEx2DayServiceCode;
-                    break;
-                case FedEx2DayAmServiceType:
-                    return FedEx2DayAmServiceCode;
-                    break;
-                case FedExExpressSaverServiceType:
-                    return FedExExpressSaverServiceCode;        
-                    break;
-                case FedExFirstOvernightServiceType:
-                    return FedExFirstOvernightServiceCode;     
-                    break;
-                case FedExPriorityOvernightServiceType:
-                    return FedExPriorityOvernightServiceCode;
-                    break;
-                case FedExStandardOvernightServiceType:
-                    return FedExStandardOvernightServiceCode;     
-                    break;
-                case FedEx1DayFreightServiceType:
-                    return FedEx1DayFreightServiceCode;           
-                    break;
-                case FedEx2DayFreightServiceType:
-                    return FedEx2DayFreightServiceCode;           
-                    break;
-                case FedEx3DayFreightServiceType:
-                    return FedEx3DayFreightServiceCode;           
-                    break;
-                case FedExFirstFreightServiceType:
-                    return FedExFirstFreightServiceCode;          
-                    break;
-                case FedExInternationalDistributionFreightServiceType:
-                    return FedExInternationalDistributionFreightServiceCode;    
-                    break;
-                case FedExEconomyFreightServiceType:
-                    return FedExEconomyFreightServiceCode;                             
-                    break;
-                case FedExInternationalEconomyServiceType:
-                    return FedExInternationalEconomyServiceCode;                       
-                    break;
-                case FedExInternationalEconomyDistributionServiceType:
-                    return FedExInternationalEconomyDistributionServiceCode;               
-                    break;
-                case FedExInternationalFirstServiceType:
-                    return FedExInternationalFirstServiceCode;                   
-                    break;
-                case FedExInternationalPriorityServiceType:
-                    return FedExInternationalPriorityServiceCode;                
-                    break;
-                case FedExInternationalPriorityDistributionServiceType:
-                    return FedExInternationalPriorityDistributionServiceCode;     
-                    break;
-                case FedExInternationalPriorityFreightServiceType:
-                    return FedExInternationalPriorityFreightServiceCode;       
-                    break;
-                case FedExEuropeFirstInternationalPriorityServiceType:
-                    return FedExEuropeFirstInternationalPriorityServiceCode;   
-                    break;
-                default:
-                    return "0";
-                    break;
-            }
         }
 
         private RateRequest RateRequest(IShipment shipment, decimal totalWeight, int quantity)

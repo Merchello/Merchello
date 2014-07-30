@@ -9,6 +9,7 @@
      * The controller for the Notifications page
      */
     controllers.NotificationsEditController = function ($scope, $routeParams, assetsService, notificationsService, merchelloNotificationsService) {
+        
 
         $scope.currentTab = "Template";
         $scope.notificationTriggers = [];
@@ -17,32 +18,31 @@
         }
 
         $scope.loaded = true;
-		$scope.preValuesLoaded = true;
+		$scope.preValuesLoaded = true;                  
 
 		//--------------------------------------------------------------------------------------
 		// Initialization methods
 		//--------------------------------------------------------------------------------------
+        $scope.rteProperties = {
+            label: 'bodyText',
+            view: 'rte',
+            config: {
+                editor: {
+                    toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+                    stylesheets: [],
+                    dimensions: { height: 650 }
+                }
+            },
+            value: ""
+
+    };
 
 		$scope.init = function () {
-			assetsService.loadCss("/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.css");
-			assetsService.loadCss("/App_Plugins/Merchello/lib/codemirror/Css/umbracoCustom.css");
 
 		    // declare empty options at startup, so ui-codemirror can watch it
-			$scope.cmOptions = {};
-
+			
 			var promise = $scope.loadNotificationMessage();
-		    promise.then(function(data) {
-
-		    	$scope.cmOptions = {
-		    		autofocus: true,
-		    		indentUnit: 4,
-		    		indentWithTabs: true,
-		    		lineNumbers: true,
-		    		matchBrackets: true,
-		    		mode: "razor",
-		    		value: $scope.notificationMessage.bodyText
-		    	};
-
+		    promise.then(function(data) {                   
 		    	$scope.loaded = true;
 		    	$scope.preValuesLoaded = true;
 		    });
@@ -58,7 +58,8 @@
         $scope.loadNotificationMessage = function() {
 
             var promise = merchelloNotificationsService.getNotificationMessagesByKey($routeParams.id);
-        	promise.then(function (notification) {
+            promise.then(function (notification) {
+                $scope.rteProperties.value = notification.bodyText;
         	    $scope.notificationMessage = new merchello.Models.NotificationMessage(notification);
         	});
 
@@ -80,6 +81,7 @@
 		$scope.saveNotificationMessage = function (message) {
 		    var promiseSave;
 		    message.monitorKey = message.monitorKey;
+		    message.bodyText = $scope.rteProperties.value;
 		    promiseSave = merchelloNotificationsService.updateNotificationMessage(message);
 
 		    promiseSave.then(function () {
@@ -103,7 +105,7 @@
     };
 
 
-	angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsEditController", ['$scope', '$routeParams', 'assetsService', 'notificationsService', 'merchelloNotificationsService', merchello.Controllers.NotificationsEditController]);
+    angular.module("umbraco").controller("Merchello.Dashboards.Settings.NotificationsEditController", ['$scope', '$routeParams', 'assetsService', 'notificationsService', 'merchelloNotificationsService', merchello.Controllers.NotificationsEditController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

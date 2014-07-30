@@ -34,7 +34,7 @@ namespace Merchello.Plugin.Shipping.UPS
         public decimal AmountPerUnit { get; set; }
 
         public string Service { get; set; }
-
+        
         public bool IsAirOnly { get; set; }
 
         public bool IsGroundOnly { get; set; }

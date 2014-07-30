@@ -1,35 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core.Events;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Umbraco.Core;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using Models;
+    using Persistence;
+    using Persistence.Querying;
+    using Persistence.UnitOfWork;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the Product Service 
     /// </summary>
     public class ProductService : IProductService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-        private readonly IProductVariantService _productVariantService;
-
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
+        /// <summary>
+        /// The uow provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
+
+        /// <summary>
+        /// The repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+
+        /// <summary>
+        /// The product variant service.
+        /// </summary>
+        private readonly IProductVariantService _productVariantService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductService"/> class.
+        /// </summary>
         public ProductService()
             : this(new RepositoryFactory(), new ProductVariantService())
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="productVariantService">
+        /// The product variant service.
+        /// </param>
         public ProductService(RepositoryFactory repositoryFactory, IProductVariantService productVariantService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, productVariantService)
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="productVariantService">
+        /// The product variant service.
+        /// </param>
         public ProductService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IProductVariantService productVariantService)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -44,11 +84,58 @@ namespace Merchello.Core.Services
             _productVariantService = productVariantService;
         }
 
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IProductService, Events.NewEventArgs<IProduct>> Creating;
+
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IProductService, Events.NewEventArgs<IProduct>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IProductService, SaveEventArgs<IProduct>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IProductService, SaveEventArgs<IProduct>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleted;
+
+        #endregion
+
         #region IProductService Members
 
         /// <summary>
         /// Creates a Product without saving it to the database
         /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         public IProduct CreateProduct(string name, string sku, decimal price)
         {
             var templateVariant = new ProductVariant(name, sku, price);
@@ -67,10 +154,18 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates and saves a <see cref="IProduct"/> to the database
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="sku"></param>
-        /// <param name="price"></param>
-        /// <returns></returns>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         public IProduct CreateProductWithKey(string name, string sku, decimal price)
         {
             var templateVariant = new ProductVariant(name, sku, price);
@@ -128,7 +223,7 @@ namespace Merchello.Core.Services
             _productVariantService.EnsureProductVariantsHaveAttributes(product);
 
             // save any remaining variants changes in the variants collection
-            if(product.ProductVariants.Any())
+            if (product.ProductVariants.Any())
             _productVariantService.Save(product.ProductVariants);
         }
 
@@ -152,6 +247,7 @@ namespace Merchello.Core.Services
                     {
                         repository.AddOrUpdate(product);
                     }
+
                     uow.Commit();
                 }
             }
@@ -193,6 +289,7 @@ namespace Merchello.Core.Services
                     uow.Commit();
                 }
             }
+
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProduct>(product), this);
         }
 
@@ -217,6 +314,7 @@ namespace Merchello.Core.Services
                     {
                         repository.Delete(product);
                     }
+
                     uow.Commit();
                 }
             }
@@ -240,8 +338,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a list of Product give a list of unique keys
         /// </summary>
-        /// <param name="keys">List of unique keys</param>
-        /// <returns></returns>
+        /// <param name="keys">
+        /// List of unique keys
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IProduct"/>.
+        /// </returns>
         public IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
@@ -253,6 +355,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Returns the count of all products
         /// </summary>
+        /// <returns>
+        /// The total product count.
+        /// </returns>
         public int ProductsCount()
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
@@ -264,10 +369,14 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// True/false indicating whether or not a sku is already exists in the database
+        /// True/false indicating whether or not a SKU is already exists in the database
         /// </summary>
-        /// <param name="sku">The sku to be tested</param>
-        /// <returns></returns>
+        /// <param name="sku">
+        /// The SKU to be tested
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not  a SKU exists
+        /// </returns>
         public bool SkuExists(string sku)
         {
             return _productVariantService.SkuExists(sku);
@@ -275,49 +384,18 @@ namespace Merchello.Core.Services
 
         #endregion
 
+        /// <summary>
+        /// Gets all the products
+        /// </summary>
+        /// <returns>
+        /// A collection of all <see cref="IProduct"/>.
+        /// </returns>
         public IEnumerable<IProduct> GetAll()
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
-        }
-
-
-        #region Event Handlers
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IProductService, Events.NewEventArgs<IProduct>> Creating;
-
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IProductService, Events.NewEventArgs<IProduct>> Created;
-
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IProductService, SaveEventArgs<IProduct>> Saving;
-
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IProductService, SaveEventArgs<IProduct>> Saved;
-
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleted;
-
-        #endregion
-     
+        }     
     }
 }

@@ -14,10 +14,43 @@
     /// </summary>
     public abstract class ShippingGatewayProviderBase : GatewayProviderBase, IShippingGatewayProvider        
     {
+        /// <summary>
+        /// The ship methods.
+        /// </summary>
+        private IEnumerable<IShipMethod> _shipMethods;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShippingGatewayProviderBase"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="gatewayProviderSettings">
+        /// The gateway provider settings.
+        /// </param>
+        /// <param name="runtimeCacheProvider">
+        /// The runtime cache provider.
+        /// </param>
         protected ShippingGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {            
+        }
+
+        /// <summary>
+        /// Gets or sets the collection of all <see cref="IShipMethod"/> assoicated with this provider
+        /// </summary>
+        public IEnumerable<IShipMethod> ShipMethods
+        {
+            get
+            {
+                return _shipMethods ??
+                       (_shipMethods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProviderSettings.Key));
+            }
+
+            protected set
+            {
+                _shipMethods = value;
+            }
         }
 
         /// <summary>
@@ -47,8 +80,7 @@
         /// </summary>
         /// <param name="shippingGatewayMethod">The <see cref="IShippingGatewayMethod"/> to be saved</param>
         public abstract void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod);
-       
-
+        
         /// <summary>
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
@@ -70,7 +102,7 @@
         public IShippingGatewayMethod GetShippingGatewayMethod(Guid shipMethodKey, Guid shipCountrKey)
         {
             return
-                GetAllShippingGatewayMethodsForShipCountry(shipMethodKey)
+                GetAllShippingGatewayMethodsForShipCountry(shipCountrKey)
                     .FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
         }
 
@@ -78,7 +110,9 @@
         /// Returns a collection of ship methods assigned for this specific provider configuration (associated with the ShipCountry)
         /// </summary>
         /// <param name="shipCountryKey">The key for the <see cref="IShipCountry"/></param>
-        /// <returns></returns>
+        /// <returns>
+        /// A collection of <see cref="IShippingGatewayMethod"/>
+        /// </returns>
         public IEnumerable<IShippingGatewayMethod> GetAllShippingGatewayMethodsForShipCountry(Guid shipCountryKey)
         {
             var shipCountry = GatewayProviderService.GetShipCountryByKey(shipCountryKey);
@@ -89,34 +123,20 @@
         /// <summary>
         /// Deletes an Active ShipMethod
         /// </summary>
-        /// <param name="shippingGatewayMethod"></param>
+        /// <param name="shippingGatewayMethod">The shipping gateway method</param>
         public virtual void DeleteShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod)
         {
             GatewayProviderService.Delete(shippingGatewayMethod.ShipMethod);
-        }
-
-        /// <summary>
-        /// Deletes all active shipMethods
-        /// </summary>
-        /// <remarks>
-        /// Used for testing
-        /// </remarks>
-        internal virtual void DeleteAllActiveShipMethods(IShipCountry shipCountry)
-        {
-            foreach (var gatewayShipMethod in GetAllShippingGatewayMethods(shipCountry))
-            {
-                DeleteShippingGatewayMethod(gatewayShipMethod);
-            }
-        }
+            _shipMethods = null;
+        }        
         
         /// <summary>
         /// Returns a collection of available <see cref="IShippingGatewayMethod"/> associated by this provider for a given shipment
         /// </summary>
-        /// <param name="shipment"><see cref="IShipment"/></param>
+        /// <param name="shipment">the <see cref="IShipment"/></param>
         /// <returns>A collection of <see cref="IShippingGatewayMethod"/></returns>
         public virtual IEnumerable<IShippingGatewayMethod> GetShippingGatewayMethodsForShipment(IShipment shipment)
         {
-
             var attempt = shipment.GetValidatedShipCountry(GatewayProviderService);
 
             // quick validation of shipment
@@ -200,8 +220,6 @@
             return QuoteShippingGatewayMethodsForShipment(attempt.Result).FirstOrDefault();
         }
 
-        
-
         /// <summary>
         /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
         /// </summary>
@@ -212,19 +230,29 @@
             return strategy.GetShipmentRateQuotes();
         }
 
-        private IEnumerable<IShipMethod> _shipMethods;
+        /// <summary>
+        /// Deletes all active shipMethods
+        /// </summary>
+        /// <param name="shipCountry">
+        /// The ship Country.
+        /// </param>
+        /// <remarks>
+        /// Used for testing
+        /// </remarks>
+        internal virtual void DeleteAllActiveShipMethods(IShipCountry shipCountry)
+        {
+            foreach (var gatewayShipMethod in GetAllShippingGatewayMethods(shipCountry))
+            {
+                DeleteShippingGatewayMethod(gatewayShipMethod);
+            }
+        }
 
         /// <summary>
-        /// Gets the collection of all <see cref="IShipMethod"/> assoicated with this provider
+        /// The reset ship methods.
         /// </summary>
-        public IEnumerable<IShipMethod> ShipMethods
+        internal virtual void ResetShipMethods()
         {
-            get {
-                return _shipMethods ??
-                       (_shipMethods = GatewayProviderService.GetShipMethodsByShipCountryKey(GatewayProviderSettings.Key));
-            }
-            protected set { _shipMethods = value; }
+            _shipMethods = null;
         }
     }
-
 }

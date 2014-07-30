@@ -17,5 +17,19 @@
         {
             return Workflow.Basket.GetBasket(customer);
         }
+
+        /// <summary>
+        /// The wish list.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWishList"/>.
+        /// </returns>
+        public static IWishList WishList(this ICustomer customer)
+        {
+            return Workflow.WishList.GetWishList(customer);
+        }
     }
 }

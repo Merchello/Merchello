@@ -1,20 +1,48 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Threading;
-using Merchello.Core.Models.Interfaces;
-using Umbraco.Core;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Threading;
+
+    using Umbraco.Core;
+
+    /// <summary>
+    /// The gateway provider collection.
+    /// </summary>
     public class GatewayProviderCollection : NotifiyCollectionBase<Guid, IGatewayProviderSettings>
     {
+        /// <summary>
+        /// The add locker.
+        /// </summary>
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override Guid GetKeyForItem(IGatewayProviderSettings item)
+        /// <summary>
+        /// Gets the index of a key in the collection.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public override int IndexOfKey(Guid key)
         {
-            return item.Key;
+            for (var i = 0; i < Count; i++)
+            {
+                if (this[i].Key == key)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
+        /// <summary>
+        /// Adds an item to the collection.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
         internal new void Add(IGatewayProviderSettings item)
         {
             using (new WriteLock(_addLocker))
@@ -35,16 +63,18 @@ namespace Merchello.Core.Models
             }
         }
 
-        public override int IndexOfKey(Guid key)
+        /// <summary>
+        /// Gets the key for an item in the collection.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        protected override Guid GetKeyForItem(IGatewayProviderSettings item)
         {
-            for (var i = 0; i < Count; i++)
-            {
-                if (this[i].Key == key)
-                {
-                    return i;
-                }
-            }
-            return -1;
+            return item.Key;
         }
     }
 }

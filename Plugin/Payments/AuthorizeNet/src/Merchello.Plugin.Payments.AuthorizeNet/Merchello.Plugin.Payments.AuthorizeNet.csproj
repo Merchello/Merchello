@@ -37,17 +37,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\UmbracoCms.Core.7.1.2\lib\interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Core, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Merchello.Core.1.2.4\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>packages\Merchello.Core.1.2.12\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Merchello.Core.1.2.4\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>packages\Merchello.Core.1.2.12\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Web, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Merchello.Core.1.2.4\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>packages\Merchello.Core.1.2.12\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -110,7 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorizeNetApplicationEventListener.cs" />
+    <Compile Include="AuthorizeNetEvents.cs" />
     <Compile Include="AuthorizeNetPaymentProcessor.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ExtendedDataExtensions.cs" />

@@ -6,6 +6,8 @@
     using global::Examine.SearchCriteria;
     using Merchello.Web.Models.ContentEditing;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// A helper class that provides many useful methods and functionality for using Merchello in templates
     /// </summary> 
@@ -182,6 +184,33 @@
         }
 
         /// <summary>
+        /// The invoices by customer.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
+        /// </returns>
+        public IEnumerable<InvoiceDisplay> InvoicesByCustomer(Guid customerKey)
+        {
+            return InvoiceQuery.GetByCustomerKey(customerKey);
+        }
+
+        /// <summary>
+        /// The invoices by customer.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
+        /// </returns>
+        public IEnumerable<InvoiceDisplay> InvoicesByCustomer(string customerKey)
+        {
+            return InvoicesByCustomer(customerKey.EncodeAsGuid());
+        }
+        /// <summary>
         /// Searches the Merchello Invoice index. 
         /// </summary>
         /// <param name="term">
@@ -207,6 +236,49 @@
         public IEnumerable<InvoiceDisplay> SearchInvoices(ISearchCriteria criteria)
         {
             return InvoiceQuery.Search(criteria);
+        }
+
+        #endregion
+
+        #region Customers
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        public CustomerDisplay Customer(string key)
+        {
+            return CustomerQuery.GetByKey(key);
+        }
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        public CustomerDisplay Customer(Guid key)
+        {
+            return Customer(key.ToString());
+        }
+
+        /// <summary>
+        /// The all customers.
+        /// </summary>
+        /// <returns>
+        /// The collection of all customers.
+        /// </returns>
+        public IEnumerable<CustomerDisplay> AllCustomers()
+        {
+            return CustomerQuery.GetAllCustomers();
         }
 
         #endregion

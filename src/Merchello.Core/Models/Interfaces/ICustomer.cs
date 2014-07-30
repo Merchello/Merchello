@@ -1,59 +1,59 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// Defines a Merchello customer
     /// </summary>
     public interface ICustomer : ICustomerBase
     {
         /// <summary>
-        /// Returns the full name of the customer
+        /// Gets the full name of the customer
         /// </summary>
         [IgnoreDataMember]
         string FullName { get; }
 
         /// <summary>
-        /// The first name of the customer
+        /// Gets or sets first name of the customer
         /// </summary>
         [DataMember]
         string FirstName { get; set; }
 
         /// <summary>
-        /// The last name of the customer
+        /// Gets or sets last name of the customer
         /// </summary>
         [DataMember]
         string LastName { get; set; }
 
         /// <summary>
-        /// The email address of the customer
+        /// Gets or sets email address of the customer
         /// </summary>
         [DataMember]
         string Email { get; set; }
 
         /// <summary>
-        /// The Umbraco member Id
+        /// Gets the login name.
         /// </summary>
         [DataMember]
-        int? MemberId { get; set; }
+        string LoginName { get; }
 
         /// <summary>
-        /// The total amount this customer has been invoiced
+        /// Gets or sets a value indicating whether tax exempt.
         /// </summary>
         [DataMember]
-        decimal TotalInvoiced { get; }
+        bool TaxExempt { get; set; }
 
         /// <summary>
-        /// The total amount this customer has paid
+        /// Gets or sets the customer notes.
         /// </summary>
         [DataMember]
-        decimal TotalPayments { get; }
+        string Notes { get; set; }
 
         /// <summary>
-        /// The date the customer made their last payment
+        /// Gets the addresses.
         /// </summary>
         [DataMember]
-        DateTime? LastPaymentDate { get; }
+        IEnumerable<ICustomerAddress> Addresses { get; } 
     }
 }

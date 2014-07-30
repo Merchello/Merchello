@@ -2,12 +2,11 @@
 {
     using System.Linq;
     using System.Net.Http.Formatting;
-
-    using Merchello.Core.Configuration;
-    using Merchello.Core.Configuration.Outline;
-
+    using Core.Configuration;
+    using Core.Configuration.Outline;
     using umbraco;
     using umbraco.BusinessLogic.Actions;
+    using umbraco.dialogs;
     using Umbraco.Web.Models.Trees;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.Trees;

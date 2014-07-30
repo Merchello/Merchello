@@ -59,6 +59,7 @@
     <key alias="fulfillmentStatus">Fulfillment Status</key>
     <key alias="lineItems"> Line Items</key>
     <key alias="orderName">[Order Name]</key>
+    <key alias="createOrder">Create Order</key>
     <!-- actions -->
     <key alias="filter">Filter Orders</key>
     <key alias="capturePayment">Capture Payment</key>
@@ -159,7 +160,8 @@
     <key alias="currency">Currency</key>
     <key alias="dateFormat">Date Format</key>
     <key alias="startingOrderNumber">Starting Order No.</key>
-    <key alias="timeFormat">Time Format</key>
+    <key alias="timeFormat">Time Format</key>   
+    <key alias="unitSystem">Unit System</key>
     <key alias="startingInvoiceNumber">Starting Invoice No.</key>
     <key alias="catalogDefaults">Catalog Defaults</key>
     <key alias="catalogDefaultsHelper">Set the default catalog item (product) options. Can be changed later on a per item basis.</key>
@@ -298,6 +300,10 @@
   </area>
   <area alias="merchelloMethodDelete">
     <key alias="deleteConfirmation">Are you sure you want to remove the method</key>
+  </area>
+  <area alias="merchelloDelete">
+    <key alias="deleteConfirmation">Delete Confirmation</key>
+    <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
   </area>
   <area alias="merchelloProductEdit">
     <key alias="enterProductName">Enter a product name</key>

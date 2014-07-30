@@ -1,28 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.Factories;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    /// <summary>
+    /// The product variant repository.
+    /// </summary>
     internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
 
         public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
-        { }
+        {            
+        }
 
-        #region Overrides MerchelloPetaPocoRepositoryBase
 
         protected override IProductVariant PerformGet(Guid key)
         {
@@ -176,8 +180,6 @@ namespace Merchello.Core.Persistence.Repositories
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
         }
 
-        #endregion
-
         private static bool MandateProductVariantRules(IProductVariant entity)
         {
             // TODO these checks can probably be moved somewhere else but are here at the moment to enforce the rules as the API develops
@@ -209,7 +211,7 @@ namespace Merchello.Core.Persistence.Repositories
             return collection;
         }
 
-        #region CatalogInventory
+
 
         // this merely asserts that an assoicate between the warehouse and the variant has been made
         internal void SaveCatalogInventory(IProductVariant productVariant)
@@ -333,8 +335,6 @@ namespace Merchello.Core.Persistence.Repositories
             var variants = GetByProductKey(product.Key);
             return variants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
         }
-
-        #endregion
 
 
         /// <summary>

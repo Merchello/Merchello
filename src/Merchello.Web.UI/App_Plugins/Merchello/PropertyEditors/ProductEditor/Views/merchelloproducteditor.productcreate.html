@@ -1,0 +1,36 @@
+﻿<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductEditor.ProductCreate">
+
+    <div class="control-group umb-control-group">
+        <a data-ng-click="save()" class="btn btn-primary"><localize key="merchelloVariant_createProduct" /></a>
+    </div>
+
+    <!-- Property classes from Umbraco styles -->
+    <div class="control-group umb-control-group">
+        <label class="merchello-control-label">
+            <localize key="merchelloVariant_variantInfo" />
+            <small><localize key="merchelloVariant_configVariant" /></small>
+        </label>
+
+        <div class="merchello-controls">
+
+            <!-- Edit the product name -->
+            <div class="row-fluid">
+                <div class="form-group col-xs-6 span6">
+                    <label for="name"><localize key="general_name" /></label>
+                    <input id="name" name="name" required type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.name" />
+                </div>
+            </div>
+
+            <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
+            <product-variant-main-simple-create product="product" product-variant="productVariant"></product-variant-main-simple-create>
+
+        </div>
+    </div>
+
+
+
+
+    <merchello-debug-section data-props-to-debug="product,productVariant"></merchello-debug-section>
+
+
+</div>

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    /// <summary>
+    /// Defines an invoice.
+    /// </summary>
     public interface IInvoice : ILineItemContainer
     {
         /// <summary>

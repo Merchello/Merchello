@@ -1,19 +1,30 @@
-﻿using System;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The customer address factory.
+    /// </summary>
     internal class CustomerAddressFactory : IEntityFactory<ICustomerAddress, CustomerAddressDto>
     {
-
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
         public ICustomerAddress BuildEntity(CustomerAddressDto dto)
         {
-            var address = new CustomerAddress(dto.CustomerKey, dto.Label)
+            var address = new CustomerAddress(dto.CustomerKey)
             {
-                Key = dto.Key, 
+                Key = dto.Key,
+                Label = dto.Label,
                 FullName = dto.FullName,
-                Company =  dto.Company,
+                Company = dto.Company,
                 AddressTypeFieldKey = dto.AddressTfKey,
                 Address1 = dto.Address1,
                 Address2 = dto.Address2,
@@ -22,6 +33,7 @@ namespace Merchello.Core.Persistence.Factories
                 PostalCode = dto.PostalCode,
                 CountryCode = dto.CountryCode,
                 Phone = dto.Phone,
+                IsDefault = dto.IsDefault,
                 CreateDate = dto.CreateDate,
                 UpdateDate = dto.UpdateDate
             };
@@ -31,6 +43,15 @@ namespace Merchello.Core.Persistence.Factories
             return address;
         }
 
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerAddressDto"/>.
+        /// </returns>
         public CustomerAddressDto BuildDto(ICustomerAddress entity)
         {
             var dto = new CustomerAddressDto()
@@ -48,6 +69,7 @@ namespace Merchello.Core.Persistence.Factories
                 PostalCode = entity.PostalCode,
                 CountryCode = entity.CountryCode,
                 Phone = entity.Phone,
+                IsDefault = entity.IsDefault,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

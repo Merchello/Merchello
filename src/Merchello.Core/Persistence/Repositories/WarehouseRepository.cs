@@ -1,44 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Factories;
+    using Models;
+    using Models.EntityBase;
+    using Models.Rdbms;
+    using Querying;
+    
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+    using UnitOfWork;
+
+    /// <summary>
+    /// The warehouse repository.
+    /// </summary>
     internal class WarehouseRepository : MerchelloPetaPocoRepositoryBase<IWarehouse>, IWarehouseRepository
     {
+        /// <summary>
+        /// The _warehouse catalog repository.
+        /// </summary>
+        private readonly IWarehouseCatalogRepository _warehouseCatalogRepository;
 
-
-        public WarehouseRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WarehouseRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="warehouseCatalogRepository">
+        /// The warehouse Catalog Repository.
+        /// </param>
+        public WarehouseRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IWarehouseCatalogRepository warehouseCatalogRepository)
             : base(work, cache)
         {
+            Mandate.ParameterNotNull(warehouseCatalogRepository, "warehouseCatalogRepository");
+
+            _warehouseCatalogRepository = warehouseCatalogRepository;
         }
-
-        #region Overrides of RepositoryBase<IWarehouse>
-
-
+       
         protected override IWarehouse PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<WarehouseDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
             var factory = new WarehouseFactory();
 
-            var warehouse = factory.BuildEntity(dto);
+            var warehouse = factory.BuildEntity(dto, _warehouseCatalogRepository.GetWarehouseCatalogsByWarehouseKey(key));
 
 
             return warehouse;
@@ -56,17 +76,13 @@ namespace Merchello.Core.Persistence.Repositories
             else
             {
                 var factory = new WarehouseFactory();
-                var dtos = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(GetBaseQuery(false));
+                var dtos = Database.Fetch<WarehouseDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
-                    yield return factory.BuildEntity(dto);
+                    yield return factory.BuildEntity(dto, _warehouseCatalogRepository.GetWarehouseCatalogsByWarehouseKey(dto.Key));
                 }
             }
         }
-
-        #endregion
-
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IWarehouse>
 
 
         protected override Sql GetBaseQuery(bool isCount)
@@ -74,10 +90,8 @@ namespace Merchello.Core.Persistence.Repositories
             // TODO VERSION NEXT: this will need to be refactored when we open up Multiple Warehouse Catalogs!!!
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<WarehouseDto>()
-                .InnerJoin<WarehouseCatalogDto>()
-                .On<WarehouseDto, WarehouseCatalogDto>(left => left.Key, right => right.WarehouseKey);
-
+                .From<WarehouseDto>();
+            
             return sql;
         }
 
@@ -140,13 +154,9 @@ namespace Merchello.Core.Persistence.Repositories
             var translator = new SqlTranslator<IWarehouse>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<WarehouseDto, WarehouseCatalogDto>(sql);
+            var dtos = Database.Fetch<WarehouseDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
-
-
-        #endregion
-
     }
 }

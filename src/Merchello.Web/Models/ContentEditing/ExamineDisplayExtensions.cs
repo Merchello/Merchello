@@ -5,8 +5,12 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
+
     using global::Examine;
+
+    using Merchello.Core.Models;
     using Merchello.Examine;
+
     using Newtonsoft.Json;
 
     /// <summary>
@@ -147,6 +151,34 @@
                     OrderStatus = JsonFieldAs<OrderStatusDisplay>(result, "orderStatus"),
                     Items = RawJsonFieldAsCollection<OrderLineItemDisplay>(result, "orderItems")
                 };
+        }
+
+        /// <summary>
+        /// Converts a Lucene index result into a <see cref="CustomerDisplay"/>.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        internal static CustomerDisplay ToCustomerDisplay(this SearchResult result)
+        {
+            return new CustomerDisplay()
+            {
+                Key = FieldAsGuid(result, "customerKey"),
+                LoginName = FieldAsString(result, "loginName"),
+                FirstName = FieldAsString(result, "firstName"),
+                LastName = FieldAsString(result, "lastName"),
+                Email = FieldAsString(result, "email"),
+                Notes = FieldAsString(result, "notes"),
+                TaxExempt = FieldAsBoolean(result.Fields["taxExempt"]),
+                ExtendedData =
+                    RawJsonFieldAsCollection<KeyValuePair<string, string>>(result, "extendedData")
+                        .AsExtendedDataCollection(),
+                Addresses = RawJsonFieldAsCollection<ICustomerAddress>(result, "addresses").Select(x => x.ToCustomerAddressDisplay()),
+                LastActivityDate = FieldAsDateTime(result, "lastActivityDate")
+            };
         }
 
 

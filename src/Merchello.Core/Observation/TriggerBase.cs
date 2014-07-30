@@ -60,9 +60,18 @@
         {
             var type = typeof(TModel);
 
-            return model == null || type.IsInstanceOfType(model); //model.GetType().IsAssignableFrom(type);
+            return model == null || type.IsInstanceOfType(model); ////model.GetType().IsAssignableFrom(type);
         }
 
+        /// <summary>
+        /// The get unsubscriber.
+        /// </summary>
+        /// <param name="observer">
+        /// The observer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDisposable"/>.
+        /// </returns>
         protected IDisposable GetUnsubscriber(IObserver<T> observer)
         {
             return new Unsubscriber<T>(Observers, observer);

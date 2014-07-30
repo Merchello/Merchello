@@ -25,6 +25,9 @@
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
 
+        // Property to control the template to show for the product state (product, product with options, etc)
+        $scope.templatePath = "";
+
 
 
         //--------------------------------------------------------------------------------------
@@ -92,6 +95,12 @@
 
                 $scope.productVariant.copyFromProduct($scope.product);
 
+                if ($scope.product.hasVariants) {
+                    $scope.templatePath = "/App_Plugins/Merchello/PropertyEditors/ProductEditor/Views/merchelloproducteditor.producteditwithoptions.html";
+                } else {
+                    $scope.templatePath = "/App_Plugins/Merchello/PropertyEditors/ProductEditor/Views/merchelloproducteditor.productedit.html";
+                }
+
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
@@ -117,22 +126,18 @@
             // Load the product from the Guid key stored in the model.value
             if (_.isString($scope.model.value)) {
                 if ($scope.model.value.length > 0) {
+                    // editing a product or product with options
                     loadProduct($scope.model.value);
                     $scope.creatingProduct = false;
                     $scope.creatingVariant = false;
                     $scope.editingVariant = false;
                 } else {
+                    $scope.templatePath = "/App_Plugins/Merchello/PropertyEditors/ProductEditor/Views/merchelloproducteditor.productcreate.html";
                     $scope.creatingProduct = true;
                     $scope.creatingVariant = false;
                     $scope.editingVariant = false;
                 }
             }
-
-            // Handle the form submitting event to save the product information to Merchello tables
-            $scope.$on("formSubmitting", function (e, args) {
-                notificationsService.success("Saving merchello product", "");
-                $scope.save();
-            });
 
         };
 
@@ -145,6 +150,20 @@
 
         /**
          * @ngdoc method
+         * @name changeTemplate
+         * @function
+         * 
+         * @description
+         * Handles the template switching for the edit / create / edit with options views
+         */
+        $scope.changeTemplate = function (templateUrl) {
+
+            $scope.templatePath = templateUrl;
+            $scope.creatingProduct = false;
+        };
+
+        /**
+         * @ngdoc method
          * @name selectedProductFromDialog
          * @function
          * 
@@ -154,9 +173,8 @@
         $scope.selectedProductFromDialog = function (selectedProduct) {
 
             $scope.model.value = selectedProduct.key;
-            $scope.product = selectedProduct;
-            $scope.productVariant.copyFromProduct($scope.product);
             $scope.creatingProduct = false;
+            loadProduct(selectedProduct.key);
         };
 
         /**
@@ -177,96 +195,6 @@
             });
 
         };
-
-
-
-        /**
-         * @ngdoc method
-         * @name save
-         * @function
-         * 
-         * @description
-         * Called when the Save button is pressed.  See comments below.
-         */
-        $scope.save = function () {
-
-            if ($scope.creatingProduct) // Save on initial create
-            {
-                if (!$scope.product.hasVariants && $scope.product.productOptions.length > 0) // The options checkbox was checked, a blank option was added, then the has options was unchecked
-                {
-                    $scope.product.productOptions = [];
-                }
-
-                // Copy from master variant
-                $scope.product.copyFromVariant($scope.productVariant);
-
-                var promiseCreate = merchelloProductService.createProduct($scope.product, function () {
-                    $scope.creatingProduct = false;
-                    //notificationsService.success("*** Product ", status);
-                });
-                promiseCreate.then(function (product) {
-
-                    $scope.product = product;
-                    $scope.productVariant.copyFromProduct($scope.product);
-
-                    $scope.creatingProduct = false; // For the variant edit/create view.
-
-                    $scope.model.value = $scope.product.key;
-
-                   // $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
-
-                    notificationsService.success("Product Created and Saved", "");
-
-                }, function (reason) {
-                    notificationsService.error("Product Create Failed", reason.message);
-                });
-            } else // if saving a product (not a variant)
-            {
-                if ($scope.product.hasVariants) // We added options / variants to a product that previously did not have them OR on save during a create
-                {
-                    // Copy from master variant
-                    $scope.product.copyFromVariant($scope.productVariant);
-
-                    var promise = merchelloProductService.updateProductWithVariants($scope.product);
-
-                    promise.then(function (product) {
-                        notificationsService.success("Products and variants saved", "");
-
-                        $scope.product = product;
-                        $scope.productVariant.copyFromProduct($scope.product);
-
-                        if ($scope.product.hasVariants) {
-                            //$location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.product.key, true);
-                        }
-
-                    }, function (reason) {
-                        notificationsService.error("Product or variants save Failed", reason.message);
-                    });
-                } else // Simple product save with no options or variants
-                {
-                    if ($scope.product.productOptions.length > 0) // The options checkbox was checked, a blank option was added, then the has options was unchecked
-                    {
-                        $scope.product.productOptions = [];
-                    }
-
-                    // Copy from master variant
-                    $scope.product.copyFromVariant($scope.productVariant);
-
-                    var promise = merchelloProductService.updateProduct($scope.product);
-
-                    promise.then(function (product) {
-                        notificationsService.success("Product Saved", "");
-
-                        $scope.product = product;
-                        $scope.productVariant.copyFromProduct($scope.product);
-
-                    }, function (reason) {
-                        notificationsService.error("Product Save Failed", reason.message);
-                    });
-                }
-            }
-        };
-
 
     };
 

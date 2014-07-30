@@ -16,19 +16,16 @@
 		}
 	]
 	,
-	javascript: [
-		'~/App_Plugins/Merchello/lib/bootstrap/js/bootstrap.min.js',
-		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',
-		'~/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.js',
-		'~/App_Plugins/Merchello/lib/codemirror/Js/Mode/Razor/razor.js',
+	javascript: [                 
+		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',    
 		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/greaterthan.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.models.js',
 		'~/App_Plugins/Merchello/Common/Js/merchello.helpers.js',
 		'~/App_Plugins/Merchello/lib/ngJsonExplorer/gd-ui-jsonexplorer.js',
-		'~/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.controller.js',
-		'~/App_Plugins/Merchello/lib/codemirror/ui-codemirror.js',
+		'~/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.controller.js',    
+		'~/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
 		'~/App_Plugins/Merchello/Modules/Order/order.invoice.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.models.js',
@@ -46,6 +43,7 @@
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/merchello.warehouse.service.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/Directives/productvariant.directives.js',
+		'~/App_Plugins/Merchello/Modules/Catalog/Directives/productwithoptions.directives.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.list.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.edit.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.editwithoptions.controller.js',
@@ -57,9 +55,13 @@
 		'~/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.updateinventory.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.deletevariants.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.duplicatevariants.controller.js',
+		'~/App_Plugins/Merchello/Modules/Customer/customer.models.js',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.list.controller.js',
 		'~/App_Plugins/Merchello/Modules/Customer/customer.view.controller.js',
-		'~/App_Plugins/Merchello/Modules/Customer/customer.edit.controller.js',
+		'~/App_Plugins/Merchello/Modules/Customer/merchello.customer.service.js',
+		'~/App_Plugins/Merchello/Modules/Customer/merchello.gravatar.service.js',
+		'~/App_Plugins/Merchello/Modules/Customer/Dialogs/customer.editaddress.controller.js',
+		'~/App_Plugins/Merchello/Modules/Customer/Dialogs/customer.editinfo.controller.js',
 		'~/App_Plugins/Merchello/Modules/Order/merchello.invoice.service.js',
 		'~/App_Plugins/Merchello/Modules/Order/merchello.order.service.js',
 		'~/App_Plugins/Merchello/Modules/Order/merchello.payment.service.js',
@@ -75,6 +77,7 @@
 		'~/App_Plugins/Merchello/Modules/Report/reports.taxesByDestination.controller.js',
         '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.catalogshipping.service.js',
         '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.catalogfixedrateshipping.service.js',
+        '~/App_Plugins/Merchello/Modules/Settings/Shipping/merchello.fixedrateshipping.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-helper-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-history-directives.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.controller.js',
@@ -82,7 +85,7 @@
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.editwarehouse.controller.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.deletewarehouse.controller.js',
-		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addcountry.controller.js',
+		'~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addcountry.controller.js',          
         '~/App_Plugins/Merchello/Modules/Settings/Payment/merchello.paymentgateway.service.js',
         '~/App_Plugins/Merchello/Modules/Settings/Taxation/merchello.taxationgateway.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Taxation/Dialogs/taxationmethod.controller.js',
@@ -110,10 +113,12 @@
 		'~/App_Plugins/Merchello/Modules/Settings/Vendors/vendors.controller.js',
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductdialog.controller.js',
 		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js',
-		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.controller.js'
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.productedit.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.productcreate.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.producteditwithoptions.controller.js'
 	],
 	css: [
-		'~/App_Plugins/Merchello/Common/Css/merchello.css',
-		'~/App_Plugins/Merchello/lib/codemirror/Js/Lib/codemirror.css'
+		'~/App_Plugins/Merchello/Common/Css/merchello.css'
 	]
 }

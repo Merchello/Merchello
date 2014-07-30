@@ -10,10 +10,25 @@
     /// Defines the GatewayBase
     /// </summary>
     public abstract class GatewayProviderBase : IProvider
-    {        
+    {
+        #region Fields
+
+        /// <summary>
+        /// The gateway provider settings.
+        /// </summary>
         private readonly IGatewayProviderSettings _gatewayProviderSettings;
+
+        /// <summary>
+        /// The gateway provider service.
+        /// </summary>
         private readonly IGatewayProviderService _gatewayProviderService;
+
+        /// <summary>
+        /// The runtime cache.
+        /// </summary>
         private readonly IRuntimeCacheProvider _runtimeCache;
+
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GatewayProviderBase"/> class.

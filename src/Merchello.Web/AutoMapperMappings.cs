@@ -24,6 +24,14 @@
 
             AutoMapper.Mapper.CreateMap<IProvince, ProvinceDisplay>();
 
+            // Customer
+            AutoMapper.Mapper.CreateMap<ICustomer, CustomerDisplay>()
+                .ForMember(
+                    dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()));
+
+            AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
+
 
             // Gateway Provider       
             AutoMapper.Mapper.CreateMap<IGatewayProviderSettings, GatewayProviderDisplay>()

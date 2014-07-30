@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+    using EntityBase;
+
     /// <summary>
     /// Represents an abstract class for base Product properties and methods
     /// </summary>
@@ -14,32 +14,235 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public abstract class ProductBase : Entity, IProductBase
     {
+        #region Fields
+
+        /// <summary>
+        /// The sku selector.
+        /// </summary>
+        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Sku);
+
+        /// <summary>
+        /// The name selector.
+        /// </summary>
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Name);
+
+        /// <summary>
+        /// The price selector.
+        /// </summary>
+        private static readonly PropertyInfo PriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal>(x => x.Price);
+
+        /// <summary>
+        /// The cost of goods selector.
+        /// </summary>
+        private static readonly PropertyInfo CostOfGoodsSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.CostOfGoods);
+
+        /// <summary>
+        /// The sale price selector.
+        /// </summary>
+        private static readonly PropertyInfo SalePriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.SalePrice);
+
+        /// <summary>
+        /// The on sale selector.
+        /// </summary>
+        private static readonly PropertyInfo OnSaleSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OnSale);
+
+        /// <summary>
+        /// The manufacturer selector.
+        /// </summary>
+        private static readonly PropertyInfo ManufacturerSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Manufacturer);
+
+        /// <summary>
+        /// The manufacturer model number selector.
+        /// </summary>
+        private static readonly PropertyInfo ManufacturerModelNumberSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.ManufacturerModelNumber);
+
+        /// <summary>
+        /// The weight selector.
+        /// </summary>
+        private static readonly PropertyInfo WeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Weight);
+
+        /// <summary>
+        /// The length selector.
+        /// </summary>
+        private static readonly PropertyInfo LengthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Length);
+
+        /// <summary>
+        /// The width selector.
+        /// </summary>
+        private static readonly PropertyInfo WidthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Width);
+
+        /// <summary>
+        /// The height selector.
+        /// </summary>
+        private static readonly PropertyInfo HeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Height);
+
+        /// <summary>
+        /// The barcode selector.
+        /// </summary>
+        private static readonly PropertyInfo BarcodeSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Barcode);
+
+        /// <summary>
+        /// The available selector.
+        /// </summary>
+        private static readonly PropertyInfo AvailableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Available);
+
+        /// <summary>
+        /// The track inventory selector.
+        /// </summary>
+        private static readonly PropertyInfo TrackInventorySelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.TrackInventory);
+
+        /// <summary>
+        /// The out of stock purchase selector.
+        /// </summary>
+        private static readonly PropertyInfo OutOfStockPurchaseSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OutOfStockPurchase);
+
+        /// <summary>
+        /// The taxable selector.
+        /// </summary>
+        private static readonly PropertyInfo TaxableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Taxable);
+
+        /// <summary>
+        /// The shippable selector.
+        /// </summary>
+        private static readonly PropertyInfo ShippableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Shippable);
+
+        /// <summary>
+        /// The download selector.
+        /// </summary>
+        private static readonly PropertyInfo DownloadSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Download);
+
+        /// <summary>
+        /// The download media id selector.
+        /// </summary>
+        private static readonly PropertyInfo DownloadMediaIdSelector = ExpressionHelper.GetPropertyInfo<ProductBase, int?>(x => x.DownloadMediaId);
+
+        /// <summary>
+        /// The warehouse inventory changed selector.
+        /// </summary>
+        private static readonly PropertyInfo WarehouseInventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, CatalogInventoryCollection>(x => x.CatalogInventoryCollection);
+
+        /// <summary>
+        /// The sku.
+        /// </summary>
         private string _sku;
+
+        /// <summary>
+        /// The name.
+        /// </summary>
         private string _name;
+
+        /// <summary>
+        /// The price.
+        /// </summary>
         private decimal _price;
+
+        /// <summary>
+        /// The cost of goods.
+        /// </summary>
         private decimal? _costOfGoods;
+
+        /// <summary>
+        /// The on sale.
+        /// </summary>
         private bool _onSale;
+
+        /// <summary>
+        /// The sale price.
+        /// </summary>
         private decimal? _salePrice;
+
+        /// <summary>
+        /// The manufacturer.
+        /// </summary>
         private string _manufacturer;
+
+        /// <summary>
+        /// The manufacturer model number.
+        /// </summary>
         private string _manufacturerModelNumber;
+
+        /// <summary>
+        /// The weight.
+        /// </summary>
         private decimal? _weight;
+
+        /// <summary>
+        /// The length.
+        /// </summary>
         private decimal? _length;
+
+        /// <summary>
+        /// The width.
+        /// </summary>
         private decimal? _width;
+
+        /// <summary>
+        /// The height.
+        /// </summary>
         private decimal? _height;
+
+        /// <summary>
+        /// The barcode.
+        /// </summary>
         private string _barcode;
+
+        /// <summary>
+        /// The available.
+        /// </summary>
         private bool _available;
+
+        /// <summary>
+        /// The track inventory.
+        /// </summary>
         private bool _trackInventory;
+
+        /// <summary>
+        /// The _out of stock purchase.
+        /// </summary>
         private bool _outOfStockPurchase;
+
+        /// <summary>
+        /// The taxable.
+        /// </summary>
         private bool _taxable;
+
+        /// <summary>
+        /// The shippable.
+        /// </summary>
         private bool _shippable;
+
+        /// <summary>
+        /// The download.
+        /// </summary>
         private bool _download;
+
+        /// <summary>
+        /// The download media id.
+        /// </summary>
         private int? _downloadMediaId;
+
+        /// <summary>
+        /// The catalog inventory collection.
+        /// </summary>
         private CatalogInventoryCollection _catalogInventoryCollection;
 
-        protected ProductBase(string name, string sku, decimal price)
-            : this(name, sku, price, new CatalogInventoryCollection())
-        { }
-        
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductBase"/> class.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <param name="catalogInventoryCollection">
+        /// The catalog inventory collection.
+        /// </param>
         internal ProductBase(string name, string sku, decimal price, CatalogInventoryCollection catalogInventoryCollection)
         {
             Mandate.ParameterNotNullOrEmpty(name, "name");
@@ -48,64 +251,47 @@ namespace Merchello.Core.Models
             _name = name;
             _sku = sku;
             _price = price;
-            _catalogInventoryCollection = catalogInventoryCollection;
-            
+            _catalogInventoryCollection = catalogInventoryCollection;            
         }
 
-        private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Sku);
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Name);
-        private static readonly PropertyInfo PriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal>(x => x.Price);
-        private static readonly PropertyInfo CostOfGoodsSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.CostOfGoods);
-        private static readonly PropertyInfo SalePriceSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.SalePrice);
-        private static readonly PropertyInfo OnSaleSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OnSale);
-        private static readonly PropertyInfo ManufacturerSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Manufacturer);
-        private static readonly PropertyInfo ManufacturerModelNumberSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.ManufacturerModelNumber);
-        private static readonly PropertyInfo WeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Weight);
-        private static readonly PropertyInfo LengthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Length);
-        private static readonly PropertyInfo WidthSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Width);
-        private static readonly PropertyInfo HeightSelector = ExpressionHelper.GetPropertyInfo<ProductBase, decimal?>(x => x.Height);
-        private static readonly PropertyInfo BarcodeSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Barcode);
-        private static readonly PropertyInfo AvailableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Available);
-        private static readonly PropertyInfo TrackInventorySelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.TrackInventory);
-        private static readonly PropertyInfo OutOfStockPurchaseSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.OutOfStockPurchase);
-        private static readonly PropertyInfo TaxableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Taxable);
-        private static readonly PropertyInfo ShippableSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Shippable);
-        private static readonly PropertyInfo DownloadSelector = ExpressionHelper.GetPropertyInfo<ProductBase, bool>(x => x.Download);
-        private static readonly PropertyInfo DownloadMediaIdSelector = ExpressionHelper.GetPropertyInfo<ProductBase, int?>(x => x.DownloadMediaId);
-        private static readonly PropertyInfo WarehouseInventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, CatalogInventoryCollection>(x => x.CatalogInventoryCollection);
-
-        private void CatalogInventoryCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductBase"/> class.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        protected ProductBase(string name, string sku, decimal price)
+            : this(name, sku, price, new CatalogInventoryCollection())
         {
-            OnPropertyChanged(WarehouseInventoryChangedSelector);
         }
 
 
         /// <summary>
-        /// Product variant inventory accross all warehouses
+        /// Gets a Product variant inventory accross all warehouses
         /// </summary>
         [IgnoreDataMember]
         public IEnumerable<ICatalogInventory> CatalogInventories
         {
             get { return _catalogInventoryCollection; }
-        }
-
-        [IgnoreDataMember]
-        internal CatalogInventoryCollection CatalogInventoryCollection
-        {
-            get { return _catalogInventoryCollection; }
-            set { 
-                _catalogInventoryCollection = value;
-                _catalogInventoryCollection.CollectionChanged += CatalogInventoryCollectionChanged;
-            }
-        }
+        }       
 
         /// <summary>
-        /// The sku associated with the Product
+        /// Gets or sets sku associated with the Product
         /// </summary>
         [DataMember]
         public string Sku
         {
-            get { return _sku; }
+            get
+            {
+                return _sku;
+            }
+
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
@@ -442,7 +628,21 @@ namespace Merchello.Core.Models
             }
         }
 
+        [IgnoreDataMember]
+        internal CatalogInventoryCollection CatalogInventoryCollection
+        {
+            get { return _catalogInventoryCollection; }
+            set
+            {
+                _catalogInventoryCollection = value;
+                _catalogInventoryCollection.CollectionChanged += CatalogInventoryCollectionChanged;
+            }
+        }
 
+        private void CatalogInventoryCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(WarehouseInventoryChangedSelector);
+        }
  
     }
 }

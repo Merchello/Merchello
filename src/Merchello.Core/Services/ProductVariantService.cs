@@ -1,38 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Merchello.Core.Configuration;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+
+    using Merchello.Core.Configuration;
+    using Merchello.Core.Models;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the ProductVariantService
     /// </summary>
     public class ProductVariantService : IProductVariantService
     {
-
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
- 
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
+        /// <summary>
+        /// The database unit of work provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
+
+        /// <summary>
+        /// The _repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantService"/> class.
+        /// </summary>
         public ProductVariantService()
             : this(new RepositoryFactory())
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
         public ProductVariantService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
         public ProductVariantService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -45,8 +74,8 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// </summary>
-        /// <param name="product"><see cref="IProduct"/></param>
-        /// <param name="attributes"><see cref="IProductVariant"/></param>
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
         public IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
@@ -63,7 +92,8 @@ namespace Merchello.Core.Services
             foreach (var att in optionIds.Select(key => attributes.FirstOrDefault(x => x.OptionKey == key)).Where(att => att != null))
             {
                 name += att.Name + " ";
-                sku += skuSeparator + (string.IsNullOrEmpty(att.Sku) ? Regex.Replace(att.Name, "[^0-9a-zA-Z]+", "") : att.Sku);
+
+                sku += skuSeparator + (string.IsNullOrEmpty(att.Sku) ? Regex.Replace(att.Name, "[^0-9a-zA-Z]+", string.Empty) : att.Sku);
             }
 
             return CreateProductVariantWithKey(product, name.Trim(), sku, product.Price, attributes, raiseEvents);
@@ -72,11 +102,11 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// </summary>
-        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="product">The <see cref="IProduct"/></param>
         /// <param name="name">The name of the product variant</param>
         /// <param name="sku">The unique sku of the product variant</param>
         /// <param name="price">The price of the product variant</param>
-        /// <param name="attributes"><see cref="IProductVariant"/></param>
+        /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
         public IProductVariant CreateProductVariantWithKey(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes, bool raiseEvents = true)
@@ -113,8 +143,8 @@ namespace Merchello.Core.Services
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// without saving it to the database
         /// </summary>
-        /// <param name="product"><see cref="IProduct"/></param>
-        /// <param name="attributes"><see cref="IProductVariant"/></param>
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
         internal IProductVariant CreateProductVariant(IProduct product, ProductAttributeCollection attributes)
         {
@@ -130,7 +160,8 @@ namespace Merchello.Core.Services
             foreach (var att in optionIds.Select(key => attributes.FirstOrDefault(x => x.OptionKey == key)).Where(att => att != null))
             {
                 name += att.Name + " ";
-                sku += skuSeparator + (string.IsNullOrEmpty(att.Sku) ? Regex.Replace(att.Name, "[^0-9a-zA-Z]+", "") : att.Sku);
+
+                sku += skuSeparator + (string.IsNullOrEmpty(att.Sku) ? Regex.Replace(att.Name, "[^0-9a-zA-Z]+", string.Empty) : att.Sku);
             }
 
             return CreateProductVariant(product, name, sku, product.Price, attributes);
@@ -398,14 +429,14 @@ namespace Merchello.Core.Services
                 
                 foreach(var att in combo) attributes.Add(att);
 
-                if(!ProductVariantWithAttributesExists(product, attributes)) variants.Add(CreateProductVariant(product, attributes));
+                if (!ProductVariantWithAttributesExists(product, attributes)) variants.Add(CreateProductVariant(product, attributes));
             }
 
             return variants;
 
         }
 
-        internal IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
+        public IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
         {
             if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
 

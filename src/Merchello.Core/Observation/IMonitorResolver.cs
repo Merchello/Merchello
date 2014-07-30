@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models.MonitorModels;
-
-namespace Merchello.Core.Observation
+﻿namespace Merchello.Core.Observation
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Defines the MonitorResolver
     /// </summary>

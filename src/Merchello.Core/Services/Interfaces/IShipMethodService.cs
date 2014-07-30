@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Umbraco.Core.Services;
+
+    /// <summary>
+    /// The ShipMethodService interface.
+    /// </summary>
     public interface IShipMethodService : IService
     {
         ///// <summary>
@@ -21,8 +23,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/>
         /// </summary>
-        /// <param name="shipMethod"></param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <param name="shipMethod">
+        /// The ship Method.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         void Save(IShipMethod shipMethod, bool raiseEvents = true);
 
         /// <summary>
@@ -35,8 +41,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Deletes a <see cref="IShipMethod"/>
         /// </summary>
-        /// <param name="shipMethod"></param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <param name="shipMethod">
+        /// The ship Method.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         void Delete(IShipMethod shipMethod, bool raiseEvents = true);
 
         /// <summary>
@@ -56,13 +66,26 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        /// <param name="providerKey">
+        /// The provider Key.
+        /// </param>
+        /// <param name="shipCountryKey">
+        /// The ship Country Key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IShipMethod"/>
+        /// </returns>
         IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey, Guid shipCountryKey);
 
         /// <summary>
         /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key
         /// </summary>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        /// <param name="providerKey">
+        /// The provider Key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IShipMethod"/>
+        /// </returns>
         IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey); 
 
     }

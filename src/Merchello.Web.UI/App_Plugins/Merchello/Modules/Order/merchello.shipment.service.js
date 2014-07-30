@@ -66,13 +66,16 @@
                     'Failed to create shipment');
             },
 
-            putShipment: function (shipment) {
+            putShipment: function (shipment, order) {
+                var shipmentOrder = {}
+                shipmentOrder.ShipmentDisplay = shipment;
+                shipmentOrder.OrderDisplay = order;
 
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'PutShipment'),
-                        shipment
-                    ),
-                    'Failed to save shipment');
+                        shipmentOrder
+                        ),
+                       'Failed to save shipment');
             }
 
         };

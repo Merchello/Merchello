@@ -57,17 +57,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#endregion
 
-		#region ICatalogInventory
 
-		internal static ICatalogInventory ToCatalogInventory(this CatalogInventoryDisplay catalogInventoryDisplay, ICatalogInventory destination)
-		{
-			destination.Count = catalogInventoryDisplay.Count;
-			destination.LowCount = catalogInventoryDisplay.LowCount;
-
-			return destination;
-		}
-
-		#endregion
 
 		#region ShipCountryDisplay
 
@@ -426,87 +416,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 
 
-		#region FixedRateShipMethodDisplay
-
-		internal static FixedRateShipMethodDisplay ToFixedRateShipMethodDisplay(this IFixedRateShippingGatewayMethod shipFixedRateMethod)
-		{
-			return AutoMapper.Mapper.Map<FixedRateShipMethodDisplay>(shipFixedRateMethod);
-		}
-
-		#endregion
-
-		#region IRateTableShipMethod
-
-		/// <summary>
-		/// Maps changes made in the <see cref="FixedRateShipMethodDisplay"/> to the <see cref="IFixedRateShippingGatewayMethod"/>
-		/// </summary>
-		/// <param name="fixedRateShipMethodDisplay">The <see cref="FixedRateShipMethodDisplay"/> to map</param>
-		/// <param name="destination">The <see cref="IFixedRateShippingGatewayMethod"/> to have changes mapped to</param>
-		/// <returns>The updated <see cref="IFixedRateShippingGatewayMethod"/></returns>
-		/// <remarks>
-		/// 
-		/// Note: after calling this mapping, the changes are still not persisted to the database as the .Save() method is not called.
-		/// 
-		/// * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
-		/// 
-		/// </remarks>
-		internal static IFixedRateShippingGatewayMethod ToFixedRateShipMethod(this FixedRateShipMethodDisplay fixedRateShipMethodDisplay, IFixedRateShippingGatewayMethod destination)
-		{
-			// RUSTY HELP: Cannot assign to these properties.  How should I do this mapping?
-
-			// Shipmethod
-			destination.ShipMethod.Name = fixedRateShipMethodDisplay.ShipMethod.Name;
-
-			if (destination.ShipMethod.Provinces.Any() && fixedRateShipMethodDisplay.ShipMethod.Provinces.Any())
-			{
-				var provinceCollection = new ProvinceCollection<IShipProvince>();
-				foreach (var province in fixedRateShipMethodDisplay.ShipMethod.Provinces)
-				{
-					provinceCollection.Add(
-						new ShipProvince(province.Code, province.Name)
-							{
-								AllowShipping = province.AllowShipping,
-								RateAdjustment = province.RateAdjustment,
-								RateAdjustmentType = province.RateAdjustmentType
-							}
-						);
-				}
-				destination.ShipMethod.Provinces = provinceCollection;               
-			}
-
-			// Rate table
-			
-			var existingRows = fixedRateShipMethodDisplay.RateTable.Rows.Where(x => !x.Key.Equals(Guid.Empty)).ToArray();            
-			foreach (var mapRow in existingRows)
-			{
-				var row = destination.RateTable.Rows.FirstOrDefault(x => x.Key == mapRow.Key);
-				if (row != null)
-				{
-					row.Rate = mapRow.Rate;
-				}
-			}
-
-			// remove existing rows that previously existed but were deleted in the UI
-			var removers =
-				destination.RateTable.Rows.Where(
-					row => !row.Key.Equals(Guid.Empty) && existingRows.All(x => x.Key != row.Key && !x.Key.Equals(Guid.Empty)));
-
-			foreach (var remove in removers)
-			{
-				destination.RateTable.DeleteRow(remove);
-			}
-
-			// add any new rows
-			foreach (var newRow in fixedRateShipMethodDisplay.RateTable.Rows.Where(x => x.Key == Guid.Empty))
-			{
-				destination.RateTable.AddRow(newRow.RangeLow, newRow.RangeHigh, newRow.Rate);
-			}
-
-
-			return destination;
-		}
-
-		#endregion
+	
 
 		#region ShipFixedRateTableDisplay
 
@@ -706,31 +616,6 @@ namespace Merchello.Web.Models.ContentEditing
 					}
 				}
 			}
-
-			return destination;
-		}
-
-		#endregion
-
-		#region WarehouseCatalogDisplay
-
-		internal static WarehouseCatalogDisplay ToWarehouseCatalogDisplay(this IWarehouseCatalog warehouseCatalog)
-		{
-			return AutoMapper.Mapper.Map<WarehouseCatalogDisplay>(warehouseCatalog);
-		}
-
-		#endregion
-
-		#region IWarehouseCatalog
-
-		internal static IWarehouseCatalog ToWarehouseCatalog(this WarehouseCatalogDisplay warehouseCatalogDisplay, IWarehouseCatalog destination)
-		{
-			if (warehouseCatalogDisplay.Key != Guid.Empty)
-			{
-				destination.Key = warehouseCatalogDisplay.Key;
-			}
-			destination.Name = warehouseCatalogDisplay.Name;
-			destination.Description = warehouseCatalogDisplay.Description;
 
 			return destination;
 		}

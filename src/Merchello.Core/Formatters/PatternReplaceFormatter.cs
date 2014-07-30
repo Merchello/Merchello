@@ -12,10 +12,24 @@
     /// </summary>
     public class PatternReplaceFormatter : IPatternReplaceFormatter
     {
+        /// <summary>
+        /// The iteration start.
+        /// </summary>
         private const string IterationStart = "{{IterationStart[";
+
+        /// <summary>
+        /// The iteration end.
+        /// </summary>
         private const string IterationEnd = "{{IterationEnd[";
+
+        /// <summary>
+        /// The iteration cap.
+        /// </summary>
         private const string IterationCap = "]}}";
 
+        /// <summary>
+        /// The _patterns.
+        /// </summary>
         private readonly IDictionary<string, IReplaceablePattern> _patterns;
                 
         /// <summary>
