@@ -15,7 +15,7 @@
             scope: {
             	shipments: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Modules/Settings/Shipping/Directives/shipping-history.html'
+            templateUrl: '/App_Plugins/Merchello/Modules/Order/Directives/shipping-history.html'
         };
     };
 

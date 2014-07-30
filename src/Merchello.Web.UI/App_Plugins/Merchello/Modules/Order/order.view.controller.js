@@ -10,6 +10,14 @@
      */
     controllers.OrderViewController = function ($scope, $routeParams, assetsService, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
 
+        /**
+         * @ngdoc method
+         * @name capturePayment
+         * @function
+         * 
+         * @description
+         * Open the capture shipment dialog.
+         */
         $scope.capturePayment = function () {
             dialogService.open({
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/capture.payment.html',
@@ -19,6 +27,14 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name capturePaymentDialogConfirm
+         * @function
+         * 
+         * @description
+         * Capture the payment after the confirmation dialog was passed through.
+         */
         $scope.capturePaymentDialogConfirm = function (paymentRequest) {
             var promiseSave = merchelloPaymentService.capturePayment(paymentRequest);
             promiseSave.then(function (payment) {
@@ -31,6 +47,14 @@
 
         };
 
+        /**
+         * @ngdoc method
+         * @name fulfillShipment
+         * @function
+         * 
+         * @description
+         * Open the fufill shipment dialog.
+         */
         $scope.fulfillShipment = function () {
             dialogService.open({
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
@@ -40,9 +64,17 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name fulfillShipmentDialogConfirm
+         * @function
+         * 
+         * @description
+         * Process the fulfill shipment functionality on callback from the dialog service.
+         */
         $scope.fulfillShipmentDialogConfirm = function (data) {
-            var promiseNew = merchelloShipmentService.newShipment(data);
-            promiseNew.then(function (shipment) {
+            var promiseNewShipment = merchelloShipmentService.newShipment(data);
+            promiseNewShipment.then(function (shipment) {
                 shipment.trackingCode = data.trackingNumber;
                 var promiseSave = merchelloShipmentService.putShipment(shipment, data);
                 promiseSave.then(function () {
