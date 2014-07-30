@@ -113,7 +113,7 @@ namespace Merchello.Plugin.Payments.Stripe
             // need to convert non-zero-decimal currencies
             bool isZeroDecimalCurrency = IsZeroDecimalCurrency(invoice.CurrencyCode());
             decimal stripeAmountDecimal = isZeroDecimalCurrency ? amount : (amount*100);
-            return stripeAmountDecimal.ToString(CultureInfo.InstalledUICulture);
+            return Convert.ToInt32(stripeAmountDecimal).ToString(CultureInfo.InvariantCulture);
         }
 
         private static IPaymentResult GetProcessPaymentResult(IInvoice invoice, IPayment payment, HttpWebResponse response)
