@@ -14,22 +14,16 @@
             replace: true,
             templateUrl: '/App_Plugins/Merchello/Modules/Order/Directives/order-create-customer.html',
             scope: {
+                'create': '&createCustomer', 
+                'cancel': '&cancelCreateCustomer',
                 customer: '=',
                 shippingAddress: '=',
-                billingAddress: '=',
-                'create': '&createCustomerDirective'
+                billingAddress: '='
             },
             link: function ($scope, $element) {
 
-                $scope.createAnonymousCustomer = function () {
-                    if ($scope.BillingSameAsShipping) {
-                        $scope.billingAddress = $scope.shippingAddress;
-                    }                                                
-
-                    $scope.customer.addresses.push($scope.shippingAddress);
-                    $scope.customer.addresses.push($scope.billingAddress);
-
-                    $scope.create();
+                $scope.cancelCreateCustomer = function () {
+                    $scope.cancel();
                 }
 
                 /**
@@ -40,9 +34,13 @@
                 * @description
                 * Save the customer.
                 */
-                $scope.saveCustomer = function () {
+                $scope.saveCustomer = function (isAnonymous) {
+                    $scope.shippingAddress = $scope.shippingAddressCreate;
+                    $scope.billingAddress = $scope.billingAddressCreate;
+                    $scope.customer = $scope.customerCreate;
+
                     $scope.wasFormSubmitted = true;
-                    if ($scope.isFormValid()) {
+                    if ($scope.isFormValid(isAnonymous)) {
                         notificationsService.info("Saving...", "");
                         var promiseSaveCustomer;
                         $scope.customer.loginName = $scope.customer.email;
@@ -54,12 +52,23 @@
                         $scope.customer.addresses.push($scope.shippingAddress);
                         $scope.customer.addresses.push($scope.billingAddress);
 
-                        promiseSaveCustomer = merchelloCustomerService.AddCustomer($scope.customer);
+                        if (isAnonymous) {
+                            promiseSaveCustomer = merchelloCustomerService.AddAnonymousCustomer($scope.customer);
+                        }
+                        else {
+                            promiseSaveCustomer = merchelloCustomerService.AddCustomer($scope.customer);
+                        }                                                                               
 
                         promiseSaveCustomer.then(function (customerResponse) {
-                            $scope.customer = new merchello.Models.Customer(customerResponse);
+                            if (isAnonymous) {
+                                $scope.customer = customerResponse;
+                            }
+                            else {
+                                $scope.customer = new merchello.Models.Customer(customerResponse);
+                            }
                             notificationsService.success("Customer Saved", "");
-                            $scope.create();
+
+                            $scope.create({ customer: $scope.customer, shipping: $scope.shippingAddress, billing: $scope.billingAddress });
 
                         }, function (reason) {
                             notificationsService.error("Customer Save Failed", reason.message);
@@ -118,9 +127,9 @@
                  * @description
                  * Return true if the customer form is valid. Otherwise return false.
                  */
-                $scope.isFormValid = function () {
+                $scope.isFormValid = function (isAnonymous) {
                     var result = true;
-                    if ($scope.customer.firstName == '' || $scope.customer.lastName == '' || $scope.customer.email == '') {
+                    if (!isAnonymous && ($scope.customer.firstName == '' || $scope.customer.lastName == '' || $scope.customer.email == '')) {
                         result = false;
                     }
                     return result;
@@ -165,9 +174,9 @@
                  * Set the $scope variables.
                  */
                 $scope.setVariables = function () {
-                    $scope.customer = new merchello.Models.Customer();
-                    $scope.shippingAddress = new merchello.Models.CustomerAddress();
-                    $scope.billingAddress = new merchello.Models.CustomerAddress();
+                    $scope.customerCreate = new merchello.Models.Customer();
+                    $scope.shippingAddressCreate = new merchello.Models.CustomerAddress();
+                    $scope.billingAddressCreate = new merchello.Models.CustomerAddress();
                     $scope.BillingSameAsShipping = true;  
                     $scope.provinceLabel = "State/Province";
                     $scope.countries = [];
@@ -180,6 +189,81 @@
                     };
    
                 };
+
+                /**
+                 * @ngdoc method
+                 * @name updateCountry
+                 * @function
+                 * 
+                 * @description
+                 * Update the selected country for the applicable address type, and prepare the provinces for selection.
+                 */
+                $scope.updateShippingCountry = function (selectedCountry) {
+                    if (selectedCountry.id > -1) {
+                        $scope.shippingAddress.countryCode = selectedCountry.countryCode;
+                        if (selectedCountry.provinces.length > 0) {
+                            $scope.provinces = _.map(selectedCountry.provinces, function (province) {
+                                return province;
+                            });
+                            $scope.provinces.unshift({ code: '00', name: 'Select State/Province' });
+                            $scope.filters.province = $scope.provinces[0];
+                        }
+                    } else {
+                        $scope.provinces = [];
+                    }
+                };
+
+                /**
+                 * @ngdoc method
+                 * @name updateCountry
+                 * @function
+                 * 
+                 * @description
+                 * Update the selected country for the applicable address type, and prepare the provinces for selection.
+                 */
+                $scope.updateBillingCountry = function (selectedCountry) {
+                    if (selectedCountry.id > -1) {
+                        $scope.billingAddress.countryCode = selectedCountry.countryCode;
+                        if (selectedCountry.provinces.length > 0) {
+                            $scope.provinces = _.map(selectedCountry.provinces, function (province) {
+                                return province;
+                            });
+                            $scope.provinces.unshift({ code: '00', name: 'Select State/Province' });
+                            $scope.filters.province = $scope.provinces[0];
+                        }
+                    } else {
+                        $scope.provinces = [];
+                    }
+                };
+
+                /**
+                 * @ngdoc method
+                 * @name updateProvince
+                 * @function
+                 * 
+                 * @description
+                 * Update the selected province for the applicable address type.
+                 */
+                $scope.updateShippingProvince = function (selectedProvince) {
+                    if (selectedProvince.code !== '00') {
+                        $scope.shippingAddress.region = selectedProvince.name;
+                    }
+                };
+
+                /**
+                 * @ngdoc method
+                 * @name updateProvince
+                 * @function
+                 * 
+                 * @description
+                 * Update the selected province for the applicable address type.
+                 */
+                $scope.updateBillingProvince = function (selectedProvince) {
+                    if (selectedProvince.code !== '00') {
+                        $scope.billingAddress.region = selectedProvince.name;
+                    }
+                };
+
                 /**
                  * @ngdoc method
                  * @name init

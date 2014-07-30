@@ -17,7 +17,8 @@ namespace Merchello.Core.Models.TypeFields
 
         internal override sealed void BuildCache()
         {
-            AddUpdateCache(ItemCacheType.Basket, new TypeField("Basket", "Standard Basket", Constants.TypeFieldKeys.ItemCache.BasketKey));
+            AddUpdateCache(ItemCacheType.Basket, new TypeField("Basket", "Standard Basket", Constants.TypeFieldKeys.ItemCache.BasketKey));    
+            AddUpdateCache(ItemCacheType.Backoffice, new TypeField("Backoffice", "Standard Backoffice", Constants.TypeFieldKeys.ItemCache.BackofficeKey));
             AddUpdateCache(ItemCacheType.Wishlist, new TypeField("Wishlist", "Wishlist", Constants.TypeFieldKeys.ItemCache.WishlistKey));
             AddUpdateCache(ItemCacheType.Checkout, new TypeField("Checkout", "Checkout", Constants.TypeFieldKeys.ItemCache.CheckoutKey));
         }
@@ -39,6 +40,14 @@ namespace Merchello.Core.Models.TypeFields
         public ITypeField Basket
         {
             get { return GetTypeField(ItemCacheType.Basket); }
+        }
+
+        /// <summary>
+        /// Default ecommerce basket item cache
+        /// </summary>
+        public ITypeField Backoffice
+        {
+            get { return GetTypeField(ItemCacheType.Backoffice); }
         }
 
         /// <summary>

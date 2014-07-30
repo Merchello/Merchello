@@ -8,12 +8,7 @@
      * @description
      * The controller for the customers list page
      */
-    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, merchelloCustomerService, merchelloSettingsService) {
-        $scope.customer = {};
-        $scope.shippingAddress = {};
-        $scope.billingAddress = {};
-        $scope.customerSelected = false;
-        $scope.createCustomer = false;
+    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, merchelloOrderService, merchelloCustomerService, merchelloSettingsService) {
 
         if ($routeParams.create) {
             $scope.loaded = true;
@@ -54,6 +49,9 @@
         */
         $scope.editCustomerInformation = function () {
             var dialogData = {};
+            $scope.customer = new merchello.Models.Customer();
+            $scope.shippingAddress = new merchello.Models.CustomerAddress();
+            $scope.billingAddress = new merchello.Models.CustomerAddress();
 
             dialogService.open({
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/selectcustomer.html',
@@ -71,30 +69,140 @@
          * @description
          * Handles the save after recieving the country to add from the dialog view/controller
          */
-        $scope.editCustomerInformationConfirm = function (customer) {
-            $scope.customer = new merchello.Models.Customer(customer);
+        $scope.editCustomerInformationConfirm = function (selectedCustomer) {
+            $scope.customer = selectedCustomer;
+            $scope.shippingAddress = new merchello.Models.CustomerAddress();
+            $scope.billingAddress = new merchello.Models.CustomerAddress();
+            $scope.isShippingAddressSelected = false;
+            $scope.isBillingAddressSelected = false;
+            $scope.existingCustomer = true;
             $scope.customerSelected = true;
             notificationsService.info("Saved!", "");
         };
 
-        $scope.createCustomerDirective = function (newCustomer, newBillingAddress, newShippingAddress) {
-            $scope.toggleCreateCustomer();
+
+        /**
+       * @ngdoc method
+       * @name selectedProductFromDialog
+       * @function
+       * 
+       * @description
+       * Handles the model update after recieving the product to add from the dialog view/controller
+       */
+        $scope.selectedProductFromDialog = function (selectedProduct) {
+            $scope.products.push(selectedProduct.key);
+            $scope.invoice.items.push(new merchello.Models.InvoiceLineItem(selectedProduct));    
+        };
+
+        /**
+         * @ngdoc method
+         * @name selectProduct
+         * @function
+         * 
+         * @description
+         * Opens the product select dialog via the Umbraco dialogService.
+         */
+        $scope.selectProduct = function () {
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/PropertyEditors/ProductPicker/Views/merchelloproductdialog.html',
+                show: true,
+                callback: $scope.selectedProductFromDialog,
+                dialogData: $scope.product
+            });
+
+        };
+
+        /**
+        * @ngdoc method
+        * @name processesProductsToBackofficeOrder
+        * @function
+        * 
+        * @description
+        * Will add products to the sales preparation and will return the order summary.
+        */
+        $scope.processesProductsToBackofficeOrder = function (shipping, billing) {
+
+            var promise = merchelloOrderService.processesProductsToBackofficeOrder($scope.customer.key, $scope.products, shipping, billing);
+            promise.then(function (orderSummary) { 
+                orderSummary.orderPrepComplete = true;
+                $scope.orderSummary = new merchello.Models.OrderSummary(orderSummary);
+                notificationsService.success("The order has been finalized.");
+            }, function(reason) {
+                notificationsService.error("Failed to add products to backoffice basket", reason.message);
+            });
+        };
+
+        /**
+        * @ngdoc method
+        * @name createCustomerDirective
+        * @function
+        * 
+        * @description
+        * Assigns values gathered from the orderedit.directives.js on creating new customers.
+        */
+        $scope.createCustomerDirective = function (customer, shippingAddress, billingAddress) {
+            $scope.init();
+
+            customer.addresses = [];
+            customer.addresses.push(shippingAddress);
+            customer.addresses.push(billingAddress);
+
+            $scope.customer = customer;                    
+            $scope.shippingAddress = shippingAddress;
+            $scope.billingAddress = billingAddress;
+
+            $scope.createCustomer = false;
             $scope.customerSelected = true;
-            $scope.shippingAddressSelected();
-            $scope.billingAddressSelected();
+            $scope.isShippingAddressSelected = true;
+            $scope.isBillingAddressSelected = true;
+            $scope.existingCustomer = false;
         }
 
+        /**
+        * @ngdoc method
+        * @name toggleCreateCustomer
+        * @function
+        * 
+        * @description
+        * Toggles the customer created flag.
+        */
         $scope.toggleCreateCustomer = function() {   
             $scope.createCustomer = !$scope.createCustomer;
         }
+
+        /**
+        * @ngdoc method
+        * @name shippingAddressSelected
+        * @function
+        * 
+        * @description
+        * Toggles the shipping address selected flag.
+        */
         $scope.shippingAddressSelected = function () {
-            $scope.shippingAddressSelected = true;
+            $scope.isShippingAddressSelected = true;
         }
 
+        /**
+        * @ngdoc method
+        * @name billingAddressSelected
+        * @function
+        * 
+        * @description
+        * Toggles the billing address selected flag.
+        */
         $scope.billingAddressSelected = function () {
-            $scope.billingAddressSelected = true;
+            $scope.isBillingAddressSelected = true;
         }
 
+        /**
+        * @ngdoc method
+        * @name save
+        * @function
+        * 
+        * @description
+        * Saves the customer.
+        */
         $scope.save = function () {
 
             notificationsService.info("Saving...", "");
@@ -111,10 +219,28 @@
             //    notificationsService.error("Order Save Failed", reason.message);
 
             //});
-        };         
+        };
+
+        $scope.init = function() {
+            $scope.customer = new merchello.Models.Customer();
+            $scope.shippingAddress = new merchello.Models.CustomerAddress();
+            $scope.billingAddress = new merchello.Models.CustomerAddress();
+            $scope.customerSelected = false;
+            $scope.createCustomer = false;
+            $scope.product = new merchello.Models.Product();
+            $scope.products = [];
+            $scope.invoice = new merchello.Models.Invoice();
+            $scope.existingCustomer = false;
+            $scope.orderSummary = new merchello.Models.OrderSummary();
+            $scope.isShippingAddressSelected = false;
+            $scope.isBillingAddressSelected = false;
+            $scope.createCustomer = false;
+        };
+
+        $scope.init();
     };
 
                                                                                   
-    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', 'dialogService', 'merchelloCustomerService', 'merchelloSettingsService', merchello.Controllers.OrderEditController]);
+    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', 'dialogService', 'merchelloOrderService', 'merchelloCustomerService', 'merchelloSettingsService', merchello.Controllers.OrderEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

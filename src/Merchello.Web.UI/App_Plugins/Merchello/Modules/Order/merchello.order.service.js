@@ -52,8 +52,21 @@
                         params: { id: invoiceKey }
                     }),
                     'Failed to get orders by invoice: ' + invoiceKey);
-            }
+            },
 
+            processesProductsToBackofficeOrder: function (customerKey, products, shippingAddress, billingAddress) {
+                var model = {};
+                model.CustomerKey = customerKey;
+                model.ProductKeys = products;
+                model.ShippingAddress = shippingAddress;
+                model.BillingAddress = billingAddress;
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'ProcessesProductsToBackofficeOrder'),
+                        model
+                    ),
+                    'Failed to add products to invoice');
+            }
         };
     };
 

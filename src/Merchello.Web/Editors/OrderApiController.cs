@@ -1,4 +1,7 @@
-﻿namespace Merchello.Web.Editors
+﻿using System.Globalization;
+using Merchello.Web.Workflow;
+
+namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
@@ -30,6 +33,11 @@
         /// </summary>
         private readonly IInvoiceService _invoiceService;
 
+        private ICustomerBase _customer;
+
+        private IBackoffice _backoffice;
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderApiController"/> class.
         /// </summary>
@@ -40,11 +48,11 @@
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrderApiController"/> class.
+        /// Initializes a new instance of the <see cref="OrderApiController" /> class.
         /// </summary>
-        /// <param name="merchelloContext">
-        /// The merchello context.
-        /// </param>
+        /// <param name="merchelloContext">The merchello context.</param>
+        /// <param name="customer">The customer.</param>
+        /// <param name="backoffice">The backoffice.</param>
         public OrderApiController(IMerchelloContext merchelloContext)
             : base((MerchelloContext) merchelloContext)
         {
@@ -167,6 +175,106 @@
             }
 
             return shipment.GetDestinationAddress().ToAddressDisplay();
+        }
+
+        /// <summary>
+        /// Adds items to the backoffice basket to calculate shipping and Sales tax
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        public BackofficeOrderSummary ProcessesProductsToBackofficeOrder(BackofficeAddItemModel model)
+        {
+                                   
+            _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
+            _backoffice = _customer.Backoffice();
+
+            if (model.ProductKeys != null && model.ProductKeys.Any())
+            {
+
+                foreach (var key in model.ProductKeys)
+                {
+                    var extendedData = new ExtendedDataCollection();
+                    //extendedData.SetValue("umbracoContentId", model.ContentId.ToString(CultureInfo.InvariantCulture));
+
+                    var product = MerchelloContext.Services.ProductService.GetByKey(new Guid(key));
+
+                    //if (model.OptionChoices != null && model.OptionChoices.Any())
+                    //{
+                    //    var variant = MerchelloContext.Services.ProductVariantService.GetProductVariantWithAttributes(product, model.OptionChoices);
+
+                    //    extendedData.SetValue("isVariant", "true");
+
+                    //    _backoffice.AddItem(variant, variant.Name, 1, extendedData);
+                    //}
+                    //else
+                    //{
+                    _backoffice.AddItem(product, product.Name, 1, extendedData);
+                    //}
+                }
+
+                var salesPreparation = _customer.Backoffice().SalePreparation();
+
+                salesPreparation.SaveBillToAddress(model.BillingAddress.ToAddress());
+                salesPreparation.SaveShipToAddress(model.ShippingAddress.ToAddress());
+                
+                return GetBackofficeOrderSummary(salesPreparation);
+            }
+            else
+            {
+                return new BackofficeOrderSummary();
+            }
+        }
+
+        /// <summary>
+        /// Gets the backoffice order summary.
+        /// </summary>
+        /// <param name="salesPreparation">The sales preparation.</param>
+        /// <returns></returns>
+        private static BackofficeOrderSummary GetBackofficeOrderSummary(BackofficeSalePreparation salesPreparation)
+        {
+            var summary = new BackofficeOrderSummary();
+
+            if (!salesPreparation.IsReadyToInvoice()) return summary;
+
+            var invoice = salesPreparation.PrepareInvoice();
+
+            // item total
+            summary.ItemTotal = invoice.TotalItemPrice();
+
+            // shipping total
+            summary.ShippingTotal = invoice.TotalShipping();
+
+            // tax total
+            summary.TaxTotal = invoice.TotalTax();
+
+            // invoice total
+            summary.InvoiceTotal = invoice.Total;
+
+            return summary;
+        }
+
+        /// <summary>
+        /// The get basket sale preparation.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="BasketSalePreparation"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws if customer record cannot be found with key passed as argument
+        /// </exception>
+        private BasketSalePreparation GetSalePreparation(Guid customerKey)
+        {
+            // This is sort of weird to have the customer key in the ShippingAddress ... but we repurposed an object 
+            // to simplify the JS
+            var customer = MerchelloContext.Services.CustomerService.GetAnyByKey(customerKey);
+
+            if (customer == null) throw new NullReferenceException(string.Format("The customer with key {0} was not found.", customerKey));
+
+            return customer.Basket().SalePreparation();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Merchello.Core
     public enum ItemCacheType
     {
         Basket,
+        Backoffice,
         Wishlist,
         Checkout,
         Custom
