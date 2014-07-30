@@ -1,0 +1,6 @@
+﻿{
+	javascript : [
+		'~/App_Plugins/Merchello.Stripe/merchello.stripe.controller.js',
+		'~/App_Plugins/Merchello.Stripe/merchello.stripe.paymentmethod.controller.js'
+	]
+}
