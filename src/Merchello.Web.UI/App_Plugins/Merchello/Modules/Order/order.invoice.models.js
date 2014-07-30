@@ -408,4 +408,22 @@
 		}
 	};
 
+	models.OrderSummary = function (data) {
+
+	    var self = this;
+
+	    if (data == undefined) {
+	        self.itemTotal = 0;
+	        self.invoiceTotal = 0;
+	        self.shippingTotal = 0;
+	        self.taxTotal = 0;
+	        self.orderPrepComplete = false;
+	    } else {
+	        self.itemTotal = data.itemTotal;
+	        self.invoiceTotal = data.invoiceTotal;
+	        self.shippingTotal = data.shippingTotal;
+	        self.taxTotal = data.taxTotal;
+	        self.orderPrepComplete = data.orderPrepComplete;
+	    }
+	};
 }(window.merchello.Models = window.merchello.Models || {}));

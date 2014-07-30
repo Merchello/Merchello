@@ -68,6 +68,7 @@
             // ItemCacheTypeField
             var itemcCache = new ItemCacheTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Basket.TypeKey, Alias = itemcCache.Basket.Alias, Name = itemcCache.Basket.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Backoffice.TypeKey, Alias = itemcCache.Backoffice.Alias, Name = itemcCache.Backoffice.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Wishlist.TypeKey, Alias = itemcCache.Wishlist.Alias, Name = itemcCache.Wishlist.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Checkout.TypeKey, Alias = itemcCache.Checkout.Alias, Name = itemcCache.Checkout.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             

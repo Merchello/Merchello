@@ -21,6 +21,15 @@
 
             /**
             * @ngdoc method
+            * @name AddAnonymousCustomer
+            * @description Posts to the API a new anonymous customer.
+            **/
+            AddAnonymousCustomer: function (customer) {
+                return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'AddAnonymousCustomer'), customer), 'Failed to create customer');
+            },
+
+            /**
+            * @ngdoc method
             * @name DeleteCustomer
             * @description Posts to the API a request to delete the specified customer.
             **/
