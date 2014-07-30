@@ -76,7 +76,6 @@
     <Folder Include="App_Plugins\Merchello\Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderCreate.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderCustomer.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
@@ -325,7 +324,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\createOrder.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\selectcustomer.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Directives\order-create-customer.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\orderedit.directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\ordercreate.directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.controller.js" />
@@ -350,7 +349,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.invoice.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.order.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.view.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Order\order.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\order.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.editwithoptions.controller.js" />

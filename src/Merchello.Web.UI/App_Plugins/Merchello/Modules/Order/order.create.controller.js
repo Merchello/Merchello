@@ -2,13 +2,13 @@
 
     /**
      * @ngdoc controller
-     * @name Merchello.Editors.Order.EditController
+     * @name Merchello.Editors.Order.CreateController
      * @function
      * 
      * @description
      * The controller for the customers list page
-     */
-    controllers.OrderEditController = function ($scope, $routeParams, $location, notificationsService, dialogService, merchelloOrderService, merchelloCustomerService, merchelloSettingsService) {
+     */                                                                                      
+    controllers.OrderCreateController = function ($scope, $routeParams, $location, notificationsService, dialogService, merchelloOrderService, merchelloCustomerService, merchelloSettingsService) {
 
         if ($routeParams.create) {
             $scope.loaded = true;
@@ -139,7 +139,7 @@
         * @function
         * 
         * @description
-        * Assigns values gathered from the orderedit.directives.js on creating new customers.
+        * Assigns values gathered from the ordercreate.directives.js on creating new customers.
         */
         $scope.createCustomerDirective = function (customer, shippingAddress, billingAddress) {
             $scope.init();
@@ -241,6 +241,6 @@
     };
 
                                                                                   
-    angular.module("umbraco").controller("Merchello.Editors.Order.EditController", ['$scope', '$routeParams', '$location', 'notificationsService', 'dialogService', 'merchelloOrderService', 'merchelloCustomerService', 'merchelloSettingsService', merchello.Controllers.OrderEditController]);
+    angular.module("umbraco").controller("Merchello.Editors.Order.CreateController", ['$scope', '$routeParams', '$location', 'notificationsService', 'dialogService', 'merchelloOrderService', 'merchelloCustomerService', 'merchelloSettingsService', merchello.Controllers.OrderCreateController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
