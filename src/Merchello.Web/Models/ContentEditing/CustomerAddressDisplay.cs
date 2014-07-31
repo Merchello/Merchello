@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Models.ContentEditing
+﻿using System.Security.Cryptography;
+
+namespace Merchello.Web.Models.ContentEditing
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -115,29 +117,29 @@
         /// <param name="address">
         /// The address.
         /// </param>
+        /// <param name="destination">
+        /// The existing address to be updated
+        /// </param>
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
-        public static ICustomerAddress ToCustomerAddress(this CustomerAddressDisplay address)
-        {
-            var customerAddress = new CustomerAddress(address.CustomerKey)
-                       {
-                           FullName = address.FullName,
-                           Label = address.Label,
-                           Address1 = address.Address1,
-                           Address2 = address.Address2,
-                           AddressTypeFieldKey = address.AddressTypeFieldKey,
-                           Locality = address.Locality,
-                           Region = address.Region,
-                           PostalCode = address.PostalCode,
-                           CountryCode = address.CountryCode,
-                           Company = address.Company,
-                           Phone = address.Phone,
-                           IsDefault = address.IsDefault
-                       };
-            if (!address.Key.Equals(Guid.Empty)) customerAddress.Key = address.Key;
+        public static ICustomerAddress ToCustomerAddress(this CustomerAddressDisplay address, ICustomerAddress destination)
+        {            
+            destination.FullName = address.FullName;
+            destination.Label = address.Label;
+            destination.Address1 = address.Address1;
+            destination.Address2 = address.Address2;
+            destination.AddressTypeFieldKey = address.AddressTypeFieldKey;
+            destination.Region = address.Region;
+            destination.PostalCode = address.PostalCode;
+            destination.CountryCode = address.CountryCode;
+            destination.Company = address.Company;
+            destination.Phone = address.Phone;
+            destination.IsDefault = address.IsDefault;
 
-            return customerAddress;            
+            if (!address.Key.Equals(Guid.Empty)) destination.Key = address.Key;
+
+            return destination;            
         }
     }
 

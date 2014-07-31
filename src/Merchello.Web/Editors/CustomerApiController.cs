@@ -180,7 +180,7 @@
             newCustomer.Notes = customer.Notes;
             newCustomer.LastActivityDate = DateTime.Today;
 
-            ((Customer)newCustomer).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress());
+            ////((Customer)newCustomer).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress(new CustomerAddress(customer.Key)));
 
             _customerService.Save(newCustomer);
 
