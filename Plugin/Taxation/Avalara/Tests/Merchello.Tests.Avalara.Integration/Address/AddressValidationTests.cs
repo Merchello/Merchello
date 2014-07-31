@@ -9,16 +9,9 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class AddressValidationTests
+    public class AddressValidationTests : ApiTestBase
     {
-        private IAvaTaxService _avaTaxService;
-
-        [TestFixtureSetUp]
-        public void Init()
-        {
-            _avaTaxService = new AvaTaxService(TestHelper.GetAvaTaxProviderSettings());
-        }
-
+        
         /// <summary>
         /// Test verifies that the API request URL is constructed as expected
         /// </summary>
@@ -29,7 +22,7 @@
             const string Expected = "https://development.avalara.net/1.0/address/validate";
 
             //// Act
-            var actual = ((AvaTaxService)_avaTaxService).GetApiUrl("address", "validate");
+            var actual = ((AvaTaxService)this.AvaTaxService).GetApiUrl("address", "validate");
 
             //// Assert
             Assert.AreEqual(Expected, actual, "Urls were not equal");
@@ -53,10 +46,10 @@
                               };
 
 
-            var requestUrl = ((AvaTaxService)_avaTaxService).GetApiUrl("address", "validate") + "?" + address.AsApiQueryString();
+            var requestUrl = ((AvaTaxService)this.AvaTaxService).GetApiUrl("address", "validate") + "?" + address.AsApiQueryString();
 
             //// Act
-            var response = ((AvaTaxService)_avaTaxService).GetResponse(requestUrl);
+            var response = ((AvaTaxService)this.AvaTaxService).GetResponse(requestUrl);
 
             //// Assert
             Assert.NotNull(response);
@@ -81,7 +74,7 @@
             };
 
             //// Act
-            var result = _avaTaxService.ValidateTaxAddress(address);
+            var result = this.AvaTaxService.ValidateTaxAddress(address);
 
             //// Assert
             Assert.NotNull(result);

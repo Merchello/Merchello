@@ -1,10 +1,20 @@
 ﻿namespace Merchello.Plugin.Taxation.Avalara.Models.Address
 {
+    using Merchello.Plugin.Taxation.Avalara.Models.Tax;
+
     /// <summary>
     /// Represents a tax address.
     /// </summary>
     public class TaxAddress : ValidatableAddress, ITaxAddress
     {
+        /// <summary>
+        /// Gets or sets the address code.
+        /// </summary>
+        /// <remarks>
+        /// This is basically an index reference to for the various addresses in a <see cref="TaxRequest"/>
+        /// </remarks>
+        public string AddressCode { get; set; }
+
         /// <summary>
         /// Gets or sets the latitude of the address (Optional)
         /// </summary>

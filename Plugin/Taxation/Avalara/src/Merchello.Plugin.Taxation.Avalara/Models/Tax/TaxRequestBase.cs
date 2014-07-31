@@ -1,7 +1,5 @@
 ﻿namespace Merchello.Plugin.Taxation.Avalara.Models.Tax
 {
-    using System.Collections;
-
     /// <summary>
     /// A base class for a tax requests.
     /// </summary>
@@ -12,8 +10,14 @@
         /// </summary>
         public StatementType DocType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the company code.
+        /// </summary>
         public string CompanyCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the doc code.  
+        /// </summary>
         public string DocCode { get; set; } 
     }
 }
