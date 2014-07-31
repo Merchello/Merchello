@@ -7,6 +7,7 @@
 
     using Merchello.Plugin.Taxation.Avalara.Models;
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
+    using Merchello.Plugin.Taxation.Avalara.Models.Tax;
 
     using Newtonsoft.Json;
 
@@ -53,6 +54,15 @@
             _licenseKey = settings.LicenseKey;
         }
 
+        /// <summary>
+        /// Performs address validation on an address
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="AddressValidationResult"/>.
+        /// </returns>
         public AddressValidationResult ValidateTaxAddress(IValidatableAddress address)
         {
             var requestUrl = string.Format("{0}?{1}", GetApiUrl("address", "validate"), address.AsApiQueryString());
@@ -60,6 +70,65 @@
             var json = GetResponse(requestUrl);
 
             return JsonConvert.DeserializeObject<AddressValidationResult>(json);
+        }
+
+
+        /// <summary>
+        /// Gets the <see cref="TaxResult"/> from the AvaTax API based on request parameters.
+        /// </summary>
+        /// <param name="request">
+        /// The <see cref="TaxRequest"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TaxResult"/>.
+        /// </returns>
+        public TaxResult GetTax(TaxRequest request)
+        {
+            var requestUrl = this.GetApiUrl("tax", "get");
+
+            var requestData = JsonConvert.SerializeObject(request);
+
+            var json = this.GetResponse(requestUrl, requestData, RequestMethod.HttpPost);
+
+            return JsonConvert.DeserializeObject<TaxResult>(json);
+        }
+
+        /// <summary>
+        /// Estimates the tax on a sales amount based on geo data
+        /// </summary>
+        /// <param name="latitude">
+        /// The latitude.
+        /// </param>
+        /// <param name="longitude">
+        /// The longitude.
+        /// </param>
+        /// <param name="saleAmount">
+        /// The sale amount.
+        /// </param>
+        /// <returns>
+        /// The <see cref="GeoTaxResult"/>.
+        /// </returns>
+        public GeoTaxResult EstimateTax(decimal latitude, decimal longitude, decimal saleAmount)
+        {            
+            var methodName = string.Format("{0},{1}/get?saleamount={2}", latitude, longitude, saleAmount);
+
+            var requestUrl = GetApiUrl("tax", methodName);
+
+            var json = GetResponse(requestUrl);
+
+            return JsonConvert.DeserializeObject<GeoTaxResult>(json);
+        }
+
+        /// <summary>
+        /// Queries the API to solicit a response based on a predefined and know latitude and longitude.
+        /// A success result indicates a valid "ping"
+        /// </summary>
+        /// <returns>
+        /// The <see cref="GeoTaxResult"/>.
+        /// </returns>
+        public GeoTaxResult Ping()
+        {
+            return this.EstimateTax(41.220691M, -111.972612M, 911);
         }
 
         /// <summary>
