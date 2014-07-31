@@ -1,4 +1,7 @@
-﻿namespace Merchello.Web.Trees
+﻿using Merchello.Core.Models;
+using umbraco.cms.presentation;
+
+namespace Merchello.Web.Trees
 {
     using System.Linq;
     using System.Net.Http.Formatting;
@@ -69,6 +72,11 @@
             if (id == "settings")
             {
                 menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
+            }
+
+            if (id == "orders")     
+            {                                                                                                 
+                menu.Items.Add<CreateChildEntity, ActionNew>("Create Order", true).Alias = "createOrder";
             }
 
             ////if (id == "catalog")
