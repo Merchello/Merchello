@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Plugin.Taxation.Avalara.Models.Tax
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
@@ -9,6 +10,17 @@
     /// </summary>
     public class TaxRequest : TaxRequestBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaxRequest"/> class.
+        /// </summary>
+        public TaxRequest()
+        {
+            DocDate = DateTime.Today.ToString("yyyy-M-dddd");
+            DetailLevel = DetailLevel.Tax;
+            Commit = false;
+            DocType = StatementType.SalesInvoice;
+        }
+
         // Required for tax calculation
 
         /// <summary>

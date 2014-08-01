@@ -16,7 +16,77 @@
     public static class LineItemExtensions
     {
         #region LineItemContainer
-        
+
+        /// <summary>
+        /// Gets the tax line items.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// The collection of tax line items.
+        /// </returns>
+        public static IEnumerable<ILineItem> TaxLineItems(this ILineItemContainer container)
+        {
+            return container.Items.Where(x => x.LineItemType == LineItemType.Tax);
+        }
+
+        /// <summary>
+        /// Gets the product line items.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// The collection of product line items.
+        /// </returns>
+        public static IEnumerable<ILineItem> ProductLineItems(this ILineItemContainer container)
+        {
+            return container.Items.Where(x => x.LineItemType == LineItemType.Product);
+        }
+
+        /// <summary>
+        /// Gets the shipping line items.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// The collection of shipping line item.
+        /// </returns>
+        public static IEnumerable<ILineItem> ShippingLineItems(this ILineItemContainer container)
+        {
+            return container.Items.Where(x => x.LineItemType == LineItemType.Shipping);
+        }
+
+        /// <summary>
+        /// Gets the discount line items.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// The collection of discount line items.
+        /// </returns>
+        public static IEnumerable<ILineItem> DiscountLineItems(this ILineItemContainer container)
+        {
+            return container.Items.Where(x => x.LineItemType == LineItemType.Discount);
+        }
+
+        /// <summary>
+        /// Gets the custom line items.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// The collection of customer line items.
+        /// </returns>
+        public static IEnumerable<ILineItem> CustomLineItems(this ILineItemContainer container)
+        {
+            return container.Items.Where(x => x.LineItemType == LineItemType.Custom);
+        }
+
         /// <summary>
         /// Adds a <see cref="IProductVariant"/> line item to the collection
         /// </summary>
@@ -139,7 +209,7 @@
         /// Converts a line item of one type to a line item of another type
         /// </summary>
         /// <typeparam name="T">The specific type of <see cref="ILineItem"/></typeparam>
-        /// <param name="lineItem">The lineitem</param>
+        /// <param name="lineItem">The line item</param>
         /// <returns>A <see cref="LineItemBase"/> of type T</returns>
         public static T AsLineItemOf<T>(this ILineItem lineItem) where T : class, ILineItem
         {    
@@ -237,7 +307,7 @@
         }
 
         /// <summary>
-        /// True/false indicating whether or not this lineItem represents a line item that can be shipped (eg. a product)
+        /// True/false indicating whether or not this lineItem represents a line item that can be shipped (a product)
         /// </summary>
         /// <param name="lineItem">
         /// The <see cref="ILineItem"/>

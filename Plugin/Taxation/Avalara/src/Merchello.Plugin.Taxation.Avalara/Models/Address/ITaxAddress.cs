@@ -1,5 +1,9 @@
 ﻿namespace Merchello.Plugin.Taxation.Avalara.Models.Address
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+
+    using Merchello.Core.Models;
     using Merchello.Plugin.Taxation.Avalara.Models.Tax;
 
     /// <summary>

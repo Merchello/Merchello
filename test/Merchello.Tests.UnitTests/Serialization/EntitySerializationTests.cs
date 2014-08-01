@@ -12,6 +12,10 @@ using Umbraco.Tests.PublishedCache;
 
 namespace Merchello.Tests.UnitTests.Serialization
 {
+    using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Services;
+    using Merchello.Tests.Base.Mocks;
+
     [TestFixture]
     public class EntitySerializationTests
     {
@@ -229,5 +233,6 @@ namespace Merchello.Tests.UnitTests.Serialization
             Assert.NotNull(address);
             Assert.AreEqual(typeof(Address), address.GetType());
         }
+
     }
 }
