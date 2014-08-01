@@ -9,6 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E98D49B5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Avalara.Integration", "..\Tests\Merchello.Tests.Avalara.Integration\Merchello.Tests.Avalara.Integration.csproj", "{547ABB98-0091-4B61-A0E2-984A8C6A4150}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{BE2005A0-C77F-40C5-B464-274A32C6A057}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\..\..\Users\rusty\Downloads\AvaTaxSystemTaxCodesinExcelFormat.xls = ..\..\..\..\..\..\..\Users\rusty\Downloads\AvaTaxSystemTaxCodesinExcelFormat.xls
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

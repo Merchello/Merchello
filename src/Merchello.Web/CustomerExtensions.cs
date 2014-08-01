@@ -19,6 +19,15 @@
         }
 
         /// <summary>
+        /// Backoffices the specified customer.
+        /// </summary>
+        /// <param name="customer">The customer.</param>
+        /// <returns></returns>
+        public static IBackoffice Backoffice(this ICustomerBase customer)
+        {
+            return Workflow.Backoffice.GetBackoffice(customer);
+        }
+        /// <summary>
         /// The wish list.
         /// </summary>
         /// <param name="customer">

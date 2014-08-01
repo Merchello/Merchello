@@ -26,7 +26,17 @@ namespace Merchello.Core.Chains.InvoiceCreation
                         value.Items.Remove(remove);
                     }
 
-                    var taxes = value.CalculateTaxes(SalePreparation.MerchelloContext, value.GetBillingAddress());
+                    IAddress taxAddress = null;
+                    var shippingItems = value.ShippableItems();
+                    if (shippingItems.Any())
+                    {
+                        var shipment = shippingItems.First().ExtendedData.GetShipment<OrderLineItem>();
+                        taxAddress = shipment.GetDestinationAddress();
+                    }
+
+                    taxAddress = taxAddress ?? value.GetBillingAddress();
+
+                    var taxes = value.CalculateTaxes(SalePreparation.MerchelloContext, taxAddress);
 
                     var taxLineItem = taxes.AsLineItemOf<InvoiceLineItem>();
 

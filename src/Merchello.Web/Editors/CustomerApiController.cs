@@ -180,11 +180,32 @@
             newCustomer.Notes = customer.Notes;
             newCustomer.LastActivityDate = DateTime.Today;
 
-            ((Customer)newCustomer).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress());
+            ////((Customer)newCustomer).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress(new CustomerAddress(customer.Key)));
 
             _customerService.Save(newCustomer);
 
             return newCustomer.ToCustomerDisplay();
+        }
+
+        /// <summary>
+        /// POST /umbraco/Merchello/CustomerApi/AddCustomer/
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public IAnonymousCustomer AddAnonymousCustomer(CustomerDisplay customer)
+        {            
+            var newCustomer = _customerService.CreateAnonymousCustomerWithKey();
+            
+            newCustomer.LastActivityDate = DateTime.Today;
+            
+            _customerService.Save(newCustomer);
+
+            return newCustomer;
         }
 
         /// <summary>

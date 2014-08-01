@@ -61,6 +61,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
@@ -114,6 +115,8 @@
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="CustomerQuery.cs" />
+    <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />
+    <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />
     <Compile Include="Models\ContentEditing\CustomerAddressDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
     <Compile Include="Models\Customer\CustomerContextData.cs" />
@@ -140,9 +143,13 @@
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
+    <Compile Include="Workflow\Backoffice.cs" />
+    <Compile Include="Workflow\BackofficeSalePreparation.cs" />
     <Compile Include="Workflow\BasketConversionBase.cs" />
     <Compile Include="Workflow\BasketConversionByCombiningAnonymousBasket.cs" />
     <Compile Include="Workflow\BasketConversionByDiscardingPreviousCustomerBasket.cs" />
+    <Compile Include="Workflow\IBackoffice.cs" />
+    <Compile Include="Workflow\IBackofficeSalePreparation.cs" />
     <Compile Include="Workflow\IBasketConversionBase.cs" />
     <Compile Include="Workflow\IWishList.cs" />
     <Compile Include="Workflow\PaymentProcessor.cs" />

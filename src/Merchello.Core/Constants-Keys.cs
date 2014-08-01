@@ -395,6 +395,15 @@
                 }
 
                 /// <summary>
+                /// Gets the backoffice key.
+                /// </summary>
+                public static Guid BackofficeKey
+                {
+                    get { return new Guid("E36930FE-6D6A-4EB3-AF95-712629913812"); }
+                }
+
+
+                /// <summary>
                 /// Gets the wishlist key.
                 /// </summary>
                 public static Guid WishlistKey

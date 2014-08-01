@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Umbraco.Core;
-using Umbraco.Core.ObjectResolution;
-
-namespace Merchello.Core.ObjectResolution
+﻿namespace Merchello.Core.ObjectResolution
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    using Umbraco.Core;
+    using Umbraco.Core.ObjectResolution;
+
     /// <summary>
     /// The base class for Merchello many-object resolvers.
     /// </summary>

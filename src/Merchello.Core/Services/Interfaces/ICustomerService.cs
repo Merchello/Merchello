@@ -134,7 +134,7 @@
         #region Anonymous Customer
 
         /// <summary>
-        /// Crates an <see cref="IAnonymousCustomer"/> and saves it to the database
+        /// Creates an <see cref="IAnonymousCustomer"/> and saves it to the database
         /// </summary>
         /// <returns><see cref="IAnonymousCustomer"/></returns>
         IAnonymousCustomer CreateAnonymousCustomerWithKey();

@@ -78,17 +78,20 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\..\src\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.2.12\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core">
+      <HintPath>..\..\src\packages\Merchello.Core.1.2.16\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.2.12\lib\net40\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine">
+      <HintPath>..\..\src\packages\Merchello.Core.1.2.16\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.2.12\lib\net40\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Tests.Base">
+      <HintPath>..\..\References\Merchello.Tests.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Tests.IntegrationTests">
+      <HintPath>..\..\References\Merchello.Tests.IntegrationTests.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Web">
+      <HintPath>..\..\src\packages\Merchello.Core.1.2.16\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -106,6 +109,9 @@
     <Reference Include="MiniProfiler">
       <HintPath>..\..\src\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\src\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\src\packages\MySql.Data.6.6.5\lib\net40\MySql.Data.dll</HintPath>
@@ -121,6 +127,7 @@
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.4\lib\SQLCE4Umbraco.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -201,12 +208,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address\AddressValidationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tax\TaxApiTests.cs" />
+    <Compile Include="TestBase\AvaTaxTestBase.cs" />
+    <Compile Include="TestBase\DbSyntax.cs" />
+    <Compile Include="TestBase\Mocks\ShipmentMock.cs" />
+    <Compile Include="TestBase\Mocks\ShipMethodMock.cs" />
+    <Compile Include="TestBase\Resolution.cs" />
+    <Compile Include="TestBase\SqlSyntaxProviderTestHelper.cs" />
+    <Compile Include="TestBase\TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Merchello.Plugin.Taxation.Avalara\Merchello.Plugin.Taxation.Avalara.csproj">
+      <Project>{d2f80b5b-df00-4f39-9430-bd37ce64d7fc}</Project>
+      <Name>Merchello.Plugin.Taxation.Avalara</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
