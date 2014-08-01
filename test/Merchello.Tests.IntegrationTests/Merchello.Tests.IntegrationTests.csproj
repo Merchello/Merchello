@@ -138,8 +138,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\src\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\..\src\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\src\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="RazorEngine, Version=3.4.1.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -253,6 +254,7 @@
     <Compile Include="Examine\CustomerProviderTests.cs" />
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
+    <Compile Include="Invoices\InvoiceTests.cs" />
     <Compile Include="Notifications\NotificationObservationTests.cs" />
     <Compile Include="Notifications\SmtpNotificationProviderTests.cs" />
     <Compile Include="MigrationTests.cs" />

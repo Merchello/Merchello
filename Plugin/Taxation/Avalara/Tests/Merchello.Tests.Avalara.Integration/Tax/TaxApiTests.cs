@@ -1,13 +1,19 @@
 ﻿namespace Merchello.Tests.Avalara.Integration.Tax
 {
     using System.Linq;
+    using System.Runtime.Remoting;
 
+    using Merchello.Core.Models;
+    using Merchello.Plugin.Taxation.Avalara;
     using Merchello.Plugin.Taxation.Avalara.Models;
+    using Merchello.Plugin.Taxation.Avalara.Models.Address;
+    using Merchello.Plugin.Taxation.Avalara.Models.Tax;
+    using Merchello.Tests.Avalara.Integration.TestBase;
 
     using NUnit.Framework;
 
     [TestFixture]
-    public class TaxApiTests : ApiTestBase
+    public class TaxApiTests : AvaTaxTestBase
     {
         /// <summary>
         /// Test verifies that the tax API can be pinged and we get a successful result
@@ -16,7 +22,7 @@
         public void Can_Ping_The_Tax_Api()
         {
             //// Arrange
-            
+
             //// Act
             var result = AvaTaxService.Ping();
 
@@ -54,7 +60,23 @@
         [Test]
         public void Can_Get_Tax_Result_With_Simple_Mock_Data()
         {
+            //// Arrange
+            var storeAddress = new Address()
+                {
+                    Name = "Mindfly, Inc.",
+                    Address1 = "114 W. Magnolia St. Suite 300",
+                    Locality = "Bellingham",
+                    Region = "WA",
+                    PostalCode = "98225",
+                    CountryCode = "US"
+                };
+
+            var taxRequest = Invoice.AsTaxRequest(storeAddress.ToTaxAddress());
+            Assert.NotNull(taxRequest);
+ 
+            //// Assert
             
+        
         }
     }
 }

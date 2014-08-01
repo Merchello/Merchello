@@ -81,17 +81,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Core, Version=1.2.16.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.2.12\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.2.16\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.2.12\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.2.16\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Web, Version=1.2.16.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.2.12\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.2.16\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -215,6 +215,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MappingExtensions.cs" />
     <Compile Include="Models\Address\AddressValidationResult.cs" />
     <Compile Include="Models\Address\ITaxAddress.cs" />
     <Compile Include="Models\Address\TaxAddress.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Provider\AvalaraTaxationGatewayProvider.cs" />
     <Compile Include="Services\AvaTaxService.cs" />
     <Compile Include="Services\IAvaTaxService.cs" />
+    <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,15 +1,19 @@
 ﻿namespace Merchello.Tests.Avalara.Integration.Address
 {
     using System;
+    using System.Linq;
 
+    using Merchello.Core.Models;
+    using Merchello.Plugin.Taxation.Avalara;
     using Merchello.Plugin.Taxation.Avalara.Models;
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
     using Merchello.Plugin.Taxation.Avalara.Services;
+    using Merchello.Tests.Avalara.Integration.TestBase;
 
     using NUnit.Framework;
 
     [TestFixture]
-    public class AddressValidationTests : ApiTestBase
+    public class AddressValidationTests : AvaTaxTestBase
     {
         
         /// <summary>
@@ -82,5 +86,46 @@
             Assert.IsNotNullOrEmpty(result.Address.Line1);
         }
 
+        /// <summary>
+        /// Test verifies that the billing address from an invoice can be validated
+        /// </summary>
+        [Test]
+        public void Can_Validate_Billing_Address_From_Invoice()
+        {
+            //// Arrange
+            var address = Invoice.GetBillingAddress().ToValidatableAddress();
+            var taxAddress = address.ToTaxAddress();
+
+            //// Act
+            var result = this.AvaTaxService.ValidateTaxAddress(address);
+
+            //// Assert
+            Assert.NotNull(result);
+            Assert.IsTrue(result.ResultCode == SeverityLevel.Success);
+            Assert.IsNotNullOrEmpty(result.Address.Line1);
+        }
+
+        /// <summary>
+        /// Test verifies that a shipping address can be validated from shipment line item
+        /// </summary>
+        [Test]
+        public void Can_Validate_Shipping_Address_From_Invoice_Line_Item()
+        {
+            //// Arrange
+            var shippableItems = Invoice.ShippingLineItems();
+            var shipment = shippableItems.FirstOrDefault().ExtendedData.GetShipment<OrderLineItem>();
+            var origin = shipment.GetOriginAddress();
+            var destination = shipment.GetDestinationAddress();
+
+            //// Act
+            var resultOrigin = AvaTaxService.ValidateTaxAddress(origin.ToValidatableAddress());
+            var resultDestination = AvaTaxService.ValidateTaxAddress(destination.ToValidatableAddress());
+
+            //// Assert
+            Assert.NotNull(resultOrigin);
+            Assert.IsTrue(resultOrigin.ResultCode == SeverityLevel.Success);
+            Assert.NotNull(resultDestination);
+            Assert.IsTrue(resultDestination.ResultCode == SeverityLevel.Success);
+        }
     }
 }

@@ -74,7 +74,7 @@
         /// <summary>
         /// Gets or sets the tax addresses.
         /// </summary>
-        public IEnumerator<TaxAddress> TaxAddresses { get; set; }
+        public IEnumerable<TaxAddress> TaxAddresses { get; set; }
 
         /// <summary>
         /// Gets or sets the result code.

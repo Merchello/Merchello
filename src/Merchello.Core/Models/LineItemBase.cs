@@ -275,6 +275,7 @@ namespace Merchello.Core.Models
                 }
                 xml = sw.ToString();
             }
+
             return xml;
         }
         
