@@ -162,9 +162,7 @@ namespace Merchello.Core.Persistence.Repositories
             // synchronize the inventory
             ((ProductVariantRepository) _productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
 
-            entity.ResetDirtyProperties();
-
-         
+            entity.ResetDirtyProperties();         
         }
 
         protected override void PersistDeletedItem(IProduct entity)

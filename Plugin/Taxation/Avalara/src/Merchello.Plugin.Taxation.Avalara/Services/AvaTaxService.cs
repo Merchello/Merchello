@@ -4,12 +4,11 @@
     using System.IO;
     using System.Net;
     using System.Text;
-
-    using Merchello.Plugin.Taxation.Avalara.Models;
-    using Merchello.Plugin.Taxation.Avalara.Models.Address;
-    using Merchello.Plugin.Taxation.Avalara.Models.Tax;
-
+    using Models;
+    using Models.Address;
+    using Models.Tax;
     using Newtonsoft.Json;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the AvaTaxService.
@@ -161,35 +160,43 @@
         /// </returns>
         internal string GetResponse(string requestUrl, string data = "", RequestMethod requestMethod = RequestMethod.HttpGet)
         {
-            var address = new Uri(requestUrl);
-
-            var request = WebRequest.Create(address) as HttpWebRequest;
-
-            //// Add Authorization header
-            var pair = Encoding.ASCII.GetBytes(string.Format("{0}:{1}", _accountNumber, _licenseKey));
-            var basic = string.Format("Basic {0}", Convert.ToBase64String(pair));
-            request.Headers.Add(HttpRequestHeader.Authorization, basic);
-
-            if (requestMethod == RequestMethod.HttpPost)
+            try
             {
-                request.Method = "POST";
-                request.ContentType = "application/json";
-                request.ContentLength = data.Length;
-                var s = request.GetRequestStream();
-                s.Write(Encoding.ASCII.GetBytes(data), 0, data.Length);
+                var address = new Uri(requestUrl);
+
+                var request = WebRequest.Create(address) as HttpWebRequest;
+
+                //// Add Authorization header
+                var pair = Encoding.ASCII.GetBytes(string.Format("{0}:{1}", _accountNumber, _licenseKey));
+                var basic = string.Format("Basic {0}", Convert.ToBase64String(pair));
+                
+                request.Headers.Add(HttpRequestHeader.Authorization, basic);
+
+                if (requestMethod == RequestMethod.HttpPost)
+                {
+                    request.Method = "POST";
+                    request.ContentType = "application/json";
+                    request.ContentLength = data.Length;
+                    var s = request.GetRequestStream();
+                    s.Write(Encoding.ASCII.GetBytes(data), 0, data.Length);
+                }
+                else
+                {
+                    request.Method = "GET";
+                }
+
+                var response = request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    return sr.ReadToEnd();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                request.Method = "GET";
+                LogHelper.Error<AvaTaxService>("AvaTax API Failure", ex);
+                throw;
             }
-
-            var response = request.GetResponse();
-
-            using (var sr = new StreamReader(response.GetResponseStream()))
-            {
-                return sr.ReadToEnd();
-            }
-        }
-
+        }        
     }
 }

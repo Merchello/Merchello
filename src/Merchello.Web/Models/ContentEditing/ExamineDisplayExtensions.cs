@@ -118,8 +118,7 @@
                     Archived = FieldAsBoolean(result.Fields["archived"]),
                     Total = FieldAsDecimal(result, "total"),
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
-                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),
-                    
+                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
                 };
 
             invoice.Orders = OrderQuery.GetByInvoiceKey(invoice.Key);

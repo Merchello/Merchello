@@ -112,7 +112,7 @@
 
             destination.Notes = customer.Notes;
 
-            ((Customer)destination).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress());
+            ((Customer)destination).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress(destination.Addresses.FirstOrDefault(dest => dest.Key == x.Key)));
 
             return destination;
         }
