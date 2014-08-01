@@ -127,8 +127,8 @@
                 var ctrValues = new object[]
                     {                        
                         new Guid(dictionary[Constants.ExtendedDataKeys.LineItemTfKey]),
-                        dictionary[Constants.ExtendedDataKeys.Sku],
                         dictionary[Constants.ExtendedDataKeys.Name],
+                        dictionary[Constants.ExtendedDataKeys.Sku],
                         int.Parse(dictionary[Constants.ExtendedDataKeys.Quantity]),
                         decimal.Parse(dictionary[Constants.ExtendedDataKeys.Price]),
                         new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData])

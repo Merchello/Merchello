@@ -31,6 +31,11 @@
             Assert.IsTrue(shipment.Items.Any(), "Shipment did not contain any line items");
             Assert.IsFalse(shipment.Items.All(x => x.ExtendedData.IsEmpty), "Extended data in one or more line items was empty");
             Assert.IsTrue(shipment.Items.Any(x => x.ExtendedData.GetTaxableValue()), "Shipment does not contain any taxable items");
+
+            foreach (var item in shipment.Items)
+            {
+                Assert.IsTrue(invoice.Items.Any(x => x.Sku == item.Sku), "No item exists for sku " + item.Sku);
+            }
         } 
     }
 }

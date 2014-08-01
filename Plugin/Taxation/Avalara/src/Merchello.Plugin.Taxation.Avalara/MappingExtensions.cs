@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Web;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
     using Merchello.Plugin.Taxation.Avalara.Models.Tax;
@@ -85,14 +86,12 @@
                 var counter = 1;
                 var lineNo = 1;
 
-
-
                 foreach (var shipLine in shippingItems)
                 {
                     var shipment = shipLine.ExtendedData.GetShipment<OrderLineItem>();
                     var shipmentAddresses = shipment.GetTaxAddressArray(counter + 1);
 
-                    foreach (var line in shippingItems)
+                    foreach (var line in shipment.Items)
                     {
                         lines.Add(
                                 new StatementLineItem()
@@ -124,6 +123,16 @@
                     counter++;
                 }
             }
+
+            // add items not included in the shipment
+            var notShipped =
+                invoice.Items.Where(
+                    x =>
+                    x.LineItemType != LineItemType.Shipping && 
+                    x.LineItemType != LineItemType.Discount &&
+                    !lines.Any(line => line.ItemCode.Contains(x.Sku)));
+
+
 
             var taxRequest = new TaxRequest()
                 {
