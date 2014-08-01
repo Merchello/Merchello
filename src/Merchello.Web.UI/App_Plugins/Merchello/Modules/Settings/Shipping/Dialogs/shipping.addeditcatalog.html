@@ -1,7 +1,7 @@
 ﻿<div class="umb-panel merchello-side-panel">
     <div class="umb-modalcolumn-header">
         <h4 data-ng-switch="dialogData.catalog.key">
-            <span data-ng-switch-when="no key created">Add Catalog</span>
+            <span data-ng-switch-when="">Add Catalog</span>
             <span data-ng-switch-default="">Edit Catalog</span>
         </h4>
     </div>
@@ -24,16 +24,10 @@
     <div class="umb-panel-footer">
         <div class="umb-el-wrap umb-panel-buttons">
             <div class="btn-toolbar umb-btn-toolbar pull-right">
-
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel"></localize>
-                </a>
-
-                <button class="btn btn-primary"
-                        data-ng-click="submit(dialogData)">
-                    <localize key="buttons_save"></localize>
-                </button>
-
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                <!-- ACTION: Save-->
+                <button class="btn btn-primary" data-ng-click="submit(dialogData)"><localize key="buttons_save"></localize></button>
             </div>
         </div>
     </div>
