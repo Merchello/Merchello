@@ -85,7 +85,15 @@
         {
             var requestUrl = this.GetApiUrl("tax", "get");
 
-            var requestData = JsonConvert.SerializeObject(request);
+            request.CustomerCode = _accountNumber;
+
+            var requestData = JsonConvert.SerializeObject(
+                request, 
+                Formatting.None, 
+                new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
 
             var json = this.GetResponse(requestUrl, requestData, RequestMethod.HttpPost);
 
@@ -195,7 +203,16 @@
             catch (Exception ex)
             {
                 LogHelper.Error<AvaTaxService>("AvaTax API Failure", ex);
-                throw;
+                var result = new TaxResult() 
+                { 
+                    ResultCode = SeverityLevel.Exception, 
+                    Messages = new[] 
+                    { 
+                        new ApiResponseMessage() { Details = ex.Message, Source = typeof(AvaTaxService).Name, RefersTo = "GetTax", Severity = SeverityLevel.Exception } 
+                    }
+                };
+
+                return JsonConvert.SerializeObject(result);
             }
         }        
     }

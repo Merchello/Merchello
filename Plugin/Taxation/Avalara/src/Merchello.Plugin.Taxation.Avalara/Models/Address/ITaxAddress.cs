@@ -22,16 +22,16 @@
         /// <summary>
         /// Gets or sets the latitude of the address (Optional)
         /// </summary>
-        decimal Latitude { get; set; }
+        decimal? Latitude { get; set; }
 
         /// <summary>
         /// Gets or sets the longitude of the address (Optional)
         /// </summary>
-        decimal Longitude { get; set; }
+        decimal? Longitude { get; set; }
 
         /// <summary>
         /// Gets or sets the tax region id (Optional)
         /// </summary>
-        int TaxRegionId { get; set; }
+        int? TaxRegionId { get; set; }
     }
 }

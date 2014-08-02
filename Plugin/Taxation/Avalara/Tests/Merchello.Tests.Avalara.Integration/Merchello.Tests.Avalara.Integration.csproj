@@ -78,13 +78,13 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\..\src\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.2.17.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Core, Version=1.2.18.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.2.17\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\..\src\packages\Merchello.Core.1.2.18\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.2.17\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\..\src\packages\Merchello.Core.1.2.18\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Tests.Base">
       <HintPath>..\..\References\Merchello.Tests.Base.dll</HintPath>
@@ -92,9 +92,9 @@
     <Reference Include="Merchello.Tests.IntegrationTests">
       <HintPath>..\..\References\Merchello.Tests.IntegrationTests.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.2.17.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Web, Version=1.2.18.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.2.17\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\..\src\packages\Merchello.Core.1.2.18\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>

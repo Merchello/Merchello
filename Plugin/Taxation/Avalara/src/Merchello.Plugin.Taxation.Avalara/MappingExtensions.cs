@@ -10,6 +10,8 @@
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
     using Merchello.Plugin.Taxation.Avalara.Models.Tax;
 
+    using Newtonsoft.Json;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -77,7 +79,7 @@
             var addresses = new List<TaxAddress>();
             var lines = new List<StatementLineItem>();
 
-            defaultStoreAddress.AddressCode = "01";
+            defaultStoreAddress.AddressCode = "1";
             addresses.Add(defaultStoreAddress as TaxAddress);
 
             var shippingItems = invoice.ShippingLineItems().ToArray();
@@ -116,7 +118,7 @@
                             Description = shipLine.Name,
                             OriginCode = shipmentAddresses[0].AddressCode,
                             DestinationCode = shipmentAddresses[1].AddressCode,
-                            TaxCode = "FR"
+                            TaxCode = "FR020200"
                         });
 
                     addresses.AddRange(shipmentAddresses);
@@ -128,7 +130,7 @@
             var notShipped =
                 invoice.Items.Where(
                     x =>
-                    x.LineItemType != LineItemType.Shipping && 
+                    x.LineItemType != LineItemType.Shipping &&
                     x.LineItemType != LineItemType.Discount &&
                     !lines.Any(line => line.ItemCode.Contains(x.Sku)));
 
@@ -136,8 +138,9 @@
 
             var taxRequest = new TaxRequest()
                 {
+                    DocCode = invoice.PrefixedInvoiceNumber(),
                     Addresses = addresses.ToArray(),
-                    DocDate = invoice.InvoiceDate.ToString("yyyy-M-dddd"),
+                    DocDate = invoice.InvoiceDate.ToString("yyyy-MM-dd"),
                     Lines = lines
                 };
 

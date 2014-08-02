@@ -59,15 +59,13 @@
 
             var billToShipTo = new Address()
                 {
-                    Name = "Space Needle",
-                    Address1 = "400 Broad St",
-                    Locality = "Seattle",
-                    Region = "WA",
-                    PostalCode = "98109",
+                    Name = "The President of the United States",
+                    Address1 = "1600 Pennsylvania Ave NW",
+                    Locality = "Washington",
+                    Region = "DC",
+                    PostalCode = "20500",
                     CountryCode = "US",                 
                 };
-
-
 
             var invoiceService = new InvoiceService();
 
