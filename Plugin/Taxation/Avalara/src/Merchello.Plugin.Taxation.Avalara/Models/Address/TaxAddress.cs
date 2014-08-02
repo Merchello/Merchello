@@ -21,12 +21,12 @@
         /// <summary>
         /// Gets or sets the latitude of the address (Optional)
         /// </summary>
-        public decimal Latitude { get; set; }
+        public decimal? Latitude { get; set; }
 
         /// <summary>
         /// Gets or sets the longitude of the address (Optional)
         /// </summary>
-        public decimal Longitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         /// <summary>
         /// Gets or sets the tax region id (Optional)
@@ -34,6 +34,6 @@
         /// <remarks>
         /// AvaTax tax region identifier. If a non-zero value is entered into TaxRegionId, other fields will be ignored.
         /// </remarks>
-        public int TaxRegionId { get; set; }
+        public int? TaxRegionId { get; set; }
     }
 }

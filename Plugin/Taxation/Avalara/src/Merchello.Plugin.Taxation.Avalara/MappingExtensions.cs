@@ -5,9 +5,12 @@
     using System.Linq;
     using System.Web;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
     using Merchello.Plugin.Taxation.Avalara.Models.Tax;
+
+    using Newtonsoft.Json;
 
     using Umbraco.Core;
 
@@ -76,7 +79,7 @@
             var addresses = new List<TaxAddress>();
             var lines = new List<StatementLineItem>();
 
-            defaultStoreAddress.AddressCode = "01";
+            defaultStoreAddress.AddressCode = "1";
             addresses.Add(defaultStoreAddress as TaxAddress);
 
             var shippingItems = invoice.ShippingLineItems().ToArray();
@@ -85,14 +88,12 @@
                 var counter = 1;
                 var lineNo = 1;
 
-
-
                 foreach (var shipLine in shippingItems)
                 {
                     var shipment = shipLine.ExtendedData.GetShipment<OrderLineItem>();
                     var shipmentAddresses = shipment.GetTaxAddressArray(counter + 1);
 
-                    foreach (var line in shippingItems)
+                    foreach (var line in shipment.Items)
                     {
                         lines.Add(
                                 new StatementLineItem()
@@ -117,7 +118,7 @@
                             Description = shipLine.Name,
                             OriginCode = shipmentAddresses[0].AddressCode,
                             DestinationCode = shipmentAddresses[1].AddressCode,
-                            TaxCode = "FR"
+                            TaxCode = "FR020200"
                         });
 
                     addresses.AddRange(shipmentAddresses);
@@ -125,10 +126,21 @@
                 }
             }
 
+            // add items not included in the shipment
+            var notShipped =
+                invoice.Items.Where(
+                    x =>
+                    x.LineItemType != LineItemType.Shipping &&
+                    x.LineItemType != LineItemType.Discount &&
+                    !lines.Any(line => line.ItemCode.Contains(x.Sku)));
+
+
+
             var taxRequest = new TaxRequest()
                 {
+                    DocCode = invoice.PrefixedInvoiceNumber(),
                     Addresses = addresses.ToArray(),
-                    DocDate = invoice.InvoiceDate.ToString("yyyy-M-dddd"),
+                    DocDate = invoice.InvoiceDate.ToString("yyyy-MM-dd"),
                     Lines = lines
                 };
 
