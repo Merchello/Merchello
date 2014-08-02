@@ -5,6 +5,9 @@
 
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
 
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// Represents a "Get" tax request.
     /// </summary>
@@ -68,6 +71,7 @@
         /// <summary>
         /// Gets or sets the detail level which specifies the level of detail to return.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DetailLevel DetailLevel { get; set; }
 
         //// Use where appropriate to the situation
