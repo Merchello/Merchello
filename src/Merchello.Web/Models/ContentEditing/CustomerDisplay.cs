@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Models.ContentEditing
+﻿using umbraco.presentation.umbraco.dialogs;
+
+namespace Merchello.Web.Models.ContentEditing
 {
     using System;
     using System.Collections.Generic;
@@ -110,9 +112,19 @@
                 ((Customer)destination).ExtendedData = customer.ExtendedData;
             }
 
-            destination.Notes = customer.Notes;
+            var addressList = new List<ICustomerAddress>();
 
-            ((Customer)destination).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress(destination.Addresses.FirstOrDefault(dest => dest.Key == x.Key)));
+            foreach (var address in customer.Addresses)
+            {
+                var destAddress = destination.Addresses.FirstOrDefault(x => x.Key == address.Key);
+                if (destAddress != null) destAddress = address.ToCustomerAddress(destAddress);
+
+                addressList.Add(destAddress);
+            }
+
+            ((Customer) destination).Addresses = addressList;
+            
+            destination.Notes = customer.Notes;
 
             return destination;
         }

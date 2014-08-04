@@ -222,6 +222,7 @@
         public CustomerDisplay PutCustomer(CustomerDisplay customer)
         {
             RemoveDeletedAddresses(customer);
+            SaveNewAddresses(customer);
 
             var merchCustomer = _customerService.GetByKey(customer.Key);
 
@@ -274,6 +275,20 @@
             foreach (var delete in existingAddresses.Where(address => customer.Addresses.All(x => x.Key != address.Key)).ToList())
             {
                 _customerAddressService.Delete(delete);
+            }
+        }
+
+        /// <summary>
+        /// Saves any new customer addresses
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        private void SaveNewAddresses(CustomerDisplay customer)
+        {
+            foreach (var address in customer.Addresses.Where(x => x.Key == Guid.Empty))
+            {
+                _customerAddressService.Save(address.ToCustomerAddress(new CustomerAddress(customer.Key)));
             }
         }
     }
