@@ -1,7 +1,4 @@
-﻿using Merchello.Core.Models;
-using umbraco.cms.presentation;
-
-namespace Merchello.Web.Trees
+﻿namespace Merchello.Web.Trees
 {
     using System.Linq;
     using System.Net.Http.Formatting;
@@ -9,7 +6,6 @@ namespace Merchello.Web.Trees
     using Core.Configuration.Outline;
     using umbraco;
     using umbraco.BusinessLogic.Actions;
-    using umbraco.dialogs;
     using Umbraco.Web.Models.Trees;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.Trees;
@@ -75,10 +71,10 @@ namespace Merchello.Web.Trees
             }
 
 
-            //if (id == "orders")     
-            //{                                                                                                 
-            //    menu.Items.Add<CreateChildEntity, ActionNew>("Create Order", true).Alias = "createOrder";
-            //}
+            if (id == "orders")
+            {
+                menu.Items.Add<CreateChildEntity, ActionNew>("Create Order", true).Alias = "createOrder";
+            }
 
             ////if (id == "catalog")
             ////{
