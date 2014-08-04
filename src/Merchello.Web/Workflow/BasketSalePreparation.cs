@@ -38,7 +38,7 @@
         {
             var result = base.AuthorizePayment(paymentGatewayMethod, args);
 
-            Customer.Basket().Empty();
+            if (result.Payment.Success) Customer.Basket().Empty();
             
             return result;
         }
@@ -53,7 +53,7 @@
         {
             var result = base.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            Customer.Basket().Empty();
+            if (result.Payment.Success) Customer.Basket().Empty();
 
             return result;
         }
