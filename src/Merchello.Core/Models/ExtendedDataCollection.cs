@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Specialized;
     using System.IO;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Xml;
     using System.Xml.Linq;
@@ -31,8 +32,11 @@
         internal ExtendedDataCollection(string persistedXml)
         {
             var doc = XDocument.Parse(persistedXml);
-            var extendedData  = doc.Element("extendedData");
+
+            var extendedData  = doc.Element("extendedData") ?? doc.Descendants("extendedData").FirstOrDefault();
+
             if (extendedData == null) return;
+ 
             foreach (var el in extendedData.Elements())
             {
                 SetValue(el.Name.LocalName, el.Value);                 

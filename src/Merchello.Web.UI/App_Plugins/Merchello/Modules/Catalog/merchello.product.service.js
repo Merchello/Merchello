@@ -11,11 +11,16 @@
         var prodservice = {
             possibleProductVariants: [],
 
-            // Builds the possible variants
-            // sets = array or arrays of choices
-            // set = current iteration
-            // permutation = array of variant combinations
-            permute: function(sets, set, permutation) {
+            /**
+            * @ngdoc method
+            * @name permute
+            * @description 
+            * Builds the possible variants
+            *    - sets = array or arrays of choices
+            *    - set = current iteration
+            *    - permutation = array of variant combinations
+            **/
+            permute: function (sets, set, permutation) {
                 for (var i = 0; i < sets[set].length; ++i) {
                     permutation[set] = sets[set][i];
 
@@ -191,14 +196,28 @@
                 return deferred.promise;
             },
 
-            updateProductWithVariants: function(product, tocreatevariants) {
+            /**
+            * @ngdoc method
+            * @name updateProduct
+            * @description Saves product changes and handles variant update or creation if new variants appear
+            **/
+            updateProductWithVariants: function (product, saveProduct) {
 
                 var deferred = $q.defer();
 
                 var promisesArray = [];
+                var shouldSaveProductFirst = true;
+
+                if (saveProduct == undefined) {
+                    shouldSaveProductFirst = true;
+                } else if (!saveProduct) {
+                    shouldSaveProductFirst = false;
+                }
 
                 // Save product
-                promisesArray.push(prodservice.save(product));
+                if (shouldSaveProductFirst) {
+                    promisesArray.push(prodservice.save(product));                    
+                }
 
                 // Create Variants
                 for (var v = 0; v < product.productVariants.length; v++) {
@@ -237,7 +256,12 @@
                 return deferred.promise;
             },
 
-            createVariantsFromOptions: function(product) {
+            /**
+            * @ngdoc method
+            * @name createVariantsFromOptions
+            * @description Used to build the variants permutations when a new option has been added or an option was deleted
+            **/
+            createVariantsFromOptions: function (product) {
                 var choiceSets = [];
                 var permutation = [];
                 prodservice.possibleProductVariants = [];
@@ -264,8 +288,12 @@
                 return product;
             },
 
-            // Used when duplicating variants with a new option
-            createVariantsFromDetachedOptionsList: function(product, options) {
+            /**
+            * @ngdoc method
+            * @name createVariantsFromDetachedOptionsList
+            * @description Used to build the variants permutations. Used when duplicating variants with a new option.
+            **/
+            createVariantsFromDetachedOptionsList: function (product, options) {
                 var choiceSets = [];
                 var permutation = [];
                 prodservice.possibleProductVariants = [];

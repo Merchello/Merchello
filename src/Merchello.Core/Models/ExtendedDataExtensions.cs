@@ -6,6 +6,7 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Web.UI;
     using System.Xml;
     using System.Xml.Linq;
     using Newtonsoft.Json;
@@ -119,13 +120,15 @@
             foreach (var element in xdoc.Descendants(Constants.ExtendedDataKeys.LineItem))
             {
                 
-            var dictionary = GetLineItemXmlValues(element.ToString());            
-            
+                var dictionary = GetLineItemXmlValues(element.ToString());
+
+                var extendData = new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData]);
+
                 var ctrValues = new object[]
                     {                        
                         new Guid(dictionary[Constants.ExtendedDataKeys.LineItemTfKey]),
-                        dictionary[Constants.ExtendedDataKeys.Sku],
                         dictionary[Constants.ExtendedDataKeys.Name],
+                        dictionary[Constants.ExtendedDataKeys.Sku],
                         int.Parse(dictionary[Constants.ExtendedDataKeys.Quantity]),
                         decimal.Parse(dictionary[Constants.ExtendedDataKeys.Price]),
                         new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData])

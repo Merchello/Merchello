@@ -26,8 +26,8 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 
 		#endregion
 
-		public PayPalPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProvider gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
-			: base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
+		public PayPalPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider)
+			: base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
 		{}
 
 		/// <summary>
@@ -53,14 +53,14 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 			var available = ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == gatewayResource.ServiceCode);
 			if (available == null) throw new InvalidOperationException("GatewayResource has already been assigned");
 
-			var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProvider.Key, name, description, available.ServiceCode);
+			var attempt = GatewayProviderService.CreatePaymentMethodWithKey(GatewayProviderSettings.Key, name, description, available.ServiceCode);
 
 
 			if (attempt.Success)
 			{
 				PaymentMethods = null;
 
-				return new PayPalPaymentGatewayMethod(GatewayProviderService, attempt.Result, GatewayProvider.ExtendedData);
+				return new PayPalPaymentGatewayMethod(GatewayProviderService, attempt.Result, GatewayProviderSettings.ExtendedData);
 			}
 
 			LogHelper.Error<PayPalPaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, available.ServiceCode), attempt.Exception);
@@ -79,7 +79,7 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 
 			if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-			return new PayPalPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProvider.ExtendedData);
+			return new PayPalPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProviderSettings.ExtendedData);
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 
 			if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-			return new PayPalPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProvider.ExtendedData);
+			return new PayPalPaymentGatewayMethod(GatewayProviderService, paymentMethod, GatewayProviderSettings.ExtendedData);
 		}
 	}
 }

@@ -108,12 +108,12 @@
                         if (rebuildVariants) {
                             notificationsService.info("rebuilding Variants", "");
                             $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
-                            $scope.toggleAllVariants(false);
 
-                            promise = merchelloProductService.updateProductWithVariants($scope.product);
+                            promise = merchelloProductService.updateProductWithVariants($scope.product, false);
                             promise.then(function(product2) {
                                 notificationsService.success("Product Saved 2", "");
                                 $scope.product = product2;
+                                $scope.toggleAllVariants(false);
                             });
                         }
 

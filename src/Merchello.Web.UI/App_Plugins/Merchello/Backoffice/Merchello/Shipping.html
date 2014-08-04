@@ -45,7 +45,7 @@
                         </div>
                         <!-- Shipping Provider -->
                         <div class="merchello-controls" data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider">
-                            <h5 class="row-fluid col-xs-5 span5">
+                            <h5 class="row-fluid col-xs-12 span12">
                                 {{shippingGatewayProvider.name}}
                                 <!-- ACTION: Add Shipping Method to Provider -->
                                 <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider)" class="pull-right"><i class="icon-add"></i> Add Method</a>
@@ -95,7 +95,7 @@
                     <h3>
                         Current Catalog
                         <!-- ACTION: Delete Catalog -->
-                        <a class="btn btn-default btn-trash pull-right"><i class="icon-trash"></i></a>
+                        <a class="btn btn-default btn-trash pull-right" data-ng-show="!selectedCatalog.isDefault" data-ng-click="deleteCatalog()"><i class="icon-trash"></i></a>
                         <!-- ACTION: Edit Catalog -->
                         <a class="btn btn-default btn-action pull-right" data-ng-click="addEditWarehouseCatalogDialogOpen(primaryWarehouse, selectedCatalog)"><i class="icon icon-edit"></i></a>
                     </h3>

@@ -119,7 +119,7 @@ namespace Merchello.Plugin.Payments.PayPal
 			return paymentDetails;
 		}
 
-		public IPaymentResult ComplitePayment(IInvoice invoice, IPayment payment, string token, string payerId)
+		public IPaymentResult CompletePayment(IInvoice invoice, IPayment payment, string token, string payerId)
 		{
 			var config = new Dictionary<string, string>
 					{

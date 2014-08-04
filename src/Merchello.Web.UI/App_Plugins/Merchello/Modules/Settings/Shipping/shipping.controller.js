@@ -282,7 +282,7 @@
          * @function
          * 
          * @description
-         * Helper method to set the primary warehouse on the scope and to make sure the idDefault flag on 
+         * Helper method to set the primary warehouse on the scope and to make sure the isDefault flag on 
          * all warehouses is set properly.  If a warehouse is passed in, then it will find that warehouse
          * and set it as the primary and set isDefault to true.  All other warehouses will have their 
          * isDefault flag reset to false.  If no warehouse is passed in (usually on loading data) then the 
@@ -314,7 +314,7 @@
          * @description
          * Helper method to change between the selected catalog on the screen. If catalogIndex is passed
          * in, then the function will select the catalog at that index if it exists. If it doesn't, then
-         * choose the first warehouse.
+         * choose the default warehouse.
          */
 		$scope.changeSelectedCatalog = function (catalogIndex) {
 		    if ((typeof catalogIndex) != 'undefined') {
@@ -324,7 +324,16 @@
 		            $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
 		        }
 		    } else {
-		        $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[0];
+		        var foundDefault = false;
+		        for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
+		            if ($scope.primaryWarehouse.warehouseCatalogs[i].isDefault == true) {
+		                $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[i];
+		                foundDefault = true;
+		            }
+		        }
+                if (!foundDefault) {
+                    $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[0];
+                }
 		    }
 		};
 
@@ -355,11 +364,10 @@
 	    $scope.doesWarehouseHaveAddress = function() {
 	        var result = true;
 	        var warehouse = $scope.primaryWarehouse;
-            if (warehouse.address1 === '' || warehouse.locality == '') {
+	        if (warehouse.address1 === '' || warehouse.locality === '' || warehouse.address1 === null || warehouse.locality === null) {
                 result = false;
             }
 	        return result;
-
 	    };
 
 	    //--------------------------------------------------------------------------------------
@@ -645,6 +653,44 @@
 
 	    /**
          * @ngdoc method
+         * @name deleteCatalog
+         * @function
+         * 
+         * @description
+         * Opens the delete catalog dialog via the Umbraco dialogService.
+         */
+	    $scope.deleteCatalog = function() {
+	        var dialogData = {};
+	        dialogData.name = $scope.selectedCatalog.name;
+	        dialogData.catalog = $scope.selectedCatalog;
+	        dialogService.open({
+	            template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+	            show: true,
+	            callback: $scope.deleteCatalogConfirm,
+	            dialogData: dialogData
+	        });
+	    };
+
+	    /**
+         * @ngdoc method
+         * @name deleteCatalogConfirm
+         * @function
+         * 
+         * @description
+         * Handles the delete after recieving the catalog to delete from the dialog view/controller
+         */
+	    $scope.deleteCatalogConfirm = function (data) {
+	        var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
+	        var promiseDeleteCatalog = merchelloWarehouseService.deleteWarehouseCatalog(selectedCatalog.key);
+	        promiseDeleteCatalog.then(function (responseCatalog) {
+	            $scope.loadWarehouses();
+	        }, function (reason) {
+	            notificationsService.error('Catalog Delete Failed', reason.message);
+	        });
+        }
+
+	    /**
+         * @ngdoc method
          * @name addCountry
          * @function
          * 
@@ -760,17 +806,20 @@
 		$scope.selectCatalogDialogOpen = function () {
 
 		    var availableCatalogs = [];
+		    var filter = availableCatalogs[0];
 		    for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
 		        var catalog = {
 		            id: i,
 		            name: $scope.primaryWarehouse.warehouseCatalogs[i].name
 		        };
 		        availableCatalogs.push(catalog);
-		    }
-
+		        if ($scope.primaryWarehouse.warehouseCatalogs[i].key == $scope.selectedCatalog.key) {
+		            filter = availableCatalogs[i];
+		        }
+            }
 		    var myDialogData = {
 		        availableCatalogs: availableCatalogs,
-		        filter: availableCatalogs[0]
+		        filter: filter
 		    };
 		    dialogService.open({
 		        template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.selectcatalog.html',
@@ -829,7 +878,8 @@
          * @function
          * 
          * @description
-         * Handles the add/edit after recieving the dialogData from the dialog view/controller
+         * Handles the add/edit after recieving the dialogData from the dialog view/controller.
+         * If the selectedCatalog is set to be default, ensure that original default is no longer default.
          */
 		$scope.warehouseCatalogDialogConfirm = function (data) {
 		    var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
@@ -840,10 +890,10 @@
             } else {
 		        promiseUpdateCatalog = merchelloWarehouseService.putWarehouseCatalog(selectedCatalog);
 		    }
-		    promiseUpdateCatalog.then(function (responseCatalog) {
+		    promiseUpdateCatalog.then(function(responseCatalog) {
 		        $scope.loadWarehouses();
-		    }, function (reason) {
-		        notificationService.error('Catalog Update Failed', reason.message);
+		    }, function(reason) {
+		        notificationsService.error('Catalog Update Failed', reason.message);
 		    });
 		};
 

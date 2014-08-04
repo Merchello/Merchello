@@ -135,7 +135,7 @@
         /// <param name="dbUnitOfWorkProvider">
         /// The database unit of work provider.
         /// </param>
-        internal ServiceContext(IDatabaseUnitOfWorkProvider dbUnitOfWorkProvider)
+        public ServiceContext(IDatabaseUnitOfWorkProvider dbUnitOfWorkProvider)
         {
             BuildServiceContext(dbUnitOfWorkProvider, new Lazy<RepositoryFactory>(() => new RepositoryFactory()));
         }

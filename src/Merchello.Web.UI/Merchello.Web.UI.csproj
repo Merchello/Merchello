@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderCustomer.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreateActionMenu.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\GatewayProviders.html" />
@@ -321,7 +322,6 @@
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectaddress.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.customer.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.gravatar.service.js" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\createOrder.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\selectcustomer.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Directives\order-create-customer.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Directives\ordercreate.directives.js" />
@@ -338,8 +338,8 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.selectcatalog.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-history.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-history-directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\shipping-history.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\shipping-history-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.shipment.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.payment.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\capture.payment.controller.js" />

@@ -1,4 +1,5 @@
 ﻿using Merchello.Core;
+using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
@@ -8,7 +9,8 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 	/// <summary>
 	/// Represents a PayPal Payment Method
 	/// </summary>
-	public class PayPalPaymentGatewayMethod : PaymentGatewayMethodBase
+    [GatewayMethodUi("PayPalPayment")]
+    public class PayPalPaymentGatewayMethod : PaymentGatewayMethodBase
 	{
 		private readonly PayPalPaymentProcessor _processor;
 
@@ -46,12 +48,12 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 			var token = args["token"];
 			var payerId = args["PayerID"];
 
-			var result = _processor.ComplitePayment(invoice, payment, token, payerId);
+			var result = _processor.CompletePayment(invoice, payment, token, payerId);
 
 			GatewayProviderService.Save(payment);
 
 			// TODO
-			GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Cash payment", payment.Amount);
+			GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal Payment", payment.Amount);
 
 			/*
 			if (!result.Payment.Success)

@@ -42,8 +42,10 @@
 		<key alias="hasDigitalDownload">This variant has digital goods</key>
 		<key alias="hasOptions">This variant has options (like size or color)</key>
 		<key alias="isTaxable">This variant is taxable</key>
-		<key alias="isShippable">This variant is shippable</key>
-		<key alias="noProduct">You have no products.</key>
+    <key alias="isShippable">This variant is shippable</key>
+    <key alias="isOnSale">This variant is on sale</key>
+    <key alias="isAvailable">This variant is available to purchase</key>
+    <key alias="noProduct">You have no products.</key>
 		<key alias="newProductPrompt">How about creating one now? Simply press the New Product button.</key>
 		<key alias="limitSelect">Number of products to display</key>
 		<key alias="mustUniqueSku">Must have a unique SKU</key>

@@ -168,7 +168,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            var shipment = shipmentLineItem.ExtendedData.GetShipment<InvoiceLineItem>();
+            var shipment = shipmentLineItem.ExtendedData.GetShipment<OrderLineItem>();
             if (shipment == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));

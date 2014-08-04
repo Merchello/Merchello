@@ -1,17 +1,142 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
 
+    using Merchello.Core.Models.EntityBase;
+
+    /// <summary>
+    /// Represents a shipment.
+    /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
     [KnownType(typeof(LineItemCollection))]
     internal class Shipment : VersionTaggedEntity, IShipment
     {
+        #region Fields
+
+        /// <summary>
+        /// The shipped date selector.
+        /// </summary>
+        private static readonly PropertyInfo ShippedDateSelector = ExpressionHelper.GetPropertyInfo<Shipment, DateTime>(x => x.ShippedDate);
+
+        /// <summary>
+        /// The ship method key selector.
+        /// </summary>
+        private static readonly PropertyInfo ShipMethodKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
+
+        /// <summary>
+        /// The from organization selector.
+        /// </summary>
+        private static readonly PropertyInfo FromOrganizationSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromOrganization);
+
+        /// <summary>
+        /// The from name selector.
+        /// </summary>
+        private static readonly PropertyInfo FromNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromName);
+
+        /// <summary>
+        /// The from address 1 selector.
+        /// </summary>
+        private static readonly PropertyInfo FromAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress1);
+
+        /// <summary>
+        /// The from address 2 selector.
+        /// </summary>
+        private static readonly PropertyInfo FromAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress2);
+
+        /// <summary>
+        /// The from locality selector.
+        /// </summary>
+        private static readonly PropertyInfo FromLocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromLocality);
+
+        /// <summary>
+        /// The from region selector.
+        /// </summary>
+        private static readonly PropertyInfo FromRegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromRegion);
+
+        /// <summary>
+        /// The from postal code selector.
+        /// </summary>
+        private static readonly PropertyInfo FromPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromPostalCode);
+
+        /// <summary>
+        /// The from country code selector.
+        /// </summary>
+        private static readonly PropertyInfo FromCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromCountryCode);
+
+        /// <summary>
+        /// The from is commercial selector.
+        /// </summary>
+        private static readonly PropertyInfo FromIsCommercialSelector = ExpressionHelper.GetPropertyInfo<Shipment, bool>(x => x.FromIsCommercial);
+
+        /// <summary>
+        /// The to organization selector.
+        /// </summary>
+        private static readonly PropertyInfo ToOrganizationSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToOrganization);
+
+        /// <summary>
+        /// The to name selector.
+        /// </summary>
+        private static readonly PropertyInfo ToNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToName);
+
+        /// <summary>
+        /// The to address 1 selector.
+        /// </summary>
+        private static readonly PropertyInfo ToAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress1);
+
+        /// <summary>
+        /// The to address 2 selector.
+        /// </summary>
+        private static readonly PropertyInfo ToAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress2);
+
+        /// <summary>
+        /// The to locality selector.
+        /// </summary>
+        private static readonly PropertyInfo ToLocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToLocality);
+
+        /// <summary>
+        /// The to region selector.
+        /// </summary>
+        private static readonly PropertyInfo ToRegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToRegion);
+
+        /// <summary>
+        /// The to postal code selector.
+        /// </summary>
+        private static readonly PropertyInfo ToPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToPostalCode);
+
+        /// <summary>
+        /// The to country code selector.
+        /// </summary>
+        private static readonly PropertyInfo ToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToCountryCode);
+
+        /// <summary>
+        /// The to is commercial selector.
+        /// </summary>
+        private static readonly PropertyInfo ToIsCommercialSelector = ExpressionHelper.GetPropertyInfo<Shipment, bool>(x => x.ToIsCommercial);
+
+        /// <summary>
+        /// The phone selector.
+        /// </summary>
+        private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);
+
+        /// <summary>
+        /// The email selector.
+        /// </summary>
+        private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Email);
+
+        /// <summary>
+        /// The tracking code selector.
+        /// </summary>
+        private static readonly PropertyInfo TrackingCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.TrackingCode);
+
+        /// <summary>
+        /// The carrier selector.
+        /// </summary>
+        private static readonly PropertyInfo CarrierSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Carrier);
+
+
         private DateTime _shippedDate;
         private string _fromOrganization;
         private string _fromName;
@@ -38,14 +163,42 @@ namespace Merchello.Core.Models
         private string _trackingCode;
         private LineItemCollection _items;
 
-        internal Shipment()
-            :this(new Address(), new Address(), new LineItemCollection())
-        {}
+        #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Shipment"/> class.
+        /// </summary>
+        internal Shipment()
+            : this(new Address(), new Address(), new LineItemCollection())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Shipment"/> class.
+        /// </summary>
+        /// <param name="origin">
+        /// The origin.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
         internal Shipment(IAddress origin, IAddress destination)
             : this(origin, destination, new LineItemCollection())
-        { }
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Shipment"/> class.
+        /// </summary>
+        /// <param name="origin">
+        /// The origin.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
         internal Shipment(IAddress origin, IAddress destination, LineItemCollection items)
         {
             Mandate.ParameterNotNull(origin, "origin");
@@ -78,268 +231,343 @@ namespace Merchello.Core.Models
             _items = items;
         }
 
-        private static readonly PropertyInfo ShippedDateSelector = ExpressionHelper.GetPropertyInfo<Shipment, DateTime>(x => x.ShippedDate);
-        private static readonly PropertyInfo ShipMethodKeySelector = ExpressionHelper.GetPropertyInfo<Shipment, Guid?>(x => x.ShipMethodKey);
-        private static readonly PropertyInfo FromOrganizationSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromOrganization); 
-        private static readonly PropertyInfo FromNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromName); 
-        private static readonly PropertyInfo FromAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress1);
-        private static readonly PropertyInfo FromAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromAddress2);
-        private static readonly PropertyInfo FromLocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromLocality);
-        private static readonly PropertyInfo FromRegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromRegion);
-        private static readonly PropertyInfo FromPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromPostalCode);
-        private static readonly PropertyInfo FromCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.FromCountryCode);
-        private static readonly PropertyInfo FromIsCommercialSelector = ExpressionHelper.GetPropertyInfo<Shipment, bool>(x => x.FromIsCommercial);
-        private static readonly PropertyInfo ToOrganizationSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToOrganization); 
-        private static readonly PropertyInfo ToNameSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToName); 
-        private static readonly PropertyInfo ToAddress1Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress1);  
-        private static readonly PropertyInfo ToAddress2Selector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToAddress2);  
-        private static readonly PropertyInfo ToLocalitySelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToLocality);  
-        private static readonly PropertyInfo ToRegionSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToRegion);  
-        private static readonly PropertyInfo ToPostalCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToPostalCode);  
-        private static readonly PropertyInfo ToCountryCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ToCountryCode);
-        private static readonly PropertyInfo ToIsCommercialSelector = ExpressionHelper.GetPropertyInfo<Shipment, bool>(x => x.ToIsCommercial);  
-        private static readonly PropertyInfo PhoneSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Phone);
-        private static readonly PropertyInfo EmailSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Email);
-        private static readonly PropertyInfo TrackingCodeSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.TrackingCode);
-        private static readonly PropertyInfo CarrierSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Carrier);
-
         /// <summary>
-        /// The date the shipment was shipped
+        /// Gets or sets the date the shipment was shipped
         /// </summary>
         [DataMember]
         public DateTime ShippedDate
         {
-            get { return _shippedDate; }
+            get
+            {
+                return _shippedDate;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                        {
                     _shippedDate = value;
                     return _shippedDate;
-                }, _shippedDate, ShippedDateSelector);
+                }, 
+                _shippedDate, 
+                ShippedDateSelector);
             }
         }
 
         /// <summary>
-        /// The organization or company name associated with the address
+        /// Gets or sets the organization or company name associated with the address
         /// </summary>
         [DataMember]
         public string FromOrganization
         {
-            get { return _fromOrganization; }
+            get
+            {
+                return _fromOrganization;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromOrganization = value;
                     return _fromOrganization;
-                }, _fromOrganization, FromOrganizationSelector);
+                }, 
+                _fromOrganization, 
+                FromOrganizationSelector);
             }
         }
 
         /// <summary>
-        /// The name of origin address's name associated with the Shipment
+        /// Gets or sets the name of origin address's name associated with the Shipment
         /// </summary>
         [DataMember]
         public string FromName
         {
-            get { return _fromName; }
+            get
+            {
+                return _fromName;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromName = value;
                     return _fromName;
-                }, _fromName, FromNameSelector);
+                }, 
+                _fromName, 
+                FromNameSelector);
             }
         }
 
 
         /// <summary>
-        /// The first line of the shipping address associated with the Shipment
+        /// Gets or sets the first line of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string FromAddress1
         {
-            get { return _fromAddress1; }
+            get
+            {
+                return _fromAddress1;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromAddress1 = value;
                     return _fromAddress1;
-                }, _fromAddress1, FromAddress1Selector);
+                }, 
+                _fromAddress1, 
+                FromAddress1Selector);
             }
         }
 
         /// <summary>
-        /// The second line of the shipping address associated with the Shipment
+        /// Gets or sets the second line of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string FromAddress2
         {
-            get { return _fromAddress2; }
+            get
+            {
+                return _fromAddress2;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromAddress2 = value;
                     return _fromAddress2;
-                }, _fromAddress2, FromAddress2Selector);
+                }, 
+                _fromAddress2, 
+                FromAddress2Selector);
             }
         }
 
         /// <summary>
-        /// The locality or city of the shipping address associated with the Shipment
+        /// Gets or sets the locality or city of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string FromLocality
         {
-            get { return _fromLocality; }
+            get
+            {
+                return _fromLocality;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromLocality = value;
                     return _toLocality;
-                }, _fromLocality, FromLocalitySelector);
+                }, 
+                _fromLocality, 
+                FromLocalitySelector);
             }
         }
 
         /// <summary>
-        /// The region, state, or province of the shipping address associated with the Shipment
+        /// Gets or sets the region, state, or province of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string FromRegion
         {
-            get { return _fromRegion; }
+            get
+            {
+                return _fromRegion;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromRegion = value;
                     return _fromRegion;
-                }, _toRegion, FromRegionSelector);
+                }, 
+                _toRegion, 
+                FromRegionSelector);
             }
         }
 
         /// <summary>
-        /// The postal or zip code of the shipping address associated with the Shipment
+        /// Gets or sets the postal or zip code of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string FromPostalCode
         {
-            get { return _fromPostalCode; }
+            get
+            {
+                return _fromPostalCode;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromPostalCode = value;
                     return _fromPostalCode;
-                }, _fromPostalCode, FromPostalCodeSelector);
+                }, 
+                _fromPostalCode, 
+                FromPostalCodeSelector);
             }
         }
 
         /// <summary>
-        /// The country code of the shipping address associated with the Shipment
+        /// Gets or sets the country code of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string FromCountryCode
         {
-            get { return _fromCountryCode; }
+            get
+            {
+                return _fromCountryCode;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromCountryCode = value;
                     return _fromCountryCode;
-                }, _fromCountryCode, FromCountryCodeSelector);
+                }, 
+                _fromCountryCode, 
+                FromCountryCodeSelector);
             }
         }
 
 
         /// <summary>
-        /// True/false indicating whether or not the origin's address is a commercial address. Used by some shipping providers.
+        /// Gets or sets a value indicating whether or not the origin's address is a commercial address. Used by some shipping providers.
         /// </summary>
         [DataMember]
-        public bool FromIsCommercial {
-            get { return _fromIsCommercial; }
+        public bool FromIsCommercial 
+        {
+            get
+            {
+                return _fromIsCommercial;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromIsCommercial = value;
                     return _fromIsCommercial;
-                }, _fromIsCommercial, FromIsCommercialSelector);
+                }, 
+                _fromIsCommercial, 
+                FromIsCommercialSelector);
             }
         }
 
         /// <summary>
-        /// The organization or company name associated with the address
+        /// Gets or sets the organization or company name associated with the address
         /// </summary>
         [DataMember]
-        public string ToOrganization {
-            get { return _toOrganization; }
+        public string ToOrganization 
+        {
+            get
+            {
+                return _toOrganization;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _toOrganization = value;
                     return _toOrganization;
-                }, _toOrganization, ToOrganizationSelector);
+                }, 
+                _toOrganization, 
+                ToOrganizationSelector);
             }
         }
 
 
         /// <summary>
-        /// The name of destination address associated with the Shipment
+        /// Gets or sets the name of destination address associated with the Shipment
         /// </summary>
         [DataMember]
         public string ToName
         {
-            get { return _toName; }
+            get
+            {
+                return _toName;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _toName = value;
                     return _toName;
-                }, _toName, ToNameSelector);
+                }, 
+                _toName, 
+                ToNameSelector);
             }
         }
 
         /// <summary>
-        /// The first line of the shipping address associated with the Shipment
+        /// Gets or sets the first line of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string ToAddress1
         {
-            get { return _toAddress1; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _toAddress1 = value;
-                        return _toAddress1;
-                    }, _toAddress1, ToAddress1Selector); 
-                }
+            get
+            {
+                return _toAddress1;
+            }
+
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                {
+                    _toAddress1 = value;
+                    return _toAddress1;
+                }, 
+                _toAddress1, 
+                ToAddress1Selector); 
+            }
         }
     
         /// <summary>
-        /// The second line of the shipping address associated with the Shipment
+        /// Gets or sets the second line of the shipping address associated with the Shipment
         /// </summary>
         [DataMember]
         public string ToAddress2
         {
-            get { return _toAddress2; }
-                set 
-                { 
-                    SetPropertyValueAndDetectChanges(o =>
-                    {
-                        _toAddress2 = value;
-                        return _toAddress2;
-                    }, _toAddress2, ToAddress2Selector); 
-                }
+            get
+            {
+                return _toAddress2;
+            }
+
+            set 
+            { 
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                {
+                    _toAddress2 = value;
+                    return _toAddress2;
+                }, 
+                _toAddress2, 
+                ToAddress2Selector); 
+            }
         }
     
         /// <summary>
