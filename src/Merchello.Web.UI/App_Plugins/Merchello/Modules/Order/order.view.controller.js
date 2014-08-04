@@ -10,6 +10,14 @@
      */
     controllers.OrderViewController = function ($scope, $routeParams, assetsService, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
 
+        /**
+         * @ngdoc method
+         * @name capturePayment
+         * @function
+         * 
+         * @description
+         * Open the capture shipment dialog.
+         */
         $scope.capturePayment = function () {
             dialogService.open({
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/capture.payment.html',
@@ -19,6 +27,14 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name capturePaymentDialogConfirm
+         * @function
+         * 
+         * @description
+         * Capture the payment after the confirmation dialog was passed through.
+         */
         $scope.capturePaymentDialogConfirm = function (paymentRequest) {
             var promiseSave = merchelloPaymentService.capturePayment(paymentRequest);
             promiseSave.then(function (payment) {
@@ -29,31 +45,6 @@
                 notificationsService.error("Payment Capture Failed", reason.message);
             });
 
-        };
-
-        $scope.fulfillShipment = function () {
-            dialogService.open({
-                template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
-                show: true,
-                callback: $scope.fulfillShipmentDialogConfirm,
-                dialogData: $scope.invoice.orders[0]    // todo: pull from current order when multiple orders is avavilable
-            });
-        };
-
-        $scope.fulfillShipmentDialogConfirm = function (data) {
-            var promiseNew = merchelloShipmentService.newShipment(data);
-            promiseNew.then(function (shipment) {
-                shipment.trackingCode = data.trackingNumber;
-                var promiseSave = merchelloShipmentService.putShipment(shipment, data);
-                promiseSave.then(function () {
-                    notificationsService.success("Shipment Created");
-                    $scope.loadInvoice(data.invoiceKey);
-                }, function (reason) {
-                    notificationsService.error("Save Shipment Failed", reason.message);
-                });
-            }, function (reason) {
-                notificationsService.error("New Shipment Failed", reason.message);
-            });
         };
 
         /**
@@ -80,8 +71,9 @@
          */
 	    $scope.loadInvoice = function (id) {
 	        var promise = merchelloInvoiceService.getByKey(id);
-	        promise.then(function (invoice) {
+	        promise.then(function (invoice) { 
 	            $scope.invoice = new merchello.Models.Invoice(invoice);
+	            console.info($scope.invoice);
 	            _.each($scope.invoice.items, function (lineItem) {
 	                if (lineItem.lineItemTfKey) {
 	                    var matchedTypeField = _.find($scope.typeFields, function (type) {
@@ -213,6 +205,85 @@
 	            }
 	        }, function (reason) {
 	            notificationsService.error("TypeFields Load Failed", reason.message);
+	        });
+	    };
+
+        /**
+         * @ngdoc method
+         * @name openDeleteInvoiceDialog
+         * @function
+         * 
+         * @description
+         * Open the delete payment dialog.
+         */
+        $scope.openDeleteInvoiceDialog = function() {
+            var dialogData = {};
+            dialogData.name = 'Invoice #' + $scope.invoice.invoiceNumber;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.processDeleteInvoiceDialog,
+                dialogData: dialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name openFulfillPaymentDialog
+         * @function
+         * 
+         * @description
+         * Open the fufill shipment dialog.
+         */
+	    $scope.openFulfillPaymentDialog = function () {
+	        dialogService.open({
+	            template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
+	            show: true,
+	            callback: $scope.processFulfillPaymentDialog,
+	            dialogData: $scope.invoice.orders[0]    // todo: pull from current order when multiple orders is avavilable
+	        });
+	    };
+
+        /**
+         * @ngdoc method
+         * @name processDeleteInvoiceDialog
+         * @function
+         * 
+         * @description
+         * Delete the invoice.
+         */
+	    $scope.processDeleteInvoiceDialog = function () {
+	        console.info($scope.invoice.key);
+	        var promiseDeleteInvoice = merchelloInvoiceService.deleteInvoice($scope.invoice.key);
+	        promiseDeleteInvoice.then(function (response) {
+	            notificationsService.success('Invoice Deleted');
+	            window.location.href = '#/merchello/merchello/OrderList/manage';
+	        }, function(reason) {
+	            notificationsService.error('Failed to Delete Invoice', reason.message);
+	        });
+	    };
+
+        /**
+         * @ngdoc method
+         * @name processFulfillPaymentDialog
+         * @function
+         * 
+         * @description
+         * Process the fulfill shipment functionality on callback from the dialog service.
+         */
+	    $scope.processFulfillPaymentDialog = function (data) {
+	        var promiseNewShipment = merchelloShipmentService.newShipment(data);
+	        promiseNewShipment.then(function (shipment) {
+	            shipment.trackingCode = data.trackingNumber;
+	            var promiseSave = merchelloShipmentService.putShipment(shipment, data);
+	            promiseSave.then(function () {
+	                notificationsService.success("Shipment Created");
+	                $scope.loadInvoice(data.invoiceKey);
+	            }, function (reason) {
+	                notificationsService.error("Save Shipment Failed", reason.message);
+	            });
+	        }, function (reason) {
+	            notificationsService.error("New Shipment Failed", reason.message);
 	        });
 	    };
 

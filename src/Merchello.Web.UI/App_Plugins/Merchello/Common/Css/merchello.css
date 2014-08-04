@@ -197,6 +197,8 @@
     background-color: #e0f2dc; }
   .merchello-panel-body .table .text-right {
     text-align: right; }
+  .merchello-panel-body .table .text-center {
+    text-align: center; }
   .merchello-panel-body .table th {
     border-top: none; }
   .merchello-panel-body table.sortable th {

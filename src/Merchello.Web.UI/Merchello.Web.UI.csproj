@@ -338,8 +338,8 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.selectcatalog.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-history.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-history-directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\shipping-history.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\shipping-history-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.shipment.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.payment.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\capture.payment.controller.js" />

@@ -212,7 +212,7 @@
         /// <returns>
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
-        [AcceptVerbs("POST", "DELETE")]
+        [AcceptVerbs("GET", "POST", "DELETE")]
         public HttpResponseMessage DeleteInvoice(Guid id)
         {
             var invoiceToDelete = _invoiceService.GetByKey(id);
