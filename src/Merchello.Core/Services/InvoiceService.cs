@@ -171,15 +171,40 @@
         /// <returns><see cref="IInvoice"/></returns>
         public IInvoice CreateInvoice(Guid invoiceStatusKey, bool raiseEvents = true)
         {
+            return CreateInvoice(invoiceStatusKey, 0, raiseEvents);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IInvoice"/> with an assigned invoice number without saving it to the database
+        /// </summary>
+        /// <param name="invoiceStatusKey">
+        /// The <see cref="IInvoiceStatus"/> key
+        /// </param>
+        /// <param name="invoiceNumber">
+        /// The invoice Number
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// <see cref="IInvoice"/>
+        /// </returns>
+        /// <remarks>
+        /// Invoice number must be a positive integer value or zero
+        /// </remarks>
+        public IInvoice CreateInvoice(Guid invoiceStatusKey, int invoiceNumber, bool raiseEvents = true)
+        {
             Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
+            Mandate.ParameterCondition(invoiceNumber >= 0, "invoiceNumber must be greater than or equal to 0");
 
             var status = GetInvoiceStatusByKey(invoiceStatusKey);
 
             var invoice = new Invoice(status)
-                {
-                    VersionKey = Guid.NewGuid(),
-                    InvoiceDate = DateTime.Now
-                };
+            {
+                VersionKey = Guid.NewGuid(),
+                InvoiceNumber = invoiceNumber,
+                InvoiceDate = DateTime.Now
+            };
 
             if (raiseEvents)
                 if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IInvoice>(invoice), this))

@@ -21,6 +21,26 @@
         IInvoice CreateInvoice(Guid invoiceStatusKey, bool raiseEvents = true);
 
         /// <summary>
+        /// Creates a <see cref="IInvoice"/> with an assigned invoice number without saving it to the database
+        /// </summary>
+        /// <param name="invoiceStatusKey">
+        /// The <see cref="IInvoiceStatus"/> key
+        /// </param>
+        /// <param name="invoiceNumber">
+        /// The invoice Number
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// <see cref="IInvoice"/>
+        /// </returns>
+        /// <remarks>
+        /// Invoice number must be a positive integer value or zero
+        /// </remarks>
+        IInvoice CreateInvoice(Guid invoiceStatusKey, int invoiceNumber, bool raiseEvents = true);
+
+        /// <summary>
         /// Saves a single <see cref="IInvoice"/>
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/> to save</param>
