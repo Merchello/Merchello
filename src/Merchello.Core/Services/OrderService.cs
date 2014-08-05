@@ -52,21 +52,49 @@ namespace Merchello.Core.Services
         /// Creates a <see cref="IOrder"/> without saving it to the database
         /// </summary>
         /// <param name="orderStatusKey">The <see cref="IOrderStatus"/> key</param>
-        /// <param name="invoiceKey"></param>
+        /// <param name="invoiceKey">The invoice key</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        /// <returns><see cref="IOrder"/></returns>
+        /// <returns>The <see cref="IOrder"/></returns>
         public IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true)
+        {
+            
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IOrder"/> without saving it to the database
+        /// </summary>
+        /// <param name="orderStatusKey">
+        /// The <see cref="IOrderStatus"/> key
+        /// </param>
+        /// <param name="invoiceKey">
+        /// The invoice key
+        /// </param>
+        /// <param name="orderNumber">
+        /// The order Number.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOrder"/>.
+        /// </returns>
+        /// <remarks>
+        /// Order number must be a positive integer value or zero
+        /// </remarks>
+        public IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, int orderNumber, bool raiseEvents = true)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
             Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Mandate.ParameterCondition(orderNumber >= 0, "orderNumber must be greater than or equal to 0");
 
             var status = GetOrderStatusByKey(orderStatusKey);
 
             var order = new Order(status, invoiceKey)
-                {
-                    VersionKey = Guid.NewGuid(),
-                    OrderDate = DateTime.Now
-                };
+            {
+                VersionKey = Guid.NewGuid(),
+                OrderNumber = orderNumber,
+                OrderDate = DateTime.Now
+            };
 
             if (raiseEvents)
                 if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IOrder>(order), this))
