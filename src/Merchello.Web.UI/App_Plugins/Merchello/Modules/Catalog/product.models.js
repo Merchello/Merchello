@@ -240,7 +240,10 @@
             self.attributes = [];
 
             for (var i = 0; i < product.catalogInventories.length; i++) {
-                self.catalogInventories.push(new merchello.Models.CatalogInventory(product.catalogInventories[i]));
+                var foundInventory = _.where(self.catalogInventories, { "catalogKey": product.catalogInventories[i].catalogKey });
+                if (foundInventory.length == 0) {
+                    self.catalogInventories.push(new merchello.Models.CatalogInventory(product.catalogInventories[i]));                  
+                }
             }
         };
 
@@ -445,6 +448,10 @@
 
         // Helper to add a variant to this product
         self.addBlankOption = function () {
+
+            if (self.productOptions == undefined) {
+                self.productOptions = [];
+            }
 
             var newOption = new merchello.Models.ProductOption();
             newOption.sortOrder = self.productOptions.length + 1;

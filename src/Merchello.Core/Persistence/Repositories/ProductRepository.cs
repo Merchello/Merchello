@@ -46,16 +46,6 @@ namespace Merchello.Core.Persistence.Repositories
             var factory = new ProductFactory(productAttributeCollection, inventoryCollection, GetProductOptionCollection(dto.Key), GetProductVariantCollection(dto.Key));
             var product = factory.BuildEntity(dto);
 
-            // TODO - inventory
-            //((ProductVariant) ((Product) product).MasterVariant).CatalogInventoryInventory =
-            //    ((ProductVariantRepository) _productVariantRepository).GetCategoryInventoryCollection(
-            //        ((Product) product).ProductVariantKey);
-
-            //// Build the list of options
-            //product.ProductOptions = GetProductOptionCollection(product.Key);
-
-            //// Build the list of product variants
-            //product.ProductVariants = GetProductVariantCollection(product.Key);
 
             product.ResetDirtyProperties();
 
@@ -172,9 +162,7 @@ namespace Merchello.Core.Persistence.Repositories
             // synchronize the inventory
             ((ProductVariantRepository) _productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
 
-            entity.ResetDirtyProperties();
-
-         
+            entity.ResetDirtyProperties();         
         }
 
         protected override void PersistDeletedItem(IProduct entity)
@@ -256,10 +244,10 @@ namespace Merchello.Core.Persistence.Repositories
         }
 
         private void SaveProductOptions(IProduct product)
-        {
-            if (!product.DefinesOptions) return;
-
+        {            
             var existing = GetProductOptionCollection(product.Key);
+            if (!product.DefinesOptions && !existing.Any()) return;
+
             //ensure all ids are in the new list
             var resetSorts = false;
             foreach (var ex in existing)

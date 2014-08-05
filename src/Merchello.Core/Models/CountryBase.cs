@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
     /// <summary>
     /// Represents a shipping or tax region (country)
     /// </summary>
@@ -13,27 +15,65 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public abstract class CountryBase : Entity, ICountryBase
     {
+        /// <summary>
+        /// The country code.
+        /// </summary>
         private readonly string _countryCode;
+
+        /// <summary>
+        /// The <see cref="RegionInfo"/>.
+        /// </summary>
         private readonly RegionInfo _regionInfo;
+
+        /// <summary>
+        /// The provinces.
+        /// </summary>
         private readonly IEnumerable<IProvince> _provinces;
-        
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CountryBase"/> class.
+        /// </summary>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
+        /// <param name="provinces">
+        /// The provinces.
+        /// </param>
         protected CountryBase(string countryCode, IEnumerable<IProvince> provinces)
-            : this(countryCode, countryCode.Equals(Constants.CountryCodes.EverywhereElse) ? null : new RegionInfo(countryCode), provinces)
-        { }
-
-        protected CountryBase(string countryCode, RegionInfo regionInfo, IEnumerable<IProvince> provinces)
+            : this(
+                countryCode,
+                countryCode.Equals(Constants.CountryCodes.EverywhereElse) ? null : new RegionInfo(countryCode),
+                provinces)
         {
-            if(!countryCode.Equals(Constants.CountryCodes.EverywhereElse)) Mandate.ParameterNotNull(regionInfo, "regionInfo");
-            Mandate.ParameterNotNull(provinces, "provinces");
-
-            _countryCode = countryCode;
-            if (!countryCode.Equals(Constants.CountryCodes.EverywhereElse))  _regionInfo = regionInfo;
-            _provinces = provinces;
         }
 
         /// <summary>
-        /// The two letter ISO Region code
+        /// Initializes a new instance of the <see cref="CountryBase"/> class.
+        /// </summary>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
+        /// <param name="regionInfo">
+        /// The region info.
+        /// </param>
+        /// <param name="provinces">
+        /// The provinces.
+        /// </param>
+        protected CountryBase(string countryCode, RegionInfo regionInfo, IEnumerable<IProvince> provinces)
+        {
+            if (!countryCode.Equals(Constants.CountryCodes.EverywhereElse)) Mandate.ParameterNotNull(regionInfo, "regionInfo");
+            
+            var proviceArray = provinces as IProvince[] ?? provinces.ToArray();
+
+            Mandate.ParameterNotNull(proviceArray, "provinces");
+
+            _countryCode = countryCode;
+            if (!countryCode.Equals(Constants.CountryCodes.EverywhereElse))  _regionInfo = regionInfo;
+            _provinces = proviceArray;
+        }
+
+        /// <summary>
+        /// Gets the two letter ISO Region code
         /// </summary>
         [DataMember]
         public string CountryCode 
@@ -42,10 +82,11 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The English name associated with the region
+        /// Gets the English name associated with the region
         /// </summary>
         [DataMember]
-        public string Name {
+        public string Name 
+        {
             get
             {
                 return _countryCode.Equals(Constants.CountryCodes.EverywhereElse) ? "Everywhere Else" : _regionInfo.EnglishName;
@@ -53,22 +94,29 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The <see cref="System.Globalization.RegionInfo"/> associated with the Region
+        /// Gets the <see cref="System.Globalization.RegionInfo"/> associated with the Region
         /// </summary>
         [DataMember]
-        public RegionInfo RegionInfo { get { return _regionInfo; } }
+        public RegionInfo RegionInfo
+        {
+            get
+            {
+                return _regionInfo;
+            }
+        }
 
         /// <summary>
-        /// The label associated with the province list.  (eg. for US this would be 'States')
+        /// Gets the label associated with the province list.  (ex. for US this would be 'States')
         /// </summary>
         [DataMember]
         public string ProvinceLabel { get; internal set; }
 
         /// <summary>
-        /// Provinces (if any) associated with the country
+        /// Gets the Provinces (if any) associated with the country
         /// </summary>
         [IgnoreDataMember]
-        public IEnumerable<IProvince> Provinces {
+        public IEnumerable<IProvince> Provinces 
+        {
             get { return _provinces; }
         }
     }

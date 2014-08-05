@@ -1,21 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Chains;
-using Umbraco.Core;
-
-namespace Merchello.Core.Builders
+﻿namespace Merchello.Core.Builders
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Chains;
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents the build chain base class
     /// </summary>
     /// <typeparam name="T"><see cref="Attempt"/> of T</typeparam>
     public abstract class BuildChainBase<T> : IBuilderChain<T>
     {
+        /// <summary>
+        /// The _task handlers.
+        /// </summary>
         private readonly List<AttemptChainTaskHandler<T>> _taskHandlers = new List<AttemptChainTaskHandler<T>>();
 
         /// <summary>
         /// Constructs the task chain
         /// </summary>
+        /// <param name="chainConfigurationAlias">
+        /// The chain Configuration Alias.
+        /// </param>
         protected virtual void ResolveChain(string chainConfigurationAlias)
         {            
             // Types from the merchello.config file
@@ -28,8 +34,7 @@ namespace Merchello.Core.Builders
                 typeName => new AttemptChainTaskHandler<T>(
                     ActivatorHelper.CreateInstance<AttemptChainTaskBase<T>>(
                         typeName, 
-                        ConstructorArgumentValues.ToArray()).Result
-                    )));
+                        ConstructorArgumentValues.ToArray()).Result)));
 
             // register the next task for each link (these are linear chains)
             foreach (var taskHandler in TaskHandlers.Where(task => TaskHandlers.IndexOf(task) != TaskHandlers.IndexOf(TaskHandlers.Last())))

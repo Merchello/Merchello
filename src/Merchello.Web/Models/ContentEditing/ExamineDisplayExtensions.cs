@@ -1,20 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Examine;
-using Merchello.Core.Models;
-using Merchello.Examine;
-using Newtonsoft.Json;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Linq;
+
+    using global::Examine;
+
+    using Merchello.Core.Models;
+    using Merchello.Examine;
+
+    using Newtonsoft.Json;
+
     /// <summary>
-    /// Extension methods to map examine (lucene) documents to respective "Display" object classes
+    /// Extension methods to map examine (Lucene) documents to respective "Display" object classes
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     internal static class ExamineDisplayExtensions
     {
-        
+        /// <summary>
+        /// The to product display.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
         internal static ProductDisplay ToProductDisplay(this SearchResult result)
         {
             // this should be the master variant
@@ -35,6 +48,12 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Converts Lucene cached ProductVariant into <see cref="ProductVariantDisplay"/>
         /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
         internal static ProductVariantDisplay ToProductVariantDisplay(this SearchResult result)
         {
             var pvd = new ProductVariantDisplay()
@@ -69,6 +88,12 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Converts a Lucene cached invoice into <see cref="InvoiceDisplay"/>
         /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="InvoiceDisplay"/>.
+        /// </returns>
         internal static InvoiceDisplay ToInvoiceDisplay(this SearchResult result)
         {
             var invoice = new InvoiceDisplay()
@@ -93,8 +118,7 @@ namespace Merchello.Web.Models.ContentEditing
                     Archived = FieldAsBoolean(result.Fields["archived"]),
                     Total = FieldAsDecimal(result, "total"),
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
-                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),
-                    
+                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
                 };
 
             invoice.Orders = OrderQuery.GetByInvoiceKey(invoice.Key);
@@ -105,6 +129,12 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Converts a Lucene cached order into <see cref="OrderDisplay"/>
         /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="OrderDisplay"/>.
+        /// </returns>
         internal static OrderDisplay ToOrderDisplay(this SearchResult result)
         {
             return new OrderDisplay()
@@ -122,23 +152,74 @@ namespace Merchello.Web.Models.ContentEditing
                 };
         }
 
+        /// <summary>
+        /// Converts a Lucene index result into a <see cref="CustomerDisplay"/>.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerDisplay"/>.
+        /// </returns>
+        internal static CustomerDisplay ToCustomerDisplay(this SearchResult result)
+        {
+            return new CustomerDisplay()
+            {
+                Key = FieldAsGuid(result, "customerKey"),
+                LoginName = FieldAsString(result, "loginName"),
+                FirstName = FieldAsString(result, "firstName"),
+                LastName = FieldAsString(result, "lastName"),
+                Email = FieldAsString(result, "email"),
+                Notes = FieldAsString(result, "notes"),
+                TaxExempt = FieldAsBoolean(result.Fields["taxExempt"]),
+                ExtendedData =
+                    RawJsonFieldAsCollection<KeyValuePair<string, string>>(result, "extendedData")
+                        .AsExtendedDataCollection(),
+                Addresses = RawJsonFieldAsCollection<ICustomerAddress>(result, "addresses").Select(x => x.ToCustomerAddressDisplay()),
+                LastActivityDate = FieldAsDateTime(result, "lastActivityDate")
+            };
+        }
+
 
         #region "Utility methods"
-
 
         /// <summary>
         /// Deserializes the a raw JSON field
         /// </summary>
+        /// <typeparam name="T">
+        /// The type to be deserialized
+        /// </typeparam>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The collection of T
+        /// </returns>
         private static IEnumerable<T> RawJsonFieldAsCollection<T>(SearchResult result, string alias)
         {
             return !result.Fields.ContainsKey(alias)
                 ? new List<T>()
                 : JsonConvert.DeserializeObject<IEnumerable<T>>(result.Fields[alias]);
-
         }
+
         /// <summary>
         /// Deserializes a the raw JSON field
         /// </summary>
+        /// <typeparam name="T">
+        /// The type to be deserialized
+        /// </typeparam>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
         private static T JsonFieldAs<T>(SearchResult result, string alias)
         {
             return !result.Fields.ContainsKey(alias)
@@ -149,6 +230,15 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Converts a field value to a Guid or Guid.Empty if not found
         /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
         private static Guid FieldAsGuid(SearchResult result, string alias)
         {
             if (!result.Fields.ContainsKey(alias)) return Guid.Empty;
@@ -161,6 +251,15 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Converts a field value to a decimal or 0 if not found
         /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
         public static decimal FieldAsDecimal(SearchResult result, string alias)
         {
             if (!result.Fields.ContainsKey(alias)) return 0;
@@ -171,8 +270,17 @@ namespace Merchello.Web.Models.ContentEditing
         }
 
         /// <summary>
-        /// Converts a field value to an int or 0 if not found
+        /// Converts a field value to an integer or 0 if not found
         /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         public static int FieldAsInteger(SearchResult result, string alias)
         {
             if (!result.Fields.ContainsKey(alias)) return 0;
@@ -185,6 +293,15 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Converts a field value to a DateTime or DateTime.MinValue if not found
         /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
         public static DateTime FieldAsDateTime(SearchResult result, string alias)
         {
             if (!result.Fields.ContainsKey(alias)) return DateTime.MinValue;
@@ -201,6 +318,12 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Converts a field value to a boolean
         /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public static bool FieldAsBoolean(string value)
         {
             return string.Equals("True", value);
@@ -209,10 +332,18 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Returns the field value as a string if available or string.Empty
         /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string FieldAsString(SearchResult result, string alias)
         {
-            if (!result.Fields.ContainsKey(alias)) return string.Empty;
-            return result.Fields[alias];
+            return !result.Fields.ContainsKey(alias) ? string.Empty : result.Fields[alias];
         }
 
         #endregion

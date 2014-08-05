@@ -223,9 +223,11 @@
 
         if (shipRateTableFromServer == undefined) {
             self.shipMethodKey = "";
+            self.shipCountryKey = "";
             self.rows = [];
         } else {
             self.shipMethodKey = shipRateTableFromServer.shipMethodKey;
+            self.shipCountryKey = shipRateTableFromServer.shipCountryKey;
             self.rows = _.map(shipRateTableFromServer.rows, function (row) {
                 return new merchello.Models.ShippingRateTier(row);
             });
@@ -235,8 +237,8 @@
             self.rows.push(row);
         };
 
-        self.removeRow = function(rowToRemove) {
-            self.rows = _.reject(self.rows, function(row) { return row.key == rowToRemove.key; });
+        self.removeRow = function (rowToRemove) {
+            self.rows = _.reject(self.rows, function(row) { return row.$$hashKey == rowToRemove.$$hashKey; });
         };
     };
 
@@ -303,15 +305,21 @@
         var self = this;
 
         if (warehouseCatalogFromServer == undefined) {
-            self.key = "";
-            self.warehouseKey = "";
-            self.name = "";
             self.description = "";
+            self.isDefault = false;
+            self.key = "";
+            self.name = "";
+            self.warehouseKey = "";
         } else {
-            self.key = warehouseCatalogFromServer.key;
-            self.warehouseKey = warehouseCatalogFromServer.warehouseKey;
-            self.name = warehouseCatalogFromServer.name;
             self.description = warehouseCatalogFromServer.description;
+            if (warehouseCatalogFromServer.isDefault) {
+                self.isDefault = true;
+            } else {
+                self.isDefault = false;
+            }
+            self.key = warehouseCatalogFromServer.key;
+            self.name = warehouseCatalogFromServer.name;
+            self.warehouseKey = warehouseCatalogFromServer.warehouseKey;
         }
 
     };

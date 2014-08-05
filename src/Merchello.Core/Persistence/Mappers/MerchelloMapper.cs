@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Concurrent;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Umbraco.Core;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Persistence.Mappers
+﻿namespace Merchello.Core.Persistence.Mappers
 {
+    using System;
+    using System.Collections.Concurrent;
+
+    using Merchello.Core.Models;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Provides a mapping by type between domain objects and their respective mapper classes.
     /// </summary>
@@ -16,14 +17,30 @@ namespace Merchello.Core.Persistence.Mappers
     /// </remarks>
     public class MerchelloMapper
     {
+        /// <summary>
+        /// The cache of mappers.
+        /// </summary>
         private static readonly ConcurrentDictionary<Type, Type> MapperCache = new ConcurrentDictionary<Type, Type>();
+
+        /// <summary>
+        /// Lazy access to the Mapper.
+        /// </summary>
         private static readonly Lazy<MerchelloMapper> Mapper = new Lazy<MerchelloMapper>(() => new MerchelloMapper());
  
         /// <summary>
-        /// Singleton accessor
+        /// Gets the singleton accessor
         /// </summary>
-        public static MerchelloMapper Current { get { return Mapper.Value;} }
+        public static MerchelloMapper Current
+        {
+            get
+            {
+                return Mapper.Value;
+            }
+        }
 
+        /// <summary>
+        /// Prevents a default instance of the <see cref="MerchelloMapper"/> class from being created.
+        /// </summary>
         private MerchelloMapper()
         {
             CacheMapper(typeof(ITaxMethod), typeof(TaxMethodMapper));
@@ -39,6 +56,8 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IInvoiceStatus), typeof(InvoiceStatusMapper));
             CacheMapper(typeof(IOrder), typeof(OrderMapper));
             CacheMapper(typeof(IOrderLineItem), typeof(OrderLineItemMapper));
+            CacheMapper(typeof(INotificationMessage), typeof(NotificationMessageMapper));
+            CacheMapper(typeof(INotificationMethod), typeof(NotificationMethodMapper));            
             CacheMapper(typeof(IPayment), typeof(PaymentMapper));
             CacheMapper(typeof(IPaymentMethod), typeof(PaymentMethodMapper));
             CacheMapper(typeof(IProduct), typeof(ProductMapper));
@@ -51,6 +70,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IShipRateTier), typeof(ShipRateTierMapper));
             CacheMapper(typeof(IStoreSetting), typeof(StoreSettingMapper));
             CacheMapper(typeof(IWarehouse), typeof(WarehouseMapper));
+            CacheMapper(typeof(IWarehouseCatalog), typeof(WarehouseCatalogMapper));
         }
 
 

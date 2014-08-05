@@ -10,7 +10,7 @@
 
                 <div class="span4">
                     <div class="umb-headline-editor-wrapper">
-                         <h1 class="umb-headline">Settings</h1>
+                        <h1 class="umb-headline"><localize key="sections_settings" /></h1>
                     </div>
                 </div>
 
@@ -19,7 +19,7 @@
                     <div class="btn-toolbar pull-right umb-btn-toolbar">
                     
                         <div class="btn-group">
-                            <a class="btn btn-success" data-ng-disabled="storeSettingsForm.$invalid" data-ng-click="save(storeSettingsForm)">Save</a>
+                            <a class="btn btn-success" data-ng-disabled="storeSettingsForm.$invalid" data-ng-click="save(storeSettingsForm)"><localize key="buttons_save" /></a>
                         </div>
                     </div>
                 </div>
@@ -32,51 +32,53 @@
 
                     <div class="control-group umb-control-group">
                         <label class="merchello-control-label">
-                            Store Defaults
-                            <small>Set the default settings</small>
+                            <localize key="merchelloSettings_storeDefaults"/>
+                            <small><localize key="merchelloSettings_setDefaultSettingsHelper" /></small>
                         </label>
 
                         <div class="merchello-controls">
 
                             <div class="form-group col-xs-6 span6">
-                                <label for="currency">Currency</label>
+                                <label for="currency"><localize key="merchelloSettings_currency" /></label>
                                 <select class="form-control col-xs-8 span8" name="currency" data-ng-change="currencyChanged(selectedCurrency)" data-ng-model="selectedCurrency" data-ng-options="c.name for c in currencies track by c.currencyCode"></select>
                             </div>
 
                             <div class="form-group col-xs-6 span6">
-                                <label for="dateformat">Date Format</label>
+                                <label for="dateformat"><localize key="merchelloSettings_dateFormat" /></label>
                                 <select class="form-control col-xs-8 span8" name="dateformat" data-ng-model="settingsDisplay.dateFormat">
-                                    <option value="dd-mm-yyyy">dd/mm/yyyy</option>
+                                    <option value="dd-MM-yyyy">dd-MM-yyyy (ex: 01-01-2014)</option>
+                                    <option value="yyyy-MM-dd">yyyy-MM-dd (ex: 2014-01-01)</option>
                                 </select>
                             </div>
 
                         
                             <div class="form-group col-xs-6 span6">
-                                <label for="startingorder">Starting Order No.</label>
+                                <label for="startingorder"><localize key="merchelloSettings_startingOrderNumber" /></label>
                                 <input type="number" class="form-control col-xs-8 span8" name="startingorder" Required data-ng-model="settingsDisplay.nextOrderNumber" />
                             </div>
 
                       
                             <div class="form-group col-xs-6 span6">
-                                <label for="timeformat">Time Format</label>
+                                <label for="timeformat"><localize key="merchelloSettings_timeFormat" /></label>
                                 <select class="form-control col-xs-8 span8" name="timeformat" data-ng-model="settingsDisplay.timeFormat">
                                     <option value="am-pm">AM/PM</option>
                                 </select>
                             </div>
 
                             <div class="form-group col-xs-6 span6">
-                                <label for="startinginvoice">Starting Invoice No.</label>
+                                <label for="startinginvoice"><localize key="merchelloSettings_startingInvoiceNumber" /></label>
                                 <input type="number" class="form-control col-xs-8 span8" name="startinginvoice" Required data-ng-model="settingsDisplay.nextInvoiceNumber" />
                             </div>
                         
                             <!-- Unit System and Time Zone will be included in version 2 -->
-                            <!--<div class="form-group col-xs-6 span6">
-                                <label for="unit-system">Unit System</label>
-                                <select class="form-control col-xs-8 span8" name="unit-system">
-                                    <option>Imperial System (Pound, Inch)</option>
+                            <div class="form-group col-xs-6 span6">
+                                <label for="unit-system"><localize key="merchelloSettings_unitSystem" /></label>
+                                <select class="form-control col-xs-8 span8" name="unit-system" data-ng-model="settingsDisplay.unitSystem">
+                                    <option value="Imperial">Imperial System (Pound, Inch)</option>
+                                    <option value="Metric">Metric System (Centimeter, Meter)</option>
                                 </select>
                             </div>
-                                <div class="form-group col-xs-6 span6">
+                             <!--<div class="form-group col-xs-6 span6">
                                 <label for="time-zone">Time Zone</label>
                                 <select class="form-control col-xs-8 span8" name="time-zone">
                                     <option>Pacific Standard (GMT-8)</option>
@@ -90,8 +92,8 @@
 
                     <div class="control-group umb-control-group">
                         <label class="merchello-control-label">
-                            Catalog Defaults
-                            <small>Set the default catalog item (product) options. Can be changed later on a per item basis.</small>
+                            <localize key="merchelloSettings_catalogDefaults" />
+                            <small><localize key="merchelloSettings_catalogDefaultsHelper" /></small>
                         </label>
 
                         <div class="merchello-controls">
@@ -100,12 +102,12 @@
                                 <div class="form-group col-xs-6 span6">
                                     <!-- All Digital Goods will be goods will be included in version 2 -->
                                     <!--<label class="label-checkbox"><input name="digital" type="checkbox"> <span>All items have/are digital goods</span></label>-->
-                                    <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="settingsDisplay.globalTaxable"> <span>All items are taxable</span></label>                                    
-                                    <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="settingsDisplay.globalShippable" > <span>All items are shippable</span></label>
+                                    <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="settingsDisplay.globalTaxable"> <span><localize key="merchelloSettings_globalTaxable" /></span></label>                                    
+                                    <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="settingsDisplay.globalShippable" > <span><localize key="merchelloSettings_globalShippable" /></span></label>
                                 </div>
                                 <div class="form-group col-xs-6 span6">
-                                    <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="settingsDisplay.globalTrackInventory"> <span>Track inventory for all items & variants</span></label>
-                                    <label class="label-checkbox"><input name="taxableshipping" type="checkbox" data-ng-model="settingsDisplay.globalShippingIsTaxable"> <span>Shipping charges are taxable</span></label>
+                                    <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="settingsDisplay.globalTrackInventory"> <span><localize key="merchelloSettings_globalTrackInventory" /></span></label>
+                                    <label class="label-checkbox"><input name="taxableshipping" type="checkbox" data-ng-model="settingsDisplay.globalShippingIsTaxable"> <span><localize key="merchelloSettings_globalShippingIsTaxable" /></span></label>
                                 </div>
                             </div>
 

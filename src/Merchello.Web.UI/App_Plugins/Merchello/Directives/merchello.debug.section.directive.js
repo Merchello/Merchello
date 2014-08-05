@@ -33,6 +33,8 @@
                         dialogData: dialogData
                     });
                 };
+
+                $scope.debugOn = Umbraco.Sys.ServerVariables.isDebuggingEnabled;
             }
         };
     };

@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Merchello.Core.Models;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Strategies.Packaging
+﻿namespace Merchello.Core.Strategies.Packaging
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Represents the default warehouse packaging strategy.  
     /// 
@@ -21,17 +23,56 @@ namespace Merchello.Core.Strategies.Packaging
     /// </remarks>
     public class DefaultWarehousePackagingStrategy : PackagingStrategyBase
     {
-        public DefaultWarehousePackagingStrategy(LineItemCollection lineItemCollection, IAddress destination, Guid versionKey) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultWarehousePackagingStrategy"/> class.
+        /// </summary>
+        /// <param name="lineItemCollection">
+        /// The line item collection.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="versionKey">
+        /// The version key.
+        /// </param>
+        public DefaultWarehousePackagingStrategy(
+            LineItemCollection lineItemCollection,
+            IAddress destination,
+            Guid versionKey)
             : base(lineItemCollection, destination, versionKey)
-        { }
+        {
+        }
 
-        public DefaultWarehousePackagingStrategy(IMerchelloContext merchelloContext, LineItemCollection lineItemCollection, IAddress destination, Guid versionKey) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultWarehousePackagingStrategy"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="lineItemCollection">
+        /// The line item collection.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="versionKey">
+        /// The version key.
+        /// </param>
+        public DefaultWarehousePackagingStrategy(
+            IMerchelloContext merchelloContext,
+            LineItemCollection lineItemCollection,
+            IAddress destination,
+            Guid versionKey)
             : base(merchelloContext, lineItemCollection, destination, versionKey)
-        { }
+        {
+        }
 
         /// <summary>
         /// Creates a collection of shipments for the current basket
-        /// </summary>   
+        /// </summary>
+        /// <returns>
+        /// A collection of <see cref="IShipment"/>.
+        /// </returns>
         public override IEnumerable<IShipment> PackageShipments()
         {
             // filter basket items for shippable items
@@ -45,7 +86,7 @@ namespace Merchello.Core.Strategies.Packaging
             var warehouse = MerchelloContext.Services.WarehouseService.GetDefaultWarehouse();
             var origin = warehouse.AsAddress();
             
-            //For the initial version we are only exposing a single shipment
+            ////For the initial version we are only exposing a single shipment
             var shipment = new Shipment(origin, Destination)
                 {
                     VersionKey = VersionKey // this is used in cache keys
@@ -54,25 +95,30 @@ namespace Merchello.Core.Strategies.Packaging
             // get the variants for each of the shippable line items
             var variants =
                    MerchelloContext.Services.ProductVariantService.GetByKeys(
-                       shippableVisitor.ShippableItems.Select(x => x.ExtendedData.GetProductVariantKey()).Where(x => !Guid.Empty.Equals(x))
-                       ).ToArray();
+                       shippableVisitor.ShippableItems
+                       .Select(x => x.ExtendedData.GetProductVariantKey())
+                       .Where(x => !Guid.Empty.Equals(x))).ToArray();
 
             foreach (var lineItem in shippableVisitor.ShippableItems)
             {
                 // We need to know what Warehouse Catalog this product is associated with for shipping and inventory
-                var variant = variants.FirstOrDefault(x => x.Key.Equals(lineItem.ExtendedData.GetProductVariantKey()));      
-                if(variant == null) throw new InvalidOperationException("This packaging strategy cannot handle null ProductVariants");
+                var variant = variants.FirstOrDefault(x => x.Key.Equals(lineItem.ExtendedData.GetProductVariantKey()));
+                if (variant == null) throw new InvalidOperationException("This packaging strategy cannot handle null ProductVariants");
 
                 if (variant.CatalogInventories.FirstOrDefault() == null)
                 {
-                    LogHelper.Error<ShippableProductVisitor>("ProductVariant marked as shippable was not assoicated with a WarehouseCatalog.  Product was: " + variant.Key.ToString() + " -  " + variant.Name, new InvalidDataException());
+                    LogHelper.Error<ShippableProductVisitor>(
+                        "ProductVariant marked as shippable was not assoicated with a WarehouseCatalog.  Product was: "
+                        + variant.Key.ToString() + " -  " + variant.Name,
+                        new InvalidDataException());
                 }
                 else
-                {                    
-                    lineItem.ExtendedData.SetValue("merchWarehouseCatalogKey", variant.CatalogInventories.First().CatalogKey.ToString());                    
-                    shipment.Items.Add(lineItem);    
+                {
+                    lineItem.ExtendedData.SetValue(
+                        "merchWarehouseCatalogKey",
+                        variant.CatalogInventories.First().CatalogKey.ToString());
+                    shipment.Items.Add(lineItem);
                 }
-                          
             }
 
             return new List<IShipment> { shipment };

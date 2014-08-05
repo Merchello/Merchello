@@ -10,34 +10,41 @@ namespace Merchello.Core.Models
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class NotificationMessage : Entity, INotificationMessage
+    public class NotificationMessage : Entity, INotificationMessage
     {
         private string _name;
         private string _description;
-        private string _message;
+        private string _bodyText;
+        private string _fromAddress;
+        private string _replyTo;
         private int _maxLength;
-        private bool _messageIsFilePath;
-        private Guid? _triggerKey;
+        private bool _bodyTextIsFilePath;
+        private Guid? _monitorKey;
         private readonly Guid _methodKey;
         private string _recipients;
         private bool _sendToCustomer;
         private bool _disabled;
 
-        public NotificationMessage(Guid notificationMethodKey, string name)
+        public NotificationMessage(Guid notificationMethodKey, string name, string fromAddress)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(notificationMethodKey), "notificationMethodKey");
+            Mandate.ParameterNotNullOrEmpty(fromAddress, "from");
             Mandate.ParameterNotNullOrEmpty(name, "name");
 
             _methodKey = notificationMethodKey;
+            _fromAddress = fromAddress;
             _name = name;
+            _maxLength = int.MaxValue;
         }
 
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Name);
         private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Description);
+        private static readonly PropertyInfo FromSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.FromAddress);
+        private static readonly PropertyInfo ReplyToSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.ReplyTo);
         private static readonly PropertyInfo MaxLengthSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, int>(x => x.MaxLength);
-        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Message);
-        private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.MessageIsFilePath);
-        private static readonly PropertyInfo TriggerKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.TriggerKey);
+        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.BodyText);
+        private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.BodyTextIsFilePath);
+        private static readonly PropertyInfo MonitorKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.MonitorKey);
         private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
         private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
         private static readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.Disabled);
@@ -85,19 +92,53 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
-        /// The path or text src
+        /// The sender's from address
         /// </summary>
         [DataMember]
-        public string Message
+        public string FromAddress
         {
-            get { return _message; }
+            get { return _fromAddress; }
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _fromAddress = value;
+                    return _fromAddress;
+                }, _fromAddress, FromSelector);
+            }
+        }
+
+        /// <summary>
+        /// The reply to 
+        /// </summary>
+        [DataMember]
+        public string ReplyTo
+        {
+            get { return _replyTo; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _message = value;
-                    return _message;
-                }, _message, MessageSelector);
+                    _replyTo = value;
+                    return _replyTo;
+                }, _replyTo, ReplyToSelector);
+            }
+        }
+
+        /// <summary>
+        /// The path or text src
+        /// </summary>
+        [DataMember]
+        public string BodyText
+        {
+            get { return _bodyText; }
+            set
+            {
+                SetPropertyValueAndDetectChanges(o =>
+                {
+                    _bodyText = value;
+                    return _bodyText;
+                }, _bodyText, MessageSelector);
             }
         }
 
@@ -121,33 +162,33 @@ namespace Merchello.Core.Models
         /// <summary>
         /// True/false indicating whether or not the string value of Message is actually a path to a file to read
         /// </summary>
-        public bool MessageIsFilePath
+        public bool BodyTextIsFilePath
         {
-            get { return _messageIsFilePath; }
+            get { return _bodyTextIsFilePath; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _messageIsFilePath = value;
-                    return _messageIsFilePath;
-                }, _messageIsFilePath, MessageIsFilePathSelector);
+                    _bodyTextIsFilePath = value;
+                    return _bodyTextIsFilePath;
+                }, _bodyTextIsFilePath, MessageIsFilePathSelector);
             }
         }
 
         /// <summary>
-        /// Optional key for Notification Trigger
+        /// Optional key for Notification Monitor
         /// </summary>
         [DataMember]
-        public Guid? TriggerKey
+        public Guid? MonitorKey
         {
-            get { return _triggerKey; }
+            get { return _monitorKey; }
             set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
-                    _triggerKey = value;
-                    return _triggerKey;
-                }, _triggerKey, TriggerKeySelector);
+                    _monitorKey = value;
+                    return _monitorKey;
+                }, _monitorKey, MonitorKeySelector);
             }
         }
 

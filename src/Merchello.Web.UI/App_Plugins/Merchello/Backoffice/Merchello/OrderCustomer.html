@@ -1,0 +1,113 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<form novalidate name="customerForm" data-ng-controller="Merchello.Editors.Customer.EditController" data-ng-show="loaded" data-ng-submit="saveCustomer()">
+    <umb-panel val-show-validation>
+        <umb-header>
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <!-- ACTION: Save Customer -->
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </div>
+        </umb-header>
+        <merchello-panel class="row-fluid">
+            <div class="merchello-pane row-fluid edit-customer">
+                
+                <div class="control-group umb-control-group">
+                    <!-- Billing Address -->
+                    <label class="merchello-section-label" for="customer-note">Billing Address</label>
+                    <div class="merchello-controls row-fluid">
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="pull-right btn-group">
+                                <!-- ACTION: Select Address to Edit -->
+                                <a class="btn-standard btn" data-ng-show="billingAddresses.length > 1" data-ng-click="openSelectAddressDialog('billing')">Select Address</a>
+                                <!-- ACTION: Create New Address -->
+                                <a class="btn btn-primary" data-ng-click="newAddress('billing')"><i class="icon-add"></i> New</a>
+                                <!-- ACTION: Delete This Address -->
+                                <a class="btn-warning btn" data-ng-show="billingAddresses.length > 1" data-ng-click="openDeleteAddressDialog('billing')"><i class="icon-trash"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group span12">
+                            <label for="fullName">Full Name:</label>
+                            <input name="fullName" type="text" class="span5" data-ng-model="billingAddress.fullName" />
+                            <label for="org">Company:</label>
+                            <input name="org" type="text" class="span5" data-ng-model="billingAddress.company" />
+                            <label for="phone">Phone:</label>
+                            <input name="phone" type="tel" class="span5" data-ng-model="billingAddress.phone" />
+                            <label for="streetAddress">*Address:</label>
+                            <input name="streetAddress" type="text" class="span5" data-ng-model="billingAddress.address1" />
+                            <label for="extendedAddress">Address Line 2:</label>
+                            <input name="extendedAddress" type="text" class="span5" data-ng-model="billingAddress.address2" />
+                            <label for="locality">*City:</label>
+                            <input name="locality" type="text" class="span5" data-ng-model="billingAddress.locality" />
+                            <label for="regionInput">{{provinceLabel}}:</label>
+                            <input name="regionInput" type="text" class="span3" data-ng-show="!doesCountryHaveProvinces(filters.billingCountry)" data-ng-model="billingAddress.region" />
+                            <select name="regionSelect" class="span3" data-ng-show="doesCountryHaveProvinces(filters.billingCountry)" data-ng-model="filters.billingProvince" data-ng-change="updateProvince('billing')" data-ng-options="option.name for option in filters.billingCountry.provinces"></select>
+                            <label for="postalCode">*Zip Code:</label>
+                            <input name="postalCode" type="text" class="span3" data-ng-model="billingAddress.postalCode" />
+                            <label for="countryName">*Country:</label>
+                            <select name="countryName" class="span3" data-ng-model="filters.billingCountry" data-ng-change="updateCountry('billing')" data-ng-options="option.name for option in countries"></select>
+                            <div>
+                                <input type="checkbox" data-ng-model="billingAddress.isDefault" /> Primary Billing Address
+                            </div><br />
+                            <div>
+                                <!-- ACTION: Add Billing Address to Address List -->
+                                <a class="btn btn-primary" data-ng-show="currentBillingAddressId == -1" data-ng-click="addAddress('billing')">Add Address</a>
+                                <!-- ACTION: Update Current Billing Address -->
+                                <a class="btn btn-primary" data-ng-show="currentBillingAddressId != -1" data-ng-click="updateAddress('billing')">Update Address</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group umb-control-group">
+                    <!-- Shipping Address -->
+                    <label class="merchello-section-label" for="customer-note">Shipping Address</label>
+                    <div class="merchello-controls row-fluid">
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="pull-right btn-group">
+                                <!-- ACTION: Select Address to Edit -->
+                                <a class="btn-standard btn" data-ng-show="shippingAddresses.length > 1" data-ng-click="openSelectAddressDialog('shipping')">Select Address</a>
+                                <!-- ACTION: Create New Address -->
+                                <a class="btn btn-primary" data-ng-click="newAddress('shipping')"><i class="icon-add"></i> New</a>
+                                <!-- ACTION: Delete This Address -->
+                                <a class="btn-warning btn" data-ng-show="shippingAddresses.length > 1" data-ng-click="openDeleteAddressDialog('shipping')"><i class="icon-trash"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group span12">
+                            <label for="shippingFullName">Full Name:</label>
+                            <input name="shippingFullName" type="text" class="span5" data-ng-model="shippingAddress.fullName" />
+                            <label for="shippingOrg">Company:</label>
+                            <input name="shippingOrg" type="text" class="span5" data-ng-model="shippingAddress.company" />
+                            <label for="shippingPhone">Phone:</label>
+                            <input name="shippingPhone" type="tel" class="span5" data-ng-model="shippingAddress.phone" />
+                            <label for="shippingStreetAddress">*Address:</label>
+                            <input name="shippingStreetAddress" type="text" class="span5" data-ng-model="shippingAddress.address1" />
+                            <label for="shippingExtendedAddress">Address Line 2:</label>
+                            <input name="shippingExtendedAddress" type="text" class="span5" data-ng-model="shippingAddress.address2" />
+                            <label for="shippingLocality">*City:</label>
+                            <input name="shippingLocality" type="text" class="span5" data-ng-model="shippingAddress.locality" />
+                            <label for="shippingRegionInput">{{provinceLabel}}:</label>
+                            <input name="shippingRegionInput" type="text" class="span3" data-ng-show="!doesCountryHaveProvinces(filters.shippingCountry)" data-ng-model="shippingAddress.region" />
+                            <select name="shippingRegionSelect" class="span3" data-ng-show="doesCountryHaveProvinces(filters.shippingCountry)" data-ng-model="filters.shippingProvince" data-ng-change="updateProvince('shipping')" data-ng-options="option.name for option in filters.shippingCountry.provinces"></select>
+                            <label for="shippingPostalCode">*Zip Code:</label>
+                            <input name="shippingPostalCode" type="text" class="span3" data-ng-model="shippingAddress.postalCode" />
+                            <label for="shippingCountryName">*Country:</label>
+                            <select name="shippingCountryName" class="span3" data-ng-model="filters.shippingCountry" data-ng-change="updateCountry('shipping')" data-ng-options="option.name for option in countries"></select>
+                            <div>
+                                <input type="checkbox" data-ng-model="currentShippingAddress.isDefault" /> Primary Shipping Address
+                            </div><br />
+                            <div>
+                                <!-- ACTION: Add Billing Address to Address List -->
+                                <a class="btn btn-primary" data-ng-show="currentShippingAddressId == -1" data-ng-click="addAddress('shipping')">Add Address</a>
+                                <!-- ACTION: Update Current Billing Address -->
+                                <a class="btn btn-primary" data-ng-show="currentShippingAddressId != -1" data-ng-click="updateAddress('shipping')">Update Address</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</form>

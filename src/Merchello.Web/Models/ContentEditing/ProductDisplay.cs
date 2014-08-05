@@ -1,15 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using Lucene.Net.Util;
-using Merchello.Core.Models;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using System;
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// The product display.
+    /// </summary>
     public class ProductDisplay : ProductDisplayBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductDisplay"/> class.
+        /// </summary>
         public ProductDisplay()
-        { }
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductDisplay"/> class.
+        /// </summary>
+        /// <param name="masterVariant">
+        /// The master variant.
+        /// </param>
         internal ProductDisplay(ProductVariantDisplay masterVariant)
         {
             Key = masterVariant.ProductKey;
@@ -32,13 +43,22 @@ namespace Merchello.Web.Models.ContentEditing
             Shippable = masterVariant.Shippable;
             Download = masterVariant.Download;
             DownloadMediaId = masterVariant.DownloadMediaId;
-
             CatalogInventories = masterVariant.CatalogInventories;
         }
 
-        public Guid Key { get; set; }        
+        /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        public Guid Key { get; set; }
 
+        /// <summary>
+        /// Gets or sets the product options.
+        /// </summary>
         public IEnumerable<ProductOptionDisplay> ProductOptions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product variants.
+        /// </summary>
         public IEnumerable<ProductVariantDisplay> ProductVariants { get; set; }
       
     }

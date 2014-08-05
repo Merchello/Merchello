@@ -7,10 +7,12 @@ using System.Net.Http;
 using System.Web.Http;
 using Merchello.Core;
 using Merchello.Core.Builders;
+using Merchello.Core.Gateways.Notification.Triggering;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using Merchello.Web.Models.ContentEditing;
 using Merchello.Web.WebApi;
+using Umbraco.Core;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 
@@ -149,10 +151,10 @@ namespace Merchello.Web.Editors
                 var builder = new ShipmentBuilderChain(MerchelloContext, order.ToOrder(merchOrder));
 
                 var attempt = builder.Build();
-
+                
                 if(!attempt.Success)
                     throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
-
+                                                                                                        
                 return attempt.Result.ToShipmentDisplay();
 
             }
@@ -162,18 +164,20 @@ namespace Merchello.Web.Editors
             }
         }
 
-        
         /// <summary>
         /// Updates and existing shipment
-        ///
         /// PUT /umbraco/Merchello/ShipmentApi/PutShipment
         /// </summary>
         /// <param name="shipment">ShipmentDisplay object serialized from WebApi</param>
-        [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage PutShipment(ShipmentDisplay shipment)
+        /// <param name="order">The order.</param>
+        /// <returns></returns>
+        [AcceptVerbs("POST", "PUT", "GET")]
+        public HttpResponseMessage PutShipment(ShipmentOrderDisplay shipmentOrder)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
 
+            var shipment = shipmentOrder.ShipmentDisplay;
+            var order = shipmentOrder.OrderDisplay;
             try
             {
                 var merchShipment = _shipmentService.GetByKey(shipment.Key);
@@ -184,7 +188,14 @@ namespace Merchello.Web.Editors
                 }
 
                 merchShipment = shipment.ToShipment(merchShipment);
-
+                if (order.Items.Count() == shipment.Items.Count())
+                {
+                    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
+                }
+                else
+                {                                
+                    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
+                }
                 _shipmentService.Save(merchShipment);
 
             }

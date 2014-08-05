@@ -1,30 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using Merchello.Core.Gateways;
-using Umbraco.Web.Mvc;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.WebApi;
-using Merchello.Web.Models.ContentEditing;
-using System.Net;
-using System.Net.Http;
-using Merchello.Core.Gateways.Shipping;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+
+    using AutoMapper.Mappers;
+
+    using Core;
+    using Core.Gateways;
+    using Core.Gateways.Shipping;
+    using Core.Models;
+    using Core.Services;
+    using Models.ContentEditing;    
+    using Umbraco.Web.Mvc;
+    using WebApi;
+
+    /// <summary>
+    /// The shipping gateway api controller.
+    /// </summary>
     [PluginController("Merchello")]
     public class ShippingGatewayApiController : MerchelloApiController
     {
-        private readonly IShippingContext _shippingContext;
-        private readonly IGatewayProviderService _gatewayProviderService;
-        private readonly IStoreSettingService _storeSettingService;
-        private readonly IShipCountryService _shipCountryService;
+        #region Fields
 
         /// <summary>
-        /// Constructor
+        /// The shipping context.
+        /// </summary>
+        private readonly IShippingContext _shippingContext;
+
+        /// <summary>
+        /// The ship country service.
+        /// </summary>
+        private readonly IShipCountryService _shipCountryService;
+
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShippingGatewayApiController"/> class.
         /// </summary>
         public ShippingGatewayApiController()
             : this(MerchelloContext.Current)
@@ -32,17 +47,16 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ShippingGatewayApiController"/> class.
         /// </summary>
-        /// <param name="merchelloContext"></param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
         public ShippingGatewayApiController(MerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _shippingContext = MerchelloContext.Gateways.Shipping;
 
-
-            _gatewayProviderService = MerchelloContext.Services.GatewayProviderService;
-            _storeSettingService = MerchelloContext.Services.StoreSettingService;
             _shipCountryService = ((ServiceContext)MerchelloContext.Services).ShipCountryService;
         }
 
@@ -52,26 +66,35 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetShipCountry/{guid}
         /// </summary>
-        /// <param name="id">Key of the ShipCountry to retrieve</param>
+        /// <param name="id">
+        /// Key of the ShipCountry to retrieve
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipCountryDisplay"/>.
+        /// </returns>
         public ShipCountryDisplay GetShipCountry(Guid id)
         {
-
             var shipCountry = _shipCountryService.GetByKey(id);
+
             if (shipCountry == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return shipCountry.ToShipCountryDisplay();
-
         }
 
         /// <summary>
         /// Returns All ShipCountries with ShipMethods in them
-        ///
+        /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountries/{guid}
         /// </summary>
-        /// <param name="id">CatalogKey Guid to get countries for</param>
+        /// <param name="id">
+        /// CatalogKey Guid to get countries for
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="ShipCountryDisplay"/>.
+        /// </returns>
         public IEnumerable<ShipCountryDisplay> GetAllShipCountries(Guid id)
         {
             var countries = _shipCountryService.GetShipCountriesByCatalogKey(id);
@@ -85,11 +108,18 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Creates a ship country
-        ///
-        /// GET /umbraco/Merchello/ShippingMethodsApi/NewShipCountry?catalogKey={guid}&countryCode={string}
+        /// 
+        /// GET /umbraco/Merchello/ShippingMethodsApi/NewShipCountry?catalogKey={guid}&amp;countryCode={string}
         /// </summary>
-        /// <param name="catalogKey">CatalogKey Guid</param>
-        /// <param name="countryCode">Country code string</param>
+        /// <param name="catalogKey">
+        /// CatalogKey Guid
+        /// </param>
+        /// <param name="countryCode">
+        /// Country code string
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipCountryDisplay"/>.
+        /// </returns>        
         [AcceptVerbs("GET", "POST")]
         public ShipCountryDisplay NewShipCountry(Guid catalogKey, string countryCode)
         {
@@ -97,10 +127,6 @@ namespace Merchello.Web.Editors
 
             try
             {
-                //ICountry country = _storeSettingService.GetCountryByCode(countryCode);
-                //newShipCountry = new ShipCountry(catalogKey, country);
-                //_shipCountryService.Save(newShipCountry);
-                //newShipCountry = _shipCountryService.GetShipCountryByCountryCode(catalogKey, countryCode) as ShipCountry;
                 var attempt = ((ShipCountryService) _shipCountryService).CreateShipCountryWithKey(catalogKey, countryCode);
                 if (attempt.Success)
                 {
@@ -121,10 +147,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Deletes an existing ship country
-        ///
+        /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteShipCountry/{guid}
         /// </summary>
-        /// <param name="id">ShipCountry Key</param>
+        /// <param name="id">
+        /// ShipCountry Key
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("GET")]
         public HttpResponseMessage DeleteShipCountry(Guid id)
         {
@@ -142,62 +173,66 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// 
-        ///
+        /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipGatewayProviders
         /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="GatewayProviderDisplay"/>.
+        /// </returns>
         public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
         {
             var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().ToArray();
-            if( providers.Any() )
-            {
-                var rateTableProvider = MerchelloContext.Gateways.Shipping.CreateInstance(providers.First().Key);
-                if (rateTableProvider == null)
-                {
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-                }
-            }
 
             return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
         }
 
         /// <summary>
         /// 
-        ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipGatewayResourcesForProvider
+        /// 
         /// </summary>
-        /// <param name="id">GatewayProvider Key</param>
+        /// <param name="id">
+        /// GatewayProvider Key
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="GatewayResourceDisplay"/>.
+        /// </returns>
         public IEnumerable<GatewayResourceDisplay> GetAllShipGatewayResourcesForProvider(Guid id)
         {
-            var provider = MerchelloContext.Gateways.Shipping.CreateInstance(id);
-            if (provider != null)
+            var provider = MerchelloContext.Gateways.Shipping.GetProviderByKey(id);
+
+            if (provider == null) yield break;
+            
+            var resources = provider.ListResourcesOffered();
+
+            foreach (IGatewayResource resource in resources)
             {
-                var resources = provider.ListResourcesOffered();
-                foreach (IGatewayResource resource in resources)
-                {
-                    yield return resource.ToGatewayResourceDisplay();
-                } 
+                yield return resource.ToGatewayResourceDisplay();
             }
         }
 
         /// <summary>
         /// 
-        ///
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetAllShipCountryProviders/{id}
+        /// 
         /// </summary>
-        /// <param name="id">ShipCountry Key</param>
+        /// <param name="id">
+        /// ShipCountry Key
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="ShippingGatewayProviderDisplay"/>.
+        /// </returns>
         public IEnumerable<ShippingGatewayProviderDisplay> GetAllShipCountryProviders(Guid id)
         {
             var shipCountry = _shipCountryService.GetByKey(id);
+
             if (shipCountry != null)
             {
                 var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
 
                 foreach (var provider in providers)
-                {
-                    if (!Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey.Equals(provider.Key))
-                    {
-                        yield return provider.ToShipGatewayProviderDisplay();
-                    }
+                {                  
+                    yield return provider.ToShipGatewayProviderDisplay();                    
                 }
             }
             else
@@ -208,127 +243,134 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Get all <see cref="IShipMethod"/> for a shipping provider
-        ///
+        /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingProviderShipMethods/{id}
         /// </summary>
-        /// <param name="id">The key of the ShippingGatewayProvider</param>
-        /// <param name="shipCountryId">ShipCountry Key</param>
-        /// <remarks>
-        /// 
-        /// </remarks>
+        /// <param name="id">
+        /// The key of the ShippingGatewayProvider
+        /// </param>
+        /// <param name="shipCountryId">
+        /// ShipCountry Key
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="ShipMethodDisplay"/>.
+        /// </returns>
         public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethods(Guid id, Guid shipCountryId)
         {
-            var provider = _shippingContext.CreateInstance(id);
+            var provider = _shippingContext.GetProviderByKey(id);
+
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
             return
                 provider.ShipMethods.Select(
                     method => 
-                        provider.GetShippingGatewayMethod(method.Key, method.ShipCountryKey).ToShipMethodDisplay()
-                    );
-                  
+                        provider.GetShippingGatewayMethod(method.Key, method.ShipCountryKey).ToShipMethodDisplay());                  
         }
 
         /// <summary>
         /// Get <see cref="IShipMethod"/> for a shipping provider by country
-        ///
+        /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingProviderShipMethodsByCountry/{id}
         /// </summary>
-        /// <param name="id">The key of the ShippingGatewayProvider</param>
-        /// <param name="shipCountryId">ShipCountry Key</param>
-        /// <remarks>
-        /// 
-        /// </remarks>
+        /// <param name="id">
+        /// The key of the ShippingGatewayProvider
+        /// </param>
+        /// <param name="shipCountryId">
+        /// ShipCountry Key
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="ShipMethodDisplay"/>.
+        /// </returns>
         public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethodsByCountry(Guid id, Guid shipCountryId)
         {
-            var provider = _shippingContext.CreateInstance(id);
+            var provider = _shippingContext.GetProviderByKey(id);
+
             var shipCountry = _shipCountryService.GetByKey(shipCountryId);
+            
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            
             if (shipCountry == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            if (!Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey.Equals(provider.Key))
-            {
-                var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
-                return methods.Select(method => method.ToShipMethodDisplay());
-            }
+            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
 
-            return new List<ShipMethodDisplay>();
+            return methods.Select(method => method.ToShipMethodDisplay());
         }
 
         /// <summary>
         /// Add an external ShipMethod to the ShipCountry
         /// 
         /// USPS, UPS, etc
-        ///
+        /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/AddShipMethod
         /// </summary>
-        /// <param name="method">POSTed ShipMethodDisplay object</param>
+        /// <param name="method">
+        /// POSTed ShipMethodDisplay object
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST")]
-        public HttpResponseMessage AddShipMethod(ShipMethodDisplay method)
+        public ShipMethodDisplay AddShipMethod(ShipMethodDisplay method)
         {
-            var response = Request.CreateResponse(HttpStatusCode.OK);
+            ////var response = Request.CreateResponse(HttpStatusCode.OK);
 
-            try
-            {
-                var provider = _shippingContext.CreateInstance(method.ProviderKey);
+            var provider = _shippingContext.GetProviderByKey(method.ProviderKey);
 
-                var gatewayResource =
-                    provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == method.ServiceCode);
+            var gatewayResource =
+                provider.ListResourcesOffered().FirstOrDefault(x => x.ServiceCode == method.ServiceCode);
 
-                var shipCountry = _shipCountryService.GetByKey(method.ShipCountryKey);
+            var shipCountry = _shipCountryService.GetByKey(method.ShipCountryKey);
 
-                var shippingGatewayMethod = provider.CreateShippingGatewayMethod(gatewayResource, shipCountry, method.Name);
+            var shippingGatewayMethod = provider.CreateShippingGatewayMethod(
+                gatewayResource,
+                shipCountry,
+                method.Name);
 
-                provider.SaveShippingGatewayMethod(shippingGatewayMethod);
+            provider.SaveShippingGatewayMethod(shippingGatewayMethod);
 
-            }
-            catch (Exception ex)
-            {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
-            }
-
-            return response;
+            return shippingGatewayMethod.ToShipMethodDisplay();
         }
 
         /// <summary>
         /// Save an external ShipMethod to the ShipCountry
         /// 
         /// USPS, UPS, etc
-        ///
+        /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/PutShipMethod
         /// </summary>
-        /// <param name="method">POSTed ShipMethodDisplay object</param>
+        /// <param name="method">
+        /// POSTed ShipMethodDisplay object
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipMethodDisplay"/>.
+        /// </returns>
         [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage PutShipMethod(ShipMethodDisplay method)
-        {
-            var response = Request.CreateResponse(HttpStatusCode.OK);
+        public ShipMethodDisplay PutShipMethod(ShipMethodDisplay method)
+        {            
+            var provider = _shippingContext.GetProviderByKey(method.ProviderKey);
 
-            try
-            {
-                var provider = _shippingContext.CreateInstance(method.ProviderKey);
+            var shippingMethod = provider.ShipMethods.FirstOrDefault(x => x.Key == method.Key);
 
-                var shippingMethod = provider.ShipMethods.FirstOrDefault(x => x.Key == method.Key);
+            shippingMethod = method.ToShipMethod(shippingMethod);
 
-                shippingMethod = method.ToShipMethod(shippingMethod);
+            provider.GatewayProviderService.Save(shippingMethod);
 
-                provider.GatewayProviderService.Save(shippingMethod);
-            }
-            catch (Exception ex)
-            {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
-            }
-
-            return response;
+            return shippingMethod.ToShipMethodDisplay();
         }
 
         /// <summary>
         /// Save an external ShipMethod to the ShipCountry
         /// 
         /// USPS, UPS, etc
-        ///
+        /// 
         /// GET /umbraco/Merchello/ShippingMethodsApi/DeleteShipMethod
         /// </summary>
-        /// <param name="method"><see cref="ShipMethodDisplay"/> key to delete</param>
+        /// <param name="method">
+        /// <see cref="ShipMethodDisplay"/> key to delete
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST", "DELETE")]
         public HttpResponseMessage DeleteShipMethod(ShipMethodDisplay method)
         {
@@ -341,6 +383,5 @@ namespace Merchello.Web.Editors
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
-
     }
 }

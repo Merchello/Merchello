@@ -1,20 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-
-namespace Merchello.Core.Gateways
+﻿namespace Merchello.Core.Gateways
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Services;
+
     /// <summary>
     /// Base class for GatewayContext objects
     /// </summary>
+    /// <typeparam name="T">
+    /// The type of the gateway provider
+    /// </typeparam>
     public abstract class GatewayProviderTypedContextBase<T> : IGatewayProviderTypedContextBase<T>
         where T : GatewayProviderBase
     {
+        /// <summary>
+        /// The gateway provider service.
+        /// </summary>
         private readonly IGatewayProviderService _gatewayProviderService;
+
+        /// <summary>
+        /// The resolver.
+        /// </summary>
         private readonly IGatewayProviderResolver _resolver;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GatewayProviderTypedContextBase{T}"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="resolver">
+        /// The resolver.
+        /// </param>
         protected GatewayProviderTypedContextBase(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");            
@@ -22,7 +40,26 @@ namespace Merchello.Core.Gateways
 
             _gatewayProviderService = gatewayProviderService;            
             _resolver = resolver;
+        }
 
+        /// <summary>
+        /// Gets the <see cref="IGatewayProviderResolver"/>
+        /// </summary>
+        protected IGatewayProviderResolver GatewayProviderResolver
+        {
+            get
+            {
+                if (_resolver == null) throw new InvalidOperationException("GatewayProviderResolver has not been instantiated.");
+                return _resolver;
+            }
+        }
+
+        /// <summary>
+        /// Gets the GatewayProviderService
+        /// </summary>
+        protected IGatewayProviderService GatewayProviderService
+        {
+            get { return _gatewayProviderService; }
         }
 
         /// <summary>
@@ -46,10 +83,15 @@ namespace Merchello.Core.Gateways
         /// <summary>
         /// Instantiates a GatewayProvider given its registered Key
         /// </summary>
-        /// <typeparam name="T">The Type of the GatewayProvider.  Must inherit from GatewayProviderBase</typeparam>
-        /// <param name="gatewayProviderKey"></param>
-        /// <param name="activatedOnly">Search only activated providers</param>
-        /// <returns>An instantiated GatewayProvider</returns>
+        /// <param name="gatewayProviderKey">
+        /// The gateway provider key
+        /// </param>
+        /// <param name="activatedOnly">
+        /// Search only activated providers
+        /// </param>
+        /// <returns>
+        /// An instantiated GatewayProvider
+        /// </returns>
         public T GetProviderByKey(Guid gatewayProviderKey, bool activatedOnly = true)
         {
             return GatewayProviderResolver.GetProviderByKey<T>(gatewayProviderKey, activatedOnly);
@@ -64,7 +106,13 @@ namespace Merchello.Core.Gateways
 
         /// <summary>
         /// Creates an instance GatewayProvider given its registered Key
-        /// </summary>        
+        /// </summary>
+        /// <param name="gatewayProviderKey">
+        /// The gateway Provider Key.
+        /// </param>
+        /// <returns>
+        /// An instance of the gateway provider.
+        /// </returns>
         [Obsolete("Use GetProviderByKey instead")]
         public T CreateInstance(Guid gatewayProviderKey)
         {
@@ -86,7 +134,6 @@ namespace Merchello.Core.Gateways
         /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/> to be activated</param>
         public void ActivateProvider(IGatewayProviderSettings gatewayProviderSettings)
         {
-
             if (gatewayProviderSettings.Activated) return;
             GatewayProviderService.Save(gatewayProviderSettings);
             GatewayProviderResolver.RefreshCache();
@@ -111,26 +158,5 @@ namespace Merchello.Core.Gateways
             GatewayProviderService.Delete(gatewayProviderSettings);
             GatewayProviderResolver.RefreshCache();
         }
-
-
-        /// <summary>
-        /// Gets the <see cref="IGatewayProviderResolver"/>
-        /// </summary>
-        protected IGatewayProviderResolver GatewayProviderResolver
-        {
-            get{
-            if(_resolver == null) throw new InvalidOperationException("GatewayProviderResolver has not been instantiated.");
-                return _resolver;
-            }
-        }
-
-        /// <summary>
-        /// Gets the GatewayProviderService
-        /// </summary>
-        protected IGatewayProviderService GatewayProviderService
-        {
-            get { return _gatewayProviderService; }
-        }
-
     }
 }

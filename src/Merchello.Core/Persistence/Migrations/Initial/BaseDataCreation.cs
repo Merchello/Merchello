@@ -1,22 +1,32 @@
-﻿using System;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneOneZero;
-using Newtonsoft.Json;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Persistence;
-
-namespace Merchello.Core.Persistence.Migrations.Initial
+﻿namespace Merchello.Core.Persistence.Migrations.Initial
 {
+    using System;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Models.TypeFields;
+
+    using Newtonsoft.Json;
+
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
+
     /// <summary>
     /// Represents the initial data creation by running Insert for the base data.
     /// </summary>
     internal class BaseDataCreation
     {
+        /// <summary>
+        /// The database.
+        /// </summary>
         private readonly Database _database;
 
-        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseDataCreation"/> class.
+        /// </summary>
+        /// <param name="database">
+        /// The database.
+        /// </param>
         public BaseDataCreation(Database database)
         {
             _database = database;
@@ -45,6 +55,9 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             
         }
 
+        /// <summary>
+        /// The create database type field data.
+        /// </summary>
         private void CreateDbTypeFieldData()
         {
             // address
@@ -55,6 +68,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             // ItemCacheTypeField
             var itemcCache = new ItemCacheTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Basket.TypeKey, Alias = itemcCache.Basket.Alias, Name = itemcCache.Basket.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Backoffice.TypeKey, Alias = itemcCache.Backoffice.Alias, Name = itemcCache.Backoffice.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Wishlist.TypeKey, Alias = itemcCache.Wishlist.Alias, Name = itemcCache.Wishlist.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = itemcCache.Checkout.TypeKey, Alias = itemcCache.Checkout.Alias, Name = itemcCache.Checkout.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             
@@ -96,7 +110,6 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.Shipment.TypeKey, Alias = entity.Shipment.Alias, Name = entity.Shipment.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.Warehouse.TypeKey, Alias = entity.Warehouse.Alias, Name = entity.Warehouse.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.WarehouseCatalog.TypeKey, Alias = entity.WarehouseCatalog.Alias, Name = entity.WarehouseCatalog.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-
         }
 
         private void CreateInvoiceStatusData()
@@ -184,6 +197,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.NextInvoiceNumberKey, Name = "nextInvoiceNumber", Value = "1", TypeName = "System.Int32", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.DateFormatKey, Name = "dateFormat", Value = "dd-mm-yyyy", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.TimeFormatKey, Name = "timeFormat", Value = "am-pm", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.UnitSystemKey, Name = "unitSystem", Value = "Imperial", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalShippableKey, Name = "globalShippable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTaxableKey, Name = "globalTaxable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTrackInventoryKey, Name = "globalTrackInventory", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });

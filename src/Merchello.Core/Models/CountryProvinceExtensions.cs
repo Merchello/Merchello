@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models.Interfaces;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models.Interfaces;
+
     /// <summary>
     /// Extension methods for the generic <see cref="ICountry"/> and <see cref="IProvince"/>
     /// </summary>
@@ -36,6 +37,7 @@ namespace Merchello.Core.Models
             {
                 provinceCollection.Add(new TaxProvince(p.Code, p.Name));
             }
+
             return provinceCollection;
         }
     }

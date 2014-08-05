@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core.Persistence.Repositories;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Umbraco.Core.Persistence.Repositories;
+
     /// <summary>
     /// Defines the LineItemRepositoryBase class
     /// </summary>
@@ -14,6 +14,7 @@ namespace Merchello.Core.Persistence.Repositories
         IEnumerable<T> GetByContainerKey(Guid containerKey);
 
         void SaveLineItem(LineItemCollection items, Guid containerKey);
+
         void SaveLineItem(T item); 
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-
-namespace Merchello.Core
+﻿namespace Merchello.Core
 {
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+
     /// <summary>
     /// Helper methods for cloning objects
     /// </summary>
@@ -11,6 +11,15 @@ namespace Merchello.Core
         /// <summary>
         /// Deep clone of an object
         /// </summary>
+        /// <typeparam name="T">
+        /// The type T of the object passed and returned
+        /// </typeparam>
+        /// <param name="obj">
+        /// The obj.
+        /// </param>
+        /// <returns>
+        /// The a deep clone of object <see cref="T"/>.
+        /// </returns>
         public static T DeepClone<T>(T obj)
         {
             using (var ms = new MemoryStream())

@@ -1,21 +1,38 @@
-﻿using Merchello.Core;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Plugin.Payments.AuthorizeNet.Models;
-using Umbraco.Core;
-
-namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
+﻿namespace Merchello.Plugin.Payments.AuthorizeNet.Provider
 {
+    using Core;
+    using Core.Gateways;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Core.Services;
+    using Models;
+    using Umbraco.Core;
+    using Constants = Merchello.Plugin.Payments.AuthorizeNet.Constants;
+
     /// <summary>
     /// Represents an AuthorizeNet Payment Method
     /// </summary>
+    [GatewayMethodUi("AuthorizeNet.CreditCard")]
     [GatewayMethodEditor("Authorize.Net Payment Method Editor", "~/App_Plugins/Merchello.AuthorizeNet/paymentmethod.html")]
     public class AuthorizeNetPaymentGatewayMethod : PaymentGatewayMethodBase, IAuthorizeNetPaymentGatewayMethod
     {
+        /// <summary>
+        /// The Authorize.Net payment processor.
+        /// </summary>
         private readonly AuthorizeNetPaymentProcessor _processor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthorizeNetPaymentGatewayMethod"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="paymentMethod">
+        /// The payment method.
+        /// </param>
+        /// <param name="providerExtendedData">
+        /// The provider extended data.
+        /// </param>
         public AuthorizeNetPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, ExtendedDataCollection providerExtendedData) 
             : base(gatewayProviderService, paymentMethod)
         {

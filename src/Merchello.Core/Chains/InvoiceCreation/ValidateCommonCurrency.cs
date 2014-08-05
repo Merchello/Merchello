@@ -1,21 +1,38 @@
-﻿using System.IO;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Sales;
-using Umbraco.Core;
-
-namespace Merchello.Core.Chains.InvoiceCreation
+﻿namespace Merchello.Core.Chains.InvoiceCreation
 {
+    using System.IO;
+    using System.Linq;
+    using Models;
+    using Sales;
+    using Umbraco.Core;
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// Validates that all line items are costed in the same currency.  If a currency has not been set
     /// the line item is tagged with the default currency from Store Settings
     /// </summary>
     internal class ValidateCommonCurrency : InvoiceCreationAttemptChainTaskBase
     {
-        public ValidateCommonCurrency(SalePreparationBase salePreparation) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidateCommonCurrency"/> class.
+        /// </summary>
+        /// <param name="salePreparation">
+        /// The sale preparation.
+        /// </param>
+        public ValidateCommonCurrency(SalePreparationBase salePreparation)
             : base(salePreparation)
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// The perform task.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             var unTagged = value.Items.Where(x => !x.ExtendedData.ContainsKey(Constants.ExtendedDataKeys.CurrencyCode)).ToArray();

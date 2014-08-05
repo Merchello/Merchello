@@ -1,0 +1,27 @@
+﻿<div class="umb-panel merchello-side-panel">
+    <div class="umb-modalcolumn-header">
+        <h4>Addresses</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="form-group row-fluid provider-dropdown">
+            <label for="catalog-name">Select Address To Edit</label>
+            <div class="input-append col-xs-12 span12">
+                <select name="availableBillingAddresses" data-ng-model="dialogData.filter" data-ng-options="item.name for item in dialogData.availableAddresses"></select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                <!-- ACTION: Submit DialogData -->
+                <button class="btn btn-primary" data-ng-click="submit(dialogData)">Confirm</button>
+
+            </div>
+        </div>
+    </div>
+</div>
