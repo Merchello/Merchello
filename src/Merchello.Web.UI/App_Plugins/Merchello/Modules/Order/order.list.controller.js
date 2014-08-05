@@ -156,7 +156,7 @@
             $scope.invoices = [];
             $scope.sortProperty = "-invoiceNumber";
             $scope.sortOrder = "desc";
-            $scope.limitAmount = 10;
+            $scope.limitAmount = 100;
             $scope.currentPage = 0;
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
