@@ -16,7 +16,7 @@
         /// <param name="orderStatusKey">The <see cref="IOrderStatus"/> key</param>
         /// <param name="invoiceKey">The invoice key</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        /// <returns><see cref="IOrder"/></returns>
+        /// <returns>The <see cref="IOrder"/></returns>
         IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true);
 
         /// <summary>

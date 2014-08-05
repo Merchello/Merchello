@@ -195,6 +195,7 @@
         public IInvoice CreateInvoice(Guid invoiceStatusKey, int invoiceNumber, bool raiseEvents = true)
         {
             Mandate.ParameterCondition(Guid.Empty != invoiceStatusKey, "invoiceStatusKey");
+            Mandate.ParameterCondition(invoiceNumber >= 0, "invoiceNumber must be greater than or equal to 0");
 
             var status = GetInvoiceStatusByKey(invoiceStatusKey);
 
