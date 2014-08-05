@@ -225,7 +225,7 @@
                 callback: $scope.processDeleteInvoiceDialog,
                 dialogData: dialogData
             });
-        }
+        };
 
         /**
          * @ngdoc method

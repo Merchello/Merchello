@@ -61,6 +61,7 @@
 		<key alias="fulfillmentStatus">Fulfillment Status</key>
     <key alias="lineItems"> Line Items</key>
     <key alias="orderName">[Order Name]</key>
+    <key alias="sales">Sales</key>
     <!-- actions -->
 		<key alias="filter">Filter Orders</key>
     <key alias="capturePayment">Capture Payment</key>

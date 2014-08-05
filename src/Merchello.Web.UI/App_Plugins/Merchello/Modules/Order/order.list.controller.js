@@ -158,7 +158,30 @@
             $scope.sortOrder = "desc";
             $scope.limitAmount = 10;
             $scope.currentPage = 0;
+            $scope.selectAllOrders = false;
+            $scope.selectedOrderCount = 0;
             $scope.settings = {};
+            $scope.visible = {};
+            $scope.visible.bulkActionDropdown = false;
+        };
+
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         * 
+         * @description
+         * Sets the $scope variables.
+         */
+        $scope.updateBulkActionDropdownStatus = function(toggle) {
+            if (toggle) {
+                $scope.selectAllOrders = !$scope.selectAllOrders;
+            }
+            var shouldShowDropdown = false;
+            if ($scope.selectAllOrders === true) {
+                shouldShowDropdown = true;
+            }
+            $scope.visible.bulkActionDropdown = shouldShowDropdown;
         };
 
         $scope.init();

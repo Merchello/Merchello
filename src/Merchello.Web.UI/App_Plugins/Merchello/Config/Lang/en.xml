@@ -62,8 +62,9 @@
     <key alias="lineItems"> Line Items</key>
     <key alias="orderName">[Order Name]</key>
     <key alias="createOrder">Create Order</key>
+    <key alias="sales">Sales</key>   
     <!-- actions -->
-    <key alias="filter">Filter Orders</key>
+    <key alias="filter">Filter Invoices</key>
     <key alias="capturePayment">Capture Payment</key>
     <key alias="processPayment">Process Payment</key>
 
