@@ -92,9 +92,17 @@
         /// <returns>
         /// The collection of all <see cref="InvoiceDisplay"/>.
         /// </returns>
-        public IEnumerable<InvoiceDisplay> GetAllInvoices()
+        public QueryResultDisplay GetAllInvoices()
         {
-            return InvoiceQuery.GetAllInvoices();
+            var invoices = InvoiceQuery.GetAllInvoices().ToArray();
+
+            return new QueryResultDisplay()
+            {
+                Results = invoices,
+                PageIndex = 1,
+                TotalPages = 1,
+                TotalResults = invoices.Count()
+            };            
         }
 
         /// <summary>
@@ -111,9 +119,18 @@
         /// <returns>
         /// The paged collection of invoices.
         /// </returns>
-        public IEnumerable<InvoiceDisplay> GetAllInvoices(int page, int perPage)
+        public QueryResultDisplay GetAllInvoices(int page, int perPage)
         {
-            return InvoiceQuery.GetAllInvoices().Skip((page - 1) * perPage).Take(perPage);
+            var allInvoices = InvoiceQuery.GetAllInvoices().ToArray();
+            var invoices = allInvoices.Skip((page - 1) * perPage).Take(perPage);
+
+            return new QueryResultDisplay()
+            {
+                Results = invoices,
+                PageIndex = page,
+                TotalPages = ((allInvoices.Count() - 1) / perPage) + 1,
+                TotalResults = allInvoices.Count()
+            };            
         }
 
         /// <summary>
@@ -143,9 +160,17 @@
         /// <returns>
         /// The collection of invoices..
         /// </returns>
-        public IEnumerable<InvoiceDisplay> GetFilteredInvoices(string term)
+        public QueryResultDisplay GetFilteredInvoices(string term)
         {
-            return InvoiceQuery.Search(term);
+            var invoices = InvoiceQuery.Search(term).ToArray();
+
+            return new QueryResultDisplay()
+            {
+                Results = invoices,
+                PageIndex = 1,
+                TotalPages = 1,
+                TotalResults = invoices.Count()
+            };
         }
 
         /// <summary>
@@ -165,9 +190,18 @@
         /// <returns>
         /// The collection of invoices..
         /// </returns>
-        public IEnumerable<InvoiceDisplay> GetFilteredInvoices(string term, int page, int perPage)
+        public QueryResultDisplay GetFilteredInvoices(string term, int page, int perPage)
         {
-            return InvoiceQuery.Search(term).Skip((page - 1) * perPage).Take(perPage);
+            var allMatches = InvoiceQuery.Search(term).ToArray();
+            var invoices = allMatches.Skip((page - 1) * perPage).Take(perPage);
+
+            return new QueryResultDisplay()
+            {
+                Results = invoices,
+                PageIndex = page,
+                TotalPages = ((allMatches.Count() - 1) / perPage) + 1,
+                TotalResults = allMatches.Count()
+            };
         }
 
         /// <summary>
