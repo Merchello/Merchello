@@ -97,11 +97,14 @@
         * in Merchello models and add to the scope via the invoices collection.
         */
         $scope.loadAllInvoices = function () {
-            var promiseAll = merchelloInvoiceService.getAll();
-            promiseAll.then(function (allInvoices) {
-                $scope.invoices = _.map(allInvoices, function (invoice) {
+            var page = $scope.currentPage;
+            var perPage = $scope.limitAmount;
+            var promiseAll = merchelloInvoiceService.getAll(page, perPage);
+            promiseAll.then(function (response) {
+                $scope.invoices = _.map(response.results, function (invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
+                console.info(response);
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             }, function (reason) {

@@ -426,4 +426,25 @@
 	        self.orderPrepComplete = data.orderPrepComplete;
 	    }
 	};
+
+    models.QueryResult = function(data) {
+
+        var self = this;
+        if (data === undefined) {
+            self.results = [];
+            self.pageIndex = 0;
+            self.totalPages = 0;
+            self.totalResults = 0;
+        } else {
+            self.results = _.map(data.results, function(result) {
+                return result;
+            });
+            self.pageIndex = data.pageIndex;
+            self.totalPages = data.totalPages;
+            self.totalResults = data.totalResults;
+        }
+
+    };
+
+
 }(window.merchello.Models = window.merchello.Models || {}));

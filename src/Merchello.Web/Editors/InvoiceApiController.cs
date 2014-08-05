@@ -99,7 +99,7 @@
             return new QueryResultDisplay()
             {
                 Results = invoices,
-                PageIndex = 1,
+                PageIndex = 0,
                 TotalPages = 1,
                 TotalResults = invoices.Count()
             };            
@@ -167,7 +167,7 @@
             return new QueryResultDisplay()
             {
                 Results = invoices,
-                PageIndex = 1,
+                PageIndex = 0,
                 TotalPages = 1,
                 TotalResults = invoices.Count()
             };
