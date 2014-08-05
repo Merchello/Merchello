@@ -57,7 +57,7 @@ namespace Merchello.Core.Services
         /// <returns>The <see cref="IOrder"/></returns>
         public IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true)
         {
-            
+            return CreateOrder(orderStatusKey, invoiceKey, 0, raiseEvents);
         }
 
         /// <summary>
