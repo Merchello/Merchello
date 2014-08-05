@@ -104,7 +104,6 @@
                 $scope.invoices = _.map(response.results, function (invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
-                console.info(response);
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             }, function (reason) {
