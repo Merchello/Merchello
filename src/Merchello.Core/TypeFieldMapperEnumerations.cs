@@ -1,9 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-
-namespace Merchello.Core
+﻿namespace Merchello.Core
 {
-    
+    using System.Diagnostics.CodeAnalysis;
+
 #pragma warning disable 1591
 
     /// <summary>
