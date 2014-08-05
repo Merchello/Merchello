@@ -129,11 +129,17 @@
         /// The collection of all customers
         /// </returns>
         [HttpGet]
-        public IEnumerable<CustomerDisplay> GetAllCustomers()
+        public QueryResultDisplay GetAllCustomers()
         {
-            var merchello = new MerchelloHelper();
+            var customers = CustomerQuery.GetAllCustomers().ToArray();
 
-            return merchello.AllCustomers();
+            return new QueryResultDisplay()
+            {
+                Results = customers,
+                PageIndex = 0,
+                TotalPages = 1,
+                TotalResults = customers.Count()
+            };
         }
 
         /// <summary>
@@ -152,11 +158,18 @@
         /// The paged collection of customers.
         /// </returns>
         [HttpGet]
-        public IEnumerable<CustomerDisplay> GetAllCustomers(int page, int perPage)
+        public QueryResultDisplay GetAllCustomers(int page, int perPage)
         {
-            var merchello = new MerchelloHelper();
+            var allCustomers = CustomerQuery.GetAllCustomers().ToArray();
+            var customers = allCustomers.Skip((page - 1) * perPage).Take(perPage);
 
-            return merchello.AllCustomers().Skip((page - 1) * perPage).Take(perPage);
+            return new QueryResultDisplay()
+            {
+                Results = customers,
+                PageIndex = page,
+                TotalPages = ((allCustomers.Count() - 1) / perPage) + 1,
+                TotalResults = allCustomers.Count()
+            };
         }
 
         /// <summary>
