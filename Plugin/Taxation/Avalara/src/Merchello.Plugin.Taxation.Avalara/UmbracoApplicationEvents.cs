@@ -1,9 +1,11 @@
 ﻿namespace Merchello.Plugin.Taxation.Avalara
 {
     using System;
+    using System.Linq;
 
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Plugin.Taxation.Avalara.Models;
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
 
     using Umbraco.Core;
@@ -35,9 +37,23 @@
             AutoMapper.Mapper.CreateMap<IValidatableAddress, TaxAddress>(); 
         }
 
+        /// <summary>
+        /// The gateway provider service on saving.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
         private void GatewayProviderServiceOnSaving(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> saveEventArgs)
         {
-            throw new NotImplementedException();
+            var key = new Guid("DBC48C38-0617-44EA-989A-18AAD8D5DE52");
+            var provider = saveEventArgs.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
+
+            if (provider == null) return;
+
+            provider.ExtendedData.SaveProviderSettings(new AvaTaxProviderSettings());
         }
     }
 }

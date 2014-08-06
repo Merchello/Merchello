@@ -420,5 +420,17 @@ namespace Merchello.Core.Services
 
         #endregion
 
+        #region Warehouse
+
+        /// <summary>
+        /// Gets the default <see cref="IWarehouse"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IWarehouse"/>.
+        /// </returns>
+        IWarehouse GetDefaultWarehouse();
+
+
+        #endregion
     }
 }

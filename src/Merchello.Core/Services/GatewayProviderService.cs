@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Permissions;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the GatewayProviderService
     /// </summary>    
@@ -33,6 +33,7 @@ namespace Merchello.Core.Services
         private readonly IPaymentMethodService _paymentMethodService;
         private readonly INotificationMethodService _notificationMethodService;
         private readonly INotificationMessageService _notificationMessageService;
+        private readonly IWarehouseService _warehouseService;
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
@@ -40,18 +41,18 @@ namespace Merchello.Core.Services
          /// Constructor
          /// </summary>
          public GatewayProviderService()
-            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(), new OrderService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService(), new NotificationMethodService(), new NotificationMessageService())
+            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(), new OrderService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService(), new NotificationMethodService(), new NotificationMessageService(), new WarehouseService())
         { }
 
          internal GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, 
              IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, 
              IInvoiceService invoiceService, IOrderService orderService,
              ITaxMethodService taxMethodService, IPaymentService paymentService, IPaymentMethodService paymentMethodService,
-             INotificationMethodService notificationMethodService, INotificationMessageService notificationMessageService)
+             INotificationMethodService notificationMethodService, INotificationMessageService notificationMessageService, IWarehouseService warehouseService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, 
              shipRateTierService, shipCountryService, invoiceService, orderService, taxMethodService,
              paymentService, paymentMethodService,
-             notificationMethodService, notificationMessageService)
+             notificationMethodService, notificationMessageService, warehouseService)
         { }
 
         internal GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, 
@@ -63,7 +64,8 @@ namespace Merchello.Core.Services
             IPaymentService paymentService, 
             IPaymentMethodService paymentMethodService, 
             INotificationMethodService notificationMethodService, 
-            INotificationMessageService notificationMessageService)
+            INotificationMessageService notificationMessageService,
+            IWarehouseService warehouseService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
@@ -77,6 +79,7 @@ namespace Merchello.Core.Services
             Mandate.ParameterNotNull(orderService, "orderService");
             Mandate.ParameterNotNull(notificationMethodService, "notificationMethodService");
             Mandate.ParameterNotNull(notificationMessageService, "notificationMessageService");
+            Mandate.ParameterNotNull(warehouseService, "warehouseService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
@@ -90,8 +93,44 @@ namespace Merchello.Core.Services
             _paymentMethodService = paymentMethodService;
             _notificationMethodService = notificationMethodService;
             _notificationMessageService = notificationMessageService;
+            _warehouseService = warehouseService;
         }
 
+
+        #region Event Handlers
+
+        ///// <summary>
+        ///// Occurs after Create
+        ///// </summary>
+        //public static event TypedEventHandler<IGatewayProviderService, Events.NewEventArgs<IGatewayProvider>> Creating;
+
+
+        ///// <summary>
+        ///// Occurs after Create
+        ///// </summary>
+        //public static event TypedEventHandler<IGatewayProviderService, Events.NewEventArgs<IGatewayProvider>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IGatewayProviderService, SaveEventArgs<IGatewayProviderSettings>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IGatewayProviderService, SaveEventArgs<IGatewayProviderSettings>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IGatewayProviderService, DeleteEventArgs<IGatewayProviderSettings>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IGatewayProviderService, DeleteEventArgs<IGatewayProviderSettings>> Deleted;
+
+        #endregion
 
         #region GatewayProviderSettings
 
@@ -747,41 +786,18 @@ namespace Merchello.Core.Services
             return _taxMethodService.GetTaxMethodsByProviderKey(providerKey);
         }
 
+        
         #endregion
 
-        #region Event Handlers
+        #region Warehouse
 
-        ///// <summary>
-        ///// Occurs after Create
-        ///// </summary>
-        //public static event TypedEventHandler<IGatewayProviderService, Events.NewEventArgs<IGatewayProvider>> Creating;
+        public IWarehouse GetDefaultWarehouse()
+        {
+            return _warehouseService.GetDefaultWarehouse();
+        }
 
-
-        ///// <summary>
-        ///// Occurs after Create
-        ///// </summary>
-        //public static event TypedEventHandler<IGatewayProviderService, Events.NewEventArgs<IGatewayProvider>> Created;
-
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IGatewayProviderService, SaveEventArgs<IGatewayProviderSettings>> Saving;
-
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IGatewayProviderService, SaveEventArgs<IGatewayProviderSettings>> Saved;
-
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IGatewayProviderService, DeleteEventArgs<IGatewayProviderSettings>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IGatewayProviderService, DeleteEventArgs<IGatewayProviderSettings>> Deleted;
 
         #endregion
+
     }
 }

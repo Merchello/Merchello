@@ -4,6 +4,8 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
 
+    using Merchello.Core.Models;
+
     /// <summary>
     /// The Avalara AvaTax provider settings.
     /// Stores API authentication credentials and implementation settings
@@ -12,6 +14,17 @@
     [DataContract(IsReference = true)]
     public class AvaTaxProviderSettings
     {
+        /// <summary>
+        /// Gets the extended data key.
+        /// </summary>
+        public static string ExtendedDataKey
+        {
+            get
+            {
+                return "merchAvaTaxProviderSettings";
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether to use a demo or sandbox mode.
         /// </summary>
@@ -69,5 +82,10 @@
         /// Value can be found in the admin console
         /// </remarks>
         public string CompanyCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default store address.
+        /// </summary>
+        public IAddress DefaultStoreAddress { get; set; }
     }
 }
