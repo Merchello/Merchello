@@ -17,7 +17,7 @@ namespace Merchello.Core.Gateways.Taxation
         /// This assumes that the tax rate is assoicated with the invoice's billing address
         /// 
         /// </remarks>
-        ITaxCalculationResult CalculateTaxesForInvoice(IInvoice invoice);
+        ITaxCalculationResult CalculateTaxesForInvoice(IInvoice invoice, bool estimateOnly = false);
 
         /// <summary>
         /// Calculates taxes for the <see cref="IInvoice"/>
@@ -25,6 +25,6 @@ namespace Merchello.Core.Gateways.Taxation
         /// <param name="invoice">The <see cref="IInvoice"/> to tax</param>
         /// <param name="taxAddress">The address to base the taxation calculation - generally country and region</param>
         /// <returns>The <see cref="ITaxCalculationResult"/></returns>
-        ITaxCalculationResult CalculateTaxesForInvoice(IInvoice invoice, IAddress taxAddress);
+        ITaxCalculationResult CalculateTaxesForInvoice(IInvoice invoice, IAddress taxAddress, bool estimateOnly = false);
     }
 }

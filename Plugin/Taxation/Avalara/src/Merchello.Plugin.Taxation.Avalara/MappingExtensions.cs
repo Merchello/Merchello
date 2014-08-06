@@ -118,7 +118,7 @@
                             Description = shipLine.Name,
                             OriginCode = shipmentAddresses[0].AddressCode,
                             DestinationCode = shipmentAddresses[1].AddressCode,
-                            TaxCode = "FR020200"
+                            TaxCode = "FR020100"
                         });
 
                     addresses.AddRange(shipmentAddresses);

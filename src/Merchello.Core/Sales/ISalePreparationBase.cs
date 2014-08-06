@@ -12,6 +12,7 @@
     /// </summary>
     public interface ISalePreparationBase
     {
+        
         /// <summary>
         /// Restarts the checkout process, deleting all persisted data
         /// </summary>

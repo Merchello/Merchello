@@ -57,6 +57,7 @@
             _customer = customer;
             _itemCache = itemCache;
             ApplyTaxesToInvoice = true;
+            CalculateTaxesAsEstimate = true;
         }
 
         /// <summary>
@@ -95,6 +96,11 @@
         {
             get { return _merchelloContext.Cache.RuntimeCache; }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to calculate taxes as estimate.
+        /// </summary>
+        internal bool CalculateTaxesAsEstimate { get; set; }
 
         /// <summary>
         /// Purges sales manager information
@@ -274,6 +280,8 @@
 
             if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
+            CalculateTaxesAsEstimate = false;
+
             // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
 
@@ -342,6 +350,8 @@
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
             if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
+
+            CalculateTaxesAsEstimate = false;
 
             // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));

@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Reporting
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Defines the ReportDataAggregatorResolver.
@@ -8,14 +10,22 @@
     public interface IReportDataAggregatorResolver
     {
         /// <summary>
+        /// Gets a collection of all <see cref="IReportDataAggregator"/>s
+        /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="IReportDataAggregator"/>s
+        /// </returns>
+        IEnumerable<IReportDataAggregator> GetAll();
+
+        /// <summary>
         /// Gets a report data aggregator by it's key defined in the attribute
         /// </summary>
-        /// <param name="aggregatorKey">
-        /// The aggregator key.
+        /// <param name="alias">
+        /// The report alias
         /// </param>
         /// <returns>
         /// The <see cref="IReportDataAggregator"/>.
         /// </returns>
-        IReportDataAggregator GetByKey(Guid aggregatorKey);
+        IReportDataAggregator GetByAlias(string alias);
     }
 }
