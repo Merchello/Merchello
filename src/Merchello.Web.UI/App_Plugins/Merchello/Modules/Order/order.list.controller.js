@@ -135,18 +135,6 @@
 
         /**
          * @ngdoc method
-         * @name numberOfPages
-         * @function
-         * 
-         * @description
-         * Helper function to get the amount of items to show per page for the paging
-         */
-        $scope.numberOfPages = function () {
-            return Math.ceil($scope.invoices.length / $scope.limitAmount);
-        };
-
-        /**
-         * @ngdoc method
          * @name setVariables
          * @function
          * 
@@ -154,15 +142,16 @@
          * Sets the $scope variables.
          */
         $scope.setVariables = function () {
-            $scope.orderIssues = [];
-            $scope.invoices = [];
-            $scope.sortProperty = "-invoiceNumber";
-            $scope.sortOrder = "desc";
-            $scope.limitAmount = 100;
             $scope.currentPage = 0;
+            $scope.invoices = [];
+            $scope.limitAmount = 100;
+            $scope.numberOfPages = 0;
+            $scope.orderIssues = [];
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
             $scope.settings = {};
+            $scope.sortOrder = "desc";
+            $scope.sortProperty = "-invoiceNumber";
             $scope.visible = {};
             $scope.visible.bulkActionDropdown = false;
         };

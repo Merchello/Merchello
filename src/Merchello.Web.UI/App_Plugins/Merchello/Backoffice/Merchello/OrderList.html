@@ -94,8 +94,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty | startfrom:currentPage * limitAmount | limitTo:limitAmount" 
-                            data-ng-class="{active: invoice.selected}" data-ng-click="invoice.selected = !invoice.selected">
+                        <!-- Invoices -->
+                        <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="invoice.selected = !invoice.selected">
                             <td><input type="checkbox" data-ng-model="invoice.selected"/></td>
                             <td>#<a data-ng-href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
                             <td>{{invoice.invoiceDate | date : settings.dateFormat}}</td>
