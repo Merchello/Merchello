@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Gateways.Taxation.FixedRate
+﻿namespace Merchello.Core.Gateways.Taxation.FixedRate
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Represents the CountryTaxRateTaxationGatewayProvider.  
     /// </summary>
@@ -21,9 +23,25 @@ namespace Merchello.Core.Gateways.Taxation.FixedRate
     [GatewayProviderActivation("A4AD4331-C278-4231-8607-925E0839A6CD", "Fixed Rate Tax Provider", "Fixed Rate Tax Provider")]
     public class FixedRateTaxationGatewayProvider : TaxationGatewayProviderBase, IFixedRateTaxationGatewayProvider
     {
-        public FixedRateTaxationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FixedRateTaxationGatewayProvider"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="gatewayProviderSettings">
+        /// The gateway provider settings.
+        /// </param>
+        /// <param name="runtimeCacheProvider">
+        /// The runtime cache provider.
+        /// </param>
+        public FixedRateTaxationGatewayProvider(
+            IGatewayProviderService gatewayProviderService,
+            IGatewayProviderSettings gatewayProviderSettings,
+            IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
-        { }
+        {
+        }
 
         /// <summary>
         /// Creates a <see cref="ITaxationGatewayMethod"/>
