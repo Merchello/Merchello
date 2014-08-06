@@ -162,7 +162,6 @@
                 foreach(var message in result.Messages) Console.WriteLine(message.Details);
 
             Assert.AreEqual(result.ResultCode, SeverityLevel.Success);
-
         }
     }
 }
