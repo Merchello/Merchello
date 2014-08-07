@@ -1,4 +1,6 @@
-﻿namespace Merchello.Plugin.Taxation.Avalara.Provider
+﻿using System;
+
+namespace Merchello.Plugin.Taxation.Avalara.Provider
 {
     using Core.Gateways.Taxation;
     using Core.Models;
@@ -59,6 +61,8 @@
             var defaultStoreAddress = _settings.DefaultStoreAddress.ToTaxAddress();
             
             var request = invoice.AsTaxRequest(defaultStoreAddress, estimateOnly);
+
+            throw new NotImplementedException();
         }
     }
 }

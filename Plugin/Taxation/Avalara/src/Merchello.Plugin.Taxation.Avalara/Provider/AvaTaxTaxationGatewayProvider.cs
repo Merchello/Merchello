@@ -46,7 +46,6 @@
         /// </returns>
         public override IEnumerable<IGatewayResource> ListResourcesOffered()
         {
-
             var countryCodes = GatewayProviderService.GetAllShipCountries().Select(x => x.CountryCode).Distinct();
 
             var resources =

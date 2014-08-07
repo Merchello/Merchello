@@ -81,6 +81,7 @@
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
+    <Compile Include="Events\SalesPreparationEventArgs.cs" />
     <Compile Include="Formatters\IPatternReplaceFormatter.cs" />
     <Compile Include="Formatters\IReplaceablePattern.cs" />
     <Compile Include="Formatters\PatternReplaceFormatter.cs" />
@@ -716,6 +717,7 @@
     <Compile Include="Chains\AttemptChainTaskHandler.cs" />
     <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="Sales\SalesDocumentHelper.cs" />
+    <Compile Include="Sales\SalesPreparationEvents.cs" />
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />

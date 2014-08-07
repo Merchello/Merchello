@@ -42,7 +42,7 @@
         /// Calculates taxes for the <see cref="IInvoice"/>
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/> to tax</param>
-        /// <param name="estimateOnly">
+        /// <param name="quoteOnly">
         /// An optional parameter indicating that the tax calculation should be an estimate.
         /// This is useful for some 3rd party tax APIs
         /// </param>
@@ -52,7 +52,7 @@
         /// This assumes that the tax rate is associated with the invoice's billing address
         /// 
         /// </remarks>
-        public ITaxCalculationResult CalculateTaxesForInvoice(IInvoice invoice, bool estimateOnly = false)
+        public ITaxCalculationResult CalculateTaxesForInvoice(IInvoice invoice, bool quoteOnly = false)
         {
             return CalculateTaxesForInvoice(invoice, invoice.GetBillingAddress());
         }
@@ -66,14 +66,14 @@
         /// <param name="taxAddress">
         /// The address to base the taxation calculation
         /// </param>
-        /// <param name="estimateOnly">
+        /// <param name="quoteOnly">
         /// An optional parameter indicating that the tax calculation should be an estimate.
         /// This is useful for some 3rd party tax APIs
         /// </param>
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>
         /// </returns>
-        public ITaxCalculationResult CalculateTaxesForInvoice(IInvoice invoice, IAddress taxAddress, bool estimateOnly = false)
+        public ITaxCalculationResult CalculateTaxesForInvoice(IInvoice invoice, IAddress taxAddress, bool quoteOnly = false)
         {
             var providersKey =
                 GatewayProviderService.GetTaxMethodsByCountryCode(taxAddress.CountryCode)
@@ -88,6 +88,18 @@
             return gatewayTaxMethod.CalculateTaxForInvoice(invoice, taxAddress);
         }
 
-
+        /// <summary>
+        /// Gets the tax method for a given tax address
+        /// </summary>
+        /// <param name="taxAddress">
+        /// The tax address
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxMethod"/>.
+        /// </returns>
+        public ITaxMethod GetTaxMethodForTaxAddress(IAddress taxAddress)
+        {
+            return GatewayProviderService.GetTaxMethodsByCountryCode(taxAddress.CountryCode).FirstOrDefault();
+        }
     }
 }

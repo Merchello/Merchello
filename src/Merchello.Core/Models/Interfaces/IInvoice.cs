@@ -33,7 +33,7 @@
         DateTime InvoiceDate { get; set; }
         
         /// <summary>
-        /// Gets the id for the invoice status associated with this invoice
+        /// Gets the key for the invoice status associated with this invoice
         /// </summary>
         [DataMember]
         Guid InvoiceStatusKey { get; }
