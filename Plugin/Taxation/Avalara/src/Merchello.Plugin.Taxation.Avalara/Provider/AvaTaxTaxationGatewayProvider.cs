@@ -80,7 +80,7 @@
 
             if (attempt.Success)
             {
-                return new AvaTaxTaxationGatewayMethod(attempt.Result, ExtendedData);
+                return new AvaTaxTaxationGatewayMethod(attempt.Result, GatewayProviderService, ExtendedData);
             }
 
             LogHelper.Error<TaxationGatewayProviderBase>("CreateTaxMethod failed.", attempt.Exception);
@@ -101,18 +101,18 @@
         {
             var taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == countryCode);
 
-            return taxMethod != null ? new AvaTaxTaxationGatewayMethod(taxMethod, ExtendedData) : null;
+            return taxMethod != null ? new AvaTaxTaxationGatewayMethod(taxMethod, GatewayProviderService, ExtendedData) : null;
         }
 
         /// <summary>
         /// Gets all gateway tax methods associated with the <see cref="AvaTaxTaxationGatewayProvider"/>
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The collection of all AvaTax tax methods.
         /// </returns>
         public override IEnumerable<ITaxationGatewayMethod> GetAllGatewayTaxMethods()
         {
-            return TaxMethods.Select(taxMethod => new AvaTaxTaxationGatewayMethod(taxMethod, ExtendedData));
+            return TaxMethods.Select(taxMethod => new AvaTaxTaxationGatewayMethod(taxMethod, GatewayProviderService, ExtendedData));
         }
     }
 }
