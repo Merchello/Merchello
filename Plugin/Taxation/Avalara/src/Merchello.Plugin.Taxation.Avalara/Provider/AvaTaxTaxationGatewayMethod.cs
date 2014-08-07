@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
 namespace Merchello.Plugin.Taxation.Avalara.Provider
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Core.Gateways.Taxation;
     using Core.Models;
-
-    using Merchello.Core.Services;
-    using Merchello.Plugin.Taxation.Avalara.Models;
+    using Core.Services;
+    using Models;
+    using Services;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the Avalara taxation gateway method
@@ -19,9 +23,9 @@ namespace Merchello.Plugin.Taxation.Avalara.Provider
         private readonly AvaTaxProviderSettings _settings;
 
         /// <summary>
-        /// The gateway provider service.
+        /// The ava tax service.
         /// </summary>
-        private readonly IGatewayProviderService _gatewayProviderService;
+        private readonly AvaTaxService _avaTaxService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AvaTaxTaxationGatewayMethod"/> class.
@@ -29,16 +33,15 @@ namespace Merchello.Plugin.Taxation.Avalara.Provider
         /// <param name="taxMethod">
         /// The tax method.
         /// </param>
-        /// <param name="gatewayProviderService">
-        /// The gateway Provider Service.
-        /// </param>
         /// <param name="extendedData">
         /// The extended Data collection from the provider.
         /// </param>
-        public AvaTaxTaxationGatewayMethod(ITaxMethod taxMethod, IGatewayProviderService gatewayProviderService, ExtendedDataCollection extendedData) : base(taxMethod)
-        {
-            _gatewayProviderService = gatewayProviderService;
+        public AvaTaxTaxationGatewayMethod(ITaxMethod taxMethod, ExtendedDataCollection extendedData) 
+            : base(taxMethod)
+        {            
             _settings = extendedData.GetAvaTaxProviderSettings();
+
+            _avaTaxService = new AvaTaxService(_settings);
         }
 
         /// <summary>
@@ -75,11 +78,46 @@ namespace Merchello.Plugin.Taxation.Avalara.Provider
         /// </returns>
         public ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress, bool quoteOnly)
         {
-            var defaultStoreAddress = _settings.DefaultStoreAddress.ToTaxAddress();
+            var defaultStoreAddress = _settings.DefaultStoreAddress;
+
+            string prefix = invoice.InvoiceNumberPrefix;
+
+            if (quoteOnly)
+            {                
+                invoice.InvoiceNumberPrefix = string.Format("Quote-{0}", Guid.NewGuid());
+            }
 
             var request = invoice.AsTaxRequest(defaultStoreAddress, quoteOnly);
+            if (quoteOnly) invoice.InvoiceNumberPrefix = prefix;
 
-            throw new NotImplementedException();
+            request.CompanyCode = _settings.CompanyCode;
+
+            var avaTaxResult = _avaTaxService.GetTax(request);
+
+            if (avaTaxResult.ResultCode == SeverityLevel.Success)
+            {
+                var extendedData = new ExtendedDataCollection();
+
+                extendedData.SetValue(Core.Constants.ExtendedDataKeys.TaxTransactionResults, JsonConvert.SerializeObject(avaTaxResult));
+
+                return new TaxCalculationResult(TaxMethod.Name, -1, avaTaxResult.TotalTax, extendedData);
+            }
+
+            IEnumerable<ApiResponseMessage> messages;
+            try
+            {
+                messages = avaTaxResult.Messages;
+            }
+            catch (Exception)
+            {                    
+                messages = Enumerable.Empty<ApiResponseMessage>();
+            }
+        
+            var exception = new AvaTaxApiException(string.Format("AvaTax returned result code: {0}.  {1}", avaTaxResult.ResultCode, string.Join(Environment.NewLine, messages.Select(x => x.Details))));
+
+            LogHelper.Error<AvaTaxTaxationGatewayMethod>("AvaTax API returned an exception", exception);
+
+            throw exception;
         }
     }
 }
