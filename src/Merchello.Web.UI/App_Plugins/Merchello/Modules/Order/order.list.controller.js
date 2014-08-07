@@ -12,6 +12,19 @@
 
         /**
          * @ngdoc method
+         * @name changePage
+         * @function
+         * 
+         * @description
+         * Changes the current page.
+         */
+        $scope.changePage = function (page) {
+            $scope.currentPage = page;
+            $scope.loadAllInvoices();
+        };
+
+        /**
+         * @ngdoc method
          * @name changeSortOrder
          * @function
          * 
@@ -44,17 +57,17 @@
          * param.  This searches the Examine index in the core.
          */
         $scope.getFilteredInvoices = function (filter) {
-            //notificationsService.info("Filtering...", "");
+            notificationsService.info("Filtering...", "");
             if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
                 $scope.loadAllInvoices();
-                //notificationsService.success("Filtered Invoices Loaded", "");
             } else {
                 var promise = merchelloInvoiceService.getFiltered(filter);
-                promise.then(function (invoices) {
-                    $scope.invoices = _.map(invoices, function (invoice) {
+                promise.then(function (response) {
+                    var queryResult = new merchello.Models.QueryResult(response);
+                    $scope.invoices = _.map(queryResult.results, function (invoice) {
                         return new merchello.Models.Invoice(invoice);
                     });
-                    //notificationsService.success("Filtered Invoices Loaded", "");
+                    notificationsService.success("Filtered Invoices Loaded", "");
                 }, function (reason) {
                     notificationsService.success("Filtered Invoices Load Failed:", reason.message);
                 });
@@ -85,6 +98,8 @@
          */
         $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
+            $scope.page = 0;
+            $scope.loadAllInvoices();
         };
 
         /**
@@ -96,16 +111,30 @@
         * Load the invoices from the invoice service, then wrap the results
         * in Merchello models and add to the scope via the invoices collection.
         */
-        $scope.loadAllInvoices = function () {
-            var page = $scope.currentPage;
-            var perPage = $scope.limitAmount;
+        $scope.loadAllInvoices = function(page, perPage) {
+            if (page === undefined) {
+                page = $scope.currentPage;
+            } else {
+                $scope.currentPage = page;
+            }
+            if (perPage === undefined) {
+                perPage = $scope.limitAmount;
+            } else {
+                $scope.limitAmount = perPage;
+            }
             var promiseAll = merchelloInvoiceService.getAll(page, perPage);
             promiseAll.then(function (response) {
-                $scope.invoices = _.map(response.results, function (invoice) {
+                var queryResult = new merchello.Models.QueryResult(response);
+                $scope.invoices = _.map(queryResult.results, function (invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
+                $scope.maxPages = queryResult.totalPages;
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
+                if ($scope.selectedOrderCount > 0) {
+                    $scope.selectAllOrders = true;
+                    $scope.updateBulkActionDropdownStatus(true);
+                }
             }, function (reason) {
                 notificationsService.error("All Invoices Load Failed", reason.message);
             });
@@ -133,6 +162,10 @@
             });
         };
 
+        $scope.numberOfPages = function() {
+            return $scope.maxPages;
+        };
+
         /**
          * @ngdoc method
          * @name setVariables
@@ -144,8 +177,8 @@
         $scope.setVariables = function () {
             $scope.currentPage = 0;
             $scope.invoices = [];
-            $scope.limitAmount = 100;
-            $scope.numberOfPages = 0;
+            $scope.limitAmount = '100';
+            $scope.maxPages = 0;
             $scope.orderIssues = [];
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
@@ -164,13 +197,24 @@
          * @description
          * Sets the $scope variables.
          */
-        $scope.updateBulkActionDropdownStatus = function(toggle) {
+        $scope.updateBulkActionDropdownStatus = function (toggle, key) {
+            var i, shouldShowDropdown = false;
+            $scope.selectedOrderCount = 0;
             if (toggle) {
                 $scope.selectAllOrders = !$scope.selectAllOrders;
             }
-            var shouldShowDropdown = false;
-            if ($scope.selectAllOrders === true) {
-                shouldShowDropdown = true;
+            for (i = 0; i < $scope.invoices.length; i++) {
+                if (toggle) {
+                    $scope.invoices[i].selected = $scope.selectAllOrders;
+                } else {
+                    if ($scope.invoices[i].key === key) {
+                        $scope.invoices[i].selected = !$scope.invoices[i].selected;
+                    }
+                }
+                if ($scope.invoices[i].selected) {
+                    shouldShowDropdown = true;
+                    $scope.selectedOrderCount += 1;
+                }
             }
             $scope.visible.bulkActionDropdown = shouldShowDropdown;
         };
