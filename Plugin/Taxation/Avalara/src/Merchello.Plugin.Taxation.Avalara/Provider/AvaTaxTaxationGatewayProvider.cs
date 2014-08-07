@@ -17,7 +17,7 @@
     /// <summary>
     /// The Avalara taxation gateway provider.
     /// </summary>
-    [GatewayProviderActivation("DBC48C38-0617-44EA-989A-18AAD8D5DE52", "Avalara Sales Tax Provider", "Avalara Sales Tax Provider")]
+    [GatewayProviderActivation("DBC48C38-0617-44EA-989A-18AAD8D5DE52", "Avalara AvaTax Provider", "Avalara AvaTax Provider")]
     [GatewayProviderEditor("Avalara Taxation Provider Configuration", "~/App_Plugins/Merchello.Avalara/Dialogs/avatax.provider.configuration.html")]
     public class AvaTaxTaxationGatewayProvider : TaxationGatewayProviderBase, IAvaTaxTaxationGatewayProvider
     {
@@ -79,7 +79,7 @@
 
             if (attempt.Success)
             {
-                return new AvaTaxTaxationGatewayMethod(attempt.Result, GatewayProviderService, ExtendedData);
+                return new AvaTaxTaxationGatewayMethod(attempt.Result, ExtendedData);
             }
 
             LogHelper.Error<TaxationGatewayProviderBase>("CreateTaxMethod failed.", attempt.Exception);
@@ -100,7 +100,7 @@
         {
             var taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == countryCode);
 
-            return taxMethod != null ? new AvaTaxTaxationGatewayMethod(taxMethod, GatewayProviderService, ExtendedData) : null;
+            return taxMethod != null ? new AvaTaxTaxationGatewayMethod(taxMethod, ExtendedData) : null;
         }
 
         /// <summary>
@@ -111,7 +111,7 @@
         /// </returns>
         public override IEnumerable<ITaxationGatewayMethod> GetAllGatewayTaxMethods()
         {
-            return TaxMethods.Select(taxMethod => new AvaTaxTaxationGatewayMethod(taxMethod, GatewayProviderService, ExtendedData));
+            return TaxMethods.Select(taxMethod => new AvaTaxTaxationGatewayMethod(taxMethod, ExtendedData));
         }
 
         /// <summary>
@@ -125,7 +125,7 @@
         /// </returns>
         public IAvaTaxTaxationGatewayMethod GetAvaTaxationGatewayMethod(ITaxMethod taxMethod)
         {
-            return new AvaTaxTaxationGatewayMethod(taxMethod, GatewayProviderService, ExtendedData);
+            return new AvaTaxTaxationGatewayMethod(taxMethod, ExtendedData);
         }
     }
 }

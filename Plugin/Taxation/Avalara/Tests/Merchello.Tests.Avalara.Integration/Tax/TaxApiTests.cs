@@ -148,7 +148,7 @@
                     CountryCode = "US"
                 };
 
-            var taxRequest = Invoice.AsTaxRequest(storeAddress.ToTaxAddress(), false);
+            var taxRequest = Invoice.AsTaxRequest(storeAddress.ToTaxAddress());
             taxRequest.DocCode = "INV-DT-" + Guid.NewGuid().ToString();
             Assert.NotNull(taxRequest);
 

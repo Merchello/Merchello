@@ -11,7 +11,6 @@
     using Models;
     using Models.Address;
     using Provider;
-    using Web.Models.MapperResolvers;
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
@@ -95,6 +94,7 @@
 
             var taxMethod = taxation.GetTaxMethodForTaxAddress(taxAddress);
 
+            // If the taxMethod is not found or 
             if (taxMethod == null || !providerKey.Equals(taxMethod.ProviderKey)) return;
 
             var provider = taxation.GetProviderByKey(taxMethod.ProviderKey) as AvaTaxTaxationGatewayProvider;

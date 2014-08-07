@@ -1,4 +1,6 @@
-﻿namespace Merchello.Plugin.Taxation.Avalara.Models
+﻿using Merchello.Plugin.Taxation.Avalara.Models.Address;
+
+namespace Merchello.Plugin.Taxation.Avalara.Models
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -67,6 +69,21 @@
         }
 
         /// <summary>
+        /// Gets or sets the company code.
+        /// </summary>
+        /// <remarks>
+        /// Value can be found in the admin console
+        /// </remarks>
+        [DataMember]
+        public string CompanyCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default store address.
+        /// </summary>
+        [DataMember]
+        public TaxAddress DefaultStoreAddress { get; set; }
+
+        /// <summary>
         /// Gets the API version.
         /// </summary>
         [DataMember]
@@ -74,18 +91,5 @@
         { 
             get { return "1.0"; } 
         }
-
-        /// <summary>
-        /// Gets or sets the company code.
-        /// </summary>
-        /// <remarks>
-        /// Value can be found in the admin console
-        /// </remarks>
-        public string CompanyCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the default store address.
-        /// </summary>
-        public IAddress DefaultStoreAddress { get; set; }
     }
 }
