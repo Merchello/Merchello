@@ -19,7 +19,7 @@
         IInvoice Invoice { get; }
         
         /// <summary>
-        /// True/false indicating whether or not the sales preparation should generate the <see cref="IOrder"/> and <see cref="IShipment"/>(s)
+        /// Gets a value indicating whether or not the sales preparation should generate the <see cref="IOrder"/> and <see cref="IShipment"/>(s)
         /// </summary>
         bool ApproveOrderCreation { get;  }
     }

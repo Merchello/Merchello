@@ -332,7 +332,7 @@
         }
 
         /// <summary>
-        /// Gets the invoice number
+        /// Gets or sets the invoice number
         /// </summary>
         [DataMember]
         public int InvoiceNumber
@@ -342,7 +342,7 @@
                 return _invoiceNumber;
             }
 
-            internal set
+            set
             {
                 SetPropertyValueAndDetectChanges(
                     o =>

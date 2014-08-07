@@ -30,15 +30,11 @@
         /// <param name="taxAddress">
         /// The tax address.
         /// </param>
-        /// <param name="estimateTax">
-        /// The estimate tax.
-        /// </param>
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        public override ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress, bool estimateTax = false)
-        {
-            
+        public override ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress)
+        {            
             var ctrValues = new object[] { invoice, taxAddress, TaxMethod };
 
             var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultInvoiceTaxRateQuote).Type;
