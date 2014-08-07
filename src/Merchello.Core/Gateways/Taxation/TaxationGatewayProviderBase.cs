@@ -58,11 +58,11 @@ namespace Merchello.Core.Gateways.Taxation
         /// </summary>
         internal void DeleteAllTaxMethods()
         {
-            foreach(var taxMethod in TaxMethods) GatewayProviderService.Delete(taxMethod);
+            foreach (var taxMethod in TaxMethods) GatewayProviderService.Delete(taxMethod);
         }
         
         /// <summary>
-        /// Gets a <see cref="ITaxationGatewayMethod"/> by it's unique 'key' (Guid)
+        /// Gets a <see cref="ITaxationGatewayMethod"/> by it's unique 'key' (GUID)
         /// </summary>
         /// <param name="countryCode">The two char ISO country code</param>
         /// <returns><see cref="ITaxationGatewayMethod"/></returns>

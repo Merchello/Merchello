@@ -148,7 +148,7 @@
                     CountryCode = "US"
                 };
 
-            var taxRequest = Invoice.AsTaxRequest(storeAddress.ToTaxAddress());
+            var taxRequest = Invoice.AsTaxRequest(storeAddress.ToTaxAddress(), false);
             taxRequest.DocCode = "INV-DT-" + Guid.NewGuid().ToString();
             Assert.NotNull(taxRequest);
 
@@ -162,7 +162,6 @@
                 foreach(var message in result.Messages) Console.WriteLine(message.Details);
 
             Assert.AreEqual(result.ResultCode, SeverityLevel.Success);
-
         }
     }
 }

@@ -28,8 +28,8 @@
     /// </remarks>
     public enum StatementType
     {
-        SalesOrder,
-        SalesInvoice,
+        SalesOrder, // this is a quote
+        SalesInvoice, // this is to record the sale
         ReturnOrder,
         ReturnInvoice,
         PurchaseOrder,

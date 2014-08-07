@@ -3,6 +3,9 @@
     /// <summary>
     /// Defines a Report Data Aggregator
     /// </summary>
+    /// <remarks>
+    /// Report data aggregators are used by the ReportApiController (in .Web) to collect data for reports
+    /// </remarks>
     public interface IReportDataAggregator
     {
         /// <summary>
