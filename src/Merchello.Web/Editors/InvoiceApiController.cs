@@ -122,7 +122,7 @@
         public QueryResultDisplay GetAllInvoices(int page, int perPage)
         {
             var allInvoices = InvoiceQuery.GetAllInvoices().ToArray();
-            var invoices = allInvoices.Skip((page - 1) * perPage).Take(perPage);
+            var invoices = allInvoices.Skip(page * perPage).Take(perPage);
 
             return new QueryResultDisplay()
             {
