@@ -3,6 +3,7 @@
     using Core.Gateways.Taxation;
     using Core.Models;
 
+    using Merchello.Core.Services;
     using Merchello.Plugin.Taxation.Avalara.Models;
 
     /// <summary>
@@ -16,16 +17,25 @@
         private readonly AvaTaxProviderSettings _settings;
 
         /// <summary>
+        /// The gateway provider service.
+        /// </summary>
+        private readonly IGatewayProviderService _gatewayProviderService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AvaTaxTaxationGatewayMethod"/> class.
         /// </summary>
         /// <param name="taxMethod">
         /// The tax method.
         /// </param>
+        /// <param name="gatewayProviderService">
+        /// The gateway Provider Service.
+        /// </param>
         /// <param name="extendedData">
         /// The extended Data collection from the provider.
         /// </param>
-        public AvaTaxTaxationGatewayMethod(ITaxMethod taxMethod, ExtendedDataCollection extendedData) : base(taxMethod)
+        public AvaTaxTaxationGatewayMethod(ITaxMethod taxMethod, IGatewayProviderService gatewayProviderService, ExtendedDataCollection extendedData) : base(taxMethod)
         {
+            _gatewayProviderService = gatewayProviderService;
             _settings = extendedData.GetAvaTaxProviderSettings();
         }
 
@@ -46,7 +56,9 @@
         /// </returns>
         public override ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress, bool estimateOnly = false)
         {
-            throw new System.NotImplementedException();
+            var defaultStoreAddress = _settings.DefaultStoreAddress.ToTaxAddress();
+            
+            var request = invoice.AsTaxRequest(defaultStoreAddress, estimateOnly);
         }
     }
 }
