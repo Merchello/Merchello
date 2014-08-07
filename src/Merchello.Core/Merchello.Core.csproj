@@ -715,6 +715,7 @@
     <Compile Include="Chains\AttemptChainEndOfChainHandler.cs" />
     <Compile Include="Chains\AttemptChainTaskHandler.cs" />
     <Compile Include="RateAdjustmentType.cs" />
+    <Compile Include="Sales\SalesDocumentHelper.cs" />
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
