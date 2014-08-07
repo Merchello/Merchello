@@ -1,4 +1,6 @@
-﻿namespace Merchello.Tests.Avalara.Integration.TestBase
+﻿using Merchello.Core.Persistence.UnitOfWork;
+
+namespace Merchello.Tests.Avalara.Integration.TestBase
 {
     using Merchello.Core;
     using Merchello.Core.Gateways.Shipping;
@@ -19,6 +21,7 @@
     {
         protected IGatewayProviderSettings GatewayProviderSettings;
         protected IGatewayProviderService GatewayProviderService;
+        protected DbPreTestDataWorker DataWorker;
         protected IAvaTaxService AvaTaxService;
 
         protected IInvoice Invoice;
@@ -35,9 +38,7 @@
 
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
 
-            var cacheProvider = new Mock<IRuntimeCacheProvider>();
-
-            //GatewayProviderService = new GatewayProviderService();
+            DataWorker = new DbPreTestDataWorker(new ServiceContext(new PetaPocoUnitOfWorkProvider()));
 
             MakeInvoice();
         }

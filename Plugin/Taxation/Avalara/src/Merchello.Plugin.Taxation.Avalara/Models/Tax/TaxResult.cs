@@ -1,16 +1,25 @@
-﻿namespace Merchello.Plugin.Taxation.Avalara.Models
+﻿namespace Merchello.Plugin.Taxation.Avalara.Models.Tax
 {
     using System;
     using System.Collections.Generic;
-
-    using Merchello.Plugin.Taxation.Avalara.Models.Address;
-    using Merchello.Plugin.Taxation.Avalara.Models.Tax;
+    using Address;
 
     /// <summary>
     /// The tax result.
     /// </summary>
     public class TaxResult
     {
+        /// <summary>
+        /// Gets the extended data key.
+        /// </summary>
+        public static string ExtendedDataKey
+        {
+            get
+            {
+                return "merchAvaTaxTaxResult";
+            }
+        }
+
         /// <summary>
         /// Gets or sets the doc code.
         /// </summary>

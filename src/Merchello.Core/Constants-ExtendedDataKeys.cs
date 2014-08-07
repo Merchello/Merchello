@@ -57,6 +57,7 @@
                     "merchBillingAddress",
                     "merchBaseTax",
                     "merchProvinceTaxRate",
+                    "merchTaxTransactionResults",
                     "merchSmtpProviderSettings"
                 }; 
             }
@@ -398,6 +399,14 @@
             public static string LineItemTaxAmount
             {
                 get { return "merchLineItemTaxAmount"; }
+            }
+
+            /// <summary>
+            /// Gets the tax transaction results.
+            /// </summary>
+            public static string TaxTransactionResults
+            {
+                get { return "merchTaxTransactionResults"; }
             }
 
             //// SMTP ---------------------------------------------------------------------------

@@ -425,7 +425,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
         }
 
-        internal IShipCountryService ShipCountryService
+        public IShipCountryService ShipCountryService
         {
             get { return _serviceContext.ShipCountryService; }
         }
