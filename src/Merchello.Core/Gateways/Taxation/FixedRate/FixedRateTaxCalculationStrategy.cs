@@ -41,13 +41,10 @@
         /// <summary>
         /// Computes the invoice tax result
         /// </summary>
-        /// <param name="estimateOnly">
-        /// The estimate Only - not used.
-        /// </param>
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>
         /// </returns>
-        public override Attempt<ITaxCalculationResult> CalculateTaxesForInvoice(bool estimateOnly)
+        public override Attempt<ITaxCalculationResult> CalculateTaxesForInvoice()
         {
             var extendedData = new ExtendedDataCollection();
 

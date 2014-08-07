@@ -2,12 +2,16 @@
 {
     using System;
     using System.Linq;
-
-    using Merchello.Core.Models;
-    using Merchello.Core.Services;
-    using Merchello.Plugin.Taxation.Avalara.Models;
-    using Merchello.Plugin.Taxation.Avalara.Models.Address;
-
+    using Core;
+    using Core.Events;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Core.Sales;
+    using Core.Services;
+    using Models;
+    using Models.Address;
+    using Provider;
+    using Web.Models.MapperResolvers;
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
@@ -16,7 +20,7 @@
     /// Handles Umbraco application events.
     /// </summary>
     public class UmbracoApplicationEvents : ApplicationEventHandler
-    {
+    {        
         /// <summary>
         /// Handles the Umbraco application started event.
         /// </summary>
@@ -35,7 +39,9 @@
             GatewayProviderService.Saving += GatewayProviderServiceOnSaving;
 
             AutoMapper.Mapper.CreateMap<IValidatableAddress, TaxAddress>(); 
-        }
+
+            SalePreparationBase.Finalizing += SalePreparationBaseOnFinalizing;
+        }   
 
         /// <summary>
         /// The gateway provider service on saving.
@@ -54,6 +60,50 @@
             if (provider == null) return;
 
             provider.ExtendedData.SaveProviderSettings(new AvaTaxProviderSettings());
+        }
+
+        /// <summary>
+        /// Handles the <see cref="SalePreparationBase"/> finalizing event.  AvaTax require the "quote" be finalized so that 
+        /// it can actually be recorded for reporting purposes.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        private void SalePreparationBaseOnFinalizing(SalePreparationBase sender, SalesPreparationEventArgs<IPaymentResult> args)
+        {
+            var result = args.Entity;
+            var invoice = result.Invoice;
+
+            if (!result.Payment.Success) return;
+
+            var taxation = MerchelloContext.Current.Gateways.Taxation;
+
+            var providerKey = new Guid("DBC48C38-0617-44EA-989A-18AAD8D5DE52");
+
+            IAddress taxAddress = null;
+            var shippingItems = invoice.ShippingLineItems().ToArray();
+            if (shippingItems.Any())
+            {
+                var shipment = shippingItems.First().ExtendedData.GetShipment<OrderLineItem>();
+                taxAddress = shipment.GetDestinationAddress();
+            }
+
+            taxAddress = taxAddress ?? invoice.GetBillingAddress();
+
+            var taxMethod = taxation.GetTaxMethodForTaxAddress(taxAddress);
+
+            if (taxMethod == null || !providerKey.Equals(taxMethod.ProviderKey)) return;
+
+            var provider = taxation.GetProviderByKey(taxMethod.ProviderKey) as AvaTaxTaxationGatewayProvider;
+
+            if (provider == null) return;
+
+            var avaTaxMethod = provider.GetAvaTaxationGatewayMethod(taxMethod);
+
+            avaTaxMethod.CalculateTaxForInvoice(invoice, taxAddress, false);
         }
     }
 }

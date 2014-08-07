@@ -46,7 +46,6 @@
         /// </returns>
         public override IEnumerable<IGatewayResource> ListResourcesOffered()
         {
-
             var countryCodes = GatewayProviderService.GetAllShipCountries().Select(x => x.CountryCode).Distinct();
 
             var resources =
@@ -113,6 +112,20 @@
         public override IEnumerable<ITaxationGatewayMethod> GetAllGatewayTaxMethods()
         {
             return TaxMethods.Select(taxMethod => new AvaTaxTaxationGatewayMethod(taxMethod, GatewayProviderService, ExtendedData));
+        }
+
+        /// <summary>
+        /// Returns an <see cref="IAvaTaxTaxationGatewayMethod"/> given the <see cref="ITaxMethod"/> (settings)
+        /// </summary>
+        /// <param name="taxMethod">
+        /// The tax method.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAvaTaxTaxationGatewayMethod"/>.
+        /// </returns>
+        public IAvaTaxTaxationGatewayMethod GetAvaTaxationGatewayMethod(ITaxMethod taxMethod)
+        {
+            return new AvaTaxTaxationGatewayMethod(taxMethod, GatewayProviderService, ExtendedData);
         }
     }
 }

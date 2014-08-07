@@ -1,4 +1,7 @@
-﻿namespace Merchello.Core.Sales
+﻿using Merchello.Core.Events;
+using Umbraco.Core.Events;
+
+namespace Merchello.Core.Sales
 {
     using System;
     using System.Collections.Generic;
@@ -57,8 +60,14 @@
             _customer = customer;
             _itemCache = itemCache;
             ApplyTaxesToInvoice = true;
-            CalculateTaxesAsEstimate = true;
         }
+
+        /// <summary>
+        /// Occurs after a sale has been finalized.
+        /// </summary>
+        public static event TypedEventHandler<SalePreparationBase, Events.SalesPreparationEventArgs<IPaymentResult>> Finalizing;
+
+
 
         /// <summary>
         /// Gets the <see cref="ICustomerBase"/>
@@ -89,6 +98,7 @@
         /// </summary>
         internal bool ApplyTaxesToInvoice { get; set; }
 
+
         /// <summary>
         /// Gets the <see cref="IRuntimeCacheProvider"/>
         /// </summary>
@@ -96,11 +106,6 @@
         {
             get { return _merchelloContext.Cache.RuntimeCache; }
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to calculate taxes as estimate.
-        /// </summary>
-        internal bool CalculateTaxesAsEstimate { get; set; }
 
         /// <summary>
         /// Purges sales manager information
@@ -280,28 +285,14 @@
 
             if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
-            CalculateTaxesAsEstimate = false;
-
             // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            ////TODO
-            //// Raise the notification event
-           //// Announce.Broadcast.InvoicedCustomer(_customer, invoice);
-
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
 
-            ////if(result.Payment.Success) 
-            ////    Announce.Broadcast.PaymentWasAuthorized(_customer, result);
-
-            if (!result.ApproveOrderCreation) return result;
-
-            // order
-            var order = result.Invoice.PrepareOrder(MerchelloContext);
-
-            MerchelloContext.Services.OrderService.Save(order);
+            Finalizing.RaiseEvent(new SalesPreparationEventArgs<IPaymentResult>(result), this);
 
             return result;
         }
@@ -351,27 +342,14 @@
 
             if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
-            CalculateTaxesAsEstimate = false;
-
             // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            ////TODO
-            ////Announce.Broadcast.InvoicedCustomer(_customer, invoice);
-
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            ////if(result.Payment.Success)
-            ////    Announce.Broadcast.PaymentWasCaptured(_customer, result);
-            
-            if (!result.ApproveOrderCreation) return result;
-
-            // order
-            var order = result.Invoice.PrepareOrder(MerchelloContext);
-
-            MerchelloContext.Services.OrderService.Save(order);
+            Finalizing.RaiseEvent(new SalesPreparationEventArgs<IPaymentResult>(result), this);
 
             return result;
         }
@@ -466,6 +444,44 @@
 
             runtimeCache.InsertCacheItem(cacheKey, () => itemCache);
             return itemCache;
+        }
+
+        /// <summary>
+        /// Finalizes the sales transaction 
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
+        /// <remarks>
+        /// Some 3rd party tax provider may need to actually record the taxation transation so we calculate taxes one more time here
+        /// passing the paramter quoteOnly = false
+        /// </remarks>
+        protected virtual IPaymentResult FinalizeTransaction(IPaymentResult result)
+        {
+            if (result.Payment.Success)
+            {
+                var invoice = result.Invoice;
+
+                IAddress taxAddress = null;
+                var shippingItems = invoice.ShippingLineItems().ToArray();
+                if (shippingItems.Any())
+                {
+                    var shipment = shippingItems.First().ExtendedData.GetShipment<OrderLineItem>();
+                    taxAddress = shipment.GetDestinationAddress();
+                }
+
+                taxAddress = taxAddress ?? invoice.GetBillingAddress();
+
+                invoice.CalculateTaxes(MerchelloContext, taxAddress);
+            }
+            
+
+
+
+            return result;
         }
 
         /// <summary>

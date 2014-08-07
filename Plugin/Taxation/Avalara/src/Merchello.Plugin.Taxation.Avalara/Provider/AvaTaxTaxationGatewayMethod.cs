@@ -1,4 +1,6 @@
-﻿namespace Merchello.Plugin.Taxation.Avalara.Provider
+﻿using System;
+
+namespace Merchello.Plugin.Taxation.Avalara.Provider
 {
     using Core.Gateways.Taxation;
     using Core.Models;
@@ -48,17 +50,36 @@
         /// <param name="taxAddress">
         /// The tax address.
         /// </param>
-        /// <param name="estimateOnly">
-        /// A value indicating whether or not this tax calculation is an estimate
+        /// <returns>
+        /// The <see cref="ITaxCalculationResult"/>.
+        /// </returns>
+        public override ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress)
+        {
+            return CalculateTaxForInvoice(invoice, taxAddress, true);
+        }
+
+        /// <summary>
+        /// The calculate tax for invoice.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="taxAddress">
+        /// The tax address.
+        /// </param>
+        /// <param name="quoteOnly">
+        /// A value indicating whether or not this is a tax quote or a formal tax submission
         /// </param>
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        public override ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress, bool estimateOnly = false)
+        public ITaxCalculationResult CalculateTaxForInvoice(IInvoice invoice, IAddress taxAddress, bool quoteOnly)
         {
             var defaultStoreAddress = _settings.DefaultStoreAddress.ToTaxAddress();
-            
-            var request = invoice.AsTaxRequest(defaultStoreAddress, estimateOnly);
+
+            var request = invoice.AsTaxRequest(defaultStoreAddress, quoteOnly);
+
+            throw new NotImplementedException();
         }
     }
 }
