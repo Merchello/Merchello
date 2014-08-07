@@ -32,9 +32,9 @@
                     <div class="form-group control-group">
                         <label for="orderFilter" class="col-xs-2 control-label"><localize key="merchelloOrder_filter" />:</label>
                         <div class="col-xs-10 controls">
-                            <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filtertext" localize="placeholder" placeholder="Search by invoice number or customer name" />
+                            <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filterText" localize="placeholder" placeholder="Search by invoice number or customer name" />
                             <!-- ACTION: Filter Orders -->
-                            <button id="orderFilterGo" class="btn" data-ng-click="getFilteredInvoices(filtertext)"><localize key="merchelloGeneral_filter" /></button>
+                            <button id="orderFilterGo" class="btn" data-ng-click="loadInvoices(filterText)"><localize key="merchelloGeneral_filter" /></button>
                         </div>
                     </div>
                 </form>
@@ -46,12 +46,12 @@
             <!-- Tabular Order List -->
             <div class="merchello-pane">
                 <!-- Pagination -->
-                <div class="pager" data-ng-show="numberOfPages() > 1">
+                <div class="pager" data-ng-show="maxPages > 1">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
                         <localize key="general_previous" />
                     </button>
-                    {{currentPage+1}}/{{numberOfPages()}}
-                    <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="changePage(currentPage + 1)">
+                    {{currentPage+1}}/{{maxPages}}
+                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)">
                         <localize key="general_next" />
                     </button>
                 </div>
@@ -116,12 +116,12 @@
                     </tbody>
                 </table>
                 <!-- Pagination -->
-                <div class="pager" data-ng-show="numberOfPages() > 1">
+                <div class="pager" data-ng-show="maxPages > 1">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
                         <localize key="general_previous" />
                     </button>
-                    {{currentPage+1}}/{{numberOfPages()}}
-                    <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="changePage(currentPage + 1)">
+                    {{currentPage+1}}/{{maxPages}}
+                    <button class="btn" data-ng-disabled="currentPage >= maxPages- 1" data-ng-click="changePage(currentPage + 1)">
                         <localize key="general_next" />
                     </button>
                 </div>

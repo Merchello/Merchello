@@ -20,7 +20,7 @@
          */
         $scope.changePage = function (page) {
             $scope.currentPage = page;
-            $scope.loadAllInvoices();
+            $scope.loadInvoices();
         };
 
         /**
@@ -49,36 +49,6 @@
 
         /**
          * @ngdoc method
-         * @name getFilteredInvoices
-         * @function
-         * 
-         * @description
-         * Calls the invoice service to search for invoices via a string search 
-         * param.  This searches the Examine index in the core.
-         */
-        $scope.getFilteredInvoices = function (filter) {
-            if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
-                $scope.loadAllInvoices();
-            } else {
-                notificationsService.info("Filtering...", "");
-                var page = $scope.currentPage;
-                var perPage = $scope.limitAmount;
-                var promise = merchelloInvoiceService.getFiltered(filter, page, perPage);
-                promise.then(function (response) {
-                    var queryResult = new merchello.Models.QueryResult(response);
-                    $scope.invoices = _.map(queryResult.results, function (invoice) {
-                        return new merchello.Models.Invoice(invoice);
-                    });
-                    $scope.maxPages = queryResult.totalPages;
-                    notificationsService.success("Filtered Invoices Loaded", "");
-                }, function (reason) {
-                    notificationsService.success("Filtered Invoices Load Failed:", reason.message);
-                });
-            }
-        };
-
-        /**
-         * @ngdoc method
          * @name init
          * @function
          * 
@@ -87,7 +57,7 @@
          */
         $scope.init = function () {
             $scope.setVariables();
-        	$scope.loadAllInvoices();
+        	$scope.loadInvoices();
 	        $scope.loadSettings();
         };
 
@@ -99,51 +69,47 @@
          * @description
          * Helper function to set the amount of items to show per page for the paging filters and calculations
          */
-        $scope.limitChanged = function(newVal) {
+        $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
             $scope.page = 0;
-            if ($scope.filtertext === "") {
-                $scope.loadAllInvoices();
-            } else {
-                $scope.getFilteredInvoices($scope.filtertext);
-            }
+            $scope.loadInvoices($scope.filterText);
         };
 
         /**
-        * @ngdoc method
-        * @name loadAllInvoices
-        * @function
-        * 
-        * @description
-        * Load the invoices from the invoice service, then wrap the results
-        * in Merchello models and add to the scope via the invoices collection.
-        */
-        $scope.loadAllInvoices = function(page, perPage) {
-            if (page === undefined) {
-                page = $scope.currentPage;
-            } else {
-                $scope.currentPage = page;
+         * @ngdoc method
+         * @name loadInvoices
+         * @function
+         * 
+         * @description
+         * Load the invoices, either filtered or not, dependingon teh current page, and status of the filterText variable.
+         */
+        $scope.loadInvoices = function(filterText) {
+            var page = $scope.currentPage;
+            var perPage = $scope.limitAmount;
+            $scope.filterText = filterText;
+            var promiseInvoices;
+            if (filterText === undefined) {
+                filterText = '';
             }
-            if (perPage === undefined) {
-                perPage = $scope.limitAmount;
+            if (filterText === '') {
+                promiseInvoices = merchelloInvoiceService.getAll(page, perPage);
             } else {
-                $scope.limitAmount = perPage;
+                promiseInvoices = merchelloInvoiceService.getFiltered(filterText, page, perPage);
             }
-            var promiseAll = merchelloInvoiceService.getAll(page, perPage);
-            promiseAll.then(function (response) {
-                var queryResult = new merchello.Models.QueryResult(response);
-                $scope.invoices = _.map(queryResult.results, function (invoice) {
+            promiseInvoices.then(function(response) {
+                var queryResult = response;
+                $scope.invoices = _.map(queryResult.results, function(invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
-                $scope.maxPages = queryResult.totalPages;
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
                 if ($scope.selectedOrderCount > 0) {
                     $scope.selectAllOrders = true;
                     $scope.updateBulkActionDropdownStatus(true);
                 }
+                $scope.maxPages = queryResult.totalPages;
             }, function (reason) {
-                notificationsService.error("All Invoices Load Failed", reason.message);
+                notificationsService.error("Failed To Load Invoices", reason.message);
             });
         };
 
@@ -169,10 +135,6 @@
             });
         };
 
-        $scope.numberOfPages = function() {
-            return $scope.maxPages;
-        };
-
         /**
          * @ngdoc method
          * @name setVariables
@@ -183,6 +145,7 @@
          */
         $scope.setVariables = function () {
             $scope.currentPage = 0;
+            $scope.filterText = '';
             $scope.invoices = [];
             $scope.limitAmount = '100';
             $scope.maxPages = 0;
