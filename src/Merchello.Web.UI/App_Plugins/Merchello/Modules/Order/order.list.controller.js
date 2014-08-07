@@ -57,16 +57,19 @@
          * param.  This searches the Examine index in the core.
          */
         $scope.getFilteredInvoices = function (filter) {
-            notificationsService.info("Filtering...", "");
             if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
                 $scope.loadAllInvoices();
             } else {
-                var promise = merchelloInvoiceService.getFiltered(filter);
+                notificationsService.info("Filtering...", "");
+                var page = $scope.currentPage;
+                var perPage = $scope.limitAmount;
+                var promise = merchelloInvoiceService.getFiltered(filter, page, perPage);
                 promise.then(function (response) {
                     var queryResult = new merchello.Models.QueryResult(response);
                     $scope.invoices = _.map(queryResult.results, function (invoice) {
                         return new merchello.Models.Invoice(invoice);
                     });
+                    $scope.maxPages = queryResult.totalPages;
                     notificationsService.success("Filtered Invoices Loaded", "");
                 }, function (reason) {
                     notificationsService.success("Filtered Invoices Load Failed:", reason.message);
@@ -96,10 +99,14 @@
          * @description
          * Helper function to set the amount of items to show per page for the paging filters and calculations
          */
-        $scope.limitChanged = function (newVal) {
+        $scope.limitChanged = function(newVal) {
             $scope.limitAmount = newVal;
             $scope.page = 0;
-            $scope.loadAllInvoices();
+            if ($scope.filtertext === "") {
+                $scope.loadAllInvoices();
+            } else {
+                $scope.getFilteredInvoices($scope.filtertext);
+            }
         };
 
         /**
