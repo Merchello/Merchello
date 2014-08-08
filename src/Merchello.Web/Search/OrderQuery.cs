@@ -1,11 +1,10 @@
-﻿namespace Merchello.Web
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using global::Examine;
-
     using global::Examine.SearchCriteria;
 
     using Merchello.Core.Models;

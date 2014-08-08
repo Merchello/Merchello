@@ -1,14 +1,17 @@
-﻿namespace Merchello.Web
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using global::Examine;
     using global::Examine.LuceneEngine.SearchCriteria;
     using global::Examine.SearchCriteria;
+
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Examine;
+    using Merchello.Examine.Models;
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
@@ -121,7 +124,10 @@
         public static IEnumerable<InvoiceDisplay> Search(string term)
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.GroupedOr(new[] { "billToName", "invoiceNumber" }, term.Fuzzy());
+            criteria.GroupedOr(
+                new[] { "billToName", "invoiceNumber" },
+                term.ToSearchTerms().Select(x => x.SearchTermType == SearchTermType.SingleWord ? x.Term.Fuzzy() : x.Term.MultipleCharacterWildcard()).ToArray());
+
             return Search(criteria);
         }
 
@@ -132,7 +138,7 @@
         /// The criteria.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="ProductDisplay"/>
+        /// A collection of <see cref="InvoiceDisplay"/>
         /// </returns>
         public static IEnumerable<InvoiceDisplay> Search(ISearchCriteria criteria)
         {
@@ -153,5 +159,6 @@
                 .ReIndexNode(invoice.SerializeToXml().Root, IndexTypes.Invoice);
         }
 
+ 
     }
 }

@@ -10,6 +10,7 @@
 
     using Merchello.Core.Models;
     using Merchello.Examine;
+    using Merchello.Web.Search;
 
     using Newtonsoft.Json;
 

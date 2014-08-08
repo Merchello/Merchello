@@ -53,12 +53,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SearchHelper.cs" />
     <Compile Include="DataServices\CustomerDataService.cs" />
     <Compile Include="DataServices\ICustomerDataService.cs" />
     <Compile Include="DataServices\IInvoiceDataService.cs" />
     <Compile Include="DataServices\InvoiceDataService.cs" />
     <Compile Include="DataServices\IOrderDataService.cs" />
     <Compile Include="DataServices\OrderDataService.cs" />
+    <Compile Include="Models\SearchTerm.cs" />
+    <Compile Include="Models\SearchTermType.cs" />
     <Compile Include="Providers\BaseMerchelloIndexer.cs" />
     <Compile Include="DataServices\IDataService.cs" />
     <Compile Include="DataServices\IIndexDataService.cs" />
