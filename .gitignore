@@ -161,3 +161,4 @@ src/Merchello.Web.UI/App_Plugins/Merchello/Common/Css/.sass-cache/
 test/Merchello.Tests.IntegrationTests/App_Data/
 test/Merchello.Tests.IntegrationTests.Examine/App_Data/
 Plugin/Taxation/Avalara/src/Merchello.Plugin.Taxation.Avalara/Properties/VersionInfo.cs
+*.list
