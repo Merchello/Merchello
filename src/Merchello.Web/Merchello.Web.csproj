@@ -114,7 +114,7 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
-    <Compile Include="CustomerQuery.cs" />
+    <Compile Include="Search\CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />
     <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />
     <Compile Include="Models\ContentEditing\CustomerAddressDisplay.cs" />
@@ -159,7 +159,7 @@
     <Compile Include="Editors\ShipmentApiController.cs" />
     <Compile Include="Editors\TaxationGatewayApiController.cs" />
     <Compile Include="Editors\WarehouseApiController.cs" />
-    <Compile Include="InvoiceQuery.cs" />
+    <Compile Include="Search\InvoiceQuery.cs" />
     <Compile Include="Models\ContentEditing\AddressDisplay.cs" />
     <Compile Include="Models\ContentEditing\AppliedPaymentDisplay.cs" />
     <Compile Include="Models\ContentEditing\GatewayProviderDisplay.cs" />
@@ -192,20 +192,20 @@
     <Compile Include="Models\ContentEditing\CatalogInventoryDisplay.cs" />
     <Compile Include="Models\PaymentRequest.cs" />
     <Compile Include="Mvc\MerchelloViewPage.cs" />
-    <Compile Include="OrderQuery.cs" />
+    <Compile Include="Search\OrderQuery.cs" />
     <Compile Include="PackageActions\AddConfigSection.cs" />
     <Compile Include="PackageActions\AddExamineConfigs.cs" />
     <Compile Include="PackageActions\AddLanguageFileKey.cs" />
     <Compile Include="PackageActions\CreateDatabase.cs" />
     <Compile Include="PackageActions\GrantPermissionForApp.cs" />
-    <Compile Include="ProductQuery.cs" />
+    <Compile Include="Search\ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="Editors\ProductApiController.cs" />
     <Compile Include="Editors\ProductVariantApiController.cs" />
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
-    <Compile Include="QueryBase.cs" />
+    <Compile Include="Search\QueryBase.cs" />
     <Compile Include="WebApi\JsonCamelCaseFormatter.cs" />
     <Compile Include="Workflow\Basket.cs" />
     <Compile Include="Models\ContentEditing\ExamineDisplayExtensions.cs" />

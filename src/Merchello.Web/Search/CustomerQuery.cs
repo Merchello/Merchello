@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +15,7 @@
     /// <summary>
     /// The customer query.
     /// </summary>
-    public class CustomerQuery : QueryBase
+    internal class CustomerQuery : QueryBase
     {
         /// <summary>
         /// The index name.

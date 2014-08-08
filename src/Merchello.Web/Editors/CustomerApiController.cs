@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
     using Umbraco.Core.Services;
