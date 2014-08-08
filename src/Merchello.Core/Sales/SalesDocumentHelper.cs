@@ -3,7 +3,7 @@
     /// <summary>
     /// Utility class that allows for custom operations (edge case) to be performed on invoices, shipments, orders, payments
     /// </summary>
-    public class SalesDocumentHelper
+    internal class SalesDocumentHelper
     {
         /// <summary>
         /// The merchello context.
