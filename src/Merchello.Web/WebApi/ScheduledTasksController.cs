@@ -1,34 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Linq;
-using Umbraco.Web.Mvc;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Core.Configuration;
-using Merchello.Web.WebApi;
-using Umbraco.Web;
-using Merchello.Web.Models.ContentEditing;
-using Examine;
-using Umbraco.Web.WebApi;
-using Umbraco.Core.Logging;
-
-
-namespace Merchello.Web.WebApi
+﻿namespace Merchello.Web.WebApi
 {
+    using System;
+    using System.Linq;
+    using System.Web.Http;
+    using Core;
+    using Core.Configuration;
+    using Core.Services;
+    using Umbraco.Core.Logging;
+    using Umbraco.Web.Mvc;
+    using Umbraco.Web.WebApi;
+
     /// <summary>
     /// Schedule Tasks
     /// </summary>
     [PluginController("Merchello")]
     public class ScheduledTasksApiController : UmbracoApiController
     {
+        /// <summary>
+        /// The <see cref="IAnonymousCustomerService"/>.
+        /// </summary>
         private readonly IAnonymousCustomerService _anonymousCustomerService;
         
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ScheduledTasksApiController"/> class. 
         /// </summary>
         public ScheduledTasksApiController()
             : this(MerchelloContext.Current)
@@ -36,12 +30,14 @@ namespace Merchello.Web.WebApi
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ScheduledTasksApiController"/> class. 
         /// </summary>
-        /// <param name="merchelloContext"></param>
-        public ScheduledTasksApiController(MerchelloContext merchelloContext)
-            : base()
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>
+        /// </param>
+        public ScheduledTasksApiController(IMerchelloContext merchelloContext)
         {
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             _anonymousCustomerService = ((ServiceContext)merchelloContext.Services).AnonymousCustomerService;
         }
 
@@ -51,12 +47,15 @@ namespace Merchello.Web.WebApi
         /// GET /umbraco/Merchello/ScheduledTasksApi/RemoveAnonymousCustomers
         ///     /Umbraco/Api/ScheduledTasksApiController/RemoveAnonymousCustomers
         /// </summary>
+        /// <returns>
+        /// The count of anonymous customers deleted
+        /// </returns>
         [AcceptVerbs("GET", "POST")]
         public int RemoveAnonymousCustomers()
         {
             int maxDays = MerchelloConfiguration.Current.AnonymousCustomersMaxDays;
 
-            var anonymousCustomers = _anonymousCustomerService.GetAnonymousCustomersCreatedBefore(DateTime.Now.AddDays(-maxDays));
+            var anonymousCustomers = _anonymousCustomerService.GetAnonymousCustomersCreatedBefore(DateTime.Now.AddDays(-maxDays)).ToArray();
 
             _anonymousCustomerService.Delete(anonymousCustomers);
 

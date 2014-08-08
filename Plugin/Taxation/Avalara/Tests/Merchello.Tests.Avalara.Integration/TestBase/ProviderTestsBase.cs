@@ -90,6 +90,8 @@ namespace Merchello.Tests.Avalara.Integration.TestBase
 
             GatewayProviderSettings.ExtendedData.SaveProviderSettings(providerSettings);
 
+            GatewayProviderService.Save(GatewayProviderSettings);
+
             Provider = new AvaTaxTaxationGatewayProvider(GatewayProviderService, GatewayProviderSettings, cacheProvider.Object);
 
             // ShipCountry

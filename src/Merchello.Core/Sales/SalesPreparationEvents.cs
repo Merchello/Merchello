@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Sales
+﻿using System;
+
+namespace Merchello.Core.Sales
 {
     using Events;
     using Gateways.Payment;
@@ -39,12 +41,24 @@
         {
             var result = args.Entity;
 
-            if (!result.ApproveOrderCreation) return;
+            if (!result.ApproveOrderCreation)
+            {
+                // order
+                var order = result.Invoice.PrepareOrder(MerchelloContext.Current);
 
-            // order
-            var order = result.Invoice.PrepareOrder(MerchelloContext.Current);
+                MerchelloContext.Current.Services.OrderService.Save(order);
+            }
 
-            MerchelloContext.Current.Services.OrderService.Save(order);
+            var customerKey = result.Invoice.CustomerKey;
+
+            // Clean up the sales prepartation item cache
+            if (customerKey == null || Guid.Empty.Equals(customerKey)) return;
+            var customer = MerchelloContext.Current.Services.CustomerService.GetAnyByKey(customerKey.Value);
+            
+            if (customer == null) return;
+            var itemCacheService = MerchelloContext.Current.Services.ItemCacheService;
+            var itemCache = itemCacheService.GetItemCacheByCustomer(customer,  ItemCacheType.Checkout);
+            itemCacheService.Delete(itemCache);
         }
     }
 }
