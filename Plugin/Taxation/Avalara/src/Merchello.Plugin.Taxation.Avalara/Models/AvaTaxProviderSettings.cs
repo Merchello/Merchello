@@ -64,7 +64,7 @@ namespace Merchello.Plugin.Taxation.Avalara.Models
         {
             get
             {
-                return UseSandBox ? "https://development.avalara.net/" : "https://avatax.avalara.net/ ";
+                return UseSandBox ? "https://development.avalara.net/" : "https://avatax.avalara.net/";
             }
         }
 

@@ -99,7 +99,21 @@
         /// </returns>
         public ITaxMethod GetTaxMethodForTaxAddress(IAddress taxAddress)
         {
-            return GatewayProviderService.GetTaxMethodsByCountryCode(taxAddress.CountryCode).FirstOrDefault();
+            return GetTaxMethodForCountryCode(taxAddress.CountryCode);
+        }
+
+        /// <summary>
+        /// Gets the tax method for country code.
+        /// </summary>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxMethod"/>.
+        /// </returns>
+        public ITaxMethod GetTaxMethodForCountryCode(string countryCode)
+        {
+            return GatewayProviderService.GetTaxMethodsByCountryCode(countryCode).FirstOrDefault();
         }
     }
 }
