@@ -55,17 +55,17 @@
     <Reference Include="log4net">
       <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Core, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.3.5\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.3.5\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Web, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.3.5\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
