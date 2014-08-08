@@ -174,6 +174,61 @@
         }
 
         /// <summary>
+        /// Returns a filtered list of customers
+        /// 
+        /// GET /umbraco/Merchello/InvoiceApi/GetFilteredCustomers
+        /// </summary>
+        /// <param name="term">
+        /// The search term
+        /// </param>
+        /// <returns>
+        /// The collection of customers..
+        /// </returns>
+        public QueryResultDisplay GetFilteredCustomers(string term)
+        {
+            var customers = CustomerQuery.Search(term).ToArray();
+
+            return new QueryResultDisplay()
+            {
+                Results = customers,
+                PageIndex = 0,
+                TotalPages = 1,
+                TotalResults = customers.Count()
+            };
+        }
+
+        /// <summary>
+        /// Returns All Products
+        /// 
+        /// GET /umbraco/Merchello/InvoicesApi/GetFilteredCustomers
+        /// </summary>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="perPage">
+        /// The per Page.
+        /// </param>
+        /// <returns>
+        /// The collection of invoices..
+        /// </returns>
+        public QueryResultDisplay GetFilteredCustomers(string term, int page, int perPage)
+        {
+            var allMatches = CustomerQuery.Search(term).ToArray();
+            var customers = allMatches.Skip(page * perPage).Take(perPage);
+
+            return new QueryResultDisplay()
+            {
+                Results = customers,
+                PageIndex = page,
+                TotalPages = ((allMatches.Count() - 1) / perPage) + 1,
+                TotalResults = allMatches.Count()
+            };
+        }
+
+        /// <summary>
         /// POST /umbraco/Merchello/CustomerApi/AddCustomer/
         /// </summary>
         /// <param name="customer">

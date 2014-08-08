@@ -60,7 +60,7 @@
                     case SearchTermType.SingleWord:
                         criteria.GroupedOr(
                             textFields,
-                            new[] { t.Term.SingleCharacterWildcard() });
+                            new[] { t.Term.Fuzzy() });
                         break;
                     case SearchTermType.MultiWord:
                         criteria.GroupedOr(

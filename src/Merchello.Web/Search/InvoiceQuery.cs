@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Examine;
+    using Merchello.Examine.Models;
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
@@ -122,10 +123,10 @@
         /// <returns>A collection of <see cref="InvoiceDisplay"/></returns>
         public static IEnumerable<InvoiceDisplay> Search(string term)
         {
-            ////var criteria = BuildCriteria(SearcherName, term, new[] { "billToName", "invoiceNumber" });
-
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.GroupedOr(new[] { "billToName", "invoiceNumber" }, term.Fuzzy());
+            criteria.GroupedOr(
+                new[] { "billToName", "invoiceNumber" },
+                term.ToSearchTerms().Select(x => x.SearchTermType == SearchTermType.SingleWord ? x.Term.Fuzzy() : x.Term.MultipleCharacterWildcard()).ToArray());
 
             return Search(criteria);
         }
@@ -137,7 +138,7 @@
         /// The criteria.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="ProductDisplay"/>
+        /// A collection of <see cref="InvoiceDisplay"/>
         /// </returns>
         public static IEnumerable<InvoiceDisplay> Search(ISearchCriteria criteria)
         {

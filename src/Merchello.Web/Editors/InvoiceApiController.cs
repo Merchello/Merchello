@@ -100,7 +100,7 @@
             return new QueryResultDisplay()
             {
                 Results = invoices,
-                PageIndex = 1,
+                PageIndex = 0,
                 TotalPages = 1,
                 TotalResults = invoices.Count()
             };            
@@ -123,7 +123,7 @@
         public QueryResultDisplay GetAllInvoices(int page, int perPage)
         {
             var allInvoices = InvoiceQuery.GetAllInvoices().ToArray();
-            var invoices = allInvoices.Skip((page - 1) * perPage).Take(perPage);
+            var invoices = allInvoices.Skip(page * perPage).Take(perPage);
 
             return new QueryResultDisplay()
             {
@@ -168,7 +168,7 @@
             return new QueryResultDisplay()
             {
                 Results = invoices,
-                PageIndex = 1,
+                PageIndex = 0,
                 TotalPages = 1,
                 TotalResults = invoices.Count()
             };
@@ -194,7 +194,7 @@
         public QueryResultDisplay GetFilteredInvoices(string term, int page, int perPage)
         {
             var allMatches = InvoiceQuery.Search(term).ToArray();
-            var invoices = allMatches.Skip((page - 1) * perPage).Take(perPage);
+            var invoices = allMatches.Skip(page * perPage).Take(perPage);
 
             return new QueryResultDisplay()
             {
