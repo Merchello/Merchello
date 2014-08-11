@@ -66,7 +66,21 @@
                         model
                     ),
                     'Failed to add products to invoice');
-            }
+            },
+
+            getShippingMethods: function (customerKey, products, shippingAddress, billingAddress) {
+            var model = {};
+            model.CustomerKey = customerKey;
+            model.ProductKeys = products;
+            model.ShippingAddress = shippingAddress;
+            model.BillingAddress = billingAddress;
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingMethods'),
+                    model
+                ),
+                'Failed to add products to invoice');
+        }
         };
     };
 

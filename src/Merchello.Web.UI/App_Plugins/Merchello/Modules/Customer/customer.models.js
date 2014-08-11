@@ -16,13 +16,17 @@
             self.notes = '';
             self.taxExempt = false;
         } else {
-            self.addresses = _.map(customerSource.addresses, function(address) {
-                return new merchello.Models.CustomerAddress(address);
-            });
-            self.email = customerSource.email;
+            if (customerSource.addresses != undefined) {
+                self.addresses = _.map(customerSource.addresses, function(address) {
+                    return new merchello.Models.CustomerAddress(address);
+                });
+            }
+            self.email = customerSource.email;     
+            if (customerSource.extendedData != undefined) {
             self.extendedData = _.map(customerSource.extendedData, function (item) {
                 return new merchello.Models.DictionaryItem(item);
             });
+            }
             self.firstName = customerSource.firstName;
             self.key = customerSource.key;
             self.lastActivityDate = customerSource.lastActivityDate;

@@ -148,7 +148,20 @@
                     </div>
 
                 </div>
-
+                <div class="control-group umb-control-group" data-ng-show="invoice.payments.length != 0 && invoice.payments[0].amount > 0" data-ng-show="invoice.billToAddress1 != undefined">
+                    <div class="merchello-controls">
+                        <div class="row-fluid span10 col-xs-10" data-ng-repeat="(paymentMethodName, appliedPaymentList) in invoice.groupedAppliedPayments">
+                            <div class="row-fluid">
+                                <div class="merchello-section-label">
+                                    <localize key="merchelloPayment_payment" />
+                                    <select name="shippingMethods" data-ng-show="shipMethods != null" data-ng-model="selectedShipMethod">
+                                        <option ng-repeat="shipMethod in shipMethods" value="shipMethod.key">{{shipMethod.name}} {{shipMethod.Rate | currency:symbol}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="control-group umb-control-group" data-ng-show="invoice.payments.length != 0 && invoice.payments[0].amount > 0" data-ng-show="invoice.billToAddress1 != undefined">
 
                     <div class="merchello-section-label">

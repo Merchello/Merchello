@@ -41,7 +41,7 @@
         
         /**
         * @ngdoc method
-        * @name addCountry
+        * @name editCustomerInformation
         * @function
         * 
         * @description
@@ -63,7 +63,7 @@
 
         /**
          * @ngdoc method
-         * @name addCountryDialogConfirm
+         * @name editCustomerInformationConfirm
          * @function
          * 
          * @description
@@ -91,6 +91,7 @@
        */
         $scope.selectedProductFromDialog = function (selectedProduct) {
             $scope.products.push(selectedProduct.key);
+            selectedProduct.quantity = 1;
             $scope.invoice.items.push(new merchello.Models.InvoiceLineItem(selectedProduct));    
         };
 
@@ -122,12 +123,18 @@
         * Will add products to the sales preparation and will return the order summary.
         */
         $scope.processesProductsToBackofficeOrder = function (shipping, billing) {
-
             var promise = merchelloOrderService.processesProductsToBackofficeOrder($scope.customer.key, $scope.products, shipping, billing);
             promise.then(function (orderSummary) { 
                 orderSummary.orderPrepComplete = true;
                 $scope.orderSummary = new merchello.Models.OrderSummary(orderSummary);
                 notificationsService.success("The order has been finalized.");
+
+                var shippingPromise = merchelloOrderService.getShippingMethods($scope.customer.key, $scope.products, shipping, billing);
+                shippingPromise.then(function(shipMethods) {
+                    $scope.shipMethods = shipMethods;
+                }, function(reason) {
+
+                });
             }, function(reason) {
                 notificationsService.error("Failed to add products to backoffice basket", reason.message);
             });
@@ -235,6 +242,7 @@
             $scope.isShippingAddressSelected = false;
             $scope.isBillingAddressSelected = false;
             $scope.createCustomer = false;
+            $scope.shipMethods = null;
         };
 
         $scope.init();

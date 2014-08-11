@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Merchello.Core.Gateways.Shipping;
 using Merchello.Web.Workflow;
 
 namespace Merchello.Web.Editors
@@ -224,6 +225,22 @@ namespace Merchello.Web.Editors
             {
                 return new BackofficeOrderSummary();
             }
+        }
+
+        /// <summary>
+        /// Adds items to the backoffice basket to calculate shipping and Sales tax
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        public IEnumerable<IShipmentRateQuote> GetShippingMethods(BackofficeAddItemModel model)
+        {
+
+            _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
+            _backoffice = _customer.Backoffice();
+            var shipment = _backoffice.PackageBackoffice(model.ShippingAddress.ToAddress()).FirstOrDefault();
+            
+            return shipment.ShipmentRateQuotes();
         }
 
         /// <summary>
