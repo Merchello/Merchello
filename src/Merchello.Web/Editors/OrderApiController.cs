@@ -13,6 +13,9 @@ namespace Merchello.Web.Editors
     using Core;
     using Core.Models;
     using Core.Services;
+
+    using Merchello.Web.Search;
+
     using Models.ContentEditing;    
     using Umbraco.Web;
     using Umbraco.Web.Mvc;

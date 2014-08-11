@@ -204,6 +204,20 @@ namespace Merchello.Web
                         }
                     }
                 }
+                else if (customer.IsAnonymous == false && _membershipHelper.IsLoggedIn() == false)
+                {
+                    // customer has logged out, so we need to go back to an anonymous customer
+                    var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
+                    
+                    cookie.Expires = DateTime.Now.AddDays(-1);
+
+                    _cache.RequestCache.ClearCacheItem(CustomerCookieName);
+                    _cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key)); 
+                    
+                    Initialize();
+                    
+                    return;
+                }
                 
                 ContextData.Key = customer.Key;
 

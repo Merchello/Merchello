@@ -1,21 +1,23 @@
-﻿namespace Merchello.Web
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using global::Examine;
+    using global::Examine.LuceneEngine.SearchCriteria;
     using global::Examine.SearchCriteria;
 
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Examine;
+    using Merchello.Examine.Models;
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
     /// The customer query.
     /// </summary>
-    public class CustomerQuery : QueryBase
+    internal class CustomerQuery : QueryBase
     {
         /// <summary>
         /// The index name.
@@ -99,6 +101,37 @@
             var retrieved = ((CustomerService)merchelloContext.Services.CustomerService).GetAll();
 
             return retrieved.Select(AutoMapper.Mapper.Map<CustomerDisplay>).ToList();
+        }
+
+        /// <summary>
+        /// Searches CustomerIndex by first name, last name, login name and email address for the 'term' passed
+        /// </summary>
+        /// <param name="term">Searches the customer index for a term</param>
+        /// <returns>A collection of <see cref="CustomerDisplay"/></returns>
+        public static IEnumerable<CustomerDisplay> Search(string term)
+        {
+            var criteria = ExamineManager.Instance.CreateSearchCriteria();
+            criteria.GroupedOr(
+                new[] { "loginName", "firstName", "lastName", "email" },
+                term.ToSearchTerms().Select(x => x.SearchTermType == SearchTermType.SingleWord ? x.Term.Fuzzy() : x.Term.MultipleCharacterWildcard()).ToArray());
+
+            return Search(criteria);
+        }
+
+        /// <summary>
+        /// Searches CustomerIndex using <see cref="ISearchCriteria"/> passed
+        /// </summary>
+        /// <param name="criteria">
+        /// The criteria.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="CustomerDisplay"/>
+        /// </returns>
+        public static IEnumerable<CustomerDisplay> Search(ISearchCriteria criteria)
+        {
+            return ExamineManager.Instance.SearchProviderCollection[SearcherName]
+                .Search(criteria).OrderByDescending(x => x.Score)
+                .Select(result => result.ToCustomerDisplay());
         }
 
         /// <summary>

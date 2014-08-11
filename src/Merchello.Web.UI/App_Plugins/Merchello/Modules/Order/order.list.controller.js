@@ -51,7 +51,7 @@
             } else {
                 var promise = merchelloInvoiceService.getFiltered(filter);
                 promise.then(function (invoices) {
-                    $scope.invoices = _.map(invoices, function (invoice) {
+                    $scope.invoices = _.map(invoices.results, function (invoice) {
                         return new merchello.Models.Invoice(invoice);
                     });
                     //notificationsService.success("Filtered Invoices Loaded", "");
@@ -99,7 +99,7 @@
         $scope.loadAllInvoices = function () {
             var promiseAll = merchelloInvoiceService.getAll();
             promiseAll.then(function (allInvoices) {
-                $scope.invoices = _.map(allInvoices, function (invoice) {
+                $scope.invoices = _.map(allInvoices.results, function (invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
                 $scope.loaded = true;

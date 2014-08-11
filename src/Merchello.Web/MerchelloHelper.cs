@@ -5,6 +5,7 @@
     using System.Linq;
     using global::Examine.SearchCriteria;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Search;
 
     using Umbraco.Core;
 

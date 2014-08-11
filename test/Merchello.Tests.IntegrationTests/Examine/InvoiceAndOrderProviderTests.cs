@@ -14,6 +14,8 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.IntegrationTests.Examine
 {
+    using Merchello.Web.Search;
+
     [TestFixture]
     public class InvoiceAndOrderProviderTests : DatabaseIntegrationTestBase
     {
