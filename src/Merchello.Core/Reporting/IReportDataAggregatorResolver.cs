@@ -1,7 +1,5 @@
 ﻿namespace Merchello.Core.Reporting
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>

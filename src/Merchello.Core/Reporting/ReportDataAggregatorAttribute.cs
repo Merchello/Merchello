@@ -1,77 +1,42 @@
-﻿using System;
-
-namespace Merchello.Core.Reporting
+﻿namespace Merchello.Core.Reporting
 {
+    using System;
+
     /// <summary>
-    /// Decorates <see cref="IReportDataAggregator"/>s with information required for back office resolution
+    /// Decorates <see cref="IReport"/>s to associate <see cref="IReportDataAggregator"/>s
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class ReportDataAggregatorAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ReportDataAggregatorAttribute : ReportAttributeBase 
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReportDataAggregatorAttribute"/> class.
         /// </summary>
         /// <param name="alias">
-        /// The alias of the report
+        /// The alias.
         /// </param>
         /// <param name="title">
-        /// The title or the report
+        /// The title.
         /// </param>
-        /// <param name="reportView">
-        /// The report view - path to the Angular view to view the report
-        /// </param>
-        public ReportDataAggregatorAttribute(string alias, string title, string reportView)
-            : this(alias, title, string.Empty, reportView)
-        {           
+        public ReportDataAggregatorAttribute(string alias, string title)
+            : this(alias, title, string.Empty)
+        {            
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReportDataAggregatorAttribute"/> class.
         /// </summary>
         /// <param name="alias">
-        /// The alias of the report
+        /// The alias.
         /// </param>
         /// <param name="title">
-        /// The title of the report
+        /// The title.
         /// </param>
         /// <param name="description">
-        /// An optional description for the report
+        /// The description.
         /// </param>
-        /// <param name="reportView">
-        /// The report view - path to the Angular view to view the report
-        /// </param>
-        public ReportDataAggregatorAttribute(string alias, string title, string description, string reportView)
+        public ReportDataAggregatorAttribute(string alias, string title, string description) 
+            : base(alias, title, description)
         {
-            Mandate.ParameterNotNullOrEmpty(alias, "alias");
-            Mandate.ParameterNotNullOrEmpty(reportView, "reportView");
-
-            Alias = alias;
-            Title = title;
-            Description = description;
-            ReportView = reportView;
         }
-
-        /// <summary>
-        /// Gets the alias of the report.
-        /// </summary>
-        /// <remarks>
-        /// This should be a unique value
-        /// </remarks>
-        public string Alias { get; private set; }
-
-        /// <summary>
-        /// Gets the name of the gateway provider editor title  
-        /// </summary>
-        public string Title { get; private set; }
-
-        /// <summary>
-        /// Gets the description of the report
-        /// </summary>
-        public string Description { get; private set; }
-
-        /// <summary>
-        /// Gets the relative path to the report view html
-        /// </summary>
-        public string ReportView { get; private set; }
     }
 }
