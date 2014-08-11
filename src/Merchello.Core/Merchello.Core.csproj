@@ -259,9 +259,11 @@
     <Compile Include="Reporting\IReport.cs" />
     <Compile Include="Reporting\IReportDataAggregator.cs" />
     <Compile Include="Reporting\IReportDataAggregatorResolver.cs" />
+    <Compile Include="Reporting\IReportResolver.cs" />
     <Compile Include="Reporting\ReportAttributeBase.cs" />
     <Compile Include="Reporting\ReportDataAggregatorAttribute.cs" />
     <Compile Include="Reporting\ReportAttribute.cs" />
+    <Compile Include="Reporting\ReportDataAggregatorBase.cs" />
     <Compile Include="Reporting\ReportDataAggregatorResolver.cs" />
     <Compile Include="Sales\SalePreparationBase.cs" />
     <Compile Include="Sales\ISalePreparationBase.cs" />

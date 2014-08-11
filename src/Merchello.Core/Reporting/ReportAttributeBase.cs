@@ -7,6 +7,18 @@
     /// </summary>
     public abstract class ReportAttributeBase : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReportAttributeBase"/> class.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
         protected ReportAttributeBase(string alias, string title, string description)
         {
             Mandate.ParameterNotNullOrEmpty(alias, "alias");

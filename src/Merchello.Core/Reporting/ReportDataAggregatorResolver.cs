@@ -1,4 +1,8 @@
-﻿namespace Merchello.Core.Reporting
+﻿using System.Linq;
+using Umbraco.Core;
+using Umbraco.Core.PropertyEditors.ValueConverters;
+
+namespace Merchello.Core.Reporting
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +11,7 @@
     /// <summary>
     /// Represents a report data aggregator resolver.
     /// </summary>
-    internal class ReportDataAggregatorResolver : MerchelloManyObjectsResolverBase<ReportDataAggregatorResolver, IReportDataAggregator>,  IReportDataAggregatorResolver
+    internal class ReportDataAggregatorResolver : MerchelloManyObjectsResolverBase<ReportDataAggregatorResolver, ReportDataAggregatorBase>,  IReportDataAggregatorResolver
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReportDataAggregatorResolver"/> class.
@@ -23,7 +27,7 @@
         /// <summary>
         /// Gets a collection of instantiated <see cref="IReportDataAggregator"/>s
         /// </summary>
-        protected override IEnumerable<IReportDataAggregator> Values
+        protected override IEnumerable<ReportDataAggregatorBase> Values
         {
             get
             {
@@ -43,21 +47,26 @@
         /// </returns>
         public IEnumerable<IReportDataAggregator> GetAll()
         {
-            throw new System.NotImplementedException();
+            return Values;
         }
 
         /// <summary>
         /// Gets a report data aggregator by it's key defined in the attribute
         /// </summary>
         /// <param name="alias">
-        /// The report alias
+        /// The report aggregator alias
         /// </param>
         /// <returns>
         /// The <see cref="IReportDataAggregator"/>.
         /// </returns>
         public IReportDataAggregator GetByAlias(string alias)
         {
-            throw new System.NotImplementedException();
+            var type = InstanceTypes.FirstOrDefault(x => x.GetCustomAttribute<ReportDataAggregatorAttribute>(true).Alias == alias);
+            if (type == null) return null;
+
+            var attempt = CreateInstance(type, new object[] { });
+
+            return !attempt.Success ? null : attempt.Result;
         }
     }
 }

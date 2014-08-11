@@ -21,35 +21,25 @@
         where TResolved : class
         where TResolver : ResolverBase
     {
-
+        /// <summary>
+        /// The instance types.
+        /// </summary>
         private readonly List<Type> _instanceTypes = new List<Type>();
+
+        /// <summary>
+        /// The lock.
+        /// </summary>
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloManyObjectsResolverBase{TResolver,TResolved}"/> class.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
         protected MerchelloManyObjectsResolverBase(IEnumerable<Type> value)
         {
             _instanceTypes = value.ToList();
-        }
-
-        /// <summary>
-        /// Gets the resolved object instances.
-        /// </summary>
-        protected abstract IEnumerable<TResolved> Values { get; }
-
-        /// <summary>
-        /// Creates the object instances for the types contained in the types collection.
-        /// </summary>
-        /// <returns>A list of objects of type <typeparamref name="TResolved"/>.</returns>
-        protected virtual IEnumerable<TResolved> CreateInstances(object[] ctrArgs)
-        {
-            var instances = new List<TResolved>();
-
-            foreach (var et in InstanceTypes)
-            {
-                var attempt = ActivatorHelper.CreateInstance<TResolved>(et, ctrArgs.ToArray());
-                if (attempt.Success) instances.Add(attempt.Result);
-            }
-
-            return instances;
         }
 
         /// <summary>
@@ -61,16 +51,10 @@
         }
 
         /// <summary>
-        /// Returns a WriteLock to use when modifying collections
+        /// Gets the resolved object instances.
         /// </summary>
-        /// <returns></returns>
-        protected WriteLock GetWriteLock()
-        {
-            return new WriteLock(_lock);
-        }
+        protected abstract IEnumerable<TResolved> Values { get; }
 
-
-        #region Types collection manipulation
 
         /// <summary>
         /// Removes a type.
@@ -82,7 +66,6 @@
         {
             using (var l = new UpgradeableReadLock(_lock))
             {
-
                 l.UpgradeToWriteLock();
                 _instanceTypes.Remove(value);
             }
@@ -101,29 +84,6 @@
         }
 
         /// <summary>
-        /// Adds types.
-        /// </summary>
-        /// <param name="types">The types to add.</param>
-        /// <remarks>The types are appended at the end of the list.</remarks>
-        /// <exception cref="InvalidOperationException">the resolver does not support adding types, or 
-        /// a type is not a valid type for the resolver, or a type is already in the collection of types.</exception>
-        protected void AddTypes(IEnumerable<Type> types)
-        {                        
-            using (new WriteLock(_lock))
-            {
-                foreach (var t in types)
-                {
-                    if (_instanceTypes.Contains(t))
-                    {
-                        throw new InvalidOperationException(string.Format(
-                            "Type {0} is already in the collection of types.", t.FullName));
-                    }
-                    _instanceTypes.Add(t);
-                }
-            }
-        }
-
-        /// <summary>
         /// Adds a type.
         /// </summary>
         /// <param name="value">The type to add.</param>
@@ -132,7 +92,7 @@
         /// the type is not a valid type for the resolver, or the type is already in the collection of types.</exception>
         public virtual void AddType(Type value)
         {
-            
+
             using (var l = new UpgradeableReadLock(_lock))
             {
                 if (_instanceTypes.Contains(value))
@@ -159,7 +119,76 @@
             AddType(typeof(T));
         }
 
-        #endregion
+        /// <summary>
+        /// Creates the object instances for the types contained in the types collection.
+        /// </summary>
+        /// <param name="ctrArgs">
+        /// The constructor args.
+        /// </param>
+        /// <returns>
+        /// A list of objects of type <typeparamref name="TResolved"/>.
+        /// </returns>
+        protected virtual IEnumerable<TResolved> CreateInstances(object[] ctrArgs)
+        {
+            var instances = new List<TResolved>();
 
+            foreach (var et in InstanceTypes)
+            {
+                var attempt = CreateInstance(et, ctrArgs.ToArray());
+                if (attempt.Success) instances.Add(attempt.Result);
+            }
+
+            return instances;
+        }
+
+
+        /// <summary>
+        /// Creates a single instance of TResolved
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <param name="ctrArgs">
+        /// The ctr args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        protected virtual Attempt<TResolved> CreateInstance(Type type, object[] ctrArgs)
+        {
+            return ActivatorHelper.CreateInstance<TResolved>(type, ctrArgs.ToArray());
+        }
+
+        /// <summary>
+        /// Returns a WriteLock to use when modifying collections
+        /// </summary>
+        /// <returns>Gets the write lock</returns>
+        protected WriteLock GetWriteLock()
+        {
+            return new WriteLock(_lock);
+        }
+
+        /// <summary>
+        /// Adds types.
+        /// </summary>
+        /// <param name="types">The types to add.</param>
+        /// <remarks>The types are appended at the end of the list.</remarks>
+        /// <exception cref="InvalidOperationException">the resolver does not support adding types, or 
+        /// a type is not a valid type for the resolver, or a type is already in the collection of types.</exception>
+        protected void AddTypes(IEnumerable<Type> types)
+        {                        
+            using (new WriteLock(_lock))
+            {
+                foreach (var t in types)
+                {
+                    if (_instanceTypes.Contains(t))
+                    {
+                        throw new InvalidOperationException(string.Format(
+                            "Type {0} is already in the collection of types.", t.FullName));
+                    }
+                    _instanceTypes.Add(t);
+                }
+            }
+        }
     }
 }

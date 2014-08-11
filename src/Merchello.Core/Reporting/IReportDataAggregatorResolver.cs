@@ -19,7 +19,7 @@
         /// Gets a report data aggregator by it's key defined in the attribute
         /// </summary>
         /// <param name="alias">
-        /// The report alias
+        /// The report aggregator alias
         /// </param>
         /// <returns>
         /// The <see cref="IReportDataAggregator"/>.
