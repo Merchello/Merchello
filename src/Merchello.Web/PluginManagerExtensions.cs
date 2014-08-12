@@ -22,7 +22,7 @@ namespace Merchello.Web
         /// </returns>
         internal static IEnumerable<Type> ResolveReportApiControllers(this PluginManager pluginManger)
         {
-            return pluginManger.ResolveTypesWithAttribute<ReportApiControllerBase, ReportViewAttribute>();
+            return pluginManger.ResolveTypesWithAttribute<ReportController, ReportAttribute>();
         } 
     }
 }

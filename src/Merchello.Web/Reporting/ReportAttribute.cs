@@ -7,40 +7,30 @@
     /// The report view attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class ReportViewAttribute : Attribute
+    public class ReportAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReportViewAttribute"/> class.
+        /// Initializes a new instance of the <see cref="ReportAttribute"/> class.
         /// </summary>
         /// <param name="title">
         /// The title.
         /// </param>
-        /// <param name="description">
-        /// The description.
-        /// </param>
         /// <param name="reportView">
         /// The report Angular view.
         /// </param>
-        public ReportViewAttribute(string title, string description, string reportView)
+        public ReportAttribute(string title, string reportView)
         {            
             Mandate.ParameterNotNullOrEmpty(title, "title");
-            Mandate.ParameterNotNullOrEmpty(description, "description");
-            Mandate.ParameterNotNullOrEmpty(reportView, "editorView");
+            Mandate.ParameterNotNullOrEmpty(reportView, "reportView");
 
             Title = title;
-            Description = description;
             ReportView = reportView;
         }
 
         /// <summary>
-        /// Gets the name of the gateway provider editor title  
+        /// Gets the name of the report
         /// </summary>
         public string Title { get; private set; }
-
-        /// <summary>
-        /// Gets the description of the gateway provider editor 
-        /// </summary>
-        public string Description { get; private set; }
 
         /// <summary>
         /// Gets the relative path to the report view html

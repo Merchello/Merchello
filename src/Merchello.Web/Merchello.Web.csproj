@@ -116,10 +116,11 @@
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
-    <Compile Include="Reporting\IReportControllerResolver.cs" />
-    <Compile Include="Reporting\ReportApiControllerBase.cs" />
-    <Compile Include="Reporting\ReportControllerResolver.cs" />
-    <Compile Include="Reporting\ReportViewAttribute.cs" />
+    <Compile Include="Reporting\IReportApiControllerResolver.cs" />
+    <Compile Include="Reporting\ReportController.cs" />
+    <Compile Include="Reporting\ReportApiControllerResolver.cs" />
+    <Compile Include="Reporting\ReportAttribute.cs" />
+    <Compile Include="Reporting\Sales\SalesOverTimeReportApiController.cs" />
     <Compile Include="Search\CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />
     <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />

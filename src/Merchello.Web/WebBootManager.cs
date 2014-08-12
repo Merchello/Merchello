@@ -1,5 +1,9 @@
 ﻿namespace Merchello.Web
 {
+    using Merchello.Web.Reporting;
+
+    using Umbraco.Core;
+
     using CoreBootManager = Merchello.Core.CoreBootManager;
     using IBootManager = Merchello.Core.IBootManager;
 
@@ -48,10 +52,15 @@
             return this;
         }
 
+        /// <summary>
+        /// Initializer resolvers.
+        /// </summary>
         protected override void InitializeResolvers()
         {
             base.InitializeResolvers();
-            
+
+            if (!ReportApiControllerResolver.HasCurrent)
+            ReportApiControllerResolver.Current = new ReportApiControllerResolver(PluginManager.Current.ResolveReportApiControllers());
         }
     }
 }
