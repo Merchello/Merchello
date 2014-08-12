@@ -38,7 +38,7 @@
         /// Initializes a new instance of the <see cref="GatewayProviderApiController"/> class.
         /// </summary>
         public GatewayProviderApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {       
         }
 
@@ -49,7 +49,7 @@
         /// The merchello context.
         /// </param>
         public GatewayProviderApiController(IMerchelloContext merchelloContext)
-            : base((MerchelloContext) merchelloContext) 
+            : base(merchelloContext) 
         {
             _gatewayContext = merchelloContext.Gateways;
             _gatewayProviderService = merchelloContext.Services.GatewayProviderService;
@@ -65,7 +65,7 @@
         /// The umbraco context.
         /// </param>
         internal GatewayProviderApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
-            : base((MerchelloContext) merchelloContext, umbracoContext)
+            : base(merchelloContext, umbracoContext)
         {
             _gatewayContext = merchelloContext.Gateways;
             _gatewayProviderService = merchelloContext.Services.GatewayProviderService;

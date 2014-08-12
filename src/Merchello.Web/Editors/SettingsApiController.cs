@@ -21,6 +21,9 @@
     [PluginController("Merchello")]
     public class SettingsApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
         private readonly StoreSettingService _storeSettingService;
 
         /// <summary>
@@ -28,7 +31,7 @@
         /// Constructor
         /// </summary>
         public SettingsApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
@@ -39,7 +42,7 @@
         /// <param name="merchelloContext">
         /// The merchello context
         /// </param>
-        public SettingsApiController(MerchelloContext merchelloContext)
+        public SettingsApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
@@ -55,7 +58,7 @@
         /// <param name="umbracoContext">
         /// The umbraco Context.
         /// </param>
-        internal SettingsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        internal SettingsApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;

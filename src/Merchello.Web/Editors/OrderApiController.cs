@@ -36,8 +36,14 @@ namespace Merchello.Web.Editors
         /// </summary>
         private readonly IInvoiceService _invoiceService;
 
+        /// <summary>
+        /// The customer.
+        /// </summary>
         private ICustomerBase _customer;
 
+        /// <summary>
+        /// The backoffice.
+        /// </summary>
         private IBackoffice _backoffice;
 
 
@@ -45,7 +51,7 @@ namespace Merchello.Web.Editors
         /// Initializes a new instance of the <see cref="OrderApiController"/> class.
         /// </summary>
         public OrderApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {            
         }
 
@@ -53,11 +59,9 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderApiController" /> class.
         /// </summary>
-        /// <param name="merchelloContext">The merchello context.</param>
-        /// <param name="customer">The customer.</param>
-        /// <param name="backoffice">The backoffice.</param>
+        /// <param name="merchelloContext">The merchello context.</param>        
         public OrderApiController(IMerchelloContext merchelloContext)
-            : base((MerchelloContext) merchelloContext)
+            : base(merchelloContext)
         {
             _orderService = merchelloContext.Services.OrderService;
             _invoiceService = merchelloContext.Services.InvoiceService;
@@ -74,7 +78,7 @@ namespace Merchello.Web.Editors
         /// The umbraco context.
         /// </param>
         internal OrderApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
-            : base((MerchelloContext) merchelloContext, umbracoContext)
+            : base(merchelloContext, umbracoContext)
         {
             _orderService = merchelloContext.Services.OrderService;
             _invoiceService = merchelloContext.Services.InvoiceService;

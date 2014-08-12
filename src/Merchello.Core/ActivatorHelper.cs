@@ -13,8 +13,8 @@
 		/// <summary>
 		/// Creates an instance of a type using that type's default constructor.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
+		/// <typeparam name="T">The type of instance to create</typeparam>
+		/// <returns>An instantiation of T</returns>
 		public static T CreateInstance<T>() where T : class, new()
 		{
 			return Activator.CreateInstance(typeof(T)) as T;

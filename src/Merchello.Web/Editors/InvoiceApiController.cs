@@ -32,7 +32,7 @@
         /// Initializes a new instance of the <see cref="InvoiceApiController"/> class.
         /// </summary>
         public InvoiceApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
@@ -43,7 +43,7 @@
         /// The merchello context.
         /// </param>
         public InvoiceApiController(IMerchelloContext merchelloContext)
-            : base((MerchelloContext) merchelloContext)
+            : base(merchelloContext)
         {
             _invoiceService = merchelloContext.Services.InvoiceService;
         }
@@ -58,7 +58,7 @@
         /// The umbraco context.
         /// </param>
         internal InvoiceApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
-            : base((MerchelloContext) merchelloContext, umbracoContext)
+            : base(merchelloContext, umbracoContext)
         {
             _invoiceService = merchelloContext.Services.InvoiceService;
         }
