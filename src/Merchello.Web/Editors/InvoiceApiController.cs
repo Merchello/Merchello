@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
     using Umbraco.Web;
@@ -193,7 +194,7 @@
         public QueryResultDisplay GetFilteredInvoices(string term, int page, int perPage)
         {
             var allMatches = InvoiceQuery.Search(term).ToArray();
-            var invoices = allMatches.Skip((page - 1) * perPage).Take(perPage);
+            var invoices = allMatches.Skip(page * perPage).Take(perPage);
 
             return new QueryResultDisplay()
             {

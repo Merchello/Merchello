@@ -48,5 +48,15 @@
         /// </returns>
         ITaxMethod GetTaxMethodForTaxAddress(IAddress taxAddress);
 
+        /// <summary>
+        /// Gets the tax method for country code.
+        /// </summary>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxMethod"/>.
+        /// </returns>
+        ITaxMethod GetTaxMethodForCountryCode(string countryCode);
     }
 }
