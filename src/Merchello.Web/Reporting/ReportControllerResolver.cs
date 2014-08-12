@@ -3,9 +3,9 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Defines a report resolver.
+    /// Represents an report controller resolver.
     /// </summary>
-    internal interface IReportControllerResolver
+    internal class ReportControllerResolver : IReportControllerResolver
     {
         /// <summary>
         /// Gets a collection of all <see cref="IReportApiController"/>s
@@ -13,7 +13,10 @@
         /// <returns>
         /// The collection of all <see cref="IReportApiController"/>s
         /// </returns>
-        IEnumerable<IReportApiController> GetAll();
+        public IEnumerable<IReportApiController> GetAll()
+        {
+            throw new System.NotImplementedException();
+        }
 
         /// <summary>
         /// Gets a report by it's key defined in the attribute
@@ -24,6 +27,9 @@
         /// <returns>
         /// The <see cref="IReportApiController"/>.
         /// </returns>
-        IReportApiController GetByAlias(string alias);
+        public IReportApiController GetByAlias(string alias)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -54,7 +54,7 @@
 
             var umbracoUrls = (Dictionary<string, object>)items["umbracoUrls"];
 
-            var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
+            var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));            
 
             umbracoUrls.Add(
                 "merchelloProductApiBaseUrl", 

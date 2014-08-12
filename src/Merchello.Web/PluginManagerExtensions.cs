@@ -6,6 +6,9 @@ namespace Merchello.Web
     using System.Collections.Generic;
     using Umbraco.Core;
 
+    /// <summary>
+    /// Extension methods for the Plugin Manager
+    /// </summary>
     public static class PluginManagerExtensions
     {
         /// <summary>
@@ -19,7 +22,7 @@ namespace Merchello.Web
         /// </returns>
         internal static IEnumerable<Type> ResolveReportApiControllers(this PluginManager pluginManger)
         {
-            return pluginManger.ResolveTypes<ReportApiControllerBase>();
+            return pluginManger.ResolveTypesWithAttribute<ReportApiControllerBase, ReportViewAttribute>();
         } 
     }
 }

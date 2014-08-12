@@ -8,7 +8,9 @@
     /// </summary>
     internal class WebBootManager : CoreBootManager
     {
-
+        /// <summary>
+        /// Designates if this boot manager is being used by a Test
+        /// </summary>
         private readonly bool _isForTesting;
 
         /// <summary>
@@ -35,7 +37,7 @@
         /// <summary>
         /// Initialize objects before anything during the boot cycle happens
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The <see cref="IBootManager"/></returns>
         public override IBootManager Initialize()
         {
             base.Initialize();
@@ -46,11 +48,10 @@
             return this;
         }
 
-        //protected override void InitializeResolvers()
-        //{
-        //    base.InitializeResolvers();
-
-        //    ReportDataAggregatorResolver.Current = new ReportDataAggregatorResolver(PluginManager.Current.ResolveReportDataAggregators());
-        //}
+        protected override void InitializeResolvers()
+        {
+            base.InitializeResolvers();
+            
+        }
     }
 }
