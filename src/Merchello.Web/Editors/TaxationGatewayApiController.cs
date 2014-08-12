@@ -31,7 +31,7 @@
         /// Initializes a new instance of the <see cref="TaxationGatewayApiController"/> class. 
         /// </summary>
         public TaxationGatewayApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
@@ -41,7 +41,7 @@
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>
         /// </param>
-        public TaxationGatewayApiController(MerchelloContext merchelloContext)
+        public TaxationGatewayApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _taxationContext = MerchelloContext.Gateways.Taxation;

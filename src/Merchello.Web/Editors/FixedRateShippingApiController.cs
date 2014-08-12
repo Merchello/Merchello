@@ -30,7 +30,7 @@
         /// Initializes a new instance of the <see cref="FixedRateShippingApiController"/> class.
         /// </summary>
         public FixedRateShippingApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
@@ -41,7 +41,7 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        public FixedRateShippingApiController(MerchelloContext merchelloContext)
+        public FixedRateShippingApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _fixedRateShippingGatewayProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.GetProviderByKey(Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);

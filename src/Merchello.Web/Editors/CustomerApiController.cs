@@ -49,7 +49,7 @@
         /// Initializes a new instance of the <see cref="CustomerApiController"/> class.
         /// </summary>
         public CustomerApiController()
-            : this(MerchelloContext.Current, global::Umbraco.Core.ApplicationContext.Current.Services.MemberService)
+            : this(Core.MerchelloContext.Current, global::Umbraco.Core.ApplicationContext.Current.Services.MemberService)
         {     
         }
 
@@ -63,7 +63,7 @@
         /// The member Service.
         /// </param>
         public CustomerApiController(IMerchelloContext merchelloContext, IMemberService memberService)
-            : base((MerchelloContext)merchelloContext)
+            : base(merchelloContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(memberService, "memberService");
@@ -86,7 +86,7 @@
         /// The member Service.
         /// </param>
         internal CustomerApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext, IMemberService memberService)
-            : base((MerchelloContext)merchelloContext, umbracoContext)
+            : base(merchelloContext, umbracoContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(memberService, "memberService");

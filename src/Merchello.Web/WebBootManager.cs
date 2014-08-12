@@ -1,9 +1,5 @@
 ﻿namespace Merchello.Web
 {
-    using Merchello.Core.Reporting;
-
-    using Umbraco.Core;
-
     using CoreBootManager = Merchello.Core.CoreBootManager;
     using IBootManager = Merchello.Core.IBootManager;
 

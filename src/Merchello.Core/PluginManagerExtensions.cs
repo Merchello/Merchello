@@ -2,12 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
-
     using Gateways;
-
-    using Merchello.Core.Reporting;
-
     using Observation;
     using Umbraco.Core;
 

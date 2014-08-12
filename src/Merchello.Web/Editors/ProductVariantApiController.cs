@@ -25,7 +25,7 @@ namespace Merchello.Web.Editors
         /// Constructor
         /// </summary>
         public ProductVariantApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 

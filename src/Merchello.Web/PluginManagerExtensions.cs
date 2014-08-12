@@ -1,10 +1,9 @@
-﻿namespace Merchello.Web
+﻿using Merchello.Web.Reporting;
+
+namespace Merchello.Web
 {
     using System;
     using System.Collections.Generic;
-
-    using Merchello.Core.Reporting;
-
     using Umbraco.Core;
 
     public static class PluginManagerExtensions
@@ -18,9 +17,9 @@
         /// <returns>
         /// The collection of the report data aggregators resolved.
         /// </returns>
-        internal static IEnumerable<Type> ResolveReportDataAggregators(this PluginManager pluginManger)
+        internal static IEnumerable<Type> ResolveReportApiControllers(this PluginManager pluginManger)
         {
-            return pluginManger.ResolveAttributedTypes<ReportDataAggregatorAttribute>();
+            return pluginManger.ResolveTypes<ReportApiControllerBase>();
         } 
     }
 }

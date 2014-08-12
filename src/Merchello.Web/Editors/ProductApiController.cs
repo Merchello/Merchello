@@ -26,7 +26,7 @@ namespace Merchello.Web.Editors
         /// Constructor
         /// </summary>
         public ProductApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
@@ -34,7 +34,7 @@ namespace Merchello.Web.Editors
         /// Constructor
         /// </summary>
         /// <param name="merchelloContext"></param>
-        public ProductApiController(MerchelloContext merchelloContext)
+        public ProductApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _productService = MerchelloContext.Services.ProductService;
@@ -44,7 +44,7 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// This is a helper contructor for unit testing
         /// </summary>
-        internal ProductApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        internal ProductApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
