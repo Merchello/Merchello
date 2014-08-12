@@ -6,6 +6,7 @@
     using System.Threading;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.ObjectResolution;
 
     /// <summary>
@@ -149,14 +150,21 @@
         /// The type.
         /// </param>
         /// <param name="ctrArgs">
-        /// The ctr args.
+        /// The constructor args.
         /// </param>
         /// <returns>
         /// The <see cref="Attempt"/>.
         /// </returns>
         protected virtual Attempt<TResolved> CreateInstance(Type type, object[] ctrArgs)
         {
-            return ActivatorHelper.CreateInstance<TResolved>(type, ctrArgs.ToArray());
+            var attempt = ActivatorHelper.CreateInstance<TResolved>(type, ctrArgs.ToArray());
+
+            if (!attempt.Success)
+            {
+                LogHelper.Debug<TResolver>(string.Format("Failed to resolve type {0}", type.Name));
+            }
+
+            return attempt;
         }
 
         /// <summary>

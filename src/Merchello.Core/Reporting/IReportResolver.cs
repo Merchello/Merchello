@@ -24,6 +24,6 @@
         /// <returns>
         /// The <see cref="IReport"/>.
         /// </returns>
-        IReportDataAggregator GetByAlias(string alias);
+        IReport GetByAlias(string alias);
     }
 }

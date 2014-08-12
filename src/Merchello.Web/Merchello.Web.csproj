@@ -114,7 +114,11 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
+    <Compile Include="PluginManagerExtensions.cs" />
+    <Compile Include="Reporting\Sales\SalesByItemDataAggregator.cs" />
+    <Compile Include="Reporting\Sales\SalesByItemQuerySettings.cs" />
     <Compile Include="Reporting\Sales\SalesOverTimeDataAggregator.cs" />
+    <Compile Include="Reporting\Sales\SalesOverTimeQuerySettings.cs" />
     <Compile Include="Search\CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />
     <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />

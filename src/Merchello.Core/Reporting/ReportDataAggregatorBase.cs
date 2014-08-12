@@ -3,11 +3,23 @@
     /// <summary>
     /// The report data aggregator base.
     /// </summary>
-    public abstract class ReportDataAggregatorBase : IReportDataAggregator
+    /// <typeparam name="TResult">
+    /// The type of result to be returned
+    /// </typeparam>
+    /// <typeparam name="TQuerySettings">
+    /// Object that contains compilation (query) parameters
+    /// </typeparam>
+    public abstract class ReportDataAggregatorBase<TResult, TQuerySettings> : IReportDataAggregatorBase<TResult, TQuerySettings>
     {
         /// <summary>
-        /// Gets or sets the aggregated data.
+        /// The compile.
         /// </summary>
-        public abstract object AggregatedData { get; set; }
+        /// <param name="querySettings">
+        /// The query settings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TResult"/>.
+        /// </returns>
+        public abstract TResult GetReportData(TQuerySettings querySettings);
     }
 }

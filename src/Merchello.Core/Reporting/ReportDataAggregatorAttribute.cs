@@ -3,7 +3,7 @@
     using System;
 
     /// <summary>
-    /// Decorates <see cref="IReport"/>s to associate <see cref="IReportDataAggregator"/>s
+    /// Decorates <see cref="IReport"/>s to associate <see cref="IReportDataAggregatorBase{TResult,TQuerySettings}"/>s
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ReportDataAggregatorAttribute : ReportAttributeBase 

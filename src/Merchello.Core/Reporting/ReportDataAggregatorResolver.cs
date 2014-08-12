@@ -1,17 +1,17 @@
-﻿using System.Linq;
-using Umbraco.Core;
-using Umbraco.Core.PropertyEditors.ValueConverters;
-
-namespace Merchello.Core.Reporting
+﻿namespace Merchello.Core.Reporting
 {
     using System;
     using System.Collections.Generic;
-    using ObjectResolution;
+    using System.Linq;
+
+    using Merchello.Core.ObjectResolution;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// Represents a report data aggregator resolver.
     /// </summary>
-    internal class ReportDataAggregatorResolver : MerchelloManyObjectsResolverBase<ReportDataAggregatorResolver, ReportDataAggregatorBase>,  IReportDataAggregatorResolver
+    internal class ReportDataAggregatorResolver : MerchelloManyObjectsResolverBase<ReportDataAggregatorResolver, object>,  IReportDataAggregatorResolver
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReportDataAggregatorResolver"/> class.
@@ -25,27 +25,29 @@ namespace Merchello.Core.Reporting
         }
 
         /// <summary>
-        /// Gets a collection of instantiated <see cref="IReportDataAggregator"/>s
+        /// Gets a collection of instantiated <see cref="object"/>s
         /// </summary>
-        protected override IEnumerable<ReportDataAggregatorBase> Values
+        protected override IEnumerable<object> Values
         {
             get
             {
                 using (GetWriteLock())
                 {
+                    return
+                        InstanceTypes.Select(x => this.CreateInstance(x, new object[] { }))
+                            .Where(x => x.Success)
+                            .Select(x => x.Result);
                 }
-
-                throw new NotImplementedException();
             }
         }
 
         /// <summary>
-        /// Gets a collection of all <see cref="IReportDataAggregator"/>s
+        /// Gets a collection of all <see cref="object"/>s
         /// </summary>
         /// <returns>
-        /// The collection of all <see cref="IReportDataAggregator"/>s
+        /// The collection of all <see cref="object"/>s
         /// </returns>
-        public IEnumerable<IReportDataAggregator> GetAll()
+        public IEnumerable<object> GetAll()
         {
             return Values;
         }
@@ -57,9 +59,9 @@ namespace Merchello.Core.Reporting
         /// The report aggregator alias
         /// </param>
         /// <returns>
-        /// The <see cref="IReportDataAggregator"/>.
+        /// The <see cref="object"/>.
         /// </returns>
-        public IReportDataAggregator GetByAlias(string alias)
+        public object GetByAlias(string alias)
         {
             var type = InstanceTypes.FirstOrDefault(x => x.GetCustomAttribute<ReportDataAggregatorAttribute>(true).Alias == alias);
             if (type == null) return null;

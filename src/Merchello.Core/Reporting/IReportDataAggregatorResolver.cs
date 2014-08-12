@@ -8,12 +8,12 @@
     public interface IReportDataAggregatorResolver
     {
         /// <summary>
-        /// Gets a collection of all <see cref="IReportDataAggregator"/>s
+        /// Gets a collection of all <see cref="object"/>s
         /// </summary>
         /// <returns>
-        /// The collection of all <see cref="IReportDataAggregator"/>s
+        /// The collection of all <see cref="object"/>s
         /// </returns>
-        IEnumerable<IReportDataAggregator> GetAll();
+        IEnumerable<object> GetAll();
 
         /// <summary>
         /// Gets a report data aggregator by it's key defined in the attribute
@@ -22,8 +22,8 @@
         /// The report aggregator alias
         /// </param>
         /// <returns>
-        /// The <see cref="IReportDataAggregator"/>.
+        /// The <see cref="object"/>.
         /// </returns>
-        IReportDataAggregator GetByAlias(string alias);
+        object GetByAlias(string alias);
     }
 }

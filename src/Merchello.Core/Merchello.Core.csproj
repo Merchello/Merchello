@@ -257,7 +257,7 @@
     <Compile Include="Persistence\Repositories\OrderLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\OrderStatusRepository.cs" />
     <Compile Include="Reporting\IReport.cs" />
-    <Compile Include="Reporting\IReportDataAggregator.cs" />
+    <Compile Include="Reporting\IReportDataAggregatorBase.cs" />
     <Compile Include="Reporting\IReportDataAggregatorResolver.cs" />
     <Compile Include="Reporting\IReportResolver.cs" />
     <Compile Include="Reporting\ReportAttributeBase.cs" />
