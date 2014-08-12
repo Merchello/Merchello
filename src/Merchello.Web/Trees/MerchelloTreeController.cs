@@ -4,6 +4,9 @@
     using System.Net.Http.Formatting;
     using Core.Configuration;
     using Core.Configuration.Outline;
+
+    using Merchello.Web.Reporting;
+
     using umbraco;
     using umbraco.BusinessLogic.Actions;
     using Umbraco.Web.Models.Trees;
@@ -35,7 +38,7 @@
 
             var backoffice = MerchelloConfiguration.Current.BackOffice;
 
-            var rootTrees = backoffice.GetTrees().Where(x => x.Visible);
+            var rootTrees = backoffice.GetTrees().Where(x => x.Visible).ToArray();
 
             var currentTree = rootTrees.FirstOrDefault(x => x.Id == id && x.Visible);
 
@@ -102,7 +105,6 @@
         /// </returns>
         private TreeNode GetTreeNodeFromConfigurationElement(TreeElement tree, FormDataCollection queryStrings, TreeElement parentTree = null)
         {
-
             var hasSubs = tree.SubTree != null && tree.SubTree.GetTrees().Any();
 
             return CreateTreeNode(

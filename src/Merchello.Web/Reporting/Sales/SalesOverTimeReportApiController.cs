@@ -5,12 +5,10 @@
     using Merchello.Core;
     using Merchello.Web.Models.ContentEditing;
 
-    using Umbraco.Web;
-
     /// <summary>
     /// The sales over time report controller.
     /// </summary>
-    [Report("Sales Over Time", "~/App_Plugins/Merchello/Backoffice/ReportSalesOverTime.html")]
+    [Report("salesOverTime", "Sales Over Time", "icon-loading", "~/App_Plugins/Merchello/Backoffice/ReportSalesOverTime/manage/", 10)]
     public class SalesOverTimeReportApiController : ReportController
     {
         /// <summary>

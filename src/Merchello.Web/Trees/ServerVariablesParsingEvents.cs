@@ -7,6 +7,7 @@
     using System.Web.Routing;
     using Merchello.Web.Editors;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Reporting;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -130,6 +131,13 @@
                 "merchelloGatewayProviderApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<GatewayProviderApiController>(
                 controller => controller.GetGatewayProvider(Guid.NewGuid())));
+
+            if (!ReportApiControllerResolver.HasCurrent) return;
+            foreach (var reportController in ReportApiControllerResolver.Current.GetAll())
+            {
+                var keyValue = reportController.BaseUrl;
+                umbracoUrls.Add(keyValue.Key, keyValue.Value);
+            }
         }
     }
 }
