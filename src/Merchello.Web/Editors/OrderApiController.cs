@@ -1,5 +1,8 @@
 ﻿using System.Globalization;
+using System.Web.Mvc;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Web.Search;
 using Merchello.Web.Workflow;
 
 namespace Merchello.Web.Editors
@@ -13,9 +16,6 @@ namespace Merchello.Web.Editors
     using Core;
     using Core.Models;
     using Core.Services;
-
-    using Merchello.Web.Search;
-
     using Models.ContentEditing;    
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
@@ -192,6 +192,9 @@ namespace Merchello.Web.Editors
                                    
             _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
             _backoffice = _customer.Backoffice();
+             
+            _backoffice.Empty();
+            _backoffice.Save();
 
             if (model.ProductKeys != null && model.ProductKeys.Any())
             {
@@ -216,7 +219,7 @@ namespace Merchello.Web.Editors
                     _backoffice.AddItem(product, product.Name, 1, extendedData);
                     //}
                 }
-
+                                                                                    
                 var salesPreparation = _customer.Backoffice().SalePreparation();
 
                 salesPreparation.SaveBillToAddress(model.BillingAddress.ToAddress());
@@ -241,11 +244,76 @@ namespace Merchello.Web.Editors
 
             _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
             _backoffice = _customer.Backoffice();
+
+            // TODO: This is temperary until the customer correctly reflects region codes
+            model.ShippingAddress.Region = "OR";
+
             var shipment = _backoffice.PackageBackoffice(model.ShippingAddress.ToAddress()).FirstOrDefault();
             
             return shipment.ShipmentRateQuotes();
         }
 
+        /// <summary>
+        /// Adds items to the backoffice basket to calculate shipping and Sales tax
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        public IEnumerable<IPaymentGatewayMethod> GetPaymentMethods(BackofficeAddItemModel model)
+        {
+            return MerchelloContext.Current.Gateways.Payment.GetPaymentGatewayMethods();
+        }
+
+        [HttpPost]
+        public bool FinalizeBackofficeOrder(BackofficeAddItemModel model)
+        {
+            _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
+            _backoffice = _customer.Backoffice();
+                                                                    
+            // This check asserts that we have enough
+            // this should be handled a bit nicer for the customer.  
+            if (!_backoffice.SalePreparation().IsReadyToInvoice()) return false;
+
+            var preparation = _backoffice.SalePreparation();
+
+            // Get the shipment again   
+            var shippingAddress = _backoffice.SalePreparation().GetShipToAddress();
+
+            var shipment = _backoffice.PackageBackoffice(shippingAddress).FirstOrDefault();
+
+            // Clear any previously saved quotes (eg. the user went back to their basket and started the process over again).
+            _backoffice.SalePreparation().ClearShipmentRateQuotes();
+
+            // get the quote using the "approved shipping method"
+            var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipmentKey);
+
+            // save the quote                 
+            _backoffice.SalePreparation().SaveShipmentRateQuote(quote);
+
+            // for cash providers we only want to authorize the payment
+            var paymentMethod = _backoffice.SalePreparation().GetPaymentMethod();
+
+            IPaymentResult attempt;
+
+            if (Merchello.Core.Constants.ProviderKeys.Payment.CashPaymentProviderKey == new Guid(model.PaymentProviderKey))
+            {
+                // AuthorizePayment will save the invoice with an Invoice Number.
+                //
+                attempt = preparation.AuthorizePayment(new Guid(model.PaymentKey));  
+            }
+            else // we 
+            {
+                // TODO wire in redirect to Credit Card view or PayPal ... etc.
+                throw new NotImplementedException();
+            }
+
+            _backoffice.Empty();
+            _backoffice.Save();
+
+            return true;
+        }
+
+           
         /// <summary>
         /// Gets the backoffice order summary.
         /// </summary>

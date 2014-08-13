@@ -10,6 +10,9 @@
      */                                                                                      
     controllers.OrderCreateController = function ($scope, $routeParams, $location, notificationsService, dialogService, merchelloOrderService, merchelloCustomerService, merchelloSettingsService) {
 
+        $scope.selectedShippingMethod = {};
+        $scope.chosenPaymentMethod = {};
+
         if ($routeParams.create) {
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
@@ -128,15 +131,30 @@
                 orderSummary.orderPrepComplete = true;
                 $scope.orderSummary = new merchello.Models.OrderSummary(orderSummary);
                 notificationsService.success("The order has been finalized.");
-
+                                                                                       
                 var shippingPromise = merchelloOrderService.getShippingMethods($scope.customer.key, $scope.products, shipping, billing);
-                shippingPromise.then(function(shipMethods) {
+                shippingPromise.then(function (shipMethods) {
                     $scope.shipMethods = shipMethods;
                 }, function(reason) {
 
                 });
+                var paymentPromise = merchelloOrderService.getPaymentMethods();
+                paymentPromise.then(function (paymentMethods) {
+                    $scope.paymentMethods = paymentMethods;
+                }, function (reason) {
+
+                });
             }, function(reason) {
                 notificationsService.error("Failed to add products to backoffice basket", reason.message);
+            });
+        };
+
+        $scope.finalizeBackofficeOrder = function() {
+            var promise = merchelloOrderService.finalizeBackofficeOrder($scope.customer.key, null, null, null, $scope.selectedPaymentMethod.paymentMethod.key, $scope.selectedPaymentMethod.paymentMethod.providerKey, $scope.selectedShippingMethod);
+            promise.then(function(backofficeOrder) {
+                
+            }, function(reason) {
+
             });
         };
 
@@ -166,6 +184,13 @@
             $scope.existingCustomer = false;
         }
 
+        $scope.paymentMethodChanged = function (method) {
+            $scope.selectedPaymentMethod = method;
+        }
+        
+        $scope.shipMethodChanged = function (method) {
+            $scope.selectedShippingMethod = method;
+        }
         /**
         * @ngdoc method
         * @name toggleCreateCustomer
@@ -243,6 +268,9 @@
             $scope.isBillingAddressSelected = false;
             $scope.createCustomer = false;
             $scope.shipMethods = null;
+            $scope.paymentMethods = null;
+            $scope.selectedShippingMethod = '00000000-0000-0000-0000-000000000000';
+            $scope.selectedPaymentMethod = '';
         };
 
         $scope.init();

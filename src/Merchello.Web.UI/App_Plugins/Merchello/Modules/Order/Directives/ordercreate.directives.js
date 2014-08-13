@@ -205,7 +205,7 @@
                             $scope.provinces = _.map(selectedCountry.provinces, function (province) {
                                 return province;
                             });
-                            $scope.provinces.unshift({ code: '00', name: 'Select State/Province' });
+                            $scope.provinces.unshift({ code: '00', name: 'Select Statsee/Province' });
                             $scope.filters.province = $scope.provinces[0];
                         }
                     } else {
