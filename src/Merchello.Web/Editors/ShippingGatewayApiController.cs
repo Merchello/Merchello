@@ -42,7 +42,7 @@
         /// Initializes a new instance of the <see cref="ShippingGatewayApiController"/> class.
         /// </summary>
         public ShippingGatewayApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
@@ -52,7 +52,7 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        public ShippingGatewayApiController(MerchelloContext merchelloContext)
+        public ShippingGatewayApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _shippingContext = MerchelloContext.Gateways.Shipping;

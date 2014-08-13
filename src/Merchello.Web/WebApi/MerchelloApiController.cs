@@ -15,7 +15,7 @@
         /// Initializes a new instance of the <see cref="MerchelloApiController"/> class.
         /// </summary>
         protected MerchelloApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
@@ -25,7 +25,7 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        protected MerchelloApiController(MerchelloContext merchelloContext) : this(merchelloContext, UmbracoContext.Current)
+        protected MerchelloApiController(IMerchelloContext merchelloContext) : this(merchelloContext, UmbracoContext.Current)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             
@@ -42,7 +42,7 @@
         /// <param name="umbracoContext">
         /// The umbraco context.
         /// </param>
-        protected MerchelloApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext) : base(umbracoContext)
+        protected MerchelloApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext) : base(umbracoContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
 
@@ -53,7 +53,7 @@
         /// <summary>
         /// Gets the current <see cref="IMerchelloContext"/>
         /// </summary>
-        public MerchelloContext MerchelloContext { get; private set; }
+        public IMerchelloContext MerchelloContext { get; private set; }
 
         /// <summary>
         /// Gets the instance id
