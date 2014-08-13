@@ -426,4 +426,6 @@
 	        self.orderPrepComplete = data.orderPrepComplete;
 	    }
 	};
+
+
 }(window.merchello.Models = window.merchello.Models || {}));

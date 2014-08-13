@@ -32,25 +32,43 @@
                    'Failed to retreive data for invoice id: ' + id);
             },
 
-            getAll: function () {
-
-                return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
-                       method: "GET"
-                   }),
-                   'Failed to retreive invoices');
+            getAll: function (page, perPage) {
+                if (page === undefined) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
+                            method: "GET"
+                        }),
+                        'Failed to retreive invoices');
+                } else {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
+                            method: "GET",
+                            params: { page: page, perPage: perPage }
+                        }),
+                        'Failed to retrieve invoices');
+                }
             },
 
-            getFiltered: function (term) {
-
-                return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetFilteredInvoices'),
-                       method: "GET",
-                       params: { term: term }
-                   }),
-                   'Failed to retreive filtered invoices');
+            getFiltered: function (term, page, perPage) {
+                if (page === undefined) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetFilteredInvoices'),
+                            method: "GET",
+                            params: { term: term }
+                        }),
+                        'Failed to retreive filtered invoices');
+                } else {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetFilteredInvoices'),
+                            method: "GET",
+                            params: { term: term, page: page, perPage: perPage }
+                        }),
+                        'Failed to retreive filtered invoices');                    
+                }
             },
 
             saveInvoice: function (invoice) {
