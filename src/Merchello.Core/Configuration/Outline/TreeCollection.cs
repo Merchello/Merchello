@@ -34,6 +34,16 @@
             return this.Cast<TreeElement>();
         }
 
+        /// <summary>
+        /// Adds an element to the collection
+        /// </summary>
+        /// <param name="element">
+        /// The element.
+        /// </param>
+        internal void Add(TreeElement element)
+        {
+            BaseAdd(element);
+        }
 
         /// <summary>
         /// The create new element.

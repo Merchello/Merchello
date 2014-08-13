@@ -8,16 +8,24 @@
     public class TreeElement : ConfigurationElement
     {
         /// <summary>
-        /// Gets the id.
+        /// Gets or sets the id.
         /// </summary>
         [ConfigurationProperty("id", IsKey = true)]
         public string Id
         {
-            get { return (string)this["id"]; }
+            get
+            {
+                return (string)this["id"];
+            }
+
+            set
+            {
+                this["id"] = value;
+            }
         }
 
         /// <summary>
-        /// Gets the title.
+        /// Gets or sets the title.
         /// </summary>
         [ConfigurationProperty("title", IsRequired = true)]
         public string Title
@@ -26,10 +34,15 @@
             {
                 return (string)this["title"];
             }
+
+            set
+            {
+                this["title"] = value;
+            }
         }
 
         /// <summary>
-        /// Gets the icon.
+        /// Gets or sets the icon.
         /// </summary>
         [ConfigurationProperty("icon", IsRequired = true)]
         public string Icon
@@ -38,10 +51,15 @@
             {
                 return (string)this["icon"];
             }
+
+            set
+            {
+                this["icon"] = value;
+            }
         }
 
         /// <summary>
-        /// Gets the route path.
+        /// Gets or sets the route path.
         /// </summary>
         [ConfigurationProperty("routePath", IsRequired = true)]
         public string RoutePath
@@ -50,10 +68,15 @@
             {
                 return (string)this["routePath"];
             }
-        }
+
+            set
+            {
+                this["routePath"] = value;
+            }
+    }
 
         /// <summary>
-        /// Gets a value indicating whether the tree is visible.
+        /// Gets or sets a value indicating whether the tree is visible.
         /// </summary>
         [ConfigurationProperty("visible", IsRequired = false, DefaultValue = true)]
         public bool Visible
@@ -62,15 +85,45 @@
             {
                 return (bool)this["visible"];
             }
+
+            set
+            {
+                this["visible"] = value;
+            }
         }
 
         /// <summary>
-        /// Gets the sub tree.
+        /// Gets or sets the sort order.
+        /// </summary>
+        [ConfigurationProperty("sortOrder", IsRequired = false, DefaultValue = 0)]
+        public int SortOrder
+        {
+            get
+            {
+                return (int)this["sortOrder"];
+            }
+
+            set
+            {
+                this["sortOrder"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the sub tree.
         /// </summary>
         [ConfigurationProperty("subTree", IsRequired = false), ConfigurationCollection(typeof(TreeCollection), AddItemName = "tree")]
         public TreeCollection SubTree
         {
-            get { return (TreeCollection)this["subTree"]; }
+            get
+            {
+                return (TreeCollection)this["subTree"];
+            }
+
+            set
+            {
+                this["subTree"] = value;
+            }
         }
     }
 }
