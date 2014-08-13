@@ -4,6 +4,9 @@ namespace Merchello.Web
 {
     using System;
     using System.Collections.Generic;
+
+    using Merchello.Web.Trees;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -22,7 +25,7 @@ namespace Merchello.Web
         /// </returns>
         internal static IEnumerable<Type> ResolveReportApiControllers(this PluginManager pluginManger)
         {
-            return pluginManger.ResolveTypesWithAttribute<ReportController, ReportAttribute>();
+            return pluginManger.ResolveTypesWithAttribute<ReportController, BackOfficeTreeAttribute>();
         } 
     }
 }

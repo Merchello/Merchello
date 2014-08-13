@@ -119,7 +119,8 @@
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
     <Compile Include="Reporting\ReportController.cs" />
     <Compile Include="Reporting\ReportApiControllerResolver.cs" />
-    <Compile Include="Reporting\ReportAttribute.cs" />
+    <Compile Include="Reporting\Sales\SalesByItemReportApiController.cs" />
+    <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
     <Compile Include="Reporting\Sales\SalesOverTimeReportApiController.cs" />
     <Compile Include="Search\CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />
