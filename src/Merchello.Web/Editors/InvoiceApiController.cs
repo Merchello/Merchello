@@ -112,26 +112,24 @@
         /// 
         /// GET /umbraco/Merchello/InvoiceApi/GetAllInvoices
         /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="perPage">
-        /// The per Page.
-        /// </param>
         /// <returns>
         /// The paged collection of invoices.
         /// </returns>
-        public QueryResultDisplay GetAllInvoices(int page, int perPage)
+        public QueryResultDisplay GetAllInvoices(QueryDisplay query)
         {
-            var allInvoices = InvoiceQuery.GetAllInvoices().ToArray();
-            var invoices = allInvoices.Skip(page * perPage).Take(perPage);
+            var page = ((InvoiceService)_invoiceService).GetPage(
+                query.CurrentPage + 1,
+                query.ItemsPerPage,
+                query.SortBy,
+                query.SortDirection);
 
             return new QueryResultDisplay()
             {
-                Items = invoices,
-                CurrentPage = page,
-                TotalPages = ((allInvoices.Count() - 1) / perPage) + 1,
-                TotalItems = allInvoices.Count()
+                Items = page.Items.Select(InvoiceQuery.GetByKey),
+                ItemsPerPage = page.ItemsPerPage,
+                CurrentPage = page.CurrentPage,
+                TotalPages = page.TotalPages,
+                TotalItems = page.TotalItems
             };            
         }
 

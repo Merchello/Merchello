@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.Factories;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
     /// <summary>
     /// Represents the Invoice Repository
     /// </summary>
@@ -78,6 +80,42 @@ namespace Merchello.Core.Persistence.Repositories
             var dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
+        }
+
+        public Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<IInvoice> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sqlClause = new Sql();
+            sqlClause.Select("*").From<InvoiceDto>();
+
+            var translator = new SqlTranslator<IInvoice>(sqlClause, query);
+            var sql = translator.Translate();
+
+
+            if (!string.IsNullOrEmpty(orderExpression))
+            {
+                if (sortDirection == SortDirection.Ascending)
+                {
+                    sql.Append(string.Format("ORDER BY {0} ASC", orderExpression));
+                }
+                else
+                {
+                    sql.Append(string.Format("ORDER BY {0} DESC", orderExpression));
+                }
+            }
+
+             Console.Write(sql.SQL);
+            
+            var p = Database.Page<InvoiceDto>(page, itemsPerPage, sql);
+
+             return new Page<Guid>()
+                       {
+                           CurrentPage = p.CurrentPage,
+                           ItemsPerPage = p.ItemsPerPage,
+                           TotalItems = p.TotalItems,
+                           TotalPages = p.TotalPages,
+                           Items = p.Items.Select(x => x.Key).ToList()
+                       };
+
         }
 
         protected override Sql GetBaseQuery(bool isCount)
