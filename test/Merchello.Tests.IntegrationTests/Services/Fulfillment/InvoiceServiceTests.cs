@@ -2,7 +2,6 @@
 using Merchello.Core.Models;
 using Merchello.Core.Services;
 using NUnit.Framework;
-
 namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
 {
     [TestFixture]
@@ -57,6 +56,16 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
 
         }
 
-        
+        //[Test]
+        //public void Can_Get_Paged_Results_From_Query()
+        //{
+        //    //// Arrange
+            
+        //    //// Act
+        //    var page = ((InvoiceService)_invoiceService).GetPage(1, 25, "billToName", SortDirection.Ascending);
+
+        //    //// Assert
+        //    Assert.IsTrue(page.Items.Any());
+        //}
     }
 }

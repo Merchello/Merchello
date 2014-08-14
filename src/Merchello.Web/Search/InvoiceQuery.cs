@@ -129,7 +129,7 @@
         /// <returns>The <see cref="InvoiceDisplay"/></returns>
         internal static InvoiceDisplay GetByKey(string key)
         {
-            var criteria = ExamineManager.Instance.CreateSearchCriteria(BooleanOperation.And);
+            var criteria = ExamineManager.Instance.CreateSearchCriteria();
             criteria.Field("invoiceKey", key);
 
             var invoice = ExamineManager.Instance.SearchProviderCollection[SearcherName]
@@ -146,8 +146,7 @@
 
             return AutoMapper.Mapper.Map<InvoiceDisplay>(retrieved);
         }
-
-
+        
         /// <summary>
         /// ReIndexes an invoice.
         /// </summary>

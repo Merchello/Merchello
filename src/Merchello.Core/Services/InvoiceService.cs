@@ -3,16 +3,23 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
     using System.Threading;
+    using System.Web.UI;
 
     using Merchello.Core.Events;
     using Merchello.Core.Models;
-    using Merchello.Core.Persistence;
+    using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.Repositories;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents the InvoiceService
@@ -450,7 +457,6 @@
                 return repository.GetByQuery(query);
             }
         }
-
         /// <summary>
         /// Gets the total count of all <see cref="IInvoice"/>
         /// </summary>
@@ -508,6 +514,38 @@
                 return repository.GetAll();
             } 
         }
+
+
+        #region Key Queries
+
+        internal Page<Guid> GetPage(long page, long itemsPerPage, string orderBy = "invoiceNumber", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = (InvoiceRepository)_repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty);
+
+                string sortExpression;
+
+                switch (orderBy.ToLowerInvariant())
+                {
+                    case "billtoname":
+                        sortExpression = "billToName";
+                        break;
+
+                    case "invoicedate":
+                        sortExpression = "invoiceDate";
+                        break;
+
+                    default:
+                        sortExpression = "invoiceNumber";
+                        break;
+                }
+
+                return repository.GetPagedKeys(page, itemsPerPage, query, sortExpression, sortDirection);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Deletes orders associated with the invoice

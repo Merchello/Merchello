@@ -1,22 +1,14 @@
 ﻿namespace Merchello.Web
 {
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-
     using Core;
     using Core.Cache;
     using Core.Gateways;
     using Core.Persistence.UnitOfWork;
     using Core.Services;
     using global::Examine;
-    using global::Examine.LuceneEngine.SearchCriteria;
-    using global::Examine.Providers;
     using global::Examine.SearchCriteria;
 
     using Merchello.Examine;
-    using Merchello.Web.Search;
 
     using Umbraco.Core;
 
@@ -33,11 +25,9 @@
         /// </returns>
         protected static IMerchelloContext GetMerchelloContext()
         {
-            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
-            return MerchelloContext.Current ??
-                new MerchelloContext(serviceContext, new GatewayContext(serviceContext, GatewayProviderResolver.Current), new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
+            return MerchelloContext.Current ?? BuildContext();
         }
-
+        
         /// <summary>
         /// Rebuilds an Examine index by the index name
         /// </summary>
@@ -66,5 +56,12 @@
         {
             return SearchHelper.BuildCriteria(searchTerm, providerName, fields);
         }
+
+        private static IMerchelloContext BuildContext()
+        {
+            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
+            return new MerchelloContext(serviceContext, new GatewayContext(serviceContext, GatewayProviderResolver.Current), new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
+        }
+
     }
 }
