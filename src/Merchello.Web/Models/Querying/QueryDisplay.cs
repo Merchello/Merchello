@@ -2,6 +2,8 @@ namespace Merchello.Web.Models.Querying
 {
     using System.Collections.Generic;
 
+    using Merchello.Core.Persistence.Querying;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
@@ -34,6 +36,6 @@ namespace Merchello.Web.Models.Querying
         /// Gets or sets the sort direction.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public QueryDisplaySortDirection SortDirection { get; set; } 
+        public SortDirection SortDirection { get; set; } 
     }
 }

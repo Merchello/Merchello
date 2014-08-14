@@ -1,6 +1,10 @@
 ﻿namespace Merchello.Web.Models.Querying
 {
+    using System;
     using System.Collections.Generic;
+    using System.Web.UI;
+
+    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// A wrapper to return query results
@@ -10,22 +14,22 @@
         /// <summary>
         /// Gets or sets the current page index
         /// </summary>
-        public int CurrentPage { get; set; }
+        public long CurrentPage { get; set; }
 
         /// <summary>
         /// Gets or sets the page size.
         /// </summary>
-        public int ItemsPerPage { get; set; }
+        public long ItemsPerPage { get; set; }
 
         /// <summary>
         /// Gets or sets the total number of pages.
         /// </summary>
-        public int TotalPages { get; set; }
+        public long TotalPages { get; set; }
 
         /// <summary>
         /// Gets or sets the number of total results in returned by the query.
         /// </summary>
-        public int TotalItems { get; set; }
+        public long TotalItems { get; set; }
 
         /// <summary>
         /// Gets or sets the results to be serialized
