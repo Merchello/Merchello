@@ -124,8 +124,8 @@
         public static IEnumerable<InvoiceDisplay> Search(string term)
         {
             var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.GroupedOr(
-                new[] { "billToName", "invoiceNumber" },
+            criteria.Field("invoiceNumber", term).Or().GroupedOr(
+                new[] { "billToName" },
                 term.ToSearchTerms().Select(x => x.SearchTermType == SearchTermType.SingleWord ? x.Term.Fuzzy() : x.Term.MultipleCharacterWildcard()).ToArray());
 
             return Search(criteria);
