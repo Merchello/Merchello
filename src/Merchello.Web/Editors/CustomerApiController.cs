@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
     using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
@@ -136,10 +137,10 @@
 
             return new QueryResultDisplay()
             {
-                Results = customers,
-                PageIndex = 0,
+                Items = customers,
+                CurrentPage = 0,
                 TotalPages = 1,
-                TotalResults = customers.Count()
+                TotalItems = customers.Count()
             };
         }
 
@@ -166,10 +167,10 @@
 
             return new QueryResultDisplay()
             {
-                Results = customers,
-                PageIndex = page,
+                Items = customers,
+                CurrentPage = page,
                 TotalPages = ((allCustomers.Count() - 1) / perPage) + 1,
-                TotalResults = allCustomers.Count()
+                TotalItems = allCustomers.Count()
             };
         }
 
@@ -190,10 +191,10 @@
 
             return new QueryResultDisplay()
             {
-                Results = customers,
-                PageIndex = 0,
+                Items = customers,
+                CurrentPage = 0,
                 TotalPages = 1,
-                TotalResults = customers.Count()
+                TotalItems = customers.Count()
             };
         }
 
@@ -221,10 +222,10 @@
 
             return new QueryResultDisplay()
             {
-                Results = customers,
-                PageIndex = page,
+                Items = customers,
+                CurrentPage = page,
                 TotalPages = ((allMatches.Count() - 1) / perPage) + 1,
-                TotalResults = allMatches.Count()
+                TotalItems = allMatches.Count()
             };
         }
 

@@ -57,9 +57,9 @@ namespace Merchello.Tests.Base.DataMakers
 
         public static ICustomerAddress RandomAddress(ICustomer customer, string label)
         {
-            var addresses = AddressMocks().ToArray();
+            var addresses = FakeAddresses().ToArray();
             var index = NoWhammyStop.Next(addresses.Count());
-            return addresses[index].MakeAddress(customer, label);
+            return addresses[index].MakeCustomerAddress(customer, label);
         }
 
 

@@ -9,6 +9,7 @@ using NUnit.Framework;
 namespace Merchello.Tests.IntegrationTests.Workflow
 {
     using Merchello.Core;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping.FixedRate;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
@@ -21,7 +22,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
     {
         private const int ProductCount = 55;
 
-        private const int InvoiceCount = 5562;
+        private const int InvoiceCount = 1202;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -36,10 +37,13 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             DbPreTestDataWorker.DeleteAllInvoices();
         }
 
+        [Test]
         public void ReportTestsSetup()
         {
-            DbPreTestDataWorker.DeleteAllProducts();
+            DbPreTestDataWorker.DeleteAllAnonymousCustomers();
+            //DbPreTestDataWorker.DeleteAllProducts();
             DbPreTestDataWorker.DeleteAllInvoices();
+            /*
             DbPreTestDataWorker.DeleteAllShipCountries();
 
             this.MakeProducts();
@@ -75,6 +79,8 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             taxProvider.SaveTaxMethod(gwTaxMethod);
 
+             */
+ 
             BuildOrders();
 
         }
@@ -82,10 +88,10 @@ namespace Merchello.Tests.IntegrationTests.Workflow
         public void BuildOrders()
         {
             var products = DbPreTestDataWorker.ProductService.GetAll().ToArray();
-            var addresses = MockDataMakerBase.AddressMocks().ToArray();
+            var addresses = MockDataMakerBase.FakeAddresses().Where(x => x.CountryCode == "US").ToArray();
 
-            var maxProductIndex = products.Count() - 1;
-            var maxAddressIndex = addresses.Count() - 1;
+            var maxProductIndex = products.Count() -1;
+            var maxAddressIndex = addresses.Count();
 
             var itemCount = MockDataMakerBase.NoWhammyStop.Next(11);
 
@@ -115,24 +121,35 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             //
             var shipments = CurrentCustomer.Basket().PackageBasket(destination).ToArray();
 
-            var shipment = shipments.First();
+            var shipment = shipments.FirstOrDefault();
 
-            var shipRateQuotes = shipment.ShipmentRateQuotes().ToArray();
+                if (shipment != null)
+                {
+                    var shipRateQuotes = shipment.ShipmentRateQuotes().ToArray();
 
+                    CurrentCustomer.Basket().SalePreparation().SaveShipmentRateQuote(shipRateQuotes.First());
+                }
 
-            CurrentCustomer.Basket().SalePreparation().SaveShipmentRateQuote(shipRateQuotes.First());
+                var paymentMethods = CurrentCustomer.Basket().SalePreparation().GetPaymentGatewayMethods();
 
-            var paymentMethods = CurrentCustomer.Basket().SalePreparation().GetPaymentGatewayMethods();
+                var randomDate = GetRandomDate();
 
-            var paymentResult = CurrentCustomer.Basket().SalePreparation().AuthorizeCapturePayment(paymentMethods.FirstOrDefault());
+            IPaymentResult paymentResult;
+            paymentResult = randomDate.Month < DateTime.Now.AddDays(-30).Month
+                    ? 
+                      CurrentCustomer.Basket()
+                          .SalePreparation()
+                          .AuthorizeCapturePayment(paymentMethods.FirstOrDefault())
+                    : 
+                      CurrentCustomer.Basket()
+                          .SalePreparation()
+                          .AuthorizePayment(paymentMethods.FirstOrDefault());
 
                 var invoice = paymentResult.Invoice;
 
-                invoice.InvoiceDate = GetRandomDate();
+                invoice.InvoiceDate = randomDate;
 
                 DbPreTestDataWorker.InvoiceService.Save(invoice);
-
-
             }
         }
 
@@ -150,15 +167,20 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
         private static DateTime GetRandomDate()
         {
-            var day = MockDataMakerBase.NoWhammyStop.Next(28);
+            var day = MockDataMakerBase.NoWhammyStop.Next(30);
+            var year = MockDataMakerBase.NoWhammyStop.Next(2012, DateTime.Now.Year);            
             var month = MockDataMakerBase.NoWhammyStop.Next(12);
-            const int Year = 2014;
+
+            if (year == DateTime.Now.Year && month > DateTime.Now.Month) return DateTime.Now;
+
+            if (month == 2 && day > 28) day = 28;
+            
             var hour = MockDataMakerBase.NoWhammyStop.Next(12);
             var min = MockDataMakerBase.NoWhammyStop.Next(59);
 
             var ampm = month % 2 == 0 ? "AM" : "PM";
 
-            var random = string.Format("{0}/{1}/{2} {3}:{4} {5}", month, day, Year, hour, min, ampm);
+            var random = string.Format("{0}/{1}/{2} {3}:{4} {5}", month, day, year, hour, min, ampm);
 
             DateTime dt;
 

@@ -11,7 +11,7 @@ namespace Merchello.Tests.Base.DataMakers
     {
         public static IWarehouse WarehouseForInserting()
         {        
-            var addresses = AddressMocks().ToArray();
+            var addresses = FakeAddresses().ToArray();
             var index = NoWhammyStop.Next(addresses.Count());
             return addresses[index].MakeWarehouse();       
         }
