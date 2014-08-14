@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
     using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
@@ -99,10 +100,10 @@
 
             return new QueryResultDisplay()
             {
-                Results = invoices,
-                PageIndex = 0,
+                Items = invoices,
+                CurrentPage = 0,
                 TotalPages = 1,
-                TotalResults = invoices.Count()
+                TotalItems = invoices.Count()
             };            
         }
 
@@ -127,10 +128,10 @@
 
             return new QueryResultDisplay()
             {
-                Results = invoices,
-                PageIndex = page,
+                Items = invoices,
+                CurrentPage = page,
                 TotalPages = ((allInvoices.Count() - 1) / perPage) + 1,
-                TotalResults = allInvoices.Count()
+                TotalItems = allInvoices.Count()
             };            
         }
 
@@ -167,10 +168,10 @@
 
             return new QueryResultDisplay()
             {
-                Results = invoices,
-                PageIndex = 0,
+                Items = invoices,
+                CurrentPage = 0,
                 TotalPages = 1,
-                TotalResults = invoices.Count()
+                TotalItems = invoices.Count()
             };
         }
 
@@ -198,10 +199,10 @@
 
             return new QueryResultDisplay()
             {
-                Results = invoices,
-                PageIndex = page,
+                Items = invoices,
+                CurrentPage = page,
                 TotalPages = ((allMatches.Count() - 1) / perPage) + 1,
-                TotalResults = allMatches.Count()
+                TotalItems = allMatches.Count()
             };
         }
 

@@ -1,6 +1,5 @@
-﻿namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.Querying
 {
-    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -9,14 +8,14 @@
     public class QueryResultDisplay
     {
         /// <summary>
-        /// Gets or sets the results to be serialized
-        /// </summary>
-        public IEnumerable<object> Results { get; set; }
-
-        /// <summary>
         /// Gets or sets the current page index
         /// </summary>
-        public int PageIndex { get; set; }
+        public int CurrentPage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the page size.
+        /// </summary>
+        public int ItemsPerPage { get; set; }
 
         /// <summary>
         /// Gets or sets the total number of pages.
@@ -26,6 +25,11 @@
         /// <summary>
         /// Gets or sets the number of total results in returned by the query.
         /// </summary>
-        public int TotalResults { get; set; }
+        public int TotalItems { get; set; }
+
+        /// <summary>
+        /// Gets or sets the results to be serialized
+        /// </summary>
+        public IEnumerable<object> Items { get; set; }
     }
 }

@@ -4,6 +4,7 @@
 
     using Merchello.Core;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
     using Merchello.Web.Trees;
 
     /// <summary>

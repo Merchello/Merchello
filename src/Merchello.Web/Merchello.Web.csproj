@@ -114,6 +114,9 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
+    <Compile Include="Models\Querying\QueryDisplay.cs" />
+    <Compile Include="Models\Querying\QueryDisplayParameter.cs" />
+    <Compile Include="Models\Querying\QueryDisplaySortDirection.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
@@ -126,7 +129,7 @@
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />
     <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />
     <Compile Include="Models\ContentEditing\CustomerAddressDisplay.cs" />
-    <Compile Include="Models\ContentEditing\QueryResultDisplay.cs" />
+    <Compile Include="Models\Querying\QueryResultDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
     <Compile Include="Models\Customer\CustomerContextData.cs" />
     <Compile Include="Editors\CustomerApiController.cs" />
