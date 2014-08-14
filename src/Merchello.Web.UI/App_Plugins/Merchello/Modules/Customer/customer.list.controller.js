@@ -23,7 +23,8 @@
             promiseAllCustomers.then(function (customersResponse) {
                 if (customersResponse) {
                     $scope.customers = [];
-                    $scope.customers = _.map(customersResponse.results, function (customer) {
+                    var queryResult = new merchello.Models.QueryResult(customersResponse);
+                    $scope.customers = _.map(queryResult.items, function (customer) {
                         return new merchello.Models.Customer(customer);
                     });
                 }
