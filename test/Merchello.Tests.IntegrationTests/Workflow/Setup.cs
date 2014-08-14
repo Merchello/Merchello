@@ -36,8 +36,6 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             DbPreTestDataWorker.DeleteAllInvoices();
         }
 
-
-        [Test]
         public void ReportTestsSetup()
         {
             DbPreTestDataWorker.DeleteAllProducts();
