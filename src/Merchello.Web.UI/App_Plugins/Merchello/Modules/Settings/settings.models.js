@@ -88,17 +88,19 @@
         var self = this;
 
         if (data === undefined) {
-            self.results = [];
-            self.pageIndex = 0;
+            self.currentPage = 0;
+            self.items = [];
+            self.itemsPerPage = 0;
+            self.totalItems = 0;
             self.totalPages = 0;
-            self.totalResults = 0;
         } else {
-            self.results = _.map(data.results, function (result) {
-                return result;
+            self.currentPage = data.currentPage;
+            self.items = _.map(data.items, function (item) {
+                return item;
             });
-            self.pageIndex = data.pageIndex;
+            self.itemsPerPage = data.itemsPerPage;
+            self.totalItems = data.totalItems;
             self.totalPages = data.totalPages;
-            self.totalResults = data.totalResults;
         }
     };
 

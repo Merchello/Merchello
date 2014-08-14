@@ -97,8 +97,8 @@
                 promiseInvoices = merchelloInvoiceService.getFiltered(filterText, page, perPage);
             }
             promiseInvoices.then(function(response) {
-                var queryResult = response;
-                $scope.invoices = _.map(queryResult.results, function(invoice) {
+                var queryResult = new merchello.Models.QueryResult(response);
+                $scope.invoices = _.map(queryResult.items, function(invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
                 $scope.loaded = true;
