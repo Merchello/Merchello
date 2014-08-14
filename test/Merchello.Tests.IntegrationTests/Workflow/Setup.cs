@@ -82,7 +82,10 @@ namespace Merchello.Tests.IntegrationTests.Workflow
         public void BuildOrders()
         {
             var products = DbPreTestDataWorker.ProductService.GetAll().ToArray();
-            var maxIndex = products.Count() - 1;
+            var addresses = MockDataMakerBase.AddressMocks().ToArray();
+
+            var maxProductIndex = products.Count() - 1;
+            var maxAddressIndex = addresses.Count() - 1;
 
             var itemCount = MockDataMakerBase.NoWhammyStop.Next(11);
 
@@ -92,23 +95,14 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             { 
             for (var i = 0; i < itemCount; i++)
             {
-                CurrentCustomer.Basket().AddItem(products[MockDataMakerBase.NoWhammyStop.Next(maxIndex)], MockDataMakerBase.NoWhammyStop.Next(5));
+                CurrentCustomer.Basket().AddItem(products[MockDataMakerBase.NoWhammyStop.Next(maxProductIndex)], MockDataMakerBase.NoWhammyStop.Next(5));
             }
             CurrentCustomer.Basket().Save();
 
 
 
             // Customer enters the destination shipping address
-            var destination = new Address()
-            {
-                Name = "Mindfly Web Design Studio",
-                Address1 = "115 W. Magnolia St.",
-                Address2 = "Suite 504",
-                Locality = "Bellingham",
-                Region = "WA",
-                PostalCode = "98225",
-                CountryCode = "US"
-            };
+                var destination = addresses[MockDataMakerBase.NoWhammyStop.Next(maxAddressIndex)];
 
             // Assume customer selects billing address is same as shipping address
             CurrentCustomer.Basket().SalePreparation().SaveBillToAddress(destination);
