@@ -4,7 +4,7 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Tests.Base.DataMakers
 {
-    internal class AddressMock
+    internal class AddressMock : IAddress
     {
         public string Name { get; set; }
         public string Address1 { get; set; }
@@ -13,6 +13,14 @@ namespace Merchello.Tests.Base.DataMakers
         public string Region { get; set; }
         public string PostalCode { get; set; }
         public string CountryCode { get; set; }
+
+        public string Phone { get; set; }
+
+        public string Email { get; set; }
+
+        public string Organization { get; set; }
+
+        public bool IsCommercial { get; set; }
 
         public ICustomerAddress MakeAddress(ICustomer customer, string label)
         {
