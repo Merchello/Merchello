@@ -99,8 +99,34 @@
             CustomerService.Saved += CustomerServiceSaved;
             CustomerService.Deleted += CustomerServiceDeleted;
 
+            //Add event so we can inject an extra field for media items
+            ProductIndexer.GatheringNodeData += ProductIndexer_GatheringNodeData;
+
             //CustomerAddressService.Saved += CustomerAddressServiceSaved;
             //CustomerAddressService.Deleted += CustomerAddressServiceDeleted;
+        }
+
+        /// <summary>
+        /// Used after we have gathered all information on a product/productvariant so we can inject extra fields into the index only
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ProductIndexer_GatheringNodeData(object sender, IndexingNodeDataEventArgs e)
+        {
+            string value = "-1";
+            int id;
+            if (int.TryParse(e.Fields["downloadMediaId"], out id))
+            {
+                if (ApplicationContext.Current != null && id > 0)
+                {
+                    var mediaItem = ApplicationContext.Current.Services.MediaService.GetById(id);
+                    if (mediaItem != null)
+                    {
+                        value=string.Join(" ", mediaItem.Properties.Select(x => x.Id.ToString()));
+                    }
+                }
+            }
+            e.Fields.Add("downloadMediaPropertyIds", value);
         }
 
         // TODO RSS - come up with another way of updating the customer index ... we should not need to requiry the customer here
