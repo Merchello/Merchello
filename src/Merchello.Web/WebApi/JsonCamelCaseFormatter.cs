@@ -22,7 +22,8 @@
         /// </param>
         public void Initialize(HttpControllerSettings controllerSettings, HttpControllerDescriptor controllerDescriptor)
         {
-            //controllerSettings.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            ////http://issues.merchello.com/youtrack/issue/M-247
+         
             var formatter = controllerSettings.Formatters.OfType<JsonMediaTypeFormatter>().Single();
             controllerSettings.Formatters.Remove(formatter);
 
