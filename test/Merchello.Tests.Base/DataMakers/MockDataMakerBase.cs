@@ -14,10 +14,16 @@ namespace Merchello.Tests.Base.DataMakers
             return Guid.NewGuid().ToString().Substring(0, 8);
         }
 
-        protected static decimal GetAmount()
+        public static decimal GetAmount()
         {
-            return NoWhammyStop.Next(1500);
+            return NoWhammyStop.Next(150);
         }
+
+        public static decimal GetWeight()
+        {
+            return NoWhammyStop.Next(8);
+        }
+
 
         protected static string ProductItemName()
         {

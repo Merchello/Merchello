@@ -7,26 +7,26 @@
     using Merchello.Web.Trees;
 
     /// <summary>
-    /// The sales over time report controller.
+    /// The sales by item report api controller.
     /// </summary>
-    [BackOfficeTree("salesOverTime", "reports", "Sales Over Time", "icon-loading", "merchello/merchello/SalesOverTime/manage/", 10)]
-    public class SalesOverTimeReportApiController : ReportController
+    [BackOfficeTree("salesByItem", "reports", "Sales By Item", "icon-barcode", "merchello/merchello/SalesByItem/manage/", 20)]
+    public class SalesByItemReportApiController : ReportController
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SalesOverTimeReportApiController"/> class.
+        /// Initializes a new instance of the <see cref="SalesByItemReportApiController"/> class.
         /// </summary>
-        public SalesOverTimeReportApiController()
+        public SalesByItemReportApiController()
             : this(Core.MerchelloContext.Current)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SalesOverTimeReportApiController"/> class.
+        /// Initializes a new instance of the <see cref="SalesByItemReportApiController"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        public SalesOverTimeReportApiController(IMerchelloContext merchelloContext)
+        public SalesByItemReportApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
         }
@@ -38,7 +38,7 @@
         {
             get
             {
-                return GetBaseUrl<SalesOverTimeReportApiController>("merchelloReportSalesOverTime");
+                return GetBaseUrl<SalesByItemReportApiController>("merchelloReportSalesByItem");
             }
         }
 

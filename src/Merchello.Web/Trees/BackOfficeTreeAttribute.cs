@@ -1,19 +1,24 @@
-﻿namespace Merchello.Web.Reporting
+﻿namespace Merchello.Web.Trees
 {
     using System;
-    using Core;
+    using System.Security.Permissions;
+
+    using Merchello.Core;
 
     /// <summary>
     /// The report view attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class ReportAttribute : Attribute
+    public class BackOfficeTreeAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReportAttribute"/> class.
+        /// Initializes a new instance of the <see cref="BackOfficeTreeAttribute"/> class.
         /// </summary>
         /// <param name="routeId">
         /// The route Id.
+        /// </param>
+        /// <param name="parentRouteId">
+        /// The parent Route Id.
         /// </param>
         /// <param name="title">
         /// The title.
@@ -27,7 +32,7 @@
         /// <param name="sortOrder">
         /// The sort order.
         /// </param>
-        public ReportAttribute(string routeId, string title, string icon, string routePath, int sortOrder)
+        public BackOfficeTreeAttribute(string routeId, string parentRouteId, string title, string icon, string routePath, int sortOrder)
         {            
             Mandate.ParameterNotNullOrEmpty(routeId, "routeId");
             Mandate.ParameterNotNullOrEmpty(title, "title");
@@ -35,6 +40,7 @@
             Mandate.ParameterNotNullOrEmpty(routePath, "routePath");
 
             RouteId = routeId;
+            ParentRouteId = parentRouteId;
             Title = title;
             Icon = icon;
             RoutePath = routePath;
@@ -45,6 +51,11 @@
         /// Gets the route id.
         /// </summary>
         public string RouteId { get; private set; }
+
+        /// <summary>
+        /// Gets the parent route id.
+        /// </summary>
+        public string ParentRouteId { get; private set; }
 
         /// <summary>
         /// Gets the name of the report
