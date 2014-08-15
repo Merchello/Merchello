@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Merchello.Core.Sales
+﻿namespace Merchello.Core.Sales
 {
+    using System;
     using Events;
     using Gateways.Payment;
     using Models;

@@ -32,8 +32,7 @@
                 SerializerSettings = { ContractResolver = new CamelCasePropertyNamesContractResolver() }
             };
 
-            controllerSettings.Formatters.Add(formatter);
-            
+            controllerSettings.Formatters.Add(formatter);            
         }
     }
 }

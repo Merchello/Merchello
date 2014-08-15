@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines the InvoiceService
     /// </summary>
-    public interface IInvoiceService : IService
+    public interface IInvoiceService : IPageCachedService<IInvoice>
     {
         /// <summary>
         /// Creates a <see cref="IInvoice"/> without saving it to the database
