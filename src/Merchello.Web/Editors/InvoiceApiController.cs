@@ -120,17 +120,18 @@
         /// <returns>
         /// The paged collection of invoices.
         /// </returns>
-        [HttpGet]
-        public QueryResultDisplay GetAllInvoices(int currentPage, int itemsPerPage, string sortBy, string sortDirection)
+        [HttpPost]
+        public QueryResultDisplay GetAllInvoices(QueryDisplay query)        
         {
-            SortDirection direction;
-            if (!Enum.TryParse(sortDirection, true, out direction)) direction = SortDirection.Descending;
+            ////int currentPage, int itemsPerPage, string sortBy, string sortDirection
+            //SortDirection direction;
+            //if (!Enum.TryParse(sortDirection, true, out direction)) direction = SortDirection.Descending;
 
             var page = ((InvoiceService)_invoiceService).GetPage(
-                currentPage + 1,
-                itemsPerPage,
-                sortBy,
-                direction);
+                query.CurrentPage + 1,
+                query.ItemsPerPage,
+                query.SortBy,
+                query.SortDirection);
 
             return new QueryResultDisplay()
             {

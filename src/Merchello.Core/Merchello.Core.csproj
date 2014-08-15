@@ -109,6 +109,7 @@
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
     <Compile Include="Models\MonitorModels\ShippingResultNotifyModel.cs" />
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
+    <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Persistence\Querying\SortDirection.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedEntityKeyFetchRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
+    <Compile Include="Persistence\Repositories\PagedEntityKeyFetchRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\WarehouseCatalogRepository.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />

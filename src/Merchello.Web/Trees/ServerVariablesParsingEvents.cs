@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Trees
+﻿using System.Linq;
+
+namespace Merchello.Web.Trees
 {
     using System;
     using System.Collections.Generic;
@@ -133,9 +135,9 @@
                 controller => controller.GetGatewayProvider(Guid.NewGuid())));
 
             if (!ReportApiControllerResolver.HasCurrent) return;
-            foreach (var reportController in ReportApiControllerResolver.Current.GetAll())
+
+            foreach (var keyValue in ReportApiControllerResolver.Current.GetAll().Select(reportController => reportController.BaseUrl))
             {
-                var keyValue = reportController.BaseUrl;
                 umbracoUrls.Add(keyValue.Key, keyValue.Value);
             }
         }

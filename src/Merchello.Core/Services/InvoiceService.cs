@@ -518,6 +518,27 @@
 
         #region Key Queries
 
+        /// <summary>
+        /// Gets a page of Keys
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderBy">
+        /// The order by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        /// <remarks>
+        /// This is used by large back office collections usually backed by Examine (Lucene) backed cache
+        /// </remarks>
         internal Page<Guid> GetPage(long page, long itemsPerPage, string orderBy = "invoiceNumber", SortDirection sortDirection = SortDirection.Descending)
         {
             using (var repository = (InvoiceRepository)_repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))

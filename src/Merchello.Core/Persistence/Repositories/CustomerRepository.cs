@@ -19,7 +19,7 @@
     /// <summary>
     /// The customer repository.
     /// </summary>
-    internal class CustomerRepository : MerchelloPetaPocoRepositoryBase<ICustomer>, ICustomerRepository
+    internal class CustomerRepository : PagedEntityKeyFetchRepositoryBase<ICustomer, CustomerDto>, ICustomerRepository
     {
         /// <summary>
         /// The _customer address repository.
