@@ -1,11 +1,9 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
-    using System.Linq.Expressions;
-
-    using Merchello.Core.Models.Rdbms;
-    using Merchello.Core.Persistence.Querying;
-
+    using Models.EntityBase;
+    using Models.Rdbms;
+    using Querying;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
     using Umbraco.Core.Persistence.Repositories;
@@ -13,11 +11,16 @@
     /// <summary>
     /// The PagedEntityKeyFetchRepository interface.
     /// </summary>
-    /// <typeparam name="TId">
-    /// </typeparam>
     /// <typeparam name="TEntity">
+    /// The type of entity
     /// </typeparam>
-    internal interface IPagedEntityKeyFetchRepository<TId, TEntity> : IRepositoryQueryable<TId, TEntity>
+    /// <typeparam name="TDto">
+    /// The type of the Dto
+    /// </typeparam>
+// ReSharper disable once UnusedTypeParameter
+    public interface IPagedEntityKeyFetchRepository<TEntity, TDto> : IRepositoryQueryable<Guid, TEntity> 
+        where TEntity : class, IEntity
+        where TDto : IPageableDto
     {
         /// <summary>
         /// The get paged keys.
@@ -32,14 +35,14 @@
         /// The query.
         /// </param>
         /// <param name="orderExpression">
-        /// The field to order by
+        /// The order expression.
         /// </param>
         /// <param name="sortDirection">
-        /// The sort Direction.
+        /// The sort direction.
         /// </param>
         /// <returns>
-        /// The paged result.
+        /// The page of data.
         /// </returns>
-        Page<TId> GetPagedKeys(long page, long itemsPerPage, IQuery<TEntity> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
+        Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<TEntity> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
     }
 }

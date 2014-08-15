@@ -19,11 +19,33 @@
     /// <summary>
     /// Represents the Invoice Repository
     /// </summary>
-    internal class InvoiceRepository : MerchelloPetaPocoRepositoryBase<IInvoice>, IInvoiceRepository
+    internal class InvoiceRepository : PagedEntityKeyFetchRepositoryBase<IInvoice, InvoiceDto>, IInvoiceRepository
     {
+        /// <summary>
+        /// The invoice line item repository.
+        /// </summary>
         private readonly IInvoiceLineItemRepository _invoiceLineItemRepository;
+
+        /// <summary>
+        /// The order repository.
+        /// </summary>
         private readonly IOrderRepository _orderRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvoiceRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="invoiceLineItemRepository">
+        /// The invoice line item repository.
+        /// </param>
+        /// <param name="orderRepository">
+        /// The order repository.
+        /// </param>
         public InvoiceRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IInvoiceLineItemRepository invoiceLineItemRepository, IOrderRepository orderRepository) 
             : base(work, cache)
         {
@@ -33,7 +55,17 @@
             _invoiceLineItemRepository = invoiceLineItemRepository;
             _orderRepository = orderRepository;
         }
+        
 
+        /// <summary>
+        /// Gets an <see cref="IInvoice"/>.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IInvoice"/>.
+        /// </returns>
         protected override IInvoice PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -43,7 +75,6 @@
 
             if (dto == null)
                 return null;
-
             
             var lineItems = GetLineItemCollection(key);
             var orders = GetOrderCollection(key);
@@ -51,6 +82,15 @@
             return factory.BuildEntity(dto);
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IInvoice"/>.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IInvoice"/>.
+        /// </returns>
         protected override IEnumerable<IInvoice> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
@@ -71,6 +111,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IInvoice"/> by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IInvoice"/>.
+        /// </returns>
         protected override IEnumerable<IInvoice> PerformGetByQuery(IQuery<IInvoice> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -81,42 +130,7 @@
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
-
-        public Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<IInvoice> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
-        {
-            var sqlClause = new Sql();
-            sqlClause.Select("*").From<InvoiceDto>();
-
-            var translator = new SqlTranslator<IInvoice>(sqlClause, query);
-            var sql = translator.Translate();
-
-
-            if (!string.IsNullOrEmpty(orderExpression))
-            {
-                if (sortDirection == SortDirection.Ascending)
-                {
-                    sql.Append(string.Format("ORDER BY {0} ASC", orderExpression));
-                }
-                else
-                {
-                    sql.Append(string.Format("ORDER BY {0} DESC", orderExpression));
-                }
-            }
-
-             Console.Write(sql.SQL);
-            
-            var p = Database.Page<InvoiceDto>(page, itemsPerPage, sql);
-
-             return new Page<Guid>()
-                       {
-                           CurrentPage = p.CurrentPage,
-                           ItemsPerPage = p.ItemsPerPage,
-                           TotalItems = p.TotalItems,
-                           TotalPages = p.TotalPages,
-                           Items = p.Items.Select(x => x.Key).ToList()
-                       };
-
-        }
+       
 
         protected override Sql GetBaseQuery(bool isCount)
         {

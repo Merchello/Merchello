@@ -15,7 +15,7 @@ using Umbraco.Core.Persistence.Querying;
 
 namespace Merchello.Core.Persistence.Repositories
 {
-    internal class ProductRepository : MerchelloPetaPocoRepositoryBase<IProduct>, IProductRepository
+    internal class ProductRepository : PagedEntityKeyFetchRepositoryBase<IProduct, ProductDto>, IProductRepository
     {
         private readonly IProductVariantRepository _productVariantRepository;
         
