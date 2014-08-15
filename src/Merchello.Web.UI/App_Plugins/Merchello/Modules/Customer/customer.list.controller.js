@@ -52,7 +52,7 @@
                 filterText = '';
             }
             if (filterText === '') {
-                promiseCustomers = merchelloCustomerService.GetAllCustomers(page, perPage);
+                promiseCustomers = merchelloCustomerService.getAllCustomers(page, perPage);
             } else {
                 promiseCustomers = merchelloCustomerService.getFiltered(filterText, page, perPage);
             }
@@ -79,7 +79,7 @@
          */
         $scope.init = function () {
             $scope.setVariables();
-            $scope.getCustomers();
+            $scope.getAllCustomers();
         };
 
         /**

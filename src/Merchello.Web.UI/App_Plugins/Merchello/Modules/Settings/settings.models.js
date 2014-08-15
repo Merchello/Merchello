@@ -83,6 +83,23 @@
         }
     };
 
+    models.ListQuery = function(data) {
+
+        var self = this;
+
+        if (data === undefined) {
+            self.currentPage = 0;
+            self.itemsPerPage = 0;
+            self.sortBy = 'invoicenumber'; // valid options are 'invoicenumber', 'billtoname', and 'invoicedate'
+            self.sortDirection = 'Ascending'; // valid options are 'Ascending' and 'Descending'
+        } else {
+            self.currentPage = data.currentPage;
+            self.itemsPerPage = data.itemsPerPage;
+            self.sortBy = data.sortBy;
+            self.sortDirection = data.sortDirection;
+        }
+    };
+
     models.QueryResult = function (data) {
 
         var self = this;

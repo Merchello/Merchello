@@ -32,8 +32,8 @@
                    'Failed to retreive data for invoice id: ' + id);
             },
 
-            getAll: function (page, perPage) {
-                if (page === undefined) {
+            getAll: function (query) {
+                if (query === undefined) {
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
@@ -41,11 +41,13 @@
                         }),
                         'Failed to retreive invoices');
                 } else {
+                    var listQuery = new merchello.Models.ListQuery(query);
+                    console.info(listQuery);
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
                             method: "GET",
-                            params: { page: page, perPage: perPage }
+                            params: { query: listQuery }
                         }),
                         'Failed to retrieve invoices');
                 }
