@@ -9,6 +9,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
@@ -96,15 +97,16 @@
         /// </returns>
         public QueryResultDisplay GetAllInvoices()
         {
-            var invoices = InvoiceQuery.GetAllInvoices().ToArray();
+            var page = ((InvoiceService)_invoiceService).GetPage(1, 100);
 
             return new QueryResultDisplay()
             {
-                Items = invoices,
-                CurrentPage = 0,
-                TotalPages = 1,
-                TotalItems = invoices.Count()
-            };            
+                Items = page.Items.Select(InvoiceQuery.GetByKey),
+                ItemsPerPage = page.ItemsPerPage,
+                CurrentPage = page.CurrentPage,
+                TotalPages = page.TotalPages,
+                TotalItems = page.TotalItems
+            };                        
         }
 
         /// <summary>
@@ -112,16 +114,23 @@
         /// 
         /// GET /umbraco/Merchello/InvoiceApi/GetAllInvoices
         /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
         /// <returns>
         /// The paged collection of invoices.
         /// </returns>
-        public QueryResultDisplay GetAllInvoices(QueryDisplay query)
+        [HttpGet]
+        public QueryResultDisplay GetAllInvoices(int currentPage, int itemsPerPage, string sortBy, string sortDirection)
         {
+            SortDirection direction;
+            if (!Enum.TryParse(sortDirection, true, out direction)) direction = SortDirection.Descending;
+
             var page = ((InvoiceService)_invoiceService).GetPage(
-                query.CurrentPage + 1,
-                query.ItemsPerPage,
-                query.SortBy,
-                query.SortDirection);
+                currentPage + 1,
+                itemsPerPage,
+                sortBy,
+                direction);
 
             return new QueryResultDisplay()
             {

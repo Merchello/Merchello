@@ -43,11 +43,19 @@
                 } else {
                     var listQuery = new merchello.Models.ListQuery(query);
                     console.info(listQuery);
+
+                    // TODO I think we should change this to a POST and go back to using the query object
+                    // This would allow us to more easily add the the advanced filters
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
                             method: "GET",
-                            params: { query: listQuery }
+                            params: {
+                                currentPage: listQuery.currentPage,
+                                itemsPerPage: listQuery.itemsPerPage,
+                                sortBy: listQuery.sortBy,
+                                sortDirection: listQuery.sortDirection
+                            }
                         }),
                         'Failed to retrieve invoices');
                 }
