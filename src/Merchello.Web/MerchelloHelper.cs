@@ -45,16 +45,16 @@
             return ProductQuery.GetByKey(key);
         }
 
-        /// <summary>
-        /// Returns a collection of all <see cref="ProductDisplay"/>
-        /// </summary>
-        /// <returns>
-        /// A collection of all <see cref="ProductDisplay"/> found in the index.
-        /// </returns>
-        public IEnumerable<ProductDisplay> AllProducts()
-        {
-            return ProductQuery.GetAllProducts();
-        }
+        ///// <summary>
+        ///// Returns a collection of all <see cref="ProductDisplay"/>
+        ///// </summary>
+        ///// <returns>
+        ///// A collection of all <see cref="ProductDisplay"/> found in the index.
+        ///// </returns>
+        //public IEnumerable<ProductDisplay> AllProducts()
+        //{
+        //    return ProductQuery.GetAllProducts();
+        //}
 
         /// <summary>
         /// Retrieves a <see cref="ProductVariantDisplay"/> from the Merchello Product index.
@@ -173,16 +173,16 @@
             return InvoiceQuery.GetByKey(key);
         }
 
-        /// <summary>
-        /// Gets a collection of all invoices
-        /// </summary>
-        /// <returns>
-        /// <returns>The collection of all <see cref="InvoiceDisplay"/></returns>
-        /// </returns>
-        public IEnumerable<InvoiceDisplay> AllInvoices()
-        {
-            return InvoiceQuery.GetAllInvoices();
-        }
+        ///// <summary>
+        ///// Gets a collection of all invoices
+        ///// </summary>
+        ///// <returns>
+        ///// <returns>The collection of all <see cref="InvoiceDisplay"/></returns>
+        ///// </returns>
+        //public IEnumerable<InvoiceDisplay> AllInvoices()
+        //{
+        //    return InvoiceQuery.GetAllInvoices();
+        //}
 
         /// <summary>
         /// The invoices by customer.
@@ -271,16 +271,16 @@
             return Customer(key.ToString());
         }
 
-        /// <summary>
-        /// The all customers.
-        /// </summary>
-        /// <returns>
-        /// The collection of all customers.
-        /// </returns>
-        public IEnumerable<CustomerDisplay> AllCustomers()
-        {
-            return CustomerQuery.GetAllCustomers();
-        }
+        ///// <summary>
+        ///// The all customers.
+        ///// </summary>
+        ///// <returns>
+        ///// The collection of all customers.
+        ///// </returns>
+        //public IEnumerable<CustomerDisplay> AllCustomers()
+        //{
+        //    return CustomerQuery.GetAllCustomers();
+        //}
 
         #endregion
     }

@@ -26,19 +26,19 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
         
         
-        [Test]
-        public void Can_GetAllProducts_From_Index()
-        {
+        //[Test]
+        //public void Can_GetAllProducts_From_Index()
+        //{
 
-            //// Arrange
-            var merchello = new MerchelloHelper();
+        //    //// Arrange
+        //    var merchello = new MerchelloHelper();
 
-            //// Act
-            var products = merchello.AllProducts();
+        //    //// Act
+        //    var products = merchello.AllProducts();
 
-            //// Assert
-            Assert.IsTrue(products.Any());
-        }
+        //    //// Assert
+        //    Assert.IsTrue(products.Any());
+        //}
 
         /// <summary>
         /// 

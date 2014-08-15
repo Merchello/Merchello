@@ -81,36 +81,36 @@
                 .Select(result => result.ToInvoiceDisplay());
         }
 
-        /// <summary>
-        /// Gets a collection of all invoices
-        /// </summary>
-        /// <returns>
-        /// A collection of all <see cref="InvoiceDisplay"/>.
-        /// </returns>
-        internal static IEnumerable<InvoiceDisplay> GetAllInvoices()
-        {
-            var merchelloContext = GetMerchelloContext();
+        ///// <summary>
+        ///// Gets a collection of all invoices
+        ///// </summary>
+        ///// <returns>
+        ///// A collection of all <see cref="InvoiceDisplay"/>.
+        ///// </returns>
+        //internal static IEnumerable<InvoiceDisplay> GetAllInvoices()
+        //{
+        //    var merchelloContext = GetMerchelloContext();
 
-            var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.Invoice);
-            criteria.Field("allDocs", "1");
+        //    var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.Invoice);
+        //    criteria.Field("allDocs", "1");
 
-            var results = ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).Select(result => result.ToInvoiceDisplay()).ToArray();
+        //    var results = ExamineManager.Instance.SearchProviderCollection[SearcherName]
+        //        .Search(criteria).Select(result => result.ToInvoiceDisplay()).ToArray();
 
 
-            var count = merchelloContext.Services.InvoiceService.InvoiceCount();
+        //    var count = merchelloContext.Services.InvoiceService.InvoiceCount();
 
-            if (results.Any() && (count == results.Count())) return results;
+        //    if (results.Any() && (count == results.Count())) return results;
 
-            if (count != results.Count())
-            {
-                RebuildIndex(IndexName);
-            }
+        //    if (count != results.Count())
+        //    {
+        //        RebuildIndex(IndexName);
+        //    }
 
-            var retrieved = ((InvoiceService)merchelloContext.Services.InvoiceService).GetAll();
+        //    var retrieved = ((InvoiceService)merchelloContext.Services.InvoiceService).GetAll();
 
-            return retrieved.Select(AutoMapper.Mapper.Map<InvoiceDisplay>).ToList();
-        }
+        //    return retrieved.Select(AutoMapper.Mapper.Map<InvoiceDisplay>).ToList();
+        //}
 
         /// <summary>
         /// Gets an <see cref="InvoiceDisplay"/> by it's unique key
