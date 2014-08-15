@@ -83,22 +83,41 @@
         }
     };
 
+    models.ListQuery = function(data) {
+
+        var self = this;
+
+        if (data === undefined) {
+            self.currentPage = 0;
+            self.itemsPerPage = 0;
+            self.sortBy = 'invoicenumber'; // valid options are 'invoicenumber', 'billtoname', and 'invoicedate'
+            self.sortDirection = 'Ascending'; // valid options are 'Ascending' and 'Descending'
+        } else {
+            self.currentPage = data.currentPage;
+            self.itemsPerPage = data.itemsPerPage;
+            self.sortBy = data.sortBy;
+            self.sortDirection = data.sortDirection;
+        }
+    };
+
     models.QueryResult = function (data) {
 
         var self = this;
 
         if (data === undefined) {
-            self.results = [];
-            self.pageIndex = 0;
+            self.currentPage = 0;
+            self.items = [];
+            self.itemsPerPage = 0;
+            self.totalItems = 0;
             self.totalPages = 0;
-            self.totalResults = 0;
         } else {
-            self.results = _.map(data.results, function (result) {
-                return result;
+            self.currentPage = data.currentPage;
+            self.items = _.map(data.items, function (item) {
+                return item;
             });
-            self.pageIndex = data.pageIndex;
+            self.itemsPerPage = data.itemsPerPage;
+            self.totalItems = data.totalItems;
             self.totalPages = data.totalPages;
-            self.totalResults = data.totalResults;
         }
     };
 

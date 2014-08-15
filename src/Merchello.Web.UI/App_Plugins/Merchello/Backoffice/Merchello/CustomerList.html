@@ -89,7 +89,7 @@
                             <td><input type="checkbox" /></td>
                             <!-- ACTION: Go To Customer View Page -->
                             <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
-                            <td>{{customer.email}}</td>
+                            <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.email}}</a></td>
                             <td>{{customer.primaryLocation()}}</td>
                             <td><localize key="merchelloGeneral_moneySymbol" />{{customer.lastOrderTotal}}</td>
                         </tr>

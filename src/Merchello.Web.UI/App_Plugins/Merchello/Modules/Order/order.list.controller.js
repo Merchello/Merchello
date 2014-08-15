@@ -86,19 +86,29 @@
         $scope.loadInvoices = function(filterText) {
             var page = $scope.currentPage;
             var perPage = $scope.limitAmount;
+            // TODO: Replace hardwired values with values provided by clicked-upon options on list in markup
+            var sortBy = 'invoicenumber';
+            var sortDirection = 'Descending';
             $scope.filterText = filterText;
             var promiseInvoices;
             if (filterText === undefined) {
                 filterText = '';
             }
             if (filterText === '') {
-                promiseInvoices = merchelloInvoiceService.getAll(page, perPage);
+                var listQuery = new merchello.Models.ListQuery({
+                    currentPage: page,
+                    itemsPerPage: perPage,
+                    sortBy: sortBy,
+                    sortDirection: sortDirection
+                });
+                console.info(listQuery);
+                promiseInvoices = merchelloInvoiceService.getAll(listQuery);
             } else {
                 promiseInvoices = merchelloInvoiceService.getFiltered(filterText, page, perPage);
             }
             promiseInvoices.then(function(response) {
-                var queryResult = response;
-                $scope.invoices = _.map(queryResult.results, function(invoice) {
+                var queryResult = new merchello.Models.QueryResult(response);
+                $scope.invoices = _.map(queryResult.items, function(invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
                 $scope.loaded = true;
