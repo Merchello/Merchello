@@ -86,9 +86,15 @@
         $scope.loadInvoices = function(filterText) {
             var page = $scope.currentPage;
             var perPage = $scope.limitAmount;
+            var sortBy, sortDirection;
             // TODO: Replace hardwired values with values provided by clicked-upon options on list in markup
-            var sortBy = 'invoicenumber';
-            var sortDirection = 'Descending';
+            if ($scope.sortProperty.indexOf('-') > -1) {
+                sortBy = $scope.sortProperty.split('-')[1].toLowerCase();
+                sortDirection = 'Ascending';
+            } else {
+                sortBy = $scope.sortProperty.toLowerCase();
+                sortDirection = 'Descending';
+            }
             $scope.filterText = filterText;
             var promiseInvoices;
             if (filterText === undefined) {
