@@ -38,7 +38,7 @@
         }
 
         /// <summary>
-        /// The get paged keys.
+        /// Get paged keys.
         /// </summary>
         /// <param name="page">
         /// The page.

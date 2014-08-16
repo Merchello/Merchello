@@ -1,17 +1,22 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
+
+    using Merchello.Core.Persistence.Querying;
+
     using Models.EntityBase;
+
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
 
     /// <summary>
     /// Marks paged cache services.
     /// </summary>
-    /// <typeparam name="TEnitity">
+    /// <typeparam name="TEntity">
     /// The type of entity
     /// </typeparam>
-    public interface IPageCachedService<out TEnitity> : IService
-        where TEnitity : class, IEntity
+    public interface IPageCachedService<out TEntity> : IService
+        where TEntity : class, IEntity
     {
         /// <summary>
         /// Gets an entity by it's unique key.
@@ -20,8 +25,32 @@
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="TEnitity"/>.
+        /// The <see cref="TEntity"/>.
         /// </returns>
-        TEnitity GetByKey(Guid key);
+        TEntity GetByKey(Guid key);
+
+        /////// <summary>
+        /////// Performs a paged query
+        /////// </summary>
+        /////// <param name="page">
+        /////// The page.
+        /////// </param>
+        /////// <param name="itemsPerPage">
+        /////// The items per page.
+        /////// </param>
+        /////// <param name="sortBy">
+        /////// The sort by.
+        /////// </param>
+        /////// <param name="sortDirection">
+        /////// The sort direction.
+        /////// </param>
+        /////// <returns>
+        /////// The <see cref="Page{Guid}"/>.
+        /////// </returns>
+        ////Page<Guid> GetPage(
+        ////    long page,
+        ////    long itemsPerPage,
+        ////    string sortBy = "",
+        ////    SortDirection sortDirection = SortDirection.Descending);
     }
 }

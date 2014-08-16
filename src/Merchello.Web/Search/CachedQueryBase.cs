@@ -2,11 +2,20 @@
 {
     using System;
     using System.Linq;
+    using System.Web.UI;
+
     using Core;
     using Core.Models.EntityBase;
     using Core.Services;
     using global::Examine;
     using global::Examine.Providers;
+    using global::Examine.SearchCriteria;
+
+    using Merchello.Web.Models.Querying;
+
+    using umbraco;
+
+    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// The cached query base.
@@ -21,6 +30,11 @@
         where TEntity : class, IEntity
         where TDisplay : class, new()
     {
+        /// <summary>
+        /// The <see cref="QueryResultFactory{TDisplay}"/>
+        /// </summary>
+        private readonly Lazy<QueryResultFactory<TDisplay>> _resultFactory; 
+
         /// <summary>
         /// The Merchello core service service.
         /// </summary>
@@ -48,7 +62,10 @@
         /// <param name="searchProvider">
         /// The Examine Search provider.
         /// </param>
-        protected CachedQueryBase(IPageCachedService<TEntity> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider)
+        protected CachedQueryBase(
+            IPageCachedService<TEntity> service, 
+            BaseIndexProvider indexProvider, 
+            BaseSearchProvider searchProvider)
         {
             Mandate.ParameterNotNull(service, "service");
             Mandate.ParameterNotNull(indexProvider, "indexProvider");
@@ -57,6 +74,8 @@
             _service = service;
             _indexProvider = indexProvider;
             _searchProvider = searchProvider;
+
+            _resultFactory = new Lazy<QueryResultFactory<TDisplay>>(() => new QueryResultFactory<TDisplay>(PerformMapSearchResultToDisplayObject, GetDisplayObject));
         }
 
         /// <summary>
@@ -76,6 +95,43 @@
         }
 
         /// <summary>
+        /// The search cache.
+        /// </summary>
+        /// <param name="criteria">
+        /// The criteria.
+        /// </param>
+        /// <param name="currentPage">
+        /// The current page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        protected QueryResultDisplay CacheSearch(ISearchCriteria criteria, long currentPage, long itemsPerPage)
+        {
+            return _resultFactory.Value.BuildQueryResult(_searchProvider.Search(criteria), currentPage, itemsPerPage);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="QueryResultDisplay"/> from a <see cref="Page{Guid}"/>.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="keyField">
+        /// The key field.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        protected QueryResultDisplay GetQueryResultDisplay(Page<Guid> page, string keyField)
+        {
+            return _resultFactory.Value.BuildQueryResult(page, keyField);
+        }
+
+        /// <summary>
         /// Gets a display object from the Examine cache or falls back the the database if not found
         /// </summary>
         /// <param name="keyField">
@@ -89,13 +145,12 @@
         /// </returns>
         protected TDisplay GetDisplayObject(string keyField, Guid key)
         {
-            var criteria = ExamineManager.Instance.CreateSearchCriteria();
+            var criteria = _searchProvider.CreateSearchCriteria();
             criteria.Field(keyField, key.ToString());
 
             var display = _searchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
 
             if (display != null) return display;
-
 
             var entity = _service.GetByKey(key);
 
@@ -118,7 +173,7 @@
         protected abstract TDisplay PerformMapSearchResultToDisplayObject(SearchResult result);
 
         /// <summary>
-        /// The reindex retrieved.
+        /// The re-index retrieved.
         /// </summary>
         /// <param name="entity">
         /// The entity.

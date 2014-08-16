@@ -24,7 +24,7 @@
     /// <summary>
     /// Represents the InvoiceService
     /// </summary>
-    public class InvoiceService : IInvoiceService
+    public class InvoiceService : PageCachedServiceBase<IInvoice>, IInvoiceService
     {
         #region Fields
 
@@ -391,7 +391,7 @@
         /// </summary>
         /// <param name="key">The <see cref="IInvoice"/>'s unique 'key' (GUID)</param>
         /// <returns><see cref="IInvoice"/></returns>
-        public IInvoice GetByKey(Guid key)
+        public override IInvoice GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -527,7 +527,7 @@
         /// <param name="itemsPerPage">
         /// The items per page.
         /// </param>
-        /// <param name="orderBy">
+        /// <param name="sortBy">
         /// The order by.
         /// </param>
         /// <param name="sortDirection">
@@ -539,7 +539,7 @@
         /// <remarks>
         /// This is used by large back office collections usually backed by Examine (Lucene) backed cache
         /// </remarks>
-        internal Page<Guid> GetPage(long page, long itemsPerPage, string orderBy = "invoiceNumber", SortDirection sortDirection = SortDirection.Descending)
+        internal override Page<Guid> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
             using (var repository = (InvoiceRepository)_repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -547,7 +547,7 @@
 
                 string sortExpression;
 
-                switch (orderBy.ToLowerInvariant())
+                switch (sortBy.ToLowerInvariant())
                 {
                     case "billtoname":
                         sortExpression = "billToName";
