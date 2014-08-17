@@ -1,16 +1,14 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
-    using System.Linq.Expressions;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.Repositories;
-    using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core.Persistence;
-    using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.Querying; 
 
     /// <summary>
     /// The page cached service base.
@@ -31,6 +29,17 @@
         /// The <see cref="TEntity"/>.
         /// </returns>
         public abstract TEntity GetByKey(Guid key);
+
+        /// <summary>
+        /// The count.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal abstract int Count(IQuery<TEntity> query);
 
         /// <summary>
         /// Performs a paged query

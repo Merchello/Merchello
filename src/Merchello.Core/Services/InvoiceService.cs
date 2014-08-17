@@ -15,6 +15,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -396,6 +397,7 @@
             }
         }
 
+        
         /// <summary>
         /// Gets a <see cref="IInvoice"/> given it's unique 'InvoiceNumber'
         /// </summary>
@@ -405,7 +407,7 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IInvoice>.Builder.Where(x => x.InvoiceNumber == invoiceNumber);
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceNumber == invoiceNumber);
 
                 return repository.GetByQuery(query).FirstOrDefault();
             }
@@ -449,23 +451,42 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == customeryKey);
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.CustomerKey == customeryKey);
 
                 return repository.GetByQuery(query);
             }
         }
 
         /// <summary>
-        /// Gets the total count of all <see cref="IInvoice"/>
+        /// Gets the count of invoice by date range.
         /// </summary>
-        /// <returns>The count of <see cref="IInvoice"/></returns>
-        public int InvoiceCount()
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <returns>
+        /// The count the invoices.
+        /// </returns>
+        public IEnumerable<IInvoice> GetInvoicesByDateRange(DateTime startDate, DateTime endDate)
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty);
-                return repository.Count(query);
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate);
+
+                return repository.GetByQuery(query);
             }
+        }
+
+
+        /// <summary>
+        /// Gets the total count of all <see cref="IInvoice"/>
+        /// </summary>
+        /// <returns>The count of <see cref="IInvoice"/></returns>
+        public int CountInvoices()
+        {
+            return this.Count(Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty));
         }
 
 
@@ -513,6 +534,23 @@
             } 
         }
 
+        /// <summary>
+        /// The count of invoices.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal override int Count(IQuery<IInvoice> query)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
 
         #region Key Queries
 
@@ -541,7 +579,7 @@
         {
             return GetPage(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty),
+                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty),
                 page,
                 itemsPerPage,
                 sortBy,
@@ -591,7 +629,7 @@
         {
             return GetPage(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey),
+                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey),
                 page,
                 itemsPerPage,
                 sortBy,
@@ -632,7 +670,7 @@
         {
             return GetPage(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= beginRange && x.InvoiceDate <= endRange),
+                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= beginRange && x.InvoiceDate <= endRange),
                 page,
                 itemsPerPage,
                 sortBy,
@@ -669,7 +707,7 @@
         {
             return GetPage(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Query<IInvoice>.Builder.Where(x => x.Exported == exported),
+                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Exported == exported),
                 page,
                 itemsPerPage,
                 sortBy,
@@ -706,7 +744,7 @@
         {
             return GetPage(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == invoiceStatusKey),
+                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == invoiceStatusKey),
                 page,
                 itemsPerPage,
                 sortBy,
@@ -747,7 +785,7 @@
         {
             return GetPage(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == invoiceStatusKey && x.Exported == exported),
+                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == invoiceStatusKey && x.Exported == exported),
                 page,
                 itemsPerPage,
                 sortBy,

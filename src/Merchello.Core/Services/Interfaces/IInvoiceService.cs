@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Gateways.Notification;
     using Merchello.Core.Models;
 
     using Umbraco.Core.Services;
@@ -105,7 +106,21 @@
         /// <returns>
         /// The collection of <see cref="IInvoice"/>.
         /// </returns>
-        IEnumerable<IInvoice> GetInvoicesByCustomerKey(Guid customeryKey); 
+        IEnumerable<IInvoice> GetInvoicesByCustomerKey(Guid customeryKey);
+
+        /// <summary>
+        /// Get a collection invoices by date range.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IInvoice"/>.
+        /// </returns>
+        IEnumerable<IInvoice> GetInvoicesByDateRange(DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Gets the total count of all invoices
@@ -113,7 +128,7 @@
         /// <returns>
         /// The <see cref="int"/> representing the count of invoices.
         /// </returns>
-        int InvoiceCount();
+        int CountInvoices();
 
         #region InvoiceStatus
 

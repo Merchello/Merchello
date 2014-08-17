@@ -101,7 +101,7 @@
             sql.Select("*").From<InvoiceDto>();
             if (numbers.Any())
             {
-                sql.Where("billToName LIKE @term OR invoiceNumber in (@invNo)", new { @term = string.Format("%{0}%", string.Join("%", terms)), @invNo = numbers.ToArray() });
+                sql.Where("billToName LIKE @term OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("%", terms)), @invNo = numbers.ToArray() });
             }
             else
             {

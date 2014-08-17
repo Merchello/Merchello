@@ -38,15 +38,6 @@ namespace Merchello.Core.Persistence.Querying
             return this;
         }
 
-        internal virtual IQuery<T> Where(string clause)
-        {
-            if (!string.IsNullOrEmpty(clause))
-            {
-                _wheres.Add(clause);
-            }
-            return this;
-        }
-
         public List<string> WhereClauses()
         {
             return _wheres;

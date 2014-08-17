@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using Merchello.Core.Events;
 using Merchello.Core.Models;
-using Merchello.Core.Persistence;
 using Merchello.Core.Persistence.Querying;
 using Merchello.Core.Persistence.UnitOfWork;
 using Umbraco.Core;
@@ -12,10 +11,15 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
 {
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
+
     /// <summary>
     /// Represents the OrderService
     /// </summary>
-    public class OrderService : IOrderService
+    public class OrderService : PageCachedServiceBase<IOrder>, IOrderService
     {
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
         private readonly RepositoryFactory _repositoryFactory;
@@ -321,21 +325,39 @@ namespace Merchello.Core.Services
             if (!shipmentKeys.Any()) return;
 
             var shipments = _shipmentService.GetByKeys(shipmentKeys).ToArray();
-            if(shipments.Any()) _shipmentService.Delete(shipments);
+            if (shipments.Any()) _shipmentService.Delete(shipments);
         }
 
 
         /// <summary>
-        /// Gets a <see cref="IOrder"/> given it's unique 'key' (Guid)
+        /// Gets a <see cref="IOrder"/> given it's unique 'key' (GUID)
         /// </summary>
-        /// <param name="key">The <see cref="IOrder"/>'s unique 'key' (Guid)</param>
-        /// <returns><see cref="IOrder"/></returns>
-        public IOrder GetByKey(Guid key)
+        /// <param name="key">The <see cref="IOrder"/>'s unique 'key' (GUID)</param>
+        /// <returns>The <see cref="IOrder"/></returns>
+        public override IOrder GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
+        }
+
+        internal override int Count(IQuery<IOrder> query)
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+        internal override Page<Guid> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string ValidateSortByField(string sortBy)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -347,7 +369,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IOrder>.Builder.Where(x => x.OrderNumber == orderNumber);
+                var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.OrderNumber == orderNumber);
 
                 return repository.GetByQuery(query).FirstOrDefault();
             }
@@ -362,7 +384,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
+                var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
 
                 return repository.GetByQuery(query);
             }

@@ -46,6 +46,16 @@
             _customerAddressRepository = customerAddressRepository;
         }
 
+        public override Page<Guid> Search(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Performs the Get by key operation.
         /// </summary>
@@ -226,16 +236,6 @@
             var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
-        }
-
-        public override Page<Guid> Search(
-            string searchTerm,
-            long page,
-            long itemsPerPage,
-            string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
-        {
-            throw new NotImplementedException();
         }
     }
 }
