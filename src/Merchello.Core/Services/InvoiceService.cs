@@ -3,14 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Linq.Expressions;
-    using System.Reflection;
     using System.Threading;
     using System.Web.UI;
 
     using Merchello.Core.Events;
     using Merchello.Core.Models;
-    using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.Repositories;
     using Merchello.Core.Persistence.UnitOfWork;
@@ -549,6 +546,19 @@
                 itemsPerPage,
                 sortBy,
                 sortDirection);
+        }
+
+        internal Page<Guid> GetPage(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = (InvoiceRepository)_repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Search(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy));
+            }
         }
 
         /// <summary>

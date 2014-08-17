@@ -170,5 +170,14 @@
             return collection;
         }
 
+        public override Page<Guid> Search(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

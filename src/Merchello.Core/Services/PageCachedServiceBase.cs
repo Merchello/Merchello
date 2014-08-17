@@ -98,6 +98,47 @@
         }
 
         /// <summary>
+        /// Performs a paged search based on a term
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <typeparam name="TDto">
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        protected virtual Page<Guid> Search<TDto>(
+            IPagedEntityKeyFetchRepository<TEntity, TDto> repository, 
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy,
+            SortDirection sortDirection = SortDirection.Descending)
+            where TDto : IPageableDto
+        {
+            using (repository)
+            {
+                return repository.Search(searchTerm, page, itemsPerPage, sortBy, sortDirection);
+            }
+        }
+
+        /// <summary>
         /// Validates the sort by string is a valid sort by field
         /// </summary>
         /// <param name="sortBy">

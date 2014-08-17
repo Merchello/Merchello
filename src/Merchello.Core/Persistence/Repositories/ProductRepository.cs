@@ -430,5 +430,14 @@ namespace Merchello.Core.Persistence.Repositories
             return _productVariantRepository.SkuExists(sku);
         }
 
+        public override Page<Guid> Search(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

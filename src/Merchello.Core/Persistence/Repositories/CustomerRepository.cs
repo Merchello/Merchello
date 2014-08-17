@@ -227,5 +227,15 @@
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
+
+        public override Page<Guid> Search(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

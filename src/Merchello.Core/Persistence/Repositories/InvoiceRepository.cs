@@ -55,7 +55,61 @@
             _invoiceLineItemRepository = invoiceLineItemRepository;
             _orderRepository = orderRepository;
         }
-        
+
+        /// <summary>
+        /// Performs the default search by term
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public override Page<Guid> Search(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+            var invidualTerms = searchTerm.Split(' ');
+
+            var numbers = new List<int>();
+            var terms = new List<string>();
+
+            foreach (var term in invidualTerms)
+            {
+                int invoiceNumber;
+                if (int.TryParse(term, out invoiceNumber))
+                {
+                    numbers.Add(invoiceNumber);
+                }
+                else
+                {
+                    terms.Add(term);
+                }
+            }
+
+            var sql = new Sql();
+            sql.Select("*").From<InvoiceDto>();
+            if (numbers.Any())
+            {
+                sql.Where("billToName LIKE @term OR invoiceNumber in (@invNo)", new { @term = string.Format("%{0}%", string.Join("%", terms)), @invNo = numbers.ToArray() });
+            }
+            else
+            {
+                sql.Where("billToName LIKE @term", new { @term = string.Format("%{0}%", searchTerm) });
+            }
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
 
         /// <summary>
         /// Gets an <see cref="IInvoice"/>.
@@ -129,8 +183,16 @@
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
-       
 
+        /// <summary>
+        /// The get base query.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
@@ -144,11 +206,23 @@
             return sql;
         }
 
+        /// <summary>
+        /// The get base where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchInvoice.pk = @Key";
         }
 
+        /// <summary>
+        /// The get delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -162,6 +236,12 @@
             return list;
         }
 
+        /// <summary>
+        /// The persist new item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(IInvoice entity)
         {
             ((Entity)entity).AddingEntity();
@@ -180,6 +260,12 @@
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// The persist updated item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistUpdatedItem(IInvoice entity)
         {
             ((Entity)entity).UpdatingEntity();
@@ -194,6 +280,15 @@
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// The get line item collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="LineItemCollection"/>.
+        /// </returns>
         private LineItemCollection GetLineItemCollection(Guid invoiceKey)
         {
             var sql = new Sql();
@@ -213,7 +308,15 @@
             return collection;
         }
 
-
+        /// <summary>
+        /// The get order collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="OrderCollection"/>.
+        /// </returns>
         private OrderCollection GetOrderCollection(Guid invoiceKey)
         {
             var query = Querying.Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
