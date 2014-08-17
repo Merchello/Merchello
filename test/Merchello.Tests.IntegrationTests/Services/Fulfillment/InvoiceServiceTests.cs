@@ -4,6 +4,12 @@ using Merchello.Core.Services;
 using NUnit.Framework;
 namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
 {
+    using System.Linq;
+
+    using ClientDependency.Core;
+
+    using Merchello.Core.Persistence.Querying;
+
     [TestFixture]
     [Category("Service Integration")]
     public class InvoiceServiceTests : FulfillmentTestsBase
@@ -60,12 +66,15 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
         //public void Can_Get_Paged_Results_From_Query()
         //{
         //    //// Arrange
-            
+ 
         //    //// Act
-        //    var page = ((InvoiceService)_invoiceService).GetPage(1, 25, "billToName", SortDirection.Ascending);
+        //    //var page = ((InvoiceService)_invoiceService).GetPageByInvoiceStatus(Core.Constants.DefaultKeys.InvoiceStatus.Paid, 1, 25);
+        //    var page = ((InvoiceService)_invoiceService).GetPageByInvoiceDateRange(DateTime.Parse("1/1/2014"), DateTime.Now, 1, 25);
 
         //    //// Assert
         //    Assert.IsTrue(page.Items.Any());
+        //    Console.WriteLine(page.TotalItems);
+        //    Console.WriteLine(page.Items.Count);
         //}
     }
 }

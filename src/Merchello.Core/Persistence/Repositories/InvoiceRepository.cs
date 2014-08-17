@@ -102,7 +102,6 @@
             }
             else
             {
-                ;
                 var dtos = Database.Fetch<InvoiceDto, InvoiceIndexDto, InvoiceStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
