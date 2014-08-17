@@ -6,17 +6,21 @@
     using System.Threading;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Persistence;
+    using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents the Customer Service, 
     /// </summary>
-    public class CustomerService : ICustomerService
+    public class CustomerService : PageCachedServiceBase<ICustomer>, ICustomerService
     {
         #region fields
 
@@ -399,14 +403,32 @@
         /// </summary>
         /// <param name="key">GUID key for the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer GetByKey(Guid key)
+        public override ICustomer GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
         }
-        
+
+        internal override int Count(IQuery<ICustomer> query)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+        internal override Page<Guid> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string ValidateSortByField(string sortBy)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Gets an <see cref="ICustomer"/> or <see cref="IAnonymousCustomer"/> object by its 'UniqueId'
         /// </summary>
@@ -444,7 +466,7 @@
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomer>.Builder.Where(x => x.LoginName == loginName);
+                var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.LoginName == loginName);
 
                 return repository.GetByQuery(query).FirstOrDefault();
             }
@@ -460,7 +482,7 @@
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
+                var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
 
                 return repository.Count(query);
             }

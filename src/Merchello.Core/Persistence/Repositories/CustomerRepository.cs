@@ -46,6 +46,16 @@
             _customerAddressRepository = customerAddressRepository;
         }
 
+        public override Page<Guid> Search(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Performs the Get by key operation.
         /// </summary>

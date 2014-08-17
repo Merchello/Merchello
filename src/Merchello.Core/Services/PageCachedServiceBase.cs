@@ -1,16 +1,14 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
-    using System.Linq.Expressions;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.Repositories;
-    using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core.Persistence;
-    using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.Querying; 
 
     /// <summary>
     /// The page cached service base.
@@ -31,6 +29,17 @@
         /// The <see cref="TEntity"/>.
         /// </returns>
         public abstract TEntity GetByKey(Guid key);
+
+        /// <summary>
+        /// The count.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal abstract int Count(IQuery<TEntity> query);
 
         /// <summary>
         /// Performs a paged query
@@ -94,6 +103,47 @@
             using (repository)
             {
                 return repository.GetPagedKeys(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Performs a paged search based on a term
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <typeparam name="TDto">
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        protected virtual Page<Guid> Search<TDto>(
+            IPagedEntityKeyFetchRepository<TEntity, TDto> repository, 
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy,
+            SortDirection sortDirection = SortDirection.Descending)
+            where TDto : IPageableDto
+        {
+            using (repository)
+            {
+                return repository.Search(searchTerm, page, itemsPerPage, sortBy, sortDirection);
             }
         }
 

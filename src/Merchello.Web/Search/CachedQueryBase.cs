@@ -95,6 +95,18 @@
         }
 
         /// <summary>
+        /// Gets an display class by it's unique by key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TDisplay"/>.
+        /// </returns>
+        public abstract TDisplay GetByKey(Guid key);
+
+
+        /// <summary>
         /// The search cache.
         /// </summary>
         /// <param name="criteria">
