@@ -11,7 +11,7 @@ namespace Merchello.Web.Models.Querying
     /// The query display.
     /// </summary>
     public class QueryDisplay
-    {
+    {       
         /// <summary>
         /// Gets or sets the parameters.
         /// </summary>

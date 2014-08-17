@@ -22,7 +22,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
     {
         private const int ProductCount = 55;
 
-        private const int InvoiceCount = 1202;
+        private const int InvoiceCount = 50;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -40,9 +40,9 @@ namespace Merchello.Tests.IntegrationTests.Workflow
         public void ReportTestsSetup()
         {
             DbPreTestDataWorker.DeleteAllAnonymousCustomers();
-            //DbPreTestDataWorker.DeleteAllProducts();
+            DbPreTestDataWorker.DeleteAllProducts();
             DbPreTestDataWorker.DeleteAllInvoices();
-            /*
+            
             DbPreTestDataWorker.DeleteAllShipCountries();
 
             this.MakeProducts();
@@ -78,7 +78,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             taxProvider.SaveTaxMethod(gwTaxMethod);
 
-             */
+             
  
             BuildOrders();
 
@@ -94,6 +94,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             var itemCount = MockDataMakerBase.NoWhammyStop.Next(11);
 
+            var invoiceDate = DateTime.Today.AddDays(-1 * InvoiceCount);
 
             for(var j = 0; j < InvoiceCount; j++)
 
@@ -131,10 +132,9 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
                 var paymentMethods = CurrentCustomer.Basket().SalePreparation().GetPaymentGatewayMethods();
 
-                var randomDate = GetRandomDate();
-
+                
             IPaymentResult paymentResult;
-            paymentResult = randomDate.Month < DateTime.Now.AddDays(-30).Month
+            paymentResult = invoiceDate.Month < DateTime.Now.AddDays(-30).Month
                     ? 
                       CurrentCustomer.Basket()
                           .SalePreparation()
@@ -146,7 +146,9 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
                 var invoice = paymentResult.Invoice;
 
-                invoice.InvoiceDate = randomDate;
+                invoice.InvoiceDate = invoiceDate;
+
+                invoiceDate = invoiceDate.AddDays(1);
 
                 DbPreTestDataWorker.InvoiceService.Save(invoice);
             }

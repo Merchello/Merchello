@@ -446,43 +446,43 @@ namespace Merchello.Core.Sales
             return itemCache;
         }
 
-        /// <summary>
-        /// Finalizes the sales transaction 
-        /// </summary>
-        /// <param name="result">
-        /// The result.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPaymentResult"/>.
-        /// </returns>
-        /// <remarks>
-        /// Some 3rd party tax provider may need to actually record the taxation transation so we calculate taxes one more time here
-        /// passing the paramter quoteOnly = false
-        /// </remarks>
-        protected virtual IPaymentResult FinalizeTransaction(IPaymentResult result)
-        {
-            if (result.Payment.Success)
-            {
-                var invoice = result.Invoice;
+        ///// <summary>
+        ///// Finalizes the sales transaction 
+        ///// </summary>
+        ///// <param name="result">
+        ///// The result.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="IPaymentResult"/>.
+        ///// </returns>
+        ///// <remarks>
+        ///// Some 3rd party tax provider may need to actually record the taxation transation so we calculate taxes one more time here
+        ///// passing the paramter quoteOnly = false
+        ///// </remarks>
+        //protected virtual IPaymentResult FinalizeTransaction(IPaymentResult result)
+        //{
+        //    if (result.Payment.Success)
+        //    {
+        //        var invoice = result.Invoice;
 
-                IAddress taxAddress = null;
-                var shippingItems = invoice.ShippingLineItems().ToArray();
-                if (shippingItems.Any())
-                {
-                    var shipment = shippingItems.First().ExtendedData.GetShipment<OrderLineItem>();
-                    taxAddress = shipment.GetDestinationAddress();
-                }
+        //        IAddress taxAddress = null;
+        //        var shippingItems = invoice.ShippingLineItems().ToArray();
+        //        if (shippingItems.Any())
+        //        {
+        //            var shipment = shippingItems.First().ExtendedData.GetShipment<OrderLineItem>();
+        //            taxAddress = shipment.GetDestinationAddress();
+        //        }
 
-                taxAddress = taxAddress ?? invoice.GetBillingAddress();
+        //        taxAddress = taxAddress ?? invoice.GetBillingAddress();
 
-                invoice.CalculateTaxes(MerchelloContext, taxAddress);
-            }
+        //        invoice.CalculateTaxes(MerchelloContext, taxAddress);
+        //    }
             
 
 
 
-            return result;
-        }
+        //    return result;
+        //}
 
         /// <summary>
         /// Makes the 'unique' RuntimeCache Key for the RuntimeCache

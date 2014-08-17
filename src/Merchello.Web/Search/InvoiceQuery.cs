@@ -17,6 +17,7 @@
     /// <summary>
     /// The invoice query.
     /// </summary>
+    [Obsolete("Use CachedInvoiceQuery")]
     internal class InvoiceQuery : QueryBase
     {
         /// <summary>
