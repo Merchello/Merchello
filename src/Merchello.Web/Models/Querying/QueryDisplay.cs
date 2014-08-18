@@ -1,3 +1,5 @@
+using Merchello.Web.Search;
+
 namespace Merchello.Web.Models.Querying
 {
     using System.Collections.Generic;

@@ -4,9 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using global::Examine.SearchCriteria;
-    using Merchello.Web.Models.ContentEditing;
-    using Merchello.Web.Search;
-
+    using Core;
+    using Core.Services;
+    using Models.ContentEditing;
+    using Search;
     using Umbraco.Core;
 
     /// <summary>
@@ -14,6 +15,40 @@
     /// </summary> 
     public class MerchelloHelper
     {
+        /// <summary>
+        /// The <see cref="ICachedQueryProvider"/>
+        /// </summary>
+        private readonly Lazy<ICachedQueryProvider> _queryProvider;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        public MerchelloHelper()
+            : this(MerchelloContext.Current.Services)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="serviceContext">
+        /// The service context.
+        /// </param>
+        public MerchelloHelper(IServiceContext serviceContext)
+        {
+            Mandate.ParameterNotNull(serviceContext, "ServiceContext cannot be null");
+
+            _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(serviceContext));
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ICachedQueryProvider"/>
+        /// </summary>
+        public ICachedQueryProvider Query
+        {
+            get { return _queryProvider.Value; }
+        }
+
         
         #region Product
 
@@ -154,9 +189,10 @@
         /// <returns>
         /// The <see cref="InvoiceDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Invoice.GetByKey")]
         public InvoiceDisplay Invoice(Guid key)
         {
-            return InvoiceQuery.GetByKey(key);
+            return Query.Invoice.GetByKey(key);
         }
 
         /// <summary>
@@ -168,9 +204,10 @@
         /// <returns>
         /// The <see cref="InvoiceDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Invoice.GetByKey")]
         public InvoiceDisplay Invoice(string key)
         {
-            return InvoiceQuery.GetByKey(key);
+            return Query.Invoice.GetByKey(key.EncodeAsGuid());
         }
 
         ///// <summary>
@@ -193,6 +230,7 @@
         /// <returns>
         /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Invoice.SearchCustomer")]
         public IEnumerable<InvoiceDisplay> InvoicesByCustomer(Guid customerKey)
         {
             return InvoiceQuery.GetByCustomerKey(customerKey);
@@ -207,6 +245,7 @@
         /// <returns>
         /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Invoice.SearchCustomer.  This may no longer return all valid results")]
         public IEnumerable<InvoiceDisplay> InvoicesByCustomer(string customerKey)
         {
             return InvoicesByCustomer(customerKey.EncodeAsGuid());
@@ -220,6 +259,7 @@
         /// <returns>
         /// The collection of <see cref="InvoiceDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Invoice.Search.  This may no longer return all valid results")]
         public IEnumerable<InvoiceDisplay> SearchInvoices(string term)
         {
             return InvoiceQuery.Search(term);
@@ -234,6 +274,7 @@
         /// <returns>
         /// The collection of all <see cref="InvoiceDisplay"/> matching the criteria.
         /// </returns>
+         [Obsolete("Use MerchelloHelper.Query.Invoice.Search.  This may no longer return all valid results")]
         public IEnumerable<InvoiceDisplay> SearchInvoices(ISearchCriteria criteria)
         {
             return InvoiceQuery.Search(criteria);
