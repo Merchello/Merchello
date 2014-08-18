@@ -106,6 +106,7 @@
     <key alias="warehouses">Warehouses</key>
     <key alias="stock">Stock</key>
     <key alias="lowCount">Low Count</key>
+    <key alias="location">Location</key>
     <!-- actions -->
     <!-- phrases -->
   </area>

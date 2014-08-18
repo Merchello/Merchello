@@ -33,30 +33,23 @@
             },
 
             getAll: function (query) {
+                var listQuery;
                 if (query === undefined) {
+                    listQuery = new merchello.Models.ListQuery({
+                        currentPage: 0,
+                        itemsPerPage: 100
+                    });
                     return umbRequestHelper.resourcePromise(
-                        $http({
-                            url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
-                            method: "GET"
-                        }),
+                        $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), listQuery),
                         'Failed to retreive invoices');
                 } else {
-                    var listQuery = new merchello.Models.ListQuery(query);
+                    listQuery = new merchello.Models.ListQuery(query);
                     console.info(listQuery);
 
                     // TODO I think we should change this to a POST and go back to using the query object
                     // This would allow us to more easily add the the advanced filters
                     return umbRequestHelper.resourcePromise(
-                        $http({
-                            url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetAllInvoices'),
-                            method: "GET",
-                            params: {
-                                currentPage: listQuery.currentPage,
-                                itemsPerPage: listQuery.itemsPerPage,
-                                sortBy: listQuery.sortBy,
-                                sortDirection: listQuery.sortDirection
-                            }
-                        }),
+                        $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), listQuery),
                         'Failed to retrieve invoices');
                 }
             },

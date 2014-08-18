@@ -45,6 +45,7 @@
                 $scope.sortProperty = propertyToSort;
                 $scope.sortOrder = "asc";
             }
+            $scope.loadInvoices($scope.filterText);
         };
 
         /**
@@ -81,31 +82,31 @@
          * @function
          * 
          * @description
-         * Load the invoices, either filtered or not, dependingon teh current page, and status of the filterText variable.
+         * Load the invoices, either filtered or not, depending on the current page, and status of the filterText variable.
          */
         $scope.loadInvoices = function(filterText) {
             var page = $scope.currentPage;
             var perPage = $scope.limitAmount;
-            // TODO: Replace hardwired values with values provided by clicked-upon options on list in markup
-            var sortBy = 'invoicenumber';
-            var sortDirection = 'Descending';
-            $scope.filterText = filterText;
+            var sortBy = $scope.sortInfo().sortBy;
+            var sortDirection = $scope.sortInfo().sortDirection;
             var promiseInvoices;
             if (filterText === undefined) {
                 filterText = '';
             }
-            if (filterText === '') {
-                var listQuery = new merchello.Models.ListQuery({
-                    currentPage: page,
-                    itemsPerPage: perPage,
-                    sortBy: sortBy,
-                    sortDirection: sortDirection
-                });
-                console.info(listQuery);
-                promiseInvoices = merchelloInvoiceService.getAll(listQuery);
-            } else {
-                promiseInvoices = merchelloInvoiceService.getFiltered(filterText, page, perPage);
-            }
+            $scope.filterText = filterText;
+            var listQuery = new merchello.Models.ListQuery({
+                currentPage: page,
+                itemsPerPage: perPage,
+                sortBy: sortBy,
+                sortDirection: sortDirection,
+                parameters: [
+                {
+                    fieldName: 'term',
+                    value: filterText
+                }]
+            });
+            console.info(listQuery);
+            promiseInvoices = merchelloInvoiceService.getAll(listQuery);
             promiseInvoices.then(function(response) {
                 var queryResult = new merchello.Models.QueryResult(response);
                 $scope.invoices = _.map(queryResult.items, function(invoice) {
@@ -167,6 +168,32 @@
             $scope.sortProperty = "-invoiceNumber";
             $scope.visible = {};
             $scope.visible.bulkActionDropdown = false;
+        };
+
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         * 
+         * @description
+         * Returns sort information based off the current $scope.sortProperty.
+         */
+        $scope.sortInfo = function() {
+            var sortDirection, sortBy;
+            // If the sortProperty starts with '-', it's representing a descending value.
+            if ($scope.sortProperty.indexOf('-') > -1) {
+                // Get the text after the '-' for sortBy
+                sortBy = $scope.sortProperty.split('-')[1];
+                sortDirection = 'Descending';
+            // Otherwise it is ascending.
+            } else {
+                sortBy = $scope.sortProperty;
+                sortDirection = 'Ascending';
+            }
+            return {
+                sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
+                sortDirection: sortDirection
+            }
         };
 
         /**

@@ -90,13 +90,30 @@
         if (data === undefined) {
             self.currentPage = 0;
             self.itemsPerPage = 0;
+            self.parameters = [];
             self.sortBy = 'invoicenumber'; // valid options are 'invoicenumber', 'billtoname', and 'invoicedate'
             self.sortDirection = 'Ascending'; // valid options are 'Ascending' and 'Descending'
         } else {
             self.currentPage = data.currentPage;
             self.itemsPerPage = data.itemsPerPage;
+            self.parameters = _.map(data.parameters, function (item) {
+                return new merchello.Models.ListQueryParameter(item);
+            });
             self.sortBy = data.sortBy;
             self.sortDirection = data.sortDirection;
+        }
+    };
+
+    models.ListQueryParameter = function(data) {
+
+        var self = this;
+
+        if (data === undefined) {
+            self.fieldName = "";
+            self.value = "";
+        } else {
+            self.fieldName = data.fieldName;
+            self.value = data.value;
         }
     };
 
