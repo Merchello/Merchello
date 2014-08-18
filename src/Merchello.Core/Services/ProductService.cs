@@ -4,17 +4,24 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Models.EntityBase;
+
     using Models;
-    using Persistence;
+
     using Persistence.Querying;
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents the Product Service 
     /// </summary>
-    public class ProductService : IProductService
+    public class ProductService : PageCachedServiceBase<IProduct>, IProductService
     {
         /// <summary>
         /// The locker.
@@ -327,12 +334,30 @@
         /// </summary>
         /// <param name="key">Guid key for the Product</param>
         /// <returns><see cref="IProductVariant"/></returns>
-        public IProduct GetByKey(Guid key)
+        public override IProduct GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
+        }
+
+        internal override int Count(IQuery<IProduct> query)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+        internal override Page<Guid> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string ValidateSortByField(string sortBy)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -362,7 +387,7 @@
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IProduct>.Builder.Where(x => x.Key != Guid.Empty);
+                var query = Persistence.Querying.Query<IProduct>.Builder.Where(x => x.Key != Guid.Empty);
 
                 return repository.Count(query);
             }

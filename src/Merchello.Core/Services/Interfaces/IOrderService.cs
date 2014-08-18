@@ -8,7 +8,7 @@
     /// <summary>
     /// Defines the OrderService.
     /// </summary>
-    public interface IOrderService : IService
+    public interface IOrderService : IPageCachedService<IOrder>
     {
         /// <summary>
         /// Creates a <see cref="IOrder"/> without saving it to the database
@@ -78,13 +78,6 @@
         /// <param name="orders">The collection of <see cref="IOrder"/> to be deleted</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IEnumerable<IOrder> orders, bool raiseEvents = true);
-
-        /// <summary>
-        /// Gets a <see cref="IOrder"/> given it's unique 'key' (Guid)
-        /// </summary>
-        /// <param name="key">The <see cref="IOrder"/>'s unique 'key' (Guid)</param>
-        /// <returns><see cref="IOrder"/></returns>
-        IOrder GetByKey(Guid key);
 
         /// <summary>
         /// Gets a <see cref="IOrder"/> given it's unique 'OrderNumber'

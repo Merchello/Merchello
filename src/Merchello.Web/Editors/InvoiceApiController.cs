@@ -123,10 +123,6 @@
         [HttpPost]
         public QueryResultDisplay GetAllInvoices(QueryDisplay query)        
         {
-            ////int currentPage, int itemsPerPage, string sortBy, string sortDirection
-            //SortDirection direction;
-            //if (!Enum.TryParse(sortDirection, true, out direction)) direction = SortDirection.Descending;
-
             var page = ((InvoiceService)_invoiceService).GetPage(
                 query.CurrentPage + 1,
                 query.ItemsPerPage,

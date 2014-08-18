@@ -97,6 +97,7 @@
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
     <Compile Include="Models\CustomerExtensions.cs" />
+    <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
     <Compile Include="Models\MonitorModels\NotifyModelBase.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Gateways\Notification\Triggering\NotificationTriggerBase.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
     <Compile Include="Models\MonitorModels\ShippingResultNotifyModel.cs" />
+    <Compile Include="Models\Querying\public InvoiceOrderByFields.cs" />
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Notification.cs" />
@@ -728,12 +730,14 @@
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
+    <Compile Include="Services\Interfaces\IPageCachedService.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Services\Interfaces\IWarehouseCatalogService.cs" />
     <Compile Include="Services\NotificationMessageService.cs" />
     <Compile Include="Services\NotificationMethodService.cs" />
     <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\PageCachedServiceBase.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />
     <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\TaxMethodService.cs" />

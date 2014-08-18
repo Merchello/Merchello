@@ -17,6 +17,7 @@
     /// <summary>
     /// The invoice query.
     /// </summary>
+    [Obsolete("Use CachedInvoiceQuery")]
     internal class InvoiceQuery : QueryBase
     {
         /// <summary>
@@ -98,7 +99,7 @@
         //        .Search(criteria).Select(result => result.ToInvoiceDisplay()).ToArray();
 
 
-        //    var count = merchelloContext.Services.InvoiceService.InvoiceCount();
+        //    var count = merchelloContext.Services.InvoiceService.CountInvoices();
 
         //    if (results.Any() && (count == results.Count())) return results;
 

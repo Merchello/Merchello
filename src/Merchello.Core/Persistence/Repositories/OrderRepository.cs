@@ -29,6 +29,16 @@
             _orderLineItemRepository = orderLineItemRepository;
         }
 
+        public override Page<Guid> Search(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override IOrder PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -169,6 +179,5 @@
 
             return collection;
         }
-
     }
 }

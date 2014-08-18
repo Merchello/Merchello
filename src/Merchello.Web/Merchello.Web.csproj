@@ -122,6 +122,9 @@
     <Compile Include="Reporting\ReportController.cs" />
     <Compile Include="Reporting\ReportApiControllerResolver.cs" />
     <Compile Include="Reporting\Sales\SalesByItemReportApiController.cs" />
+    <Compile Include="Search\CachedQueryBase.cs" />
+    <Compile Include="Search\CachedInvoiceQuery.cs" />
+    <Compile Include="Search\QueryResultFactory.cs" />
     <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
     <Compile Include="Reporting\Sales\SalesOverTimeReportApiController.cs" />
     <Compile Include="Search\CustomerQuery.cs" />

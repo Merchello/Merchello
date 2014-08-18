@@ -38,7 +38,7 @@
         }
 
         /// <summary>
-        /// The get paged keys.
+        /// Get paged keys.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -66,7 +66,34 @@
             var translator = new SqlTranslator<TEntity>(sqlClause, query);
             var sql = translator.Translate();
 
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
 
+        public abstract Page<Guid> Search(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
+        /// Get the paged keys.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sql">
+        /// The <see cref="Sql"/>.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        protected Page<Guid> GetPagedKeys(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
             if (!string.IsNullOrEmpty(orderExpression))
             {
                 sql.Append(sortDirection == SortDirection.Ascending
