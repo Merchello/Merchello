@@ -1,17 +1,15 @@
-﻿using System.Linq;
-using Merchello.Web.Models.Querying;
-
-namespace Merchello.Web.Trees
+﻿namespace Merchello.Web.Trees
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using Merchello.Web.Editors;
-    using Merchello.Web.Models.ContentEditing;
-    using Merchello.Web.Reporting;
-
+    using Editors;
+    using Models.ContentEditing;
+    using Models.Querying;
+    using Reporting;
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web;
@@ -112,7 +110,8 @@ namespace Merchello.Web.Trees
                 {
                     CurrentPage = 0,
                     ItemsPerPage = 100,
-                    Parameters = new QueryDisplayParameter[] { }})));
+                    Parameters = new QueryDisplayParameter[] { }
+                })));
 
             umbracoUrls.Add(
                 "merchelloOrderApiBaseUrl", 
