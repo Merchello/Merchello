@@ -106,7 +106,7 @@
                 }]
             });
             console.info(listQuery);
-            promiseInvoices = merchelloInvoiceService.getAll(listQuery);
+            promiseInvoices = merchelloInvoiceService.searchInvoices(listQuery);
             promiseInvoices.then(function(response) {
                 var queryResult = new merchello.Models.QueryResult(response);
                 $scope.invoices = _.map(queryResult.items, function(invoice) {

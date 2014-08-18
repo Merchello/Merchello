@@ -10,81 +10,7 @@
 
         return {
 
-            getByCustomerKey: function (customerKey) {
-
-                return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetByCustomerKey'),
-                        method: "GET",
-                        params: {id: customerKey }
-                    }),
-                    'Failed to get invoices for customer ' + customerKey);
-            },
-
-            getByKey: function (id) {
-
-                return umbRequestHelper.resourcePromise(
-                   $http({
-                       url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetInvoice'),
-                       method: "GET",
-                       params: { id: id }
-                   }),
-                   'Failed to retreive data for invoice id: ' + id);
-            },
-
-            getAll: function (query) {
-                var listQuery;
-                if (query === undefined) {
-                    listQuery = new merchello.Models.ListQuery({
-                        currentPage: 0,
-                        itemsPerPage: 100
-                    });
-                    return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), listQuery),
-                        'Failed to retreive invoices');
-                } else {
-                    listQuery = new merchello.Models.ListQuery(query);
-                    console.info(listQuery);
-
-                    // TODO I think we should change this to a POST and go back to using the query object
-                    // This would allow us to more easily add the the advanced filters
-                    return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), listQuery),
-                        'Failed to retrieve invoices');
-                }
-            },
-
-            getFiltered: function (term, page, perPage) {
-                if (page === undefined) {
-                    return umbRequestHelper.resourcePromise(
-                        $http({
-                            url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetFilteredInvoices'),
-                            method: "GET",
-                            params: { term: term }
-                        }),
-                        'Failed to retreive filtered invoices');
-                } else {
-                    return umbRequestHelper.resourcePromise(
-                        $http({
-                            url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetFilteredInvoices'),
-                            method: "GET",
-                            params: { term: term, page: page, perPage: perPage }
-                        }),
-                        'Failed to retreive filtered invoices');                    
-                }
-            },
-
-            saveInvoice: function (invoice) {
-
-                return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoice'),
-                        invoice
-                    ),
-                    'Failed to save invoice');
-            },
-
             deleteInvoice: function (invoiceKey) {
-
                 return umbRequestHelper.resourcePromise(
                     $http({
                         url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'DeleteInvoice'),
@@ -93,7 +19,45 @@
                     }),
                     'Failed to delete invoice');
             },
-
+            getByCustomerKey: function (customerKey) {
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetByCustomerKey'),
+                        method: "GET",
+                        params: {id: customerKey }
+                    }),
+                    'Failed to get invoices for customer ' + customerKey);
+            },
+            getByKey: function (id) {
+                return umbRequestHelper.resourcePromise(
+                   $http({
+                       url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetInvoice'),
+                       method: "GET",
+                       params: { id: id }
+                   }),
+                   'Failed to retreive data for invoice id: ' + id);
+            },
+            saveInvoice: function (invoice) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoice'),
+                        invoice
+                    ),
+                    'Failed to save invoice');
+            },
+            searchInvoices: function (query) {
+                var listQuery;
+                if (query === undefined) {
+                    query = new merchello.Models.ListQuery({
+                        currentPage: 0,
+                        itemsPerPage: 100
+                    });
+                }
+                listQuery = new merchello.Models.ListQuery(query);
+                console.info(listQuery);
+                return umbRequestHelper.resourcePromise(
+                        $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), listQuery),
+                        'Failed to retreive invoices');
+            }
         };
     };
 
