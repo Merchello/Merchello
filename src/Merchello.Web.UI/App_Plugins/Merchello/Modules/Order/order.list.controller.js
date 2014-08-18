@@ -45,6 +45,7 @@
                 $scope.sortProperty = propertyToSort;
                 $scope.sortOrder = "asc";
             }
+            $scope.loadInvoices($scope.filterText);
         };
 
         /**
@@ -81,25 +82,18 @@
          * @function
          * 
          * @description
-         * Load the invoices, either filtered or not, dependingon teh current page, and status of the filterText variable.
+         * Load the invoices, either filtered or not, depending on the current page, and status of the filterText variable.
          */
         $scope.loadInvoices = function(filterText) {
             var page = $scope.currentPage;
             var perPage = $scope.limitAmount;
-            var sortBy, sortDirection;
-            // TODO: Replace hardwired values with values provided by clicked-upon options on list in markup
-            if ($scope.sortProperty.indexOf('-') > -1) {
-                sortBy = $scope.sortProperty.split('-')[1].toLowerCase();
-                sortDirection = 'Ascending';
-            } else {
-                sortBy = $scope.sortProperty.toLowerCase();
-                sortDirection = 'Descending';
-            }
-            $scope.filterText = filterText;
+            var sortBy = $scope.sortInfo().sortBy;
+            var sortDirection = $scope.sortInfo().sortDirection;
             var promiseInvoices;
             if (filterText === undefined) {
                 filterText = '';
             }
+            $scope.filterText = filterText;
             if (filterText === '') {
                 var listQuery = new merchello.Models.ListQuery({
                     currentPage: page,
@@ -173,6 +167,32 @@
             $scope.sortProperty = "-invoiceNumber";
             $scope.visible = {};
             $scope.visible.bulkActionDropdown = false;
+        };
+
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         * 
+         * @description
+         * Returns sort information based off the current $scope.sortProperty.
+         */
+        $scope.sortInfo = function() {
+            var sortDirection, sortBy;
+            // If the sortProperty starts with '-', it's representing a descending value.
+            if ($scope.sortProperty.indexOf('-') > -1) {
+                // Get the text after the '-' for sortBy
+                sortBy = $scope.sortProperty.split('-')[1];
+                sortDirection = 'Descending';
+            // Otherwise it is ascending.
+            } else {
+                sortBy = $scope.sortProperty;
+                sortDirection = 'Ascending';
+            }
+            return {
+                sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
+                sortDirection: sortDirection
+            }
         };
 
         /**
