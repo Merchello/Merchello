@@ -2,8 +2,6 @@
 {
     using System;
     using System.Linq;
-    using System.Web.UI;
-
     using Core;
     using Core.Models.EntityBase;
     using Core.Services;
@@ -12,9 +10,6 @@
     using global::Examine.SearchCriteria;
 
     using Merchello.Web.Models.Querying;
-
-    using umbraco;
-
     using Umbraco.Core.Persistence;
 
     /// <summary>
@@ -107,7 +102,7 @@
 
 
         /// <summary>
-        /// The search cache.
+        /// Performs a Lucene "cache" only search
         /// </summary>
         /// <param name="criteria">
         /// The criteria.
