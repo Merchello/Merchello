@@ -2,10 +2,10 @@
 
 
     /**
-        * @ngdoc service
-        * @name merchello.Services.MerchelloInvoiceService
-        * @description Loads in data and allows modification for invoices
-        **/
+    * @ngdoc service
+    * @name merchello.Services.MerchelloInvoiceService
+    * @description Loads in data and allows modification for invoices
+    **/
     merchelloServices.MerchelloInvoiceService = function ($http, umbRequestHelper) {
 
         return {
@@ -53,7 +53,6 @@
                     });
                 }
                 listQuery = new merchello.Models.ListQuery(query);
-                console.info(listQuery);
                 return umbRequestHelper.resourcePromise(
                         $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), listQuery),
                         'Failed to retreive invoices');

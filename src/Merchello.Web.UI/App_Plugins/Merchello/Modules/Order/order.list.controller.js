@@ -20,7 +20,7 @@
          */
         $scope.changePage = function (page) {
             $scope.currentPage = page;
-            $scope.loadInvoices();
+            $scope.loadInvoices($scope.filterText);
         };
 
         /**
@@ -72,7 +72,7 @@
          */
         $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
-            $scope.page = 0;
+            $scope.currentPage = 0;
             $scope.loadInvoices($scope.filterText);
         };
 
@@ -105,7 +105,6 @@
                     value: filterText
                 }]
             });
-            console.info(listQuery);
             promiseInvoices = merchelloInvoiceService.searchInvoices(listQuery);
             promiseInvoices.then(function(response) {
                 var queryResult = new merchello.Models.QueryResult(response);
