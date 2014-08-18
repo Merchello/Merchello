@@ -92,10 +92,13 @@
         /// <param name="result">
         /// The result.
         /// </param>
+        /// <param name="getOrders">
+        /// The get Orders.
+        /// </param>
         /// <returns>
         /// The <see cref="InvoiceDisplay"/>.
         /// </returns>
-        internal static InvoiceDisplay ToInvoiceDisplay(this SearchResult result)
+        internal static InvoiceDisplay ToInvoiceDisplay(this SearchResult result, Func<Guid, IEnumerable<OrderDisplay>> getOrders)
         {
             var invoice = new InvoiceDisplay()
                 {
@@ -122,7 +125,7 @@
                     Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
                 };
 
-            invoice.Orders = OrderQuery.GetByInvoiceKey(invoice.Key);
+            invoice.Orders = getOrders(invoice.Key);
 
             return invoice;
         }
