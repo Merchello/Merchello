@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Web.Search
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using Core.Persistence.Querying;
     using Models.ContentEditing;
     using Models.Querying;
@@ -277,5 +279,17 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         QueryResultDisplay SearchByCustomer(Guid customerKey, Guid invoiceStatusKey, long page, long itemsPerPage, string sortBy = "invoiceNumber", SortDirection sortDirection = SortDirection.Descending);
+
+
+        /// <summary>
+        /// Gets the collection of all customer invoices
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The collection of customer invoices.
+        /// </returns>
+        IEnumerable<InvoiceDisplay> GetByCustomerKey(Guid customerKey);
     }
 }

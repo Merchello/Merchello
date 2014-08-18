@@ -8,6 +8,11 @@
         /// <summary>
         /// Gets the <see cref="ICachedInvoiceQuery"/>.
         /// </summary>
-        ICachedInvoiceQuery Invoice { get; } 
+        ICachedInvoiceQuery Invoice { get; }
+
+        /// <summary>
+        /// Gets the <see cref="ICachedOrderQuery"/>
+        /// </summary>
+        ICachedOrderQuery Order { get; }
     }
 }

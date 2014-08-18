@@ -79,12 +79,13 @@
         /// </returns>
         public override Page<Guid> Search(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
+            searchTerm = searchTerm.Replace(",", " ");
             var invidualTerms = searchTerm.Split(' ');
 
             var numbers = new List<int>();
             var terms = new List<string>();
 
-            foreach (var term in invidualTerms)
+            foreach (var term in invidualTerms.Where(x => !string.IsNullOrEmpty(x)))
             {
                 int invoiceNumber;
                 if (int.TryParse(term, out invoiceNumber))

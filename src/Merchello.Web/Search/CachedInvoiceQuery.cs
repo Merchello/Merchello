@@ -1,10 +1,12 @@
 ﻿namespace Merchello.Web.Search
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Core;
     using Core.Models;
     using Core.Persistence.Querying;
-    using Core.Services;    
+    using Core.Services;
     using Examine;
     using global::Examine;
     using global::Examine.Providers;
@@ -23,10 +25,15 @@
         private readonly InvoiceService _invoiceService;
 
         /// <summary>
+        /// The method to retreive orders for an invoice
+        /// </summary>
+        private readonly Func<Guid, IEnumerable<OrderDisplay>> _getOrders;
+ 
+        /// <summary>
         /// Initializes a new instance of the <see cref="CachedInvoiceQuery"/> class.
         /// </summary>
-        public CachedInvoiceQuery() : this(
-            MerchelloContext.Current.Services.InvoiceService)
+        public CachedInvoiceQuery()
+            : this(MerchelloContext.Current.Services.InvoiceService)
         {
         }
 
@@ -37,8 +44,23 @@
         /// The invoice service.
         /// </param>
         internal CachedInvoiceQuery(IInvoiceService invoiceService)
+            : this(invoiceService, new CachedOrderQuery(MerchelloContext.Current.Services.OrderService).GetByInvoiceKey)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedInvoiceQuery"/> class.
+        /// </summary>
+        /// <param name="invoiceService">
+        /// The invoice service.
+        /// </param>
+        /// <param name="getOrders">
+        /// The get Orders.
+        /// </param>
+        internal CachedInvoiceQuery(IInvoiceService invoiceService, Func<Guid, IEnumerable<OrderDisplay>> getOrders)
             : this(
             invoiceService,
+            getOrders,
             ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"],
             ExamineManager.Instance.SearchProviderCollection["MerchelloInvoiceSearcher"])
         {            
@@ -50,6 +72,9 @@
         /// <param name="service">
         /// The service.
         /// </param>
+        /// <param name="getOrders">
+        /// The get Orders.
+        /// </param>
         /// <param name="indexProvider">
         /// The index provider.
         /// </param>
@@ -58,11 +83,13 @@
         /// </param>
         internal CachedInvoiceQuery(
             IPageCachedService<IInvoice> service, 
+            Func<Guid, IEnumerable<OrderDisplay>> getOrders,
             BaseIndexProvider indexProvider, 
             BaseSearchProvider searchProvider) 
             : base(service, indexProvider, searchProvider)
         {
             _invoiceService = (InvoiceService)service;
+            _getOrders = getOrders;
         }
 
         /// <summary>
@@ -380,7 +407,23 @@
             var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey && x.InvoiceStatusKey == invoiceStatusKey);
 
             return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
-        }       
+        }
+
+        /// <summary>
+        /// Gets the collection of all customer invoices
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The collection of customer invoices.
+        /// </returns>
+        public IEnumerable<InvoiceDisplay> GetByCustomerKey(Guid customerKey)
+        {
+            var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey);
+
+            return BuildForPage(_invoiceService.GetPage(query, 1, int.MaxValue, "invoiceNumber")).Items.Select(x => (InvoiceDisplay)x);
+        }
 
         /// <summary>
         /// Maps a <see cref="SearchResult"/> to <see cref="InvoiceDisplay"/>
@@ -393,7 +436,7 @@
         /// </returns>
         protected override InvoiceDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
-            return result.ToInvoiceDisplay();
+            return result.ToInvoiceDisplay(_getOrders);
         }
 
         /// <summary>
