@@ -94,18 +94,19 @@
                 filterText = '';
             }
             $scope.filterText = filterText;
-            if (filterText === '') {
-                var listQuery = new merchello.Models.ListQuery({
-                    currentPage: page,
-                    itemsPerPage: perPage,
-                    sortBy: sortBy,
-                    sortDirection: sortDirection
-                });
-                console.info(listQuery);
-                promiseInvoices = merchelloInvoiceService.getAll(listQuery);
-            } else {
-                promiseInvoices = merchelloInvoiceService.getFiltered(filterText, page, perPage);
-            }
+            var listQuery = new merchello.Models.ListQuery({
+                currentPage: page,
+                itemsPerPage: perPage,
+                sortBy: sortBy,
+                sortDirection: sortDirection,
+                parameters: [
+                {
+                    fieldName: 'term',
+                    value: filterText
+                }]
+            });
+            console.info(listQuery);
+            promiseInvoices = merchelloInvoiceService.getAll(listQuery);
             promiseInvoices.then(function(response) {
                 var queryResult = new merchello.Models.QueryResult(response);
                 $scope.invoices = _.map(queryResult.items, function(invoice) {

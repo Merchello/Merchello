@@ -158,6 +158,7 @@ namespace Merchello.Web.Editors
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
+        [HttpPost]
         public QueryResultDisplay SearchByDateRange(QueryDisplay query)
         {
             var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
