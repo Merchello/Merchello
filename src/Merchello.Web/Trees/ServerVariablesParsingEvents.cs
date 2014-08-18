@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Merchello.Web.Models.Querying;
 
 namespace Merchello.Web.Trees
 {
@@ -107,7 +108,11 @@ namespace Merchello.Web.Trees
             umbracoUrls.Add(
                 "merchelloInvoiceApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<InvoiceApiController>(
-                controller => controller.GetAllInvoices()));
+                controller => controller.SearchInvoices(new QueryDisplay()
+                {
+                    CurrentPage = 0,
+                    ItemsPerPage = 100,
+                    Parameters = new QueryDisplayParameter[] { }})));
 
             umbracoUrls.Add(
                 "merchelloOrderApiBaseUrl", 

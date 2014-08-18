@@ -4,8 +4,6 @@
     using System.Linq;
 
     using global::Examine;
-
-    using Merchello.Core.Models.EntityBase;
     using Merchello.Web.Models.Querying;
 
     using Umbraco.Core.Persistence;

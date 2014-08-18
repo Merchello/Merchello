@@ -586,6 +586,30 @@
                 sortDirection);
         }
 
+        /// <summary>
+        /// Gets a page by search term
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        /// <remarks>
+        /// The search is prefabricated in the repository
+        /// </remarks>
         internal Page<Guid> GetPage(
             string searchTerm,
             long page,
@@ -597,91 +621,13 @@
             {
                 return repository.Search(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy));
             }
-        }
+        }       
 
         /// <summary>
-        /// Gets a page of invoice keys by customer key.
+        /// Gets a page by query.
         /// </summary>
-        /// <param name="customerKey">
-        /// The customer key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{Guid}"/>.
-        /// </returns>
-        internal Page<Guid> GetPageByCustomerKey(
-            Guid customerKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
-        {
-            return GetPage(
-                _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey),
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
-        }
-
-        /// <summary>
-        /// Gets a  page by invoice date range.
-        /// </summary>
-        /// <param name="beginRange">
-        /// The begin range.
-        /// </param>
-        /// <param name="endRange">
-        /// The end range.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{Guid}"/>.
-        /// </returns>
-        internal Page<Guid> GetPageByInvoiceDateRange(
-            DateTime beginRange,
-            DateTime endRange,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
-        {
-            return GetPage(
-                _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= beginRange && x.InvoiceDate <= endRange),
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
-        }
-
-        /// <summary>
-        /// The get page by exported.
-        /// </summary>
-        /// <param name="exported">
-        /// The exported flag
+        /// <param name="query">
+        /// The query.
         /// </param>
         /// <param name="page">
         /// The page.
@@ -698,45 +644,8 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<Guid> GetPageByExported(
-            bool exported,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
-        {
-            return GetPage(
-                _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Exported == exported),
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
-        }
-
-        /// <summary>
-        /// The get page by invoice status.
-        /// </summary>
-        /// <param name="invoiceStatusKey">
-        /// The invoice status key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page"/>.
-        /// </returns>
-        internal Page<Guid> GetPageByInvoiceStatus(
-            Guid invoiceStatusKey,
+        internal Page<Guid> GetPage(
+            IQuery<IInvoice> query,
             long page,
             long itemsPerPage,
             string sortBy = "",
@@ -744,48 +653,7 @@
         {
             return GetPage(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == invoiceStatusKey),
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
-        }
-
-        /// <summary>
-        /// The get page by invoice status.
-        /// </summary>
-        /// <param name="invoiceStatusKey">
-        /// The invoice status key.
-        /// </param>
-        /// <param name="exported">
-        /// The exported flag
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page"/>.
-        /// </returns>
-        internal Page<Guid> GetPageByInvoiceStatus(
-            Guid invoiceStatusKey,
-            bool exported,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
-        {
-            return GetPage(
-                _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
-                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == invoiceStatusKey && x.Exported == exported),
+                query,
                 page,
                 itemsPerPage,
                 sortBy,
