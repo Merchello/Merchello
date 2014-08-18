@@ -97,15 +97,20 @@
                 }
             }
 
+
             var sql = new Sql();
             sql.Select("*").From<InvoiceDto>();
-            if (numbers.Any())
+            if (numbers.Any() && terms.Any())
             {
-                sql.Where("billToName LIKE @term OR billToEmail LIKE @term invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("%", terms)), @invNo = numbers.ToArray() });
+                sql.Where("billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("%", terms)), @email = string.Format("%{0}%", string.Join("%", terms)), @invNo = numbers.ToArray() });
+            }
+            else if (numbers.Any())
+            {
+                sql.Where("invoiceNumber IN (@invNo)", new { @invNo = numbers.ToArray() });
             }
             else
             {
-                sql.Where("billToName LIKE @term OR billToEmail LIKE @term", new { @term = string.Format("%{0}%", string.Join("%", terms)) });
+                sql.Where("billToName LIKE @term OR billToEmail LIKE @term", new { @term = string.Format("%{0}%", string.Join("%", terms)), @email = string.Format("%{0}%", string.Join("%", terms)) });
             }
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
