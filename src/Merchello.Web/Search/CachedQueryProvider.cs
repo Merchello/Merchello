@@ -15,6 +15,11 @@
         private Lazy<ICachedInvoiceQuery> _invoiceQuery;
 
         /// <summary>
+        /// The <see cref="ICachedOrderQuery"/>
+        /// </summary>
+        private Lazy<ICachedOrderQuery> _orderQuery; 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryProvider"/> class.
         /// </summary>
         public CachedQueryProvider()
@@ -43,6 +48,14 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="ICachedOrderQuery"/>
+        /// </summary>
+        public ICachedOrderQuery Order
+        {
+            get { return _orderQuery.Value; }
+        }
+
+        /// <summary>
         /// The initialize provider.
         /// </summary>
         /// <param name="serviceContext">
@@ -50,7 +63,11 @@
         /// </param>
         private void InitializeProvider(IServiceContext serviceContext)
         {
+            if (_invoiceQuery == null)
             _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(serviceContext.InvoiceService));
+
+            if (_orderQuery == null)
+            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(serviceContext.OrderService));
         }
     }
 }

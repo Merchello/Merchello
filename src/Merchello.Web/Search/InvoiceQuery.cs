@@ -47,7 +47,7 @@
             criteria.Field("customerKey", customerKey.ToString());
 
             return ExamineManager.Instance.SearchProviderCollection[SearcherName].Search(criteria)
-                    .Select(result => result.ToInvoiceDisplay())
+                    .Select(result => result.ToInvoiceDisplay(OrderQuery.GetByInvoiceKey))
                     .ToArray();
         }
 
@@ -79,7 +79,7 @@
         {
             return ExamineManager.Instance.SearchProviderCollection[SearcherName]
                 .Search(criteria).OrderByDescending(x => x.Score)
-                .Select(result => result.ToInvoiceDisplay());
+                .Select(result => result.ToInvoiceDisplay(OrderQuery.GetByInvoiceKey));
         }
 
         ///// <summary>
@@ -134,7 +134,7 @@
             criteria.Field("invoiceKey", key);
 
             var invoice = ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).Select(result => result.ToInvoiceDisplay()).FirstOrDefault();
+                .Search(criteria).Select(result => result.ToInvoiceDisplay(OrderQuery.GetByInvoiceKey)).FirstOrDefault();
 
             if (invoice != null) return invoice;
             var merchelloContext = GetMerchelloContext();

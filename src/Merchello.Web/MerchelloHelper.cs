@@ -230,10 +230,10 @@
         /// <returns>
         /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Invoice.SearchCustomer")]
+        [Obsolete("Use MerchelloHelper.Query.Invoice.GetByCustomerKey")]
         public IEnumerable<InvoiceDisplay> InvoicesByCustomer(Guid customerKey)
         {
-            return InvoiceQuery.GetByCustomerKey(customerKey);
+            return Query.Invoice.GetByCustomerKey(customerKey);
         }
 
         /// <summary>
@@ -245,10 +245,10 @@
         /// <returns>
         /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Invoice.SearchCustomer.  This may no longer return all valid results")]
+        [Obsolete("Use MerchelloHelper.Query.Invoice.GetByCustomerKey")]
         public IEnumerable<InvoiceDisplay> InvoicesByCustomer(string customerKey)
         {
-            return InvoicesByCustomer(customerKey.EncodeAsGuid());
+            return Query.Invoice.GetByCustomerKey(customerKey.EncodeAsGuid());
         }
         /// <summary>
         /// Searches the Merchello Invoice index. 
