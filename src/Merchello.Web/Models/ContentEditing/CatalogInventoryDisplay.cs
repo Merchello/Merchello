@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Merchello.Core.Models;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+    using Core.Models;
 
     /// <summary>
     /// The catalog inventory display.

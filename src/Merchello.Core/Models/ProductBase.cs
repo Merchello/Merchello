@@ -117,9 +117,15 @@
         private static readonly PropertyInfo DownloadMediaIdSelector = ExpressionHelper.GetPropertyInfo<ProductBase, int?>(x => x.DownloadMediaId);
 
         /// <summary>
+        /// The version key selector.
+        /// </summary>
+        private static readonly PropertyInfo VersionKeySelector = ExpressionHelper.GetPropertyInfo<ProductBase, Guid>(x => x.VersionKey);
+
+        /// <summary>
         /// The warehouse inventory changed selector.
         /// </summary>
         private static readonly PropertyInfo WarehouseInventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, CatalogInventoryCollection>(x => x.CatalogInventoryCollection);
+
 
         /// <summary>
         /// The sku.
@@ -222,6 +228,11 @@
         private int? _downloadMediaId;
 
         /// <summary>
+        /// The version key.
+        /// </summary>
+        private Guid _versionKey;
+
+        /// <summary>
         /// The catalog inventory collection.
         /// </summary>
         private CatalogInventoryCollection _catalogInventoryCollection;
@@ -270,7 +281,7 @@
             : this(name, sku, price, new CatalogInventoryCollection())
         {
         }
-
+        
 
         /// <summary>
         /// Gets a Product variant inventory accross all warehouses
@@ -625,6 +636,30 @@
                     _downloadMediaId = value;
                     return _downloadMediaId;
                 }, _downloadMediaId, DownloadMediaIdSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets the version key.
+        /// </summary>
+        [DataMember]
+        public Guid VersionKey
+        {
+            get
+            {
+                return _versionKey;                 
+            }
+
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(
+                o =>
+                {
+                    _versionKey = value;
+                    return _versionKey;
+                }, 
+                _versionKey, 
+                VersionKeySelector);
             }
         }
 
