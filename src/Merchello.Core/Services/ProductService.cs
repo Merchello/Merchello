@@ -29,6 +29,11 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "sku", "name", "price" };
+
+        /// <summary>
         /// The uow provider.
         /// </summary>
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
@@ -342,6 +347,11 @@
             }
         }
 
+        public override Page<IProduct> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
         internal override int Count(IQuery<IProduct> query)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
@@ -350,7 +360,7 @@
             }
         }
 
-        internal override Page<Guid> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
             throw new NotImplementedException();
         }

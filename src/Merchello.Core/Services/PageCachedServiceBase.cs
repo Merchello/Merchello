@@ -30,6 +30,27 @@
         /// </returns>
         public abstract TEntity GetByKey(Guid key);
 
+
+        /// <summary>
+        /// Gets a <see cref="Page{TEntity}"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{TEntity}"/>.
+        /// </returns>
+        public abstract Page<TEntity> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+    
         /// <summary>
         /// The count.
         /// </summary>
@@ -59,7 +80,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal abstract Page<Guid> GetPage(
+        internal abstract Page<Guid> GetPagedKeys(
             long page,
             long itemsPerPage,
             string sortBy = "",
@@ -92,8 +113,8 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        protected virtual Page<Guid> GetPage<TDto>(
-            IPagedEntityKeyFetchRepository<TEntity, TDto> repository,
+        protected virtual Page<Guid> GetPagedKeys<TDto>(
+            IPagedRepository<TEntity, TDto> repository,
             IQuery<TEntity> query,
             long page,
             long itemsPerPage,
@@ -128,12 +149,13 @@
         /// The sort direction.
         /// </param>
         /// <typeparam name="TDto">
+        /// The type of <see cref="TDto"/>
         /// </typeparam>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{TDto}"/>.
         /// </returns>
         protected virtual Page<Guid> Search<TDto>(
-            IPagedEntityKeyFetchRepository<TEntity, TDto> repository, 
+            IPagedRepository<TEntity, TDto> repository, 
             string searchTerm,
             long page,
             long itemsPerPage,
@@ -143,7 +165,7 @@
         {
             using (repository)
             {
-                return repository.Search(searchTerm, page, itemsPerPage, sortBy, sortDirection);
+                return repository.SearchKeys(searchTerm, page, itemsPerPage, sortBy, sortDirection);
             }
         }
 

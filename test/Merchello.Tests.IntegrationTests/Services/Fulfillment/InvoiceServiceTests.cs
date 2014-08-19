@@ -69,7 +69,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
             var statuses = new[] { Core.Constants.DefaultKeys.InvoiceStatus.Paid, Core.Constants.DefaultKeys.InvoiceStatus.Unpaid };
 
             //// Act
-            var page = ((InvoiceService)_invoiceService).GetPage("5 10 17 space nee", 1, 25);
+            var page = ((InvoiceService)_invoiceService).GetPagedKeys("5 10 17 space nee", 1, 25);
             //var page = ((InvoiceService)_invoiceService).GetPageByInvoiceDateRange(DateTime.Parse("1/1/2014"), DateTime.Now, 1, 25);
 
             //// Assert

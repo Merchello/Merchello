@@ -10,6 +10,11 @@
     public class CachedQueryProvider : ICachedQueryProvider
     {
         /// <summary>
+        /// The <see cref="ICachedCustomerQuery"/>.
+        /// </summary>
+        private Lazy<ICachedCustomerQuery> _customerQuery; 
+
+        /// <summary>
         /// The <see cref="ICachedInvoiceQuery"/>
         /// </summary>
         private Lazy<ICachedInvoiceQuery> _invoiceQuery;
@@ -40,6 +45,14 @@
         }
 
         /// <summary>
+        /// Gets the customer.
+        /// </summary>
+        public ICachedCustomerQuery Customer
+        {
+            get { return _customerQuery.Value; }
+        }
+
+        /// <summary>
         /// Gets the <see cref="ICachedInvoiceQuery"/>.
         /// </summary>
         public ICachedInvoiceQuery Invoice
@@ -63,6 +76,9 @@
         /// </param>
         private void InitializeProvider(IServiceContext serviceContext)
         {
+            if (_customerQuery == null)
+            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(serviceContext.CustomerService));
+
             if (_invoiceQuery == null)
             _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(serviceContext.InvoiceService));
 

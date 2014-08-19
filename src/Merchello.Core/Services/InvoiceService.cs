@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -30,7 +32,12 @@
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-      
+
+        /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "invoicenumber", "invoicedate", "billtoname", "billtoemail" };
+
         /// <summary>
         /// The unit of work provider.
         /// </summary>
@@ -397,7 +404,35 @@
             }
         }
 
-        
+        /// <summary>
+        /// Gets a <see cref="Page{IInvoice}"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public override Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+
         /// <summary>
         /// Gets a <see cref="IInvoice"/> given it's unique 'InvoiceNumber'
         /// </summary>
@@ -575,14 +610,14 @@
         /// <remarks>
         /// This is used by large back office collections usually backed by Examine (Lucene) backed cache
         /// </remarks>
-        internal override Page<Guid> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            return GetPage(
+            return GetPagedKeys(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
                 Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty),
                 page,
                 itemsPerPage,
-                sortBy,
+                ValidateSortByField(sortBy),
                 sortDirection);
         }
 
@@ -610,7 +645,7 @@
         /// <remarks>
         /// The search is prefabricated in the repository
         /// </remarks>
-        internal Page<Guid> GetPage(
+        internal Page<Guid> GetPagedKeys(
             string searchTerm,
             long page,
             long itemsPerPage,
@@ -619,7 +654,7 @@
         {
             using (var repository = (InvoiceRepository)_repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.Search(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy));
+                return repository.SearchKeys(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy));
             }
         }       
 
@@ -644,19 +679,19 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<Guid> GetPage(
+        internal Page<Guid> GetPagedKeys(
             IQuery<IInvoice> query,
             long page,
             long itemsPerPage,
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            return GetPage(
+            return GetPagedKeys(
                 _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
                 query,
                 page,
                 itemsPerPage,
-                sortBy,
+                ValidateSortByField(sortBy),
                 sortDirection);
         }
 
@@ -671,7 +706,7 @@
         /// </returns>
         protected override string ValidateSortByField(string sortBy)
         {
-            return new[] { "billtoname", "invoicedate", "invoicenumber" }
+            return ValidSortFields
                 .Contains(sortBy.ToLowerInvariant()) ? sortBy : "invoiceNumber";
         }
 

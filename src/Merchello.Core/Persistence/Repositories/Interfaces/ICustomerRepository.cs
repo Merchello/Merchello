@@ -6,7 +6,7 @@
     /// <summary>
     /// Marker Interface for the customer repository
     /// </summary>
-    internal interface ICustomerRepository : IPagedEntityKeyFetchRepository<ICustomer, CustomerDto>
+    internal interface ICustomerRepository : IPagedRepository<ICustomer, CustomerDto>
     {
     }
 }

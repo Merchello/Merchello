@@ -16,7 +16,7 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
 
-    internal class ProductRepository : PagedEntityKeyFetchRepositoryBase<IProduct, ProductDto>, IProductRepository
+    internal class ProductRepository : PagedRepositoryBase<IProduct, ProductDto>, IProductRepository
     {
         private readonly IProductVariantRepository _productVariantRepository;
         
@@ -28,7 +28,12 @@
            _productVariantRepository = productVariantRepository;        
         }
 
-        public override Page<Guid> Search(
+        public override Page<IProduct> GetPage(long page, long itemsPerPage, IQuery<IProduct> query,string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+           throw new NotImplementedException();
+        }
+
+        public override Page<Guid> SearchKeys(
             string searchTerm,
             long page,
             long itemsPerPage,

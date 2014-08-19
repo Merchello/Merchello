@@ -19,7 +19,7 @@
     /// <summary>
     /// Represents the Invoice Repository
     /// </summary>
-    internal class InvoiceRepository : PagedEntityKeyFetchRepositoryBase<IInvoice, InvoiceDto>, IInvoiceRepository
+    internal class InvoiceRepository : PagedRepositoryBase<IInvoice, InvoiceDto>, IInvoiceRepository
     {
         /// <summary>
         /// The invoice line item repository.
@@ -77,7 +77,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public override Page<Guid> Search(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        public override Page<Guid> SearchKeys(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
             searchTerm = searchTerm.Replace(",", " ");
             var invidualTerms = searchTerm.Split(' ');
