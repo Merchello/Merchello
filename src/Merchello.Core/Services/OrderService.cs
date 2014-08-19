@@ -27,6 +27,11 @@ namespace Merchello.Core.Services
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "orderdate", "ordernumber" };
+
+        /// <summary>
         /// The uow provider.
         /// </summary>
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
@@ -420,6 +425,33 @@ namespace Merchello.Core.Services
             }
         }
 
+        /// <summary>
+        /// Gets a <see cref="Page{IOrder}"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IOrder}"/>.
+        /// </returns>
+        public override Page<IOrder> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.GetPage(page, itemsPerPage, query, sortBy, sortDirection);
+            }
+        }
 
 
         /// <summary>
@@ -541,7 +573,7 @@ namespace Merchello.Core.Services
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>        
-        internal override Page<Guid> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
             using (var repository = (OrderRepository)_repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
             {
@@ -579,7 +611,7 @@ namespace Merchello.Core.Services
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            return GetPage(
+            return GetPagedKeys(
                 _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()),
                 query,
                 page,
@@ -599,7 +631,7 @@ namespace Merchello.Core.Services
         /// </returns>
         protected override string ValidateSortByField(string sortBy)
         {
-            return new[] { "orderdate", "ordernumber" }
+            return ValidSortFields
                 .Contains(sortBy.ToLowerInvariant()) ? sortBy : "orderNumber";
         }
 

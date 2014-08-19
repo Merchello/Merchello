@@ -19,7 +19,7 @@
     /// <summary>
     /// The product variant repository.
     /// </summary>
-    internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
+    internal class ProductVariantRepository : PagedRepositoryBase<IProductVariant, ProductVariantDto>, IProductVariantRepository
     {
 
         public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
@@ -27,6 +27,10 @@
         {            
         }
 
+        public override Page<Guid> SearchKeys(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
 
         protected override IProductVariant PerformGet(Guid key)
         {
@@ -392,6 +396,7 @@
 
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
+
 
     }
 }

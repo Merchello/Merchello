@@ -17,7 +17,7 @@
     /// <summary>
     /// Represents the OrderRepository
     /// </summary>
-    internal class OrderRepository : PagedEntityKeyFetchRepositoryBase<IOrder, OrderDto>, IOrderRepository
+    internal class OrderRepository : PagedRepositoryBase<IOrder, OrderDto>, IOrderRepository
     {
         private readonly ILineItemRepositoryBase<IOrderLineItem> _orderLineItemRepository;
 
@@ -29,7 +29,7 @@
             _orderLineItemRepository = orderLineItemRepository;
         }
 
-        public override Page<Guid> Search(
+        public override Page<Guid> SearchKeys(
             string searchTerm,
             long page,
             long itemsPerPage,

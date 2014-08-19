@@ -15,7 +15,7 @@
     /// <typeparam name="TEntity">
     /// The type of entity
     /// </typeparam>
-    public interface IPageCachedService<out TEntity> : IService
+    public interface IPageCachedService<TEntity> : IService
         where TEntity : class, IEntity
     {
         /// <summary>
@@ -28,6 +28,27 @@
         /// The <see cref="TEntity"/>.
         /// </returns>
         TEntity GetByKey(Guid key);
+
+
+        /// <summary>
+        /// Gets a <see cref="Page{TEntity}"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{TEntity}"/>.
+        /// </returns>
+        Page<TEntity> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
 
         /////// <summary>
         /////// Performs a paged query

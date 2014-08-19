@@ -19,7 +19,7 @@
     /// <summary>
     /// The customer repository.
     /// </summary>
-    internal class CustomerRepository : PagedEntityKeyFetchRepositoryBase<ICustomer, CustomerDto>, ICustomerRepository
+    internal class CustomerRepository : PagedRepositoryBase<ICustomer, CustomerDto>, ICustomerRepository
     {
         /// <summary>
         /// The _customer address repository.
@@ -46,7 +46,7 @@
             _customerAddressRepository = customerAddressRepository;
         }
 
-        public override Page<Guid> Search(
+        public override Page<Guid> SearchKeys(
             string searchTerm,
             long page,
             long itemsPerPage,

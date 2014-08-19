@@ -101,7 +101,7 @@
         /// </returns>
         public QueryResultDisplay Search(long page, long itemsPerPage, string sortBy = "orderNumber", SortDirection sortDirection = SortDirection.Descending)
         {
-            return BuildForPage(_orderService.GetPage(page, itemsPerPage, sortBy, sortDirection));
+            return BuildForPage(_orderService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>

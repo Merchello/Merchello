@@ -6,7 +6,7 @@
     /// <summary>
     /// Maker interface for the OrderRepository
     /// </summary>
-    internal interface IOrderRepository : IPagedEntityKeyFetchRepository<IOrder, OrderDto>
+    internal interface IOrderRepository : IPagedRepository<IOrder, OrderDto>
     {
     }
 }

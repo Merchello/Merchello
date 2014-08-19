@@ -176,9 +176,9 @@
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
-    <Compile Include="Persistence\Repositories\Interfaces\IPagedEntityKeyFetchRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
-    <Compile Include="Persistence\Repositories\PagedEntityKeyFetchRepositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\PagedRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\WarehouseCatalogRepository.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />

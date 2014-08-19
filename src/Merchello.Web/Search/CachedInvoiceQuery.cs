@@ -126,7 +126,7 @@
         /// </returns>
         public QueryResultDisplay Search(long page, long itemsPerPage, string sortBy = "invoiceNumber", SortDirection sortDirection = SortDirection.Descending)
         {
-            return BuildForPage(_invoiceService.GetPage(page, itemsPerPage, sortBy, sortDirection));
+            return BuildForPage(_invoiceService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>

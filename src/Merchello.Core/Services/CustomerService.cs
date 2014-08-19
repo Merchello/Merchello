@@ -30,6 +30,11 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "firstname", "lastname", "loginname", "email", "lastactivitydate" };
+
+        /// <summary>
         /// The unit of work provider.
         /// </summary>
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
@@ -57,7 +62,7 @@
         /// <summary>
         /// The payment service.
         /// </summary>
-        private readonly IPaymentService _paymentService;
+        private readonly IPaymentService _paymentService;        
 
         #endregion
 
@@ -411,6 +416,16 @@
             }
         }
 
+        public override Page<ICustomer> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
         internal override int Count(IQuery<ICustomer> query)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
@@ -419,14 +434,14 @@
             }
         }
 
-        internal override Page<Guid> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
             throw new NotImplementedException();
         }
 
         protected override string ValidateSortByField(string sortBy)
         {
-            throw new NotImplementedException();
+            return ValidSortFields.Contains(sortBy.ToLower()) ? sortBy : "lastName";
         }
 
         /// <summary>

@@ -126,6 +126,7 @@
     <Compile Include="Search\CachedQueryBase.cs" />
     <Compile Include="Search\CachedInvoiceQuery.cs" />
     <Compile Include="Search\CachedQueryProvider.cs" />
+    <Compile Include="Search\ICachedCustomerQuery.cs" />
     <Compile Include="Search\ICachedInvoiceQuery.cs" />
     <Compile Include="Search\ICachedOrderQuery.cs" />
     <Compile Include="Search\ICachedQueryProvider.cs" />
