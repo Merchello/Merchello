@@ -1,4 +1,7 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Persistence.Querying;
+using Umbraco.Core.Persistence;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -129,6 +132,26 @@
         /// The <see cref="int"/> representing the count of invoices.
         /// </returns>
         int CountInvoices();
+
+        /// <summary>
+        /// Gets a <see cref="Page{IInvoice}"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
 
         #region InvoiceStatus
 

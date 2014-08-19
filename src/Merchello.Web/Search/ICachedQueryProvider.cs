@@ -6,6 +6,11 @@
     public interface ICachedQueryProvider
     {
         /// <summary>
+        /// Gets the <see cref="ICachedCustomerQuery"/>
+        /// </summary>
+        ICachedCustomerQuery Customer { get; }
+
+        /// <summary>
         /// Gets the <see cref="ICachedInvoiceQuery"/>.
         /// </summary>
         ICachedInvoiceQuery Invoice { get; }

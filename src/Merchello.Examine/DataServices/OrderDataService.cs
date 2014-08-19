@@ -25,7 +25,7 @@ namespace Merchello.Examine.DataServices
 
         public IEnumerable<IOrder> GetAll()
         {
-            return new OrderService().GetAll();
+            return new OrderService().GetPage(1, 100).Items;
         }
 
 

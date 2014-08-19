@@ -28,6 +28,11 @@
         #region Fields
 
         /// <summary>
+        /// The <see cref="MerchelloHelper"/>
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
+
+        /// <summary>
         /// The customer service.
         /// </summary>
         private ICustomerService _customerService;
@@ -41,6 +46,7 @@
         /// The membership member service.
         /// </summary>
         private IMemberService _memberService;
+        
 
         #endregion
 
@@ -72,6 +78,8 @@
             _customerService = merchelloContext.Services.CustomerService;
             _customerAddressService = ((Core.Services.ServiceContext)merchelloContext.Services).CustomerAddressService;
             _memberService = memberService;
+
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
         /// <summary>
@@ -112,37 +120,8 @@
         [HttpGet]
         public CustomerDisplay GetCustomer(Guid id)
         {
-            var customer = _customerService.GetByKey(id);
-            if (customer == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            return customer.ToCustomerDisplay();
-        }
-
-        /// <summary>
-        /// GET /umbraco/Merchello/CustomerApi/GetAllCustomers/
-        /// 
-        /// 
-        /// Gets a collection of all customers.
-        /// </summary>
-        /// <returns>
-        /// The collection of all customers
-        /// </returns>
-        [HttpGet]
-        public QueryResultDisplay GetAllCustomers()
-        {
-            var customers = CustomerQuery.GetAllCustomers().ToArray();
-
-            return new QueryResultDisplay()
-            {
-                Items = customers,
-                CurrentPage = 0,
-                TotalPages = 1,
-                TotalItems = customers.Count()
-            };
-        }
+            return _merchello.Query.Customer.GetByKey(id);
+        }        
 
         /// <summary>
         /// GET /umbraco/Merchello/CustomerApi/GetAllCustomers/{page}/{perPage}
@@ -177,57 +156,72 @@
         /// <summary>
         /// Returns a filtered list of customers
         /// 
-        /// GET /umbraco/Merchello/InvoiceApi/GetFilteredCustomers
+        /// GET /umbraco/Merchello/InvoiceApi/SearchCustomers
         /// </summary>
-        /// <param name="term">
-        /// The search term
+        /// <param name="query">
+        /// The query.
         /// </param>
         /// <returns>
         /// The collection of customers..
         /// </returns>
-        public QueryResultDisplay GetFilteredCustomers(string term)
+        [HttpPost]
+        public QueryResultDisplay SearchCustomers(QueryDisplay query)
         {
-            var customers = CustomerQuery.Search(term).ToArray();
+            var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
 
-            return new QueryResultDisplay()
-            {
-                Items = customers,
-                CurrentPage = 0,
-                TotalPages = 1,
-                TotalItems = customers.Count()
-            };
+            return term != null && !string.IsNullOrEmpty(term.Value)
+              ?
+               _merchello.Query.Customer.Search(
+                  term.Value,
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection)
+              :
+              _merchello.Query.Customer.Search(
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection);
         }
 
         /// <summary>
-        /// Returns All Products
-        /// 
-        /// GET /umbraco/Merchello/InvoicesApi/GetFilteredCustomers
+        /// The search by date range.
         /// </summary>
-        /// <param name="term">
-        /// The term.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="perPage">
-        /// The per Page.
+        /// <param name="query">
+        /// The query.
         /// </param>
         /// <returns>
-        /// The collection of invoices..
+        /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetFilteredCustomers(string term, int page, int perPage)
+        [HttpPost]
+        public QueryResultDisplay SearchByDateRange(QueryDisplay query)
         {
-            var allMatches = CustomerQuery.Search(term).ToArray();
-            var customers = allMatches.Skip(page * perPage).Take(perPage);
+            var lastActivityDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "lastActivityDateStart");
+            var lastActivityDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "lastActivityDateEnd");
+           
+            DateTime startDate;
+            DateTime endDate;
+            Mandate.ParameterNotNull(lastActivityDateStart, "lastActivityDateStart is a required parameter");
+            Mandate.ParameterCondition(DateTime.TryParse(lastActivityDateStart.Value, out startDate), "Failed to convert lastActivityDateStart to a valid DateTime");
 
-            return new QueryResultDisplay()
-            {
-                Items = customers,
-                CurrentPage = page,
-                TotalPages = ((allMatches.Count() - 1) / perPage) + 1,
-                TotalItems = allMatches.Count()
-            };
+            endDate = lastActivityDateEnd == null
+                ? DateTime.MaxValue
+                : DateTime.TryParse(lastActivityDateEnd.Value, out endDate)
+                    ? endDate
+                    : DateTime.MaxValue;
+
+            return
+                _merchello.Query.Customer.Search(
+                    startDate,
+                    endDate,
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection);
         }
+                
+
 
         /// <summary>
         /// POST /umbraco/Merchello/CustomerApi/AddCustomer/

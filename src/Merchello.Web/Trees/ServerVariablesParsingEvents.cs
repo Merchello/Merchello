@@ -71,7 +71,12 @@
             umbracoUrls.Add(
                 "merchelloCustomerApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<CustomerApiController>(
-                controller => controller.GetAllCustomers()));
+                controller => controller.SearchCustomers(new QueryDisplay()
+                    {
+                        CurrentPage = 0,
+                        ItemsPerPage = 100,
+                        Parameters = new QueryDisplayParameter[] { }
+                    })));
 
             umbracoUrls.Add(
                 "merchelloSettingsApiBaseUrl", 

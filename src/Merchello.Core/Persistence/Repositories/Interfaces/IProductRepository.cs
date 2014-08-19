@@ -6,7 +6,7 @@
     /// <summary>
     /// Marker interface for the address repository
     /// </summary>
-    public interface IProductRepository : IPagedEntityKeyFetchRepository<IProduct, ProductDto>
+    public interface IProductRepository : IPagedRepository<IProduct, ProductDto>
     {
         /// <summary>
         /// Gets or sets a value Indicating whether or not a sku is already exists in the database
