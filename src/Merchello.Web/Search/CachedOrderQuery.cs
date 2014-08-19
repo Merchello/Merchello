@@ -68,6 +68,14 @@
         }
 
         /// <summary>
+        /// Gets the key field in index.
+        /// </summary>
+        protected override string KeyFieldInIndex
+        {
+            get { return "orderKey"; }
+        }
+
+        /// <summary>
         /// Gets an <see cref="OrderDisplay"/> by it's key.
         /// </summary>
         /// <param name="key">
@@ -78,7 +86,7 @@
         /// </returns>
         public override OrderDisplay GetByKey(Guid key)
         {
-            return GetDisplayObject("orderKey", key);
+            return GetDisplayObject(key);
         }
 
         /// <summary>
@@ -101,7 +109,7 @@
         /// </returns>
         public QueryResultDisplay Search(long page, long itemsPerPage, string sortBy = "orderNumber", SortDirection sortDirection = SortDirection.Descending)
         {
-            return BuildForPage(_orderService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_orderService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -132,7 +140,7 @@
         {
             var query = Query<IOrder>.Builder.Where(x => x.OrderDate >= orderDateStart && x.OrderDate <= orderDateEnd);
 
-            return BuildForPage(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -166,7 +174,7 @@
         {
             var query = Query<IOrder>.Builder.Where(x => x.OrderDate >= orderDateStart && x.OrderDate <= orderDateEnd && x.OrderStatusKey == orderStatusKey);
 
-            return BuildForPage(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -200,7 +208,7 @@
         {
             var query = Query<IOrder>.Builder.Where(x => x.OrderDate >= orderDateStart && x.OrderDate <= orderDateEnd && x.Exported == exported);
 
-            return BuildForPage(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -237,7 +245,7 @@
         {
             var query = Query<IOrder>.Builder.Where(x => x.OrderDate >= orderDateStart && x.OrderDate <= orderDateEnd && x.OrderStatusKey == orderStatusKey && x.Exported == exported);
 
-            return BuildForPage(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -265,7 +273,7 @@
         {
             var query = Query<IOrder>.Builder.Where(x => x.OrderStatusKey == orderStatusKey);
 
-            return BuildForPage(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -296,7 +304,7 @@
         {
             var query = Query<IOrder>.Builder.Where(x => x.OrderStatusKey == orderStatusKey && x.Exported == exported);
 
-            return BuildForPage(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_orderService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -312,7 +320,7 @@
         {
             var query = Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
 
-            return BuildForPage(_orderService.GetPage(query, 1, int.MaxValue, "orderNumber")).Items.Select(x => (OrderDisplay)x);
+            return GetQueryResultDisplay(_orderService.GetPage(query, 1, int.MaxValue, "orderNumber")).Items.Select(x => (OrderDisplay)x);
         }
         
         /// <summary>
@@ -338,20 +346,6 @@
         protected override void ReindexEntity(IOrder entity)
         {
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.Order);
-        }
-
-        /// <summary>
-        /// Builds a <see cref="QueryResultDisplay"/> for a page of keys
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        private QueryResultDisplay BuildForPage(Page<Guid> page)
-        {
-            return GetQueryResultDisplay(page, "orderKey");
         }
     }
 }

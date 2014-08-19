@@ -93,6 +93,14 @@
         }
 
         /// <summary>
+        /// Gets the key field in index.
+        /// </summary>
+        protected override string KeyFieldInIndex
+        {
+            get { return "invoiceKey"; }
+        }
+
+        /// <summary>
         /// Gets an display class by it's unique by key.
         /// </summary>
         /// <param name="key">
@@ -103,7 +111,7 @@
         /// </returns>
         public override InvoiceDisplay GetByKey(Guid key)
         {
-            return GetDisplayObject("invoiceKey", key);
+            return GetDisplayObject(key);
         }
 
         /// <summary>
@@ -126,7 +134,7 @@
         /// </returns>
         public QueryResultDisplay Search(long page, long itemsPerPage, string sortBy = "invoiceNumber", SortDirection sortDirection = SortDirection.Descending)
         {
-            return BuildForPage(_invoiceService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -152,7 +160,7 @@
         /// </returns>
         public QueryResultDisplay Search(string term, long page, long itemsPerPage, string sortBy = "invoiceNumber", SortDirection sortDirection = SortDirection.Descending)
         {
-            return BuildForPage(_invoiceService.GetPage(term, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -183,7 +191,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= invoiceDateStart && x.InvoiceDate <= invoiceDateEnd);
 
-            return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -217,7 +225,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= invoiceDateStart && x.InvoiceDate <= invoiceDateEnd && x.InvoiceStatusKey == invoiceStatusKey);
 
-            return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -251,7 +259,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= invoiceDateStart && x.InvoiceDate <= invoiceDateEnd && x.Exported == exported);
 
-            return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -288,7 +296,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= invoiceDateStart && x.InvoiceDate <= invoiceDateEnd && x.Exported == exported && x.InvoiceStatusKey == invoiceStatusKey);
 
-            return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -316,7 +324,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == invoiceStatusKey);
 
-            return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -347,7 +355,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == invoiceStatusKey && x.Exported == exported);
 
-            return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -375,7 +383,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey);
 
-            return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -406,7 +414,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey && x.InvoiceStatusKey == invoiceStatusKey);
 
-            return BuildForPage(_invoiceService.GetPage(query, page, itemsPerPage, sortBy, sortDirection));
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -422,7 +430,7 @@
         {
             var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey);
 
-            return BuildForPage(_invoiceService.GetPage(query, 1, int.MaxValue, "invoiceNumber")).Items.Select(x => (InvoiceDisplay)x);
+            return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, 1, int.MaxValue, "invoiceNumber")).Items.Select(x => (InvoiceDisplay)x);
         }
 
         /// <summary>
@@ -448,20 +456,6 @@
         protected override void ReindexEntity(IInvoice entity)
         {
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.Invoice);
-        }
-
-        /// <summary>
-        /// Builds a <see cref="QueryResultDisplay"/> for a page of keys
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        private QueryResultDisplay BuildForPage(Page<Guid> page)
-        {
-            return GetQueryResultDisplay(page, "invoiceKey");
         }
     }
 }

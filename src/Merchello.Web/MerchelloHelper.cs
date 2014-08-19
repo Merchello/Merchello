@@ -210,17 +210,6 @@
             return Query.Invoice.GetByKey(key.EncodeAsGuid());
         }
 
-        ///// <summary>
-        ///// Gets a collection of all invoices
-        ///// </summary>
-        ///// <returns>
-        ///// <returns>The collection of all <see cref="InvoiceDisplay"/></returns>
-        ///// </returns>
-        //public IEnumerable<InvoiceDisplay> AllInvoices()
-        //{
-        //    return InvoiceQuery.GetAllInvoices();
-        //}
-
         /// <summary>
         /// The invoices by customer.
         /// </summary>
@@ -293,9 +282,10 @@
         /// <returns>
         /// The <see cref="CustomerDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Customer.GetByKey")]
         public CustomerDisplay Customer(string key)
         {
-            return CustomerQuery.GetByKey(key);
+            return Query.Customer.GetByKey(key.EncodeAsGuid());
         }
 
         /// <summary>
@@ -307,21 +297,11 @@
         /// <returns>
         /// The <see cref="CustomerDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Customer.GetByKey")]
         public CustomerDisplay Customer(Guid key)
         {
-            return Customer(key.ToString());
+            return Query.Customer.GetByKey(key);
         }
-
-        ///// <summary>
-        ///// The all customers.
-        ///// </summary>
-        ///// <returns>
-        ///// The collection of all customers.
-        ///// </returns>
-        //public IEnumerable<CustomerDisplay> AllCustomers()
-        //{
-        //    return CustomerQuery.GetAllCustomers();
-        //}
 
         #endregion
     }

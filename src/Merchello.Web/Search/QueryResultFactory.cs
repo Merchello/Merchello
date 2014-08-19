@@ -25,7 +25,7 @@
         /// <summary>
         /// Gets a <see cref="TDisplay"/>
         /// </summary>
-        private readonly Func<string, Guid, TDisplay> _get; 
+        private readonly Func<Guid, TDisplay> _get; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueryResultFactory{TDisplay}"/> class.
@@ -36,7 +36,7 @@
         /// <param name="get">
         /// The get method
         /// </param>
-        public QueryResultFactory(Func<SearchResult, TDisplay> map, Func<string, Guid, TDisplay> get)
+        public QueryResultFactory(Func<SearchResult, TDisplay> map, Func<Guid, TDisplay> get)
         {
             _map = map;
             _get = get;
@@ -75,17 +75,14 @@
         /// <param name="page">
         /// The page.
         /// </param>
-        /// <param name="keyField">
-        /// The key field.
-        /// </param>
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay BuildQueryResult(Page<Guid> page, string keyField)
+        public QueryResultDisplay BuildQueryResult(Page<Guid> page)
         {
             return new QueryResultDisplay()
             {
-                Items = page.Items.Select(x => _get(keyField, x)),
+                Items = page.Items.Select(x => _get(x)),
                 CurrentPage = page.CurrentPage - 1,
                 ItemsPerPage = page.ItemsPerPage,
                 TotalPages = page.TotalPages,

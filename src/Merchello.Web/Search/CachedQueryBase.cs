@@ -21,7 +21,7 @@
     /// <typeparam name="TDisplay">
     /// The type of display object
     /// </typeparam>
-    internal abstract class CachedQueryBase<TEntity, TDisplay>
+    public abstract class CachedQueryBase<TEntity, TDisplay>
         where TEntity : class, IEntity
         where TDisplay : class, new()
     {
@@ -89,6 +89,12 @@
             get { return _searchProvider; }
         }
 
+
+        /// <summary>
+        /// Gets the key field in index.
+        /// </summary>
+        protected abstract string KeyFieldInIndex { get; }
+        
         /// <summary>
         /// Gets an display class by it's unique by key.
         /// </summary>
@@ -126,34 +132,28 @@
         /// </summary>
         /// <param name="page">
         /// The page.
-        /// </param>
-        /// <param name="keyField">
-        /// The key field.
-        /// </param>
+        /// </param>        
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        protected QueryResultDisplay GetQueryResultDisplay(Page<Guid> page, string keyField)
+        protected QueryResultDisplay GetQueryResultDisplay(Page<Guid> page)
         {
-            return _resultFactory.Value.BuildQueryResult(page, keyField);
+            return _resultFactory.Value.BuildQueryResult(page);
         }
 
         /// <summary>
         /// Gets a display object from the Examine cache or falls back the the database if not found
         /// </summary>
-        /// <param name="keyField">
-        /// The key field.
-        /// </param>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
         /// The <see cref="TDisplay"/>.
         /// </returns>
-        protected TDisplay GetDisplayObject(string keyField, Guid key)
+        protected TDisplay GetDisplayObject(Guid key)
         {
             var criteria = _searchProvider.CreateSearchCriteria();
-            criteria.Field(keyField, key.ToString());
+            criteria.Field(KeyFieldInIndex, key.ToString());
 
             var display = _searchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
 

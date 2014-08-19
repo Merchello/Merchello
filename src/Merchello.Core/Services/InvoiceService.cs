@@ -645,7 +645,7 @@ namespace Merchello.Core.Services
         /// <remarks>
         /// The search is prefabricated in the repository
         /// </remarks>
-        internal Page<Guid> GetPage(
+        internal Page<Guid> GetPagedKeys(
             string searchTerm,
             long page,
             long itemsPerPage,
@@ -679,7 +679,7 @@ namespace Merchello.Core.Services
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<Guid> GetPage(
+        internal Page<Guid> GetPagedKeys(
             IQuery<IInvoice> query,
             long page,
             long itemsPerPage,

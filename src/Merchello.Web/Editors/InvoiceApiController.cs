@@ -107,14 +107,16 @@ namespace Merchello.Web.Editors
         {
             var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
 
-            return term == null
-                ? _merchello.Query.Invoice.Search(
+            return term != null && !string.IsNullOrEmpty(term.Value)
+                ? 
+                 _merchello.Query.Invoice.Search(
+                    term.Value,
                     query.CurrentPage + 1,
                     query.ItemsPerPage,
                     query.SortBy,
-                    query.SortDirection)
-                : _merchello.Query.Invoice.Search(
-                    term.Value,
+                    query.SortDirection) 
+                :
+                _merchello.Query.Invoice.Search(
                     query.CurrentPage + 1,
                     query.ItemsPerPage,
                     query.SortBy,

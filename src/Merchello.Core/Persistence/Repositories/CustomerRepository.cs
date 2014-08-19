@@ -46,6 +46,27 @@
             _customerAddressRepository = customerAddressRepository;
         }
 
+        /// <summary>
+        /// Searches customers
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         public override Page<Guid> SearchKeys(
             string searchTerm,
             long page,
@@ -53,7 +74,22 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            throw new NotImplementedException();
+            searchTerm = searchTerm.Replace(",", " ");
+            var invidualTerms = searchTerm.Split(' ');
+
+            var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();            
+
+            var sql = new Sql();
+            sql.Select("*").From<CustomerDto>();
+
+            if (terms.Any())
+            {
+                var preparedTerms = string.Format("%{0}%", string.Join("%", terms));
+
+                sql.Where("lastName LIKE @ln OR firstName LIKE @fn OR email LIKE @email", new { @ln = preparedTerms, @fn = preparedTerms, @email = preparedTerms });
+            }
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
         /// <summary>
