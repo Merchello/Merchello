@@ -66,6 +66,7 @@ namespace Merchello.Web.Models.ContentEditing
         {
             destination.Count = catalogInventoryDisplay.Count;
             destination.LowCount = catalogInventoryDisplay.LowCount;
+            destination.Location = catalogInventoryDisplay.Location;
 
             return destination;
         }
