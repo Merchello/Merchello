@@ -29,6 +29,11 @@
 
         public override Page<Guid> SearchKeys(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
+            return SearchKeys(searchTerm, false, page, itemsPerPage, orderExpression, sortDirection);
+        }
+
+        internal Page<Guid> SearchKeys(string searchTerm, bool masterOnly, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
             throw new NotImplementedException();
         }
 
@@ -121,6 +126,8 @@
 
             ((Entity)entity).AddingEntity();
 
+            ((ProductVariant)entity).VersionKey = Guid.NewGuid();
+
             var factory = new ProductVariantFactory(((ProductVariant)entity).ProductAttributes, ((ProductVariant)entity).CatalogInventoryCollection);
             var dto = factory.BuildDto(entity);
 
@@ -159,6 +166,7 @@
             Mandate.ParameterCondition(!SkuExists(entity.Sku, entity.Key), "Entity cannot be updated.  The sku already exists.");
 
             ((Entity)entity).UpdatingEntity();
+            ((ProductVariant)entity).VersionKey = Guid.NewGuid();
 
             var factory = new ProductVariantFactory(((ProductVariant)entity).ProductAttributes, ((ProductVariant)entity).CatalogInventoryCollection);
             var dto = factory.BuildDto(entity);
