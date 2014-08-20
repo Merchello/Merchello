@@ -90,15 +90,33 @@
                 {
                     var original = ApplicationContext.Current.Services.MemberService.GetByKey(member.Key);
 
-                    if (original.Username == member.Username) return;
-
                     var customerService = MerchelloContext.Current.Services.CustomerService;
 
-                    var customer = customerService.GetByLoginName(original.Username);
+                    ICustomer customer;
+                    if (original == null)
+                    {
+                        // assert there is not already a customer with the login name
+                        customer = customerService.GetByLoginName(member.Username);
+
+                        if (customer != null)
+                        {
+                            LogHelper.Info<UmbracoApplicationEventHandler>("A customer already exists with the loginName of: " + member.Username + " -- ABORTING customer creation");
+                            return;
+                        }
+
+                        customerService.CreateCustomerWithKey(member.Username, string.Empty, string.Empty, member.Email);
+
+                        return;
+                    }
+
+                    if (original.Username == member.Username && original.Email == member.Email) return;
+
+                    customer = customerService.GetByLoginName(original.Username);
 
                     if (customer == null) return;
 
                     ((Customer)customer).LoginName = member.Username;
+                    customer.Email = member.Email;
 
                     customerService.Save(customer);
                 }
