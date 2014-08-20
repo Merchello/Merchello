@@ -540,12 +540,19 @@
 		    var providers = _.map($scope.providers, function (item) {
 		        var newProvider = new merchello.Models.GatewayProvider(item);
 		        newProvider.resources = _.map(item.resources, function (resource) {
-		            if (resource.serviceCode !== '') {
 		                return new merchello.Models.GatewayResource(resource);
-		            }
 		        });
 		        return newProvider;
 		    });
+		    // Clean out any placeholder dropdown values for the providers' resources.
+            for (var i = 0; i < providers.length; i++) {
+                for (var j = 0; j < providers[i].resources.length; j++) {
+                    if (providers[i].resources[j].serviceCode === '') {
+                        providers[i].resources.splice(j, 1);
+                        j -= 1;
+                    }
+                }
+            }
 		    var myDialogData = {
 		        country: country,
 		        provider: dialogProvider,

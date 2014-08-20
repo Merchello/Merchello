@@ -19,7 +19,6 @@
         * Performs any needed functions when the $scope is initialized.
         */
         $scope.init = function() {
-            console.info($scope.dialogData.availableProviders);
             $scope.prepareDropdown('providers');
         };
 
@@ -61,7 +60,6 @@
                 }
                 $scope.dialogData.provider = $scope.dialogData.availableProviders[0];
             } else if (type === 'resources') {
-                console.info($scope.dialogData.provider);
                 if ($scope.dialogData.provider.resources[0].serviceCode !== '-1')
                 {
                     $scope.dialogData.provider.resources.unshift({
