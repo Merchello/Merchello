@@ -71,20 +71,14 @@
          * in Merchello models and add to the scope via the providers collection in the resources collection.
          */
 	    $scope.loadAllAvailableGatewayResources = function (shipProvider) {
-
 	        var promiseAllResources = merchelloCatalogShippingService.getAllShipGatewayResourcesForProvider(shipProvider);
 	        promiseAllResources.then(function (allResources) {
-
 	            shipProvider.resources = _.map(allResources, function (resource) {
 	                return new merchello.Models.GatewayResource(resource);
 	            });
-
 	        }, function (reason) {
-
 	            notificationsService.error("Available Gateway Resources Load Failed", reason.message);
-
 	        });
-
 	    };
 
 	    /**
@@ -97,26 +91,18 @@
          * in Merchello models and add to the scope via the providers collection.
          */
 	    $scope.loadAllShipProviders = function () {
-
 	        var promiseAllProviders = merchelloCatalogShippingService.getAllShipGatewayProviders();
 	        promiseAllProviders.then(function (allProviders) {
-
 	            $scope.providers = _.map(allProviders, function (providerFromServer) {
 	                return new merchello.Models.GatewayProvider(providerFromServer);
 	            });
-
 	            _.each($scope.providers, function (element, index, list) {
 	                $scope.loadAllAvailableGatewayResources(element);
 	            });
-
 	            $scope.loadCountries();
-
 	        }, function (reason) {
-
 	            notificationsService.error("Available Ship Providers Load Failed", reason.message);
-
 	        });
-
 	    };
 
 	    /**
@@ -131,29 +117,20 @@
          * country.
          */
 	    $scope.loadCountries = function () {
-
 	        if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
-
 	            var catalogKey = $scope.selectedCatalog.key;
-
 	            var promiseShipCountries = merchelloCatalogShippingService.getWarehouseCatalogShippingCountries(catalogKey);
 	            promiseShipCountries.then(function (shipCountriesFromServer) {
-
 	                $scope.countries = _.map(shipCountriesFromServer, function (shippingCountryFromServer) {
 	                    return new merchello.Models.ShippingCountry(shippingCountryFromServer);
 	                });
-
 	                _.each($scope.countries, function (element, index, list) {
 	                    $scope.loadCountryProviders(element);
 	                });
-
 	                $scope.loaded = true;
 	                $scope.preValuesLoaded = true;
-
 	            }, function (reason) {
-
 	                notificationsService.error("Shipping Countries Load Failed", reason.message);
-
 	            });
 	        }
 	    };
@@ -509,7 +486,10 @@
 		    var provider;
             for (var i = 0; i < $scope.providers.length; i++) {
                 if (gatewayProvider.key == $scope.providers[i].key) {
-                    provider = $scope.providers[i];
+                    provider = new merchello.Models.GatewayProvider($scope.providers[i]);
+                    provider.resources = _.map($scope.providers[i].resources, function (resource) {
+                        return new merchello.Models.GatewayResource(resource);
+                    });
                 }
             }
             // If no method exists, create a new, blank one.
@@ -557,10 +537,19 @@
 		    if (!provider) {
 		        dialogProvider = new merchello.Models.ShippingGatewayProvider();
 		    }
+		    var providers = _.map($scope.providers, function (item) {
+		        var newProvider = new merchello.Models.GatewayProvider(item);
+		        newProvider.resources = _.map(item.resources, function (resource) {
+		            if (resource.serviceCode !== '') {
+		                return new merchello.Models.GatewayResource(resource);
+		            }
+		        });
+		        return newProvider;
+		    });
 		    var myDialogData = {
 		        country: country,
 		        provider: dialogProvider,
-		        availableProviders: $scope.providers
+		        availableProviders: providers
 		    };
 		    dialogService.open({
 		        template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.html',
