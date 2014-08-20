@@ -246,7 +246,7 @@
     <Compile Include="Trees\MerchelloApplication.cs" />
     <Compile Include="Trees\MerchelloTreeController.cs" />
     <Compile Include="Trees\ServerVariablesParsingEvents.cs" />
-    <Compile Include="UmbracoApplicationEventListener.cs" />
+    <Compile Include="UmbracoApplicationEventHandler.cs" />
     <Compile Include="Validation\BasketItemInventoryValidation.cs" />
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
