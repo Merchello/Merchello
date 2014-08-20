@@ -179,7 +179,7 @@
                 ExtendedData =
                     RawJsonFieldAsCollection<KeyValuePair<string, string>>(result, "extendedData")
                         .AsExtendedDataCollection(),
-                Addresses = RawJsonFieldAsCollection<ICustomerAddress>(result, "addresses").Select(x => x.ToCustomerAddressDisplay()),
+                Addresses = RawJsonFieldAsCollection<CustomerAddress>(result, "addresses").Select(x => x.ToCustomerAddressDisplay()),
                 LastActivityDate = FieldAsDateTime(result, "lastActivityDate")
             };
         }

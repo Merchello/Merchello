@@ -33,7 +33,7 @@
             getByCustomerKey: function (customerKey) {
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetByCustomerKey'),
+                        url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetByCustomerKey'), 
                         method: "GET",
                         params: {id: customerKey }
                     }),

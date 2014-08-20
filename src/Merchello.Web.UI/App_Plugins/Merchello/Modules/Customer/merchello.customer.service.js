@@ -60,7 +60,7 @@
                 }
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'GetAllCustomers'),
+                        url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'GetAllCustomers'), // TODO POST this is now SearchCustomers w/query
                         method: "GET",
                         params: { page: page, perPage: perPage }
                     }),
