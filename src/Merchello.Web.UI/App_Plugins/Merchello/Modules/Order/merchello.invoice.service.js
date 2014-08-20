@@ -10,6 +10,11 @@
 
         return {
 
+            /**
+            * @ngdoc method
+            * @name deleteInvoice
+            * @description 
+            **/
             deleteInvoice: function (invoiceKey) {
                 return umbRequestHelper.resourcePromise(
                     $http({
@@ -19,6 +24,12 @@
                     }),
                     'Failed to delete invoice');
             },
+
+            /**
+            * @ngdoc method
+            * @name getByCustomerKey
+            * @description 
+            **/
             getByCustomerKey: function (customerKey) {
                 return umbRequestHelper.resourcePromise(
                     $http({
@@ -28,6 +39,12 @@
                     }),
                     'Failed to get invoices for customer ' + customerKey);
             },
+
+            /**
+            * @ngdoc method
+            * @name getByKey
+            * @description 
+            **/
             getByKey: function (id) {
                 return umbRequestHelper.resourcePromise(
                    $http({
@@ -37,6 +54,12 @@
                    }),
                    'Failed to retreive data for invoice id: ' + id);
             },
+
+            /**
+            * @ngdoc method
+            * @name saveInvoice
+            * @description 
+            **/
             saveInvoice: function (invoice) {
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoice'),
@@ -44,12 +67,20 @@
                     ),
                     'Failed to save invoice');
             },
+
+            /**
+            * @ngdoc method
+            * @name searchInvoices
+            * @description 
+            **/
             searchInvoices: function (query) {
                 var listQuery;
                 if (query === undefined) {
                     query = new merchello.Models.ListQuery({
                         currentPage: 0,
-                        itemsPerPage: 100
+                        itemsPerPage: 100,
+                        sortBy: '',
+                        sortDirection: ''
                     });
                 }
                 listQuery = new merchello.Models.ListQuery(query);
