@@ -89,6 +89,30 @@
             **/
             SaveCustomer: function(customer) {
                 return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'PutCustomer'), customer), 'Failed to save customer');
+            },
+
+            /**
+            * @ngdoc method
+            * @name searchCustomers
+            * @description Search for a list of customers using the parameters of the listQuery model.
+            * Valid query.sortBy options: firstname, lastname, loginname, email, lastactivitydate
+            * Valid query.sortDirection options: Ascending, Descending
+            * Defaults to sortBy: loginname
+            **/
+            searchCustomers: function(query) {
+                var listQuery;
+                if (query === undefined) {
+                    query = new merchello.Models.ListQuery({
+                        currentPage: 0,
+                        itemsPerPage: 100,
+                        sortBy: 'loginname',
+                        sortDirection: 'Ascending'
+                    });
+                }
+                listQuery = new merchello.Models.ListQuery(query);
+                return umbRequestHelper.resourcePromise(
+                        $http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'SearchCustomers'), listQuery),
+                        'Failed to retreive customers');
             }
 
         };

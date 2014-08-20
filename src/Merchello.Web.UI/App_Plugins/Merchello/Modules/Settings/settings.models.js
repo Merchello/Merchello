@@ -96,9 +96,13 @@
         } else {
             self.currentPage = data.currentPage;
             self.itemsPerPage = data.itemsPerPage;
-            self.parameters = _.map(data.parameters, function (item) {
-                return new merchello.Models.ListQueryParameter(item);
-            });
+            if (data.parameters) {
+                self.parameters = _.map(data.parameters, function(item) {
+                    return new merchello.Models.ListQueryParameter(item);
+                });
+            } else {
+                self.parameters = [];
+            }
             self.sortBy = data.sortBy;
             self.sortDirection = data.sortDirection;
         }

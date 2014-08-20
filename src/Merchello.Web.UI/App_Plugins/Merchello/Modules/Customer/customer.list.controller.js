@@ -30,9 +30,25 @@
          * @description
          * Load all the customers from the API.
          */
-        $scope.getAllCustomers = function () {
-            var promiseAllCustomers = merchelloCustomerService.GetAllCustomers();
+        $scope.getAllCustomers = function (filterText) {
+            if (filterText === undefined) {
+                filterText = '';
+            }
+            $scope.filterText = filterText;
+            var listQuery = new merchello.Models.ListQuery({
+                currentPage: 0,
+                itemsPerPage: 100,
+                sortBy: 'loginname',
+                sortDirection: 'Ascending',
+                parameters: [
+                {
+                    fieldName: 'term',
+                    value: filterText
+                }]
+            });
+            var promiseAllCustomers = merchelloCustomerService.searchCustomers(listQuery);
             promiseAllCustomers.then(function (customersResponse) {
+                console.info(customersResponse);
                 if (customersResponse) {
                     $scope.customers = [];
                     var queryResult = new merchello.Models.QueryResult(customersResponse);
@@ -40,32 +56,6 @@
                         return new merchello.Models.Customer(customer);
                     });
                 }
-            });
-        };
-
-        $scope.getCustomers = function(filterText) {
-            var page = $scope.currentPage;
-            var perPage = $scope.perPage;
-            $scope.filterText = filterText;
-            var promiseCustomers;
-            if (filterText === undefined) {
-                filterText = '';
-            }
-            if (filterText === '') {
-                promiseCustomers = merchelloCustomerService.getAllCustomers(page, perPage);
-            } else {
-                promiseCustomers = merchelloCustomerService.getFiltered(filterText, page, perPage);
-            }
-            promiseCustomers.then(function (response) {
-                if (response) {
-                    $scope.customers = [];
-                    var queryResult = new merchello.Models.QueryResult(response);
-                    $scope.customers = _.map(queryResult.items, function (customer) {
-                        return new merchello.Models.Customer(customer);
-                    });
-                }
-            }, function (reason) {
-                notificationsService.error("Failed To Load Customers", reason.message);
             });
         };
 
