@@ -52,9 +52,9 @@
                 if (customersResponse) {
                     $scope.customers = [];
                     var queryResult = new merchello.Models.QueryResult(customersResponse);
-                    //$scope.customers = _.map(queryResult.items, function (customer) {
-                    //    return new merchello.Models.Customer(customer);
-                    //});
+                    $scope.customers = _.map(queryResult.items, function (customer) {
+                        return new merchello.Models.Customer(customer);
+                    });
                 }
             });
         };
