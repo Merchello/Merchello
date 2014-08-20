@@ -108,7 +108,7 @@
                     InvoiceDate = FieldAsDateTime(result, "invoiceDate"),
                     InvoiceStatusKey = FieldAsGuid(result, "invoiceStatusKey"),
                     VersionKey = FieldAsGuid(result, "versionKey"),
-                    BillToName = result.Fields["billToName"],
+                    BillToName = FieldAsString(result, "billToName"),
                     BillToAddress1 = FieldAsString(result, "billToAddress1"),
                     BillToAddress2 = FieldAsString(result, "billToAddress2"),
                     BillToLocality = FieldAsString(result, "billToLocality"),
