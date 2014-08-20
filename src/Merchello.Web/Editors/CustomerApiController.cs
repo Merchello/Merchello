@@ -124,36 +124,6 @@
         }        
 
         /// <summary>
-        /// GET /umbraco/Merchello/CustomerApi/GetAllCustomers/{page}/{perPage}
-        /// 
-        /// 
-        /// Gets a paged collection of customers.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="perPage">
-        /// The per page.
-        /// </param>
-        /// <returns>
-        /// The paged collection of customers.
-        /// </returns>
-        [HttpGet]
-        public QueryResultDisplay GetAllCustomers(int page, int perPage)
-        {
-            var allCustomers = CustomerQuery.GetAllCustomers().ToArray();
-            var customers = allCustomers.Skip((page - 1) * perPage).Take(perPage);
-
-            return new QueryResultDisplay()
-            {
-                Items = customers,
-                CurrentPage = page,
-                TotalPages = ((allCustomers.Count() - 1) / perPage) + 1,
-                TotalItems = allCustomers.Count()
-            };
-        }
-
-        /// <summary>
         /// Returns a filtered list of customers
         /// 
         /// GET /umbraco/Merchello/InvoiceApi/SearchCustomers
