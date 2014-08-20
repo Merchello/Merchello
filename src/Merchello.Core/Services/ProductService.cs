@@ -4,9 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-
-    using Merchello.Core.Models.EntityBase;
-
     using Models;
 
     using Persistence.Querying;
@@ -347,11 +344,41 @@
             }
         }
 
+        /// <summary>
+        /// Gets a page of <see cref="IProduct"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
         public override Page<IProduct> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetPage(page, itemsPerPage, null, ValidateSortByField(sortBy), sortDirection);
+            }
         }
 
+        /// <summary>
+        /// The count.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         internal override int Count(IQuery<IProduct> query)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
@@ -360,14 +387,73 @@
             }
         }
 
+        /// <summary>
+        /// Gets a page of product keys
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
         internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetPagedKeys(page, itemsPerPage, null, ValidateSortByField(sortBy), sortDirection);
+            }
         }
 
+        /// <summary>
+        /// The get paged keys.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetPagedKeys(string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.SearchKeys(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The validate sort by field.
+        /// </summary>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         protected override string ValidateSortByField(string sortBy)
         {
-            throw new NotImplementedException();
+            return ValidSortFields.Contains(sortBy.ToLowerInvariant()) ? sortBy : "name";
         }
 
         /// <summary>

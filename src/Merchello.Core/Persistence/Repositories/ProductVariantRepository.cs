@@ -19,23 +19,22 @@
     /// <summary>
     /// The product variant repository.
     /// </summary>
-    internal class ProductVariantRepository : PagedRepositoryBase<IProductVariant, ProductVariantDto>, IProductVariantRepository
+    internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
         public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {            
         }
 
-        public override Page<Guid> SearchKeys(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
-        {
-            return SearchKeys(searchTerm, false, page, itemsPerPage, orderExpression, sortDirection);
-        }
-
-        internal Page<Guid> SearchKeys(string searchTerm, bool masterOnly, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
-        {
-            throw new NotImplementedException();
-        }
 
         protected override IProductVariant PerformGet(Guid key)
         {

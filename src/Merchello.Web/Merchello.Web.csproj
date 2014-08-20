@@ -124,12 +124,14 @@
     <Compile Include="Reporting\Sales\SalesByItemReportApiController.cs" />
     <Compile Include="Search\CachedCustomerQuery.cs" />
     <Compile Include="Search\CachedOrderQuery.cs" />
+    <Compile Include="Search\CachedProductQuery.cs" />
     <Compile Include="Search\CachedQueryBase.cs" />
     <Compile Include="Search\CachedInvoiceQuery.cs" />
     <Compile Include="Search\CachedQueryProvider.cs" />
     <Compile Include="Search\ICachedCustomerQuery.cs" />
     <Compile Include="Search\ICachedInvoiceQuery.cs" />
     <Compile Include="Search\ICachedOrderQuery.cs" />
+    <Compile Include="Search\ICachedProductQuery.cs" />
     <Compile Include="Search\ICachedQueryProvider.cs" />
     <Compile Include="Search\QueryResultFactory.cs" />
     <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
