@@ -9,7 +9,7 @@ namespace Merchello.Core.Persistence.Repositories
     /// <summary>
     /// Defines the product variant repository
     /// </summary>
-    internal interface IProductVariantRepository : IPagedRepository<IProductVariant, ProductVariantDto> 
+    internal interface IProductVariantRepository : IRepositoryQueryable<Guid, IProductVariant> 
     {
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
