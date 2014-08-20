@@ -99,7 +99,7 @@
         /// <returns>
         /// The page of data.
         /// </returns>
-        public Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<TEntity> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        public virtual Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<TEntity> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
             var sqlClause = new Sql();
             sqlClause.Select("*").From<TDto>();
@@ -154,7 +154,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        protected Page<Guid> GetPagedKeys(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        protected virtual Page<Guid> GetPagedKeys(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {            
             var p = GetDtoPage(page, itemsPerPage, sql, orderExpression, sortDirection);
 

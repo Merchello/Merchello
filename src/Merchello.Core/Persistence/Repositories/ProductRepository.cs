@@ -28,11 +28,47 @@
            _productVariantRepository = productVariantRepository;        
         }
 
-        public override Page<IProduct> GetPage(long page, long itemsPerPage, IQuery<IProduct> query,string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        //// TODO this is a total hack and needs to be thought through a bit better.  IQuery is a worthless parameter here
+        public override Page<IProduct> GetPage(long page, long itemsPerPage, IQuery<IProduct> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
-           throw new NotImplementedException();
+            var p = SearchKeys(string.Empty, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IProduct>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
         }
 
+        public override Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<IProduct> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+            return SearchKeys(string.Empty, page, itemsPerPage, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Searches the 
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         public override Page<Guid> SearchKeys(
             string searchTerm,
             long page,
@@ -40,8 +76,73 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            throw new NotImplementedException();
+            searchTerm = searchTerm.Replace(",", " ");
+            var invidualTerms = searchTerm.Split(' ');
+
+            var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+
+            var sql = new Sql();
+            sql.Select("*").From<ProductVariantDto>();
+
+            if (terms.Any())
+            {
+                var preparedTerms = string.Format("%{0}%", string.Join("%", terms));
+
+                sql.Where("sku LIKE @sku OR name LIKE @name", new { @sku = preparedTerms, @name = preparedTerms });
+            }
+
+            sql.Where("master = @master", new { @master = true });
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
+
+        /// <summary>
+        /// Get the paged keys.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sql">
+        /// The <see cref="Sql"/>.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        protected override Page<Guid> GetPagedKeys(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = GetDtoPage(page, itemsPerPage, sql, orderExpression, sortDirection);
+
+            return new Page<Guid>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(x => x.ProductKey).ToList()
+            };
+        }
+
+        private Page<ProductVariantDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+            if (!string.IsNullOrEmpty(orderExpression))
+            {
+                sql.Append(sortDirection == SortDirection.Ascending
+                    ? string.Format("ORDER BY {0} ASC", orderExpression)
+                    : string.Format("ORDER BY {0} DESC", orderExpression));
+            }
+
+            return Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
+        } 
 
         #region Overrides of RepositoryBase<IProduct>
 

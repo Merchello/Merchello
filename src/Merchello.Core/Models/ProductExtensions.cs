@@ -231,7 +231,7 @@ namespace Merchello.Core
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
 
                     writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
-
+                    writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
                     writer.WriteAttributeString("allDocs", "1");

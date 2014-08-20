@@ -96,6 +96,10 @@ namespace Merchello.Core.Models.Rdbms
         [Constraint(Default = "0")]
         public bool Master { get; set; }
 
+        [Column("versionKey")]
+        [Constraint(Default = "newid()")]
+        public Guid VersionKey { get; set; }
+
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]
         public DateTime UpdateDate { get; set; }

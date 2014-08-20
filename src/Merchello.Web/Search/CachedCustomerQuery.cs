@@ -14,7 +14,7 @@
     /// <summary>
     /// Represents a CachedCustomerQuery.
     /// </summary>
-    public class CachedCustomerQuery : CachedQueryBase<ICustomer, CustomerDisplay>, ICachedCustomerQuery
+    internal class CachedCustomerQuery : CachedQueryBase<ICustomer, CustomerDisplay>, ICachedCustomerQuery
     {
         /// <summary>
         /// The customer service.

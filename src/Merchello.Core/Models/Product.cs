@@ -339,6 +339,12 @@
             set { _variant.DownloadMediaId = value; }
         }
 
+        [DataMember]
+        public Guid VersionKey
+        {
+            get { return _variant.VersionKey; }
+        }
+
         /// <summary>
         /// Exposes the product variant template's inventory collection
         /// </summary>
