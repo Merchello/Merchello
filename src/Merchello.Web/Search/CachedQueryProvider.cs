@@ -22,7 +22,12 @@
         /// <summary>
         /// The <see cref="ICachedOrderQuery"/>
         /// </summary>
-        private Lazy<ICachedOrderQuery> _orderQuery; 
+        private Lazy<ICachedOrderQuery> _orderQuery;
+
+        /// <summary>
+        /// The <see cref="ICachedProductQuery"/>
+        /// </summary>
+        private Lazy<ICachedProductQuery> _productQuery; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryProvider"/> class.
@@ -69,6 +74,17 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="ICachedProductQuery"/>
+        /// </summary>
+        public ICachedProductQuery Product
+        {
+            get
+            {
+                return _productQuery.Value;
+            }
+        }
+
+        /// <summary>
         /// The initialize provider.
         /// </summary>
         /// <param name="serviceContext">
@@ -84,6 +100,9 @@
 
             if (_orderQuery == null)
             _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(serviceContext.OrderService));
+
+            if (_productQuery == null)
+            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(serviceContext.ProductService));
         }
     }
 }
