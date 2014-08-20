@@ -1,28 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Linq;
-using Umbraco.Web.Mvc;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.WebApi;
-using Umbraco.Web;
-using Merchello.Web.Models.ContentEditing;
-using Examine;
-
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+
+    using global::Examine;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
+    using Merchello.Web.WebApi;
+
+    using Umbraco.Web;
+    using Umbraco.Web.Mvc;
+
+    /// <summary>
+    /// The product api controller.
+    /// </summary>
     [PluginController("Merchello")]
     public class ProductApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The product service.
+        /// </summary>
         private readonly IProductService _productService;
+
+        /// <summary>
+        /// The warehouse service.
+        /// </summary>
         private readonly IWarehouseService _warehouseService;
 
         /// <summary>
+        /// The <see cref="MerchelloHelper"/>.
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductApiController"/> class. 
         /// Constructor
         /// </summary>
         public ProductApiController()
@@ -31,24 +50,36 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ProductApiController"/> class. 
         /// Constructor
         /// </summary>
-        /// <param name="merchelloContext"></param>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>
+        /// </param>
         public ProductApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _productService = MerchelloContext.Services.ProductService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
+            _merchello = new MerchelloHelper(MerchelloContext.Services);
         }
 
         /// <summary>
-        /// This is a helper contructor for unit testing
+        /// Initializes a new instance of the <see cref="ProductApiController"/> class. 
+        /// This is a helper constructor for unit testing
         /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="umbracoContext">
+        /// The umbraco Context.
+        /// </param>
         internal ProductApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
+            _merchello = new MerchelloHelper(MerchelloContext.Services);
         }
 
         /// <summary>
@@ -56,79 +87,48 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">
+        /// The product key
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
         public ProductDisplay GetProduct(Guid id)
         {
-           
-            var product = _productService.GetByKey(id) as Product;
-            if (product == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            return product.ToProductDisplay();
-           
+            return _merchello.Query.Product.GetByKey(id);
         }
 
         /// <summary>
-        /// Returns All Products
-        /// 
-        /// GET /umbraco/Merchello/ProductApi/GetProducts
+        /// Searches all products with an optional term.
         /// </summary>
-        /// <param name="keys"></param>
-        public IEnumerable<ProductDisplay> GetAllProducts()
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        /// <remarks>
+        /// Valid sortBy parameters  "sku", "name", "price" 
+        /// </remarks>
+        [HttpPost]
+        public QueryResultDisplay SearchProducts(QueryDisplay query)
         {
-            MerchelloHelper merchello = new MerchelloHelper();
+            var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
 
-            var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.Field("master", "True");
-
-            return merchello.SearchProducts(criteria);
-        }
-
-        /// <summary>
-        /// Returns All Products
-        /// 
-        /// GET /umbraco/Merchello/ProductApi/GetProducts
-        /// </summary>
-        /// <param name="keys"></param>
-        public IEnumerable<ProductDisplay> GetAllProducts(int page, int perPage)
-        {
-            MerchelloHelper merchello = new MerchelloHelper();
-
-            var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.Field("master", "True");
-
-            var products = merchello.SearchProducts(criteria);
-
-            return products.Skip((page-1) * perPage).Take(perPage);
-        }
-
-        /// <summary>
-        /// Returns All Products
-        /// 
-        /// GET /umbraco/Merchello/ProductApi/GetFilteredProducts
-        /// </summary>
-        /// <param name="term"></param>
-        public IEnumerable<ProductDisplay> GetFilteredProducts(string term)
-        {
-            MerchelloHelper merchello = new MerchelloHelper();
-
-            return merchello.SearchProducts(term);
-        }
-
-
-        /// <summary>
-        /// Returns All Products
-        /// 
-        /// GET /umbraco/Merchello/ProductApi/GetFilteredProducts
-        /// </summary>
-        /// <param name="term"></param>
-        public IEnumerable<ProductDisplay> GetFilteredProducts(string term, int page, int perPage)
-        {
-            MerchelloHelper merchello = new MerchelloHelper();
-
-            return merchello.SearchProducts(term).Skip((page - 1) * perPage).Take(perPage);
+            return term != null && !string.IsNullOrEmpty(term.Value)
+              ?
+               _merchello.Query.Product.Search(
+                  term.Value,
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection)
+              :
+              _merchello.Query.Product.Search(
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection);
         }
 
         /// <summary>

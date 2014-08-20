@@ -19,5 +19,10 @@
         /// Gets the <see cref="ICachedOrderQuery"/>
         /// </summary>
         ICachedOrderQuery Order { get; }
+
+        /// <summary>
+        /// Gets the <see cref="ICachedProductQuery"/>
+        /// </summary>
+        ICachedProductQuery Product { get; }
     }
 }

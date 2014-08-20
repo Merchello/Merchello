@@ -61,7 +61,12 @@
             umbracoUrls.Add(
                 "merchelloProductApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<ProductApiController>(
-                controller => controller.GetAllProducts()));
+                controller => controller.SearchProducts(new QueryDisplay()
+                    {
+                        CurrentPage = 0,
+                        ItemsPerPage = 100,
+                        Parameters = new QueryDisplayParameter[] { }
+                    })));
 
             umbracoUrls.Add(
                 "merchelloProductVariantsApiBaseUrl", 
