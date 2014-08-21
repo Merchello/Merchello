@@ -449,7 +449,7 @@ namespace Merchello.Core.Services
             {
                 var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.Key != Guid.Empty);
 
-                return repository.GetPage(page, itemsPerPage, query, sortBy, sortDirection);
+                return repository.GetPage(page, itemsPerPage, query, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 

@@ -74,7 +74,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            searchTerm = searchTerm.Replace(",", " ");
             var invidualTerms = searchTerm.Split(' ');
 
             var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();            

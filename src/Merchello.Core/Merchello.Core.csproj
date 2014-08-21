@@ -96,7 +96,9 @@
     <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
+    <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\CustomerExtensions.cs" />
+    <Compile Include="Models\Interfaces\IAuditLog.cs" />
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
@@ -172,10 +174,14 @@
     <Compile Include="ObjectResolution\MerchelloManyObjectsResolverBase.cs" />
     <Compile Include="Observation\MonitorForAttribute.cs" />
     <Compile Include="Observation\Unsubscriber.cs" />
+    <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
+    <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
+    <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IAuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
     <Compile Include="Persistence\Repositories\PagedRepositoryBase.cs" />
@@ -217,7 +223,7 @@
     <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\PaymentExtensions.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
-    <Compile Include="Models\Rdbms\AuditDto.cs" />
+    <Compile Include="Models\Rdbms\AuditLogDto.cs" />
     <Compile Include="Models\Rdbms\InvoiceIndexDto.cs" />
     <Compile Include="Models\Rdbms\NotificationMessageDto.cs" />
     <Compile Include="Models\Rdbms\NotificationMethodDto.cs" />

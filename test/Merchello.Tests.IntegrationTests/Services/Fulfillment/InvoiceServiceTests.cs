@@ -62,7 +62,6 @@ namespace Merchello.Tests.IntegrationTests.Services.Fulfillment
 
         }
 
-        [Test]
         public void Can_Get_Paged_Results_From_Query()
         {
             //// Arrange
