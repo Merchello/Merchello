@@ -249,9 +249,6 @@ namespace Merchello.Web.Editors
             _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
             _backoffice = _customer.Backoffice();
 
-            // TODO: This is temperary until the customer correctly reflects region codes
-            model.ShippingAddress.Region = "OR";
-
             var shipment = _backoffice.PackageBackoffice(model.ShippingAddress.ToAddress()).FirstOrDefault();
             
             return shipment.ShipmentRateQuotes();
