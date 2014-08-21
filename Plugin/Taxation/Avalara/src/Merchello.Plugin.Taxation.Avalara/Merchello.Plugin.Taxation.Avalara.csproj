@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Plugins\Merchello.Avalara\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

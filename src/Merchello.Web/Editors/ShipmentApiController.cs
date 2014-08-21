@@ -27,11 +27,11 @@ namespace Merchello.Web.Editors
         private readonly IShipMethodService _shipMethodService;
 
         public ShipmentApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         { }
 
         public ShipmentApiController(IMerchelloContext merchelloContext)
-            : base((MerchelloContext) merchelloContext)
+            : base(merchelloContext)
         {
             _shipmentService = merchelloContext.Services.ShipmentService;
             _invoiceService = merchelloContext.Services.InvoiceService;
@@ -43,7 +43,7 @@ namespace Merchello.Web.Editors
         /// This is a helper contructor for unit testing
         /// </summary>
         internal ShipmentApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
-            : base((MerchelloContext) merchelloContext, umbracoContext)
+            : base(merchelloContext, umbracoContext)
         {
             _shipmentService = merchelloContext.Services.ShipmentService;
             _invoiceService = merchelloContext.Services.InvoiceService;

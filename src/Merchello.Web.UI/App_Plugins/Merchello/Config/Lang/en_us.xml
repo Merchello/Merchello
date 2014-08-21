@@ -54,7 +54,9 @@
   </area>
 	<area alias="merchelloOrder">
 		<!-- things -->
-		<key alias="order">Order</key>
+    <key alias="invoice">Invoice</key>
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="order">Order</key>
 		<key alias="orders">Orders</key>
 		<key alias="orderNumber">Order #</key>
 		<key alias="paymentStatus">Payment Status</key>
@@ -64,6 +66,8 @@
       <key alias="createNewOrder">Create New Order</key>
     <key alias="lineItems"> Line Items</key>
     <key alias="orderName">[Order Name]</key>
+    <key alias="sales">Sales</key>
+    <key alias="saleInformation">Sale Information</key>
     <!-- actions -->
 		<key alias="filter">Filter Orders</key>
     <key alias="capturePayment">Capture Payment</key>
@@ -91,6 +95,7 @@
     <key alias="salesTax">Sales Tax</key>
     <key alias="authorized"> Authorized</key>
     <key alias="paymentHistory"> Payment History</key>
+    <key alias="saleHistory">Sale History</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>
     <key alias="paymentProcessedBy">Payment processed by:</key>
   </area>

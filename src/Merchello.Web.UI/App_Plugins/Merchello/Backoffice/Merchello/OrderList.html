@@ -4,7 +4,7 @@
         <umb-header>
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-	                <h1 class="umb-headline"><localize key="merchelloOrder_order"/></h1>
+                    <h1 class="umb-headline"><localize key="merchelloOrder_sales" /></h1>
                 </div>
             </div>
             <div class="span8">
@@ -18,52 +18,60 @@
         </umb-header>
         <merchello-panel>
             <div class="merchello-pane">
-                <!-- Order Filters -->
-                <form class="form-horizontal">
-                    <div class="form-group control-group row-fluid">
-                        <label for="orderFilter" class="col-xs-2 control-label"><localize key="merchelloOrder_filter"/>:</label>
-                        <div class="col-xs-10 controls">
-                            <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filtertext" localize="placeholder" placeholder="@merchelloPlaceholders_enterOrder" />
-                            <!-- ACTION: Filter Orders -->
-                            <button id="orderFilterGo" class="btn" data-ng-click="getFilteredInvoices(filtertext)"><localize key="merchelloGeneral_filter" /></button>
-                        </div>
+                <form class="form-horizontal row-fluid">
+                    <!-- Number of Orders/Invoices Per Page -->
+                    <div class="controls pull-right" data-ng-show="invoices.length > 0">
+                        <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
+                        <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </div>
-                </form>
-                <form class="form-horizontal" data-ng-show="invoices.length > 0">
-                    <div class="form-group control-group row-fluid">
-                        <label for="limitSelect" class="col-xs-2 control-label"><localize key="merchelloOrder_invoicesPerPage"/>:</label>
+                    <!-- Order Filters -->
+                    <div class="form-group control-group">
+                        <label for="orderFilter" class="col-xs-2 control-label"><localize key="merchelloOrder_filter" />:</label>
                         <div class="col-xs-10 controls">
-                            <select name="limitSelect" class="form-control span3 col-xs-3" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                                <option selected value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
+                            <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filterText" localize="placeholder" placeholder="Search by invoice number or customer name" />
+                            <!-- ACTION: Filter Orders -->
+                            <button id="orderFilterGo" class="btn" data-ng-click="loadInvoices(filterText)"><localize key="merchelloGeneral_filter" /></button>
                         </div>
                     </div>
                 </form>
                 <div class="row warning" data-ng-show="orderIssues.length > 0">
-                    <h2><i class="icon-alert"></i> <localize key="merchelloOrder_attentionRequired"/></h2>
-                    <p><a href="#">There is 1 payment authorization expiring</a>. <localize key="merchelloOrder_paymentExpirationWarning"/> </p>
+                    <h2><i class="icon-alert"></i> <localize key="merchelloOrder_attentionRequired" /></h2>
+                    <p><a href="#">There is 1 payment authorization expiring</a>. <localize key="merchelloOrder_paymentExpirationWarning" /> </p>
                 </div>
             </div>
             <!-- Tabular Order List -->
             <div class="merchello-pane">
-                <merchello-pager></merchello-pager>
+                <!-- Pagination -->
+                <div class="pager" data-ng-show="maxPages > 1">
+                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
+                        <localize key="general_previous" />
+                    </button>
+                    {{currentPage+1}}/{{maxPages}}
+                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)">
+                        <localize key="general_next" />
+                    </button>
+                </div>
                 <table class="table table-hover merchello-selectable-table">
                     <thead>
-                        <tr>
-                            <!--<th><input type="checkbox" /></th>--> <!-- Toggles the bulk action dropdown -->
+                        <tr data-ng-show="!visible.bulkActionDropdown">
+                            <th>
+                                <input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" />
+                            </th>
                             <th data-ng-click="changeSortOrder('invoiceNumber')" data-ng-class="{'sorted': sortProperty == 'invoiceNumber' ||  sortProperty == '-invoiceNumber'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceNumber', 'icon-navigation-down': sortProperty == '-invoiceNumber'}"></i> 
-                                <localize key="merchelloOrder_orderNumber"/>
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceNumber', 'icon-navigation-down': sortProperty == '-invoiceNumber'}"></i>
+                                <localize key="merchelloOrder_invoiceNumber" />
                             </th>
                             <th data-ng-click="changeSortOrder('invoiceDate')" data-ng-class="{'sorted': sortProperty == 'invoiceDate' ||  sortProperty == '-invoiceDate'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceDate', 'icon-navigation-down': sortProperty == '-invoiceDate'}"></i> 
-                                <localize key="general_date"/>
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceDate', 'icon-navigation-down': sortProperty == '-invoiceDate'}"></i>
+                                <localize key="general_date" />
                             </th>
                             <th data-ng-click="changeSortOrder('billToName')" data-ng-class="{'sorted': sortProperty == 'billToName' ||  sortProperty == '-billToName'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'billToName', 'icon-navigation-down': sortProperty == '-billToName'}"></i> 
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'billToName', 'icon-navigation-down': sortProperty == '-billToName'}"></i>
                                 <localize key="merchelloGeneral_customer" />
                             </th>
                             <th>
@@ -77,24 +85,28 @@
                             </th>
                         </tr>
                         <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
-                        <!--<tr>
-                                <th><input type="checkbox" /></th>
-                                <th colspan="6">
-                                    <div class="btn-group">
-                                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">Capture Payments</a></li>
-                                            <li><a href="#">Print Packing Slips</a></li>
-                                            <li><a href="#">Mark as Shipped</a></li>
-                                        </ul>
-                                    </div>
-                                </th>
-                            </tr>-->
+                        <tr data-ng-show="visible.bulkActionDropdown">
+                            <th><input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" /></th>
+                            <th colspan="6">
+                                <div class="btn-group">
+                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedOrderCount}} orders selected) <i class="icon-navigation-down"></i></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Print Orders</a></li>
+                                        <li><a href="#">Print Pull Lists</a></li>
+                                        <li><a href="#">Capture Payments</a></li>
+                                        <li><a href="#">Fulfill Orders</a></li>
+                                        <li><hr /></li>
+                                        <li><a href="#">Archive Orders</a></li>
+                                        <li><a href="#">Unarchive Orders</a></li>
+                                    </ul>
+                                </div>
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty | startfrom:currentPage * limitAmount | limitTo:limitAmount" 
-                            data-ng-class="{active: invoice.selected}" data-ng-click="invoice.selected = !invoice.selected">
-                            <!--<td><input type="checkbox" data-ng-model="invoice.selected"/></td>-->
+                        <!-- Invoices -->
+                        <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="updateBulkActionDropdownStatus(false, invoice.key)">
+                            <td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>
                             <td>#<a data-ng-href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
                             <td>{{invoice.invoiceDate | date : settings.dateFormat}}</td>
                             <td>{{invoice.billToName}}</td>
@@ -104,9 +116,18 @@
                         </tr>
                     </tbody>
                 </table>
-                <merchello-pager></merchello-pager>
+                <!-- Pagination -->
+                <div class="pager" data-ng-show="maxPages > 1">
+                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
+                        <localize key="general_previous" />
+                    </button>
+                    {{currentPage+1}}/{{maxPages}}
+                    <button class="btn" data-ng-disabled="currentPage >= maxPages- 1" data-ng-click="changePage(currentPage + 1)">
+                        <localize key="general_next" />
+                    </button>
+                </div>
                 <div class="pager well" data-ng-show="invoices.length == 0">
-	                <localize key="merchelloOrder_noOrders"/>
+                    <localize key="merchelloOrder_noOrders" />
                 </div>
             </div>
         </merchello-panel>

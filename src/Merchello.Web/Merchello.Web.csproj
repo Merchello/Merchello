@@ -114,6 +114,14 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
+    <Compile Include="PluginManagerExtensions.cs" />
+    <Compile Include="Reporting\IReportApiController.cs" />
+    <Compile Include="Reporting\IReportApiControllerResolver.cs" />
+    <Compile Include="Reporting\ReportController.cs" />
+    <Compile Include="Reporting\ReportApiControllerResolver.cs" />
+    <Compile Include="Reporting\Sales\SalesByItemReportApiController.cs" />
+    <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
+    <Compile Include="Reporting\Sales\SalesOverTimeReportApiController.cs" />
     <Compile Include="Search\CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />
     <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />
@@ -230,9 +238,7 @@
     <Compile Include="WebBootManager.cs" />
     <Compile Include="Workflow\Wishlist.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Reporting\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>

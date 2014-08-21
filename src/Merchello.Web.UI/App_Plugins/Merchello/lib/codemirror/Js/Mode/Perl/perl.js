@@ -367,7 +367,7 @@ CodeMirror.defineMode("perl",function(config,parserConfig){
 		push				:1,	// - append one or more elements to an array
 		q				:null,	// - singly quote a string
 		qq				:null,	// - doubly quote a string
-		qr				:null,	// - Compile pattern
+		qr				:null,	// - GetReportData pattern
 		quotemeta			:null,	// - quote regular expression magic characters
 		qw				:null,	// - quote a list of words
 		qx				:null,	// - backquote quote a string

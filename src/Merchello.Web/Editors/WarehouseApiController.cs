@@ -31,7 +31,7 @@
         /// Initializes a new instance of the <see cref="WarehouseApiController"/> class.
         /// </summary>
         public WarehouseApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
@@ -41,7 +41,7 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        public WarehouseApiController(MerchelloContext merchelloContext)
+        public WarehouseApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _warehouseService = MerchelloContext.Services.WarehouseService;
@@ -56,7 +56,7 @@
         /// <param name="umbracoContext">
         /// The umbraco context.
         /// </param>
-        internal WarehouseApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        internal WarehouseApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
             _warehouseService = MerchelloContext.Services.WarehouseService;

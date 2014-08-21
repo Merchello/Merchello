@@ -41,7 +41,7 @@ namespace Merchello.Core.Sales
         {
             var result = args.Entity;
 
-            if (!result.ApproveOrderCreation)
+            if (result.ApproveOrderCreation)
             {
                 // order
                 var order = result.Invoice.PrepareOrder(MerchelloContext.Current);

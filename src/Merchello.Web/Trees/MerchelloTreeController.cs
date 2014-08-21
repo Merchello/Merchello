@@ -1,11 +1,18 @@
 ﻿namespace Merchello.Web.Trees
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http.Formatting;
     using Core.Configuration;
     using Core.Configuration.Outline;
+
+    using Merchello.Web.Reporting;
+
     using umbraco;
     using umbraco.BusinessLogic.Actions;
+    using umbraco.cms.presentation;
+
+    using Umbraco.Core;
     using Umbraco.Web.Models.Trees;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.Trees;
@@ -35,14 +42,18 @@
 
             var backoffice = MerchelloConfiguration.Current.BackOffice;
 
-            var rootTrees = backoffice.GetTrees().Where(x => x.Visible);
+            var rootTrees = backoffice.GetTrees().Where(x => x.Visible).ToArray();
 
             var currentTree = rootTrees.FirstOrDefault(x => x.Id == id && x.Visible);
 
             collection.AddRange(
                 currentTree != null
-                    ? currentTree.SubTree.GetTrees().Where(x => x.Visible)
+                    ? 
+                        currentTree.Id == "reports" ? 
+                        GetAttributeDefinedTrees(queryStrings) :
+                        currentTree.SubTree.GetTrees().Where(x => x.Visible)
                             .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings, currentTree))
+
                     : backoffice.GetTrees().Where(x => x.Visible)
                             .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings)));
 
@@ -101,8 +112,9 @@
         /// </returns>
         private TreeNode GetTreeNodeFromConfigurationElement(TreeElement tree, FormDataCollection queryStrings, TreeElement parentTree = null)
         {
-
             var hasSubs = tree.SubTree != null && tree.SubTree.GetTrees().Any();
+
+            if (tree.Id == "reports" && hasSubs == false) hasSubs = ReportApiControllerResolver.Current.ResolvedTypes.Any();
 
             return CreateTreeNode(
                 tree.Id,
@@ -112,6 +124,33 @@
                 tree.Icon,
                 hasSubs,
                 tree.RoutePath);
+        }
+
+        /// <summary>
+        /// Adds attribute defined trees.
+        /// </summary>
+        /// <param name="queryStrings">
+        /// The query Strings.
+        /// </param>
+        private IEnumerable<TreeNode> GetAttributeDefinedTrees(FormDataCollection queryStrings)
+        {
+            var types = ReportApiControllerResolver.Current.ResolvedTypes.ToArray();
+            if (!types.Any()) return new TreeNode[] { };
+
+
+            var atts = types.Select(x => x.GetCustomAttribute<BackOfficeTreeAttribute>(true)).OrderBy(x => x.SortOrder);
+
+            return
+                atts.Select(
+                    att =>
+                    CreateTreeNode(
+                        att.RouteId,
+                        att.ParentRouteId,
+                        queryStrings,
+                        att.Title,
+                        att.Icon,
+                        false,
+                        att.RoutePath));
         }
     }
 }

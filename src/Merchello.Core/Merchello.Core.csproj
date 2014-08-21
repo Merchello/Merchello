@@ -256,10 +256,6 @@
     <Compile Include="Persistence\Repositories\NotificationMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\OrderLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\OrderStatusRepository.cs" />
-    <Compile Include="Reporting\IReportDataAggregator.cs" />
-    <Compile Include="Reporting\IReportDataAggregatorResolver.cs" />
-    <Compile Include="Reporting\ReportDataAggregatorAttribute.cs" />
-    <Compile Include="Reporting\ReportDataAggregatorResolver.cs" />
     <Compile Include="Sales\SalePreparationBase.cs" />
     <Compile Include="Sales\ISalePreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />

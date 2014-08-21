@@ -17,6 +17,10 @@ using WebBootManager = Merchello.Web.WebBootManager;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
+    using Merchello.Core.Events;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Sales;
+
     public abstract class MerchelloAllInTestBase
     {
         protected ICustomerBase CurrentCustomer;
@@ -57,9 +61,34 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             // BasketCheckout             
            // ItemCacheService.Saved += BasketItemCacheSaved;
 
+            SalePreparationBase.Finalizing += SalePreparationBaseOnFinalizing;
+
 
         }
 
+        private void SalePreparationBaseOnFinalizing(SalePreparationBase sender, SalesPreparationEventArgs<IPaymentResult> args)
+        {
+            var result = args.Entity;
+
+            if (result.ApproveOrderCreation)
+            {
+                // order
+                var order = result.Invoice.PrepareOrder(MerchelloContext.Current);
+
+                MerchelloContext.Current.Services.OrderService.Save(order);
+            }
+
+            var customerKey = result.Invoice.CustomerKey;
+
+            // Clean up the sales prepartation item cache
+            if (customerKey == null || Guid.Empty.Equals(customerKey)) return;
+            var customer = MerchelloContext.Current.Services.CustomerService.GetAnyByKey(customerKey.Value);
+
+            if (customer == null) return;
+            var itemCacheService = MerchelloContext.Current.Services.ItemCacheService;
+            var itemCache = itemCacheService.GetItemCacheByCustomer(customer, ItemCacheType.Checkout);
+            itemCacheService.Delete(itemCache);
+        }
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
@@ -73,6 +102,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             ProductVariantService.Saved -= ProductVariantServiceSaved;
             ProductVariantService.Deleted -= ProductVariantServiceDeleted;
 
+            SalePreparationBase.Finalizing -= SalePreparationBaseOnFinalizing;
         }
 
         //#region BasketCheckoutEvents
