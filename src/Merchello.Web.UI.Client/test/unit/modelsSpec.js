@@ -226,5 +226,42 @@ describe("Mechello Models", function () {
                 expect(productvar[i.name]).not.toBe(undefined);
             });
         });
+
+
+        it("should return if it isComposedFromAttribute", function () {
+            var pafs = { key: "123", optionKey: "321", name: "bane", sortOrder: 6, optionOrder: 7, isRemoved: true };
+            productvar.attributes.push(pafs);
+            expect(productvar.isComposedFromAttribute(pafs)).toBe(true);
+            var new_pafs = _.extend({}, pafs);
+            new_pafs.key = "###";
+            expect(productvar.isComposedFromAttribute(new_pafs)).toBe(false);
+        });
+
+        it("should ensure the catalog inventory", function () {
+            var warehouse = { key: "meh", warehouseCatalogs: [{key: "123", name: "Matt"}] };
+            expect(productvar.catalogInventories.length).toBe(0);
+            productvar.ensureCatalogInventory(warehouse);
+            expect(productvar.catalogInventories.length).toBe(1);
+            productvar.ensureCatalogInventory(warehouse);
+            expect(productvar.catalogInventories.length).toBe(1);
+        });
+
+        it("should add a variant to this product", function () {
+            var warehouse = { key: "meh", warehouseCatalogs: [{ key: "123", name: "Matt" }] };
+            productvar.addCatalogInventory(warehouse);
+            expect(productvar.catalogInventories.length).toBe(1);
+            expect(productvar.catalogInventories[0].productVariantKey).toBe(productvar.key);
+            expect(productvar.catalogInventories[0].warehouseKey).toBe(warehouse.key);
+            expect(productvar.catalogInventories[0].catalogKey).toBe("123");
+            expect(productvar.catalogInventories[0].catalogName).toBe("Matt");
+        });
+
+        it("should update the global inventory on change", function () {
+            productvar.globalInventoryChanged(5);
+            expect(productvar.totalInventoryCount).toBe(productvar.catalogInventories * 5);
+            _.each(productvar.catalogInventories, function (i) {
+                expect(i.count).toBe(5);
+            });
+        });
     });
 });
