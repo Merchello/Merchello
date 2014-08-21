@@ -92,6 +92,9 @@
             var promiseInvoices;
             if (filterText === undefined) {
                 filterText = '';
+            } else {
+                // Since there's a filter being added, start back at the first page.
+                page = 0;
             }
             $scope.filterText = filterText;
             var listQuery = new merchello.Models.ListQuery({
