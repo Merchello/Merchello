@@ -219,7 +219,7 @@ namespace Merchello.Web.Editors
                     _backoffice.AddItem(product, product.Name, 1, extendedData);
                     //}
                 }
-                                                                                    
+                                                                                         
                 var salesPreparation = _customer.Backoffice().SalePreparation();
 
                 salesPreparation.SaveBillToAddress(model.BillingAddress.ToAddress());

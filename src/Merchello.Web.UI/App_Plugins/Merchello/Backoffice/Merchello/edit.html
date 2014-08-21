@@ -9,10 +9,9 @@
         <umb-header>
 
             <div class="span4">
-                <umb-content-name ng-model="order.name"
-                                  localize="placeholder"
-                                  placeholder="@merchelloOrder_orderName">
-                </umb-content-name>
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline"><localize key="merchelloOrder_createNewOrder" /></h1>
+                </div>
             </div>
 
 
@@ -227,7 +226,14 @@
 
             </div>
             <div data-ng-show="createCustomer">
-                <order-create-customer shipping-address="shippingAddress" billing-address="billingAddress" create-customer="createCustomerDirective(customer, shipping, billing)" cancel-create-customer="toggleCreateCustomer()"></order-create-customer>
+                <order-create-customer customer="customer"
+                                       shipping-address="shippingAddress"
+                                       billing-address="billingAddress"
+                                       create-customer="createCustomerDirective(customer, shipping, billing)"
+                                       cancel-create-customer="toggleCreateCustomer()"
+                                       edit-customer-information="createCustomerInformationFromDialog()"
+                                       edit-customer-address-information="createCustomerAddressFromDialog(type)">
+                </order-create-customer>
             </div>
         </merchello-panel>
 
