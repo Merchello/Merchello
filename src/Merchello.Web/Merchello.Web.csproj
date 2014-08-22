@@ -246,9 +246,13 @@
     </Compile>
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
+    <Compile Include="Editors\AuditLogApiController.cs" />
     <Compile Include="Localize.cs" />
+    <Compile Include="Models\SaleHistory\AuditLogDisplay.cs" />
     <Compile Include="Models\Querying\QueryDisplay.cs" />
     <Compile Include="Models\Querying\QueryDisplayParameter.cs" />
+    <Compile Include="Models\SaleHistory\DailyAuditLogDisplay.cs" />
+    <Compile Include="Models\SaleHistory\SalesHistoryDisplay.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />

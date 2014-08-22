@@ -59,6 +59,11 @@
             var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));            
 
             umbracoUrls.Add(
+                "merchelloAuditLogApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<AuditLogApiController>(
+                    controller => controller.GetSalesHistoryByInvoiceKey(Guid.Empty)));
+
+            umbracoUrls.Add(
                 "merchelloProductApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<ProductApiController>(
                 controller => controller.SearchProducts(new QueryDisplay()
