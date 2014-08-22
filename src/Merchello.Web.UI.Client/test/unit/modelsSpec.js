@@ -264,4 +264,188 @@ describe("Mechello Models", function () {
             });
         });
     });
+
+    describe("Product.Models.Product", function () {
+        var product;
+        var pfs;
+
+        beforeEach(function () {
+            var pafs = { key: "123", optionKey: "321", name: "bane", sortOrder: 6, optionOrder: 7, isRemoved: true };
+            var pofs = { key: "123", name: "bane", required: "aye", sortOrder: 6, choices: [_.extend({}, pafs), _.extend({}, pafs)] };
+            var pofsv2 = { key: "321", name: "fame", required: "neh", sortOrder: 3, choices: [_.extend({}, pafs), _.extend({}, pafs)] };
+            var pvfs = {
+                key: "123",
+                name: "bane",
+                productKey: "asdfg",
+                sku: "1qa2ws",
+                price: 1.00,
+                costOfGoods: 2.00,
+                salePrice: 3.00,
+                onSale: true,
+                manufacturer: "Me",
+                manufacturerModelNumber: "1234567890",
+                weight: 10,
+                length: 11,
+                width: 12,
+                height: 13,
+                barcode: "10101010",
+                available: false,
+                trackInventory: true,
+                outOfStockPurchase: true,
+                taxable: true,
+                shippable: true,
+                download: true,
+                downloadMediaId: 123890,
+                totalInventoryCount: 1000000000,
+                attributes: [pafs, pafs],
+                attributeKeys: ["123"],
+                catalogInventories: []
+            };
+
+            pfs = {
+                key: "123",
+                name: "bane",
+                sku: "1qa2ws",
+                price: 1.00,
+                costOfGoods: 2.00,
+                salePrice: 3.00,
+                onSale: true,
+                manufacturer: "Me",
+                manufacturerModelNumber: "1234567890",
+                weight: 10,
+                length: 11,
+                width: 12,
+                height: 13,
+                barcode: "10101010",
+                available: false,
+                trackInventory: true,
+                outOfStockPurchase: true,
+                taxable: true,
+                shippable: true,
+                download: true,
+                downloadMediaId: 123890,
+                hasOptions: true,
+                hasVariants: true,
+                productOptions: [pofs, pofsv2],
+                productVariants: [pvfs, (pvfs.sortOrder = 9)]
+            };
+            product = new merchello.Models.Product(pfs, false);
+        });
+
+        it("should create a defined object", function () {
+            expect(product).not.toBe(undefined);
+            for (var i in pfs) {
+                expect(product[i]).not.toBe(undefined);
+            }
+
+        });
+
+        it("should create a empty object", function () {
+            product = new merchello.Models.Product();
+
+            expect(product.key).toBe("");
+            expect(product.name).toBe("");
+            expect(product.sku).toBe("");
+            expect(product.price).toBe(0.00);
+            expect(product.costOfGoods).toBe(0.00);
+            expect(product.salePrice).toBe(0.00);
+            expect(product.onSale).toBe(false);
+            expect(product.manufacturer).toBe("");
+            expect(product.manufacturerModelNumber).toBe("");
+            expect(product.weight).toBe(0);
+            expect(product.length).toBe(0);
+            expect(product.width).toBe(0);
+            expect(product.height).toBe(0);
+            expect(product.barcode).toBe("");
+            expect(product.available).toBe(true);
+            expect(product.trackInventory).toBe(false);
+            expect(product.outOfStockPurchase).toBe(false);
+            expect(product.taxable).toBe(false);
+            expect(product.shippable).toBe(false);
+            expect(product.download).toBe(false);
+            expect(product.downloadMediaId).toBe(-1);
+            expect(product.hasOptions).toBe(false);
+            expect(product.hasVariants).toBe(false);
+
+            expect(product.productOptions.length).toBe(0);
+
+            expect(product.productVariants.length).toBe(0);
+
+            expect(product.catalogInventories.length).toBe(0);
+        });
+
+        it("should create a populated product but not map the children", function () {
+            product = new merchello.Models.Product(pfs, true);
+            expect(product.productOptions).toBe(undefined);
+            expect(product.productVariants).toBe(undefined);
+        });
+
+        it("should add a blank options to the product", function () {
+            product.productOptions = undefined;
+            product.hasOptions = false;
+            product.addBlankOption();
+            expect(product.productOptions).not.toBe(undefined);
+            expect(product.productOptions.length).toBe(1);
+            expect(product.hasOptions).toBe(true);
+            product.productOptions = [];
+            product.addBlankOption();
+            expect(product.productOptions.length).toBe(1);
+            expect(product.productOptions[0].key).toBe("");
+        });
+
+        it("should remove an option from it's productOptions", function () {
+            expect(product.productOptions.length).toBe(2);
+            product.removeOption(product.productOptions[0]);
+            expect(product.productOptions.length).toBe(1);
+        });
+
+        it("should create an array of all choices in a flattened list", function () {
+            var flattenedlist = product.flattened();
+            var choices = ["choice1", "choice2"];
+            expect(flattenedlist.length).toBe(product.productOptions.length * 2);
+            for (var i; i < flattenedlist.length; i++) {
+                expect(flattenedlist[i]).toBe(choices[i % 2]);
+            }
+        });
+
+        it("should add variant to the product", function () {
+            var attrs = [{ one: "one", key: "one" }, { two: "two", key: "two" }];
+            product.hasVariants = false;
+            var vari = product.addVariant(attrs);
+            expect(vari.name).toBe("");
+            expect(vari.selected).toBe(true);
+            expect(vari.sku).toBe("");
+            expect(vari.attributeKeys.length).toBe(2);
+            expect(product.productVariants.length).toBe(3);
+            expect(product.hasVariants).toBe(true);
+        });
+
+        it("should remove variant to the product", function () {
+            expect(product.productVariants.length).toBe(2);
+            product.removeVariant(0);
+            expect(product.productVariants.length).toBe(1);
+            product.removeVariant(0);
+            expect(product.productVariants.length).toBe(0);
+        });
+
+        it("should return the lowest variant price if the product has variants", function () {
+            for(var i = 0; i < product.productVariants.length; i++) {
+                product.productVariants[i].price = i+1;
+            }
+            expect(product.variantsMinimumPrice().price).toBe(1);
+            product.productVariants = undefined;
+            product.minPrice = { price: 1200 };
+            expect(product.variantsMinimumPrice().price).toBe(1200);
+        });
+
+        it("should return the lowest variant price if the product has variants", function () {
+            for (var i = 0; i < product.productVariants.length; i++) {
+                product.productVariants[i].price = i + 1;
+            }
+            expect(product.variantsMaximumPrice().price).toBe(product.productVariants.length);
+            product.productVariants = undefined;
+            product.maxPrice = { price: 1200 };
+            expect(product.variantsMaximumPrice().price).toBe(1200);
+        });
+    });
 });
