@@ -11,6 +11,8 @@
         var prodservice = {
             possibleProductVariants: [],
 
+            /// Helper methods
+
             /**
             * @ngdoc method
             * @name permute
@@ -121,38 +123,6 @@
                         query
                     ),
                     'Failed to search products');
-
-            },
-
-            /**
-            * @ngdoc method
-            * @name getByKey
-            * @description Gets all products in the data store with an API call to the server
-            **/
-            getAllProducts: function () {
-
-                return umbRequestHelper.resourcePromise(
-                    $http.get(
-                        umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetAllProducts')
-                    ),
-                    'Failed to get all products');
-
-            },
-
-            /**
-            * @ngdoc method
-            * @name getByKey
-            * @description Gets all products matching teh 'term' in the data store with an API call to the server
-            **/
-            filterProducts: function (term) {
-
-                return umbRequestHelper.resourcePromise(
-                    $http.get(
-                        umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetFilteredProducts'),
-                        //'/umbraco/Merchello/ProductApi/GetFilteredProducts',
-                        { params: { term: term } }
-                    ),
-                    'Failed to get filtered products');
 
             },
 
