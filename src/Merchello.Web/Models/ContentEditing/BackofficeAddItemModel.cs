@@ -33,6 +33,30 @@ namespace Merchello.Web.Models.ContentEditing
         public string CustomerKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the Merchello Payment Method.
+        /// </summary>
+        /// <remarks>
+        /// Used to populate the add item form
+        /// </remarks>
+        public string PaymentKey { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the Merchello Payment Provider.
+        /// </summary>
+        /// <remarks>
+        /// Used to populate the add item form
+        /// </remarks>
+        public string PaymentProviderKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Merchello Ship Method.
+        /// </summary>
+        /// <remarks>
+        /// Used to populate the add item form
+        /// </remarks>
+        public string ShipmentKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the Merchello product.
         /// </summary>
         /// <remarks>

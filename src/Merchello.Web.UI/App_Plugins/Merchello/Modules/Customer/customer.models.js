@@ -4,7 +4,7 @@
 
         var self = this;
 
-        if (customerSource === undefined) {
+        if (customerSource == undefined) {
             self.addresses = [];
             self.email = '';
             self.extendedData = [];
@@ -19,7 +19,7 @@
             self.addresses = _.map(customerSource.addresses, function(address) {
                 return new merchello.Models.CustomerAddress(address);
             });
-            self.email = customerSource.email;
+            self.email = customerSource.email;     
             self.extendedData = _.map(customerSource.extendedData, function (item) {
                 return new merchello.Models.DictionaryItem(item);
             });
@@ -57,7 +57,7 @@
 
         var self = this;
 
-        if (customerAddressSource === undefined) {
+        if (customerAddressSource == undefined) {
             self.address1 = '';
             self.address2 = '';
             self.addressType = '';
