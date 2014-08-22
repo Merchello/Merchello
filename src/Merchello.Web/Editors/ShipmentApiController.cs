@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Merchello.Core;
-using Merchello.Core.Builders;
-using Merchello.Core.Gateways.Notification.Triggering;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.Models.ContentEditing;
-using Merchello.Web.WebApi;
-using Umbraco.Core;
-using Umbraco.Web;
-using Umbraco.Web.Mvc;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+
+    using Merchello.Core;
+    using Merchello.Core.Builders;
+    using Merchello.Core.Gateways.Notification.Triggering;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.WebApi;
+
+    using Umbraco.Core;
+    using Umbraco.Web;
+    using Umbraco.Web.Mvc;
+
     [PluginController("Merchello")]
     public class ShipmentApiController : MerchelloApiController
     {
@@ -190,12 +192,15 @@ namespace Merchello.Web.Editors
                 merchShipment = shipment.ToShipment(merchShipment);
                 if (order.Items.Count() == shipment.Items.Count())
                 {
+                    merchShipment.AuditCreated();
                     Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
                 }
                 else
-                {                                
+                {
+                    merchShipment.AuditCreated();            
                     Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
                 }
+
                 _shipmentService.Save(merchShipment);
 
             }
