@@ -182,6 +182,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IAssertsDocumentNumber.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
