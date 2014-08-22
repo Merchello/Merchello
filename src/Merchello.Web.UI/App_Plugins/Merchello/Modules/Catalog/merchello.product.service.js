@@ -110,6 +110,22 @@
 
             /**
             * @ngdoc method
+            * @name searchProducts
+            * @description Searches for all products with a ListQuery object
+            **/
+            searchProducts: function (query) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(
+                        umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'SearchProducts'),
+                        query
+                    ),
+                    'Failed to search products');
+
+            },
+
+            /**
+            * @ngdoc method
             * @name getByKey
             * @description Gets all products in the data store with an API call to the server
             **/
