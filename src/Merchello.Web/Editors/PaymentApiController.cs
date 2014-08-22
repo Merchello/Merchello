@@ -160,7 +160,11 @@
             var authorize = processor.Authorize();
 
             if (!authorize.Payment.Success)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            {
+                throw nw HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));    
+            }
+            
+            authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice);
 
             return authorize.Payment.Result.ToPaymentDisplay();
 
