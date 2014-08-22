@@ -73,7 +73,7 @@
             {
                 var preparedTerms = string.Format("%{0}%", string.Join("%", terms));
 
-                sql.Where("referenceType = @ref OR message LIKE @msg", new { @ref = searchTerm, @msg = preparedTerms });
+                sql.Where("message LIKE @msg", new { @msg = preparedTerms });
             }
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);

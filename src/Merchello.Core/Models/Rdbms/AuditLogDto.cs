@@ -25,17 +25,22 @@
         /// Gets or sets the entity key.
         /// </summary>
         [Column("entityKey")]
-        public Guid EntityKey { get; set; }
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? EntityKey { get; set; }
 
         /// <summary>
         /// Gets or sets the reference type.
         /// </summary>
-        [Column("referenceType")]
-        public string ReferenceType { get; set; }
+        [Column("entityTfKey")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? EntityTfKey { get; set; }
 
         /// <summary>
         /// Gets or sets the message.
         /// </summary>
+        [Column("message")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
         public string Message { get; set; }
 
         /// <summary>

@@ -68,6 +68,20 @@
         }
 
         /// <summary>
+        /// Creates an instance of the <see cref="IAuditLogRepository"/>
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAuditLogRepository"/>.
+        /// </returns>
+        internal virtual IAuditLogRepository CreateAuditLogRepository(IDatabaseUnitOfWork uow)
+        {
+            return new AuditLogRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="ITaxMethodRepository"/>
         /// </summary>
         /// <param name="uow">

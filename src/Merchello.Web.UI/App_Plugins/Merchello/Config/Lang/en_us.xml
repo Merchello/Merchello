@@ -329,4 +329,19 @@
     <key alias="selectMerchelloProduct">Select Merchello Product</key>
     <key alias="selectYourProduct">Select Your Product</key>
   </area>
+
+  <area alias="merchelloAuditLogs">
+    <key alias="notificationShipping">Shipping confirmation email sent to %0%</key>
+    <key alias="notificationSalesConfirmation">Sales confirmation email sent to %0%</key>    
+    <key alias="paymentCaptured">We successfully captured %0% %1%</key>
+    <key alias="paymentAuthorize">Payment was authorized for %0% %1%</key>
+    <key alias="paymentVoided">Payment was voided</key>
+    <key alias="paymentDeclined">Payment was declined</key>
+    <key alias="invoiceDeleted">Invoice %0% was deleted</key>
+    <key alias="paymentDeleted">Payment was deleted</key>
+    <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
+    <key alias="orderCreated">Order %0% was created</key>
+    <key alias="orderDeleted">Order %0% was deleted</key>
+    <key alias="shipmentCreated">We successfully fulfilled %0% line items</key>
+  </area>
 </language>

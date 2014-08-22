@@ -25,7 +25,8 @@
 
             CacheMap<AuditLog, AuditLogDto>(src => src.Key, dto => dto.Key);
             CacheMap<AuditLog, AuditLogDto>(src => src.EntityKey, dto => dto.EntityKey);
-            CacheMap<AuditLog, AuditLogDto>(src => src.ReferenceType, dto => dto.ReferenceType);
+            CacheMap<AuditLog, AuditLogDto>(src => src.EntityTfKey, dto => dto.EntityTfKey);
+            CacheMap<AuditLog, AuditLogDto>(src => src.Message, dto => dto.Message);
             CacheMap<AuditLog, AuditLogDto>(src => src.Verbosity, dto => dto.Verbosity);
             CacheMap<AuditLog, AuditLogDto>(src => src.IsError, dto => dto.IsError);
             CacheMap<AuditLog, AuditLogDto>(src => src.CreateDate, dto => dto.CreateDate);
