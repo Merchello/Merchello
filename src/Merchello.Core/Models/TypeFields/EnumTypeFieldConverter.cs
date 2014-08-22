@@ -19,6 +19,14 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
+        /// Creates an instance of an <see cref="IEntityTypeField"/> object
+        /// </summary>
+        internal static IEntityTypeField EntityType
+        {
+            get { return new EntityTypeField(); }
+        }
+
+        /// <summary>
         /// Creates an instance of an <see cref="IItemCacheTypeField"/> object
         /// </summary>
         internal static IItemCacheTypeField ItemItemCache

@@ -1,4 +1,9 @@
-﻿namespace Merchello.Web
+﻿using Merchello.Core.Events;
+using Merchello.Core.Gateways.Payment;
+using Merchello.Core.Sales;
+using Merchello.Core.Services;
+
+namespace Merchello.Web
 {
     using System;
     using System.Linq;
@@ -67,6 +72,79 @@
             LogHelper.Info<UmbracoApplicationEventHandler>("Initializing Customer related events");
 
             MemberService.Saving += this.MemberServiceOnSaving;
+
+            SalePreparationBase.Finalizing += SalePreparationBaseOnFinalizing;
+
+            InvoiceService.Deleted += InvoiceServiceOnDeleted;
+            OrderService.Deleted += OrderServiceOnDeleted;
+        }
+
+
+        /// <summary>
+        /// Handles the <see cref="InvoiceService"/> Deleted event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="deleteEventArgs">
+        /// The delete event args.
+        /// </param>
+        private void InvoiceServiceOnDeleted(IInvoiceService sender, DeleteEventArgs<IInvoice> deleteEventArgs)
+        {
+            foreach (var invoice in deleteEventArgs.DeletedEntities)
+            {
+                invoice.AuditDeleted();
+            }
+        }
+
+        /// <summary>
+        /// Handles the <see cref="OrderService"/> Deleted event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="deleteEventArgs">
+        /// The delete event args.
+        /// </param>
+        private void OrderServiceOnDeleted(IOrderService sender, DeleteEventArgs<IOrder> deleteEventArgs)
+        {
+            foreach (var order in deleteEventArgs.DeletedEntities)
+            {
+                order.AuditDeleted();
+            }
+        }
+
+
+        /// <summary>
+        /// Performs audits on SalePrepartionBase.Finalizing
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="salesPreparationEventArgs">
+        /// The sales preparation event args.
+        /// </param>
+        private void SalePreparationBaseOnFinalizing(SalePreparationBase sender, SalesPreparationEventArgs<IPaymentResult> salesPreparationEventArgs)
+        {
+            var result = salesPreparationEventArgs.Entity;
+
+            result.Invoice.AuditCreated();
+
+            if (result.Payment.Success)
+            {
+                if (result.Invoice.InvoiceStatusKey == Core.Constants.DefaultKeys.InvoiceStatus.Paid)
+                {
+                    result.Payment.Result.AuditPaymentCaptured();
+                }
+                else
+                {
+                    result.Payment.Result.AuditPaymentAuthorize();
+                }
+            }
+            else
+            {
+                result.Payment.Result.AuditPaymentDeclined();
+            }
         }
 
         /// <summary>

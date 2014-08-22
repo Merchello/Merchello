@@ -52,12 +52,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="interfaces, Version=1.0.5261.28126, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\interfaces.dll</HintPath>
+    <Reference Include="interfaces">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.5\lib\interfaces.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -69,9 +70,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Umbraco.Core, Version=1.0.5261.28127, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\Umbraco.Core.dll</HintPath>
+    <Reference Include="Umbraco.Core">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.5\lib\Umbraco.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -729,9 +730,11 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
+    <Compile Include="Services\AuditLogService.cs" />
     <Compile Include="Services\CustomerAddressService.cs" />
     <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IAuditLogService.cs" />
     <Compile Include="Services\Interfaces\ICustomerAddressService.cs" />
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />

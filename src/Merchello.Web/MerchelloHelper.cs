@@ -157,23 +157,10 @@
         /// </summary>
         /// <param name="term">The search term</param>
         /// <returns>The collection of <see cref="ProductDisplay"/></returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.Search")]
         public IEnumerable<ProductDisplay> SearchProducts(string term)
         {
-            return ProductQuery.Search(term);
-        }
-
-        /// <summary>
-        /// Searches the Merchello Product index.  NOTE:  This returns a ProductDisplay and is not a Content search.  Use the the UmbracoHelper.Search for content searches.
-        /// </summary>
-        /// <param name="criteria">
-        /// The criteria.
-        /// </param>
-        /// <returns>
-        /// <returns>The collection of <see cref="ProductDisplay"/></returns>
-        /// </returns>
-        public IEnumerable<ProductDisplay> SearchProducts(ISearchCriteria criteria)
-        {
-            return ProductQuery.Search(criteria);
+            return Query.Product.Search(term, 0, int.MaxValue).Items.Select(x => (ProductDisplay)x);
         }
 
         #endregion
