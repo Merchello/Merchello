@@ -1,8 +1,9 @@
-﻿using umbraco;
-
-namespace Merchello.Web.Search
+﻿namespace Merchello.Web.Search
 {
-    using System;    
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Core;
     using Core.Models;
     using Core.Persistence.Querying;
@@ -86,6 +87,24 @@ namespace Merchello.Web.Search
         }
 
         /// <summary>
+        /// Gets a <see cref="ProductVariantDisplay"/> by it's key
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        public ProductVariantDisplay GetProductVariantByKey(Guid key)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field("productVariantKey", key.ToString());
+
+            return CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
+        }
+
+
+        /// <summary>
         /// Searches all products
         /// </summary>
         /// <param name="page">
@@ -135,6 +154,25 @@ namespace Merchello.Web.Search
         }
 
         /// <summary>
+        /// Gets the <see cref="ProductVariantDisplay"/> for a product
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ProductVariantDisplay}"/>.
+        /// </returns>
+        public IEnumerable<ProductVariantDisplay> GetVariantsByProduct(Guid productKey)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field(KeyFieldInIndex, productKey.ToString()).Not().Field("master", "True");
+
+            var results = SearchProvider.Search(criteria);
+
+            return results.Select(x => x.ToProductVariantDisplay());
+        }
+
+        /// <summary>
         /// Maps a <see cref="SearchResult"/> to <see cref="ProductDisplay"/>
         /// </summary>
         /// <param name="result">
@@ -145,7 +183,7 @@ namespace Merchello.Web.Search
         /// </returns>
         protected override ProductDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
-            return result.ToProductDisplay();
+            return result.ToProductDisplay(GetVariantsByProduct);
         }
 
         /// <summary>

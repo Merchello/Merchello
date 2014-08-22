@@ -61,6 +61,9 @@
 		<key alias="orderNumber">Order #</key>
 		<key alias="paymentStatus">Payment Status</key>
 		<key alias="fulfillmentStatus">Fulfillment Status</key>
+        <key alias="saveAnonymousCustomer">Save as Anonymous Customer</key>
+        <key alias="createCustomer">Create New Customer</key>
+      <key alias="createNewOrder">Create New Order</key>
     <key alias="lineItems"> Line Items</key>
     <key alias="orderName">[Order Name]</key>
     <key alias="sales">Sales</key>
