@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Search
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Core;
     using Core.Models.EntityBase;
@@ -106,6 +107,25 @@
         /// </returns>
         public abstract TDisplay GetByKey(Guid key);
 
+        /// <summary>
+        /// Performs a Lucene "cache" only search
+        /// </summary>
+        /// <param name="criteria">
+        /// The criteria.
+        /// </param>
+        /// <param name="mapper">
+        /// The mapper.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of results to be returned
+        /// </typeparam>
+        /// <returns>
+        /// The collection of T.
+        /// </returns>
+        public IEnumerable<T> CachedSearch<T>(ISearchCriteria criteria, Func<SearchResult, T> mapper)
+        {
+            return _searchProvider.Search(criteria).Select(mapper);
+        }
 
         /// <summary>
         /// Performs a Lucene "cache" only search

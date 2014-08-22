@@ -17,6 +17,7 @@
     /// <summary>
     /// The customer query.
     /// </summary>
+    [Obsolete("Use CachedCustomerQuery")]
     internal class CustomerQuery : QueryBase
     {
         /// <summary>

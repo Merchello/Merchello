@@ -15,11 +15,13 @@
     using Merchello.Examine.Models;
     using Merchello.Web.Models.ContentEditing;
 
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
 
     /// <summary>
     /// The product query.
     /// </summary>
+    [Obsolete("Use CachedProductQuery")]
     internal class ProductQuery : QueryBase
     {
         /// <summary>
@@ -37,6 +39,7 @@
         /// </summary>
         /// <param name="key">The product key</param>
         /// <returns><see cref="ProductDisplay"/></returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.GetByKey")]
         public static ProductDisplay GetByKey(Guid key)
         {
             return GetByKey(key.ToString());
@@ -47,23 +50,11 @@
         /// </summary>
         /// <param name="key">The product key</param>
         /// <returns><see cref="ProductDisplay"/></returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.GetByKey")]
         public static ProductDisplay GetByKey(string key)
         {
-            var criteria = ExamineManager.Instance.CreateSearchCriteria(BooleanOperation.And);
-            criteria.Field("productKey", key).And().Field("master", "True");
-            var product = ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).Select(result => result.ToProductDisplay()).FirstOrDefault();
-
-            if (product != null) return product;
-            var merchelloContext = GetMerchelloContext();
-
-            var retrieved = merchelloContext.Services.ProductService.GetByKey(new Guid(key));
-
-            if (retrieved == null) return null;
-                
-            ReindexProduct(retrieved);
-
-            return AutoMapper.Mapper.Map<ProductDisplay>(retrieved);
+            var merchello = new MerchelloHelper(GetMerchelloContext().Services);
+            return merchello.Query.Product.GetByKey(key.EncodeAsGuid());
         }
 
         /// <summary>
@@ -72,29 +63,13 @@
         /// <returns>
         /// The collection of all products.
         /// </returns>
+        [Obsolete("Use CachedProductQuery", true)]
         public static IEnumerable<ProductDisplay> GetAllProducts()
         {
-            var merchelloContext = GetMerchelloContext();
 
-            var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.ProductVariant);
-            criteria.Field("master", "True");
+            var merchello = new MerchelloHelper(GetMerchelloContext().Services);
 
-            var results = ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).Select(result => result.ToProductDisplay()).ToArray();
-
-
-            var count = merchelloContext.Services.ProductService.ProductsCount();
-
-            if (results.Any() && (count == results.Count())) return results;
-
-            if (count != results.Count())
-            {
-                RebuildIndex(IndexName);
-            }
-
-            var retrieved = ((ProductService) merchelloContext.Services.ProductService).GetAll();
-
-            return retrieved.Select(AutoMapper.Mapper.Map<ProductDisplay>).ToList();
+            return merchello.Query.Product.Search(0, int.MaxValue).Items.Select(x => (ProductDisplay)x);
         }
 
         /// <summary>
@@ -102,6 +77,7 @@
         /// </summary>
         /// <param name="key">The product variant key</param>
         /// <returns>The <see cref="ProductVariantDisplay"/></returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.GetProductVariantByKey")]
         public static ProductVariantDisplay GetVariantDisplayByKey(Guid key)
         {
             return GetVariantDisplayByKey(key.ToString());
@@ -112,93 +88,12 @@
         /// </summary>
         /// <param name="key">The product variant key</param>
         /// <returns>The <see cref="ProductVariantDisplay"/></returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.GetProductVariantByKey")]
         public static ProductVariantDisplay GetVariantDisplayByKey(string key)
         {
-            var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.Field("productVariantKey", key);
-            try
-            {
-                var variant = ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).Select(result => result.ToProductVariantDisplay()).FirstOrDefault();
 
-                if (variant != null) return variant;
-
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error<ProductQuery>("GetVariantDisplayByKey", ex);
-            }
-            
-            // Assists in unit testing
-            var merchelloContext = GetMerchelloContext();
-
-            var retrieved = merchelloContext.Services.ProductVariantService.GetByKey(new Guid(key));
-            if (retrieved != null) ReindexProductVariant(retrieved, null);
-
-            return retrieved != null ? retrieved.ToProductVariantDisplay() : null;
-        }
-
-
-        /// <summary>
-        /// Searches ProductIndex by name and SKU for the 'term' passed
-        /// </summary>
-        /// <param name="term">The search term</param>
-        /// <returns>A collection of <see cref="ProductDisplay"/></returns>
-        public static IEnumerable<ProductDisplay> Search(string term)
-        {
-            var criteria = ExamineManager.Instance.CreateSearchCriteria();
-
-            criteria.Field("master", "True").And().GroupedOr(
-                new[] { "name", "sku" }, 
-                term.ToSearchTerms().Select(x => x.SearchTermType == SearchTermType.SingleWord ? x.Term.Fuzzy() : x.Term.MultipleCharacterWildcard()).ToArray());
-            return Search(criteria);
-        }
-
-        /// <summary>
-        /// Searches ProductIndex using <see cref="ISearchCriteria"/> passed
-        /// </summary>
-        /// <param name="criteria">
-        /// Custom criteria
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="ProductDisplay"/>
-        /// </returns>
-        public static IEnumerable<ProductDisplay> Search(ISearchCriteria criteria)
-        {
-    
-            return ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).OrderByDescending(x => x.Score)
-                .Select(result => result.ToProductDisplay());
-        }
-
-
-        /// <summary>
-        /// This is a sort of fall back, in the event that the index becomes corrupted or the product was not indexed for some reason.
-        /// </summary>
-        /// <param name="product">The <see cref="IProduct"/></param>
-        private static void ReindexProduct(IProduct product)
-        {
-            foreach (var variant in product.ProductVariants)
-            {
-                ReindexProductVariant(variant, null);
-            }
-            ReindexProductVariant(((Product)product).MasterVariant, product.ProductOptions);
-
-        }
-
-        /// <summary>
-        /// Re-indexes a product variant.
-        /// </summary>
-        /// <param name="productVariant">
-        /// The product variant.
-        /// </param>
-        /// <param name="productOptions">
-        /// The product options.
-        /// </param>
-        private static void ReindexProductVariant(IProductVariant productVariant, ProductOptionCollection productOptions)
-        {
-            ExamineManager.Instance.IndexProviderCollection[IndexName]
-                .ReIndexNode(productVariant.SerializeToXml(productOptions).Root, IndexTypes.ProductVariant);
+            var merchello = new MerchelloHelper(GetMerchelloContext().Services);
+            return null;
         }
     }
 }

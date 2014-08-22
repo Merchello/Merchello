@@ -128,7 +128,6 @@
 
         #endregion
 
-        #region IProductService Members
 
         /// <summary>
         /// Creates a Product without saving it to the database
@@ -388,6 +387,23 @@
         }
 
         /// <summary>
+        /// The count.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal int Count(IQuery<IProductVariant> query)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+        /// <summary>
         /// Gets a page of product keys
         /// </summary>
         /// <param name="page">
@@ -479,6 +495,7 @@
         /// <returns>
         /// The total product count.
         /// </returns>
+        [Obsolete("Only used in ProductQuery")]
         public int ProductsCount()
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
@@ -502,8 +519,6 @@
         {
             return _productVariantService.SkuExists(sku);
         }
-
-        #endregion
 
         /// <summary>
         /// Gets all the products
