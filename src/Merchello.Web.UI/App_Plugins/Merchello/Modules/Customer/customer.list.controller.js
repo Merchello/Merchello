@@ -50,18 +50,6 @@
 
         /**
          * @ngdoc method
-         * @name filterCustomers
-         * @function
-         * 
-         * @description
-         * Filter the customer list based on the provided filter.
-         */
-        $scope.filterCustomers = function () {
-
-        };
-
-        /**
-         * @ngdoc method
          * @name init
          * @function
          * 
@@ -89,7 +77,7 @@
 
         /**
          * @ngdoc method
-         * @name getAllCustomers
+         * @name loadCustomers
          * @function
          * 
          * @description

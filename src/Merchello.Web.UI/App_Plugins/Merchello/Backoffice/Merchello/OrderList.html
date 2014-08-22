@@ -55,7 +55,12 @@
                         <localize key="general_next" />
                     </button>
                 </div>
-                <table class="table table-hover merchello-selectable-table">
+                <!-- Loader -->
+                <div class="pager" data-ng-show="!salesLoaded">
+                    <img src="/umbraco/assets/img/loader.gif" />
+                </div>
+                <!-- List of Sales -->
+                <table class="table table-hover merchello-selectable-table" data-ng-show="salesLoaded">
                     <thead>
                         <tr data-ng-show="!visible.bulkActionDropdown">
                             <th>

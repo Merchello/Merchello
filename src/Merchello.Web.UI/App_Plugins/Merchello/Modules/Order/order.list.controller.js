@@ -92,9 +92,10 @@
             var promiseInvoices;
             if (filterText === undefined) {
                 filterText = '';
-            } else {
-                // Since there's a filter being added, start back at the first page.
+            }
+            if (filterText !== $scope.filterText) {
                 page = 0;
+                $scope.currentPage = 0;
             }
             $scope.filterText = filterText;
             var listQuery = new merchello.Models.ListQuery({
@@ -109,6 +110,7 @@
                 }]
             });
             promiseInvoices = merchelloInvoiceService.searchInvoices(listQuery);
+            $scope.salesLoaded = false;
             promiseInvoices.then(function(response) {
                 var queryResult = new merchello.Models.QueryResult(response);
                 $scope.invoices = _.map(queryResult.items, function(invoice) {
@@ -116,6 +118,7 @@
                 });
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
+                $scope.salesLoaded = true;
                 if ($scope.selectedOrderCount > 0) {
                     $scope.selectAllOrders = true;
                     $scope.updateBulkActionDropdownStatus(true);
@@ -163,6 +166,7 @@
             $scope.limitAmount = '100';
             $scope.maxPages = 0;
             $scope.orderIssues = [];
+            $scope.salesLoaded = false;
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
             $scope.settings = {};
