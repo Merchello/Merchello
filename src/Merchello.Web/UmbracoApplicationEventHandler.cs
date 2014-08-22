@@ -8,6 +8,8 @@ namespace Merchello.Web
     using System;
     using System.Linq;
     using System.Reflection;
+    using System.Threading.Tasks;
+
     using Core;
     using log4net;
 
@@ -19,6 +21,8 @@ namespace Merchello.Web
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
+
+    using Task = System.Threading.Tasks.Task;
 
     /// <summary>
     /// Handles the Umbraco Application "Starting" and "Started" event and initiates the Merchello startup
@@ -91,10 +95,21 @@ namespace Merchello.Web
         /// </param>
         private void InvoiceServiceOnDeleted(IInvoiceService sender, DeleteEventArgs<IInvoice> deleteEventArgs)
         {
-            foreach (var invoice in deleteEventArgs.DeletedEntities)
+            Task.Factory.StartNew(
+            () =>
             {
-                invoice.AuditDeleted();
-            }
+                foreach (var invoice in deleteEventArgs.DeletedEntities)
+                {
+                    try
+                    {
+                        invoice.AuditDeleted();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Error<UmbracoApplicationEventHandler>("Failed to log invoice deleted", ex);
+                    }
+                }
+            });
         }
 
         /// <summary>
@@ -108,10 +123,21 @@ namespace Merchello.Web
         /// </param>
         private void OrderServiceOnDeleted(IOrderService sender, DeleteEventArgs<IOrder> deleteEventArgs)
         {
-            foreach (var order in deleteEventArgs.DeletedEntities)
+            Task.Factory.StartNew(
+            () =>
             {
-                order.AuditDeleted();
-            }
+                foreach (var order in deleteEventArgs.DeletedEntities)
+                {
+                    try
+                    {
+                        order.AuditDeleted();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Error<UmbracoApplicationEventHandler>("Failed to log order deleted", ex);
+                    }
+                }
+            });
         }
 
 
@@ -138,7 +164,7 @@ namespace Merchello.Web
                 }
                 else
                 {
-                    result.Payment.Result.AuditPaymentAuthorize();
+                    result.Payment.Result.AuditPaymentAuthorize(result.Invoice);
                 }
             }
             else

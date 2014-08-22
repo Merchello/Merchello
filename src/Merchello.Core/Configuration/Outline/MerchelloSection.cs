@@ -30,11 +30,21 @@
         /// <summary>
         /// Gets or sets a value indicating whether logging is enabled
         /// </summary>
-        [ConfigurationProperty("enableLogging", DefaultValue = false, IsRequired = false)]
+        [ConfigurationProperty("enableLogging", DefaultValue = true, IsRequired = false)]
         public bool EnableLogging
         {
             get { return (bool)this["enableLogging"]; }
             set { this["enableLogging"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the log localization defaults to "en"
+        /// </summary>
+        [ConfigurationProperty("logLocalization", DefaultValue = "en", IsRequired = false)]
+        public string LogLocalization
+        {
+            get { return (string)this["logLocalization"]; }
+            set { this["logLocalization"] = value; }
         }
 
         /// <summary>

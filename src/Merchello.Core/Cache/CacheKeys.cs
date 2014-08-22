@@ -100,6 +100,20 @@
         internal static string GetEntityCacheKey<TEntity>(Guid key)
         {
             return string.Format("{0}.{1}", typeof(TEntity).Name, key);
-        }                       
+        }
+
+        /// <summary>
+        /// Returns the cache key used to store the Umbraco lang file.
+        /// </summary>
+        /// <param name="lang">
+        /// The lang.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string GetLocalizationCacheKey(string lang)
+        {
+            return string.Format("merch-localize-{0}", string.IsNullOrEmpty(lang) ? "en" : lang);
+        }
     }
 }

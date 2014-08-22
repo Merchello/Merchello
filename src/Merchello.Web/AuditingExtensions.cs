@@ -2,8 +2,17 @@
 {
     using System;
     using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Core;
     using Core.Models;
+
+    using Merchello.Core.Configuration;
+
+    using umbraco;
+
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// The auditing extensions.
@@ -23,7 +32,7 @@
         /// </param>
         internal static void AuditCreated(this IInvoice invoice)
         {
-            var msg = Localize.Text(Section, "inoviceCreated").Replace("%0%", invoice.PrefixedInvoiceNumber());
+            var msg = Localize.Text(Section, "invoiceCreated").Replace("%0%", invoice.PrefixedInvoiceNumber());
 
             UpdateAuditLog(invoice.Key, EntityType.Invoice, msg);
         }
@@ -86,16 +95,18 @@
             UpdateAuditLog(shipment.Key, EntityType.Shipment, msg);
         }
 
-
         /// <summary>
         /// Logs an authorized payment
         /// </summary>
         /// <param name="payment">
-        /// The payment.
+        /// The payment to be collected
         /// </param>
-        internal static void AuditPaymentAuthorize(this IPayment payment)
+        /// <param name="invoice">
+        /// The invoice for which the payment was authorized 
+        /// </param>
+        internal static void AuditPaymentAuthorize(this IPayment payment, IInvoice invoice)
         {
-            var msg = Localize.Text(Section, "paymentAuthorize").Replace("%0%", payment.Amount.ToString("F")).Replace("%1%", payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode));
+            var msg = Localize.Text(Section, "paymentAuthorize").Replace("%0%", invoice.Total.ToString("F")).Replace("%1%", invoice.Items.First().ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode));
 
             UpdateAuditLog(payment.Key, EntityType.Payment, msg);
         }
@@ -176,7 +187,18 @@
         {
             if (string.IsNullOrEmpty(message) || key == Guid.Empty) return;
 
-            merchelloContext.Services.AuditLogService.CreateAuditLogWithKey(key, entityType, message);
+            Task.Factory.StartNew(
+            () =>
+            {
+                try
+                {
+                    merchelloContext.Services.AuditLogService.CreateAuditLogWithKey(key, entityType, message);
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error(typeof(AuditingExtensions), string.Format("Failed to log {0} for entityType {1} with key {2}", message, entityType, key), ex);
+                }
+            });
         }
     }
 }
