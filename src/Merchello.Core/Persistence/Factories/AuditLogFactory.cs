@@ -1,7 +1,5 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
-    using System;
-
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
@@ -26,7 +24,8 @@
                 {
                     Key = dto.Key,
                     EntityKey = dto.EntityKey,
-                    ReferenceType = dto.ReferenceType,
+                    EntityTfKey = dto.EntityTfKey,
+                    Message = dto.Message,
                     Verbosity = dto.Verbosity,
                     ExtendedData = new ExtendedDataCollection(dto.ExtendedData),
                     IsError = dto.IsError,
@@ -54,7 +53,8 @@
                 {
                     Key = entity.Key,
                     EntityKey = entity.EntityKey,
-                    ReferenceType = entity.ReferenceType,
+                    EntityTfKey = entity.EntityTfKey,
+                    Message = entity.Message,
                     Verbosity = entity.Verbosity,
                     ExtendedData = entity.ExtendedData.SerializeToXml(),
                     IsError = entity.IsError,

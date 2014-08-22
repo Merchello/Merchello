@@ -14,13 +14,19 @@
         /// Gets or sets the entity key related to the audit record
         /// </summary>
         [DataMember]
-        Guid EntityKey { get; set; }
+        Guid? EntityKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the reference type.
+        /// Gets or sets the entity type field key.
         /// </summary>
         [DataMember]
-        string ReferenceType { get; set; }
+        Guid? EntityTfKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message.
+        /// </summary>
+        [DataMember]
+        string Message { get; set; }
 
         /// <summary>
         /// Gets or sets the verbosity level.

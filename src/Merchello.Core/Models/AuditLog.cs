@@ -25,12 +25,17 @@
         /// <summary>
         /// The entity key selector.
         /// </summary>
-        private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<AuditLog, Guid>(x => x.EntityKey);
+        private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<AuditLog, Guid?>(x => x.EntityKey);
+
+        /// <summary>
+        /// The message selector.
+        /// </summary>
+        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<AuditLog, string>(x => x.Message);
 
         /// <summary>
         /// The reference type selector.
         /// </summary>
-        private static readonly PropertyInfo ReferenceTypeSelector = ExpressionHelper.GetPropertyInfo<AuditLog, string>(x => x.ReferenceType);
+        private static readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<AuditLog, Guid?>(x => x.EntityTfKey);
 
         /// <summary>
         /// The verbosity selector.
@@ -45,12 +50,17 @@
         /// <summary>
         /// The entity key.
         /// </summary>
-        private Guid _entityKey;
+        private Guid? _entityKey;
 
         /// <summary>
         /// The reference type.
         /// </summary>
-        private string _referenceType;
+        private Guid? _entityTfKey;
+
+        /// <summary>
+        /// The message.
+        /// </summary>
+        private string _message;
 
         /// <summary>
         /// The verbosity.
@@ -73,7 +83,7 @@
         /// Gets or sets the entity key.
         /// </summary>
         [DataMember]
-        public Guid EntityKey 
+        public Guid? EntityKey 
         { 
             get
             {
@@ -97,11 +107,11 @@
         /// Gets or sets the reference type.
         /// </summary>
         [DataMember]
-        public string ReferenceType
+        public Guid? EntityTfKey
         {
             get
             {
-                return _referenceType;
+                return _entityTfKey;
             }
 
             set
@@ -109,11 +119,35 @@
                 SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _referenceType = value;
-                        return _referenceType;
+                        _entityTfKey = value;
+                        return _entityTfKey;
                     },
-                    _referenceType,
-                    ReferenceTypeSelector);
+                    _entityTfKey,
+                    EntityTfKeySelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the message.
+        /// </summary>
+        [DataMember]
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _message = value;
+                        return _message;
+                    },
+                    _message,
+                    MessageSelector);
             }
         }
 
