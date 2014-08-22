@@ -7,12 +7,12 @@ using Merchello.Core.Sales;
 namespace Merchello.Web.Workflow
 {
     /// <summary>
-    /// Represents the basket sale preparation.
+    /// Represents the backoffice sale preparation.
     /// </summary>
     public class BackofficeSalePreparation : SalePreparationBase, IBackofficeSalePreparation
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketSalePreparation"/> class.
+        /// Initializes a new instance of the <see cref="BackofficeSalePreparation"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -38,7 +38,7 @@ namespace Merchello.Web.Workflow
         {
             var result = base.AuthorizePayment(paymentGatewayMethod, args);
 
-            Customer.Basket().Empty();
+            Customer.Backoffice().Empty();
 
             return result;
         }
@@ -53,19 +53,19 @@ namespace Merchello.Web.Workflow
         {
             var result = base.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            Customer.Basket().Empty();
+            Customer.Backoffice().Empty();
 
             return result;
         }
 
         /// <summary>
-        /// The get basket checkout preparation.
+        /// The get backoffice checkout preparation.
         /// </summary>
         /// <param name="backoffice">
-        /// The basket.
+        /// The backoffice.
         /// </param>
         /// <returns>
-        /// The <see cref="BasketSalePreparation"/>.
+        /// The <see cref="BackofficeSalePreparation"/>.
         /// </returns>
         internal static BackofficeSalePreparation GetBackofficeCheckoutPreparation(IBackoffice backoffice)
         {
@@ -73,16 +73,16 @@ namespace Merchello.Web.Workflow
         }
 
         /// <summary>
-        /// The get basket checkout preparation.
+        /// The get backoffice checkout preparation.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
         /// <param name="backoffice">
-        /// The basket.
+        /// The backoffice.
         /// </param>
         /// <returns>
-        /// The <see cref="BasketSalePreparation"/>.
+        /// The <see cref="BackofficeSalePreparation"/>.
         /// </returns>
         internal static BackofficeSalePreparation GetBackofficeCheckoutPreparation(IMerchelloContext merchelloContext, IBackoffice backoffice)
         {

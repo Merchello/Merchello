@@ -637,7 +637,7 @@
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         public static decimal TotalItemPrice(this IInvoice invoice)
-        {
+        {                                                                 
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice);
         }
 
