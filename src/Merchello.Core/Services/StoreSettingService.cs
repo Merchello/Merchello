@@ -313,7 +313,11 @@
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
                 {
-                    invoiceNumber = repository.GetNextInvoiceNumber(Core.Constants.StoreSettingKeys.NextInvoiceNumberKey, invoicesCount);
+                    using (var validationRepository = _repositoryFactory.CreateInvoiceRepository(uow))
+                    { 
+                        invoiceNumber = repository.GetNextInvoiceNumber(Core.Constants.StoreSettingKeys.NextInvoiceNumberKey, validationRepository.GetMaxDocumentNumber, invoicesCount);
+                    }
+
                     uow.Commit();
                 }
             }
@@ -338,7 +342,11 @@
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
                 {
-                    orderNumber = repository.GetNextOrderNumber(Core.Constants.StoreSettingKeys.NextOrderNumberKey, ordersCount);
+                    using (var validationRepository = _repositoryFactory.CreateOrderRepository(uow))
+                    {
+                        orderNumber = repository.GetNextOrderNumber(Core.Constants.StoreSettingKeys.NextOrderNumberKey, validationRepository.GetMaxDocumentNumber, ordersCount);
+                    }
+
                     uow.Commit();
                 }
             }

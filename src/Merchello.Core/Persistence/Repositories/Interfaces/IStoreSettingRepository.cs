@@ -15,17 +15,19 @@ namespace Merchello.Core.Persistence.Repositories
         /// Gets the next invoice number (int)
         /// </summary>
         /// <param name="storeSettingKey">Constant Guid Key of the NextInvoiceNumber store setting</param>
+        /// <param name="validate">Function to execute to validate the next number</param>
         /// <param name="invoicesCount">The number of invoices needing invoice numbers.  Useful when saving multiple new invoices.</param>
         /// <returns></returns>
-        int GetNextInvoiceNumber(Guid storeSettingKey, int invoicesCount = 1);
+        int GetNextInvoiceNumber(Guid storeSettingKey, Func<int> validate, int invoicesCount = 1);
 
         /// <summary>
         /// Gets the next order number (int)
         /// </summary>
         /// <param name="storeSettingKey">Constant Guid Key of the NextOrderNumber store setting</param>
+        /// <param name="validate">Function to execute to validate the next number</param>
         /// <param name="ordersCount">The number of orders needing invoice orders.  Useful when saving multiple new orders.</param>
         /// <returns></returns>
-        int GetNextOrderNumber(Guid storeSettingKey, int ordersCount = 1);
+        int GetNextOrderNumber(Guid storeSettingKey, Func<int> validate, int ordersCount = 1);
 
 
         /// <summary>

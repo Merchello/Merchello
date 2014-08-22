@@ -336,5 +336,16 @@
 
             return collection;            
         }
+
+        /// <summary>
+        /// The get max document number.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int GetMaxDocumentNumber()
+        {
+            return Database.ExecuteScalar<int>("SELECT MAX(invoiceNumber) FROM merchInvoice");
+        }
     }
 }
