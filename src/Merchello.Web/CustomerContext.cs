@@ -3,7 +3,6 @@ namespace Merchello.Web
 {
     using System;
     using System.Linq;
-    using System.Net.Mime;
     using System.Web;
 
     using Merchello.Core;
@@ -172,7 +171,10 @@ namespace Merchello.Web
         private void TryGetCustomer(Guid key)
         {
             var customer = (ICustomerBase)_cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(key));
-            
+
+            var isLoggedIn = (bool)_cache.RequestCache.GetCacheItem(CacheKeys.CustomerIsLoggedIn(key), () => _membershipHelper.IsLoggedIn());
+
+
             // check the cache for a previously retrieved customer
             if (customer != null)
             {
@@ -180,7 +182,7 @@ namespace Merchello.Web
 
                 if (customer.IsAnonymous)
                 {
-                    if (_membershipHelper.IsLoggedIn())
+                    if (isLoggedIn)
                     {                        
                         var memberId = _membershipHelper.GetCurrentMemberId();
                         var member = _memberService.GetById(memberId);
@@ -204,7 +206,7 @@ namespace Merchello.Web
                         }
                     }
                 }
-                else if (customer.IsAnonymous == false && _membershipHelper.IsLoggedIn() == false)
+                else if (customer.IsAnonymous == false && isLoggedIn == false)
                 {
                     // customer has logged out, so we need to go back to an anonymous customer
                     var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
