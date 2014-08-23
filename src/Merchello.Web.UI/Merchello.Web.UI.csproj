@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderCustomer.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderFulfillment.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreateActionMenu.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />

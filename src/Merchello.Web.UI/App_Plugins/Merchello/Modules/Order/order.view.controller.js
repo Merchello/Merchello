@@ -71,7 +71,8 @@
          */
 	    $scope.loadInvoice = function (id) {
 	        var promise = merchelloInvoiceService.getByKey(id);
-	        promise.then(function (invoice) { 
+	        promise.then(function (invoice) {
+	            console.info(invoice);
 	            $scope.invoice = new merchello.Models.Invoice(invoice);
 	            console.info($scope.invoice);
 	            _.each($scope.invoice.items, function (lineItem) {
