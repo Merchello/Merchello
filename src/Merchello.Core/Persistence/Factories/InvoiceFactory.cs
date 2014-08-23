@@ -1,19 +1,47 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The invoice factory.
+    /// </summary>
     internal class InvoiceFactory : IEntityFactory<IInvoice, InvoiceDto>
     {
+        /// <summary>
+        /// The line item collection.
+        /// </summary>
         private readonly LineItemCollection _lineItemCollection;
+
+        /// <summary>
+        /// The order collection.
+        /// </summary>
         private readonly OrderCollection _orderCollection;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvoiceFactory"/> class.
+        /// </summary>
+        /// <param name="lineItemCollection">
+        /// The line item collection.
+        /// </param>
+        /// <param name="orderCollection">
+        /// The order collection.
+        /// </param>
         public InvoiceFactory(LineItemCollection lineItemCollection, OrderCollection orderCollection)
         {
             _lineItemCollection = lineItemCollection;
             _orderCollection = orderCollection;
         }
 
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IInvoice"/>.
+        /// </returns>
         public IInvoice BuildEntity(InvoiceDto dto)
         {
             var factory = new InvoiceStatusFactory();
@@ -24,6 +52,7 @@ namespace Merchello.Core.Persistence.Factories
                     InvoiceNumberPrefix = dto.InvoiceNumberPrefix,
                     InvoiceNumber = dto.InvoiceNumber,
                     InvoiceDate = dto.InvoiceDate,
+                    PoNumber = dto.PoNumber,
                     VersionKey = dto.VersionKey,
                     BillToName = dto.BillToName,
                     BillToAddress1 = dto.BillToAddress1,
@@ -50,6 +79,15 @@ namespace Merchello.Core.Persistence.Factories
             return invoice;
         }
 
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="InvoiceDto"/>.
+        /// </returns>
         public InvoiceDto BuildDto(IInvoice entity)
         {
             return new InvoiceDto()
@@ -59,6 +97,7 @@ namespace Merchello.Core.Persistence.Factories
                     InvoiceNumberPrefix = entity.InvoiceNumberPrefix,
                     InvoiceNumber = entity.InvoiceNumber,
                     InvoiceDate = entity.InvoiceDate,
+                    PoNumber = entity.PoNumber,
                     InvoiceStatusKey = entity.InvoiceStatusKey,
                     VersionKey = entity.VersionKey,
                     BillToName = entity.BillToName,

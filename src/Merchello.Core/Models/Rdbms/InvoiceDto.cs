@@ -43,6 +43,13 @@
         public int InvoiceNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets the po number.
+        /// </summary>
+        [Column("poNumber")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string PoNumber { get; set; }
+
+        /// <summary>
         /// Gets or sets the invoice date.
         /// </summary>
         [Column("invoiceDate")]
