@@ -35,14 +35,23 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <param name="addressType">The type of address to be saved</param>
+        /// <param name="label">
+        /// The address label
+        /// </param>
+        /// <param name="addressType">
+        /// The type of address to be saved
+        /// </param>
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
-        internal static ICustomerAddress ToCustomerAddress(this IAddress address, ICustomer customer, AddressType addressType)
+        internal static ICustomerAddress ToCustomerAddress(this IAddress address, ICustomer customer, string label, AddressType addressType)
         {
+            Mandate.ParameterNotNullOrEmpty(label, "Label cannot be empty");
+
             return new CustomerAddress(customer.Key)
             {
+                Label = label,
+                FullName = address.Name,
                 Address1 = address.Address1,
                 Address2 = address.Address2,
                 Locality = address.Locality,
@@ -50,7 +59,6 @@
                 PostalCode = address.PostalCode,
                 CountryCode = address.CountryCode,
                 Phone = address.Phone,                
-                Label = string.IsNullOrEmpty(address.Name) ? "Address" : address.Name, 
                 Company = address.Organization,
                 AddressType = addressType
             };

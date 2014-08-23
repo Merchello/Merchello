@@ -41,8 +41,6 @@
             _repositoryFactory = repositoryFactory;
         }
 
-        #region ICustomerItemRegisterService Members
-
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
@@ -270,8 +268,6 @@
             }
         }
 
-       
-
         public IEnumerable<IItemCache> GetAll()
         {
             using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
@@ -279,10 +275,6 @@
                 return repository.GetAll();
             }
         }      
-
-        #endregion
-
-      
 
 
         #region Event Handlers
