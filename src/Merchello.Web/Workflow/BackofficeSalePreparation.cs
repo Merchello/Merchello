@@ -1,11 +1,12 @@
-﻿using System.Linq;
-using Merchello.Core;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Core.Sales;
-
-namespace Merchello.Web.Workflow
+﻿namespace Merchello.Web.Workflow
 {
+    using System.Linq;
+
+    using Merchello.Core;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Models;
+    using Merchello.Core.Sales;
+
     /// <summary>
     /// Represents the backoffice sale preparation.
     /// </summary>

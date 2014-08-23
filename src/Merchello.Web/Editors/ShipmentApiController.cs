@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Web.Editors
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
@@ -10,28 +9,54 @@
 
     using Merchello.Core;
     using Merchello.Core.Builders;
-    using Merchello.Core.Gateways.Notification.Triggering;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.WebApi;
 
-    using Umbraco.Core;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
 
+    /// <summary>
+    /// The shipment api controller.
+    /// </summary>
     [PluginController("Merchello")]
     public class ShipmentApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The shipment service.
+        /// </summary>
         private readonly IShipmentService _shipmentService;
+
+        /// <summary>
+        /// The invoice service.
+        /// </summary>
         private readonly IInvoiceService _invoiceService;
+
+        /// <summary>
+        /// The order service.
+        /// </summary>
         private readonly IOrderService _orderService;
+
+        /// <summary>
+        /// The ship method service.
+        /// </summary>
         private readonly IShipMethodService _shipMethodService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentApiController"/> class.
+        /// </summary>
         public ShipmentApiController()
             : this(Core.MerchelloContext.Current)
-        { }
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentApiController"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
         public ShipmentApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
@@ -44,6 +69,12 @@
         /// <summary>
         /// This is a helper contructor for unit testing
         /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="umbracoContext">
+        /// The umbraco Context.
+        /// </param>
         internal ShipmentApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
@@ -58,7 +89,7 @@
         /// 
         /// GET /umbraco/Merchello/ShipmentApi/GetShipment/{guid}
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">The shipment key</param>
         public ShipmentDisplay GetShipment(Guid id)
         {
             var shipment = _shipmentService.GetByKey(id) as Shipment;
@@ -146,7 +177,7 @@
         {
             try
             {
-                if(!order.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
+                if (!order.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
                 
                 var merchOrder = _orderService.GetByKey(order.Key);
 
@@ -206,12 +237,10 @@
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
 
             return response;
         }
-
-        
     }
 }
