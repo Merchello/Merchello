@@ -187,6 +187,8 @@
         {
             if (string.IsNullOrEmpty(message) || key == Guid.Empty) return;
 
+            if (!MerchelloConfiguration.Current.Section.EnableLogging) return;
+
             Task.Factory.StartNew(
             () =>
             {
