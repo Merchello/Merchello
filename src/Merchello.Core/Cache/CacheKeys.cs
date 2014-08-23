@@ -28,6 +28,23 @@
         }
 
         /// <summary>
+        /// CacheKey for request cache only. Used to check if the customer is logged in.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO look at if this can be introduced to the MembershipHelper (Umbraco)
+        /// </remarks>
+        internal static string CustomerIsLoggedIn(Guid entityKey)
+        {
+            return string.Format("merchello.customer.isloggedin.{0}", entityKey);
+        }
+
+        /// <summary>
         /// Returns a cache key intend for runtime caching of a <see cref="IItemCache"/>
         /// </summary>
         /// <param name="entityKey">
