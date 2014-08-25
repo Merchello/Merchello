@@ -3,6 +3,9 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     internal sealed class GatewayProviderTypeField  : TypeFieldMapper<GatewayProviderType>, IGatewayProviderTypeField
     {
 
@@ -19,6 +22,15 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(GatewayProviderType.Shipping, new TypeField("Shipping", "Shipping", Constants.TypeFieldKeys.GatewayProvider.ShippingProviderKey));
             AddUpdateCache(GatewayProviderType.Taxation, new TypeField("Taxation", "Taxation", Constants.TypeFieldKeys.GatewayProvider.TaxationProviderKey));
         }
+
+        public override IEnumerable<ITypeField> CustomTypeFields
+        {
+            get
+            {
+                return GatewayProviders.GetTypeFields().Select(GetTypeField);
+            }
+        }
+
 
         /// <summary>
         /// Indicates the gateway provider is for payments

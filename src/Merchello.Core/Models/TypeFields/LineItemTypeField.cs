@@ -3,6 +3,9 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     internal sealed class LineItemTypeField : TypeFieldMapper<LineItemType>, ILineItemTypeField
     {
         internal LineItemTypeField()
@@ -17,6 +20,15 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(LineItemType.Tax, new TypeField("Tax", "Tax", Constants.TypeFieldKeys.LineItem.TaxKey));
             AddUpdateCache(LineItemType.Discount, new TypeField("Discount", "Discount", Constants.TypeFieldKeys.LineItem.DiscountKey));
         }
+
+        public override IEnumerable<ITypeField> CustomTypeFields
+        {
+            get
+            {
+                return LineItems.GetTypeFields().Select(GetTypeField);
+            }
+        }
+
 
         protected override ITypeField GetCustom(string alias)
         {
