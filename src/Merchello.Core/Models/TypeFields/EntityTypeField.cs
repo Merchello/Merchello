@@ -2,6 +2,9 @@
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Type fields for Merchello entities
     /// </summary>
@@ -26,7 +29,16 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(EntityType.Warehouse, new TypeField("Warehouse", "Warehouse", Constants.TypeFieldKeys.Entity.WarehouseKey));
             AddUpdateCache(EntityType.WarehouseCatalog, new TypeField("WarehouseCatalog", "WarehouseCatalog", Constants.TypeFieldKeys.Entity.WarehouseCatalogKey));
         }
-        
+
+        public override IEnumerable<ITypeField> CustomTypeFields
+        {
+            get
+            {
+                return Entities.GetTypeFields().Select(GetTypeField);
+            }
+        }
+
+
         /// <summary>
         /// The customer entity type field
         /// </summary>
