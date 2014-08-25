@@ -188,7 +188,9 @@
         /// </returns>
         public int GetMaxDocumentNumber()
         {
-            return Database.ExecuteScalar<int>("SELECT MAX(orderNumber) FROM merchOrder");
+
+            var value = Database.ExecuteScalar<object>("SELECT TOP 1 orderNumber FROM merchOrder ORDER BY orderNumber DESC");
+            return value == null ? 0 : int.Parse(value.ToString());
         }
     }
 }

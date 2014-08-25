@@ -345,7 +345,8 @@
         /// </returns>
         public int GetMaxDocumentNumber()
         {
-            return Database.ExecuteScalar<int>("SELECT MAX(invoiceNumber) FROM merchInvoice");
+            var value = Database.ExecuteScalar<object>("SELECT TOP 1 invoiceNumber FROM merchInvoice ORDER BY invoiceNumber DESC");
+            return value == null ? 0 : int.Parse(value.ToString());
         }
     }
 }
