@@ -160,10 +160,14 @@
             var authorize = processor.Authorize();
 
             if (!authorize.Payment.Success)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            {
+                authorize.Payment.Result.AuditPaymentDeclined();
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));    
+            }
+            
+            authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice);
 
             return authorize.Payment.Result.ToPaymentDisplay();
-
         }
 
         /// <summary>
@@ -184,8 +188,13 @@
 
             var capture = processor.Capture();
 
-            if(!capture.Payment.Success)
+            if (!capture.Payment.Success)
+            {
+                capture.Payment.Result.AuditPaymentDeclined();
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            capture.Payment.Result.AuditPaymentCaptured();
 
             return capture.Payment.Result.ToPaymentDisplay();
         }
@@ -223,9 +232,13 @@
 
             var authorizeCapture = processor.AuthorizeCapture();
 
-            if(!authorizeCapture.Payment.Success)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            if (!authorizeCapture.Payment.Success)
+            {
+                authorizeCapture.Payment.Result.AuditPaymentDeclined();
 
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));    
+            }
+            
             return authorizeCapture.Payment.Result.ToPaymentDisplay();
         }
 

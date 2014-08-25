@@ -10,7 +10,7 @@
     [TableName("merchOrder")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class OrderDto
+    internal class OrderDto : IPageableDto
     {
         /// <summary>
         /// Gets or sets the key.

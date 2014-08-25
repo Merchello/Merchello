@@ -163,7 +163,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             var customer = _customerService.CreateCustomerWithKey(loginName, firstName, lastName, email);
 
             //// Act
-            var customerAddress = customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Billing);
+            var customerAddress = customer.CreateCustomerAddress(MerchelloContext, _address, "Test address", AddressType.Billing);
 
             //// Assert
             Assert.NotNull(customerAddress, "Customer address was null");
@@ -182,11 +182,11 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.NotNull(customer, "Customer was null");            
 
             //// Act
-            customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Billing);
-            customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Billing);
-            customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Shipping);
-            customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Shipping);
-            customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Shipping);
+            customer.CreateCustomerAddress(MerchelloContext, _address, "test address1", AddressType.Billing);
+            customer.CreateCustomerAddress(MerchelloContext, _address, "test address2", AddressType.Billing);
+            customer.CreateCustomerAddress(MerchelloContext, _address, "test address3", AddressType.Shipping);
+            customer.CreateCustomerAddress(MerchelloContext, _address, "test address4", AddressType.Shipping);
+            customer.CreateCustomerAddress(MerchelloContext, _address, "test address5", AddressType.Shipping);
 
             //// Assert
             var all = customer.CustomerAddresses(MerchelloContext);
@@ -214,8 +214,8 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.NotNull(customer, "Customer was null");
             
             //// Act
-            var address1 = customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Billing);
-            var address2 = customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Billing);
+            var address1 = customer.CreateCustomerAddress(MerchelloContext, _address, "test address1", AddressType.Billing);
+            var address2 = customer.CreateCustomerAddress(MerchelloContext, _address, "test address2", AddressType.Billing);
 
             // at this point address 1 should be default
             var defaultBilling = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing);
@@ -248,8 +248,8 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.NotNull(customer, "Customer was null");
 
             //// Act
-            var address1 = customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Billing);
-            var address2 = customer.CreateCustomerAddress(MerchelloContext, _address, AddressType.Billing);
+            var address1 = customer.CreateCustomerAddress(MerchelloContext, _address, "test address1", AddressType.Billing);
+            var address2 = customer.CreateCustomerAddress(MerchelloContext, _address, "test address2", AddressType.Billing);
 
             // at this point address 1 should be default
 

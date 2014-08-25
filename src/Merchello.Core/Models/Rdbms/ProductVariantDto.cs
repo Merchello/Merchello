@@ -7,7 +7,7 @@ namespace Merchello.Core.Models.Rdbms
     [TableName("merchProductVariant")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class ProductVariantDto
+    public class ProductVariantDto : IPageableDto
     {
         [Column("pk")]
         [PrimaryKeyColumn(AutoIncrement = false)]
@@ -95,6 +95,10 @@ namespace Merchello.Core.Models.Rdbms
         [Column("master")]
         [Constraint(Default = "0")]
         public bool Master { get; set; }
+
+        [Column("versionKey")]
+        [Constraint(Default = "newid()")]
+        public Guid VersionKey { get; set; }
 
         [Column("updateDate")]
         [Constraint(Default = "getdate()")]

@@ -2,13 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using Merchello.Web.Editors;
-    using Merchello.Web.Models.ContentEditing;
-    using Merchello.Web.Reporting;
-
+    using Editors;
+    using Models.ContentEditing;
+    using Models.Querying;
+    using Reporting;
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web;
@@ -58,9 +59,19 @@
             var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));            
 
             umbracoUrls.Add(
+                "merchelloAuditLogApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<AuditLogApiController>(
+                    controller => controller.GetSalesHistoryByInvoiceKey(Guid.Empty)));
+
+            umbracoUrls.Add(
                 "merchelloProductApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<ProductApiController>(
-                controller => controller.GetAllProducts()));
+                controller => controller.SearchProducts(new QueryDisplay()
+                    {
+                        CurrentPage = 0,
+                        ItemsPerPage = 100,
+                        Parameters = new QueryDisplayParameter[] { }
+                    })));
 
             umbracoUrls.Add(
                 "merchelloProductVariantsApiBaseUrl", 
@@ -70,7 +81,12 @@
             umbracoUrls.Add(
                 "merchelloCustomerApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<CustomerApiController>(
-                controller => controller.GetAllCustomers()));
+                controller => controller.SearchCustomers(new QueryDisplay()
+                    {
+                        CurrentPage = 0,
+                        ItemsPerPage = 100,
+                        Parameters = new QueryDisplayParameter[] { }
+                    })));
 
             umbracoUrls.Add(
                 "merchelloSettingsApiBaseUrl", 
@@ -105,7 +121,12 @@
             umbracoUrls.Add(
                 "merchelloInvoiceApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<InvoiceApiController>(
-                controller => controller.GetAllInvoices()));
+                controller => controller.SearchInvoices(new QueryDisplay()
+                {
+                    CurrentPage = 0,
+                    ItemsPerPage = 100,
+                    Parameters = new QueryDisplayParameter[] { }
+                })));
 
             umbracoUrls.Add(
                 "merchelloOrderApiBaseUrl", 
@@ -133,9 +154,9 @@
                 controller => controller.GetGatewayProvider(Guid.NewGuid())));
 
             if (!ReportApiControllerResolver.HasCurrent) return;
-            foreach (var reportController in ReportApiControllerResolver.Current.GetAll())
+
+            foreach (var keyValue in ReportApiControllerResolver.Current.GetAll().Select(reportController => reportController.BaseUrl))
             {
-                var keyValue = reportController.BaseUrl;
                 umbracoUrls.Add(keyValue.Key, keyValue.Value);
             }
         }

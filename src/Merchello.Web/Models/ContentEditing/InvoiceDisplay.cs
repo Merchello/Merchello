@@ -34,6 +34,11 @@
         public int InvoiceNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets the po number.
+        /// </summary>
+        public string PoNumber { get; set; }
+
+        /// <summary>
         /// Gets or sets the invoice date.
         /// </summary>
         public DateTime InvoiceDate { get; set; }

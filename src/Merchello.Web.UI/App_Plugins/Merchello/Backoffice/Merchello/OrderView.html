@@ -9,10 +9,42 @@
             </div>
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <!-- Action: Actions Button -->
+                        <a class="btn" href="#" ng-click="" prevent-default data-toggle="dropdown">
+                            <localize key="general_actions">Actions</localize>
+                            <span class="caret"></span>
+                        </a>
+                        <!-- Actions Menu -->
+                        <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
+                            <li data-ng-hide="invoice.getPaymentStatus()=='Paid'">
+                                <a data-ng-click="capturePayment()">
+                                    <i class="icon icon-credit-card"></i>
+                                    <span class="menu-label">Capture Funds</span>
+                                </a>
+                            </li>
+                            <li data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'">
+                                <a data-ng-click="openFulfillPaymentDialog()">
+                                    <i class="icon icon-truck"></i>
+                                    <span class="menu-label"><localize key="merchelloGeneral_fulfill" /></span>
+                                </a>
+                            </li>
+                            <li class="sep" i data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'">
+                                <a data-ng-click="">
+                                    <i class="icon icon-stop-alt"></i>
+                                    <span class="menu-label">Cancel Sale</span>
+                                </a>
+                            </li>
+                            <li class="sep">
+                                <a data-ng-click="openDeleteInvoiceDialog()">
+                                    <i class="icon icon-delete"></i>
+                                    <span class="menu-label">Delete Sale</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <!-- ACTION: Refund -->
-                    <a class="btn btn-warning">Refund</a>
-                    <!-- ACTION: Delete -->
-                    <a class="btn btn-danger" data-ng-click="openDeleteInvoiceDialog()">Delete</a>
+                    <!--<a class="btn btn-warning">Refund</a>-->
                 </div>
             </div>
         </umb-header>
@@ -22,16 +54,10 @@
                 <!-- Order Information -->
                 <div class="control-group umb-control-group">
                     <div class="merchello-section-label">
-                        <localize key="merchelloOrderView_orderInformation" />
+                        Sale Information
                         <small><localize key="merchelloOrderView_orderInformationHelper" /></small>
                     </div>
                     <div class="merchello-controls">
-                        <div class="row-fluid" data-ng-hide="invoice.getPaymentStatus()=='Paid' && invoice.getFulfillmentStatus()=='Fulfilled'">
-                            <div class="btn-toolbar pull-right umb-btn-toolbar">
-                                <a class="btn btn-primary" data-ng-hide="invoice.getPaymentStatus()=='Paid'" data-ng-click="capturePayment()"><localize key="merchelloOrderView_captureUpTo" /> {{invoice.total | currency : currencySymbol}}</a>
-                                <a class="btn btn-primary" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="openFulfillPaymentDialog()"><localize key="merchelloGeneral_fulfill" /> {{invoice.getProductLineItems().length}} <localize key="merchelloOrder_lineItems" /></a>
-                            </div>
-                        </div>
                         <table class="table table-striped merchello-striped-table order-items">
                             <tbody>
                                 <tr>
@@ -111,13 +137,7 @@
             <div class="merchello-pane secondary span3">
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
-                    <h3>Invoice &amp; Order Statuses</h3><br/>
-                    <div>Payment Status: <strong>{{invoice.getPaymentStatus()}}</strong></div>
-                    <div>Fulfillment Status: <strong>{{invoice.getFulfillmentStatus()}}</strong></div>
-                </div>
-                <!-- Billing Address -->
-                <div class="well billing-address-info">
-                    <h3><localize key="merchelloOrderView_billingAddress" /></h3>
+                    <h3><localize key="merchelloOrderView_billingAddress" /></h3><br/>
                     <div class="vcard">
                         <span class="fn" data-ng-show="invoice.billToName != ''">{{invoice.billToName}}</span>
                         <span class="org" data-ng-show="invoice.billToCompany != ''">{{invoice.billToCompany}}</span>
@@ -130,10 +150,7 @@
                         <span class="tel" data-ng-show="invoice.billToPhone != ''">Phone: {{invoice.billToPhone}}</span>
                         <span data-ng-show="invoice.billToEmail != ''"><a data-ng-href="mailto:{{invoice.billToEmail}}" class="email">{{invoice.billToEmail}}</a></span>
                     </div>
-                </div>
-                <!-- Shipping Address -->
-                <div class="well shipping-address-info">
-                    <h3><localize key="merchelloOrderView_shippingAddress" /></h3>
+                    <h3><localize key="merchelloOrderView_shippingAddress" /></h3><br/>
                     <div class="vcard">
                         <span class="fn" data-ng-show="shippingAddress.name != null">{{shippingAddress.name}}</span>
                         <span class="org" data-ng-show="shippingAddress.organization != null">{{shippingAddress.organization}}</span>

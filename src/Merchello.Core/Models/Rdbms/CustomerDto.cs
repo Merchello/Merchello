@@ -11,7 +11,7 @@
     [TableName("merchCustomer")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class CustomerDto
+    internal class CustomerDto : IPageableDto
     {
         /// <summary>
         /// Gets or sets the key.

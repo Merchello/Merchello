@@ -329,19 +329,21 @@
         var self = this;
 
         if (catalogInventoryFromServer == undefined) {
-            self.catalogKey = "";
-            self.warehouseKey = "";
-            self.productVariantKey = "";
-            self.count = 0;
-            self.lowCount = 0;
             self.catalogName = "";
+            self.catalogKey = "";
+            self.count = 0;
+            self.location = "";
+            self.lowCount = 0;
+            self.productVariantKey = "";
+            self.warehouseKey = "";
         } else {
             self.catalogKey = catalogInventoryFromServer.catalogKey;
-            self.warehouseKey = catalogInventoryFromServer.warehouseKey;
-            self.productVariantKey = catalogInventoryFromServer.productVariantKey;
-            self.count = catalogInventoryFromServer.count;
-            self.lowCount = catalogInventoryFromServer.lowCount;
             self.catalogName = catalogInventoryFromServer.catalogName;
+            self.count = catalogInventoryFromServer.count;
+            self.location = catalogInventoryFromServer.location;
+            self.lowCount = catalogInventoryFromServer.lowCount;
+            self.productVariantKey = catalogInventoryFromServer.productVariantKey;
+            self.warehouseKey = catalogInventoryFromServer.warehouseKey;
         }
     };
 

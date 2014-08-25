@@ -29,18 +29,12 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
-        internal static ProductDisplay ToProductDisplay(this SearchResult result)
+        internal static ProductDisplay ToProductDisplay(this SearchResult result, Func<Guid, IEnumerable<ProductVariantDisplay>> getProductVariants)
         {
             // this should be the master variant
             var productDisplay = new ProductDisplay(result.ToProductVariantDisplay());
 
-            var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
-            var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.ProductVariant);
-            criteria.Field("productKey", productDisplay.Key.ToString()).Not().Field("master", "True");
-
-            var variants = searcher.Search(criteria);
-
-            productDisplay.ProductVariants =  variants.Select(variant => variant.ToProductVariantDisplay()).ToList();
+            productDisplay.ProductVariants = getProductVariants(productDisplay.Key);
             productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "productOptions");
 
             return productDisplay;
@@ -61,13 +55,13 @@
             {
                 Key = FieldAsGuid(result, "productVariantKey"),
                 ProductKey = FieldAsGuid(result, "productKey"),
-                Name = result.Fields["name"],
-                Sku = result.Fields["sku"],
+                Name = FieldAsString(result, "name"),
+                Sku = FieldAsString(result, "sku"),
                 Price = FieldAsDecimal(result, "price"),
                 OnSale = FieldAsBoolean(result.Fields["onSale"]),
                 SalePrice = FieldAsDecimal(result, "salePrice"),
-                CostOfGoods = FieldAsDecimal(result,"costOfGoods"),
-                Weight = FieldAsDecimal(result,"weight"),
+                CostOfGoods = FieldAsDecimal(result, "costOfGoods"),
+                Weight = FieldAsDecimal(result, "weight"),
                 Length = FieldAsDecimal(result, "length"),
                 Height = FieldAsDecimal(result, "height"),
                 Width = FieldAsDecimal(result, "width"),
@@ -79,6 +73,7 @@
                 Shippable = FieldAsBoolean(result.Fields["shippable"]),
                 Download = FieldAsBoolean(result.Fields["download"]),
                 DownloadMediaId = FieldAsInteger(result, "downloadMediaId"),
+                VersionKey = FieldAsGuid(result, "versionKey"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories")
             };
@@ -92,10 +87,13 @@
         /// <param name="result">
         /// The result.
         /// </param>
+        /// <param name="getOrders">
+        /// The get Orders.
+        /// </param>
         /// <returns>
         /// The <see cref="InvoiceDisplay"/>.
         /// </returns>
-        internal static InvoiceDisplay ToInvoiceDisplay(this SearchResult result)
+        internal static InvoiceDisplay ToInvoiceDisplay(this SearchResult result, Func<Guid, IEnumerable<OrderDisplay>> getOrders)
         {
             var invoice = new InvoiceDisplay()
                 {
@@ -105,7 +103,7 @@
                     InvoiceDate = FieldAsDateTime(result, "invoiceDate"),
                     InvoiceStatusKey = FieldAsGuid(result, "invoiceStatusKey"),
                     VersionKey = FieldAsGuid(result, "versionKey"),
-                    BillToName = result.Fields["billToName"],
+                    BillToName = FieldAsString(result, "billToName"),
                     BillToAddress1 = FieldAsString(result, "billToAddress1"),
                     BillToAddress2 = FieldAsString(result, "billToAddress2"),
                     BillToLocality = FieldAsString(result, "billToLocality"),
@@ -122,7 +120,7 @@
                     Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
                 };
 
-            invoice.Orders = OrderQuery.GetByInvoiceKey(invoice.Key);
+            invoice.Orders = getOrders(invoice.Key);
 
             return invoice;
         }
@@ -176,7 +174,7 @@
                 ExtendedData =
                     RawJsonFieldAsCollection<KeyValuePair<string, string>>(result, "extendedData")
                         .AsExtendedDataCollection(),
-                Addresses = RawJsonFieldAsCollection<ICustomerAddress>(result, "addresses").Select(x => x.ToCustomerAddressDisplay()),
+                Addresses = RawJsonFieldAsCollection<CustomerAddress>(result, "addresses").Select(x => x.ToCustomerAddressDisplay()),
                 LastActivityDate = FieldAsDateTime(result, "lastActivityDate")
             };
         }
@@ -240,7 +238,7 @@
         /// <returns>
         /// The <see cref="Guid"/>.
         /// </returns>
-        private static Guid FieldAsGuid(SearchResult result, string alias)
+        internal static Guid FieldAsGuid(SearchResult result, string alias)
         {
             if (!result.Fields.ContainsKey(alias)) return Guid.Empty;
 

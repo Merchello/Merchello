@@ -1,23 +1,30 @@
-﻿namespace Merchello.Core.Services
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using System.Web.UI;
 
     using Merchello.Core.Events;
     using Merchello.Core.Models;
-    using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.Repositories;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents the InvoiceService
     /// </summary>
-    public class InvoiceService : IInvoiceService
+    public class InvoiceService : PageCachedServiceBase<IInvoice>, IInvoiceService
     {
         #region Fields
 
@@ -25,7 +32,12 @@
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-      
+
+        /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "invoicenumber", "invoicedate", "billtoname", "billtoemail" };
+
         /// <summary>
         /// The unit of work provider.
         /// </summary>
@@ -384,13 +396,42 @@
         /// </summary>
         /// <param name="key">The <see cref="IInvoice"/>'s unique 'key' (GUID)</param>
         /// <returns><see cref="IInvoice"/></returns>
-        public IInvoice GetByKey(Guid key)
+        public override IInvoice GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
         }
+
+        /// <summary>
+        /// Gets a <see cref="Page{IInvoice}"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public override Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
 
         /// <summary>
         /// Gets a <see cref="IInvoice"/> given it's unique 'InvoiceNumber'
@@ -401,7 +442,7 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IInvoice>.Builder.Where(x => x.InvoiceNumber == invoiceNumber);
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceNumber == invoiceNumber);
 
                 return repository.GetByQuery(query).FirstOrDefault();
             }
@@ -445,23 +486,42 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == customeryKey);
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.CustomerKey == customeryKey);
 
                 return repository.GetByQuery(query);
             }
         }
 
         /// <summary>
-        /// Gets the total count of all <see cref="IInvoice"/>
+        /// Gets the count of invoice by date range.
         /// </summary>
-        /// <returns>The count of <see cref="IInvoice"/></returns>
-        public int InvoiceCount()
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <returns>
+        /// The count the invoices.
+        /// </returns>
+        public IEnumerable<IInvoice> GetInvoicesByDateRange(DateTime startDate, DateTime endDate)
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty);
-                return repository.Count(query);
+                var query = Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate);
+
+                return repository.GetByQuery(query);
             }
+        }
+
+
+        /// <summary>
+        /// Gets the total count of all <see cref="IInvoice"/>
+        /// </summary>
+        /// <returns>The count of <see cref="IInvoice"/></returns>
+        public int CountInvoices()
+        {
+            return this.Count(Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty));
         }
 
 
@@ -508,6 +568,149 @@
                 return repository.GetAll();
             } 
         }
+
+        /// <summary>
+        /// The count of invoices.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal override int Count(IQuery<IInvoice> query)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+
+        #region Key Queries
+
+        /// <summary>
+        /// Gets a page of Keys
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The order by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        /// <remarks>
+        /// This is used by large back office collections usually backed by Examine (Lucene) backed cache
+        /// </remarks>
+        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetPagedKeys(
+                _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
+                Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty),
+                page,
+                itemsPerPage,
+                ValidateSortByField(sortBy),
+                sortDirection);
+        }
+
+        /// <summary>
+        /// Gets a page by search term
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        /// <remarks>
+        /// The search is prefabricated in the repository
+        /// </remarks>
+        internal Page<Guid> GetPagedKeys(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = (InvoiceRepository)_repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.SearchKeys(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy));
+            }
+        }       
+
+        /// <summary>
+        /// Gets a page by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetPagedKeys(
+            IQuery<IInvoice> query,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetPagedKeys(
+                _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()),
+                query,
+                page,
+                itemsPerPage,
+                ValidateSortByField(sortBy),
+                sortDirection);
+        }
+
+        /// <summary>
+        /// Validates the sort by string is a valid sort by field
+        /// </summary>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// A validated database field name.
+        /// </returns>
+        protected override string ValidateSortByField(string sortBy)
+        {
+            return ValidSortFields
+                .Contains(sortBy.ToLowerInvariant()) ? sortBy : "invoiceNumber";
+        }
+
+        #endregion
 
         /// <summary>
         /// Deletes orders associated with the invoice

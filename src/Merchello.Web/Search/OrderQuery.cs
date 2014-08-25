@@ -14,6 +14,7 @@
     /// <summary>
     /// The order query.
     /// </summary>
+    [Obsolete("Use CachedOrderQuery")]
     internal class OrderQuery : QueryBase
     {
         /// <summary>

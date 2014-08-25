@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines the CustomerService, which provides access to operations involving <see cref="ICustomer"/>
     /// </summary>
-    public interface ICustomerService : IService
+    public interface ICustomerService : IPageCachedService<ICustomer>
     {
         /// <summary>
         /// Creates a customer without saving to the database
@@ -91,12 +91,6 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IEnumerable<ICustomer> customers, bool raiseEvents = true);
 
-        /// <summary>
-        /// Gets an <see cref="ICustomer"/> object by its 'UniqueId'
-        /// </summary>
-        /// <param name="key">GUID key of the Customer to retrieve</param>
-        /// <returns><see cref="ICustomer"/></returns>
-        ICustomer GetByKey(Guid key);
 
         /// <summary>
         /// Gets an <see cref="ICustomer"/> or <see cref="IAnonymousCustomer"/> object by its 'UniqueId'

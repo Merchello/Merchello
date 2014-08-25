@@ -44,7 +44,7 @@
          */
         $scope.submitIfValid = function() {
             $scope.wasFormSubmitted = true;
-            if ($scope.editInfoForm.firstName.$valid && $scope.editInfoForm.lastName.$valid && $scope.editInfoForm.email.$valid) {
+            if ($scope.editInfoForm.email.$valid) {
                 $scope.submit($scope.dialogData);
             }
         };

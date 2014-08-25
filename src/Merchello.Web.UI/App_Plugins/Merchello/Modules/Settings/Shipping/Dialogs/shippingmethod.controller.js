@@ -141,7 +141,7 @@
             $scope.rateTable.shipMethodKey = $scope.dialogData.method.key;
             $scope.rateTable.shipCountryKey = $scope.dialogData.method.shipCountryKey;
             if ($scope.dialogData.gatewayResources[0].serviceCode !== '') {
-                var blankMethod = new merchello.Models.GatewayResource({ name: 'Choose Method', serviceCode: '' });
+                var blankMethod = new merchello.Models.GatewayResource({ name: '------', serviceCode: '' });
                 $scope.dialogData.gatewayResources.unshift(blankMethod);
             }
             var serviceCode = $scope.dialogData.method.serviceCode;

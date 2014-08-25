@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Factories;
+    using Models;
+    using Models.EntityBase;
+    using Models.Rdbms;    
+    using Querying;    
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+    using UnitOfWork;
+
     /// <summary>
     /// Represents the OrderRepository
     /// </summary>
-    internal class OrderRepository : MerchelloPetaPocoRepositoryBase<IOrder>, IOrderRepository
+    internal class OrderRepository : PagedRepositoryBase<IOrder, OrderDto>, IOrderRepository
     {
         private readonly ILineItemRepositoryBase<IOrderLineItem> _orderLineItemRepository;
 
@@ -27,6 +27,16 @@ namespace Merchello.Core.Persistence.Repositories
             Mandate.ParameterNotNull(orderLineItemRepository, "lineItemRepository");
 
             _orderLineItemRepository = orderLineItemRepository;
+        }
+
+        public override Page<Guid> SearchKeys(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
         }
 
         protected override IOrder PerformGet(Guid key)
@@ -170,5 +180,17 @@ namespace Merchello.Core.Persistence.Repositories
             return collection;
         }
 
+        /// <summary>
+        /// The get max document number.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int GetMaxDocumentNumber()
+        {
+
+            var value = Database.ExecuteScalar<object>("SELECT TOP 1 orderNumber FROM merchOrder ORDER BY orderNumber DESC");
+            return value == null ? 0 : int.Parse(value.ToString());
+        }
     }
 }

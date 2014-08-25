@@ -12,34 +12,40 @@
 
         /**
          * @ngdoc method
-         * @name getAllCustomers
+         * @name changePage
          * @function
          * 
          * @description
-         * Load all the customers from the API.
+         * Changes the current page.
          */
-        $scope.getAllCustomers = function() {
-            var promiseAllCustomers = merchelloCustomerService.GetAllCustomers();
-            promiseAllCustomers.then(function (customersResponse) {
-                if (customersResponse) {
-                    $scope.customers = [];
-                    $scope.customers = _.map(customersResponse.results, function (customer) {
-                        return new merchello.Models.Customer(customer);
-                    });
-                }
-            });
+        $scope.changePage = function (page) {
+            $scope.currentPage = page;
+            $scope.loadCustomers($scope.filterText);
         };
 
         /**
          * @ngdoc method
-         * @name filterCustomers
+         * @name changeSortOrder
          * @function
          * 
          * @description
-         * Filter the customer list based on the provided filter.
+         * Helper function to set the current sort on the table and switch the 
+         * direction if the property is already the current sort column.
          */
-        $scope.filterCustomers = function () {
-
+        $scope.changeSortOrder = function (propertyToSort) {
+            if ($scope.sortProperty == propertyToSort) {
+                if ($scope.sortOrder == "asc") {
+                    $scope.sortProperty = "-" + propertyToSort;
+                    $scope.sortOrder = "desc";
+                } else {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "asc";
+                }
+            } else {
+                $scope.sortProperty = propertyToSort;
+                $scope.sortOrder = "asc";
+            }
+            $scope.loadCustomers($scope.filterText);
         };
 
         /**
@@ -52,7 +58,65 @@
          */
         $scope.init = function () {
             $scope.setVariables();
-            $scope.getAllCustomers();
+            $scope.loadCustomers();
+        };
+
+        /**
+         * @ngdoc method
+         * @name limitChanged
+         * @function
+         * 
+         * @description
+         * Helper function to set the amount of items to show per page for the paging filters and calculations
+         */
+        $scope.limitChanged = function (newVal) {
+            $scope.limitAmount = newVal;
+            $scope.currentPage = 0;
+            $scope.loadCustomers($scope.filterText);
+        };
+
+        /**
+         * @ngdoc method
+         * @name loadCustomers
+         * @function
+         * 
+         * @description
+         * Load the customers from the API using the provided filter (if any).
+         */
+        $scope.loadCustomers = function (filterText) {
+            var page = $scope.currentPage;
+            var perPage = $scope.limitAmount;
+            var sortBy = $scope.sortInfo().sortBy;
+            var sortDirection = $scope.sortInfo().sortDirection;
+            if (filterText === undefined) {
+                filterText = '';
+            } else {
+                // Since there's a filter being added, start back at the first page.
+                page = 0;
+            }
+            $scope.filterText = filterText;
+            var listQuery = new merchello.Models.ListQuery({
+                currentPage: page,
+                itemsPerPage: perPage,
+                sortBy: sortBy,
+                sortDirection: sortDirection,
+                parameters: [
+                {
+                    fieldName: 'term',
+                    value: filterText
+                }]
+            });
+            var promiseAllCustomers = merchelloCustomerService.searchCustomers(listQuery);
+            promiseAllCustomers.then(function (customersResponse) {
+                if (customersResponse) {
+                    $scope.customers = [];
+                    var queryResult = new merchello.Models.QueryResult(customersResponse);
+                    $scope.customers = _.map(queryResult.items, function (customer) {
+                        return new merchello.Models.Customer(customer);
+                    });
+                    $scope.maxPages = queryResult.totalPages;
+                }
+            });
         };
 
         /**
@@ -111,9 +175,13 @@
          * Sets $scope variables.
          */
         $scope.setVariables = function () {
+            $scope.currentPage = 0;
             $scope.customers = [];
+            $scope.limitAmount = 100;
             $scope.loaded = true;
+            $scope.maxPages = 0;
             $scope.preValuesLoaded = true;
+            $scope.sortProperty = 'firstName';
             $scope.visible = {
                 bulkActionButton: function() {
                     var result = false;
@@ -121,6 +189,32 @@
                 },
                 bulkActionDropdown: false
             };
+        };
+
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         * 
+         * @description
+         * Returns sort information based off the current $scope.sortProperty.
+         */
+        $scope.sortInfo = function () {
+            var sortDirection, sortBy;
+            // If the sortProperty starts with '-', it's representing a descending value.
+            if ($scope.sortProperty.indexOf('-') > -1) {
+                // Get the text after the '-' for sortBy
+                sortBy = $scope.sortProperty.split('-')[1];
+                sortDirection = 'Descending';
+                // Otherwise it is ascending.
+            } else {
+                sortBy = $scope.sortProperty;
+                sortDirection = 'Ascending';
+            }
+            return {
+                sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
+                sortDirection: sortDirection
+            }
         };
 
         $scope.init();

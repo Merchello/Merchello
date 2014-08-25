@@ -3,6 +3,9 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Indicates whether a shopping cart basket is either a "basket" or a "wishlist" representation
     /// </summary>
@@ -22,6 +25,15 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(ItemCacheType.Wishlist, new TypeField("Wishlist", "Wishlist", Constants.TypeFieldKeys.ItemCache.WishlistKey));
             AddUpdateCache(ItemCacheType.Checkout, new TypeField("Checkout", "Checkout", Constants.TypeFieldKeys.ItemCache.CheckoutKey));
         }
+
+        public override IEnumerable<ITypeField> CustomTypeFields
+        {
+            get
+            {
+                return ItemCaches.GetTypeFields().Select(GetTypeField);
+            }
+        }
+
 
         /// <summary>
         /// Returns a custom basket or a NullTypeField

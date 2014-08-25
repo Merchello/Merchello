@@ -1,20 +1,18 @@
-﻿using System;
-using Merchello.Core.Models;
-using Umbraco.Core.Persistence.Repositories;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using Models;
+    using Models.Rdbms;
+
     /// <summary>
     /// Marker interface for the address repository
     /// </summary>
-    public interface IProductRepository : IRepositoryQueryable<Guid, IProduct>
+    public interface IProductRepository : IPagedRepository<IProduct, ProductDto>
     {
         /// <summary>
-        /// True/false indicating whether or not a sku is already exists in the database
+        /// Gets or sets a value Indicating whether or not a sku is already exists in the database
         /// </summary>
         /// <param name="sku">The sku to be tested</param>
-        /// <returns></returns>
+        /// <returns>A value indicating whether or not a sku is already exists in the database</returns>
         bool SkuExists(string sku);
-
     }
 }

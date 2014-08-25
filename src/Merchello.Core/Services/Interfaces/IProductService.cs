@@ -8,7 +8,7 @@
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
     /// </summary>
-    public interface IProductService : IService
+    public interface IProductService : IPageCachedService<IProduct>
     {
         /// <summary>
         /// Creates a Product without saving it to the database
@@ -71,13 +71,6 @@
         /// <param name="productList">Collection of <see cref="IProduct"/> to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IEnumerable<IProduct> productList, bool raiseEvents = true);
-
-        /// <summary>
-        /// Gets an <see cref="IProduct"/> object by its 'UniqueId'
-        /// </summary>
-        /// <param name="key">Guid key of the Product to retrieve</param>
-        /// <returns><see cref="IProduct"/></returns>
-        IProduct GetByKey(Guid key);
 
         /// <summary>
         /// Gets list of <see cref="IProduct"/> objects given a list of Unique keys

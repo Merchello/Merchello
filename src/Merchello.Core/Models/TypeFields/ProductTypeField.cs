@@ -2,6 +2,9 @@
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Product Types
     /// </summary>
@@ -15,6 +18,15 @@ namespace Merchello.Core.Models.TypeFields
         internal override void BuildCache()
         {
         }
+
+        public override IEnumerable<ITypeField> CustomTypeFields
+        {
+            get
+            {
+                return Products.GetTypeFields().Select(GetTypeField);
+            }
+        }
+
 
         /// <summary>
         /// Returns a product type or NullTypeField

@@ -122,6 +122,7 @@
                 new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("catalogInventories", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("productOptions", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("versionKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)

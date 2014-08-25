@@ -1,25 +1,21 @@
-﻿using System.Globalization;
-using System.Web.Mvc;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Web.Search;
-using Merchello.Web.Workflow;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
-    using System.Net.Http;
     using System.Web.Http;
-    using Core;
-    using Core.Models;
-    using Core.Services;
-    using Models.ContentEditing;    
+
+    using Merchello.Core;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.WebApi;
+    using Merchello.Web.Workflow;
+
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
-    using WebApi;
 
     /// <summary>
     /// The order api controller.
@@ -36,6 +32,11 @@ namespace Merchello.Web.Editors
         /// The invoice service.
         /// </summary>
         private readonly IInvoiceService _invoiceService;
+
+        /// <summary>
+        /// The <see cref="MerchelloHelper"/>.
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
 
         /// <summary>
         /// The customer.
@@ -66,6 +67,7 @@ namespace Merchello.Web.Editors
         {
             _orderService = merchelloContext.Services.OrderService;
             _invoiceService = merchelloContext.Services.InvoiceService;
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
 
@@ -83,6 +85,7 @@ namespace Merchello.Web.Editors
         {
             _orderService = merchelloContext.Services.OrderService;
             _invoiceService = merchelloContext.Services.InvoiceService;
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
         /// <summary>
@@ -96,16 +99,10 @@ namespace Merchello.Web.Editors
         /// <returns>
         /// The <see cref="OrderDisplay"/>.
         /// </returns>
+        [HttpGet]
         public OrderDisplay GetOrder(Guid id)
         {
-            var order = _orderService.GetByKey(id) as Order;
-
-            if (order == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            return order.ToOrderDisplay();
+            return _merchello.Query.Order.GetByKey(id);
         }
 
         /// <summary>
@@ -124,15 +121,16 @@ namespace Merchello.Web.Editors
         /// <returns>
         /// The collection of <see cref="OrderLineItemDisplay"/>.
         /// </returns>
+        [HttpGet]
         public IEnumerable<OrderLineItemDisplay> GetUnFulfilledItems(Guid id)
         {
             var order = _orderService.GetByKey(id);
             if (order == null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                throw new KeyNotFoundException("Order not found");
             }
 
-            return order.UnfulfilledItems().Select(x => x.ToOrderLineItemDisplay());
+            return order.UnfulfilledItems(MerchelloContext).Select(x => x.ToOrderLineItemDisplay());
         }
 
         /// <summary>
@@ -148,7 +146,7 @@ namespace Merchello.Web.Editors
         /// </returns>
         public IEnumerable<OrderDisplay> GetOrdersByInvoiceKey(Guid id)
         {
-            return OrderQuery.GetByInvoiceKey(id);
+            return _merchello.Query.Order.GetByInvoiceKey(id);
         }
 
         /// <summary>
@@ -166,20 +164,20 @@ namespace Merchello.Web.Editors
 
             if (invoice == null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                throw new KeyNotFoundException("Invoice with id passed not found");
             }
 
             var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping);
 
             if (shipmentLineItem == null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                throw new KeyNotFoundException("Shipment line item not found in the invoice");
             }
 
             var shipment = shipmentLineItem.ExtendedData.GetShipment<OrderLineItem>();
             if (shipment == null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                throw new KeyNotFoundException("Shipment not found in shipment line item extended data collection");
             }
 
             return shipment.GetDestinationAddress().ToAddressDisplay();
@@ -262,7 +260,7 @@ namespace Merchello.Web.Editors
         [AcceptVerbs("GET")]
         public IEnumerable<IPaymentGatewayMethod> GetPaymentMethods(BackofficeAddItemModel model)
         {
-            return MerchelloContext.Current.Gateways.Payment.GetPaymentGatewayMethods();
+            return MerchelloContext.Gateways.Payment.GetPaymentGatewayMethods();
         }
 
         [HttpPost]

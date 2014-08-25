@@ -10,7 +10,7 @@
     [TableName("merchInvoice")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class InvoiceDto
+    internal class InvoiceDto : IPageableDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -41,6 +41,13 @@
         [Column("invoiceNumber")]
         [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]
         public int InvoiceNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the po number.
+        /// </summary>
+        [Column("poNumber")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string PoNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the invoice date.
