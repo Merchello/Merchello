@@ -7,6 +7,7 @@
 
     using Merchello.Core;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
 
     using Umbraco.Core.Cache;
     using Umbraco.Web;

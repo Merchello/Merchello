@@ -1,4 +1,7 @@
-﻿namespace Merchello.Core.Services
+﻿using System.Web.UI;
+using Merchello.Core.Persistence.Repositories;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -6,17 +9,21 @@
     using System.Threading;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Persistence;
+    using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents the Customer Service, 
     /// </summary>
-    public class CustomerService : ICustomerService
+    public class CustomerService : PageCachedServiceBase<ICustomer>, ICustomerService
     {
         #region fields
 
@@ -24,6 +31,11 @@
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
+        /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "firstname", "lastname", "loginname", "email", "lastactivitydate" };
 
         /// <summary>
         /// The unit of work provider.
@@ -53,7 +65,7 @@
         /// <summary>
         /// The payment service.
         /// </summary>
-        private readonly IPaymentService _paymentService;
+        private readonly IPaymentService _paymentService;        
 
         #endregion
 
@@ -399,14 +411,42 @@
         /// </summary>
         /// <param name="key">GUID key for the customer</param>
         /// <returns><see cref="ICustomer"/></returns>
-        public ICustomer GetByKey(Guid key)
+        public override ICustomer GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
         }
-        
+
+        /// <summary>
+        /// Gets a page of <see cref="ICustomer"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Icustomer}"/>.
+        /// </returns>
+        public override Page<ICustomer> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+       
         /// <summary>
         /// Gets an <see cref="ICustomer"/> or <see cref="IAnonymousCustomer"/> object by its 'UniqueId'
         /// </summary>
@@ -444,7 +484,7 @@
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomer>.Builder.Where(x => x.LoginName == loginName);
+                var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.LoginName == loginName);
 
                 return repository.GetByQuery(query).FirstOrDefault();
             }
@@ -460,7 +500,7 @@
         {
             using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
+                var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
 
                 return repository.Count(query);
             }
@@ -619,6 +659,7 @@
                 return repository.GetAll();
             }
         }
+      
 
         /// <summary>
         /// For testing.
@@ -632,6 +673,139 @@
             {
                 return repository.GetAll();
             }
+        }
+
+        /// <summary>
+        /// Gets a count of items returned by a query
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal override int Count(IQuery<ICustomer> query)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="Page{Guid}"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repositoy = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repositoy.GetPagedKeys(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets a page by search term
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        /// <remarks>
+        /// The search is prefabricated in the repository
+        /// </remarks>
+        internal Page<Guid> GetPagedKeys(
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.SearchKeys(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy));
+            }
+        }    
+
+        /// <summary>
+        /// Gets a page by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetPagedKeys(
+            IQuery<ICustomer> query,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetPagedKeys(
+                _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()),
+                query,
+                page,
+                itemsPerPage,
+                ValidateSortByField(sortBy),
+                sortDirection);
+        }
+
+        /// <summary>
+        /// Validates the sort by field
+        /// </summary>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected override string ValidateSortByField(string sortBy)
+        {
+            return ValidSortFields.Contains(sortBy.ToLower()) ? sortBy : "loginName";
         }
 
         /// <summary>
@@ -656,6 +830,7 @@
                 _customerAddressService.Save(addresses[i]);
             }
         }
+
 
         /// <summary>
         /// Deletes invoices and payments associated with a customer

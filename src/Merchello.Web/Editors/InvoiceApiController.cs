@@ -1,4 +1,7 @@
-﻿namespace Merchello.Web.Editors
+﻿using AutoMapper.Mappers;
+using Umbraco.Core;
+
+namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
@@ -9,8 +12,10 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
     using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
@@ -24,9 +29,14 @@
     public class InvoiceApiController : MerchelloApiController
     {
         /// <summary>
-        /// The _invoice service.
+        /// The <see cref="IInvoiceService"/>.
         /// </summary>
         private readonly IInvoiceService _invoiceService;
+
+        /// <summary>
+        /// The <see cref="MerchelloHelper"/>
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvoiceApiController"/> class.
@@ -46,6 +56,8 @@
             : base(merchelloContext)
         {
             _invoiceService = merchelloContext.Services.InvoiceService;
+
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
         /// <summary>
@@ -76,134 +88,115 @@
         /// </returns>
         public InvoiceDisplay GetInvoice(Guid id)
         {
-            var invoice = _invoiceService.GetByKey(id) as Invoice;
-            if (invoice == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            return invoice.ToInvoiceDisplay();
+            return _merchello.Query.Invoice.GetByKey(id);
         }
 
         /// <summary>
         /// Returns All Invoices
         /// 
-        /// GET /umbraco/Merchello/InvoiceApi/GetInvoices
+        /// GET /umbraco/Merchello/InvoiceApi/SearchAllInvoices
         /// </summary>
-        /// <returns>
-        /// The collection of all <see cref="InvoiceDisplay"/>.
-        /// </returns>
-        public QueryResultDisplay GetAllInvoices()
-        {
-            var invoices = InvoiceQuery.GetAllInvoices().ToArray();
-
-            return new QueryResultDisplay()
-            {
-                Results = invoices,
-                PageIndex = 0,
-                TotalPages = 1,
-                TotalResults = invoices.Count()
-            };            
-        }
-
-        /// <summary>
-        /// Returns All Invoices
-        /// 
-        /// GET /umbraco/Merchello/InvoiceApi/GetAllInvoices
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="perPage">
-        /// The per Page.
+        /// <param name="query">
+        /// The query.
         /// </param>
         /// <returns>
         /// The paged collection of invoices.
         /// </returns>
-        public QueryResultDisplay GetAllInvoices(int page, int perPage)
+        [HttpPost]
+        public QueryResultDisplay SearchInvoices(QueryDisplay query)
         {
-            var allInvoices = InvoiceQuery.GetAllInvoices().ToArray();
-            var invoices = allInvoices.Skip(page * perPage).Take(perPage);
+            var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
 
-            return new QueryResultDisplay()
-            {
-                Results = invoices,
-                PageIndex = page,
-                TotalPages = ((allInvoices.Count() - 1) / perPage) + 1,
-                TotalResults = allInvoices.Count()
-            };            
+            return term != null && !string.IsNullOrEmpty(term.Value)
+                ? 
+                 _merchello.Query.Invoice.Search(
+                    term.Value,
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection) 
+                :
+                _merchello.Query.Invoice.Search(
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection);
         }
 
         /// <summary>
         /// Gets a collection of invoices associated with a customer.
         /// 
-        /// GET /umbraco/Merchello/InvoiceApi/GetByCustomerKey/{id}
+        /// GET /umbraco/Merchello/InvoiceApi/SearchByCustomer/
         /// </summary>
-        /// <param name="id">
-        /// The id.
+        /// <param name="query">
+        /// The query.
         /// </param>
         /// <returns>
         /// The collection of invoices associated with the customer.
         /// </returns>
-        public IEnumerable<InvoiceDisplay> GetByCustomerKey(Guid id)
+        [HttpPost]
+        public QueryResultDisplay SearchByCustomer(QueryDisplay query)
         {
-            return InvoiceQuery.GetByCustomerKey(id);
+            Guid key;
+           
+            var customerKey = query.Parameters.FirstOrDefault(x => x.FieldName == "customerKey");
+            Mandate.ParameterNotNull(customerKey, "customerKey was null");
+            Mandate.ParameterCondition(Guid.TryParse(customerKey.Value, out key), "customerKey was not a valid GUID");
+           
+            return _merchello.Query.Invoice.SearchByCustomer(
+                key,
+                query.CurrentPage + 1,
+                query.ItemsPerPage,
+                query.SortBy,
+                query.SortDirection);
         }
 
         /// <summary>
-        /// Returns All Invoices
-        /// 
-        /// GET /umbraco/Merchello/InvoiceApi/GetFilteredInvoices
+        /// The search by date range.
         /// </summary>
-        /// <param name="term">
-        /// The search term
+        /// <param name="query">
+        /// The query.
         /// </param>
         /// <returns>
-        /// The collection of invoices..
+        /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetFilteredInvoices(string term)
+        [HttpPost]
+        public QueryResultDisplay SearchByDateRange(QueryDisplay query)
         {
-            var invoices = InvoiceQuery.Search(term).ToArray();
+            var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
+            var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
+            var invoiceStatusKey = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceStatusKey");
 
-            return new QueryResultDisplay()
-            {
-                Results = invoices,
-                PageIndex = 0,
-                TotalPages = 1,
-                TotalResults = invoices.Count()
-            };
+            DateTime startDate;
+            DateTime endDate;
+            Mandate.ParameterNotNull(invoiceDateStart, "invoiceDateStart is a required parameter");
+            Mandate.ParameterCondition(DateTime.TryParse(invoiceDateStart.Value, out startDate), "Failed to convert invoiceDateStart to a valid DateTime");
+
+            endDate = invoiceDateEnd == null
+                ? DateTime.MaxValue
+                : DateTime.TryParse(invoiceDateEnd.Value, out endDate)
+                    ? endDate
+                    : DateTime.MaxValue;
+
+            return invoiceStatusKey == null
+                ? _merchello.Query.Invoice.Search(
+                    startDate,
+                    endDate,
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection) :
+
+                 _merchello.Query.Invoice.Search(
+                    startDate,
+                    endDate,
+                    invoiceStatusKey.Value.EncodeAsGuid(),
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection);
         }
-
-        /// <summary>
-        /// Returns All Products
-        /// 
-        /// GET /umbraco/Merchello/InvoicesApi/GetFilteredInvoices
-        /// </summary>
-        /// <param name="term">
-        /// The term.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="perPage">
-        /// The per Page.
-        /// </param>
-        /// <returns>
-        /// The collection of invoices..
-        /// </returns>
-        public QueryResultDisplay GetFilteredInvoices(string term, int page, int perPage)
-        {
-            var allMatches = InvoiceQuery.Search(term).ToArray();
-            var invoices = allMatches.Skip(page * perPage).Take(perPage);
-
-            return new QueryResultDisplay()
-            {
-                Results = invoices,
-                PageIndex = page,
-                TotalPages = ((allMatches.Count() - 1) / perPage) + 1,
-                TotalResults = allMatches.Count()
-            };
-        }
+                
 
         /// <summary>
         /// Updates an existing invoice

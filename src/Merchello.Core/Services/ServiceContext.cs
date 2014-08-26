@@ -28,6 +28,11 @@
         private Lazy<IAppliedPaymentService> _appliedPaymentService;
 
         /// <summary>
+        /// The audit log service.
+        /// </summary>
+        private Lazy<IAuditLogService> _auditLogService;
+
+        /// <summary>
         /// The country tax rate service.
         /// </summary>
         private Lazy<ITaxMethodService> _countryTaxRateService;
@@ -141,6 +146,14 @@
         }
 
         #region IServiceContext Members
+
+        /// <summary>
+        /// Gets the <see cref="IAuditLogService"/>
+        /// </summary>
+        public IAuditLogService AuditLogService
+        {
+            get { return _auditLogService.Value; }
+        }
 
         /// <summary>
         /// Gets the <see cref="ICustomerService"/>
@@ -316,6 +329,9 @@
 
             if (_appliedPaymentService == null)
                 _appliedPaymentService = new Lazy<IAppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_auditLogService == null)
+                _auditLogService = new Lazy<IAuditLogService>(() => new AuditLogService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_customerAddressService == null)
                 _customerAddressService = new Lazy<ICustomerAddressService>(() => new CustomerAddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

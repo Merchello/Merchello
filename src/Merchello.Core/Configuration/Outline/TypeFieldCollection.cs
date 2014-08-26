@@ -1,7 +1,9 @@
 ﻿namespace Merchello.Core.Configuration.Outline
 {
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     /// <summary>
     /// The type field collection.
@@ -19,6 +21,16 @@
         protected override ConfigurationElement CreateNewElement()
         {
             return new TypeFieldElement();
+        }
+        /// <summary>
+        /// The gets the collection of type fields.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{TypeFieldElement}"/>.
+        /// </returns>
+        public IEnumerable<TypeFieldElement> GetTypeFields()
+        {
+            return this.Cast<TypeFieldElement>();
         }
 
         /// <summary>

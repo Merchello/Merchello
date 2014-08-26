@@ -1,13 +1,12 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
-    using System;
-    using Merchello.Core.Models;
-    using Umbraco.Core.Persistence.Repositories;
+    using Models;
+    using Models.Rdbms;
 
     /// <summary>
     /// Marker Interface for the customer repository
     /// </summary>
-    internal interface ICustomerRepository : IRepositoryQueryable<Guid, ICustomer>
+    internal interface ICustomerRepository : IPagedRepository<ICustomer, CustomerDto>
     {
     }
 }

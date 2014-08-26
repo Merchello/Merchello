@@ -4,6 +4,9 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Security.Cryptography.X509Certificates;
+
     /// <summary>
     /// Identifies an address as either shipping or billing
     /// </summary>
@@ -23,7 +26,15 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(AddressType.Billing,  new TypeField("Billing", "Billing", Constants.TypeFieldKeys.Address.BillingAddressKey));
         }
 
-#endregion
+        public override IEnumerable<ITypeField> CustomTypeFields
+        {
+            get
+            {
+                return Addresses.GetTypeFields().Select(GetTypeField);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Indicates the address is a residential address

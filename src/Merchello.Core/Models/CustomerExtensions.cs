@@ -16,36 +16,6 @@
     /// </summary>
     public static class CustomerExtensions
     {
-        /////// <summary>
-        /////// Gets a collection of all customer addresses
-        /////// </summary>
-        /////// <param name="customer">
-        /////// The customer.
-        /////// </param>
-        /////// <returns>
-        /////// The collection of all <see cref="ICustomerAddress"/> for a given customer
-        /////// </returns>
-        ////public static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer)
-        ////{
-        ////    return customer.CustomerAddresses(MerchelloContext.Current);
-        ////}
-
-        /////// <summary>
-        /////// The addresses.
-        /////// </summary>
-        /////// <param name="customer">
-        /////// The customer.
-        /////// </param>
-        /////// <param name="addressType">
-        /////// The address type.
-        /////// </param>
-        /////// <returns>
-        /////// The collection of <see cref="ICustomerAddress"/>
-        /////// </returns>
-        ////public static IEnumerable<ICustomerAddress> CustomerAddresses(this ICustomer customer, AddressType addressType)
-        ////{
-        ////    return customer.CustomerAddresses(MerchelloContext.Current, addressType);
-        ////}
 
         /// <summary>
         /// The default customer address associated with a customer of a given type
@@ -73,13 +43,18 @@
         /// <param name="address">
         /// The address.
         /// </param>
-        /// <param name="addressType">The <see cref="AddressType"/></param>
+        /// <param name="label">
+        /// The address label
+        /// </param>
+        /// <param name="addressType">
+        /// The <see cref="AddressType"/>
+        /// </param>
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
-        public static ICustomerAddress CreateCustomerAddress(this ICustomer customer, IAddress address, AddressType addressType)
+        public static ICustomerAddress CreateCustomerAddress(this ICustomer customer, IAddress address, string label, AddressType addressType)
         {
-            return customer.CreateCustomerAddress(MerchelloContext.Current, address, addressType);
+            return customer.CreateCustomerAddress(MerchelloContext.Current, address, label, addressType);
         }
 
         /// <summary>
@@ -210,15 +185,18 @@
         /// <param name="address">
         /// The address.
         /// </param>
+        /// <param name="label">
+        /// The customer label
+        /// </param>
         /// <param name="addressType">
         /// The address type.
         /// </param>
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
-        internal static ICustomerAddress CreateCustomerAddress(this ICustomer customer, IMerchelloContext merchelloContext, IAddress address, AddressType addressType)
+        internal static ICustomerAddress CreateCustomerAddress(this ICustomer customer, IMerchelloContext merchelloContext, IAddress address, string label, AddressType addressType)
         {
-            var customerAddress = address.ToCustomerAddress(customer, addressType);
+            var customerAddress = address.ToCustomerAddress(customer, label, addressType);
 
             return customer.SaveCustomerAddress(merchelloContext, customerAddress);
         }

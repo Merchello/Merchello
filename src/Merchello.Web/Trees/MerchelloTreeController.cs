@@ -79,8 +79,7 @@
             if (id == "settings")
             {
                 menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
-            }
-
+            }     
 
             if (id == "orders")
             {

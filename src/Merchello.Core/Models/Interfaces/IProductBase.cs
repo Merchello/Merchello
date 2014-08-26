@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Merchello.Core.Models.EntityBase;
 
@@ -128,6 +129,13 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         int? DownloadMediaId { get; set; }
+
+
+        /// <summary>
+        /// Gets the version key.
+        /// </summary>
+        [DataMember]
+        Guid VersionKey { get;  }
 
         /// <summary>
         /// The product inventory

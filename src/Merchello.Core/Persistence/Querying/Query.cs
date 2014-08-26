@@ -37,7 +37,7 @@ namespace Merchello.Core.Persistence.Querying
             }
             return this;
         }
-        
+
         public List<string> WhereClauses()
         {
             return _wheres;

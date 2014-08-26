@@ -1,8 +1,8 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Mappers
+﻿namespace Merchello.Core.Persistence.Mappers
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
     internal sealed class AppliedPaymentMapper : MerchelloBaseMapper
     {
         public AppliedPaymentMapper()

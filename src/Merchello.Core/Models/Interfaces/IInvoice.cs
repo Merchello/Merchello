@@ -27,6 +27,12 @@
         int InvoiceNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets the po number.
+        /// </summary>
+        [DataMember]
+        string PoNumber { get; set; }
+
+        /// <summary>
         /// Gets or sets the date the invoice was issued to customer
         /// </summary>
         [DataMember]

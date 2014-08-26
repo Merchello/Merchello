@@ -1,9 +1,9 @@
-﻿using System;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.DatabaseAnnotations;
-
-namespace Merchello.Core.Models.Rdbms
+﻿namespace Merchello.Core.Models.Rdbms
 {
+    using System;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.DatabaseAnnotations;
+
     [TableName("merchInvoiceItem")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]

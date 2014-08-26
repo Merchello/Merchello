@@ -35,7 +35,8 @@
 		{
 		}
 
-		/// <summary>
+
+        /// <summary>
 		/// Gets the database Unit of Work added to the repository
 		/// </summary>
 		protected internal new IDatabaseUnitOfWork UnitOfWork

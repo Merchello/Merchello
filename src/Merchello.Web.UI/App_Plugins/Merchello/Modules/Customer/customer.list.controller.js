@@ -21,6 +21,7 @@
         $scope.changePage = function (page) {
             $scope.currentPage = page;
             $scope.loadCustomers($scope.filterText);
+<<<<<<< HEAD
         };
 
         /**
@@ -46,18 +47,33 @@
                 $scope.sortOrder = "asc";
             }
             $scope.loadCustomers($scope.filterText);
+=======
+>>>>>>> merchello/1.4.0
         };
 
         /**
          * @ngdoc method
-         * @name filterCustomers
+         * @name changeSortOrder
          * @function
          * 
          * @description
-         * Filter the customer list based on the provided filter.
+         * Helper function to set the current sort on the table and switch the 
+         * direction if the property is already the current sort column.
          */
-        $scope.filterCustomers = function () {
-
+        $scope.changeSortOrder = function (propertyToSort) {
+            if ($scope.sortProperty == propertyToSort) {
+                if ($scope.sortOrder == "asc") {
+                    $scope.sortProperty = "-" + propertyToSort;
+                    $scope.sortOrder = "desc";
+                } else {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "asc";
+                }
+            } else {
+                $scope.sortProperty = propertyToSort;
+                $scope.sortOrder = "asc";
+            }
+            $scope.loadCustomers($scope.filterText);
         };
 
         /**
@@ -89,7 +105,11 @@
 
         /**
          * @ngdoc method
+<<<<<<< HEAD
          * @name getAllCustomers
+=======
+         * @name loadCustomers
+>>>>>>> merchello/1.4.0
          * @function
          * 
          * @description

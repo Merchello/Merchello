@@ -103,27 +103,15 @@
 
             },
 
-            getInvoiceAndOrderNumbers: function () {
-                return umbRequestHelper.resourcePromise(
-                     $http.get(
-                        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'GetInvoiceAndOrderNumbers')
-                    ),
-                    'Failed to get all Store Settings');
-            },
-
             getCurrentSettings: function() {
                 var deferred = $q.defer();
 
                 var promiseArray = [];
 
                 promiseArray.push(settingsServices.getAllSettings());
-                promiseArray.push(settingsServices.getInvoiceAndOrderNumbers());
 
                 var promise = $q.all(promiseArray);
                 promise.then(function (data) {
-                    data[0].nextInvoiceNumber = data[1].nextInvoiceNumber;
-                    data[0].nextOrderNumber = data[1].nextOrderNumber;
-
                     deferred.resolve(new merchello.Models.StoreSettings(data[0]));
                 }, function(reason) {
                     deferred.reject(reason);
