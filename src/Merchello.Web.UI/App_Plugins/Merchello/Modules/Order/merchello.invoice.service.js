@@ -30,14 +30,22 @@
             * @name getByCustomerKey
             * @description 
             **/
-            getByCustomerKey: function (customerKey) {
+            getByCustomerKey: function(customerKey) {
+
+                var listQuery;
+                
+                var query = new merchello.Models.ListQuery({
+                        currentPage: 0,
+                        itemsPerPage: 100,
+                        sortBy: '',
+                        sortDirection: ''
+                    });
+                
+                listQuery = new merchello.Models.ListQuery(query);
+                listQuery.parameters.push(new merchello.Models.ListQueryParameter({ fieldName: 'customerKey', value: customerKey }));
                 return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetByCustomerKey'), 
-                        method: "GET",
-                        params: {id: customerKey }
-                    }),
-                    'Failed to get invoices for customer ' + customerKey);
+                        $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchByCustomer'), listQuery),
+                        'Failed to retreive invoices');
             },
 
             /**
@@ -54,6 +62,7 @@
                    }),
                    'Failed to retreive data for invoice id: ' + id);
             },
+
 
             /**
             * @ngdoc method
