@@ -1,24 +1,18 @@
-﻿using AutoMapper.Mappers;
-using Umbraco.Core;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
 
     using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
-    using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
+    using Umbraco.Core;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
 

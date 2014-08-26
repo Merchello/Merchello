@@ -1,9 +1,11 @@
 ﻿namespace Merchello.Core.Gateways
 {
-    using System;
-    using Shipping;
+    using Merchello.Core.Events;
+    using Merchello.Core.Gateways.Payment;
+
     using Models;
     using Services;
+    using Shipping;
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
@@ -32,7 +34,72 @@
             LogHelper.Info<GatewayEvents>("Initializing Merchello Warehouse Catalog binding events");
 
             WarehouseCatalogService.Deleted += WarehouseCatalogServiceDeleted;
+
+            PaymentGatewayMethodBase.AuthorizeAttempted += PaymentGatewayMethodBaseOnAuthorizeAttempted;
+
+            PaymentGatewayMethodBase.AuthorizeCaptureAttempted += PaymentGatewayMethodBaseOnAuthorizeCaptureAttempted;
+
+            PaymentGatewayMethodBase.CaptureAttempted += PaymentGatewayMethodBaseOnCaptureAttempted;
         }
+
+        /// <summary>
+        /// Creates an order if approved
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        private static void CreateOrder(IPaymentResult result)
+        {
+            if (!result.Payment.Success || !result.ApproveOrderCreation) return;
+
+            // order
+            var order = result.Invoice.PrepareOrder(MerchelloContext.Current);
+
+            MerchelloContext.Current.Services.OrderService.Save(order);
+        }
+
+        /// <summary>
+        /// Handles the capture attempted event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="paymentAttemptEventArgs">
+        /// The payment attempt event args.
+        /// </param>
+        private void PaymentGatewayMethodBaseOnCaptureAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> paymentAttemptEventArgs)
+        {
+            CreateOrder(paymentAttemptEventArgs.Entity);
+        }
+
+        /// <summary>
+        /// Handles the authorize capture attempted event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="paymentAttemptEventArgs">
+        /// The payment attempt event args.
+        /// </param>
+        private void PaymentGatewayMethodBaseOnAuthorizeCaptureAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> paymentAttemptEventArgs)
+        {
+            CreateOrder(paymentAttemptEventArgs.Entity);
+        }
+
+        /// <summary>
+        /// Handles the authorize attempted event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="paymentAttemptEventArgs">
+        /// The payment attempt event args.
+        /// </param>
+        private void PaymentGatewayMethodBaseOnAuthorizeAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> paymentAttemptEventArgs)
+        {
+            CreateOrder(paymentAttemptEventArgs.Entity);
+        }
+        
 
         /// <summary>
         /// The warehouse catalog service deleted.
