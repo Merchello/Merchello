@@ -128,7 +128,7 @@
 
         private void Build(PaymentRequest request)
         {
-            _invoice = _merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
+            Invoice = _merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
 
             if (request.PaymentKey != null)
                 _payment = _merchelloContext.Services.PaymentService.GetByKey(request.PaymentKey.Value);

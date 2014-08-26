@@ -140,7 +140,7 @@
         $scope.loadInvoices = function() {
             var promiseInvoices = merchelloInvoiceService.getByCustomerKey($scope.customer.key);
             promiseInvoices.then(function(invoicesResponse) {
-                $scope.invoices = _.map(invoicesResponse, function (invoice) {
+                $scope.invoices = _.map(invoicesResponse.items, function (invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
                 for (var i = 0; i < invoicesResponse.length; i++) {
