@@ -194,6 +194,9 @@ namespace Merchello.Web
                             customer = _customerService.GetByLoginName(member.Username) ??
                                             _customerService.CreateCustomerWithKey(member.Username);
 
+
+                            ContextData.Key = customer.Key;
+
                             var customerBasket = Basket.GetBasket(_merchelloContext, customer);
 
                             //// convert the customer basket

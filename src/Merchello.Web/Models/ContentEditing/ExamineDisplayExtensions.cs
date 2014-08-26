@@ -102,6 +102,7 @@
                     InvoiceNumber = FieldAsInteger(result, "invoiceNumber"),
                     InvoiceDate = FieldAsDateTime(result, "invoiceDate"),
                     InvoiceStatusKey = FieldAsGuid(result, "invoiceStatusKey"),
+                    CustomerKey = FieldAsGuid(result, "customerKey"),
                     VersionKey = FieldAsGuid(result, "versionKey"),
                     BillToName = FieldAsString(result, "billToName"),
                     BillToAddress1 = FieldAsString(result, "billToAddress1"),

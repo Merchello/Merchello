@@ -40,14 +40,6 @@
         {
             var result = args.Entity;
 
-            if (result.ApproveOrderCreation)
-            {
-                // order
-                var order = result.Invoice.PrepareOrder(MerchelloContext.Current);
-
-                MerchelloContext.Current.Services.OrderService.Save(order);
-            }
-
             var customerKey = result.Invoice.CustomerKey;
 
             // Clean up the sales prepartation item cache

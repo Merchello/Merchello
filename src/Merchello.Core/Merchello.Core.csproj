@@ -82,6 +82,7 @@
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
+    <Compile Include="Events\PaymentAttemptEventArgs.cs" />
     <Compile Include="Events\SalesPreparationEventArgs.cs" />
     <Compile Include="Formatters\IPatternReplaceFormatter.cs" />
     <Compile Include="Formatters\IReplaceablePattern.cs" />
