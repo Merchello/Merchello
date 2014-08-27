@@ -11,8 +11,9 @@
     using Core.Models;
     using Core.Services;
     using Models.ContentEditing;
-    using Umbraco.Web.Mvc;
+    using Models.Payments;
     using WebApi;
+    using Umbraco.Web.Mvc;
 
     /// <summary>
     /// Represents the PaymentGatewayApiController

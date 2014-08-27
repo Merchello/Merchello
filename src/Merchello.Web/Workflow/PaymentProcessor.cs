@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Workflow
+﻿using Merchello.Web.Models.Payments;
+
+namespace Merchello.Web.Workflow
 {
     using System;
     using Merchello.Core;

@@ -194,6 +194,28 @@
         }
 
         /// <summary>
+        /// Logs a voided payment.
+        /// </summary>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The refund amount
+        /// </param>
+        internal static void AuditPaymentRefunded(this IPayment payment, decimal amount)
+        {
+            var obj = new
+            {
+                area = Area,
+                key = "paymentRefunded",
+                refundAmount = amount,
+                currencyCode = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)
+            };
+
+            UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize());
+        }
+
+        /// <summary>
         /// The log.
         /// </summary>
         /// <param name="key">
