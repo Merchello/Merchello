@@ -19,7 +19,6 @@ describe("Vendor Models", function () {
                 region: "122",
                 postalCode: "813456",
                 country: "UK"
-
             }
 
             vendor = new merchello.Models.Vendor(vfs);
