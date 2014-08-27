@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Editors
+﻿using Lucene.Net.Index;
+
+namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
@@ -12,9 +14,10 @@
     using Core.Services;
     using Models;
     using Models.ContentEditing;
-    using Umbraco.Web;
+    using Models.Payments;
     using WebApi;
     using Workflow;
+    using Umbraco.Web;
 
     /// <summary>
     /// The payment api controller.
@@ -83,6 +86,7 @@
         /// <returns>
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
+        [HttpGet]
         public PaymentDisplay GetPayment(Guid id)
         {
             var payment = _paymentService.GetByKey(id) as Payment;
@@ -105,6 +109,7 @@
         /// <returns>
         /// The collection of payments.
         /// </returns>
+        [HttpGet]
         public IEnumerable<PaymentDisplay> GetPaymentsByInvoice(Guid id)
         {
             var payments = _paymentService.GetPaymentsByInvoiceKey(id);
@@ -129,7 +134,8 @@
 		/// <returns>
 		/// The collection of applied payments.
 		/// </returns>
-		public IEnumerable<AppliedPaymentDisplay> GetAppliedPaymentsByInvoice(Guid id)
+		[HttpGet]
+        public IEnumerable<AppliedPaymentDisplay> GetAppliedPaymentsByInvoice(Guid id)
 		{
 			var appliedPayments = _paymentService.GetAppliedPaymentsByInvoiceKey(id);
 
@@ -153,21 +159,30 @@
         /// <returns>
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
-        [AcceptVerbs("POST", "GET")]
-        public PaymentDisplay AuthorizePayment(PaymentRequest request)
+        [HttpPost]
+        public PaymentResultDisplay AuthorizePayment(PaymentRequest request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
             var authorize = processor.Authorize();
 
+            var result = new PaymentResultDisplay()
+            {
+                Success = authorize.Payment.Success,
+                Invoice = authorize.Invoice.ToInvoiceDisplay(),
+                Payment = authorize.Payment.Result.ToPaymentDisplay(),
+                ApproveOrderCreation = authorize.ApproveOrderCreation
+            };
+            
             if (!authorize.Payment.Success)
             {
-                authorize.Payment.Result.AuditPaymentDeclined();
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));    
+                authorize.Payment.Result.AuditPaymentDeclined();                
             }
-            
-            authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice);
-
-            return authorize.Payment.Result.ToPaymentDisplay();
+            else
+            {
+                authorize.Payment.Result.AuditPaymentAuthorize(authorize.Invoice);    
+            }
+                       
+            return result;
         }
 
         /// <summary>
@@ -181,38 +196,33 @@
         /// <returns>
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
-        [AcceptVerbs("POST", "GET")]
-        public PaymentDisplay CapturePayment(PaymentRequest request)
+        [HttpPost]
+        public PaymentResultDisplay CapturePayment(PaymentRequest request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
 
             var capture = processor.Capture();
 
+            var result = new PaymentResultDisplay()
+            {
+                Success = capture.Payment.Success,
+                Invoice = capture.Invoice.ToInvoiceDisplay(),
+                Payment = capture.Payment.Result.ToPaymentDisplay(),
+                ApproveOrderCreation = capture.ApproveOrderCreation
+            };
+
             if (!capture.Payment.Success)
             {
                 capture.Payment.Result.AuditPaymentDeclined();
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
-
-            capture.Payment.Result.AuditPaymentCaptured();
-
-            return capture.Payment.Result.ToPaymentDisplay();
+            else
+            {
+                capture.Payment.Result.AuditPaymentCaptured();
+            }
+           
+            return result;
         }
 
-		/// <summary>
-		/// PaymentProcessor Capture()
-		/// </summary>
-		/// <param name="request">
-		/// The request.
-		/// </param>
-		/// <returns>
-		/// The <see cref="IPaymentResult"/>.
-		/// </returns>
-		public IPaymentResult ComplitePayment(PaymentRequest request)
-		{
-			var processor = new PaymentProcessor(MerchelloContext, request);
-			return processor.Capture();
-		}
 
         /// <summary>
         /// Returns a payment for an AuthorizeCapturePayment PaymentRequest
@@ -225,21 +235,32 @@
         /// <returns>
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
-        [AcceptVerbs("POST", "GET")]
-        public PaymentDisplay AuthorizeCapturePayment(PaymentRequest request)
+        [HttpPost]
+        public PaymentResultDisplay AuthorizeCapturePayment(PaymentRequest request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
 
             var authorizeCapture = processor.AuthorizeCapture();
 
+            var result = new PaymentResultDisplay()
+            {
+                Success = authorizeCapture.Payment.Success,
+                Invoice = authorizeCapture.Invoice.ToInvoiceDisplay(),
+                Payment = authorizeCapture.Payment.Result.ToPaymentDisplay(),
+                ApproveOrderCreation = authorizeCapture.ApproveOrderCreation
+            };
+
             if (!authorizeCapture.Payment.Success)
             {
                 authorizeCapture.Payment.Result.AuditPaymentDeclined();
-
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));    
+            }
+            else
+            {
+                authorizeCapture.Payment.Result.AuditPaymentAuthorize(authorizeCapture.Invoice);
+                authorizeCapture.Payment.Result.AuditPaymentCaptured();
             }
             
-            return authorizeCapture.Payment.Result.ToPaymentDisplay();
+            return result;
         }
 
         /// <summary>
@@ -253,16 +274,27 @@
         /// <returns>
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
-        public PaymentDisplay RefundPayment(PaymentRequest request)
+        public PaymentResultDisplay RefundPayment(PaymentRequest request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
 
             var refund = processor.Refund();
 
-            if (!refund.Payment.Success)
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            var result = new PaymentResultDisplay()
+            {
+                Success = refund.Payment.Success,
+                Invoice = refund.Invoice.ToInvoiceDisplay(),
+                Payment = refund.Payment.Result.ToPaymentDisplay(),
+                ApproveOrderCreation = refund.ApproveOrderCreation
+            };
 
-            return refund.Payment.Result.ToPaymentDisplay();
+            if (refund.Payment.Success)            
+            {
+               refund.Payment.Result.AuditPaymentRefunded(request.Amount);
+            }
+            
+
+            return result;
         }       
     }
 }

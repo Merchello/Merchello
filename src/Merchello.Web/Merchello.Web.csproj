@@ -228,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Models\Payments\PaymentResultDisplay.cs" />
     <Compile Include="SalesHistoryAuditingExtensions.cs" />
     <Compile Include="AutoMapperMappings-Payment.cs">
       <DependentUpon>AutoMapperMappings.cs</DependentUpon>
@@ -329,8 +330,8 @@
     <Compile Include="Models\ContentEditing\OrderDisplay.cs" />
     <Compile Include="Models\ContentEditing\OrderLineItemDisplay.cs" />
     <Compile Include="Models\ContentEditing\OrderStatusDisplay.cs" />
-    <Compile Include="Models\ContentEditing\PaymentDisplay.cs" />
-    <Compile Include="Models\ContentEditing\PaymentMethodDisplay.cs" />
+    <Compile Include="Models\Payments\PaymentDisplay.cs" />
+    <Compile Include="Models\Payments\PaymentMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipFixedRateTableDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipRateTierDisplay.cs" />
@@ -349,7 +350,7 @@
     <Compile Include="Models\ContentEditing\TaxProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
     <Compile Include="Models\ContentEditing\CatalogInventoryDisplay.cs" />
-    <Compile Include="Models\PaymentRequest.cs" />
+    <Compile Include="Models\Payments\PaymentRequest.cs" />
     <Compile Include="Mvc\MerchelloViewPage.cs" />
     <Compile Include="Search\OrderQuery.cs" />
     <Compile Include="PackageActions\AddConfigSection.cs" />

@@ -8,6 +8,7 @@ using Merchello.Core.Gateways.Taxation;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
 using Merchello.Core.Gateways.Shipping;
+using Merchello.Web.Models.Payments;
 
 namespace Merchello.Web.Models.ContentEditing
 {

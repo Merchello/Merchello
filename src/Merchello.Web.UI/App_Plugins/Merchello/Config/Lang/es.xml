@@ -323,6 +323,7 @@
     <key alias="paymentAuthorize">We were authorized to capture %0% %1%</key>
     <key alias="paymentVoided">Payment was voided</key>
     <key alias="paymentDeclined">Payment was declined</key>
+    <key alias="paymentRefunded">We refunded %0% %1% of a payment</key>
     <key alias="invoiceDeleted">Invoice %0% was deleted</key>
     <key alias="paymentDeleted">Payment was deleted</key>
     <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
