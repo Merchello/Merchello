@@ -228,7 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
-    <Compile Include="AuditingExtensions.cs" />
+    <Compile Include="SalesHistoryAuditingExtensions.cs" />
     <Compile Include="AutoMapperMappings-Payment.cs">
       <DependentUpon>AutoMapperMappings.cs</DependentUpon>
     </Compile>
