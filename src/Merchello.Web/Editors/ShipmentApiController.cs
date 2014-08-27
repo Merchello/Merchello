@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Management.Instrumentation;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
@@ -10,6 +11,7 @@
     using Merchello.Core;
     using Merchello.Core.Builders;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.WebApi;
@@ -44,6 +46,11 @@
         private readonly IShipMethodService _shipMethodService;
 
         /// <summary>
+        /// The <see cref="MerchelloHelper"/>.
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ShipmentApiController"/> class.
         /// </summary>
         public ShipmentApiController()
@@ -63,7 +70,8 @@
             _shipmentService = merchelloContext.Services.ShipmentService;
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
-            _shipMethodService = ((ServiceContext) merchelloContext.Services).ShipMethodService;
+            _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
         /// <summary>
@@ -82,6 +90,7 @@
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
         /// <summary>
@@ -127,7 +136,7 @@
         public ShipMethodDisplay GetShipMethod(OrderDisplay order)
         {
             var invoice = _invoiceService.GetByKey(order.InvoiceKey);
-            
+
             if (invoice == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -145,17 +154,31 @@
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            if(shipment.ShipMethodKey != null)
+            if (shipment.ShipMethodKey != null)
             {
                 var shipMethod = _shipMethodService.GetByKey(shipment.ShipMethodKey.Value);
 
-                if (shipMethod == null) return new ShipMethodDisplay() {Name = "Not Found"};
+                if (shipMethod == null) return new ShipMethodDisplay() { Name = "Not Found" };
 
                 return shipMethod.ToShipMethodDisplay();
             }
 
             return new ShipMethodDisplay() { Name = "Not Found" };
         }
+
+        //public ShipMethodDisplay GetShipMethod(OrderDisplay order)
+        //{
+        //    var invoice = _merchello.Query.Invoice.GetByKey(order.InvoiceKey);
+
+        //    if (invoice == null) throw new KeyNotFoundException("Could not find an invoice associated with the order passed");
+
+        //    var shipmentItems = invoice.Items.Where(x => x.LineItemTfKey == EnumTypeFieldConverter.LineItemType.GetTypeField(LineItemType.Shipping).TypeKey);
+
+        //    if (!shipmentItems.Any()) throw new KeyNotFoundException("No shipment line items found on the invoice");
+
+
+
+        //}
 
 
         /// <summary>

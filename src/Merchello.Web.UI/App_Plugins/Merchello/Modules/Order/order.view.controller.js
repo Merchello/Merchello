@@ -44,7 +44,24 @@
             }, function (reason) {
                 notificationsService.error("Payment Capture Failed", reason.message);
             });
+        };
 
+        /**
+         * @ngdoc method
+         * @name hasOrder
+         * @function
+         * 
+         * @description
+         * Returns false if the invoice has no orders.
+         */
+        $scope.hasOrder = function() {
+            var result = false;
+            if ($scope.invoice.orders !== undefined) {
+                if ($scope.invoice.orders.length > 0) {
+                    result = true;
+                }
+            }
+            return result;
         };
 
         /**
@@ -61,6 +78,17 @@
 	        $scope.loadSettings();
 	    };
 
+	    $scope.isPaid = function () {
+	        var result = false;
+	        if (typeof $scope.invoice.getPaymentStatus === "function") {
+	            var status = $scope.invoice.getPaymentStatus();
+	            if (status === "Paid") {
+	                result = true;
+	            }
+	        }
+	        return result;
+	    };
+
         /**
          * @ngdoc method
          * @name loadInvoice
@@ -72,9 +100,9 @@
 	    $scope.loadInvoice = function (id) {
 	        var promise = merchelloInvoiceService.getByKey(id);
 	        promise.then(function (invoice) {
-	            console.info(invoice);
 	            $scope.invoice = new merchello.Models.Invoice(invoice);
 	            console.info($scope.invoice);
+	            console.info('getPaymentStatus: ' + $scope.invoice.getPaymentStatus());
 	            _.each($scope.invoice.items, function (lineItem) {
 	                if (lineItem.lineItemTfKey) {
 	                    var matchedTypeField = _.find($scope.typeFields, function (type) {
@@ -254,7 +282,6 @@
          * Delete the invoice.
          */
 	    $scope.processDeleteInvoiceDialog = function () {
-	        console.info($scope.invoice.key);
 	        var promiseDeleteInvoice = merchelloInvoiceService.deleteInvoice($scope.invoice.key);
 	        promiseDeleteInvoice.then(function (response) {
 	            notificationsService.success('Invoice Deleted');

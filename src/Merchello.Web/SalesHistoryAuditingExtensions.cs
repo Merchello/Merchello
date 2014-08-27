@@ -4,25 +4,21 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
-
     using Core;
+    using Core.Configuration;
     using Core.Models;
-
-    using Merchello.Core.Configuration;
-
-    using umbraco;
-
+    using Newtonsoft.Json;
     using Umbraco.Core.Logging;
 
     /// <summary>
     /// The auditing extensions.
     /// </summary>
-    internal static class AuditingExtensions
+    internal static class SalesHistoryAuditingExtensions
     {
         /// <summary>
-        /// The localization section
+        /// The localization area
         /// </summary>
-        private const string Section = "merchelloAuditLogs";
+        private const string Area = "merchelloAuditLogs";
 
         /// <summary>
         /// Logs the invoice creation
@@ -32,9 +28,14 @@
         /// </param>
         internal static void AuditCreated(this IInvoice invoice)
         {
-            var msg = Localize.Text(Section, "invoiceCreated").Replace("%0%", invoice.PrefixedInvoiceNumber());
+            var obj = new
+            {
+                area = Area,
+                key = "invoiceCreated",
+                invoiceNumber = invoice.PrefixedInvoiceNumber()
+            };            
 
-            UpdateAuditLog(invoice.Key, EntityType.Invoice, msg);
+            UpdateAuditLog(invoice.Key, EntityType.Invoice, obj.Serialize());
         }
 
 
@@ -46,9 +47,14 @@
         /// </param>
         internal static void AuditDeleted(this IInvoice invoice)
         {
-            var msg = Localize.Text(Section, "invoiceDeleted").Replace("%0%", invoice.PrefixedInvoiceNumber());
+            var obj = new
+            {
+                area = Area,
+                key = "invoiceDeleted",
+                invoiceNumber = invoice.PrefixedInvoiceNumber()
+            };    
 
-            UpdateAuditLog(invoice.Key, EntityType.Invoice, msg);
+            UpdateAuditLog(invoice.Key, EntityType.Invoice, obj.Serialize());
         }
 
 
@@ -61,9 +67,14 @@
         /// </param>
         internal static void AuditCreated(this IOrder order)
         {
-            var msg = Localize.Text(Section, "orderCreated").Replace("%0%", order.PrefixedOrderNumber());
+            var obj = new
+            {
+                area = Area,
+                key = "orderCreated",
+                invoiceNumber = order.PrefixedOrderNumber()
+            };
 
-            UpdateAuditLog(order.Key, EntityType.Order, msg);
+            UpdateAuditLog(order.Key, EntityType.Order, obj.Serialize());
         }
         
 
@@ -75,9 +86,14 @@
         /// </param>
         internal static void AuditDeleted(this IOrder order)
         {
-            var msg = Localize.Text(Section, "orderDeleted").Replace("%0%", order.PrefixedOrderNumber());
+            var obj = new
+            {
+                area = Area,
+                key = "orderDeleted",
+                orderNumber = order.PrefixedOrderNumber()
+            };
 
-            UpdateAuditLog(order.Key, EntityType.Order, msg);
+            UpdateAuditLog(order.Key, EntityType.Order, obj.Serialize());
         }
 
 
@@ -90,9 +106,16 @@
         /// </param>
         internal static void AuditCreated(this IShipment shipment)
         {            
-            var msg = Localize.Text(Section, "shipmentCreated").Replace("%0%", shipment.Items.Count.ToString(CultureInfo.InvariantCulture));
 
-            UpdateAuditLog(shipment.Key, EntityType.Shipment, msg);
+            var obj = new
+            {
+                area = Area,
+                key = "shipmentCreated",
+                itemCount = shipment.Items.Count.ToString(CultureInfo.InvariantCulture)
+            };
+
+
+            UpdateAuditLog(shipment.Key, EntityType.Shipment, obj.Serialize());
         }
 
         /// <summary>
@@ -105,10 +128,16 @@
         /// The invoice for which the payment was authorized 
         /// </param>
         internal static void AuditPaymentAuthorize(this IPayment payment, IInvoice invoice)
-        {
-            var msg = Localize.Text(Section, "paymentAuthorize").Replace("%0%", invoice.Total.ToString("F")).Replace("%1%", invoice.Items.First().ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode));
+        {            
+            var obj = new
+            {
+                area = Area,
+                key = "paymentAuthorize",
+                invoiceTotal = invoice.Total,
+                currencyCode = invoice.Items.First().ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)
+            };
 
-            UpdateAuditLog(payment.Key, EntityType.Payment, msg);
+            UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize());
         }
 
         /// <summary>
@@ -119,9 +148,15 @@
         /// </param>
         internal static void AuditPaymentCaptured(this IPayment payment)
         {
-            var msg = Localize.Text(Section, "paymentCaptured").Replace("%0%", payment.Amount.ToString("F")).Replace("%1%", payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode));
+            var obj = new
+            {
+                area = Area,
+                key = "paymentCaptured",
+                invoiceTotal = payment.Amount,
+                currencyCode = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)
+            };
 
-            UpdateAuditLog(payment.Key, EntityType.Payment, msg);
+            UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize());
         }
 
         /// <summary>
@@ -132,9 +167,13 @@
         /// </param>
         internal static void AuditPaymentDeclined(this IPayment payment)
         {
-            var msg = Localize.Text(Section, "paymentDeclined");
+            var obj = new
+            {
+                area = Area,
+                key = "paymentDeclined"
+            };
 
-            UpdateAuditLog(payment.Key, EntityType.Payment, msg);
+            UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize());
         }
 
         /// <summary>
@@ -145,9 +184,35 @@
         /// </param>
         internal static void AuditPaymentVoided(this IPayment payment)
         {
-            var msg = Localize.Text(Section, "paymentVoided");
+            var obj = new
+            {
+                area = Area,
+                key = "paymentVoided"
+            };
 
-            UpdateAuditLog(payment.Key, EntityType.Payment, msg);
+            UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize());
+        }
+
+        /// <summary>
+        /// Logs a voided payment.
+        /// </summary>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The refund amount
+        /// </param>
+        internal static void AuditPaymentRefunded(this IPayment payment, decimal amount)
+        {
+            var obj = new
+            {
+                area = Area,
+                key = "paymentRefunded",
+                refundAmount = amount,
+                currencyCode = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)
+            };
+
+            UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize());
         }
 
         /// <summary>
@@ -198,9 +263,23 @@
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Error(typeof(AuditingExtensions), string.Format("Failed to log {0} for entityType {1} with key {2}", message, entityType, key), ex);
+                    LogHelper.Error(typeof(SalesHistoryAuditingExtensions), string.Format("Failed to log {0} for entityType {1} with key {2}", message, entityType, key), ex);
                 }
             });
+        }
+
+        /// <summary>
+        /// Helper to serialize the objects containing sales history messages
+        /// </summary>
+        /// <param name="msg">
+        /// The msg.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string Serialize(this object msg)
+        {
+            return JsonConvert.SerializeObject(msg);
         }
     }
 }
