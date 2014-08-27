@@ -21,34 +21,6 @@
         $scope.changePage = function (page) {
             $scope.currentPage = page;
             $scope.loadCustomers($scope.filterText);
-<<<<<<< HEAD
-        };
-
-        /**
-         * @ngdoc method
-         * @name changeSortOrder
-         * @function
-         * 
-         * @description
-         * Helper function to set the current sort on the table and switch the 
-         * direction if the property is already the current sort column.
-         */
-        $scope.changeSortOrder = function (propertyToSort) {
-            if ($scope.sortProperty == propertyToSort) {
-                if ($scope.sortOrder == "asc") {
-                    $scope.sortProperty = "-" + propertyToSort;
-                    $scope.sortOrder = "desc";
-                } else {
-                    $scope.sortProperty = propertyToSort;
-                    $scope.sortOrder = "asc";
-                }
-            } else {
-                $scope.sortProperty = propertyToSort;
-                $scope.sortOrder = "asc";
-            }
-            $scope.loadCustomers($scope.filterText);
-=======
->>>>>>> merchello/1.4.0
         };
 
         /**
@@ -105,11 +77,7 @@
 
         /**
          * @ngdoc method
-<<<<<<< HEAD
-         * @name getAllCustomers
-=======
          * @name loadCustomers
->>>>>>> merchello/1.4.0
          * @function
          * 
          * @description

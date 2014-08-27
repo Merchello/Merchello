@@ -44,7 +44,24 @@
             }, function (reason) {
                 notificationsService.error("Payment Capture Failed", reason.message);
             });
+        };
 
+        /**
+         * @ngdoc method
+         * @name hasOrder
+         * @function
+         * 
+         * @description
+         * Returns false if the invoice has no orders.
+         */
+        $scope.hasOrder = function() {
+            var result = false;
+            if ($scope.invoice.orders !== undefined) {
+                if ($scope.invoice.orders.length > 0) {
+                    result = true;
+                }
+            }
+            return result;
         };
 
         /**
@@ -72,7 +89,6 @@
 	    $scope.loadInvoice = function (id) {
 	        var promise = merchelloInvoiceService.getByKey(id);
 	        promise.then(function (invoice) {
-	            console.info(invoice);
 	            $scope.invoice = new merchello.Models.Invoice(invoice);
 	            console.info($scope.invoice);
 	            _.each($scope.invoice.items, function (lineItem) {
@@ -254,7 +270,6 @@
          * Delete the invoice.
          */
 	    $scope.processDeleteInvoiceDialog = function () {
-	        console.info($scope.invoice.key);
 	        var promiseDeleteInvoice = merchelloInvoiceService.deleteInvoice($scope.invoice.key);
 	        promiseDeleteInvoice.then(function (response) {
 	            notificationsService.success('Invoice Deleted');

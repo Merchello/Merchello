@@ -23,7 +23,7 @@
                                     <span class="menu-label">Capture Funds</span>
                                 </a>
                             </li>
-                            <li data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'">
+                            <li data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled' || !hasOrder()">
                                 <a data-ng-click="openFulfillPaymentDialog()">
                                     <i class="icon icon-truck"></i>
                                     <span class="menu-label"><localize key="merchelloGeneral_fulfill" /></span>
