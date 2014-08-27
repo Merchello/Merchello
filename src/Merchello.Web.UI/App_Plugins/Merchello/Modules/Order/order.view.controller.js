@@ -78,6 +78,14 @@
 	        $scope.loadSettings();
 	    };
 
+        /**
+         * @ngdoc method
+         * @name isPaid
+         * @function
+         * 
+         * @description
+         * Returns true if the invoice has been paid. Otherwise it returns false.
+         */
 	    $scope.isPaid = function () {
 	        var result = false;
 	        if (typeof $scope.invoice.getPaymentStatus === "function") {
@@ -184,16 +192,18 @@
          * Load the shipments associated with the provided invoice.
          */
 	    $scope.loadShipments = function (invoice) {
-	        var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
-	        promise.then(function (shipments) {
-	            invoice.shipments = _.map(shipments, function (shipment) {
-	                return new merchello.Models.Shipment(shipment);
+	        if ($scope.hasOrder()) {
+	            var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
+	            promise.then(function (shipments) {
+	                invoice.shipments = _.map(shipments, function (shipment) {
+	                    return new merchello.Models.Shipment(shipment);
+	                });
+	                $scope.loaded = true;
+	                $scope.preValuesLoaded = true;
+	            }, function (reason) {
+	                notificationsService.error("Shipments Load Failed", reason.message);
 	            });
-	            $scope.loaded = true;
-	            $scope.preValuesLoaded = true;
-	        }, function (reason) {
-	            notificationsService.error("Shipments Load Failed", reason.message);
-	        });
+            }
 	    };
 
         /**
@@ -269,7 +279,7 @@
 	            template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
 	            show: true,
 	            callback: $scope.processFulfillPaymentDialog,
-	            dialogData: $scope.invoice.orders[0]    // todo: pull from current order when multiple orders is avavilable
+	            dialogData: $scope.invoice.orders[0]    // todo: pull from current order when multiple orders is available
 	        });
 	    };
 
