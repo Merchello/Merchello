@@ -745,67 +745,7 @@
                         }, 
                         Formatting.None);
         }
-
-        /// <summary>
-        /// The get orders jason.
-        /// </summary>
-        /// <param name="orders">
-        /// The orders.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        private static string GetOrdersJason(IEnumerable<IOrder> orders)
-        {
-            var json = "[{0}]";
-
-            var ojson = string.Empty;
-
-            foreach (var order in orders)
-            {
-                if (ojson.Length > 0) ojson += ",";
-                ojson += JsonConvert.SerializeObject(
-                new 
-                {
-                    key = order.Key,
-                    invoiceKey = order.InvoiceKey,
-                    orderNumberPrefix = order.OrderNumberPrefix,
-                    orderNumber = order.OrderNumber,
-                    prefixedOrderNumber = order.PrefixedOrderNumber(),
-                    orderDate = order.OrderDate.ToString("s"),
-                    orderStatusKey = order.OrderStatusKey,
-                    orderStatus = new
-                        {
-                            key = order.OrderStatus.Key,
-                            name = order.OrderStatus.Name,
-                            alias = order.OrderStatus.Alias,
-                            reportable = order.OrderStatus.Reportable,
-                            active = order.OrderStatus.Active,
-                            sortOrder = order.OrderStatus.SortOrder
-                        },
-                   versionKey = order.VersionKey,
-                   exported = order.Exported,
-                   Items = order.Items.Select(x => 
-                    new
-                        {
-                            key = x.Key,
-                            name = x.Name,
-                            lineItemTfKey = x.LineItemTfKey,
-                            shipmentKey = ((IOrderLineItem)x).ShipmentKey,
-                            lineItemType = x.LineItemType.ToString(),
-                            sku = x.Sku,
-                            price = x.Price,
-                            quantity = x.Quantity,
-                            backOrder = ((IOrderLineItem)x).BackOrder,
-                            exported = x.Exported                            
-                        })
-                }, 
-                Formatting.None);
-            }
-
-            json = string.Format(json, ojson);
-            return json;
-        }
+        
 
         /// <summary>
         /// The get generic items collection.
@@ -823,6 +763,7 @@
                     new
                         {
                             key = x.Key,
+                            containerKey = x.ContainerKey,
                             name = x.Name,
                             lineItemTfKey = x.LineItemTfKey,
                             lineItemType = x.LineItemType.ToString(),
