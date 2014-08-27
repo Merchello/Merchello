@@ -78,6 +78,17 @@
 	        $scope.loadSettings();
 	    };
 
+	    $scope.isPaid = function () {
+	        var result = false;
+	        if (typeof $scope.invoice.getPaymentStatus === "function") {
+	            var status = $scope.invoice.getPaymentStatus();
+	            if (status === "Paid") {
+	                result = true;
+	            }
+	        }
+	        return result;
+	    };
+
         /**
          * @ngdoc method
          * @name loadInvoice
@@ -91,6 +102,7 @@
 	        promise.then(function (invoice) {
 	            $scope.invoice = new merchello.Models.Invoice(invoice);
 	            console.info($scope.invoice);
+	            console.info('getPaymentStatus: ' + $scope.invoice.getPaymentStatus());
 	            _.each($scope.invoice.items, function (lineItem) {
 	                if (lineItem.lineItemTfKey) {
 	                    var matchedTypeField = _.find($scope.typeFields, function (type) {

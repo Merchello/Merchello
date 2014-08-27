@@ -17,7 +17,7 @@
                         </a>
                         <!-- Actions Menu -->
                         <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
-                            <li data-ng-hide="invoice.getPaymentStatus()=='Paid'">
+                            <li data-ng-hide="isPaid()">
                                 <a data-ng-click="capturePayment()">
                                     <i class="icon icon-credit-card"></i>
                                     <span class="menu-label">Capture Funds</span>
