@@ -66,10 +66,6 @@
             Build(request);
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="IInvoice"/>
-        /// </summary>
-        private IInvoice Invoice { get; set; }
 
         /// <summary>
         /// Performs an Authorize payment 
@@ -123,12 +119,12 @@
 
         private IPaymentResult GetFailedResult()
         {
-            return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("PaymentProcessor is not ready")), Invoice, false);
+            return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("PaymentProcessor is not ready")), _invoice, false);
         }
 
         private void Build(PaymentRequest request)
         {
-            Invoice = _merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
+            _invoice = _merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
 
             if (request.PaymentKey != null)
                 _payment = _merchelloContext.Services.PaymentService.GetByKey(request.PaymentKey.Value);

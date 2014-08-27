@@ -157,6 +157,7 @@ namespace Merchello.Core.Models
                     new
                     {
                         key = x.Key,
+                        containerKey = x.ContainerKey,
                         name = x.Name,
                         shipmentKey = ((OrderLineItem)x).ShipmentKey,
                         lineItemTfKey = x.LineItemTfKey,
