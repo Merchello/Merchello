@@ -16,6 +16,7 @@
         /// <remarks>
         /// This corresponds to the alias field in the "merchDbTypeField" table
         /// </remarks>
+        [ConfigurationProperty("alias", IsKey = true)]
         public string Alias
         {
             get { return (string)this["alias"]; }
