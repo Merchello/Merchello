@@ -75,7 +75,7 @@
                     self.invoiceNumber = data.invoiceNumber;
                     break;
                 case 'orderDeleted':
-                    self.orderNumber = data.invoiceNumber;
+                    self.orderNumber = data.orderNumber;
                     break;
                 case 'shipmentCreated':
                     self.itemCount = data.itemCount;
