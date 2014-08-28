@@ -2,8 +2,8 @@
 
     /**
     * @ngdoc service
-    * @name merchello.Services.MerchelloInvoiceService
-    * @description Loads in data and allows modification for invoices
+    * @name merchello.Services.MerchelloAuditService
+    * @description Loads in audit logs via API calls.
     **/
     merchelloServices.MerchelloAuditService = function ($http, umbRequestHelper) {
 
@@ -11,17 +11,17 @@
 
             /**
             * @ngdoc method
-            * @name getByKey
+            * @name getSalesHistoryByInvoiceKey
             * @description 
             **/
             getSalesHistoryByInvoiceKey: function (key) {
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetInvoice'),
+                        url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetSalesHistoryByInvoiceKey'),
                         method: "GET",
                         params: { id: key }
                     }),
-                    'Failed to retreive data for invoice id: ' + id);
+                    'Failed to retreive sales history log for invoice with following key: ' + key);
             }
 
         };

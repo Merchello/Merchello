@@ -8,7 +8,7 @@
      * @description
      * The controller for the order view page
      */
-    controllers.OrderViewController = function ($scope, $routeParams, assetsService, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
+    controllers.OrderViewController = function ($scope, $routeParams, assetsService, dialogService, notificationsService, merchelloAuditService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
 
         /**
          * @ngdoc method
@@ -97,6 +97,15 @@
 	        return result;
 	    };
 
+        $scope.loadAuditLog = function(key) {
+            if (key !== undefined) {
+                var promise = merchelloAuditService.getSalesHistoryByInvoiceKey(key);
+                promise.then(function(response) {
+                    console.info(response);
+                });
+            }
+        };
+
         /**
          * @ngdoc method
          * @name loadInvoice
@@ -122,6 +131,7 @@
 	            $scope.loadShippingAddress($scope.invoice);
 	            $scope.loadPayments($scope.invoice);
 	            $scope.loadShipments($scope.invoice);
+	            $scope.loadAuditLog($scope.invoice.key);
 	        }, function (reason) {
 	            notificationsService.error("Invoice Load Failed", reason.message);
 	        });
@@ -344,7 +354,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Order.ViewController", ['$scope', '$routeParams', 'assetsService', 'dialogService', 'notificationsService', 'merchelloInvoiceService', 'merchelloOrderService', 'merchelloPaymentService', 'merchelloShipmentService', 'merchelloSettingsService', merchello.Controllers.OrderViewController]);
+    angular.module("umbraco").controller("Merchello.Editors.Order.ViewController", ['$scope', '$routeParams', 'assetsService', 'dialogService', 'notificationsService', 'merchelloAuditService', 'merchelloInvoiceService', 'merchelloOrderService', 'merchelloPaymentService', 'merchelloShipmentService', 'merchelloSettingsService', merchello.Controllers.OrderViewController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
