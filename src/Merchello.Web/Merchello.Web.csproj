@@ -133,6 +133,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.SqlServerCe">
       <HintPath>..\packages\UmbracoCms.Core.7.1.6\lib\System.Data.SqlServerCe.dll</HintPath>
       <Private>True</Private>
@@ -228,8 +229,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Models\MapperResolvers\EntityTypeResolver.cs" />
     <Compile Include="Models\Payments\PaymentResultDisplay.cs" />
-    <Compile Include="SalesHistoryAuditingExtensions.cs" />
+    <Compile Include="Models\SaleHistory\SalesHistoryAuditingExtensions.cs" />
     <Compile Include="AutoMapperMappings-Payment.cs">
       <DependentUpon>AutoMapperMappings.cs</DependentUpon>
     </Compile>
