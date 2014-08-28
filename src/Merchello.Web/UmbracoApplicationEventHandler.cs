@@ -1,27 +1,22 @@
-﻿using Merchello.Core.Events;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Sales;
-using Merchello.Core.Services;
-
-namespace Merchello.Web
+﻿namespace Merchello.Web
 {
     using System;
     using System.Linq;
     using System.Reflection;
-    using System.Threading.Tasks;
-
-    using Core;
     using log4net;
-
-    using Merchello.Core.Configuration;
-    using Merchello.Core.Models;
-
+    using Core;
+    using Core.Configuration;
+    using Core.Events;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Core.Sales;
+    using Core.Services;
+    using Models.SaleHistory;
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
-
     using Task = System.Threading.Tasks.Task;
 
     /// <summary>

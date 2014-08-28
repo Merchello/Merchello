@@ -1,15 +1,15 @@
-﻿namespace Merchello.Web
-{
-    using System;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Core;
-    using Core.Configuration;
-    using Core.Models;
-    using Newtonsoft.Json;
-    using Umbraco.Core.Logging;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using Merchello.Core;
+using Merchello.Core.Configuration;
+using Merchello.Core.Models;
+using Newtonsoft.Json;
+using Umbraco.Core.Logging;
 
+namespace Merchello.Web.Models.SaleHistory
+{
     /// <summary>
     /// The auditing extensions.
     /// </summary>

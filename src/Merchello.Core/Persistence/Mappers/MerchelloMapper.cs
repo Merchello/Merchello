@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Persistence.Mappers
+﻿using Merchello.Core.Models.Interfaces;
+
+namespace Merchello.Core.Persistence.Mappers
 {
     using System;
     using System.Collections.Concurrent;
@@ -43,6 +45,7 @@
         /// </summary>
         private MerchelloMapper()
         {
+            CacheMapper(typeof(IAuditLog), typeof(AuditLogMapper));
             CacheMapper(typeof(ITaxMethod), typeof(TaxMethodMapper));
             CacheMapper(typeof(ICustomerAddress), typeof(CustomerAddressMapper));
             CacheMapper(typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper));

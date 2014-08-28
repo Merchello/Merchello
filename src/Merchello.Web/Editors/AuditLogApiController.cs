@@ -99,7 +99,6 @@
                     list.AddRange(paymentLogs);
                 }
             }
-
             return list.ToSalesHistoryDisplay();
         }
     }
