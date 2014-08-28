@@ -173,6 +173,17 @@
         }
 
         /// <summary>
+        /// Re-indexes the <see cref="IProduct"/>
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        internal override void ReindexEntity(IProduct entity)
+        {
+            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
+        }
+
+        /// <summary>
         /// Maps a <see cref="SearchResult"/> to <see cref="ProductDisplay"/>
         /// </summary>
         /// <param name="result">
@@ -184,17 +195,6 @@
         protected override ProductDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
             return result.ToProductDisplay(GetVariantsByProduct);
-        }
-
-        /// <summary>
-        /// Re-indexes the <see cref="IProduct"/>
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        protected override void ReindexEntity(IProduct entity)
-        {
-            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
     }
 }

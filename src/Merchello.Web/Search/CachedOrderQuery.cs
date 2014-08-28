@@ -322,7 +322,18 @@
 
             return GetQueryResultDisplay(_orderService.GetPage(query, 1, int.MaxValue, "orderNumber")).Items.Select(x => (OrderDisplay)x);
         }
-        
+
+        /// <summary>
+        /// The re-index entity.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        internal override void ReindexEntity(IOrder entity)
+        {
+            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.Order);
+        }
+
         /// <summary>
         /// The perform map search result to display object.
         /// </summary>
@@ -337,15 +348,5 @@
             return result.ToOrderDisplay();
         }
 
-        /// <summary>
-        /// The re-index entity.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        protected override void ReindexEntity(IOrder entity)
-        {
-            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.Order);
-        }
     }
 }
