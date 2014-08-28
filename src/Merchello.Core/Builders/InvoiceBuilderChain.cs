@@ -80,7 +80,7 @@
             if (!attempt.Success) return attempt;
 
             // total the invoice
-            attempt.Result.Total = attempt.Result.Items.Sum(x => x.TotalPrice);
+            attempt.Result.Total = decimal.Parse(attempt.Result.Items.Sum(x => x.TotalPrice).ToString("#.##"));
 
             return attempt;
         }
