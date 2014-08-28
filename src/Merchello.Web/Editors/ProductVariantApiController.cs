@@ -1,27 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Umbraco.Web;
-using Umbraco.Web.Mvc;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.WebApi;
-using Merchello.Web.Models.ContentEditing;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+    using Core;
+    using Core.Models;
+    using Core.Services;
+    using Models.ContentEditing;    
+    using Umbraco.Web;
+    using Umbraco.Web.Mvc;
+    using WebApi;
+
+    /// <summary>
+    /// The product variant api controller.
+    /// </summary>
     [PluginController("Merchello")]
     public class ProductVariantApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The product variant service.
+        /// </summary>
         private readonly IProductVariantService _productVariantService;
+
+        /// <summary>
+        /// The _product service.
+        /// </summary>
         private readonly IProductService _productService;
+
+        /// <summary>
+        /// The warehouse service.
+        /// </summary>
         private readonly IWarehouseService _warehouseService;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantApiController"/> class. 
         /// Constructor
         /// </summary>
         public ProductVariantApiController()

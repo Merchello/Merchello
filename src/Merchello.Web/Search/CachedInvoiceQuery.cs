@@ -434,6 +434,17 @@
         }
 
         /// <summary>
+        /// The re-index entity.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        internal override void ReindexEntity(IInvoice entity)
+        {
+            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.Invoice);
+        }
+
+        /// <summary>
         /// Maps a <see cref="SearchResult"/> to <see cref="InvoiceDisplay"/>
         /// </summary>
         /// <param name="result">
@@ -447,15 +458,6 @@
             return result.ToInvoiceDisplay(_getOrders);
         }
 
-        /// <summary>
-        /// The re-index entity.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        protected override void ReindexEntity(IInvoice entity)
-        {
-            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.Invoice);
-        }
+
     }
 }

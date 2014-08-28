@@ -127,6 +127,15 @@
             return _searchProvider.Search(criteria).Select(mapper);
         }
 
+
+        /// <summary>
+        /// The re-index retrieved.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        internal abstract void ReindexEntity(TEntity entity);
+
         /// <summary>
         /// Performs a Lucene "cache" only search
         /// </summary>
@@ -199,12 +208,5 @@
         /// </returns>
         protected abstract TDisplay PerformMapSearchResultToDisplayObject(SearchResult result);
 
-        /// <summary>
-        /// The re-index retrieved.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        protected abstract void ReindexEntity(TEntity entity);
     }
 }
