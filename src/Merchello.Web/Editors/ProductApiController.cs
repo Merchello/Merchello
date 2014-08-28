@@ -6,9 +6,6 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
-
-    using global::Examine;
-
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
@@ -94,8 +91,8 @@
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
         public ProductDisplay GetProduct(Guid id)
-        {
-            return _merchello.Query.Product.GetByKey(id);
+        {            
+            return _merchello.Query.Product.GetByKey(id);            
         }
 
         /// <summary>
@@ -236,6 +233,7 @@
                 merchProduct = product.ToProduct(merchProduct);
 
                 _productService.Save(merchProduct);
+
             }
             catch (Exception ex) 
             {

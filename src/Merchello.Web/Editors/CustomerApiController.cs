@@ -322,7 +322,9 @@
         {
             foreach (var address in customer.Addresses.Where(x => x.Key == Guid.Empty))
             {
-                _customerAddressService.Save(address.ToCustomerAddress(new CustomerAddress(customer.Key)));
+                var customerAddress = address.ToCustomerAddress(new CustomerAddress(customer.Key));
+                _customerAddressService.Save(customerAddress);
+                address.Key = customerAddress.Key;
             }
         }
     }
