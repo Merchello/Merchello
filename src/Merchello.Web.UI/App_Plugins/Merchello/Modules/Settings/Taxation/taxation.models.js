@@ -53,7 +53,6 @@
             self.countryCode = "";
             self.percentageTaxRate = 0.0;
             self.provinces = [];
-            self.displayEditor = "";
         } else {
             self.key = taxMethodFromServer.key;
             self.providerKey = taxMethodFromServer.providerKey;

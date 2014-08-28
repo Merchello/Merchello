@@ -81,7 +81,7 @@
         };
 
         self.removeMethod = function (shippingMethod) {
-            self.shipMethods = _.reject(self.shipMethods, function (m) { return m.shipMethod.key == shippingMethod.shipMethod.key; });
+            self.shipMethods = _.reject(self.shipMethods, function (m) { return m.key == shippingMethod.key; });
         };
 
         // TODO: get this from API or somehow better
@@ -134,7 +134,7 @@
             if (province) {
                 newShippingRegion = province;
             } else {
-                newShippingRegion = new merchello.Models.ShippingRegion();
+                newShippingRegion = new merchello.Models.ProvinceData();
             }
             // Note From Kyle: Not sure what preferred method we have on this project to inject the properties (if any) into the newly created region.
             self.provinces.push(newShippingRegion);
