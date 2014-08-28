@@ -196,6 +196,22 @@
 
         };
 
+        /**
+         * @ngdoc method
+         * @name removeProduct
+         * @function
+         * 
+         * @description
+         * Opens the product select dialog via the Umbraco dialogService.
+         */
+        $scope.removeProduct = function () {
+
+            $scope.creatingProduct = true;
+            $scope.model.value = null;
+            $scope.templatePath = "";
+
+        };
+
     };
 
     angular.module("umbraco").controller('Merchello.PropertyEditors.MerchelloProductEditor', ['$scope', '$routeParams', 'merchelloProductService', 'notificationsService', 'dialogService', 'merchelloWarehouseService', 'merchelloSettingsService', productEditor]);
