@@ -329,6 +329,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\selectcustomer.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Directives\order-create-customer.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Directives\ordercreate.directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.controller.js" />
