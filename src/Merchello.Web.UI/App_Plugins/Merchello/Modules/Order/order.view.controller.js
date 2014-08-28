@@ -40,7 +40,6 @@
             promiseSave.then(function (payment) {
                 notificationsService.success("Payment Captured");
                 $scope.loadInvoice(paymentRequest.invoiceKey);
-
             }, function (reason) {
                 notificationsService.error("Payment Capture Failed", reason.message);
             });
@@ -100,8 +99,14 @@
         $scope.loadAuditLog = function(key) {
             if (key !== undefined) {
                 var promise = merchelloAuditService.getSalesHistoryByInvoiceKey(key);
-                promise.then(function(response) {
+                promise.then(function (response) {
                     console.info(response);
+                    var auditLogs = _.map(response.dailyLogs, function(log) {
+                         return new merchello.Models.DailyLog(log);
+                    });
+                    console.info(auditLogs);
+                    console.info(auditLogs[0].logs[0].message.area);
+                    console.info(auditLogs[0].logs[0].message.key);
                 });
             }
         };

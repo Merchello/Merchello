@@ -27,6 +27,7 @@
 		'~/App_Plugins/Merchello/Common/Js/Dialogs/debug.dialog.controller.js',    
 		'~/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.controller.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/product.models.js',
+		'~/App_Plugins/Merchello/Modules/Order/merchello.audit.models.js',
 		'~/App_Plugins/Merchello/Modules/Order/order.invoice.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Notifications/notifications.models.js',
 		'~/App_Plugins/Merchello/Modules/Settings/Payment/payment.models.js',
