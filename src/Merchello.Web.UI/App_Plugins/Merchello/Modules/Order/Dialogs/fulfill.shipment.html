@@ -3,7 +3,6 @@
         <h4><localize key="merchelloGeneral_fulfill" /> <localize key="merchelloGeneral_shipment" /></h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
-        
             <h3><localize key="merchelloFulfillShipment_fulfillManually" /></h3>
             <div class="control-group row-fluid">
                 <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" />:</label>
@@ -13,7 +12,6 @@
                 <!--<select name="provider" disabled="disabled" class="col-xs-6 span6"><option>{{shipMethod}}</option></select>-->
                 <!--<label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>-->
             </div>
-            
             <table class="table table-striped merchello-striped-table order-items">
                 <tbody>
                     <tr>
@@ -33,24 +31,16 @@
                     </tr>
                 </tbody>
             </table>
-
-
     </div>
-
 	<div class="umb-panel-footer" >
 		<div class="umb-el-wrap umb-panel-buttons">
 	        <div class="btn-toolbar umb-btn-toolbar pull-right">
-
-	        	<a href data-ng-click="close()" class="btn btn-link">
-	        		<localize key="general_cancel">Cancel</localize>
-				</a>
-
-				<button
-					class="btn btn-primary"
-					data-ng-click="submit(dialogData)">
+                <!-- ACTION: Cancel -->
+	        	<a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+                <!-- ACTION: Save Button -->
+	            <button class="btn btn-primary" data-ng-click="save()">
                     <localize key="merchelloGeneral_fulfill" /> <localize key="merchelloGeneral_shipment" />
 				</button>
-
 	        </div>
 		</div>
 	</div>
