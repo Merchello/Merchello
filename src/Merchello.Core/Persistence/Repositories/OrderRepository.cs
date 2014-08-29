@@ -49,7 +49,7 @@
             if (dto == null)
                 return null;
 
-            var lineItems =GetLineItemCollection(key);
+            var lineItems = GetLineItemCollection(key);
 
             var factory = new OrderFactory(lineItems);
             return factory.BuildEntity(dto);
