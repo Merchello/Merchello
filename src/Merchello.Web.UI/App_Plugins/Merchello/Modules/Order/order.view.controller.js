@@ -8,7 +8,41 @@
      * @description
      * The controller for the order view page
      */
-    controllers.OrderViewController = function ($scope, $routeParams, assetsService, dialogService, notificationsService, merchelloAuditService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
+    controllers.OrderViewController = function ($scope, $routeParams, assetsService, dialogService, localizationService, notificationsService, merchelloAuditService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
+
+        /**
+         * @ngdoc method
+         * @name buildLocalizedShippingHistory
+         * @function
+         * 
+         * @description
+         */
+        $scope.buildLocalizedShippingHistory = function (dailyLogs) {
+            _.each(dailyLogs, function (day) {
+                var newDay = {
+                    date: day.day.split('T')[0],
+                    logs: []
+                };
+                newDay.logs = _.map(day.logs, function (log) {
+                    var time = log.recordDate.split('T')[1];
+                    time = time.split(':')[0] + ':' + time.split(':')[1];
+                    return {
+                        time: time,
+                        type: log.entityType,
+                        messageObject: log.message,
+                        message: ''
+                    }
+                });
+                _.each(newDay.logs, function (logItem) {
+                    var key = logItem.messageObject.area + '_' + logItem.messageObject.key;
+                    localizationService.localize(key).then(function (value) {
+                        logItem.message = $scope.formatLogMessage(value, logItem.messageObject);
+                    });
+                });
+                $scope.salesHistory.days.push(newDay);
+            });
+            $scope.historyLoaded = true;
+        };
 
         /**
          * @ngdoc method
@@ -43,6 +77,42 @@
             }, function (reason) {
                 notificationsService.error("Payment Capture Failed", reason.message);
             });
+        };
+
+        /**
+         * @ngdoc method
+         * @name formatLogMessage
+         * @function
+         * 
+         * @description
+         * Format the provided textstring with the appropriate log item values from the message object.
+         */
+        $scope.formatLogMessage = function (textString, message) {
+            switch(message.key) {
+                case 'invoiceCreated':
+                case 'invoiceDeleted':
+                case 'orderCreated':
+                    textString = textString.replace('%0%', message.invoiceNumber);
+                    break;
+                case 'orderDeleted':
+                    textString = textString.replace('%0%', message.orderNumber);
+                    break;
+                case 'shipmentCreated':
+                    textString = textString.replace('%0%', message.itemCount);
+                    break;
+                case 'paymentAuthorize':
+                case 'paymentCaptured':
+                    textString = textString.replace('%0%', message.invoiceTotal);
+                    textString = textString.replace('%1%', message.currencyCode);
+                    break;
+                case 'paymentRefunded':
+                    textString = textString.replace('%0%', message.refundAmount);
+                    textString = textString.replace('%1%', message.currencyCode);
+                    break;
+                default:
+                    break;
+            };
+            return textString;
         };
 
         /**
@@ -96,17 +166,22 @@
 	        return result;
 	    };
 
+        /**
+         * @ngdoc method
+         * @name loadAuditLog
+         * @function
+         * 
+         * @description
+         * Load the Audit Log for the invoice via API.
+         */
         $scope.loadAuditLog = function(key) {
             if (key !== undefined) {
                 var promise = merchelloAuditService.getSalesHistoryByInvoiceKey(key);
                 promise.then(function (response) {
-                    console.info(response);
-                    var auditLogs = _.map(response.dailyLogs, function(log) {
+                    var dailyLogs = _.map(response.dailyLogs, function(log) {
                          return new merchello.Models.DailyLog(log);
                     });
-                    console.info(auditLogs);
-                    console.info(auditLogs[0].logs[0].message.area);
-                    console.info(auditLogs[0].logs[0].message.key);
+                    $scope.buildLocalizedShippingHistory(dailyLogs);
                 });
             }
         };
@@ -123,8 +198,6 @@
 	        var promise = merchelloInvoiceService.getByKey(id);
 	        promise.then(function (invoice) {
 	            $scope.invoice = new merchello.Models.Invoice(invoice);
-	            console.info($scope.invoice);
-	            console.info('getPaymentStatus: ' + $scope.invoice.getPaymentStatus());
 	            _.each($scope.invoice.items, function (lineItem) {
 	                if (lineItem.lineItemTfKey) {
 	                    var matchedTypeField = _.find($scope.typeFields, function (type) {
@@ -348,10 +421,14 @@
          * @description
          * Sets the $scope variables.
          */
-        $scope.setVariables = function() {
+	    $scope.setVariables = function () {
+	        $scope.historyLoaded = false;
             $scope.invoice = {};
             $scope.typeFields = [];
             $scope.shippingAddress = {};
+            $scope.salesHistory = {
+                days: []
+            };
         };
 
         $scope.init();
@@ -359,7 +436,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Order.ViewController", ['$scope', '$routeParams', 'assetsService', 'dialogService', 'notificationsService', 'merchelloAuditService', 'merchelloInvoiceService', 'merchelloOrderService', 'merchelloPaymentService', 'merchelloShipmentService', 'merchelloSettingsService', merchello.Controllers.OrderViewController]);
+    angular.module("umbraco").controller("Merchello.Editors.Order.ViewController", ['$scope', '$routeParams', 'assetsService', 'dialogService', 'localizationService', 'notificationsService', 'merchelloAuditService', 'merchelloInvoiceService', 'merchelloOrderService', 'merchelloPaymentService', 'merchelloShipmentService', 'merchelloSettingsService', merchello.Controllers.OrderViewController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

@@ -160,7 +160,6 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             }
         }
 
-        
         public void MakeProducts()
         {
             for (var i = 0; i < ProductCount; i++)
