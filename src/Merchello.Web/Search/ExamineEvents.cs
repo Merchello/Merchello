@@ -113,19 +113,24 @@
         /// <param name="e"></param>
         void ProductIndexer_GatheringNodeData(object sender, IndexingNodeDataEventArgs e)
         {
-            string value = "-1";
-            int id;
-            if (int.TryParse(e.Fields["downloadMediaId"], out id))
+            var value = "-1";
+
+            if (e.Fields.ContainsKey("downloadMediaId"))
             {
-                if (ApplicationContext.Current != null && id > 0)
+                int id;
+                if (int.TryParse(e.Fields["downloadMediaId"], out id))
                 {
-                    var mediaItem = ApplicationContext.Current.Services.MediaService.GetById(id);
-                    if (mediaItem != null)
+                    if (ApplicationContext.Current != null && id > 0)
                     {
-                        value=string.Join(" ", mediaItem.Properties.Select(x => x.Id.ToString()));
+                        var mediaItem = ApplicationContext.Current.Services.MediaService.GetById(id);
+                        if (mediaItem != null)
+                        {
+                            value = string.Join(" ", mediaItem.Properties.Select(x => x.Id.ToString(CultureInfo.InvariantCulture)));
+                        }
                     }
                 }
             }
+
             e.Fields.Add("downloadMediaPropertyIds", value);
         }
 
