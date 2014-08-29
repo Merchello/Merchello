@@ -1,4 +1,5 @@
 ﻿using Lucene.Net.Index;
+using Merchello.Web.Models.SaleHistory;
 
 namespace Merchello.Web.Editors
 {

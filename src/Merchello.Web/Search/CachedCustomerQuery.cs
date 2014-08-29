@@ -164,6 +164,17 @@
         }
 
         /// <summary>
+        /// Re-indexes the <see cref="ICustomer"/>
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        internal override void ReindexEntity(ICustomer entity)
+        {
+            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.Customer);
+        }
+
+        /// <summary>
         /// Maps a <see cref="SearchResult"/> to a <see cref="CustomerDisplay"/>
         /// </summary>
         /// <param name="result">
@@ -175,17 +186,6 @@
         protected override CustomerDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
             return result.ToCustomerDisplay();
-        }
-
-        /// <summary>
-        /// Re-indexes the <see cref="ICustomer"/>
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        protected override void ReindexEntity(ICustomer entity)
-        {
-            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.Customer);
         }
     }
 }

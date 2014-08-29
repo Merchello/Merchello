@@ -168,6 +168,8 @@
             Database.Insert(dto);
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>
@@ -186,6 +188,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>
@@ -201,6 +205,8 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICustomer>(entity.CustomerKey));
         }
 
         /// <summary>

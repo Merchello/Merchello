@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Editors
+﻿using Merchello.Web.Models.SaleHistory;
+
+namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;

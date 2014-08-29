@@ -8,7 +8,7 @@
      * @description
      * The controller for the order view page
      */
-    controllers.OrderViewController = function ($scope, $routeParams, assetsService, dialogService, notificationsService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
+    controllers.OrderViewController = function ($scope, $routeParams, assetsService, dialogService, notificationsService, merchelloAuditService, merchelloInvoiceService, merchelloOrderService, merchelloPaymentService, merchelloShipmentService, merchelloSettingsService) {
 
         /**
          * @ngdoc method
@@ -40,7 +40,6 @@
             promiseSave.then(function (payment) {
                 notificationsService.success("Payment Captured");
                 $scope.loadInvoice(paymentRequest.invoiceKey);
-
             }, function (reason) {
                 notificationsService.error("Payment Capture Failed", reason.message);
             });
@@ -97,6 +96,21 @@
 	        return result;
 	    };
 
+        $scope.loadAuditLog = function(key) {
+            if (key !== undefined) {
+                var promise = merchelloAuditService.getSalesHistoryByInvoiceKey(key);
+                promise.then(function (response) {
+                    console.info(response);
+                    var auditLogs = _.map(response.dailyLogs, function(log) {
+                         return new merchello.Models.DailyLog(log);
+                    });
+                    console.info(auditLogs);
+                    console.info(auditLogs[0].logs[0].message.area);
+                    console.info(auditLogs[0].logs[0].message.key);
+                });
+            }
+        };
+
         /**
          * @ngdoc method
          * @name loadInvoice
@@ -122,6 +136,7 @@
 	            $scope.loadShippingAddress($scope.invoice);
 	            $scope.loadPayments($scope.invoice);
 	            $scope.loadShipments($scope.invoice);
+	            $scope.loadAuditLog($scope.invoice.key);
 	        }, function (reason) {
 	            notificationsService.error("Invoice Load Failed", reason.message);
 	        });
@@ -344,7 +359,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Order.ViewController", ['$scope', '$routeParams', 'assetsService', 'dialogService', 'notificationsService', 'merchelloInvoiceService', 'merchelloOrderService', 'merchelloPaymentService', 'merchelloShipmentService', 'merchelloSettingsService', merchello.Controllers.OrderViewController]);
+    angular.module("umbraco").controller("Merchello.Editors.Order.ViewController", ['$scope', '$routeParams', 'assetsService', 'dialogService', 'notificationsService', 'merchelloAuditService', 'merchelloInvoiceService', 'merchelloOrderService', 'merchelloPaymentService', 'merchelloShipmentService', 'merchelloSettingsService', merchello.Controllers.OrderViewController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

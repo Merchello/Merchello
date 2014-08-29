@@ -32,7 +32,10 @@
                     opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
                 .ForMember(
                     dest => dest.RecordDate,
-                    opt => opt.MapFrom(src => src.CreateDate));
+                    opt => opt.MapFrom(src => src.CreateDate))
+                .ForMember(
+                    dest => dest.EntityType,
+                    opt => opt.ResolveUsing<EntityTypeResolver>().ConstructedBy(() => new EntityTypeResolver()));
 
             // Country and provinces
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
