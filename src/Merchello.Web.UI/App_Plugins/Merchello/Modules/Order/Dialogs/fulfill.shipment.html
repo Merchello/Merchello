@@ -40,14 +40,10 @@
 	<div class="umb-panel-footer" >
 		<div class="umb-el-wrap umb-panel-buttons">
 	        <div class="btn-toolbar umb-btn-toolbar pull-right">
-
-	        	<a href data-ng-click="close()" class="btn btn-link">
-	        		<localize key="general_cancel">Cancel</localize>
-				</a>
-
-				<button
-					class="btn btn-primary"
-					data-ng-click="submit(dialogData)">
+                <!-- ACTION: Cancel -->
+	        	<a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+                <!-- ACTION: Save Button -->
+	            <button class="btn btn-primary" data-ng-click="save()">
                     <localize key="merchelloGeneral_fulfill" /> <localize key="merchelloGeneral_shipment" />
 				</button>
 
