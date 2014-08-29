@@ -24,23 +24,23 @@
             </div>
             <div class="form-group row-fluid">
                 <label for="org">Company:</label>
-                <input name="org" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddres.Company" />
+                <input name="org" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.Company" />
                 <label for="address1">*Address:</label>
-                <input name="address1" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddres.Address1" required />
+                <input name="address1" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.Address1" required />
                 <label for="address2">Address Line 2:</label>
-                <input name="address2" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddres.Address2" />
+                <input name="address2" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.Address2" />
                 <label for="locality">*City:</label>
                 <div class="error" data-ng-show="editProviderForm.locality.$invalid && wasFormSubmitted">City is a required field.</div>
-                <input name="locality" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddres.Locality" required />
+                <input name="locality" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.Locality" required />
                 <label for="country">*Country:</label>
                 <div class="error" data-ng-show="$scope.filters.country.id == -1 && wasFormSubmitted">Country is a required field.</div>
                 <select name="country" class="span12" data-ng-model="filters.country" data-ng-change="updateCountry(filters.country)" data-ng-options="option.name for option in countries"></select>
                 <label for="region">State/Province:</label>
-                <input name="region" type="text" class="span12" data-ng-show="!doesCountryHaveProvinces(filters.country)" data-ng-model="avataxSettings.DefaultStoreAddres.region" />
+                <input name="region" type="text" class="span12" data-ng-show="!doesCountryHaveProvinces(filters.country)" data-ng-model="avataxSettings.DefaultStoreAddress.region" />
                 <select name="regionSelect" class="span12" data-ng-show="doesCountryHaveProvinces(filters.country)" data-ng-model="filters.province" data-ng-change="updateProvince(filters.province)" data-ng-options="option.name for option in provinces"></select>
                 <label for="postalCode">*Zip/Postal Code:</label>
                 <div class="error" data-ng-show="editProviderForm.postalCode.$invalid && wasFormSubmitted">Zip/Postal Code is a required field.</div>
-                <input name="postalCode" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddres.PostalCode" required />
+                <input name="postalCode" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.PostalCode" required />
             </div>
 
             <div class="control-group row-fluid">
