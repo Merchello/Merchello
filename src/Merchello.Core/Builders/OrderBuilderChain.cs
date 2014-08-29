@@ -76,7 +76,7 @@
         /// <returns>The Attempt{IOrder}</returns>
         public override Attempt<IOrder> Build()
         {
-            var attempt = (TaskHandlers.Any()) 
+            var attempt = TaskHandlers.Any()
                 ? TaskHandlers.First().Execute(new Order(_orderStatus, _invoice.Key) 
                 { 
                     OrderNumberPrefix = _invoice.InvoiceNumberPrefix,

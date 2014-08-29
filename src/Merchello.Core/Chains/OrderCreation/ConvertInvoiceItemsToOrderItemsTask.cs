@@ -1,15 +1,25 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core.Models;
-using Umbraco.Core;
-
-namespace Merchello.Core.Chains.OrderCreation
+﻿namespace Merchello.Core.Chains.OrderCreation
 {
+    using System;
+    using System.Linq;
+    using Models;
+    using Umbraco.Core;
+
+    /// <summary>
+    /// The convert invoice items to order items task.
+    /// </summary>
     internal class ConvertInvoiceItemsToOrderItemsTask : OrderCreationAttemptChainTaskBase
     {
-        public ConvertInvoiceItemsToOrderItemsTask(IInvoice invoice) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConvertInvoiceItemsToOrderItemsTask"/> class.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        public ConvertInvoiceItemsToOrderItemsTask(IInvoice invoice)
             : base(invoice)
-        {}
+        {            
+        }
 
         /// <summary>
         /// Task converts InvoiceLineItems to OrderLineItems and adds them to the order
@@ -32,8 +42,7 @@ namespace Merchello.Core.Chains.OrderCreation
                 catch (Exception ex)
                 {
                     return Attempt<IOrder>.Fail(ex);
-                }
-                
+                }                
             }
 
             return Attempt<IOrder>.Succeed(value);
