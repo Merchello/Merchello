@@ -18,6 +18,7 @@
          * @description
          */
         $scope.buildLocalizedShippingHistory = function (dailyLogs) {
+            $scope.salesHistory.days = [];
             _.each(dailyLogs, function (day) {
                 var newDay = {
                     date: day.day.split('T')[0],
