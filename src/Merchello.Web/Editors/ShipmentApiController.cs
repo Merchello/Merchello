@@ -210,7 +210,7 @@ namespace Merchello.Web.Editors
 
                 var attempt = builder.Build();
                 
-                if(!attempt.Success)
+                if (!attempt.Success)
                     throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
                                                                                                         
                 return attempt.Result.ToShipmentDisplay();
