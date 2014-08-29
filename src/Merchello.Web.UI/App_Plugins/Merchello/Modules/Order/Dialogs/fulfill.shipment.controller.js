@@ -87,10 +87,12 @@
          * 
          * @description
          */
-	    $scope.save = function() {
-	        console.info($scope.dialogData.items);
-            // $scope.submit(dialogData);
-	    };
+        $scope.save = function () {
+            $scope.dialogData.items = _.filter($scope.dialogData.items, function (item) {
+                return item.selected == true;
+            });
+            $scope.submit($scope.dialogData); 
+        };
 
 	    /**
          * @ngdoc method
