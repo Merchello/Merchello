@@ -95,6 +95,30 @@
                         </table>
                     </div>
                 </div>
+                <!-- Sale History -->
+                <div class="control-group umb-control-group" data-ng-hide="!historyLoaded">
+                    <div class="merchello-section-label">
+                        Sale History
+                        <small>A timeline of events regarding this order</small>
+                    </div>
+                    <div class="merchello-controls">
+                        <div class="row-fluid" data-ng-repeat="day in salesHistory.days">
+                            <table class="table">
+                                <tbody>
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">{{day.date}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tr data-ng-repeat="log in day.logs">
+                                        <td>{{log.message}}</td>
+                                        <td>{{log.recordDate}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <!-- Payment History -->
                 <!-- data-ng-show="invoice.payments.length != 0 && invoice.payments[0].amount > 0" -->
                 <div class="control-group umb-control-group" >
