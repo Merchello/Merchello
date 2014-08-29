@@ -96,7 +96,7 @@
         /// </returns>
         public IEnumerable<CountryDisplay> GetAllCountries()
         {
-            var countries = _storeSettingService.GetAllCountries();
+            var countries = _storeSettingService.GetAllCountries().OrderBy(x => x.Name);
             if (countries == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
