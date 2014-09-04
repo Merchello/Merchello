@@ -178,10 +178,14 @@
             if (key !== undefined) {
                 var promise = merchelloAuditService.getSalesHistoryByInvoiceKey(key);
                 promise.then(function (response) {
-                    var dailyLogs = _.map(response.dailyLogs, function(log) {
-                         return new merchello.Models.DailyLog(log);
-                    });
-                    $scope.buildLocalizedShippingHistory(dailyLogs);
+                    if (response.dailyLogs) {
+                        if (response.dailyLogs.length > 0) {
+                            var dailyLogs = _.map(response.dailyLogs, function (log) {
+                                return new merchello.Models.DailyLog(log);
+                            });
+                            $scope.buildLocalizedShippingHistory(dailyLogs);
+                        }
+                    }
                 });
             }
         };

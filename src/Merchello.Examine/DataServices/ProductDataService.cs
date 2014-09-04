@@ -29,7 +29,7 @@
 
         public IEnumerable<IProduct> GetAll()
         {
-            return new ProductService().GetAll();
+            return new ProductService().GetPage(1, 100).Items;
         }
 
         /// <summary>
