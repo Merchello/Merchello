@@ -280,7 +280,7 @@
             var addresses, newAddress, i;
             addresses = data.addresses;
             //  Filter out an address if it's marked to be deleted.
-            if (data.addressType) {
+            if (data.shouldDelete) {
                 addresses = _.reject(addresses, function(address) {
                     return address.key == data.addressToReturn.key;
                 });
@@ -289,14 +289,14 @@
             _.each(addresses, function(address) {
                 address.customerKey = $scope.customer.key;
                 address.addressType = data.AddressType;
-                if (address.addressType === 'billing') {
+                if (data.addressType === 'billing') {
                     address.addressTypeFieldKey = $scope.billingKey;
                 } else {
                     address.addressTypeFieldKey = $scope.shippingKey;
                 }
             });
             // Update the appropriate address list.
-            if (data.AddressType === 'billing') {
+            if (data.addressType === 'billing') {
                 $scope.billingAddresses = _.map(addresses, function(address) {
                     return new merchello.Models.CustomerAddress(address);
                 });
