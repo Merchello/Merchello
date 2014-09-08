@@ -65,8 +65,7 @@
                 }
             }
             else
-            {
-                ;
+            {                
                 var dtos = Database.Fetch<OrderDto, OrderIndexDto, OrderStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
