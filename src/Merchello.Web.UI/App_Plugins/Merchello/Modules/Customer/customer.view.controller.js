@@ -277,43 +277,36 @@
         * Edit an address and update the associated lists. 
         */
         $scope.processEditAddressDialog = function (data) {
-            var newAddress, i;
-            if (data.shouldDelete) {
-                if (data.addressType === 'billing') {
-                    for (i = 0; i < $scope.billingAddresses.length; i++) {
-                        if ($scope.billingAddresses[i].key == data.addressToReturn.key) {
-                            $scope.billingAddresses.splice(i, 1);
-                        }
-                    }
-                } else {
-                    for (i = 0; i < $scope.shippingAddresses.length; i++) {
-                        if ($scope.shippingAddresses[i].key == data.addressToReturn.key) {
-                            $scope.shippingAddresses.splice(i, 1);
-                        }
-                    }
-                }
-            } else {
-                if (data.filters.address.name != 'New Address') {
-                    if (data.addressType === 'billing') {
-                        $scope.billingAddresses[data.filters.address.id] = new merchello.Models.CustomerAddress(data.addressToReturn);
-                    } else {
-                        $scope.shippingAddresses[data.filters.address.id] = new merchello.Models.CustomerAddress(data.addressToReturn);
-                    }
-                    notificationsService.success("Address updated.", "");
-                } else {
-                    newAddress = new merchello.Models.CustomerAddress(data.addressToReturn);
-                    newAddress.customerKey = $scope.customer.key;
-                    newAddress.addressType = data.AddressType;
-                    if (data.addressType === 'billing') {
-                        newAddress.addressTypeFieldKey = $scope.billingKey;
-                        $scope.billingAddresses.push(newAddress);
-                    } else {
-                        newAddress.addressTypeFieldKey = $scope.shippingKey;
-                        $scope.shippingAddresses.push(newAddress);
-                    }
-                    notificationsService.success("Address added to list.", "");
-                }
+            var addresses, newAddress, i;
+            addresses = data.addresses;
+            //  Filter out an address if it's marked to be deleted.
+            if (data.addressType) {
+                addresses = _.reject(addresses, function(address) {
+                    return address.key == data.addressToReturn.key;
+                });
             }
+            // Insert the applicable customer, billing, and shipping keys and types into new addresses.
+            _.each(addresses, function(address) {
+                address.customerKey = $scope.customer.key;
+                address.addressType = data.AddressType;
+                if (address.addressType === 'billing') {
+                    address.addressTypeFieldKey = $scope.billingKey;
+                } else {
+                    address.addressTypeFieldKey = $scope.shippingKey;
+                }
+            });
+            // Update the appropriate address list.
+            if (data.AddressType === 'billing') {
+                $scope.billingAddresses = _.map(addresses, function(address) {
+                    return new merchello.Models.CustomerAddress(address);
+                });
+            } else {
+                $scope.shippingAddresses = _.map(addresses, function (address) {
+                    return new merchello.Models.CustomerAddress(address);
+                });
+            }
+            notificationsService.info("Preparing addresses for updating...", "");
+            // Combine the address lists and update the customer.
             $scope.customer.addresses = $scope.prepareAddressesForSave();
             $scope.saveCustomer();
         };
