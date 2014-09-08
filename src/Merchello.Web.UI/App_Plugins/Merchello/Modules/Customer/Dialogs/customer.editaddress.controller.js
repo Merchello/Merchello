@@ -16,9 +16,9 @@
          * @function
          * 
          * @description
-         * Return the appropriate address depending on the filter and the type.
+         * Return the appropriate address depending on the filter.
          */
-        $scope.chooseAddress = function (type, filter) {
+        $scope.chooseAddress = function (filter) {
             var address = $scope.dialogData.addresses[(filter.id * 1) + 1];
             $scope.currentAddress = address;
         };
