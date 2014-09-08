@@ -75,10 +75,22 @@
 
         // Remove any blank addresses and fix multiple defaults.
         $scope.prepareAddressesForSave = function() {
-            var addresses = _.reject($scope.dialogData.addresses, function(address) {
+            var addresses = _.reject($scope.dialogData.addresses, function (address) {
+                // Reject an address if it is blank (and remove from the array).
                 return address.address1 == '';
             });
-            console.info(addresses);
+            if ($scope.dialogData.addressToReturn.isDefault) {
+                _.each(addresses, function(address) {
+                    if (address.isDefault) {
+                        if (address.key !== $scope.dialogData.addressToReturn.key) {
+                            address.isDefault = false;
+                        }
+                    }
+                });
+            }
+            $scope.dialogData.addresses = _.map(addresses, function(address) {
+                return new merchello.Models.CustomerAddress(address);
+            });
         };
 
         /**
@@ -133,7 +145,6 @@
             }
         };
 
-
         /**
          * @ngdoc method
          * @name saveAddress
@@ -144,9 +155,8 @@
          */
         $scope.saveAddress = function() {
             if ($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode && $scope.dialogData.filters.country.id != -1) {
-                console.info($scope.dialogData.addresses);
-                $scope.prepareAddressesForSave();
                 $scope.dialogData.addressToReturn = $scope.currentAddress;
+                $scope.prepareAddressesForSave();
                 $scope.submit($scope.dialogData);
             } else {
                 $scope.wasFormSubmitted = true;
