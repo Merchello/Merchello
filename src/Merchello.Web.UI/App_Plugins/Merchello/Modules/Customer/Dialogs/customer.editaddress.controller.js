@@ -236,8 +236,14 @@
          * Update the selected province for the applicable address type.
          */
         $scope.updateProvince = function (selectedProvince) {
+            console.info(selectedProvince);
             if (selectedProvince.code !== '00') {
-                $scope.currentAddress.region = selectedProvince.name;
+                $scope.currentAddress.region = selectedProvince.code;
+                _.each($scope.dialogData.addresses, function(address) {
+                    if (address.key == $scope.currentAddress.key) {
+                        address.region = selectedProvince.code;
+                    }
+                });
             }
         };
 
