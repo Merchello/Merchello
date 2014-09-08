@@ -73,6 +73,13 @@
             });
         };
 
+        // Remove any blank addresses and fix multiple defaults.
+        $scope.prepareAddressesForSave = function() {
+            var addresses = _.reject($scope.dialogData.addresses, function(address) {
+                return address.address1 == '';
+            });
+            console.info(addresses);
+        };
 
         /**
          * @ngdoc method
@@ -133,10 +140,12 @@
          * @function
          * 
          * @description
-         * Acquire the address and close teh dialog, submitting collected data.
+         * Acquire the address and close the dialog, submitting collected data.
          */
         $scope.saveAddress = function() {
             if ($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode && $scope.dialogData.filters.country.id != -1) {
+                console.info($scope.dialogData.addresses);
+                $scope.prepareAddressesForSave();
                 $scope.dialogData.addressToReturn = $scope.currentAddress;
                 $scope.submit($scope.dialogData);
             } else {

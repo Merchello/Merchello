@@ -73,7 +73,6 @@
         $scope.capturePaymentDialogConfirm = function (paymentRequest) {
             var promiseSave = merchelloPaymentService.capturePayment(paymentRequest);
             promiseSave.then(function (payment) {
-                console.info(payment);
                 notificationsService.success("Payment Captured");
                 $scope.loadInvoice(paymentRequest.invoiceKey);
             }, function (reason) {
