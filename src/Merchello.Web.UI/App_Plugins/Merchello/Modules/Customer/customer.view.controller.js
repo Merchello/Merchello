@@ -277,8 +277,8 @@
         * Edit an address and update the associated lists. 
         */
         $scope.processEditAddressDialog = function (data) {
-            var addresses, newAddress, i;
-            addresses = data.addresses;
+            var addresses = data.addresses;
+            console.info(addresses);
             //  Filter out an address if it's marked to be deleted.
             if (data.shouldDelete) {
                 addresses = _.reject(addresses, function(address) {
@@ -288,7 +288,7 @@
             // Insert the applicable customer, billing, and shipping keys and types into new addresses.
             _.each(addresses, function(address) {
                 address.customerKey = $scope.customer.key;
-                address.addressType = data.AddressType;
+                address.addressType = data.addressType;
                 if (data.addressType === 'billing') {
                     address.addressTypeFieldKey = $scope.billingKey;
                 } else {
