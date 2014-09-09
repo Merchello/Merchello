@@ -18,6 +18,10 @@ namespace Merchello.Web.Models.ContentEditing
             {
                 destination.Key = productDisplay.Key;
             }
+
+            productDisplay.CatalogInventories = productDisplay.CatalogInventories ?? Enumerable.Empty<CatalogInventoryDisplay>();
+            productDisplay.ProductOptions = productDisplay.ProductOptions ?? Enumerable.Empty<ProductOptionDisplay>();
+
             destination.Name = productDisplay.Name;
             destination.Sku = productDisplay.Sku;
             destination.Price = productDisplay.Price;

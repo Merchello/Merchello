@@ -210,7 +210,7 @@
             {
                 if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IProduct>(product), this))
                 {
-                    ((Product) product).WasCancelled = true;
+                    ((Product)product).WasCancelled = true;
                     return;
                 }
             }
