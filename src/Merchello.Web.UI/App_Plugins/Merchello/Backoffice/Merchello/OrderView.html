@@ -95,6 +95,8 @@
                         </table>
                     </div>
                 </div>
+                <!-- Shipping History -->
+                <merchello-shipping-history data-shipments="invoice.shipments"></merchello-shipping-history>
                 <!-- Sale History -->
                 <div class="control-group umb-control-group" data-ng-hide="!historyLoaded">
                     <div class="merchello-section-label">
@@ -105,28 +107,26 @@
                         <div class="row-fluid" data-ng-repeat="day in salesHistory.days">
                             <table class="table">
                                 <tbody>
-                                    <thead>
-                                        <tr>
-                                            <th colspan="2">{{day.date}}</th>
-                                        </tr>
-                                    </thead>
-                                    <tr data-ng-repeat="log in day.logs">
-                                        <td>{{log.message}}</td>
-                                        <td>{{log.recordDate}}</td>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">{{day.date}}</th>
                                     </tr>
+                                </thead>
+                                <tr data-ng-repeat="log in day.logs">
+                                    <td>{{log.message}}</td>
+                                    <td>{{log.recordDate}}</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                <!-- Shipping History -->
-                <merchello-shipping-history data-shipments="invoice.shipments"></merchello-shipping-history>
             </div>
             <!-- Sidebar -->
             <div class="merchello-pane secondary span3">
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
-                    <h3><localize key="merchelloOrderView_billingAddress" /></h3><br/>
+                    <h3><localize key="merchelloOrderView_billingAddress" /></h3><br />
                     <div class="vcard">
                         <span class="fn" data-ng-show="invoice.billToName != ''">{{invoice.billToName}}</span>
                         <span class="org" data-ng-show="invoice.billToCompany != ''">{{invoice.billToCompany}}</span>
@@ -139,7 +139,7 @@
                         <span class="tel" data-ng-show="invoice.billToPhone != ''">Phone: {{invoice.billToPhone}}</span>
                         <span data-ng-show="invoice.billToEmail != ''"><a data-ng-href="mailto:{{invoice.billToEmail}}" class="email">{{invoice.billToEmail}}</a></span>
                     </div>
-                    <h3><localize key="merchelloOrderView_shippingAddress" /></h3><br/>
+                    <h3><localize key="merchelloOrderView_shippingAddress" /></h3><br />
                     <div class="vcard">
                         <span class="fn" data-ng-show="shippingAddress.name != null">{{shippingAddress.name}}</span>
                         <span class="org" data-ng-show="shippingAddress.organization != null">{{shippingAddress.organization}}</span>
