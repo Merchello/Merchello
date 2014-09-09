@@ -119,41 +119,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Payment History -->
-                <!-- data-ng-show="invoice.payments.length != 0 && invoice.payments[0].amount > 0" -->
-                <div class="control-group umb-control-group" >
-                    <div class="merchello-section-label">
-                        <localize key="merchelloOrderView_paymentHistory" />
-                        <small><localize key="merchelloOrderView_paymentHistoryHelper" /></small>
-                    </div>
-                    <div class="merchello-controls">
-                        <div class="row-fluid" data-ng-repeat="(paymentMethodName, appliedPaymentList) in invoice.groupedAppliedPayments">
-                            <div class="row-fluid">
-                                <div class="merchello-section-label">
-                                    <localize key="merchelloPayment_payment" /> - {{paymentMethodName}}
-                                </div>
-                            </div>
-                            <table class="table table-striped merchello-striped-table invoice-payments">
-                                <tbody>
-                                <thead>
-                                    <tr>
-                                        <th><localize key="general_date" /></th>
-                                        <th><localize key="merchelloOrder_paymentStatus" /></th>
-                                        <th><localize key="general_type" /></th>
-                                        <th><localize key="merchelloGeneral_amount" /></th>
-                                    </tr>
-                                </thead>
-                                <tr data-ng-repeat="appliedPayment in appliedPaymentList | greaterthan: 'amount': 0">
-                                    <td class="text-left">{{appliedPayment.createDate | date : 'M/d/yyyy H:m a'}}</td>
-                                    <td class="text-left">{{appliedPayment.payment.getStatus()}}</td>
-                                    <td class="text-left">{{appliedPayment.appliedPaymentType.alias}}</td>
-                                    <td class="text-left">{{appliedPayment.amount | currency : currencySymbol}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
                 <!-- Shipping History -->
                 <merchello-shipping-history data-shipments="invoice.shipments"></merchello-shipping-history>
             </div>
