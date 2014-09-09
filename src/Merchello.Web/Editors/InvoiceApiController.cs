@@ -203,7 +203,7 @@
         /// <returns>
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
-        [AcceptVerbs("POST", "PUT")]
+        [HttpPost, HttpPut]
         public HttpResponseMessage PutInvoice(InvoiceDisplay invoice)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -234,7 +234,7 @@
         /// <returns>
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
-        [AcceptVerbs("GET", "POST", "DELETE")]
+        [HttpPost, HttpDelete, HttpGet]
         public HttpResponseMessage DeleteInvoice(Guid id)
         {
             var invoiceToDelete = _invoiceService.GetByKey(id);

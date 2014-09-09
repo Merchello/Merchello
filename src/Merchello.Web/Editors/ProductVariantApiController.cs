@@ -18,6 +18,7 @@
     /// The product variant api controller.
     /// </summary>
     [PluginController("Merchello")]
+    [Obsolete("Use ProductApiController")]
     public class ProductVariantApiController : MerchelloApiController
     {
         /// <summary>

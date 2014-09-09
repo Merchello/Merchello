@@ -109,6 +109,49 @@ namespace Merchello.Core
                                selectedChoiceKeys.All(key => ((ProductAttributeCollection)variant.Attributes).Contains(key)));
         }
 
+        /// <summary>
+        /// The get possible product attribute combinations.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The collection of product attribute collections.
+        /// </returns>
+        internal static IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(this IProduct product)
+        {
+            if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
+
+            var optionChoices = product.ProductOptions.Select(option => option.Choices.ToList()).ToList();
+
+            return optionChoices.CartesianProduct();
+        }
+
+        #endregion
+
+
+        #region ProductAttributeCollection
+
+        /// <summary>
+        /// Converts an enumeration of ProductAttributes to a ProductAttributecollection
+        /// </summary>
+        /// <param name="attributes">
+        /// The attributes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </returns>
+        internal static ProductAttributeCollection ToProductAttributeCollection(this IEnumerable<IProductAttribute> attributes)
+        {
+            var collection = new ProductAttributeCollection();
+            foreach (var att in attributes)
+            {
+                collection.Add(att);
+            }
+
+            return collection;
+        }
+
         #endregion
 
 

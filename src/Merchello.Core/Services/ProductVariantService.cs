@@ -437,6 +437,7 @@
 
         }
 
+        [Obsolete("Use Product Extension Method")]
         public IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
         {
             if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
