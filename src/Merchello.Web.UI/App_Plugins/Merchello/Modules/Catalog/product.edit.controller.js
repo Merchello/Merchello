@@ -52,7 +52,6 @@
             promiseWarehouse.then(function(warehouse) {
                 $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
                 $scope.warehouses.push($scope.defaultWarehouse);
-                $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
             }, function (reason) {
                 notificationsService.error("Default Warehouse Load Failed", reason.message);
             });
@@ -66,17 +65,13 @@
          * @function
          * 
          * @description
-         * Loads in store settings from server into the scope and applies the 
-         * defaults to the product variant.  Called in init().
+         * Loads in store settings from server into the scope.  Called in init().
          */
         $scope.loadSettings = function() {
 
             var promiseSettings = merchelloSettingsService.getAllSettings();
             promiseSettings.then(function(settings) {
                 $scope.settings = new merchello.Models.StoreSettings(settings);
-                $scope.productVariant.shippable = $scope.settings.globalShippable;
-                $scope.productVariant.taxable = $scope.settings.globalTaxable;
-                $scope.productVariant.trackInventory = $scope.settings.globalTrackInventory;
             }, function (reason) {
                 notificationsService.error("Settings Load Failed", reason.message);
             });
@@ -98,6 +93,8 @@
                 $scope.product = new merchello.Models.Product(product);
 
                 $scope.productVariant.copyFromProduct($scope.product);
+
+                $scope.productVariant.ensureAllCatalogInventoriesForWarehouse($scope.defaultWarehouse);
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;

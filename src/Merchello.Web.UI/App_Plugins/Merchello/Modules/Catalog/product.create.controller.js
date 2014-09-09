@@ -54,7 +54,7 @@
             promiseWarehouse.then(function(warehouse) {
                 $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
                 $scope.warehouses.push($scope.defaultWarehouse);
-                $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
+                $scope.productVariant.ensureAllCatalogInventoriesForWarehouse($scope.defaultWarehouse);
             }, function (reason) {
                 notificationsService.error("Default Warehouse Load Failed", reason.message);
             });
