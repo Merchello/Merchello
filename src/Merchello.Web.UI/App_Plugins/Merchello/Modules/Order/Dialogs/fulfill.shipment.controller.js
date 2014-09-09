@@ -97,7 +97,6 @@
             $scope.dialogData.items = _.filter($scope.dialogData.items, function (item) {
                 return item.selected == true;
             });
-            console.info($scope.dialogData);
             $scope.submit($scope.dialogData); 
         };
 
