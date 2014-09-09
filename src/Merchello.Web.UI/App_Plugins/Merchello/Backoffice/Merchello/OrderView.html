@@ -9,42 +9,8 @@
             </div>
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group">
-                        <!-- Action: Actions Button -->
-                        <a class="btn" href="#" ng-click="" prevent-default data-toggle="dropdown">
-                            <localize key="general_actions">Actions</localize>
-                            <span class="caret"></span>
-                        </a>
-                        <!-- Actions Menu -->
-                        <ul class="dropdown-menu umb-actions" role="menu" aria-labelledby="dLabel">
-                            <li data-ng-hide="isPaid()">
-                                <a data-ng-click="capturePayment()">
-                                    <i class="icon icon-credit-card"></i>
-                                    <span class="menu-label">Capture Funds</span>
-                                </a>
-                            </li>
-                            <li data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled' || !hasOrder()">
-                                <a data-ng-click="openFulfillShipmentDialog()">
-                                    <i class="icon icon-truck"></i>
-                                    <span class="menu-label"><localize key="merchelloGeneral_fulfill" /></span>
-                                </a>
-                            </li>
-                            <li class="sep" i data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'">
-                                <a data-ng-click="">
-                                    <i class="icon icon-stop-alt"></i>
-                                    <span class="menu-label">Cancel Sale</span>
-                                </a>
-                            </li>
-                            <li class="sep">
-                                <a data-ng-click="openDeleteInvoiceDialog()">
-                                    <i class="icon icon-delete"></i>
-                                    <span class="menu-label">Delete Sale</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                     <!-- ACTION: Refund -->
-                    <!--<a class="btn btn-warning">Refund</a>-->
+                    <button type="button" class="btn btn-default btn-trash" data-ng-click="">Refund</button>
                 </div>
             </div>
         </umb-header>
@@ -58,6 +24,14 @@
                         <small><localize key="merchelloOrderView_orderInformationHelper" /></small>
                     </div>
                     <div class="merchello-controls">
+                        <div>
+                            <!-- ACTION: Cancel Sale -->
+                            <button type="button" class="btn btn-default btn-trash pull-right" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>
+                            <!-- ACTION: Fulfill Shipment -->
+                            <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled' || !hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
+                            <!-- ACTION: Capture Payment -->
+                            <button type="button" class="btn btn-default btn-action" data-ng-hide="isPaid()" data-ng-click="capturePayment()">Capture Funds</button>
+                        </div>
                         <table class="table table-striped merchello-striped-table order-items">
                             <tbody>
                                 <tr>
