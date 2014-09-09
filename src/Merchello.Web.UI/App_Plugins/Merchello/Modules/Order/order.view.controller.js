@@ -361,17 +361,17 @@
 
         /**
          * @ngdoc method
-         * @name openFulfillPaymentDialog
+         * @name openFulfillShipmentDialog
          * @function
          * 
          * @description
          * Open the fufill shipment dialog.
          */
-	    $scope.openFulfillPaymentDialog = function () {
+	    $scope.openFulfillShipmentDialog = function () {
 	        dialogService.open({
 	            template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
 	            show: true,
-	            callback: $scope.processFulfillPaymentDialog,
+	            callback: $scope.processFulfillShipmentDialog,
 	            dialogData: $scope.invoice.orders[0]    // todo: pull from current order when multiple orders is available
 	        });
 	    };
@@ -402,7 +402,7 @@
          * @description
          * Process the fulfill shipment functionality on callback from the dialog service.
          */
-	    $scope.processFulfillPaymentDialog = function (data) {
+	    $scope.processFulfillShipmentDialog = function (data) {
 	        var promiseNewShipment = merchelloShipmentService.newShipment(data);
 	        promiseNewShipment.then(function (shipment) {
 	            shipment.trackingCode = data.trackingNumber;
