@@ -1,51 +1,29 @@
 ﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
-
-<div ng-controller="Merchello.Dashboards.Customer.ListController"
-     ng-show="loaded">
-
+<div ng-controller="Merchello.Dashboards.Customer.ListController" ng-show="loaded">
     <umb-panel>
-
         <umb-header>
-
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
                     <h1 class="umb-headline">Customers</h1>
                 </div>
-
                 <!-- Tabs for All Customers, Accepts Marketing, and Repeat Customers -->
                 <ul class="nav nav-tabs umb-nav-tabs span12">
                     <li class="ng-scope active">
                         <a href="#tab6" data-toggle="tab" class="ng-binding">All Customers</a>
                     </li>
-                    <!-- COMMENT: Removed For Merchello v1.0 -->
-                    <!--
-                    <li class="ng-scope">
-                    <a href="#tab0" data-toggle="tab" class="ng-binding">Accepts Marketing</a>
-                    </!--li>
-                    <li class="ng-scope">
-                        <a href="#tab0" data-toggle="tab" class="ng-binding">Repeat Customers</a>
-                    </li>
-                    -->
                 </ul>
             </div>
-
-
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-
                     <!-- New Order Button -->
                     <div class="btn-group">
                         <!-- ACTION: New Customer -->
                         <a class="btn btn-success" data-ng-click="openNewCustomerDialog()">New Customer</a>
                     </div>
-
                 </div>
             </div>
-
         </umb-header>
-
         <merchello-panel>
-
             <div class="merchello-pane">
                 <form class="form-horizontal row-fluid">
                     <!-- Number of Customer Per Page -->
@@ -72,13 +50,11 @@
             <div class="merchello-pane">
                 <!-- Pagination -->
                 <div class="pager" data-ng-show="maxPages > 1">
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
-                        <localize key="general_previous" />
-                    </button>
+                    <!-- ACTION: Previous Page -->
+                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)"><localize key="general_previous" /></button>
                     {{currentPage+1}}/{{maxPages}}
-                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)">
-                        <localize key="general_next" />
-                    </button>
+                    <!-- ACTION: Next Page -->
+                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)"><localize key="general_next" /></button>
                 </div>
                 <!-- Table of Customers -->
                 <table class="table table-hover merchello-selectable-table">
@@ -124,16 +100,13 @@
                 </table>
                 <!-- Pagination -->
                 <div class="pager" data-ng-show="maxPages > 1">
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
-                        <localize key="general_previous" />
-                    </button>
+                    <!-- ACTION: Previous Page -->
+                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)"><localize key="general_previous" /></button>
                     {{currentPage+1}}/{{maxPages}}
-                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)">
-                        <localize key="general_next" />
-                    </button>
+                    <!-- ACTION: Next Page -->
+                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)"><localize key="general_next" /></button>
                 </div>
             </div>
         </merchello-panel>
-
     </umb-panel>
 </div>
