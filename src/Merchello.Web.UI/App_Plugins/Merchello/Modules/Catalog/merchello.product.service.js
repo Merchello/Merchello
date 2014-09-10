@@ -68,6 +68,20 @@
 
             /**
             * @ngdoc method
+            * @name createFromProduct
+            * @description Creates a new product with an API call to the server
+            **/
+            add: function (product) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'AddProduct'),
+                        product
+                    ),
+                    'Failed to create product sku ' + product.sku);
+            },
+
+            /**
+            * @ngdoc method
             * @name getByKey
             * @description Gets a product with an API call to the server
             **/
@@ -133,11 +147,11 @@
             * @name createProduct
             * @description Creates product and delivers the new Product model in the promise data
             **/
-            createProduct: function(product, notifyMethodCallback) {
+            createProduct: function(product) {
 
                 var deferred = $q.defer();
 
-                var promiseCreate = prodservice.createFromProduct(product);
+                var promiseCreate = prodservice.add(product);
                 promiseCreate.then(function(newproduct) {
 
                     product = new merchello.Models.Product(newproduct);
@@ -161,19 +175,11 @@
 
                 var promise = prodservice.save(product);
 
-                promise.then(function() {
+                promise.then(function (savedProduct) {
 
-                    // Get updated product and options
-                    var promiseProduct = prodservice.getByKey(product.key);
-                    promiseProduct.then(function(dbproduct) {
+                    product = new merchello.Models.Product(savedProduct);
 
-                        product = new merchello.Models.Product(dbproduct);
-
-                        deferred.resolve(product);
-
-                    }, function(reason) {
-                        deferred.reject(reason);
-                    });
+                    deferred.resolve(product);
 
                 }, function(reason) {
                     deferred.reject(reason);
