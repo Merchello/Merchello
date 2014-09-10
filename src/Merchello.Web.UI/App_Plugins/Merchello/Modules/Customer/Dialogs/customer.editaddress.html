@@ -7,7 +7,7 @@
             <div class="form-group row-fluid provider-dropdown">
                 <label for="catalog-name">Select Address To Edit</label>
                 <div class="input-append col-xs-12 span12">
-                    <select name="availableBillingAddresses" class="span12" data-ng-model="dialogData.filters.address" data-ng-change="chooseAddress(dialogData.addressType, dialogData.filters.address)" data-ng-options="item.name for item in dialogData.addressAliases"></select>
+                    <select name="availableBillingAddresses" class="span12" data-ng-model="dialogData.filters.address" data-ng-change="chooseAddress(dialogData.filters.address)" data-ng-options="item.name for item in dialogData.addressAliases"></select>
                 </div>
             </div>
             <div class="form-group row-fluid">
