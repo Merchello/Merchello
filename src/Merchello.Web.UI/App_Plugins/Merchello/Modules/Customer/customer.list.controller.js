@@ -88,11 +88,9 @@
             var perPage = $scope.limitAmount;
             var sortBy = $scope.sortInfo().sortBy;
             var sortDirection = $scope.sortInfo().sortDirection;
-            if (filterText === undefined) {
-                filterText = '';
-            } else {
-                // Since there's a filter being added, start back at the first page.
+            if (filterText !== $scope.filterText) {
                 page = 0;
+                $scope.currentPage = 0;
             }
             $scope.filterText = filterText;
             var listQuery = new merchello.Models.ListQuery({
