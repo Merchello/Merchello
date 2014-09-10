@@ -131,7 +131,6 @@
         */
         $scope.loadMostRecentOrders = function () {
             _.each($scope.customers, function (customer) {
-                console.info(customer);
                 var promiseOrder = merchelloInvoiceService.getByCustomerKey(customer.key);
                 promiseOrder.then(function (response) {
                     // TODO: Finish function acquiring the most recent order total for each customer once the merchelloInvoiceService.getByCustomerKey API endpoint returns valid results.
