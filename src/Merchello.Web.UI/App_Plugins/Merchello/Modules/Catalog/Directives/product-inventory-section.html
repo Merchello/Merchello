@@ -27,25 +27,6 @@
 			</div>-->
 		</div>
 
-		<div class="span10">
-			<table class="table">
-				<tr>
-					<th></th>
-					<th class="name"><localize key="merchelloWarehouse_warehouse"/></th>
-                    <th><localize key="merchelloWarehouse_location" /></th>
-				    <th><localize key="merchelloWarehouse_stock" /></th>
-					<th><localize key="merchelloWarehouse_lowCount" /></th>
-				</tr>
-				<tr data-ng-repeat="catalogInv in productVariant.catalogInventories">
-					<td class="span1"><input name="incatalog" type="checkbox" disabled="disabled" checked="checked"></td>
-				    <td class="name">{{defaultWarehouse.name}} - {{defaultWarehouse.warehouseCatalogs[0].name}}</td>
-                    <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.location"/></td>
-					<td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.count" /></td>
-					<td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.lowCount" /></td>
-				</tr>
-			</table>
-		</div>
-
 	</div>
 </div>
 

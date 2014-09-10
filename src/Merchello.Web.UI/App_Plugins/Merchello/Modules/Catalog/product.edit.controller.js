@@ -48,16 +48,23 @@
          */
         $scope.loadAllWarehouses = function() {
 
+            var deferred = $q.defer();
+
             var promiseWarehouse = merchelloWarehouseService.getDefaultWarehouse();
-            promiseWarehouse.then(function(warehouse) {
+            promiseWarehouse.then(function (warehouse) {
+
                 $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
                 $scope.warehouses.push($scope.defaultWarehouse);
-                $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
+                deferred.resolve();
+
             }, function (reason) {
                 notificationsService.error("Default Warehouse Load Failed", reason.message);
+                deferred.reject(reason);
             });
 
             // TODO: load other warehouses when implemented
+
+            return deferred.promise;
         }
 
         /**
@@ -66,17 +73,13 @@
          * @function
          * 
          * @description
-         * Loads in store settings from server into the scope and applies the 
-         * defaults to the product variant.  Called in init().
+         * Loads in store settings from server into the scope.  Called in init().
          */
         $scope.loadSettings = function() {
 
             var promiseSettings = merchelloSettingsService.getAllSettings();
             promiseSettings.then(function(settings) {
                 $scope.settings = new merchello.Models.StoreSettings(settings);
-                $scope.productVariant.shippable = $scope.settings.globalShippable;
-                $scope.productVariant.taxable = $scope.settings.globalTaxable;
-                $scope.productVariant.trackInventory = $scope.settings.globalTrackInventory;
             }, function (reason) {
                 notificationsService.error("Settings Load Failed", reason.message);
             });
@@ -99,6 +102,8 @@
 
                 $scope.productVariant.copyFromProduct($scope.product);
 
+                $scope.productVariant.ensureAllCatalogInventoriesForWarehouse($scope.defaultWarehouse);
+
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
@@ -119,9 +124,17 @@
          */
         $scope.init = function () {
 
-            $scope.loadAllWarehouses();
-            $scope.loadSettings();
-            loadProduct($routeParams.id);
+            var promiseWarehouses = $scope.loadAllWarehouses();
+            promiseWarehouses.then(function () {
+
+                $scope.loadSettings();
+                loadProduct($routeParams.id);
+
+            }, function (reason) {
+
+                //notificationsService.error("Load Failed", reason.message);
+
+            });
 
         };
 
@@ -150,7 +163,8 @@
                     // Copy from master variant
                     $scope.product.copyFromVariant($scope.productVariant);
 
-                    var promise = merchelloProductService.updateProductWithVariants($scope.product);
+                    //var promise = merchelloProductService.updateProductWithVariants($scope.product);  // Trying Rusty's new method
+                    var promise = merchelloProductService.updateProduct($scope.product);
 
                     promise.then(function (product) {
                         notificationsService.success("Products and variants saved", "");

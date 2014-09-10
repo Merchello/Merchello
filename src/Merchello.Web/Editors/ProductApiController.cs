@@ -146,6 +146,7 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [HttpPost]
         public ProductDisplay AddProduct(ProductDisplay product)
         {
             var merchProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
