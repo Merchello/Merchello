@@ -48,15 +48,23 @@
          */
         $scope.loadAllWarehouses = function() {
 
+            var deferred = $q.defer();
+
             var promiseWarehouse = merchelloWarehouseService.getDefaultWarehouse();
-            promiseWarehouse.then(function(warehouse) {
+            promiseWarehouse.then(function (warehouse) {
+
                 $scope.defaultWarehouse = new merchello.Models.Warehouse(warehouse);
                 $scope.warehouses.push($scope.defaultWarehouse);
+                deferred.resolve();
+
             }, function (reason) {
                 notificationsService.error("Default Warehouse Load Failed", reason.message);
+                deferred.reject(reason);
             });
 
             // TODO: load other warehouses when implemented
+
+            return deferred.promise;
         }
 
         /**
@@ -116,9 +124,17 @@
          */
         $scope.init = function () {
 
-            $scope.loadAllWarehouses();
-            $scope.loadSettings();
-            loadProduct($routeParams.id);
+            var promiseWarehouses = $scope.loadAllWarehouses();
+            promiseWarehouses.then(function () {
+
+                $scope.loadSettings();
+                loadProduct($routeParams.id);
+
+            }, function (reason) {
+
+                //notificationsService.error("Load Failed", reason.message);
+
+            });
 
         };
 
