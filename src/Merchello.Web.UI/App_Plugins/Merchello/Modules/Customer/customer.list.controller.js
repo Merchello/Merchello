@@ -181,7 +181,7 @@
             $scope.loaded = true;
             $scope.maxPages = 0;
             $scope.preValuesLoaded = true;
-            $scope.sortProperty = 'firstName';
+            $scope.sortProperty = 'loginName';
             $scope.visible = {
                 bulkActionButton: function() {
                     var result = false;
