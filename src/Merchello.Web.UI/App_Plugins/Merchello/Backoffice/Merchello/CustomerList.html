@@ -61,13 +61,13 @@
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
+                            <th data-ng-click="changeSortOrder('email')" data-ng-class="{'sorted': sortProperty == 'email' ||  sortProperty == '-email'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'email', 'icon-navigation-down': sortProperty == '-email'}"></i>
+                                Login
+                            </th>
                             <th data-ng-click="changeSortOrder('firstName')" data-ng-class="{'sorted': sortProperty == 'firstName' ||  sortProperty == '-firstName'}">
                                 <i data-ng-class="{'icon-navigation-up': sortProperty == 'firstName', 'icon-navigation-down': sortProperty == '-firstName'}"></i>
                                 Name
-                            </th>
-                            <th data-ng-click="changeSortOrder('email')" data-ng-class="{'sorted': sortProperty == 'email' ||  sortProperty == '-email'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'email', 'icon-navigation-down': sortProperty == '-email'}"></i>
-                                Email Address
                             </th>
                             <th>Location</th>
                             <th>Last Order Total</th>
@@ -91,8 +91,8 @@
                         <tr data-ng-repeat="customer in customers">
                             <td><input type="checkbox" /></td>
                             <!-- ACTION: Go To Customer View Page -->
+                            <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.loginName}}</a></td>
                             <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
-                            <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.email}}</a></td>
                             <td>{{customer.primaryLocation()}}</td>
                             <td><localize key="merchelloGeneral_moneySymbol" />{{customer.lastOrderTotal}}</td>
                         </tr>
