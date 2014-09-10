@@ -155,7 +155,7 @@
             {
                 if (result.Invoice.InvoiceStatusKey == Core.Constants.DefaultKeys.InvoiceStatus.Paid)
                 {
-                    result.Payment.Result.AuditPaymentCaptured();
+                    result.Payment.Result.AuditPaymentCaptured(result.Payment.Result.Amount);
                 }
                 else
                 {

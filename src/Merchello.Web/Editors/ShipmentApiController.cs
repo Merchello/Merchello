@@ -206,7 +206,7 @@ namespace Merchello.Web.Editors
                 
                 var merchOrder = _orderService.GetByKey(order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, order.ToOrder(merchOrder));
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key));
 
                 var attempt = builder.Build();
                 

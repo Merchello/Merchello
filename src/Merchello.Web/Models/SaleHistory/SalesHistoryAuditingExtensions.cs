@@ -146,13 +146,14 @@
         /// <param name="payment">
         /// The payment.
         /// </param>
-        internal static void AuditPaymentCaptured(this IPayment payment)
+        /// <param name="amount">The amount captured</param>
+        internal static void AuditPaymentCaptured(this IPayment payment, decimal amount)
         {
             var obj = new
             {
                 area = Area,
                 key = "paymentCaptured",
-                invoiceTotal = payment.Amount,
+                invoiceTotal = amount,
                 currencyCode = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)
             };
 

@@ -17,6 +17,11 @@
         private readonly IOrder _order;
 
         /// <summary>
+        /// A collection of order line item keys to be included in the shipment
+        /// </summary>
+        private readonly IEnumerable<Guid> _keysToShip;
+ 
+        /// <summary>
         /// The merchello context.
         /// </summary>
         private readonly IMerchelloContext _merchelloContext;
@@ -35,13 +40,18 @@
         /// <param name="order">
         /// The order.
         /// </param>
-        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order)
+        /// <param name="keysToShip">
+        /// A collection of line item keys which identifies which line items in the order are to be included in the shipment being packaged
+        /// </param>
+        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(order, "order");
+            Mandate.ParameterNotNull(keysToShip, "keysToShip");
 
             _merchelloContext = merchelloContext;
             _order = order;
+            _keysToShip = keysToShip;
 
             ResolveChain(Core.Constants.TaskChainAlias.OrderPreparationShipmentCreate);
         }
@@ -61,7 +71,7 @@
         {
             get
             {
-                return _constructorParameters ?? (_constructorParameters = new List<object>(new object[] { _merchelloContext, _order }));
+                return _constructorParameters ?? (_constructorParameters = new List<object>(new object[] { _merchelloContext, _order, _keysToShip }));
             }
         }
 
