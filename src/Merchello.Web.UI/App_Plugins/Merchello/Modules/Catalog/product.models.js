@@ -315,7 +315,7 @@
             }
         };
 
-        // Helper to add a variant to this product
+        // Helper to add a catalog inventory to this product
         self.addCatalogInventory = function (warehouse, catalog) {
 
             var newCatalogInventory = new merchello.Models.CatalogInventory();
@@ -330,6 +330,14 @@
 
             return newCatalogInventory;
         };
+
+        // Helper to remove catalog inventories that aren't used / checked
+        self.removeUnusedCatalogInventories = function (catalogInventories) {
+
+            return _.reject(catalogInventories, function (inventory) { return !inventory.productInCatalog; });
+
+        };
+
 
         self.globalInventoryChanged = function(newVal) {
             if (newVal) {
@@ -473,6 +481,14 @@
             self.downloadMediaId = productVariant.downloadMediaId;
 
             self.catalogInventories = productVariant.catalogInventories.slice(0);
+            self.catalogInventories = self.removeUnusedCatalogInventories(self.catalogInventories);
+        };
+
+        // Helper to remove catalog inventories that aren't used / checked
+        self.removeUnusedCatalogInventories = function (catalogInventories) {
+
+            return _.reject(catalogInventories, function (inventory) { return !inventory.productInCatalog; });
+
         };
 
         // Helper to add a variant to this product

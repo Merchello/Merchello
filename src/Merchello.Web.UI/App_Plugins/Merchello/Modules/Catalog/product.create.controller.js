@@ -131,10 +131,7 @@
                     // Copy from master variant
                     $scope.product.copyFromVariant($scope.productVariant);
 
-                    var promiseCreate = merchelloProductService.createProduct($scope.product, function() {
-                        $scope.creatingProduct = false;
-                        //notificationsService.success("*** Product ", status);
-                    });
+                    var promiseCreate = merchelloProductService.createProduct($scope.product);
                     promiseCreate.then(function(product) {
 
                         $scope.product = product;
@@ -142,7 +139,9 @@
 
                         $scope.creatingProduct = false; // For the variant edit/create view.
 
-                        $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
+                        if ($scope.product.hasVariants) {
+                            $location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.product.key, true);
+                        }
 
                         notificationsService.success("Product Created and Saved", "");
 
@@ -156,7 +155,8 @@
                         // Copy from master variant
                         $scope.product.copyFromVariant($scope.productVariant);
 
-                        var promise = merchelloProductService.updateProductWithVariants($scope.product);
+                        //var promise = merchelloProductService.updateProductWithVariants($scope.product);  // Trying Rusty's new method
+                        var promise = merchelloProductService.updateProduct($scope.product);
 
                         promise.then(function (product) {
                             notificationsService.success("Products and variants saved", "");
