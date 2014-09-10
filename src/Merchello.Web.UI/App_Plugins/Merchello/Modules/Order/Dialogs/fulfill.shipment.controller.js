@@ -10,9 +10,14 @@
      */
 	controllers.FulfillShipmentController = function ($scope, merchelloOrderService, merchelloShipmentService, notificationsService, merchelloSettingsService) {
 
-
-
-
+	    /**
+         * @ngdoc method
+         * @name getShipMethodForOrder
+         * @function
+         * 
+         * @description
+         * Load the ship methods that will be available for this order.
+         */
         $scope.getShipMethodForOrder = function (order) {
             var promise = merchelloShipmentService.getShipMethod(order);
             promise.then(function (method) {
@@ -86,6 +91,7 @@
          * @function
          * 
          * @description
+         * Prepare the data to be sent back to the order view controller for saving.
          */
         $scope.save = function () {
             $scope.dialogData.items = _.filter($scope.dialogData.items, function (item) {
