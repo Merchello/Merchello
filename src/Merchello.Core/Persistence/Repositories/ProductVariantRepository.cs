@@ -256,6 +256,7 @@
                 ProductVariantKey = inv.ProductVariantKey,
                 Count = inv.Count,
                 LowCount = inv.LowCount,
+                Location = inv.Location,
                 CreateDate = inv.CreateDate,
                 UpdateDate = inv.UpdateDate
             };
@@ -266,24 +267,15 @@
         private void UpdateCatalogInventory(ICatalogInventory inv)
         {
             inv.UpdateDate = DateTime.Now;
-            var dto = new CatalogInventoryDto()
-            {
-                CatalogKey = inv.CatalogKey,
-                ProductVariantKey = inv.ProductVariantKey,
-                Count = inv.Count,
-                LowCount = inv.LowCount,
-                CreateDate = inv.CreateDate,
-                UpdateDate = inv.UpdateDate
-            };
 
-            //Database.Update(dto);
 
             Database.Execute(
-                "UPDATE merchCatalogInventory SET Count = @invCount, LowCount = @invLowCount, UpdateDate = @invUpdateDate WHERE catalogKey = @catalogKey AND productVariantKey = @productVariantKey",
+                "UPDATE merchCatalogInventory SET Count = @invCount, LowCount = @invLowCount, Location = @invLocation, UpdateDate = @invUpdateDate WHERE catalogKey = @catalogKey AND productVariantKey = @productVariantKey",
                 new
                 {
                     invCount = inv.Count,
                     invLowCount = inv.LowCount,
+                    invLocation = inv.Location,
                     invUpdateDate = inv.UpdateDate,
                     catalogKey = inv.CatalogKey,
                     productVariantKey = inv.ProductVariantKey                    

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+    using EntityBase;
+    using Interfaces;
+
     /// <summary>
     /// Represents a warehouse catalog
     /// </summary>
