@@ -273,16 +273,14 @@
             // Insert the applicable customer, billing, and shipping keys and types into new addresses.
             _.each(addresses, function(address) {
                 address.customerKey = $scope.customer.key;
-                if (data.addressType === 'billing') {
+                if (data.addressType.toLowerCase() === 'billing') {
                     address.addressType = 'Billing';
-                    address.addressTypeFieldKey = $scope.billingKey;
                 } else {
                     address.addressType = 'Shipping';
-                    address.addressTypeFieldKey = $scope.shippingKey;
                 }
             });
             // Update the appropriate address list.
-            if (data.addressType === 'billing') {
+            if (data.addressType.toLowerCase() === 'billing') {
                 $scope.billingAddresses = _.map(addresses, function(address) {
                     return new merchello.Models.CustomerAddress(address);
                 });
@@ -362,7 +360,6 @@
         $scope.setVariables = function () {
             $scope.avatarUrl = "";
             $scope.billingAddresses = [];
-            $scope.billingKey = false;
             $scope.countries = [];
             $scope.customer = new merchello.Models.Customer();
             $scope.customerKey = false;
@@ -376,7 +373,6 @@
             $scope.invoiceTotal = 0;
             $scope.loaded = false;
             $scope.shippingAddresses = [];
-            $scope.shippingKey = false;
         };
 
         $scope.init();
