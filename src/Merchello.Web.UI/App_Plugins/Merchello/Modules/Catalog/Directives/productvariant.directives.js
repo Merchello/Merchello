@@ -41,7 +41,7 @@
                  * @function
                  * 
                  * @description
-                 * This is called when the "Track inventory for this variant" checkbox is checked.  It creates an initial catalog inventory object ready to 
+                 * This is called when the "is Shippable" checkbox is checked.  It creates an initial catalog inventory object ready to 
                  * fill out.
                  */
                 $scope.ensureCatalogInventory = function () {
@@ -159,7 +159,9 @@
             replace: true,
             scope: {
                 product: '=',
-                productVariant: '='
+                productVariant: '=',
+                defaultWarehouse: '=',
+                warehouses: '='
             },
             templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-shipping-section.html'
         };

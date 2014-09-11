@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Merchello.Core
+﻿namespace Merchello.Core
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Extension methods for IEnumerable types
     /// </summary>
@@ -25,10 +25,10 @@ namespace Merchello.Core
                 (accumulator, sequence) =>
                     from accseq in accumulator
                     from item in sequence
-                    select accseq.Concat(new[] { item })
-                );
-        }
-
-        
+                    select accseq.Concat(new[]
+                    {
+                        item
+                    }));
+        }        
     }
 }

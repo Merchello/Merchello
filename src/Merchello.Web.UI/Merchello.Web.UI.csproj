@@ -287,7 +287,7 @@
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.css" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-option-attributes-selection.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variants-view-table.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product-variants-view-table.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\productwithoptions.directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-options-reorder.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
