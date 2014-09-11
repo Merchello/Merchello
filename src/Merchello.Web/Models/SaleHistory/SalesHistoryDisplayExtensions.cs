@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-namespace Merchello.Web.Models.SaleHistory
+﻿namespace Merchello.Web.Models.SaleHistory
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+
     /// <summary>
     /// The sales history display extensions.
     /// </summary>

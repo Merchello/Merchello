@@ -18,6 +18,10 @@ namespace Merchello.Web.Models.ContentEditing
             {
                 destination.Key = productDisplay.Key;
             }
+
+            productDisplay.CatalogInventories = productDisplay.CatalogInventories ?? Enumerable.Empty<CatalogInventoryDisplay>();
+            productDisplay.ProductOptions = productDisplay.ProductOptions ?? Enumerable.Empty<ProductOptionDisplay>();
+
             destination.Name = productDisplay.Name;
             destination.Sku = productDisplay.Sku;
             destination.Price = productDisplay.Price;
@@ -41,14 +45,18 @@ namespace Merchello.Web.Models.ContentEditing
 
             foreach (var catalogInventory in productDisplay.CatalogInventories)
             {
-                ICatalogInventory destinationCatalogInventory;
+                var catInv = destination.CatalogInventories.FirstOrDefault(x => x.CatalogKey == catalogInventory.CatalogKey);
 
-                var catInv = destination.CatalogInventories.First(x => x.CatalogKey == catalogInventory.CatalogKey);
                 if (catInv != null)
                 {
-                    destinationCatalogInventory = catInv;
+                    var destinationCatalogInventory = catInv;
 
                     destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+                }
+                else if (!Guid.Empty.Equals(catalogInventory.CatalogKey) && destination.HasIdentity)
+                {
+                    //// Add to a new catalog
+                    ((Product)destination).MasterVariant.AddToCatalogInventory(catalogInventory.CatalogKey);
                 }
             }
 

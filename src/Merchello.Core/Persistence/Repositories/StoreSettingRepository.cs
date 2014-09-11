@@ -138,7 +138,7 @@
             var setting = Get(storeSettingKey);
             var nextInvoiceNumber = int.Parse(setting.Value);
             var max = validate();
-            nextInvoiceNumber = nextInvoiceNumber > max ? nextInvoiceNumber : max + 5; 
+            nextInvoiceNumber = nextInvoiceNumber >= max ? nextInvoiceNumber : max + 5; 
             var invoiceNumber = nextInvoiceNumber + invoicesCount;
 
             setting.Value = invoiceNumber.ToString(CultureInfo.InvariantCulture);
@@ -161,7 +161,7 @@
             var setting = Get(storeSettingKey);
             var max = validate();
             var nextOrderNumber = int.Parse(setting.Value);
-            nextOrderNumber = nextOrderNumber > max ? nextOrderNumber : max + 5;
+            nextOrderNumber = nextOrderNumber >= max ? nextOrderNumber : max + 5;
             var orderNumber = nextOrderNumber + ordersCount;
 
             setting.Value = orderNumber.ToString(CultureInfo.InvariantCulture);
