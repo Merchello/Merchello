@@ -104,7 +104,25 @@
         }
 
         /// <summary>
-        /// The get product from service.
+        /// Returns a Product Variant by id (key)
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProductVariant/{guid}
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        public ProductVariantDisplay GetProductVariant(Guid id)
+        {
+            return _merchello.Query.Product.GetProductVariantByKey(id);
+        }
+
+        /// <summary>
+        /// Returns a Product by id (key) directly from the service
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
         /// </summary>
         /// <param name="id">
         /// The id.
