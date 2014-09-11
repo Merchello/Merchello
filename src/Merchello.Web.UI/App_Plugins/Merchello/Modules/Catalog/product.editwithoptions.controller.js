@@ -105,17 +105,17 @@
 
                         $scope.product = product;
 
-                        if (rebuildVariants) {
-                            notificationsService.info("rebuilding Variants", "");
-                            $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
+                        //if (rebuildVariants) {
+                        //    notificationsService.info("rebuilding Variants", "");
+                        //    $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
-                            promise = merchelloProductService.updateProductWithVariants($scope.product, false);
-                            promise.then(function(product2) {
-                                notificationsService.success("Product Saved 2", "");
-                                $scope.product = product2;
-                                $scope.toggleAllVariants(false);
-                            });
-                        }
+                        //    promise = merchelloProductService.updateProductWithVariants($scope.product, false);
+                        //    promise.then(function(product2) {
+                        //        notificationsService.success("Product Saved 2", "");
+                        //        $scope.product = product2;
+                        //        $scope.toggleAllVariants(false);
+                        //    });
+                        //}
 
                         if (!$scope.product.hasVariants && !$scope.product.hasOptions) {
                             $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
