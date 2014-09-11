@@ -162,7 +162,6 @@
          */
         $scope.saveAddress = function() {
             if ($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode && $scope.dialogData.filters.country.id != -1) {
-                console.info($scope.dialogData.addresses);
                 $scope.dialogData.addressToReturn = $scope.currentAddress;
                 $scope.prepareAddressesForSave();
                 $scope.submit($scope.dialogData);
@@ -244,7 +243,6 @@
          * Update the selected province for the applicable address type.
          */
         $scope.updateProvince = function (selectedProvince) {
-            console.info(selectedProvince);
             if (selectedProvince.code !== '00') {
                 $scope.currentAddress.region = selectedProvince.code;
                 _.each($scope.dialogData.addresses, function(address) {
