@@ -37,6 +37,7 @@
             : base(work, cache)
         {
             Mandate.ParameterNotNull(orderLineItemRepository, "orderLineItemRepository");
+            _orderLineItemRepository = orderLineItemRepository;
         }
 
         #region Overrides of RepositoryBase<IShipment>
