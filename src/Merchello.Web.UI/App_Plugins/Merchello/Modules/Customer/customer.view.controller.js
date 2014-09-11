@@ -242,15 +242,14 @@
         * Prepare a list of addresses to save with the customer
         */
         $scope.prepareAddressesForSave = function () {
-            var addresses = [], addressToAdd, i;
-            for (i = 0; i < $scope.billingAddresses.length; i++) {
-                addressToAdd = new merchello.Models.CustomerAddress($scope.billingAddresses[i]);
-                addresses.push(addressToAdd);
-            };
-            for (i = 0; i < $scope.shippingAddresses.length; i++) {
-                addressToAdd = new merchello.Models.CustomerAddress($scope.shippingAddresses[i]);
-                addresses.push(addressToAdd);
-            };
+            var addresses = [];
+            _.each($scope.billingAddresses, function(address) {
+                addresses.push(new merchello.Models.CustomerAddress(address));
+            });
+
+            _.each($scope.shippingAddresses, function(address) {
+                addresses.push(new merchello.Models.CustomerAddress(address));
+            });
             return addresses;
         };
 
