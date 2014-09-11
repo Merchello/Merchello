@@ -88,13 +88,6 @@
             if (value.ShipMethodKey == Guid.Empty) value.ShipMethodKey = null;
             _shipmentService.Save(value);
 
-            foreach (var shipItem in value.Items)
-            {
-                ((OrderLineItem) Order.Items.First(x => x.Key == shipItem.Key)).ShipmentKey = value.Key;
-            }
-
-            _orderService.Save(Order);
-
             return Attempt<IShipment>.Succeed(value);
         }
     }
