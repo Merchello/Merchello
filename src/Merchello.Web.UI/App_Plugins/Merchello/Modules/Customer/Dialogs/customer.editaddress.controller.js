@@ -76,16 +76,13 @@
         // Remove any blank addresses and fix multiple defaults.
         $scope.prepareAddressesForSave = function () {
             var addresses = $scope.dialogData.addresses;
-            console.info($scope.currentAddress);
-            _.each(addresses, function (address) {
-                console.info(address.key);
+            addresses = _.map(addresses, function (address) {
                 if (address.key == $scope.currentAddress.key) {
-                    console.info('match found');
                     address = new merchello.Models.CustomerAddress($scope.currentAddress);
                 }
+                return address;
             });
-            console.info(addresses);
-            addresses = _.reject($scope.dialogData.addresses, function (address) {
+            addresses = _.reject(addresses, function (address) {
                 // Reject an address if it is blank (and remove from the array).
                 return address.address1 == '';
             });
