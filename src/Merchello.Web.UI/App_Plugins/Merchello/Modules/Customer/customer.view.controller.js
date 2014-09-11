@@ -308,7 +308,8 @@
             notificationsService.info("Preparing addresses for updating...", "");
             // Combine the address lists and update the customer.
             $scope.customer.addresses = $scope.prepareAddressesForSave();
-            $scope.saveCustomer();
+            console.info($scope.customer.addresses);
+            // $scope.saveCustomer();
         };
 
         /**

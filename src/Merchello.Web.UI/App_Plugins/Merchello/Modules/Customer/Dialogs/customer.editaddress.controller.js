@@ -74,8 +74,18 @@
         };
 
         // Remove any blank addresses and fix multiple defaults.
-        $scope.prepareAddressesForSave = function() {
-            var addresses = _.reject($scope.dialogData.addresses, function (address) {
+        $scope.prepareAddressesForSave = function () {
+            var addresses = $scope.dialogData.addresses;
+            console.info($scope.currentAddress);
+            _.each(addresses, function (address) {
+                console.info(address.key);
+                if (address.key == $scope.currentAddress.key) {
+                    console.info('match found');
+                    address = new merchello.Models.CustomerAddress($scope.currentAddress);
+                }
+            });
+            console.info(addresses);
+            addresses = _.reject($scope.dialogData.addresses, function (address) {
                 // Reject an address if it is blank (and remove from the array).
                 return address.address1 == '';
             });
@@ -155,6 +165,7 @@
          */
         $scope.saveAddress = function() {
             if ($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode && $scope.dialogData.filters.country.id != -1) {
+                console.info($scope.dialogData.addresses);
                 $scope.dialogData.addressToReturn = $scope.currentAddress;
                 $scope.prepareAddressesForSave();
                 $scope.submit($scope.dialogData);
