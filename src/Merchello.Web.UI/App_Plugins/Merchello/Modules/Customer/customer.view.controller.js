@@ -246,7 +246,6 @@
             _.each($scope.billingAddresses, function(address) {
                 addresses.push(new merchello.Models.CustomerAddress(address));
             });
-
             _.each($scope.shippingAddresses, function(address) {
                 addresses.push(new merchello.Models.CustomerAddress(address));
             });
