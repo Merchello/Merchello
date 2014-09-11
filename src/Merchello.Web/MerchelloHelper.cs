@@ -48,7 +48,6 @@
         {
             get { return _queryProvider.Value; }
         }
-
         
         #region Product
 
@@ -61,9 +60,10 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.GetByKey")]
         public ProductDisplay Product(string key)
         {
-            return ProductQuery.GetByKey(key);
+            return Product(key.EncodeAsGuid());
         }
 
         /// <summary>
@@ -75,9 +75,10 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.GetByKey")]
         public ProductDisplay Product(Guid key)
         {
-            return ProductQuery.GetByKey(key);
+            return Query.Product.GetByKey(key);
         }
 
         ///// <summary>
@@ -100,9 +101,10 @@
         /// <returns>
         /// The <see cref="ProductVariantDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.GetProductVariantByKey")]
         public ProductVariantDisplay ProductVariant(string key)
         {
-            return ProductQuery.GetVariantDisplayByKey(key);
+            return ProductVariant(key.EncodeAsGuid());
         }
 
         /// <summary>
@@ -114,9 +116,10 @@
         /// <returns>
         /// The <see cref="ProductVariantDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Product.GetProductVariantByKey")]
         public ProductVariantDisplay ProductVariant(Guid key)
         {
-            return ProductVariant(key.ToString());
+            return Query.Product.GetProductVariantByKey(key);
         }
 
 
@@ -128,7 +131,7 @@
         /// <returns>The <see cref="ProductVariantDisplay"/></returns>
         public ProductVariantDisplay GetProductVariantWithAttributes(Guid productKey, Guid[] attributeKeys)
         {
-            var product = Product(productKey);
+            var product = Query.Product.GetByKey(productKey);
             return product.ProductVariants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
         }
 
@@ -143,7 +146,7 @@
         /// </remarks>
         public IEnumerable<ProductVariantDisplay> GetValidProductVariants(Guid productKey, Guid[] attributeKeys)
         {
-            var product = Product(productKey);
+            var product = Query.Product.GetByKey(productKey);
             if (product == null) throw new InvalidOperationException("Product is null");
             if (!attributeKeys.Any()) return product.ProductVariants;
 

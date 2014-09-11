@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<umbPackage>
+	<info>
+		<package>
+			<name>Merchello.PurchaseOrder.Payments</name>
+			<version>0.0.0</version>
+            <license url="https://github.com/Merchello/Merchello/blob/master/License.md">MIT license</license>
+            <url>http://our.umbraco.org/projects/website-utilities/merchello</url>
+			<requirements>
+				<major>0</major>
+				<minor>0</minor>
+				<patch>0</patch>
+			</requirements>
+		</package>
+        <author>
+            <name>Rusty Swayne</name>
+            <website>http://www.merchello.com/</website>
+        </author>
+		<readme>
+			<![CDATA[]]>
+		</readme>
+	</info>
+	<DocumentTypes />
+	<Templates />
+	<Stylesheets />
+	<Macros />
+	<DictionaryItems />
+	<Languages />
+	<DataTypes />
+	<Actions />
+	<control />
+	<files />
+</umbPackage>

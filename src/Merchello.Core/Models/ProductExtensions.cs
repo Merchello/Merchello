@@ -174,8 +174,23 @@ namespace Merchello.Core
         /// <param name="catalog">The <see cref="IWarehouseCatalog"/></param>
         internal static void AddToCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
         {
-            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalog.Key, productVariant.Key));
+            productVariant.AddToCatalogInventory(catalog.Key);
         }
+
+        /// <summary>
+        /// Associates a product variant with a warehouse
+        /// </summary>
+        /// <param name="productVariant">
+        /// The <see cref="IProductVariant"/>
+        /// </param>
+        /// <param name="catalogKey">
+        /// The catalog Key.
+        /// </param>
+        internal static void AddToCatalogInventory(this IProductVariant productVariant, Guid catalogKey)
+        {
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalogKey, productVariant.Key));
+        }
+
 
         /// <summary>
         /// Removes a product varaint from a catalog inventory.

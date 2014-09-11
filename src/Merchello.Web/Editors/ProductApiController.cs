@@ -154,6 +154,17 @@
             merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
 
+            // special case where a catalog was associated before the creation of the product
+            if (product.CatalogInventories.Any())
+            {
+                foreach (var cat in product.CatalogInventories)
+                {
+                    ((Product)merchProduct).MasterVariant.AddToCatalogInventory(cat.CatalogKey);
+                }
+            }
+
+            _productService.Save(merchProduct);
+
             if (!merchProduct.ProductOptions.Any()) return merchProduct.ToProductDisplay();
 
             var attributeLists = merchProduct.GetPossibleProductAttributeCombinations();
@@ -180,10 +191,8 @@
         [HttpPost, HttpPut]
         public ProductDisplay PutProduct(ProductDisplay product)
         {            
-            var merchProduct = _productService.GetByKey(product.Key);
-         
+            var merchProduct = _productService.GetByKey(product.Key);         
             merchProduct = product.ToProduct(merchProduct);
-
             _productService.Save(merchProduct);
 
             return merchProduct.ToProductDisplay();

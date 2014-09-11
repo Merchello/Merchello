@@ -364,7 +364,6 @@
     <Compile Include="Search\ProductQuery.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="Editors\ProductApiController.cs" />
-    <Compile Include="Editors\ProductVariantApiController.cs" />
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
