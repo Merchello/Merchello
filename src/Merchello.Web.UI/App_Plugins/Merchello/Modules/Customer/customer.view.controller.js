@@ -23,44 +23,30 @@
             $scope.billingAddresses = [];
             var haveBillingDefault = false;
             var haveShippingDefault = false;
-            var i;
-            var promiseTypeFields = merchelloSettingsService.getTypeFields();
             $scope.shippingAddresses = [];
-            promiseTypeFields.then(function (typeFieldsResponse) {
-                for (i = 0; i < typeFieldsResponse.length; i++) {
-                    var typeField = typeFieldsResponse[i];
-                    if (typeField.alias === "Billing" & $scope.billingKey === false) {
-                        $scope.billingKey = typeField.typeKey;
-                    }
-                    if (typeField.alias == "Shipping" & $scope.shippingKey === false) {
-                        $scope.shippingKey = typeField.typeKey;
-                    }
-                }
-                if (addresses.length > 0) {
-                    for (i = 0; i < addresses.length; i++) {
-                        var newAddress = new merchello.Models.CustomerAddress(addresses[i]);
-                        if (newAddress.addressTypeFieldKey == $scope.billingKey) {
-                            if (newAddress.isDefault) {
-                                $scope.defaultBillingAddress = newAddress;
-                                haveBillingDefault = true;
-                            }
-                            $scope.billingAddresses.push(newAddress);
-                        } else if (newAddress.addressTypeFieldKey == $scope.shippingKey) {
-                            if (newAddress.isDefault) {
-                                $scope.defaultShippingAddress = newAddress;
-                                haveShippingDefault = true;
-                            }
-                            $scope.shippingAddresses.push(newAddress);
+            if (addresses.length > 0) {
+                _.each(addresses, function(address) {
+                    if (address.addressType.toLowerCase() === 'billing') {
+                        if (address.isDefault) {
+                            $scope.defaultBillingAddress = new merchello.Models.CustomerAddress(address);
+                            haveBillingDefault = true;
                         }
+                        $scope.billingAddresses.push(new merchello.Models.CustomerAddress(address));
+                    } else {
+                        if (address.isDefault) {
+                            $scope.defaultShippingAddress = new merchello.Models.CustomerAddress(address);
+                            haveShippingDefault = true;
+                        }
+                        $scope.shippingAddresses.push(new merchello.Models.CustomerAddress(address));
                     }
-                }
-                if (!haveBillingDefault && $scope.billingAddresses.length > 0) {
-                    $scope.defaultBillingAddress = $scope.billingAddresses[0];
-                }
-                if (!haveShippingDefault && $scope.shippingAddresses.length > 0) {
-                    $scope.defaultShippingAddress = $scope.shippingAddresses[0];
-                }
-            });
+                });
+            }
+            if (!haveBillingDefault && $scope.billingAddresses.length > 0) {
+                $scope.defaultBillingAddress = $scope.billingAddresses[0];
+            }
+            if (!haveShippingDefault && $scope.shippingAddresses.length > 0) {
+                $scope.defaultShippingAddress = $scope.shippingAddresses[0];
+            }
         };
 
         /**
@@ -287,10 +273,11 @@
             // Insert the applicable customer, billing, and shipping keys and types into new addresses.
             _.each(addresses, function(address) {
                 address.customerKey = $scope.customer.key;
-                address.addressType = data.addressType;
                 if (data.addressType === 'billing') {
+                    address.addressType = 'Billing';
                     address.addressTypeFieldKey = $scope.billingKey;
                 } else {
+                    address.addressType = 'Shipping';
                     address.addressTypeFieldKey = $scope.shippingKey;
                 }
             });
