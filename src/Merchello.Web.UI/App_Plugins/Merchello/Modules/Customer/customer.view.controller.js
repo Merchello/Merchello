@@ -278,7 +278,6 @@
         */
         $scope.processEditAddressDialog = function (data) {
             var addresses = data.addresses;
-            console.info(addresses);
             //  Filter out an address if it's marked to be deleted.
             if (data.shouldDelete) {
                 addresses = _.reject(addresses, function(address) {
