@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductEditWithOptionsController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
+    controllers.ProductEditWithOptionsController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService) {
 
         //load the seperat css for the editor to avoid it blocking our js loading
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
@@ -282,7 +282,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Editors.Product.EditWithOptionsController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', merchello.Controllers.ProductEditWithOptionsController]);
+    angular.module("umbraco").controller("Merchello.Editors.Product.EditWithOptionsController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', merchello.Controllers.ProductEditWithOptionsController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 
