@@ -157,50 +157,24 @@
 
             if (thisForm.$valid) {
 
-                // if saving a product (not a variant)
-                if ($scope.product.hasVariants) // We added options / variants to a product that previously did not have them OR on save during a create
-                {
-                    // Copy from master variant
-                    $scope.product.copyFromVariant($scope.productVariant);
+                // Copy from master variant
+                $scope.product.copyFromVariant($scope.productVariant);
 
-                    //var promise = merchelloProductService.updateProductWithVariants($scope.product);  // Trying Rusty's new method
-                    var promise = merchelloProductService.updateProduct($scope.product);
+                var promise = merchelloProductService.updateProduct($scope.product);
 
-                    promise.then(function (product) {
-                        notificationsService.success("Products and variants saved", "");
+                promise.then(function (product) {
+                    notificationsService.success("Product Saved", "");
 
-                        $scope.product = product;
-                        $scope.productVariant.copyFromProduct($scope.product);
+                    $scope.product = product;
+                    $scope.productVariant.copyFromProduct($scope.product);
 
-                        if ($scope.product.hasVariants) {
-                            $location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.product.key, true);
-                        }
-
-                    }, function (reason) {
-                        notificationsService.error("Product or variants save Failed", reason.message);
-                    });
-                } else // Simple product save with no options or variants
-                {
-                    if ($scope.product.productOptions.length > 0) // The options checkbox was checked, a blank option was added, then the options checkbox was unchecked
-                    {
-                        $scope.product.productOptions = [];
+                    if ($scope.product.hasVariants) {
+                        $location.url("/merchello/merchello/ProductEditWithOptions/" + $scope.product.key, true);
                     }
 
-                    // Copy from master variant
-                    $scope.product.copyFromVariant($scope.productVariant);
-
-                    var promise = merchelloProductService.updateProduct($scope.product);
-
-                    promise.then(function (product) {
-                        notificationsService.success("Product Saved", "");
-
-                        $scope.product = product;
-                        $scope.productVariant.copyFromProduct($scope.product);
-
-                    }, function (reason) {
-                        notificationsService.error("Product Save Failed", reason.message);
-                    });
-                }
+                }, function (reason) {
+                    notificationsService.error("Product Save Failed", reason.message);
+                });
             }
         };
 
@@ -243,38 +217,6 @@
                 dialogData: $scope.product
             });
         }
-
-        /**
-        * @ngdoc method
-        * @name updateVariants
-        * @function
-        * 
-        * @description
-        * Called when the Update button is pressed below the options.  This will create a new product if necessary 
-        * and save the product.  Then the product variants are generated.
-        * 
-        * We have to create the product because the API cannot create the variants with a product with options.
-        */
-        $scope.updateVariants = function (thisForm) {
-
-            // Copy from master variant
-            $scope.product.copyFromVariant($scope.productVariant);
-
-            var promise = merchelloProductService.updateProduct($scope.product);
-
-            promise.then(function(product) {
-                notificationsService.success("Product Saved", "");
-
-                $scope.product = product;
-                $scope.productVariant.copyFromProduct($scope.product);
-
-                $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
-
-            }, function(reason) {
-                notificationsService.error("Product Save Failed", reason.message);
-            });
-
-        };
 
     };
 

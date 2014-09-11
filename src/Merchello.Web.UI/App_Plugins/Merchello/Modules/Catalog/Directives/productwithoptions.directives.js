@@ -196,7 +196,7 @@
                     var selected = $scope.selectedVariants();
                     for (var i = 0; i < selected.length; i++) {
                         selected[i].price = dialogData.newPrice;
-                        var savepromise = merchelloProductVariantService.save(selected[i]);
+                        var savepromise = merchelloProductService.updateProductVariant(selected[i]);
                         savepromise.then(function () {
                             //notificationsService.success("Variant saved ", "");
                         }, function (reason) {
@@ -241,7 +241,7 @@
                     var selected = $scope.selectedVariants();
                     for (var i = 0; i < selected.length; i++) {
                         selected[i].globalInventoryChanged(dialogData.newInventory);
-                        var savepromise = merchelloProductVariantService.save(selected[i]);
+                        var savepromise = merchelloProductService.updateProductVariant(selected[i]);
                         savepromise.then(function () {
                             //notificationsService.success("Product Variant Saved", "");
                         }, function (reason) {
