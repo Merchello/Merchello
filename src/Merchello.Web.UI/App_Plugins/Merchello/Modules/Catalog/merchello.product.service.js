@@ -6,7 +6,7 @@
     * @name umbraco.resources.MerchelloProductService
     * @description Loads in data for data types
     **/
-    merchelloServices.MerchelloProductService = function($q, $http, umbRequestHelper, notificationsService, merchelloProductVariantService) {
+    merchelloServices.MerchelloProductService = function($q, $http, umbRequestHelper, notificationsService) {
 
         var prodservice = {
             possibleProductVariants: [],
@@ -69,6 +69,21 @@
                         method: "GET"
                     }),
                     'Failed to retreive data for product key ' + key);
+            },
+
+            /**
+            * @ngdoc method
+            * @name getVariant
+            * @description Gets a product variant with an API call to the server
+            **/
+            getVariant: function (key) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProductVariant', [{ id: key }]),
+                        method: "GET"
+                    }),
+                    'Failed to retreive data for product variant key ' + key);
             },
 
             /**
@@ -274,6 +289,6 @@
         return prodservice;
     };
 
-    angular.module('umbraco.resources').factory('merchelloProductService', ['$q', '$http', 'umbRequestHelper', 'notificationsService', 'merchelloProductVariantService', merchello.Services.MerchelloProductService]);
+    angular.module('umbraco.resources').factory('merchelloProductService', ['$q', '$http', 'umbRequestHelper', 'notificationsService', merchello.Services.MerchelloProductService]);
 
 }(window.merchello.Services = window.merchello.Services || {}));

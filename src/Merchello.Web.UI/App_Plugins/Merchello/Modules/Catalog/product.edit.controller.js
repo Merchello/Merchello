@@ -8,7 +8,7 @@
      * @description
      * The controller for the product edit view
      */
-    controllers.ProductEditController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService, merchelloWarehouseService, merchelloSettingsService) {
+    controllers.ProductEditController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloWarehouseService, merchelloSettingsService) {
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
@@ -220,7 +220,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Editors.Product.EditController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', 'merchelloWarehouseService', 'merchelloSettingsService', merchello.Controllers.ProductEditController]);
+    angular.module("umbraco").controller("Merchello.Editors.Product.EditController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloWarehouseService', 'merchelloSettingsService', merchello.Controllers.ProductEditController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 

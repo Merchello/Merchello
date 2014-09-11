@@ -8,7 +8,7 @@
      * @description
      * The controller for the product create view
      */
-    controllers.ProductCreateController = function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService, merchelloWarehouseService, merchelloSettingsService) {
+    controllers.ProductCreateController = function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloWarehouseService, merchelloSettingsService) {
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
@@ -169,7 +169,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Editors.Product.CreateController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', 'merchelloWarehouseService', 'merchelloSettingsService', merchello.Controllers.ProductCreateController]);
+    angular.module("umbraco").controller("Merchello.Editors.Product.CreateController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloWarehouseService', 'merchelloSettingsService', merchello.Controllers.ProductCreateController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 
