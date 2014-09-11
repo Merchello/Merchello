@@ -1,4 +1,7 @@
-﻿namespace Merchello.Core.Chains.ShipmentCreation
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Merchello.Core.Chains.ShipmentCreation
 {
     using System;
     using System.Linq;
@@ -11,6 +14,7 @@
     /// </summary>
     internal class SetOrderStatusTask : OrderAttemptChainTaskBase
     {
+   
         /// <summary>
         /// The _order service.
         /// </summary>
@@ -25,8 +29,11 @@
         /// <param name="order">
         /// The order.
         /// </param>
-        public SetOrderStatusTask(IMerchelloContext merchelloContext, IOrder order) 
-            : base(merchelloContext, order)
+        /// <param name="keysToShip">
+        /// The keys To Ship.
+        /// </param>
+        public SetOrderStatusTask(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip) 
+            : base(merchelloContext, order, keysToShip)
         {
             _orderService = MerchelloContext.Services.OrderService;
         }
@@ -41,12 +48,12 @@
         /// The <see cref="Attempt"/>.
         /// </returns>
         public override Attempt<IShipment> PerformTask(IShipment value)
-        {            
-            return Order.ShippableItems().All(x => ((OrderLineItem)x).ShipmentKey == null)
-                ? SaveOrderStatus(value, Core.Constants.DefaultKeys.OrderStatus.NotFulfilled) : 
-                SaveOrderStatus(
-                    value,
-                    Order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null) ? Core.Constants.DefaultKeys.OrderStatus.BackOrder : Core.Constants.DefaultKeys.OrderStatus.Fulfilled); 
+        {
+            return SaveOrderStatus(
+                value,
+                Order.ShippableItems().Any(x => ((OrderLineItem) x).ShipmentKey == null)
+                    ? Core.Constants.DefaultKeys.OrderStatus.BackOrder
+                    : Core.Constants.DefaultKeys.OrderStatus.Fulfilled);
         }
 
         /// <summary>

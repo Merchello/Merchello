@@ -104,6 +104,20 @@
         }
 
         /// <summary>
+        /// The get product from service.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public ProductDisplay GetProductFromService(Guid id)
+        {
+            return _productService.GetByKey(id).ToProductDisplay();
+        }
+
+        /// <summary>
         /// Searches all products with an optional term.
         /// </summary>
         /// <param name="query">
@@ -194,6 +208,15 @@
             var merchProduct = _productService.GetByKey(product.Key);         
             merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
+
+            if (!merchProduct.ProductOptions.Any()) return merchProduct.ToProductDisplay();
+
+            // verify that all attributes have been created
+            var attributeLists = merchProduct.GetPossibleProductAttributeCombinations().ToArray();
+            foreach (var list in from list in attributeLists let variant = merchProduct.GetProductVariantForPurchase(list) where variant == null select list)
+            {
+                _productVariantService.CreateProductVariantWithKey(merchProduct, list.ToProductAttributeCollection());
+            }
 
             return merchProduct.ToProductDisplay();
         }

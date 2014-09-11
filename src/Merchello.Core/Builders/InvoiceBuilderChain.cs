@@ -79,8 +79,13 @@
 
             if (!attempt.Success) return attempt;
 
+
+            var charges = attempt.Result.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
+            var discounts = attempt.Result.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
+
             // total the invoice
-            attempt.Result.Total = decimal.Parse(attempt.Result.Items.Sum(x => x.TotalPrice).ToString("#.##"));
+            attempt.Result.Total = decimal.Parse((charges - discounts).ToString("#.##"));
+               
 
             return attempt;
         }
