@@ -195,6 +195,8 @@
             merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
 
+            //if ()
+
             return merchProduct.ToProductDisplay();
         }
 
