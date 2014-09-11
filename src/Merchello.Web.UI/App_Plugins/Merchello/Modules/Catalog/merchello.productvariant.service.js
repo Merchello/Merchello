@@ -9,89 +9,89 @@
     merchelloServices.MerchelloProductVariantService = function($q, $http, umbRequestHelper) {
 
         return {
-            create: function(productVariant) {
+        //    create: function(productVariant) {
 
-                return umbRequestHelper.resourcePromise(
-                    $http.post(
-                        umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'NewProductVariant'),
-                        productVariant
-                    ),
-                    'Failed to create product variant ' + productVariant.sku);
-            },
+        //        return umbRequestHelper.resourcePromise(
+        //            $http.post(
+        //                umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'NewProductVariant'),
+        //                productVariant
+        //            ),
+        //            'Failed to create product variant ' + productVariant.sku);
+        //    },
 
             getById: function(id) {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetProductVariant'),
+                        url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProductVariant'),
                         method: "GET",
                         params: { id: id }
                     }),
                     'Failed to retreive data for product variant id ' + id);
             },
 
-            getByIds: function (ids) {
+            //getByIds: function (ids) {
  
-            	var variantKeysStr = ids.join("&ids=");
+            //	var variantKeysStr = ids.join("&ids=");
 
-            	return umbRequestHelper.resourcePromise(
-	                $http({
-	                	url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetProductVariants', variantKeysStr),
-	                	method: "GET",
-	                	params: { ids: variantKeysStr }
-	                }),
-	                'Failed to retrieve data for product variant ids: ' + variantKeysStr);
-            },
+            //	return umbRequestHelper.resourcePromise(
+	        //        $http({
+	        //        	url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetProductVariants', variantKeysStr),
+	        //        	method: "GET",
+	        //        	params: { ids: variantKeysStr }
+	        //        }),
+	        //        'Failed to retrieve data for product variant ids: ' + variantKeysStr);
+            //},
 
-            getByProduct: function(productkey) {
+            //getByProduct: function(productkey) {
 
-                return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetByProduct'),
-                        method: "GET",
-                        params: { key: productkey }
-                    }),
-                    'Failed to retreive data for product key ' + productkey);
-            },
+            //    return umbRequestHelper.resourcePromise(
+            //        $http({
+            //            url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetByProduct'),
+            //            method: "GET",
+            //            params: { key: productkey }
+            //        }),
+            //        'Failed to retreive data for product key ' + productkey);
+            //},
 
-            getVariantsByProductThatCanBeCreated: function(productkey) {
+            //getVariantsByProductThatCanBeCreated: function(productkey) {
 
-                return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetVariantsByProductThatCanBeCreated'),
-                        method: "GET",
-                        params: { id: productkey }
-                    }),
-                    'Failed to retreive data for product key ' + productkey);
-            },
+            //    return umbRequestHelper.resourcePromise(
+            //        $http({
+            //            url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'GetVariantsByProductThatCanBeCreated'),
+            //            method: "GET",
+            //            params: { id: productkey }
+            //        }),
+            //        'Failed to retreive data for product key ' + productkey);
+            //},
 
-            deleteVariant: function(key) {
+            //deleteVariant: function(key) {
 
-                return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'DeleteVariant', [{ id: key }]),
-                        method: "GET"
-                    }),
-                    'Failed to delete variant data for key ' + key);
-            },
+            //    return umbRequestHelper.resourcePromise(
+            //        $http({
+            //            url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'DeleteVariant', [{ id: key }]),
+            //            method: "GET"
+            //        }),
+            //        'Failed to delete variant data for key ' + key);
+            //},
 
-            deleteAllByProduct: function(productkey) {
+            //deleteAllByProduct: function(productkey) {
 
-                return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'DeleteAllVariants'),
-                        method: "GET",
-                        params: { productkey: productkey }
-                    }),
-                    'Failed to delete variants data for product key ' + productkey);
-            },
+            //    return umbRequestHelper.resourcePromise(
+            //        $http({
+            //            url: umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'DeleteAllVariants'),
+            //            method: "GET",
+            //            params: { productkey: productkey }
+            //        }),
+            //        'Failed to delete variants data for product key ' + productkey);
+            //},
 
             /** saves or updates a product variant object */
             save: function(productVariant) {
 
                 return umbRequestHelper.resourcePromise(
                     $http.put(
-                        umbRequestHelper.getApiUrl('merchelloProductVariantsApiBaseUrl', 'PutProductVariant'),
+                        umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'PutProductVariant'),
                         productVariant
                     ),
                     'Failed to save data for product variant id ' + productVariant.id);
