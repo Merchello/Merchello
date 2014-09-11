@@ -74,8 +74,15 @@
         };
 
         // Remove any blank addresses and fix multiple defaults.
-        $scope.prepareAddressesForSave = function() {
-            var addresses = _.reject($scope.dialogData.addresses, function (address) {
+        $scope.prepareAddressesForSave = function () {
+            var addresses = $scope.dialogData.addresses;
+            addresses = _.map(addresses, function (address) {
+                if (address.key == $scope.currentAddress.key) {
+                    address = new merchello.Models.CustomerAddress($scope.currentAddress);
+                }
+                return address;
+            });
+            addresses = _.reject(addresses, function (address) {
                 // Reject an address if it is blank (and remove from the array).
                 return address.address1 == '';
             });
@@ -236,7 +243,6 @@
          * Update the selected province for the applicable address type.
          */
         $scope.updateProvince = function (selectedProvince) {
-            console.info(selectedProvince);
             if (selectedProvince.code !== '00') {
                 $scope.currentAddress.region = selectedProvince.code;
                 _.each($scope.dialogData.addresses, function(address) {
