@@ -229,6 +229,8 @@
 
             if (!merchProduct.ProductOptions.Any()) return merchProduct.ToProductDisplay();
 
+
+
             // verify that all attributes have been created
             var attributeLists = merchProduct.GetPossibleProductAttributeCombinations().ToArray();
             foreach (var list in from list in attributeLists let variant = merchProduct.GetProductVariantForPurchase(list) where variant == null select list)
