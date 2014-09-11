@@ -59,7 +59,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="product in products | orderBy:sortProperty | startfrom:currentPage * limitAmount | limitTo:limitAmount" 
+                <tr data-ng-repeat="product in products" 
                     data-ng-class="{active: product.selected}">
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>

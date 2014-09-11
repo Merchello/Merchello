@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
-    public interface IOrderService : IService
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Umbraco.Core.Services;
+
+    /// <summary>
+    /// Defines the OrderService.
+    /// </summary>
+    public interface IOrderService : IPageCachedService<IOrder>
     {
         /// <summary>
         /// Creates a <see cref="IOrder"/> without saving it to the database
@@ -13,8 +16,31 @@ namespace Merchello.Core.Services
         /// <param name="orderStatusKey">The <see cref="IOrderStatus"/> key</param>
         /// <param name="invoiceKey">The invoice key</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        /// <returns><see cref="IOrder"/></returns>
+        /// <returns>The <see cref="IOrder"/></returns>
         IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true);
+
+        /// <summary>
+        /// Creates a <see cref="IOrder"/> without saving it to the database
+        /// </summary>
+        /// <param name="orderStatusKey">
+        /// The <see cref="IOrderStatus"/> key
+        /// </param>
+        /// <param name="invoiceKey">
+        /// The invoice key
+        /// </param>
+        /// <param name="orderNumber">
+        /// The order Number.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOrder"/>.
+        /// </returns>
+        /// <remarks>
+        /// Order number must be a positive integer value or zero
+        /// </remarks>
+        IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, int orderNumber, bool raiseEvents = true);
 
         /// <summary>
         /// Creates a <see cref="IOrder"/> and saves it to the database
@@ -52,13 +78,6 @@ namespace Merchello.Core.Services
         /// <param name="orders">The collection of <see cref="IOrder"/> to be deleted</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IEnumerable<IOrder> orders, bool raiseEvents = true);
-
-        /// <summary>
-        /// Gets a <see cref="IOrder"/> given it's unique 'key' (Guid)
-        /// </summary>
-        /// <param name="key">The <see cref="IOrder"/>'s unique 'key' (Guid)</param>
-        /// <returns><see cref="IOrder"/></returns>
-        IOrder GetByKey(Guid key);
 
         /// <summary>
         /// Gets a <see cref="IOrder"/> given it's unique 'OrderNumber'

@@ -1,27 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;    
+    using Factories;
+    using Models;
+    using Models.EntityBase;
+    using Models.Rdbms;
+    using Querying;    
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+    using UnitOfWork;
+
+    /// <summary>
+    /// The shipment repository.
+    /// </summary>
     internal class ShipmentRepository : MerchelloPetaPocoRepositoryBase<IShipment>, IShipmentRepository
     {
+        private readonly IOrderLineItemRepository _orderLineItemRepository;
 
-
-        public ShipmentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="orderLineItemRepository">
+        /// The order Line Item Repository.
+        /// </param>
+        public ShipmentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IOrderLineItemRepository orderLineItemRepository)
             : base(work, cache)
         {
+            Mandate.ParameterNotNull(orderLineItemRepository, "orderLineItemRepository");
+            _orderLineItemRepository = orderLineItemRepository;
         }
 
         #region Overrides of RepositoryBase<IShipment>
@@ -86,6 +102,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
+                    "UPDATE merchOrderLineItem SET shipmentKey = NULL WHERE shipmentKey = @Key",
                     "DELETE FROM merchShipment WHERE pk = @Key",
                 };
 
@@ -101,6 +118,13 @@ namespace Merchello.Core.Persistence.Repositories
 
             Database.Insert(dto);
             entity.Key = dto.Key;
+
+            foreach (var item in entity.Items.ToArray())
+            {
+                ((IOrderLineItem)item).ShipmentKey = entity.Key;
+                _orderLineItemRepository.SaveLineItem((IOrderLineItem)item);
+            }
+
             entity.ResetDirtyProperties();
         }
 

@@ -68,6 +68,20 @@
         }
 
         /// <summary>
+        /// Creates an instance of the <see cref="IAuditLogRepository"/>
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAuditLogRepository"/>.
+        /// </returns>
+        internal virtual IAuditLogRepository CreateAuditLogRepository(IDatabaseUnitOfWork uow)
+        {
+            return new AuditLogRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="ITaxMethodRepository"/>
         /// </summary>
         /// <param name="uow">
@@ -390,7 +404,7 @@
         /// </returns>
         internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipmentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+            return new ShipmentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateOrderLineItemRepository(uow));
         }
 
         /// <summary>

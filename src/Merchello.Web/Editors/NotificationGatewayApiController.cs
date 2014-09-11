@@ -24,15 +24,21 @@ namespace Merchello.Web.Editors
     [PluginController("Merchello")]
     public class NotificationGatewayApiController : MerchelloApiController
     {
-
+        /// <summary>
+        /// The notification context.
+        /// </summary>
         private readonly INotificationContext _notificationContext;
+
+        /// <summary>
+        /// The notification message service.
+        /// </summary>
         private readonly INotificationMessageService _notificationMessageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationGatewayApiController"/> class. 
         /// </summary>
         public NotificationGatewayApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {            
         }
 
@@ -40,7 +46,7 @@ namespace Merchello.Web.Editors
         /// Initializes a new instance of the <see cref="NotificationGatewayApiController"/> class. 
         /// </summary>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        public NotificationGatewayApiController(MerchelloContext merchelloContext)
+        public NotificationGatewayApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _notificationContext = ((GatewayContext)MerchelloContext.Gateways).Notification;

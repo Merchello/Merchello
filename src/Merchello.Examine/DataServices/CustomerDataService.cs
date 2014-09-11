@@ -1,5 +1,7 @@
-﻿using System.Security;
+﻿using System;
+using System.Security;
 using Merchello.Core;
+using Merchello.Core.Persistence.Querying;
 
 namespace Merchello.Examine.DataServices
 {
@@ -47,7 +49,7 @@ namespace Merchello.Examine.DataServices
         /// </returns>
         public IEnumerable<ICustomer> GetAll()
         {
-            return new CustomerService().GetAll();
+            return new CustomerService().GetPage(1, 100).Items;
         }
 
         /// <summary>

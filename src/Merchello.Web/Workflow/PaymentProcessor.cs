@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web.Workflow
+﻿using Merchello.Web.Models.Payments;
+
+namespace Merchello.Web.Workflow
 {
     using System;
     using Merchello.Core;
@@ -66,10 +68,6 @@
             Build(request);
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="IInvoice"/>
-        /// </summary>
-        private IInvoice Invoice { get; set; }
 
         /// <summary>
         /// Performs an Authorize payment 
@@ -123,7 +121,7 @@
 
         private IPaymentResult GetFailedResult()
         {
-            return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("PaymentProcessor is not ready")), Invoice, false);
+            return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("PaymentProcessor is not ready")), _invoice, false);
         }
 
         private void Build(PaymentRequest request)

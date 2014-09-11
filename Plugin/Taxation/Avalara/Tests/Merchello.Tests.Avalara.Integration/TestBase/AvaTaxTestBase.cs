@@ -1,4 +1,6 @@
-﻿namespace Merchello.Tests.Avalara.Integration.TestBase
+﻿using Merchello.Core.Persistence.UnitOfWork;
+
+namespace Merchello.Tests.Avalara.Integration.TestBase
 {
     using Merchello.Core;
     using Merchello.Core.Gateways.Shipping;
@@ -19,6 +21,7 @@
     {
         protected IGatewayProviderSettings GatewayProviderSettings;
         protected IGatewayProviderService GatewayProviderService;
+        protected DbPreTestDataWorker DataWorker;
         protected IAvaTaxService AvaTaxService;
 
         protected IInvoice Invoice;
@@ -35,9 +38,7 @@
 
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
 
-            var cacheProvider = new Mock<IRuntimeCacheProvider>();
-
-            //GatewayProviderService = new GatewayProviderService();
+            DataWorker = new DbPreTestDataWorker(new ServiceContext(new PetaPocoUnitOfWorkProvider()));
 
             MakeInvoice();
         }
@@ -57,15 +58,25 @@
                 Phone = "555-555-5555"
             };
 
+            //var billToShipTo = new Address()
+            //    {
+            //        Name = "The President of the United States",
+            //        Address1 = "1600 Pennsylvania Ave NW",
+            //        Locality = "Washington",
+            //        Region = "DC",
+            //        PostalCode = "20500",
+            //        CountryCode = "US",                 
+            //    };
+
             var billToShipTo = new Address()
-                {
-                    Name = "The President of the United States",
-                    Address1 = "1600 Pennsylvania Ave NW",
-                    Locality = "Washington",
-                    Region = "DC",
-                    PostalCode = "20500",
-                    CountryCode = "US",                 
-                };
+            {
+                Name = "Old Office",
+                Address1 = "211 W Holly St H22",
+                Locality = "Bellingham",
+                Region = "WA",
+                PostalCode = "98225",
+                CountryCode = "US",
+            };
 
             var invoiceService = new InvoiceService();
 

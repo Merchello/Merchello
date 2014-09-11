@@ -13,6 +13,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence.Querying;
 
     /// <summary>
     /// Represents the ProductVariantService
@@ -436,6 +437,7 @@
 
         }
 
+        [Obsolete("Use Product Extension Method")]
         public IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
         {
             if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
@@ -481,6 +483,14 @@
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.SkuExists(sku);
+            }
+        }
+
+        internal int Count(IQuery<IProductVariant> query)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
             }
         }
 

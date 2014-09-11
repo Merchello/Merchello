@@ -39,7 +39,7 @@
 					return extDataItem['key'] == "merchProductVariantKey";
 				});
 			}
-			if (variantKey === "undefined") {
+			if (variantKey == undefined) {
 				variantKey = '';
 			}
 			return variantKey;
@@ -287,7 +287,7 @@
 		};
 
 		self.hasAmount = function () {
-			return amount > 0;
+			return self.amount > 0;
 		};
 	};
 
@@ -320,7 +320,7 @@
 		}
 
 		self.hasAmount = function() {
-			return amount > 0;
+			return self.amount > 0;
 		};
 	};
 
@@ -426,4 +426,6 @@
 	        self.orderPrepComplete = data.orderPrepComplete;
 	    }
 	};
+
+
 }(window.merchello.Models = window.merchello.Models || {}));

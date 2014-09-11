@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web
+﻿using Merchello.Web.Models.Payments;
+
+namespace Merchello.Web
 {
     using System.Linq;
     using Core.Gateways.Payment;

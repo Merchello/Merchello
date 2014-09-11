@@ -11,8 +11,9 @@
     using Core.Models;
     using Core.Services;
     using Models.ContentEditing;
-    using Umbraco.Web.Mvc;
+    using Models.Payments;
     using WebApi;
+    using Umbraco.Web.Mvc;
 
     /// <summary>
     /// Represents the PaymentGatewayApiController
@@ -20,13 +21,16 @@
     [PluginController("Merchello")]
     public class PaymentGatewayApiController : MerchelloApiController 
     {
+        /// <summary>
+        /// The payment context.
+        /// </summary>
         private readonly IPaymentContext _paymentContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentGatewayApiController"/> class.
         /// </summary>
         public PaymentGatewayApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {            
         }
 
@@ -34,7 +38,7 @@
         /// Initializes a new instance of the <see cref="PaymentGatewayApiController"/> class.
         /// </summary>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        public PaymentGatewayApiController(MerchelloContext merchelloContext)
+        public PaymentGatewayApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _paymentContext = MerchelloContext.Gateways.Payment;

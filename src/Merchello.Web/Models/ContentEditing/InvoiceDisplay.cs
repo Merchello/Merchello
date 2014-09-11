@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Merchello.Core.Models;
 
     /// <summary>
     /// The invoice display.
@@ -32,6 +35,11 @@
         /// Gets or sets the invoice number.
         /// </summary>
         public int InvoiceNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the po number.
+        /// </summary>
+        public string PoNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the invoice date.
@@ -122,5 +130,56 @@
         /// Gets or sets the items.
         /// </summary>
         public IEnumerable<InvoiceLineItemDisplay> Items { get; set; }
+    }
+
+    /// <summary>
+    /// The invoice display extensions.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements", Justification = "Reviewed. Suppression is OK here."),SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    public static class InvoiceDisplayExtensions
+    {
+
+        /// <summary>
+        /// Utility extension method to add an <see cref="IAddress"/> to an <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The <see cref="IInvoice"/> to which to set the address information</param>
+        /// <param name="address">The billing address <see cref="IAddress"/></param>
+        public static void SetBillingAddress(this InvoiceDisplay invoice, IAddress address)
+        {
+            invoice.BillToName = address.Name;
+            invoice.BillToCompany = address.Organization;
+            invoice.BillToAddress1 = address.Address1;
+            invoice.BillToAddress2 = address.Address2;
+            invoice.BillToLocality = address.Locality;
+            invoice.BillToRegion = address.Region;
+            invoice.BillToPostalCode = address.PostalCode;
+            invoice.BillToCountryCode = address.CountryCode;
+            invoice.BillToPhone = address.Phone;
+            invoice.BillToEmail = address.Email;
+        }
+
+        /// <summary>
+        /// Utility extension to extract the billing <see cref="IAddress"/> from an <see cref="IInvoice"/>
+        /// </summary>
+        /// <param name="invoice">The invoice</param>
+        /// <returns>
+        /// The billing address saved in the invoice
+        /// </returns>
+        public static IAddress GetBillingAddress(this InvoiceDisplay invoice)
+        {
+            return new Address()
+            {
+                Name = invoice.BillToName,
+                Organization = invoice.BillToCompany,
+                Address1 = invoice.BillToAddress1,
+                Address2 = invoice.BillToAddress2,
+                Locality = invoice.BillToLocality,
+                Region = invoice.BillToRegion,
+                PostalCode = invoice.BillToPostalCode,
+                CountryCode = invoice.BillToCountryCode,
+                Phone = invoice.BillToPhone,
+                Email = invoice.BillToEmail
+            };
+        }
     }
 }

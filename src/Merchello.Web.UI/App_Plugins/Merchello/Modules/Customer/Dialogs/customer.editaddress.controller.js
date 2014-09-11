@@ -16,9 +16,9 @@
          * @function
          * 
          * @description
-         * Return the appropriate address depending on the filter and the type.
+         * Return the appropriate address depending on the filter.
          */
-        $scope.chooseAddress = function (type, filter) {
+        $scope.chooseAddress = function (filter) {
             var address = $scope.dialogData.addresses[(filter.id * 1) + 1];
             $scope.currentAddress = address;
         };
@@ -73,6 +73,32 @@
             });
         };
 
+        // Remove any blank addresses and fix multiple defaults.
+        $scope.prepareAddressesForSave = function () {
+            var addresses = $scope.dialogData.addresses;
+            addresses = _.map(addresses, function (address) {
+                if (address.key == $scope.currentAddress.key) {
+                    address = new merchello.Models.CustomerAddress($scope.currentAddress);
+                }
+                return address;
+            });
+            addresses = _.reject(addresses, function (address) {
+                // Reject an address if it is blank (and remove from the array).
+                return address.address1 == '';
+            });
+            if ($scope.dialogData.addressToReturn.isDefault) {
+                _.each(addresses, function(address) {
+                    if (address.isDefault) {
+                        if (address.key !== $scope.dialogData.addressToReturn.key) {
+                            address.isDefault = false;
+                        }
+                    }
+                });
+            }
+            $scope.dialogData.addresses = _.map(addresses, function(address) {
+                return new merchello.Models.CustomerAddress(address);
+            });
+        };
 
         /**
          * @ngdoc method
@@ -126,18 +152,18 @@
             }
         };
 
-
         /**
          * @ngdoc method
          * @name saveAddress
          * @function
          * 
          * @description
-         * Acquire the address and close teh dialog, submitting collected data.
+         * Acquire the address and close the dialog, submitting collected data.
          */
         $scope.saveAddress = function() {
             if ($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode && $scope.dialogData.filters.country.id != -1) {
                 $scope.dialogData.addressToReturn = $scope.currentAddress;
+                $scope.prepareAddressesForSave();
                 $scope.submit($scope.dialogData);
             } else {
                 $scope.wasFormSubmitted = true;
@@ -218,7 +244,12 @@
          */
         $scope.updateProvince = function (selectedProvince) {
             if (selectedProvince.code !== '00') {
-                $scope.currentAddress.region = selectedProvince.name;
+                $scope.currentAddress.region = selectedProvince.code;
+                _.each($scope.dialogData.addresses, function(address) {
+                    if (address.key == $scope.currentAddress.key) {
+                        address.region = selectedProvince.code;
+                    }
+                });
             }
         };
 

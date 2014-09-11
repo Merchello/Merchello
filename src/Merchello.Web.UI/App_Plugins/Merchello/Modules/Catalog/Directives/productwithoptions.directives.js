@@ -106,7 +106,7 @@
      * @description
      * table of variants that can be selected for bulk editing.
      */
-    directives.ProductVariantsViewTable = function ($q, dialogService, notificationsService, merchelloProductService, merchelloProductVariantService) {
+    directives.ProductVariantsViewTable = function ($q, dialogService, notificationsService, merchelloProductService) {
         return {
             restrict: 'E',
             replace: true,
@@ -196,7 +196,7 @@
                     var selected = $scope.selectedVariants();
                     for (var i = 0; i < selected.length; i++) {
                         selected[i].price = dialogData.newPrice;
-                        var savepromise = merchelloProductVariantService.save(selected[i]);
+                        var savepromise = merchelloProductService.updateProductVariant(selected[i]);
                         savepromise.then(function () {
                             //notificationsService.success("Variant saved ", "");
                         }, function (reason) {
@@ -241,7 +241,7 @@
                     var selected = $scope.selectedVariants();
                     for (var i = 0; i < selected.length; i++) {
                         selected[i].globalInventoryChanged(dialogData.newInventory);
-                        var savepromise = merchelloProductVariantService.save(selected[i]);
+                        var savepromise = merchelloProductService.updateProductVariant(selected[i]);
                         savepromise.then(function () {
                             //notificationsService.success("Product Variant Saved", "");
                         }, function (reason) {
@@ -288,25 +288,25 @@
                         var selected = $scope.selectedVariants();
                         var promisesArray = [];
 
-                        for (var i = 0; i < selected.length; i++) {
-                            promisesArray.push(merchelloProductVariantService.deleteVariant(selected[i].key));
-                        }
+                        //for (var i = 0; i < selected.length; i++) {
+                        //    promisesArray.push(merchelloProductVariantService.deleteVariant(selected[i].key));
+                        //}
 
-                        var promise = $q.all(promisesArray);
+                        //var promise = $q.all(promisesArray);
 
-                        promise.then(function () {
+                        //promise.then(function () {
 
-                            var promiseLoadProduct = merchelloProductService.getByKey($scope.product.key);
-                            promiseLoadProduct.then(function (dbproduct) {
-                                $scope.product = new merchello.Models.Product(dbproduct);
+                        //    var promiseLoadProduct = merchelloProductService.getByKey($scope.product.key);
+                        //    promiseLoadProduct.then(function (dbproduct) {
+                        //        $scope.product = new merchello.Models.Product(dbproduct);
 
-                                notificationsService.success("Variants Deleted");
-                            }, function (reason) {
-                                notificationsService.error("Product Variants Delete Failed", reason.message);
-                            });
-                        }, function (reason) {
-                            notificationsService.error("Product Variants Delete Failed", reason.message);
-                        });
+                        //        notificationsService.success("Variants Deleted");
+                        //    }, function (reason) {
+                        //        notificationsService.error("Product Variants Delete Failed", reason.message);
+                        //    });
+                        //}, function (reason) {
+                        //    notificationsService.error("Product Variants Delete Failed", reason.message);
+                        //});
                     }
                     else {
                         notificationsService.error("Type the word DELETE in the box to confirm deletion", "");
@@ -424,6 +424,6 @@
         };
     };
 
-    angular.module("umbraco").directive('productVariantsViewTable', ['$q', 'dialogService', 'notificationsService', 'merchelloProductService', 'merchelloProductVariantService', merchello.Directives.ProductVariantsViewTable]);
+    angular.module("umbraco").directive('productVariantsViewTable', ['$q', 'dialogService', 'notificationsService', 'merchelloProductService', merchello.Directives.ProductVariantsViewTable]);
 
 }(window.merchello.Directives = window.merchello.Directives || {}));

@@ -87,7 +87,7 @@ namespace Merchello.Core.Persistence.Repositories
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchAppliedPayment WHERE paymentKey = @Key"
+                    "DELETE FROM merchAppliedPayment WHERE merchAppliedPayment.pk = @Key"
                 };
 
             return list;

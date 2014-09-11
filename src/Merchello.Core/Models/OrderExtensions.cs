@@ -56,7 +56,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="order">The <see cref="IOrder"/></param>
         /// <param name="items">A collection of <see cref="IOrderLineItem"/></param>
-        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        /// <returns>The collection of <see cref="IOrderLineItem"/></returns>
         public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order, IEnumerable<IOrderLineItem> items)
         {
             return order.UnfulfilledItems(MerchelloContext.Current, items);
@@ -68,7 +68,7 @@ namespace Merchello.Core.Models
         /// <param name="order">The <see cref="IOrder"/></param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         /// <param name="items">A collection of <see cref="IOrderLineItem"/></param>
-        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        /// <returns>The collection of <see cref="IOrderLineItem"/></returns>
         public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order, IMerchelloContext merchelloContext, IEnumerable<IOrderLineItem> items)
         {
 
@@ -85,10 +85,12 @@ namespace Merchello.Core.Models
             {
                 var variant = variants.FirstOrDefault(x => x.Key == item.ExtendedData.GetProductVariantKey());
                 if (variant == null) continue;
-                // check inventory
-                var inventory = variant.CatalogInventories.FirstOrDefault(x => x.CatalogKey == item.ExtendedData.GetWarehouseCatalogKey());
-                if (inventory != null)
-                    item.BackOrder = inventory.Count < item.Quantity;
+
+                // TODO refactor back ordering.
+                //// check inventory
+                //var inventory = variant.CatalogInventories.FirstOrDefault(x => x.CatalogKey == item.ExtendedData.GetWarehouseCatalogKey());
+                //if (inventory != null)
+                //    item.BackOrder = inventory.Count < item.Quantity;
             }
 
             return shippableItems;
@@ -157,6 +159,7 @@ namespace Merchello.Core.Models
                     new
                     {
                         key = x.Key,
+                        containerKey = x.ContainerKey,
                         name = x.Name,
                         shipmentKey = ((OrderLineItem)x).ShipmentKey,
                         lineItemTfKey = x.LineItemTfKey,

@@ -1,7 +1,13 @@
 ﻿namespace Merchello.Web
 {
+    using System.Web.UI;
+
     using Core.Gateways;
     using Core.Models;
+
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Web.Models.SaleHistory;
+
     using Models.ContentEditing;
     using Models.MapperResolvers;
 
@@ -18,7 +24,19 @@
             // Address
             AutoMapper.Mapper.CreateMap<IAddress, AddressDisplay>();           
             AutoMapper.Mapper.CreateMap<AddressDisplay, Address>();
-                       
+
+            // AuditLog
+            AutoMapper.Mapper.CreateMap<IAuditLog, AuditLogDisplay>()
+                .ForMember(
+                    dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(
+                    dest => dest.RecordDate,
+                    opt => opt.MapFrom(src => src.CreateDate))
+                .ForMember(
+                    dest => dest.EntityType,
+                    opt => opt.ResolveUsing<EntityTypeResolver>().ConstructedBy(() => new EntityTypeResolver()));
+
             // Country and provinces
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
 

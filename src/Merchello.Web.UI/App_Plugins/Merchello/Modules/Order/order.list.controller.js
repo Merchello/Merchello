@@ -12,6 +12,19 @@
 
         /**
          * @ngdoc method
+         * @name changePage
+         * @function
+         * 
+         * @description
+         * Changes the current page.
+         */
+        $scope.changePage = function (page) {
+            $scope.currentPage = page;
+            $scope.loadInvoices($scope.filterText);
+        };
+
+        /**
+         * @ngdoc method
          * @name changeSortOrder
          * @function
          * 
@@ -32,33 +45,7 @@
                 $scope.sortProperty = propertyToSort;
                 $scope.sortOrder = "asc";
             }
-        };
-
-        /**
-         * @ngdoc method
-         * @name getFilteredInvoices
-         * @function
-         * 
-         * @description
-         * Calls the invoice service to search for invoices via a string search 
-         * param.  This searches the Examine index in the core.
-         */
-        $scope.getFilteredInvoices = function (filter) {
-            //notificationsService.info("Filtering...", "");
-            if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
-                $scope.loadAllInvoices();
-                //notificationsService.success("Filtered Invoices Loaded", "");
-            } else {
-                var promise = merchelloInvoiceService.getFiltered(filter);
-                promise.then(function (invoices) {
-                    $scope.invoices = _.map(invoices, function (invoice) {
-                        return new merchello.Models.Invoice(invoice);
-                    });
-                    //notificationsService.success("Filtered Invoices Loaded", "");
-                }, function (reason) {
-                    notificationsService.success("Filtered Invoices Load Failed:", reason.message);
-                });
-            }
+            $scope.loadInvoices($scope.filterText);
         };
 
         /**
@@ -71,7 +58,7 @@
          */
         $scope.init = function () {
             $scope.setVariables();
-        	$scope.loadAllInvoices();
+        	$scope.loadInvoices();
 	        $scope.loadSettings();
         };
 
@@ -85,27 +72,60 @@
          */
         $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
+            $scope.currentPage = 0;
+            $scope.loadInvoices($scope.filterText);
         };
 
         /**
-        * @ngdoc method
-        * @name loadAllInvoices
-        * @function
-        * 
-        * @description
-        * Load the invoices from the invoice service, then wrap the results
-        * in Merchello models and add to the scope via the invoices collection.
-        */
-        $scope.loadAllInvoices = function () {
-            var promiseAll = merchelloInvoiceService.getAll();
-            promiseAll.then(function (allInvoices) {
-                $scope.invoices = _.map(allInvoices, function (invoice) {
+         * @ngdoc method
+         * @name loadInvoices
+         * @function
+         * 
+         * @description
+         * Load the invoices, either filtered or not, depending on the current page, and status of the filterText variable.
+         */
+        $scope.loadInvoices = function(filterText) {
+            var page = $scope.currentPage;
+            var perPage = $scope.limitAmount;
+            var sortBy = $scope.sortInfo().sortBy;
+            var sortDirection = $scope.sortInfo().sortDirection;
+            var promiseInvoices;
+            if (filterText === undefined) {
+                filterText = '';
+            }
+            if (filterText !== $scope.filterText) {
+                page = 0;
+                $scope.currentPage = 0;
+            }
+            $scope.filterText = filterText;
+            var listQuery = new merchello.Models.ListQuery({
+                currentPage: page,
+                itemsPerPage: perPage,
+                sortBy: sortBy,
+                sortDirection: sortDirection,
+                parameters: [
+                {
+                    fieldName: 'term',
+                    value: filterText
+                }]
+            });
+            promiseInvoices = merchelloInvoiceService.searchInvoices(listQuery);
+            $scope.salesLoaded = false;
+            promiseInvoices.then(function(response) {
+                var queryResult = new merchello.Models.QueryResult(response);
+                $scope.invoices = _.map(queryResult.items, function(invoice) {
                     return new merchello.Models.Invoice(invoice);
                 });
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
+                $scope.salesLoaded = true;
+                if ($scope.selectedOrderCount > 0) {
+                    $scope.selectAllOrders = true;
+                    $scope.updateBulkActionDropdownStatus(true);
+                }
+                $scope.maxPages = queryResult.totalPages;
             }, function (reason) {
-                notificationsService.error("All Invoices Load Failed", reason.message);
+                notificationsService.error("Failed To Load Invoices", reason.message);
             });
         };
 
@@ -133,14 +153,53 @@
 
         /**
          * @ngdoc method
-         * @name numberOfPages
+         * @name setVariables
          * @function
          * 
          * @description
-         * Helper function to get the amount of items to show per page for the paging
+         * Sets the $scope variables.
          */
-        $scope.numberOfPages = function () {
-            return Math.ceil($scope.invoices.length / $scope.limitAmount);
+        $scope.setVariables = function () {
+            $scope.currentPage = 0;
+            $scope.filterText = '';
+            $scope.invoices = [];
+            $scope.limitAmount = '100';
+            $scope.maxPages = 0;
+            $scope.orderIssues = [];
+            $scope.salesLoaded = false;
+            $scope.selectAllOrders = false;
+            $scope.selectedOrderCount = 0;
+            $scope.settings = {};
+            $scope.sortOrder = "desc";
+            $scope.sortProperty = "-invoiceNumber";
+            $scope.visible = {};
+            $scope.visible.bulkActionDropdown = false;
+        };
+
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         * 
+         * @description
+         * Returns sort information based off the current $scope.sortProperty.
+         */
+        $scope.sortInfo = function() {
+            var sortDirection, sortBy;
+            // If the sortProperty starts with '-', it's representing a descending value.
+            if ($scope.sortProperty.indexOf('-') > -1) {
+                // Get the text after the '-' for sortBy
+                sortBy = $scope.sortProperty.split('-')[1];
+                sortDirection = 'Descending';
+            // Otherwise it is ascending.
+            } else {
+                sortBy = $scope.sortProperty;
+                sortDirection = 'Ascending';
+            }
+            return {
+                sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
+                sortDirection: sortDirection
+            }
         };
 
         /**
@@ -151,14 +210,26 @@
          * @description
          * Sets the $scope variables.
          */
-        $scope.setVariables = function () {
-            $scope.orderIssues = [];
-            $scope.invoices = [];
-            $scope.sortProperty = "-invoiceNumber";
-            $scope.sortOrder = "desc";
-            $scope.limitAmount = 10;
-            $scope.currentPage = 0;
-            $scope.settings = {};
+        $scope.updateBulkActionDropdownStatus = function (toggle, key) {
+            var i, shouldShowDropdown = false;
+            $scope.selectedOrderCount = 0;
+            if (toggle) {
+                $scope.selectAllOrders = !$scope.selectAllOrders;
+            }
+            for (i = 0; i < $scope.invoices.length; i++) {
+                if (toggle) {
+                    $scope.invoices[i].selected = $scope.selectAllOrders;
+                } else {
+                    if ($scope.invoices[i].key === key) {
+                        $scope.invoices[i].selected = !$scope.invoices[i].selected;
+                    }
+                }
+                if ($scope.invoices[i].selected) {
+                    shouldShowDropdown = true;
+                    $scope.selectedOrderCount += 1;
+                }
+            }
+            $scope.visible.bulkActionDropdown = shouldShowDropdown;
         };
 
         $scope.init();

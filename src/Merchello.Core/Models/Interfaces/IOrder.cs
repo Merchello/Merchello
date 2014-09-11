@@ -21,10 +21,10 @@
         string OrderNumberPrefix { get; set; }
 
         /// <summary>
-        /// Gets the order number
+        /// Gets or sets the order number
         /// </summary>
         [DataMember]
-        int OrderNumber { get; }
+        int OrderNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the date of the order

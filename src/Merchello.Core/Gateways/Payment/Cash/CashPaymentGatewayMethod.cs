@@ -1,8 +1,14 @@
 ﻿namespace Merchello.Core.Gateways.Payment.Cash
 {
+    using System.Linq;
+
+    using Merchello.Core.Models.TypeFields;
+
     using Models;
     using Services;
     using Umbraco.Core;
+
+    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// Represents a CashPaymentMethod
@@ -33,7 +39,7 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, 0, PaymentMethod.Key);
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, invoice.Total, PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
             payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
@@ -81,7 +87,7 @@
 
             GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Cash payment", amount);
 
-            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, invoice.Total == amount);
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
         }
 
         /// <summary>
@@ -94,7 +100,6 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-            payment.Amount += amount;
 
             payment.Collected = true;
             payment.Authorized = true;
@@ -103,7 +108,7 @@
 
             GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Cash payment", amount);
 
-            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, invoice.Total == amount);
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
         }
 
         /// <summary>
@@ -159,6 +164,27 @@
             GatewayProviderService.Save(payment);
 
             return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
+        }
+
+        private decimal CalculateTotalOwed(IInvoice invoice)
+        {
+            var applied = invoice.AppliedPayments(GatewayProviderService).ToArray();
+
+            var owed =
+                applied.Where(
+                    x =>
+                    x.AppliedPaymentTfKey.Equals(
+                        EnumTypeFieldConverter.AppliedPayment.GetTypeField(AppliedPaymentType.Debit).TypeKey))
+                    .Select(y => y.Amount)
+                    .Sum()
+                - applied.Where(
+                    x =>
+                    x.AppliedPaymentTfKey.Equals(
+                        EnumTypeFieldConverter.AppliedPayment.GetTypeField(AppliedPaymentType.Credit).TypeKey))
+                      .Select(y => y.Amount)
+                      .Sum();
+
+            return owed;
         }
     }
 }

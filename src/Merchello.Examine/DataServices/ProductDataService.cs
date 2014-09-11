@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Examine.Providers;
-using Umbraco.Core.Persistence.UnitOfWork;
-
-namespace Merchello.Examine.DataServices
+﻿namespace Merchello.Examine.DataServices
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security;
+    using Core;
+    using Core.Models;
+    using Core.Services;
+    using Providers;
+    using Umbraco.Core.Persistence.UnitOfWork;
+
     public class ProductDataService : IProductDataService
     {
         private readonly IMerchelloContext _merchelloContext;
@@ -29,7 +29,7 @@ namespace Merchello.Examine.DataServices
 
         public IEnumerable<IProduct> GetAll()
         {
-            return new ProductService().GetAll();
+            return new ProductService().GetPage(1, 100).Items;
         }
 
         /// <summary>

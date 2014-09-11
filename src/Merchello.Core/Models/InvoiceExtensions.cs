@@ -587,11 +587,18 @@
         /// <summary>
         /// Calculates taxes for the invoice
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/></param>
-        /// <returns>The <see cref="ITaxCalculationResult"/> from the calculation</returns>
-        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice)
+        /// <param name="invoice">
+        /// The <see cref="IInvoice"/>
+        /// </param>
+        /// <param name="quoteOnly">
+        /// A value indicating whether or not the taxes should be calculated as a quote
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxCalculationResult"/> from the calculation
+        /// </returns>
+        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, bool quoteOnly = true)
         {
-            return invoice.CalculateTaxes(invoice.GetBillingAddress());
+            return invoice.CalculateTaxes(invoice.GetBillingAddress(), quoteOnly);
         }
 
         /// <summary>
@@ -599,10 +606,11 @@
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="taxAddress">The address (generally country code and region) to be used to determine the taxation rates</param>
+        /// <param name="quoteOnly">A value indicating whether or not the taxes should be calculated as a quote</param>
         /// <returns>The <see cref="ITaxCalculationResult"/> from the calculation</returns>
-        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IAddress taxAddress)
+        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IAddress taxAddress, bool quoteOnly = true)
         {
-            return invoice.CalculateTaxes(MerchelloContext.Current, taxAddress);
+            return invoice.CalculateTaxes(MerchelloContext.Current, taxAddress, quoteOnly);
         }
 
         /// <summary>
@@ -611,12 +619,12 @@
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         /// <param name="taxAddress">The address (generally country code and region) to be used to determine the taxation rates</param>
+        /// <param name="quoteOnly">A value indicating whether or not the taxes should be calculated as a quote</param>
         /// <returns>The <see cref="ITaxCalculationResult"/> from the calculation</returns>
-        internal static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IMerchelloContext merchelloContext,
-            IAddress taxAddress)
+        internal static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IMerchelloContext merchelloContext, IAddress taxAddress, bool quoteOnly = true)
         {
             // remove any other tax lines
-            return merchelloContext.Gateways.Taxation.CalculateTaxesForInvoice(invoice, taxAddress);
+            return merchelloContext.Gateways.Taxation.CalculateTaxesForInvoice(invoice, taxAddress, quoteOnly);
         }
 
         #endregion
@@ -629,7 +637,7 @@
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         public static decimal TotalItemPrice(this IInvoice invoice)
-        {
+        {                                                                 
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice);
         }
 
@@ -649,6 +657,20 @@
         public static decimal TotalTax(this IInvoice invoice)
         {
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice);
+        }
+
+        /// <summary>
+        /// The total discounts.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal TotalDiscounts(this IInvoice invoice)
+        {
+            return invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
         }
 
     #endregion
@@ -737,67 +759,7 @@
                         }, 
                         Formatting.None);
         }
-
-        /// <summary>
-        /// The get orders jason.
-        /// </summary>
-        /// <param name="orders">
-        /// The orders.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        private static string GetOrdersJason(IEnumerable<IOrder> orders)
-        {
-            var json = "[{0}]";
-
-            var ojson = string.Empty;
-
-            foreach (var order in orders)
-            {
-                if (ojson.Length > 0) ojson += ",";
-                ojson += JsonConvert.SerializeObject(
-                new 
-                {
-                    key = order.Key,
-                    invoiceKey = order.InvoiceKey,
-                    orderNumberPrefix = order.OrderNumberPrefix,
-                    orderNumber = order.OrderNumber,
-                    prefixedOrderNumber = order.PrefixedOrderNumber(),
-                    orderDate = order.OrderDate.ToString("s"),
-                    orderStatusKey = order.OrderStatusKey,
-                    orderStatus = new
-                        {
-                            key = order.OrderStatus.Key,
-                            name = order.OrderStatus.Name,
-                            alias = order.OrderStatus.Alias,
-                            reportable = order.OrderStatus.Reportable,
-                            active = order.OrderStatus.Active,
-                            sortOrder = order.OrderStatus.SortOrder
-                        },
-                   versionKey = order.VersionKey,
-                   exported = order.Exported,
-                   Items = order.Items.Select(x => 
-                    new
-                        {
-                            key = x.Key,
-                            name = x.Name,
-                            lineItemTfKey = x.LineItemTfKey,
-                            shipmentKey = ((IOrderLineItem)x).ShipmentKey,
-                            lineItemType = x.LineItemType.ToString(),
-                            sku = x.Sku,
-                            price = x.Price,
-                            quantity = x.Quantity,
-                            backOrder = ((IOrderLineItem)x).BackOrder,
-                            exported = x.Exported                            
-                        })
-                }, 
-                Formatting.None);
-            }
-
-            json = string.Format(json, ojson);
-            return json;
-        }
+        
 
         /// <summary>
         /// The get generic items collection.
@@ -815,6 +777,7 @@
                     new
                         {
                             key = x.Key,
+                            containerKey = x.ContainerKey,
                             name = x.Name,
                             lineItemTfKey = x.LineItemTfKey,
                             lineItemType = x.LineItemType.ToString(),

@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Plugin.Shipping.FedEx.Provider
 {
-    interface IFedExShippingGatewayMethod
+    /// <summary>
+    /// Marker interface FedExShippingGatewayMethod.
+    /// </summary>
+    public interface IFedExShippingGatewayMethod
     {
     }
 }

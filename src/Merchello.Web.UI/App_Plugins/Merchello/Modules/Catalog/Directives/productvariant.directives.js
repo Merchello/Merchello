@@ -41,7 +41,7 @@
                  * @function
                  * 
                  * @description
-                 * This is called when the "Track inventory for this variant" checkbox is checked.  It creates an initial catalog inventory object ready to 
+                 * This is called when the "is Shippable" checkbox is checked.  It creates an initial catalog inventory object ready to 
                  * fill out.
                  */
                 $scope.ensureCatalogInventory = function () {
@@ -83,7 +83,7 @@
      * @description
      * directive to pick the media file or files for digital download
      */
-    directives.ProductDigitalDownloadSection = function (dialogService) {
+    directives.ProductDigitalDownloadSection = function (dialogService, mediaHelper, mediaResource) {
         return {
             restrict: 'E',
             replace: true,
@@ -92,9 +92,20 @@
                 productVariant: '='
             },
             templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-digital-download-section.html',
-            //templateUrl: 'product-main-edit.html',
 
             link: function ($scope, $element) {
+
+                $scope.id = $scope.productVariant.downloadMediaId;
+                if ($scope.productVariant.download && $scope.id != -1) {
+                    mediaResource.getById($scope.id).then(function (media) {
+                        if (!media.thumbnail) {
+                            media.thumbnail = mediaHelper.resolveFile(media, true);
+                        }
+
+                        $scope.mediaItem = media;
+                        $scope.mediaItem.umbracoFile = mediaHelper.resolveFile(media, false);
+                    });
+                }
 
                 /**
                  * @ngdoc method
@@ -109,21 +120,17 @@
                 $scope.chooseMedia = function () {
 
                     dialogService.mediaPicker({
-                        multipicker: true,
-                        callback: function (data) {
-                            _.each(data.selection, function (media, i) {
-                                //shortcuts
-                                //TODO, do something better then this for searching
+                        onlyImages: false,
+                        callback: function (media) {
 
-                                var img = {};
-                                img.id = media.id;
-                                img.src = imageHelper.getImagePropertyValue({ imageModel: media });
-                                img.thumbnail = imageHelper.getThumbnailFromPath(img.src);
-                                $scope.images.push(img);
-                                $scope.ids.push(img.id);
-                            });
+                            if (!media.thumbnail) {
+                                media.thumbnail = mediaHelper.resolveFile(media, true);
+                            }
 
-                            $scope.sync();
+                            $scope.mediaItem = media;
+                            $scope.mediaItem.umbracoFile = mediaHelper.resolveFile(media, false);
+                            $scope.id = media.id;
+                            $scope.productVariant.downloadMediaId = media.id;
                         }
                     });
 
@@ -133,7 +140,7 @@
         };
     };
 
-    angular.module("umbraco").directive('productDigitalDownloadSection', ['dialogService', merchello.Directives.ProductDigitalDownloadSection] );
+    angular.module("umbraco").directive('productDigitalDownloadSection', ['dialogService', 'mediaHelper', 'mediaResource', merchello.Directives.ProductDigitalDownloadSection]);
 
 
 
@@ -152,7 +159,9 @@
             replace: true,
             scope: {
                 product: '=',
-                productVariant: '='
+                productVariant: '=',
+                defaultWarehouse: '=',
+                warehouses: '='
             },
             templateUrl: '/App_Plugins/Merchello/Modules/Catalog/Directives/product-shipping-section.html'
         };

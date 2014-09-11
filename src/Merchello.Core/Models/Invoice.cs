@@ -32,6 +32,12 @@
         private static readonly PropertyInfo InvoiceNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, int>(x => x.InvoiceNumber);
 
         /// <summary>
+        /// The invoice number prefix selector.
+        /// </summary>
+        private static readonly PropertyInfo PoNumberSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.PoNumber);
+
+
+        /// <summary>
         /// The invoice date selector.
         /// </summary>
         private static readonly PropertyInfo InvoiceDateSelector = ExpressionHelper.GetPropertyInfo<Invoice, DateTime>(x => x.InvoiceDate);
@@ -125,6 +131,11 @@
         /// The invoice number prefix.
         /// </summary>
         private string _invoiceNumberPrefix;
+
+        /// <summary>
+        /// The purchase order number.
+        /// </summary>
+        private string _poNumber;
 
         /// <summary>
         /// The invoice date.
@@ -332,7 +343,7 @@
         }
 
         /// <summary>
-        /// Gets the invoice number
+        /// Gets or sets the invoice number
         /// </summary>
         [DataMember]
         public int InvoiceNumber
@@ -342,7 +353,7 @@
                 return _invoiceNumber;
             }
 
-            internal set
+            set
             {
                 SetPropertyValueAndDetectChanges(
                     o =>
@@ -352,6 +363,30 @@
                 }, 
                 _invoiceNumber, 
                 InvoiceNumberSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the po number.
+        /// </summary>
+        [DataMember]
+        public string PoNumber
+        {
+            get
+            {
+                return _poNumber;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _poNumber = value;
+                        return _poNumber;
+                    },
+                _poNumber,
+                PoNumberSelector);
             }
         }
 

@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderCustomer.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderFulfillment.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreateActionMenu.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
@@ -116,6 +117,7 @@
     <Content Include="App_Plugins\Merchello\Config\Lang\en_us.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_Plugins\Merchello\Config\Lang\it.xml" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-pager.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-slide-open-panel.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.debug.section.directive.js" />
@@ -284,8 +286,10 @@
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.css" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-main-simple-create.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-option-attributes-selection.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variants-view-table.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product-variants-view-table.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\productwithoptions.directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-options-reorder.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
@@ -309,7 +313,6 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.changeprices.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-main-edit.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\productvariant.directives.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.productvariant.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.product.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.edit.controller.js" />
@@ -320,11 +323,15 @@
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editinfo.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editinfo.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectaddress.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\order.editcustomeraddress.html" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.customer.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.gravatar.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\order.editcustomerinfo.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\selectcustomer.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Directives\order-create-customer.html" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Directives\ordercreate.directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.controller.js" />
@@ -414,8 +421,10 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Vendors\vendors.models.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.productcreate.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.productedit.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.controller.js" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.producteditwithoptions.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.html" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.productedit.html" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloproductdialog.controller.js" />

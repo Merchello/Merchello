@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    using Merchello.Core.Models;
+
     public abstract class MockDataMakerBase
     {
         public static Random NoWhammyStop = new Random();
@@ -14,10 +16,16 @@ namespace Merchello.Tests.Base.DataMakers
             return Guid.NewGuid().ToString().Substring(0, 8);
         }
 
-        protected static decimal GetAmount()
+        public static decimal GetAmount()
         {
-            return NoWhammyStop.Next(1500);
+            return NoWhammyStop.Next(150);
         }
+
+        public static decimal GetWeight()
+        {
+            return NoWhammyStop.Next(8);
+        }
+
 
         protected static string ProductItemName()
         {
@@ -56,11 +64,11 @@ namespace Merchello.Tests.Base.DataMakers
             return NoWhammyStop.Next(25);
         }
 
-        internal static IEnumerable<AddressMock> AddressMocks()
+        internal static IEnumerable<IAddress> FakeAddresses()
         {
-            return new List<AddressMock>()
+            return new List<IAddress>()
                 {
-                    new AddressMock()
+                    new Address()
                         {
                             Name = "Walt Disney World Resort",
                             Locality = "Lake Buena Vista",
@@ -68,15 +76,16 @@ namespace Merchello.Tests.Base.DataMakers
                             PostalCode = "32830",
                             CountryCode = "US"
                         },
-                    new AddressMock()
+                    new Address()
                         {
                             Name = "Rockefeller Center",
                             Address1 = "45 Rockefeller Plz",
                             Locality = "New York",
                             Region = "NY",
+                            CountryCode = "US",
                             PostalCode = "10111"
                         },
-                    new AddressMock()
+                    new Address()
                         {
                             Name = "Eiffel Tower",
                             Address1 = "Champs-de-Mars",
@@ -84,22 +93,23 @@ namespace Merchello.Tests.Base.DataMakers
                             PostalCode = "75007",
                             CountryCode = "FR"
                         },
-                    new AddressMock()
+                    new Address()
                         {
                             Name = "Buckingham Palace",
                             Address1 = "SW1A 1AA",
                             Locality = "London",
                             CountryCode = "UK"
                         },
-                    new AddressMock()
+                    new Address()
                         {
                             Name = "Space Needle",
                             Address1 = "400 Broad St",
                             Locality = "Seattle",
                             Region = "WA",
-                            PostalCode = "98102"
+                            PostalCode = "98102",
+                            CountryCode = "US"
                         },
-                    new AddressMock()
+                    new Address()
                         {
                             Name = "Sydney Opera House",
                             Address1 = "Bennelong Point",

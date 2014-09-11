@@ -16,12 +16,16 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TaxRequest"/> class.
         /// </summary>
-        public TaxRequest()
+        /// <param name="docType">
+        /// The doc Type. This determines if the quotation should be recorded or if it is just an estimate.
+        /// Defaults to an estimate.
+        /// </param>
+        public TaxRequest(StatementType docType = StatementType.SalesOrder)
         {
             DocDate = DateTime.Today.ToString("yyyy-M-dddd");
             DetailLevel = DetailLevel.Tax;
             Commit = false;
-            DocType = StatementType.SalesInvoice;
+            DocType = docType;
         }
 
         // Required for tax calculation

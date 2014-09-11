@@ -175,7 +175,7 @@
         }
 
         /// <summary>
-        /// Gets the unique OrderNumber
+        /// Gets or sets the unique OrderNumber
         /// </summary>
         [DataMember]
         public int OrderNumber
@@ -185,7 +185,7 @@
                 return _orderNumber;
             }
 
-            internal set
+            set
             {
                 SetPropertyValueAndDetectChanges(
                     o =>

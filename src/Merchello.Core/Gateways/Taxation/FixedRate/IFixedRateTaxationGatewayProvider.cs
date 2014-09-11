@@ -4,5 +4,6 @@
     /// Marker interface the FixedRateTaxationGatewayProvider
     /// </summary>
     public interface IFixedRateTaxationGatewayProvider
-    { }
+    {
+    }
 }

@@ -47,7 +47,7 @@
         /// </returns>
         public IEnumerable<IInvoice> GetAll()
         {
-            return new InvoiceService().GetAll();
+            return new InvoiceService().GetPage(1, 100).Items;
         }
 
 

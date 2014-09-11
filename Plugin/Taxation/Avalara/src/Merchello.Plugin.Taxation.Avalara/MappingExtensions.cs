@@ -7,18 +7,49 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Plugin.Taxation.Avalara.Models;
     using Merchello.Plugin.Taxation.Avalara.Models.Address;
     using Merchello.Plugin.Taxation.Avalara.Models.Tax;
 
     using Newtonsoft.Json;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// Mapping extensions to assist in mapping objects types
     /// </summary>
     public static class MappingExtensions
     {
+        #region ExtendedData
+
+        /// <summary>
+        /// Serializes the <see cref="AvaTaxProviderSettings"/> and saves them in the extend data collection.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        public static void SaveProviderSettings(this ExtendedDataCollection extendedData, AvaTaxProviderSettings settings)
+        {
+            extendedData.SetValue(AvaTaxProviderSettings.ExtendedDataKey, JsonConvert.SerializeObject(settings)); 
+        }
+
+        /// <summary>
+        /// Deserializes ava tax provider settings from the gateway provider's extended data collection
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="AvaTaxProviderSettings"/>.
+        /// </returns>
+        public static AvaTaxProviderSettings GetAvaTaxProviderSettings(this ExtendedDataCollection extendedData)
+        {
+            return JsonConvert.DeserializeObject<AvaTaxProviderSettings>(extendedData.GetValue(AvaTaxProviderSettings.ExtendedDataKey));
+        }
+
+        #endregion
+
         #region TaxAddress
 
         /// <summary>
@@ -50,9 +81,11 @@
         public static TaxAddress[] GetTaxAddressArray(this IShipment shipment, int startAddressIndex = 1)
         {
             var origin = shipment.GetOriginAddress().ToTaxAddress() as TaxAddress;
+
             origin.AddressCode = startAddressIndex.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0');
 
             var destination = shipment.GetDestinationAddress().ToTaxAddress() as TaxAddress;
+
             destination.AddressCode = (startAddressIndex + 1).ToString(CultureInfo.InvariantCulture).PadLeft(2, '0');
 
             return new[] { origin, destination };
@@ -71,10 +104,13 @@
         /// <param name="defaultStoreAddress">
         /// The default store address.  This is required for items without shipping information.
         /// </param>
+        /// <param name="estimateOnly">
+        /// Indicates if the quote should be an estimate or recorded
+        /// </param>
         /// <returns>
         /// The <see cref="TaxRequest"/>.
         /// </returns>
-        public static TaxRequest AsTaxRequest(this IInvoice invoice, ITaxAddress defaultStoreAddress)
+        public static TaxRequest AsTaxRequest(this IInvoice invoice, ITaxAddress defaultStoreAddress, bool estimateOnly = true)
         {
             var addresses = new List<TaxAddress>();
             var lines = new List<StatementLineItem>();
@@ -118,7 +154,7 @@
                             Description = shipLine.Name,
                             OriginCode = shipmentAddresses[0].AddressCode,
                             DestinationCode = shipmentAddresses[1].AddressCode,
-                            TaxCode = "FR020200"
+                            TaxCode = "FR020100" // TODO this should probably not be hard coded here
                         });
 
                     addresses.AddRange(shipmentAddresses);
@@ -134,9 +170,10 @@
                     x.LineItemType != LineItemType.Discount &&
                     !lines.Any(line => line.ItemCode.Contains(x.Sku)));
 
+            // TODO add lines for non shippable - like downloadable and discounts
 
 
-            var taxRequest = new TaxRequest()
+            var taxRequest = new TaxRequest(estimateOnly ? StatementType.SalesOrder : StatementType.SalesInvoice)
                 {
                     DocCode = invoice.PrefixedInvoiceNumber(),
                     Addresses = addresses.ToArray(),

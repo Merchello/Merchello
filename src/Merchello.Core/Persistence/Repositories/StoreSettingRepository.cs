@@ -131,16 +131,19 @@
         /// <param name="storeSettingKey">Constant Guid Key of the NextInvoiceNumber store setting</param>
         /// <param name="invoicesCount">The number of invoices needing invoice numbers.  Useful when saving multiple new invoices.</param>
         /// <returns></returns>
-        public int GetNextInvoiceNumber(Guid storeSettingKey, int invoicesCount = 1)
+        public int GetNextInvoiceNumber(Guid storeSettingKey, Func<int> validate, int invoicesCount = 1)
         {
             Mandate.ParameterCondition(1 >= invoicesCount, "invoicesCount");
 
-            var nextInvoiceNumber = Get(storeSettingKey);
-            var invoiceNumber = (int.Parse(nextInvoiceNumber.Value) + invoicesCount);
+            var setting = Get(storeSettingKey);
+            var nextInvoiceNumber = int.Parse(setting.Value);
+            var max = validate();
+            nextInvoiceNumber = nextInvoiceNumber >= max ? nextInvoiceNumber : max + 5; 
+            var invoiceNumber = nextInvoiceNumber + invoicesCount;
 
-            nextInvoiceNumber.Value = invoiceNumber.ToString(CultureInfo.InvariantCulture);
+            setting.Value = invoiceNumber.ToString(CultureInfo.InvariantCulture);
 
-            AddOrUpdate(nextInvoiceNumber); // this will deal with the cache as well
+            AddOrUpdate(setting); // this will deal with the cache as well
 
             return invoiceNumber;
         }
@@ -151,16 +154,19 @@
         /// <param name="storeSettingKey">Constant Guid Key of the NextOrderNumber store setting</param>
         /// <param name="ordersCount">The number of orders needing order numbers.  Useful when saving multiple new orders</param>
         /// <returns></returns>
-        public int GetNextOrderNumber(Guid storeSettingKey, int ordersCount = 1)
+        public int GetNextOrderNumber(Guid storeSettingKey, Func<int> validate, int ordersCount = 1)
         {
             Mandate.ParameterCondition(1 >= ordersCount, "ordersCount");
 
-            var nextOrderNumber = Get(storeSettingKey);
-            var orderNumber = (int.Parse(nextOrderNumber.Value) + ordersCount);
+            var setting = Get(storeSettingKey);
+            var max = validate();
+            var nextOrderNumber = int.Parse(setting.Value);
+            nextOrderNumber = nextOrderNumber >= max ? nextOrderNumber : max + 5;
+            var orderNumber = nextOrderNumber + ordersCount;
 
-            nextOrderNumber.Value = orderNumber.ToString(CultureInfo.InvariantCulture);
+            setting.Value = orderNumber.ToString(CultureInfo.InvariantCulture);
 
-            AddOrUpdate(nextOrderNumber);
+            AddOrUpdate(setting);
 
             return orderNumber;
         }

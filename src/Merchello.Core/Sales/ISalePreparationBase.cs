@@ -12,6 +12,7 @@
     /// </summary>
     public interface ISalePreparationBase
     {
+        
         /// <summary>
         /// Restarts the checkout process, deleting all persisted data
         /// </summary>
@@ -166,5 +167,25 @@
         /// True or false indicating whether or not an invoice can be created
         /// </returns>
         bool IsReadyToInvoice();
+
+        /// <summary>
+        /// Adds a <see cref="ILineItem"/> to the collection of items
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <remarks>
+        /// Intended for custom line item types
+        /// http://issues.merchello.com/youtrack/issue/M-381
+        /// </remarks>
+        void AddItem(ILineItem lineItem);
+
+        /// <summary>
+        /// Removes a line item for the collection of items
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        void RemoveItem(ILineItem lineItem);
     }
 }

@@ -1,38 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Merchello.Core;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.Models.ContentEditing;
-using Merchello.Web.WebApi;
-using Umbraco.Web.Mvc;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
 
+    using Merchello.Core;
+    using Merchello.Core.Gateways.Taxation;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.WebApi;
+
+    using Umbraco.Web.Mvc;
+
+    /// <summary>
+    /// The taxation gateway api controller.
+    /// </summary>
     [PluginController("Merchello")]
     public class TaxationGatewayApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The taxation context.
+        /// </summary>
         private readonly ITaxationContext _taxationContext;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TaxationGatewayApiController"/> class. 
         /// </summary>
         public TaxationGatewayApiController()
-            :this(MerchelloContext.Current)
-        {}
+            : this(Core.MerchelloContext.Current)
+        {
+        }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="TaxationGatewayApiController"/> class. 
         /// </summary>
-        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        public TaxationGatewayApiController(MerchelloContext merchelloContext)
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>
+        /// </param>
+        public TaxationGatewayApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _taxationContext = MerchelloContext.Gateways.Taxation;
@@ -40,15 +49,20 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// 
-        ///
+        /// 
         /// GET /umbraco/Merchello/TaxationGatewayApi/GetGatewayResources/{id}
         /// </summary>
-        /// <param name="id">The key of the TaxationGatewayProvider</param>
+        /// <param name="id">
+        /// The key of the TaxationGatewayProvider
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="GatewayResourceDisplay"/>.
+        /// </returns>
         public IEnumerable<GatewayResourceDisplay> GetGatewayResources(Guid id)
         {
             try
             {
-                var provider = _taxationContext.CreateInstance(id);
+                var provider = _taxationContext.GetProviderByKey(id);
 
                 var resources = provider.ListResourcesOffered();
 
@@ -64,9 +78,12 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Returns a list of all of GatewayProviders of GatewayProviderType Taxation
-        ///
+        /// 
         /// GET /umbraco/Merchello/TaxationGatewayApi/GetAllGatewayProviders/
-        /// </summary>        
+        /// </summary>
+        /// <returns>
+        /// The collection of <see cref="GatewayProviderDisplay"/>.
+        /// </returns>
         public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
         {
             var providers = _taxationContext.GetAllActivatedProviders();
@@ -80,16 +97,18 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// 
-        ///
+        /// 
         /// GET /umbraco/Merchello/TaxationGatewayApi/GetTaxationProviderTaxMethods/{id}
         /// </summary>
-        /// <param name="id">The key of the TaxationGatewayProvider</param>
-        /// <remarks>
-        /// 
-        /// </remarks>
+        /// <param name="id">
+        /// The key of the TaxationGatewayProvider
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="TaxMethodDisplay"/>.
+        /// </returns>
         public IEnumerable<TaxMethodDisplay> GetTaxationProviderTaxMethods(Guid id)
         {
-            var provider = _taxationContext.CreateInstance(id);
+            var provider = _taxationContext.GetProviderByKey(id);
             if (provider != null)
             {
                 return provider.GetAllGatewayTaxMethods().Select(x => x.ToTaxMethodDisplay());
@@ -100,10 +119,15 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Adds a TaxMethod
-        ///
+        /// 
         /// POST /umbraco/Merchello/TaxationGatewayApi/AddTaxMethod
         /// </summary>
-        /// <param name="method">POSTed <see cref="TaxMethodDisplay"/> object</param>
+        /// <param name="method">
+        /// POSTed <see cref="TaxMethodDisplay"/> object
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST")]
         public HttpResponseMessage AddTaxMethod(TaxMethodDisplay method)
         {
@@ -111,7 +135,10 @@ namespace Merchello.Web.Editors
 
             try
             {
-                var provider = _taxationContext.CreateInstance(method.ProviderKey);
+                var deleteMethod = _taxationContext.GetTaxMethodForCountryCode(method.CountryCode);
+                if (deleteMethod != null) this.DeleteTaxMethod(deleteMethod.Key);
+
+                var provider = _taxationContext.GetProviderByKey(method.ProviderKey);
 
                 var taxationGatewayMethod = provider.CreateTaxMethod(method.CountryCode, method.PercentageTaxRate);
 
@@ -132,7 +159,12 @@ namespace Merchello.Web.Editors
         /// 
         /// PUT /umbraco/Merchello/TaxationGatewayApi/PutTaxMethod
         /// </summary>
-        /// <param name="method">POSTed <see cref="TaxMethodDisplay"/> object</param>
+        /// <param name="method">
+        /// POSTed <see cref="TaxMethodDisplay"/> object
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("POST", "PUT")]
         public HttpResponseMessage PutTaxMethod(TaxMethodDisplay method)
         {
@@ -140,9 +172,16 @@ namespace Merchello.Web.Editors
 
             try
             {
-                var provider = _taxationContext.CreateInstance(method.ProviderKey);
+                var provider = _taxationContext.GetProviderByKey(method.ProviderKey);
 
                 var taxMethod = provider.TaxMethods.FirstOrDefault(x => x.Key == method.Key);
+
+                if (taxMethod == null)
+                {
+                    var deleteMethod = _taxationContext.GetTaxMethodForCountryCode(method.CountryCode);
+                    this.DeleteTaxMethod(deleteMethod.Key);
+                    return this.AddTaxMethod(method);
+                }
 
                 taxMethod = method.ToTaxMethod(taxMethod);
 
@@ -150,7 +189,7 @@ namespace Merchello.Web.Editors
             }
             catch (Exception ex)
             {
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message));
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
 
             return response;
@@ -161,7 +200,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/TaxationGatewayApi/DeleteTaxMethod
         /// </summary>
-        /// <param name="id">TaxMethod Key</param>
+        /// <param name="id">
+        /// TaxMethod Key
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
         [AcceptVerbs("GET", "DELETE")]
         public HttpResponseMessage DeleteTaxMethod(Guid id)
         {

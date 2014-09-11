@@ -1,8 +1,12 @@
-﻿namespace Merchello.Plugin.Taxation.Avalara.Models
+﻿using Merchello.Plugin.Taxation.Avalara.Models.Address;
+
+namespace Merchello.Plugin.Taxation.Avalara.Models
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
+
+    using Merchello.Core.Models;
 
     /// <summary>
     /// The Avalara AvaTax provider settings.
@@ -12,6 +16,17 @@
     [DataContract(IsReference = true)]
     public class AvaTaxProviderSettings
     {
+        /// <summary>
+        /// Gets the extended data key.
+        /// </summary>
+        public static string ExtendedDataKey
+        {
+            get
+            {
+                return "merchAvaTaxProviderSettings";
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether to use a demo or sandbox mode.
         /// </summary>
@@ -49,9 +64,24 @@
         {
             get
             {
-                return UseSandBox ? "https://development.avalara.net/" : "https://avatax.avalara.net/ ";
+                return UseSandBox ? "https://development.avalara.net/" : "https://avatax.avalara.net/";
             }
         }
+
+        /// <summary>
+        /// Gets or sets the company code.
+        /// </summary>
+        /// <remarks>
+        /// Value can be found in the admin console
+        /// </remarks>
+        [DataMember]
+        public string CompanyCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default store address.
+        /// </summary>
+        [DataMember]
+        public TaxAddress DefaultStoreAddress { get; set; }
 
         /// <summary>
         /// Gets the API version.
@@ -61,13 +91,5 @@
         { 
             get { return "1.0"; } 
         }
-
-        /// <summary>
-        /// Gets or sets the company code.
-        /// </summary>
-        /// <remarks>
-        /// Value can be found in the admin console
-        /// </remarks>
-        public string CompanyCode { get; set; }
     }
 }

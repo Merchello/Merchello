@@ -5,21 +5,30 @@
     using System.Linq;
     using System.Threading;
     using Models;
-    using Persistence;
+
     using Persistence.Querying;
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents the Product Service 
     /// </summary>
-    public class ProductService : IProductService
+    public class ProductService : PageCachedServiceBase<IProduct>, IProductService
     {
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
+        /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "sku", "name", "price" };
 
         /// <summary>
         /// The uow provider.
@@ -119,7 +128,6 @@
 
         #endregion
 
-        #region IProductService Members
 
         /// <summary>
         /// Creates a Product without saving it to the database
@@ -202,7 +210,7 @@
             {
                 if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IProduct>(product), this))
                 {
-                    ((Product) product).WasCancelled = true;
+                    ((Product)product).WasCancelled = true;
                     return;
                 }
             }
@@ -327,12 +335,141 @@
         /// </summary>
         /// <param name="key">Guid key for the Product</param>
         /// <returns><see cref="IProductVariant"/></returns>
-        public IProduct GetByKey(Guid key)
+        public override IProduct GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
+        }
+
+        /// <summary>
+        /// Gets a page of <see cref="IProduct"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public override Page<IProduct> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetPage(page, itemsPerPage, null, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The count.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal override int Count(IQuery<IProduct> query)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+        /// <summary>
+        /// The count.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal int Count(IQuery<IProductVariant> query)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+        /// <summary>
+        /// Gets a page of product keys
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetPagedKeys(page, itemsPerPage, null, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get paged keys.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetPagedKeys(string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.SearchKeys(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The validate sort by field.
+        /// </summary>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected override string ValidateSortByField(string sortBy)
+        {
+            return ValidSortFields.Contains(sortBy.ToLowerInvariant()) ? sortBy : "name";
         }
 
         /// <summary>
@@ -358,11 +495,12 @@
         /// <returns>
         /// The total product count.
         /// </returns>
+        [Obsolete("Only used in ProductQuery")]
         public int ProductsCount()
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IProduct>.Builder.Where(x => x.Key != Guid.Empty);
+                var query = Persistence.Querying.Query<IProduct>.Builder.Where(x => x.Key != Guid.Empty);
 
                 return repository.Count(query);
             }
@@ -381,8 +519,6 @@
         {
             return _productVariantService.SkuExists(sku);
         }
-
-        #endregion
 
         /// <summary>
         /// Gets all the products

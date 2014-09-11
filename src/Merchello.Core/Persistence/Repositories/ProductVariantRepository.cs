@@ -21,7 +21,15 @@
     /// </summary>
     internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
         public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {            
@@ -117,6 +125,8 @@
 
             ((Entity)entity).AddingEntity();
 
+            ((ProductVariant)entity).VersionKey = Guid.NewGuid();
+
             var factory = new ProductVariantFactory(((ProductVariant)entity).ProductAttributes, ((ProductVariant)entity).CatalogInventoryCollection);
             var dto = factory.BuildDto(entity);
 
@@ -155,6 +165,7 @@
             Mandate.ParameterCondition(!SkuExists(entity.Sku, entity.Key), "Entity cannot be updated.  The sku already exists.");
 
             ((Entity)entity).UpdatingEntity();
+            ((ProductVariant)entity).VersionKey = Guid.NewGuid();
 
             var factory = new ProductVariantFactory(((ProductVariant)entity).ProductAttributes, ((ProductVariant)entity).CatalogInventoryCollection);
             var dto = factory.BuildDto(entity);
@@ -245,6 +256,7 @@
                 ProductVariantKey = inv.ProductVariantKey,
                 Count = inv.Count,
                 LowCount = inv.LowCount,
+                Location = inv.Location,
                 CreateDate = inv.CreateDate,
                 UpdateDate = inv.UpdateDate
             };
@@ -255,24 +267,15 @@
         private void UpdateCatalogInventory(ICatalogInventory inv)
         {
             inv.UpdateDate = DateTime.Now;
-            var dto = new CatalogInventoryDto()
-            {
-                CatalogKey = inv.CatalogKey,
-                ProductVariantKey = inv.ProductVariantKey,
-                Count = inv.Count,
-                LowCount = inv.LowCount,
-                CreateDate = inv.CreateDate,
-                UpdateDate = inv.UpdateDate
-            };
 
-            //Database.Update(dto);
 
             Database.Execute(
-                "UPDATE merchCatalogInventory SET Count = @invCount, LowCount = @invLowCount, UpdateDate = @invUpdateDate WHERE catalogKey = @catalogKey AND productVariantKey = @productVariantKey",
+                "UPDATE merchCatalogInventory SET Count = @invCount, LowCount = @invLowCount, Location = @invLocation, UpdateDate = @invUpdateDate WHERE catalogKey = @catalogKey AND productVariantKey = @productVariantKey",
                 new
                 {
                     invCount = inv.Count,
                     invLowCount = inv.LowCount,
+                    invLocation = inv.Location,
                     invUpdateDate = inv.UpdateDate,
                     catalogKey = inv.CatalogKey,
                     productVariantKey = inv.ProductVariantKey                    
@@ -392,6 +395,7 @@
 
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
+
 
     }
 }

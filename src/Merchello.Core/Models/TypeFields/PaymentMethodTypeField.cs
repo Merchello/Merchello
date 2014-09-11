@@ -3,6 +3,9 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     internal sealed class PaymentMethodTypeField : TypeFieldMapper<PaymentMethodType>, IPaymentMethodTypeField
     {
         internal PaymentMethodTypeField()
@@ -16,6 +19,15 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(PaymentMethodType.CreditCard, new TypeField("CreditCard", "Credit Card", Constants.TypeFieldKeys.PaymentMethod.CreditCardKey));
             AddUpdateCache(PaymentMethodType.PurchaseOrder, new TypeField("PurchaseOrder", "Purchase Order", Constants.TypeFieldKeys.PaymentMethod.PurchaseOrderKey));
         }
+
+        public override IEnumerable<ITypeField> CustomTypeFields
+        {
+            get
+            {
+                return PaymentMethods.GetTypeFields().Select(GetTypeField);
+            }
+        }
+
 
         /// <summary>
         /// Returns a custom payment methods or a NullTypeField

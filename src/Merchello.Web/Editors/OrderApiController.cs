@@ -1,21 +1,21 @@
-﻿using System.Globalization;
-using Merchello.Web.Workflow;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
-    using System.Net.Http;
     using System.Web.Http;
-    using Core;
-    using Core.Models;
-    using Core.Services;
-    using Models.ContentEditing;    
+
+    using Merchello.Core;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.WebApi;
+    using Merchello.Web.Workflow;
+
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
-    using WebApi;
 
     /// <summary>
     /// The order api controller.
@@ -33,8 +33,19 @@ namespace Merchello.Web.Editors
         /// </summary>
         private readonly IInvoiceService _invoiceService;
 
+        /// <summary>
+        /// The <see cref="MerchelloHelper"/>.
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
         private ICustomerBase _customer;
 
+        /// <summary>
+        /// The backoffice.
+        /// </summary>
         private IBackoffice _backoffice;
 
 
@@ -42,7 +53,7 @@ namespace Merchello.Web.Editors
         /// Initializes a new instance of the <see cref="OrderApiController"/> class.
         /// </summary>
         public OrderApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {            
         }
 
@@ -50,14 +61,13 @@ namespace Merchello.Web.Editors
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderApiController" /> class.
         /// </summary>
-        /// <param name="merchelloContext">The merchello context.</param>
-        /// <param name="customer">The customer.</param>
-        /// <param name="backoffice">The backoffice.</param>
+        /// <param name="merchelloContext">The merchello context.</param>        
         public OrderApiController(IMerchelloContext merchelloContext)
-            : base((MerchelloContext) merchelloContext)
+            : base(merchelloContext)
         {
             _orderService = merchelloContext.Services.OrderService;
             _invoiceService = merchelloContext.Services.InvoiceService;
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
 
@@ -71,10 +81,11 @@ namespace Merchello.Web.Editors
         /// The umbraco context.
         /// </param>
         internal OrderApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
-            : base((MerchelloContext) merchelloContext, umbracoContext)
+            : base(merchelloContext, umbracoContext)
         {
             _orderService = merchelloContext.Services.OrderService;
             _invoiceService = merchelloContext.Services.InvoiceService;
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
         /// <summary>
@@ -88,16 +99,10 @@ namespace Merchello.Web.Editors
         /// <returns>
         /// The <see cref="OrderDisplay"/>.
         /// </returns>
+        [HttpGet]
         public OrderDisplay GetOrder(Guid id)
         {
-            var order = _orderService.GetByKey(id) as Order;
-
-            if (order == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            return order.ToOrderDisplay();
+            return _merchello.Query.Order.GetByKey(id);
         }
 
         /// <summary>
@@ -116,15 +121,16 @@ namespace Merchello.Web.Editors
         /// <returns>
         /// The collection of <see cref="OrderLineItemDisplay"/>.
         /// </returns>
+        [HttpGet]
         public IEnumerable<OrderLineItemDisplay> GetUnFulfilledItems(Guid id)
         {
             var order = _orderService.GetByKey(id);
             if (order == null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                throw new KeyNotFoundException("Order not found");
             }
 
-            return order.UnfulfilledItems().Select(x => x.ToOrderLineItemDisplay());
+            return order.UnfulfilledItems(MerchelloContext).Select(x => x.ToOrderLineItemDisplay());
         }
 
         /// <summary>
@@ -140,7 +146,7 @@ namespace Merchello.Web.Editors
         /// </returns>
         public IEnumerable<OrderDisplay> GetOrdersByInvoiceKey(Guid id)
         {
-            return OrderQuery.GetByInvoiceKey(id);
+            return _merchello.Query.Order.GetByInvoiceKey(id);
         }
 
         /// <summary>
@@ -158,20 +164,20 @@ namespace Merchello.Web.Editors
 
             if (invoice == null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                throw new KeyNotFoundException("Invoice with id passed not found");
             }
 
             var shipmentLineItem = invoice.Items.FirstOrDefault(x => x.LineItemType == LineItemType.Shipping);
 
             if (shipmentLineItem == null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                throw new KeyNotFoundException("Shipment line item not found in the invoice");
             }
 
             var shipment = shipmentLineItem.ExtendedData.GetShipment<OrderLineItem>();
             if (shipment == null)
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                throw new KeyNotFoundException("Shipment not found in shipment line item extended data collection");
             }
 
             return shipment.GetDestinationAddress().ToAddressDisplay();
@@ -188,6 +194,9 @@ namespace Merchello.Web.Editors
                                    
             _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
             _backoffice = _customer.Backoffice();
+             
+            _backoffice.Empty();
+            _backoffice.Save();
 
             if (model.ProductKeys != null && model.ProductKeys.Any())
             {
@@ -212,7 +221,7 @@ namespace Merchello.Web.Editors
                     _backoffice.AddItem(product, product.Name, 1, extendedData);
                     //}
                 }
-
+                                                                                         
                 var salesPreparation = _customer.Backoffice().SalePreparation();
 
                 salesPreparation.SaveBillToAddress(model.BillingAddress.ToAddress());
@@ -226,6 +235,84 @@ namespace Merchello.Web.Editors
             }
         }
 
+        /// <summary>
+        /// Adds items to the backoffice basket to calculate shipping and Sales tax
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        public IEnumerable<IShipmentRateQuote> GetShippingMethods(BackofficeAddItemModel model)
+        {
+
+            _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
+            _backoffice = _customer.Backoffice();
+
+            var shipment = _backoffice.PackageBackoffice(model.ShippingAddress.ToAddress()).FirstOrDefault();
+            
+            return shipment.ShipmentRateQuotes();
+        }
+
+        /// <summary>
+        /// Adds items to the backoffice basket to calculate shipping and Sales tax
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        public IEnumerable<IPaymentGatewayMethod> GetPaymentMethods(BackofficeAddItemModel model)
+        {
+            return MerchelloContext.Gateways.Payment.GetPaymentGatewayMethods();
+        }
+
+        [HttpPost]
+        public bool FinalizeBackofficeOrder(BackofficeAddItemModel model)
+        {
+            _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
+            _backoffice = _customer.Backoffice();
+                                                                    
+            // This check asserts that we have enough
+            // this should be handled a bit nicer for the customer.  
+            if (!_backoffice.SalePreparation().IsReadyToInvoice()) return false;
+
+            var preparation = _backoffice.SalePreparation();
+
+            // Get the shipment again   
+            var shippingAddress = _backoffice.SalePreparation().GetShipToAddress();
+
+            var shipment = _backoffice.PackageBackoffice(shippingAddress).FirstOrDefault();
+
+            // Clear any previously saved quotes (eg. the user went back to their basket and started the process over again).
+            _backoffice.SalePreparation().ClearShipmentRateQuotes();
+
+            // get the quote using the "approved shipping method"
+            var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipmentKey);
+
+            // save the quote                 
+            _backoffice.SalePreparation().SaveShipmentRateQuote(quote);
+
+            // for cash providers we only want to authorize the payment
+            var paymentMethod = _backoffice.SalePreparation().GetPaymentMethod();
+
+            IPaymentResult attempt;
+
+            if (Merchello.Core.Constants.ProviderKeys.Payment.CashPaymentProviderKey == new Guid(model.PaymentProviderKey))
+            {
+                // AuthorizePayment will save the invoice with an Invoice Number.
+                //
+                attempt = preparation.AuthorizePayment(new Guid(model.PaymentKey));  
+            }
+            else // we 
+            {
+                // TODO wire in redirect to Credit Card view or PayPal ... etc.
+                throw new NotImplementedException();
+            }
+
+            _backoffice.Empty();
+            _backoffice.Save();
+
+            return true;
+        }
+
+           
         /// <summary>
         /// Gets the backoffice order summary.
         /// </summary>

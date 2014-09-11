@@ -3,14 +3,18 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Builders;
-    using Gateways.Payment;
-    using Gateways.Shipping;
-    using Models;
-    using Models.TypeFields;
-    using Services;
+
+    using Merchello.Core.Builders;
+    using Merchello.Core.Events;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Services;
+
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
 
     /// <summary>
@@ -60,6 +64,13 @@
         }
 
         /// <summary>
+        /// Occurs after a sale has been finalized.
+        /// </summary>
+        public static event TypedEventHandler<SalePreparationBase, SalesPreparationEventArgs<IPaymentResult>> Finalizing;
+
+
+
+        /// <summary>
         /// Gets the <see cref="ICustomerBase"/>
         /// </summary>
         public ICustomerBase Customer
@@ -87,6 +98,7 @@
         /// Gets or sets a value indicating whether to apply taxes to invoice.
         /// </summary>
         internal bool ApplyTaxesToInvoice { get; set; }
+
 
         /// <summary>
         /// Gets the <see cref="IRuntimeCacheProvider"/>
@@ -225,6 +237,48 @@
             return _customer.ExtendedData.GetAddress(AddressType.Billing) != null;
         }
 
+        /// <summary>
+        /// Adds a <see cref="ILineItem"/> to the collection of items
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <remarks>
+        /// Intended for custom line item types
+        /// http://issues.merchello.com/youtrack/issue/M-381
+        /// </remarks>
+        public void AddItem(ILineItem lineItem)
+        {
+            Mandate.ParameterNotNullOrEmpty(lineItem.Sku, "The line item must have a sku");
+            Mandate.ParameterNotNullOrEmpty(lineItem.Name, "The line item must have a name");
+
+            if (lineItem.Quantity <= 0) lineItem.Quantity = 1;
+            if (lineItem.Price < 0) lineItem.Price = 0;
+
+            if (lineItem.LineItemType == LineItemType.Custom)
+            {
+                if (!new LineItemTypeField().CustomTypeFields.Select(x => x.TypeKey).Contains(lineItem.LineItemTfKey))
+                {
+                    var argError = new ArgumentException("The LineItemTfKey was not found in merchello.config custom type fields");
+                    LogHelper.Error<SalePreparationBase>("The LineItemTfKey was not found in merchello.config custom type fields", argError);
+
+                    throw argError;
+                }
+            }
+
+            _itemCache.AddItem(lineItem);
+        }
+
+        /// <summary>
+        /// Removes a line item for the collection of items
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        public void RemoveItem(ILineItem lineItem)
+        {
+            _itemCache.Items.Remove(lineItem.Sku);
+        }
 
         /// <summary>
         /// Generates an <see cref="IInvoice"/>
@@ -279,21 +333,9 @@
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            ////TODO
-            //// Raise the notification event
-           //// Announce.Broadcast.InvoicedCustomer(_customer, invoice);
-
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
 
-            ////if(result.Payment.Success) 
-            ////    Announce.Broadcast.PaymentWasAuthorized(_customer, result);
-
-            if (!result.ApproveOrderCreation) return result;
-
-            // order
-            var order = result.Invoice.PrepareOrder(MerchelloContext);
-
-            MerchelloContext.Services.OrderService.Save(order);
+            Finalizing.RaiseEvent(new SalesPreparationEventArgs<IPaymentResult>(result), this);
 
             return result;
         }
@@ -348,20 +390,9 @@
 
             MerchelloContext.Services.InvoiceService.Save(invoice);
 
-            ////TODO
-            ////Announce.Broadcast.InvoicedCustomer(_customer, invoice);
-
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            ////if(result.Payment.Success)
-            ////    Announce.Broadcast.PaymentWasCaptured(_customer, result);
-            
-            if (!result.ApproveOrderCreation) return result;
-
-            // order
-            var order = result.Invoice.PrepareOrder(MerchelloContext);
-
-            MerchelloContext.Services.OrderService.Save(order);
+            Finalizing.RaiseEvent(new SalesPreparationEventArgs<IPaymentResult>(result), this);
 
             return result;
         }
@@ -455,6 +486,7 @@
             }
 
             runtimeCache.InsertCacheItem(cacheKey, () => itemCache);
+
             return itemCache;
         }
 

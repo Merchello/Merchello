@@ -13,15 +13,17 @@
     controllers.MerchelloProductDialog = function ($scope, merchelloProductService, merchelloSettingsService, notificationsService) {
 
         $scope.selectedProduct = $scope.dialogData;
+
         $scope.filtertext = "";
         $scope.products = [];
         $scope.filteredproducts = [];
         $scope.watchCount = 0;
         $scope.sortProperty = "name";
-        $scope.sortOrder = "asc";
+        $scope.sortOrder = "Ascending";
         $scope.limitAmount = 5;
         $scope.currentPage = 0;
-
+        $scope.maxPages = 0;
+        
         //--------------------------------------------------------------------------------------
         // Initialization methods
         //--------------------------------------------------------------------------------------
@@ -37,16 +39,35 @@
          */
         $scope.loadProducts = function () {
 
-            var promise = merchelloProductService.getAllProducts();
+            var page = $scope.currentPage;
+            var perPage = $scope.limitAmount;
+            var sortBy = $scope.sortProperty.replace("-", "");
+            var sortDirection = $scope.sortOrder;
 
-            promise.then(function (products) {
+            var listQuery = new merchello.Models.ListQuery({
+                currentPage: page,
+                itemsPerPage: perPage,
+                sortBy: sortBy,
+                sortDirection: sortDirection,
+                parameters: [
+                {
+                    fieldName: 'term',
+                    value: $scope.filtertext
+                }]
+            });
 
-                $scope.products = _.map(products, function (productFromServer) {
+            var promise = merchelloProductService.searchProducts(listQuery);
+
+            promise.then(function (response) {
+                var queryResult = new merchello.Models.QueryResult(response);
+
+                $scope.products = _.map(queryResult.items, function (productFromServer) {
                     return new merchello.Models.Product(productFromServer, true);
                 });
 
                 selectProduct($scope.products);
 
+                $scope.maxPages = queryResult.totalPages;
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
@@ -112,6 +133,21 @@
          */
         $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
+            $scope.currentPage = 0;
+            $scope.loadProducts();
+        };
+
+        /**
+         * @ngdoc method
+         * @name changePage
+         * @function
+         * 
+         * @description
+         * Helper function re-search the products after the page has changed
+         */
+        $scope.changePage = function (newPage) {
+            $scope.currentPage = newPage;
+            $scope.loadProducts();
         };
 
         /**
@@ -126,18 +162,19 @@
         $scope.changeSortOrder = function (propertyToSort) {
 
             if ($scope.sortProperty == propertyToSort) {
-                if ($scope.sortOrder == "asc") {
+                if ($scope.sortOrder == "Ascending") {
                     $scope.sortProperty = "-" + propertyToSort;
-                    $scope.sortOrder = "desc";
+                    $scope.sortOrder = "Descending";
                 } else {
                     $scope.sortProperty = propertyToSort;
-                    $scope.sortOrder = "asc";
+                    $scope.sortOrder = "Ascending";
                 }
             } else {
                 $scope.sortProperty = propertyToSort;
-                $scope.sortOrder = "asc";
+                $scope.sortOrder = "Ascending";
             }
 
+            $scope.loadProducts();
         };
 
         /**
@@ -151,25 +188,10 @@
          */
         $scope.getFilteredProducts = function (filter) {
 
-            if (merchello.Helpers.Strings.isNullOrEmpty(filter)) {
-                $scope.loadProducts();
-            } else {
-                var promise = merchelloProductService.filterProducts(filter);
+            $scope.filtertext = filter;
+            $scope.currentPage = 0;
 
-                promise.then(function (products) {
-
-                    $scope.products = _.map(products, function (productFromServer) {
-                        return new merchello.Models.Product(productFromServer, true);
-                    });
-
-                    selectProduct($scope.products);
-
-                }, function (reason) {
-
-                    notificationsService.success("Filtered Products Load Failed:", reason.message);
-
-                });
-            }
+            $scope.loadProducts();
         };
 
 
@@ -211,7 +233,8 @@
          * Helper function to get the amount of items to show per page for the paging
          */
         $scope.numberOfPages = function () {
-            return Math.ceil($scope.products.length / $scope.limitAmount);
+            return $scope.maxPages;
+            //return Math.ceil($scope.products.length / $scope.limitAmount);
         };
 
 

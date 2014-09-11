@@ -7,7 +7,7 @@
       <PropertyGroup>
         
         <VersionMajor>1</VersionMajor>
-        <VersionMinor>3</VersionMinor>
+        <VersionMinor>4</VersionMinor>
         <VersionPatch>0</VersionPatch>
         <VersionSuffix>0</VersionSuffix>        
         <BuildConfiguration>Release</BuildConfiguration>
@@ -15,7 +15,7 @@
         
         <UmbracoVersionMajor>7</UmbracoVersionMajor>
         <UmbracoVersionMinor>1</UmbracoVersionMinor>
-        <UmbracoVersionPatch>4</UmbracoVersionPatch>
+        <UmbracoVersionPatch>6</UmbracoVersionPatch>
         <UmbracoVersionSuffix>0</UmbracoVersionSuffix>
         <UmbracoVersion>$(UmbracoVersionMajor).$(UmbracoVersionMinor).$(UmbracoVersionPatch)</UmbracoVersion>
         

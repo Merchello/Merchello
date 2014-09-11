@@ -11,6 +11,8 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
+    using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
     using Umbraco.Core.Services;
@@ -26,6 +28,11 @@
         #region Fields
 
         /// <summary>
+        /// The <see cref="MerchelloHelper"/>
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
+
+        /// <summary>
         /// The customer service.
         /// </summary>
         private ICustomerService _customerService;
@@ -39,6 +46,7 @@
         /// The membership member service.
         /// </summary>
         private IMemberService _memberService;
+        
 
         #endregion
 
@@ -48,7 +56,7 @@
         /// Initializes a new instance of the <see cref="CustomerApiController"/> class.
         /// </summary>
         public CustomerApiController()
-            : this(MerchelloContext.Current, global::Umbraco.Core.ApplicationContext.Current.Services.MemberService)
+            : this(Core.MerchelloContext.Current, global::Umbraco.Core.ApplicationContext.Current.Services.MemberService)
         {     
         }
 
@@ -62,7 +70,7 @@
         /// The member Service.
         /// </param>
         public CustomerApiController(IMerchelloContext merchelloContext, IMemberService memberService)
-            : base((MerchelloContext)merchelloContext)
+            : base(merchelloContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(memberService, "memberService");
@@ -70,6 +78,8 @@
             _customerService = merchelloContext.Services.CustomerService;
             _customerAddressService = ((Core.Services.ServiceContext)merchelloContext.Services).CustomerAddressService;
             _memberService = memberService;
+
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
         /// <summary>
@@ -85,7 +95,7 @@
         /// The member Service.
         /// </param>
         internal CustomerApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext, IMemberService memberService)
-            : base((MerchelloContext)merchelloContext, umbracoContext)
+            : base(merchelloContext, umbracoContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(memberService, "memberService");
@@ -110,54 +120,78 @@
         [HttpGet]
         public CustomerDisplay GetCustomer(Guid id)
         {
-            var customer = _customerService.GetByKey(id);
-            if (customer == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
+            return _merchello.Query.Customer.GetByKey(id);
+        }        
 
-            return customer.ToCustomerDisplay();
+        /// <summary>
+        /// Returns a filtered list of customers
+        /// 
+        /// GET /umbraco/Merchello/InvoiceApi/SearchCustomers
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The collection of customers..
+        /// </returns>
+        [HttpPost]
+        public QueryResultDisplay SearchCustomers(QueryDisplay query)
+        {
+            var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
+
+            return term != null && !string.IsNullOrEmpty(term.Value)
+              ?
+               _merchello.Query.Customer.Search(
+                  term.Value,
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection)
+              :
+              _merchello.Query.Customer.Search(
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection);
         }
 
         /// <summary>
-        /// GET /umbraco/Merchello/CustomerApi/GetAllCustomers/
-        /// 
-        /// 
-        /// Gets a collection of all customers.
+        /// The search by date range.
         /// </summary>
-        /// <returns>
-        /// The collection of all customers
-        /// </returns>
-        [HttpGet]
-        public IEnumerable<CustomerDisplay> GetAllCustomers()
-        {
-            var merchello = new MerchelloHelper();
-
-            return merchello.AllCustomers();
-        }
-
-        /// <summary>
-        /// GET /umbraco/Merchello/CustomerApi/GetAllCustomers/{page}/{perPage}
-        /// 
-        /// 
-        /// Gets a paged collection of customers.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="perPage">
-        /// The per page.
+        /// <param name="query">
+        /// The query.
         /// </param>
         /// <returns>
-        /// The paged collection of customers.
+        /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        [HttpGet]
-        public IEnumerable<CustomerDisplay> GetAllCustomers(int page, int perPage)
+        [HttpPost]
+        public QueryResultDisplay SearchByDateRange(QueryDisplay query)
         {
-            var merchello = new MerchelloHelper();
+            var lastActivityDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "lastActivityDateStart");
+            var lastActivityDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "lastActivityDateEnd");
+           
+            DateTime startDate;
+            DateTime endDate;
+            Mandate.ParameterNotNull(lastActivityDateStart, "lastActivityDateStart is a required parameter");
+            Mandate.ParameterCondition(DateTime.TryParse(lastActivityDateStart.Value, out startDate), "Failed to convert lastActivityDateStart to a valid DateTime");
 
-            return merchello.AllCustomers().Skip((page - 1) * perPage).Take(perPage);
+            endDate = lastActivityDateEnd == null
+                ? DateTime.MaxValue
+                : DateTime.TryParse(lastActivityDateEnd.Value, out endDate)
+                    ? endDate
+                    : DateTime.MaxValue;
+
+            return
+                _merchello.Query.Customer.Search(
+                    startDate,
+                    endDate,
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection);
         }
+                
+
 
         /// <summary>
         /// POST /umbraco/Merchello/CustomerApi/AddCustomer/
@@ -288,7 +322,9 @@
         {
             foreach (var address in customer.Addresses.Where(x => x.Key == Guid.Empty))
             {
-                _customerAddressService.Save(address.ToCustomerAddress(new CustomerAddress(customer.Key)));
+                var customerAddress = address.ToCustomerAddress(new CustomerAddress(customer.Key));
+                _customerAddressService.Save(customerAddress);
+                address.Key = customerAddress.Key;
             }
         }
     }

@@ -54,6 +54,8 @@
   </area>
   <area alias="merchelloOrder">
     <!-- things -->
+    <key alias="invoice">Invoice</key>
+    <key alias="invoiceNumber">Invoice #</key>
     <key alias="order">Order</key>
     <key alias="orders">Orders</key>
     <key alias="orderNumber">Order #</key>
@@ -62,8 +64,10 @@
     <key alias="lineItems"> Line Items</key>
     <key alias="orderName">[Order Name]</key>
     <key alias="createOrder">Create Order</key>
+    <key alias="sales">Sales</key>
+    <key alias="saleInformation">Sale Information</key>
     <!-- actions -->
-    <key alias="filter">Filter Orders</key>
+    <key alias="filter">Filter Invoices</key>
     <key alias="capturePayment">Capture Payment</key>
     <key alias="processPayment">Process Payment</key>
 
@@ -89,6 +93,7 @@
     <key alias="salesTax">Sales Tax</key>
     <key alias="authorized"> Authorized</key>
     <key alias="paymentHistory"> Payment History</key>
+    <key alias="saleHistory">Sale History</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>
     <key alias="paymentProcessedBy">Payment processed by:</key>
   </area>
@@ -102,6 +107,7 @@
     <key alias="warehouses">Warehouses</key>
     <key alias="stock">Stock</key>
     <key alias="lowCount">Low Count</key>
+    <key alias="location">Location</key>
     <!-- actions -->
     <!-- phrases -->
   </area>
@@ -329,5 +335,22 @@
     <key alias="selectProduct">Select Product...</key>
     <key alias="selectMerchelloProduct">Select Merchello Product</key>
     <key alias="selectYourProduct">Select Your Product</key>
+    <key alias="removeProduct">Disconnect This Product</key>
+    <key alias="itemLocation">Item Location</key>
+  </area>
+
+  <area alias="merchelloAuditLogs">
+    <key alias="notificationShipping">Shipping confirmation email sent to %0%</key>
+    <key alias="notificationSalesConfirmation">Sales confirmation email sent to %0%</key>
+    <key alias="paymentCaptured">We successfully captured %0% %1%</key>
+    <key alias="paymentAuthorize">We were authorized to capture %0% %1%</key>
+    <key alias="paymentVoided">Payment was voided</key>
+    <key alias="paymentDeclined">Payment was declined</key>
+    <key alias="paymentRefunded">We refunded %0% %1% of a payment</key>
+    <key alias="invoiceDeleted">Invoice %0% was deleted</key>
+    <key alias="paymentDeleted">Payment was deleted</key>
+    <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
+    <key alias="orderCreated">Order %0% was created</key>
+    <key alias="shipmentCreated">We successfully fulfilled %0% line items</key>
   </area>
 </language>

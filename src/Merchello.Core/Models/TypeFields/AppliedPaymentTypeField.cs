@@ -3,6 +3,9 @@ using Merchello.Core.Configuration.Outline;
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Indicates whether a shopping cart basket is either a "basket" or a "wishlist" representation
     /// </summary>
@@ -23,6 +26,15 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(AppliedPaymentType.Refund, new TypeField("Refund", "Refund", Constants.TypeFieldKeys.AppliedPayment.RefundRecordKey));
             AddUpdateCache(AppliedPaymentType.Denied, new TypeField("Denied", "Denied", Constants.TypeFieldKeys.AppliedPayment.DeniedRecordKey));
         }
+
+        public override IEnumerable<ITypeField> CustomTypeFields
+        {
+            get
+            {
+                return AppliedPayment.GetTypeFields().Select(GetTypeField);
+            }
+        }
+
 
         /// <summary>
         /// Returns a custom basket or a NullTypeField

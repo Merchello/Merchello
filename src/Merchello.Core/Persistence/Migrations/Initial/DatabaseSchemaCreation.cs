@@ -61,7 +61,8 @@
             { 33, typeof(StoreSettingDto) },
             { 34, typeof(OrderIndexDto) },
             { 35, typeof(NotificationMethodDto) },
-            { 36, typeof(NotificationMessageDto) }
+            { 36, typeof(NotificationMessageDto) },
+            { 37, typeof(AuditLogDto) }
         };
 
         /// <summary>
