@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Merchello.Web.Models.ContentEditing
 {
@@ -81,6 +82,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Gets or sets the address type.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public AddressType AddressType { get; set; }
 
         /// <summary>
