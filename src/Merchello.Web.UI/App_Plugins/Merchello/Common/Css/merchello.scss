@@ -354,3 +354,24 @@ $active: lighten($green, 50%);
 		}
 	}
 }
+
+.merchello-product-editor{
+    .merchello-panel-body {
+        position: static;
+    }
+
+    label{
+        display: block;
+        padding: 0;
+    }
+
+    input, select, textarea{
+        margin-bottom: 10px;
+    }
+
+    input[type="radio"], input[type="checkbox"]
+    {
+        margin-top: 4px;
+    }
+
+}
