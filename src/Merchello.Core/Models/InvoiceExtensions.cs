@@ -659,6 +659,20 @@
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice);
         }
 
+        /// <summary>
+        /// The total discounts.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal TotalDiscounts(this IInvoice invoice)
+        {
+            return invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
+        }
+
     #endregion
 
 

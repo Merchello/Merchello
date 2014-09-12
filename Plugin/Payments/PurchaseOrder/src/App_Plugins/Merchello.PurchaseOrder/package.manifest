@@ -1,0 +1,6 @@
+﻿{
+	javascript : [
+		'~/App_Plugins/Merchello.PurchaseOrder/merchello.purchaseorder.controller.js',
+		'~/App_Plugins/Merchello.PurchaseOrder/merchello.purchaseorder.paymentmethod.controller.js'
+	]
+}

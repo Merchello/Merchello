@@ -193,7 +193,7 @@
             if (entity == null) return null;
 
             ReindexEntity(entity);
-
+            
             return AutoMapper.Mapper.Map<TDisplay>(entity);
         }
 

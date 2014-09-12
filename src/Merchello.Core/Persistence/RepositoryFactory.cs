@@ -404,7 +404,7 @@
         /// </returns>
         internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipmentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+            return new ShipmentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateOrderLineItemRepository(uow));
         }
 
         /// <summary>

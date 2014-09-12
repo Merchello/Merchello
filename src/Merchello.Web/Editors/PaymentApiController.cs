@@ -218,7 +218,7 @@ namespace Merchello.Web.Editors
             }
             else
             {
-                capture.Payment.Result.AuditPaymentCaptured();
+                capture.Payment.Result.AuditPaymentCaptured(request.Amount);
             }
            
             return result;
@@ -258,7 +258,7 @@ namespace Merchello.Web.Editors
             else
             {
                 authorizeCapture.Payment.Result.AuditPaymentAuthorize(authorizeCapture.Invoice);
-                authorizeCapture.Payment.Result.AuditPaymentCaptured();
+                authorizeCapture.Payment.Result.AuditPaymentCaptured(request.Amount);
             }
             
             return result;

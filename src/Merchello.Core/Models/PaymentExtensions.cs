@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Services;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using Gateways.Payment;
+    using Services;
+
     /// <summary>
     /// Extension methods for <see cref="IPayment"/>
     /// </summary>

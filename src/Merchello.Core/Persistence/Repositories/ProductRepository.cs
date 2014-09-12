@@ -238,7 +238,8 @@
             Mandate.ParameterCondition(SkuExists(entity.Sku) == false, "Skus must be unique.");
 
             ((Product)entity).AddingEntity();
-            
+            ((ProductVariant)((Product)entity).MasterVariant).VersionKey = Guid.NewGuid();
+
             var factory = new ProductFactory();
             var dto = factory.BuildDto(entity);
 
@@ -267,6 +268,7 @@
         protected override void PersistUpdatedItem(IProduct entity)
         {
             ((Product)entity).UpdatingEntity();
+            ((ProductVariant) ((Product) entity).MasterVariant).VersionKey = Guid.NewGuid();
 
             var factory = new ProductFactory();
             var dto = factory.BuildDto(entity);

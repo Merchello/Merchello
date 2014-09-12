@@ -62,14 +62,14 @@
 			            <product-digital-download-section product="product" product-variant="productVariant" ></product-digital-download-section>
 			        </merchello-slide-open-panel>
 
+                    <!-- Shipping settings for a product. -->
+                    <merchello-slide-open-panel is-open="productVariant.shippable">
+                        <product-shipping-section product="product" product-variant="productVariant" default-warehouse="defaultWarehouse" warehouses="warehouses"></product-shipping-section>
+                    </merchello-slide-open-panel>
+
                     <!-- Inventory for a single product without options -->
 			        <merchello-slide-open-panel is-open="(productVariant.trackInventory && !productVariant.hasOptions)">
 			            <product-inventory-section product="product" product-variant="productVariant" default-warehouse="defaultWarehouse" warehouses="warehouses" ></product-inventory-section>
-			        </merchello-slide-open-panel>
-
-                    <!-- Shipping settings for a product. -->
-			        <merchello-slide-open-panel is-open="productVariant.shippable">
-			            <product-shipping-section product="product" product-variant="productVariant" ></product-shipping-section>
 			        </merchello-slide-open-panel>
 
                     <merchello-debug-section data-props-to-debug="product,productVariant"></merchello-debug-section>

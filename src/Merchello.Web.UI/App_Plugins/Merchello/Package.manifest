@@ -41,7 +41,6 @@
 		'~/App_Plugins/Merchello/Directives/merchello.pager.directive.js',
 		'~/App_Plugins/Merchello/Directives/merchello.debug.section.directive.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/merchello.product.service.js',
-		'~/App_Plugins/Merchello/Modules/Catalog/merchello.productvariant.service.js',
 		'~/App_Plugins/Merchello/Modules/Settings/merchello.warehouse.service.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/Directives/productvariant.directives.js',
 		'~/App_Plugins/Merchello/Modules/Catalog/Directives/productwithoptions.directives.js',
