@@ -17,7 +17,7 @@
 	]
 	,
 	javascript: [                 
-		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',    
+		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',       
 		'~/App_Plugins/Merchello/Common/Js/merchello.namespaces.js',
 		'~/App_Plugins/Merchello/Common/Js/startfrom.filter.js',
 		'~/App_Plugins/Merchello/Common/Js/greaterthan.filter.js',
