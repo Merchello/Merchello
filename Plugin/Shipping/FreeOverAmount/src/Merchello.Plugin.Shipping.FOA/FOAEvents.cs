@@ -13,14 +13,14 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Plugin.Shipping.FOA
 {
-    public class FedExEvents : ApplicationEventHandler
+    public class FOAEvents : ApplicationEventHandler
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication,
                                               ApplicationContext applicationContext)
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            LogHelper.Info<FedExEvents>("Initializing Free Over Amount Shipping provider registration binding events");
+            LogHelper.Info<FOAEvents>("Initializing Free Over Amount Shipping provider registration binding events");
 
 
             GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> args)
