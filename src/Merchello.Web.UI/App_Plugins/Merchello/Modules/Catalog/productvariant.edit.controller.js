@@ -104,7 +104,8 @@
 
                 $scope.productVariant = new merchello.Models.ProductVariant(productVariant);
 
-                $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
+                //$scope.productVariant.ensureCatalogInventory($scope.defaultWarehouse);
+                $scope.productVariant.ensureAllCatalogInventoriesForWarehouse($scope.defaultWarehouse);
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
