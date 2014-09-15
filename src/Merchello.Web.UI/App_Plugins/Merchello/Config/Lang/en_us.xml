@@ -68,6 +68,7 @@
     <key alias="orderName">[Order Name]</key>
     <key alias="sales">Sales</key>
     <key alias="saleInformation">Sale Information</key>
+    <key alias="merchelloGeneral_DownloadCSV">Download Order CSV</key>
     <!-- actions -->
 		<key alias="filter">Filter Orders</key>
     <key alias="capturePayment">Capture Payment</key>

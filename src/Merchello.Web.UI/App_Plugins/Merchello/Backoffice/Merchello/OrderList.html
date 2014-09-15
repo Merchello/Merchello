@@ -40,6 +40,14 @@
                             <button id="orderFilterGo" class="btn" data-ng-click="filterWithWildcard(filterText)"><localize key="merchelloGeneral_filter" /></button>
                         </div>
                     </div>
+                    <div class="form-group control-group">
+                        <label for="orderFilter" class="col-xs-2 control-label"><localize key="merchelloOrder_DownloadCSV" />:</label>
+                        <div class="col-xs-10 controls">
+                            <!-- ACTION: Filter Orders -->
+                            <a class="btn" data-ng-click="downloadOrderCSV()"><localize key="merchelloGeneral_DownloadCSV" /></a>
+                            <a id="orderDownloadCSV" data-ng-show="false"></a>
+                        </div>
+                    </div>
                 </form>
                 <merchello-slide-open-panel is-open="filterAction" classes="'well row-fluid col-xs-10 span10'">
 
@@ -102,66 +110,68 @@
                     <img src="/umbraco/assets/img/loader.gif" />
                 </div>
                 <!-- List of Sales -->
-                <table class="table table-hover merchello-selectable-table" data-ng-show="salesLoaded">
-                    <thead>
-                        <tr data-ng-show="!visible.bulkActionDropdown">
-                            <th>
-                                <input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" />
-                            </th>
-                            <th data-ng-click="changeSortOrder('invoiceNumber')" data-ng-class="{'sorted': sortProperty == 'invoiceNumber' ||  sortProperty == '-invoiceNumber'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceNumber', 'icon-navigation-down': sortProperty == '-invoiceNumber'}"></i>
-                                <localize key="merchelloOrder_invoiceNumber" />
-                            </th>
-                            <th data-ng-click="changeSortOrder('invoiceDate')" data-ng-class="{'sorted': sortProperty == 'invoiceDate' ||  sortProperty == '-invoiceDate'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceDate', 'icon-navigation-down': sortProperty == '-invoiceDate'}"></i>
-                                <localize key="general_date" />
-                            </th>
-                            <th data-ng-click="changeSortOrder('billToName')" data-ng-class="{'sorted': sortProperty == 'billToName' ||  sortProperty == '-billToName'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'billToName', 'icon-navigation-down': sortProperty == '-billToName'}"></i>
-                                <localize key="merchelloGeneral_customer" />
-                            </th>
-                            <th>
-                                <localize key="merchelloOrder_paymentStatus" />
-                            </th>
-                            <th>
-                                <localize key="merchelloOrder_fulfillmentStatus" />
-                            </th>
-                            <th>
-                                <localize key="merchelloGeneral_total" />
-                            </th>
-                        </tr>
-                        <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
-                        <tr data-ng-show="visible.bulkActionDropdown">
-                            <th><input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" /></th>
-                            <th colspan="6">
-                                <div class="btn-group">
-                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedOrderCount}} orders selected) <i class="icon-navigation-down"></i></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Print Orders</a></li>
-                                        <li><a href="#">Print Pull Lists</a></li>
-                                        <li><a href="#">Capture Payments</a></li>
-                                        <li><a href="#">Fulfill Orders</a></li>
-                                        <li><hr /></li>
-                                        <li><a href="#">Archive Orders</a></li>
-                                        <li><a href="#">Unarchive Orders</a></li>
-                                    </ul>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Invoices -->
-                        <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="updateBulkActionDropdownStatus(false, invoice.key)">
-                            <td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>
-                            <td>#<a data-ng-href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
-                            <td>{{invoice.invoiceDate | date : settings.dateFormat}}</td>
-                            <td>{{invoice.billToName}}</td>
-                            <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
-                            <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
-                            <td>{{invoice.total | currency : currencySymbol}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div id="orderListTable">
+                    <table class="table table-hover merchello-selectable-table" data-ng-show="salesLoaded">
+                        <thead>
+                            <tr data-ng-show="!visible.bulkActionDropdown">
+                                <th>
+                                    <input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" />
+                                </th>
+                                <th data-ng-click="changeSortOrder('invoiceNumber')" data-ng-class="{'sorted': sortProperty == 'invoiceNumber' ||  sortProperty == '-invoiceNumber'}">
+                                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceNumber', 'icon-navigation-down': sortProperty == '-invoiceNumber'}"></i>
+                                    <localize key="merchelloOrder_invoiceNumber" />
+                                </th>
+                                <th data-ng-click="changeSortOrder('invoiceDate')" data-ng-class="{'sorted': sortProperty == 'invoiceDate' ||  sortProperty == '-invoiceDate'}">
+                                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceDate', 'icon-navigation-down': sortProperty == '-invoiceDate'}"></i>
+                                    <localize key="general_date" />
+                                </th>
+                                <th data-ng-click="changeSortOrder('billToName')" data-ng-class="{'sorted': sortProperty == 'billToName' ||  sortProperty == '-billToName'}">
+                                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'billToName', 'icon-navigation-down': sortProperty == '-billToName'}"></i>
+                                    <localize key="merchelloGeneral_customer" />
+                                </th>
+                                <th>
+                                    <localize key="merchelloOrder_paymentStatus" />
+                                </th>
+                                <th>
+                                    <localize key="merchelloOrder_fulfillmentStatus" />
+                                </th>
+                                <th>
+                                    <localize key="merchelloGeneral_total" />
+                                </th>
+                            </tr>
+                            <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
+                            <tr data-ng-show="visible.bulkActionDropdown">
+                                <th><input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" /></th>
+                                <th colspan="6">
+                                    <div class="btn-group">
+                                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedOrderCount}} orders selected) <i class="icon-navigation-down"></i></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Print Orders</a></li>
+                                            <li><a href="#">Print Pull Lists</a></li>
+                                            <li><a href="#">Capture Payments</a></li>
+                                            <li><a href="#">Fulfill Orders</a></li>
+                                            <li><hr /></li>
+                                            <li><a href="#">Archive Orders</a></li>
+                                            <li><a href="#">Unarchive Orders</a></li>
+                                        </ul>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Invoices -->
+                            <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="updateBulkActionDropdownStatus(false, invoice.key)">
+                                <td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>
+                                <td>#<a data-ng-href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
+                                <td>{{invoice.invoiceDate | date : settings.dateFormat}}</td>
+                                <td>{{invoice.billToName}}</td>
+                                <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
+                                <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
+                                <td>{{invoice.total | currency : currencySymbol}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!-- Pagination -->
                 <div class="pager" data-ng-show="maxPages > 1">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
