@@ -41,7 +41,7 @@
                                         <th>Actions</th>
                                     </tr>
                                     <tr data-ng-repeat="payment in invoice.appliedPayments">
-                                        <td>{{payment.createDate}}</td>
+                                        <td>{{formatDate(payment.createDate)}}</td>
                                         <td>{{payment.description}}</td>
                                         <td>{{payment.amount}}</td>
                                         <td><a href="#">Void</a> | <a href="#">Refund</a></td>
