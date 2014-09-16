@@ -79,6 +79,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderCustomer.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderFulfillment.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderPaymentInfo.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderShipmentInfo.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreateActionMenu.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
@@ -334,6 +335,7 @@
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.payment.info.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\order.shipment.info.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.controller.js" />

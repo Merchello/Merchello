@@ -118,47 +118,10 @@
                         lineItem.lineItemType = matchedTypeField;
                     }
                 });
-                console.info($scope.invoice);
                 $scope.loaded = true;
-                $scope.loadPayments($scope.invoice);
+                $scope.loadShipments($scope.invoice);
             }, function (reason) {
                 notificationsService.error("Invoice Load Failed", reason.message);
-            });
-        };
-
-        /**
-         * @ngdoc method
-         * @name loadPayments
-         * @function
-         * 
-         * @description
-         * Load the payments for the provided invoice.
-         */
-        $scope.loadPayments = function (invoice) {
-            var promise = merchelloPaymentService.getAppliedPaymentsByInvoice(invoice.key);
-            promise.then(function (appliedPayments) {
-                invoice.appliedPayments = appliedPayments;
-                invoice.payments = [];
-                if (invoice.appliedPayments.length > 0) {
-                    invoice.payments = _.uniq(_.map(invoice.appliedPayments, function (appliedPayment) {
-                        return appliedPayment.payment;
-                    }));
-                }
-                _.each(invoice.appliedPayments, function (appliedPayment) {
-                    if (appliedPayment.appliedPaymentTfKey) {
-                        var matchedTypeField = _.find($scope.typeFields, function (type) {
-                            return type.typeKey == appliedPayment.appliedPaymentTfKey;
-                        });
-                        appliedPayment.appliedPaymentType = matchedTypeField;
-                    }
-                });
-                // used for rendering the payment history
-                invoice.groupedAppliedPayments = _.groupBy(invoice.appliedPayments, function (appliedPayment) {
-                    return appliedPayment.payment.paymentMethodName;
-                });
-                $scope.loadShipments($scope.invoice.key);
-            }, function (reason) {
-                notificationsService.error("Payments Load Failed", reason.message);
             });
         };
 
@@ -188,14 +151,13 @@
          * @description
          * Load the shipments associated with the provided invoice.
          */
-        $scope.loadShipments = function () {
+        $scope.loadShipments = function (invoice) {
             if ($scope.hasOrder()) {
-                var promise = merchelloShipmentService.getShipmentsByInvoice($scope.invoice);
+                var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
                 promise.then(function (shipments) {
                     $scope.invoice.shipments = _.map(shipments, function (shipment) {
                         return new merchello.Models.Shipment(shipment);
                     });
-                    console.info($scope.invoice.shipments);
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -233,7 +195,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Order.ShipmentInfoController", ['$scope', '$routeParams', 'dialogService', 'localizationService', 'notificationsService', 'merchelloInvoiceService', 'merchelloPaymentService', 'merchelloSettingsService', 'merchelloShipmentService', merchello.Controllers.PaymentInfoController]);
+    angular.module("umbraco").controller("Merchello.Editors.Order.ShipmentInfoController", ['$scope', '$routeParams', 'dialogService', 'localizationService', 'notificationsService', 'merchelloInvoiceService', 'merchelloPaymentService', 'merchelloSettingsService', 'merchelloShipmentService', merchello.Controllers.ShipmentInfoController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

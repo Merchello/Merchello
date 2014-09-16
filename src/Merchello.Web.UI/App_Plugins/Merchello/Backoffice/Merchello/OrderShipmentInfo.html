@@ -32,7 +32,6 @@
                             <a class="btn btn-default btn-action" href="">Payments</a>
                         </div>
                         <div class="row-fluid">
-                            <div>Order #ABCD from <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</div>
                             <table class="table">
                                 <tbody>
                                     <tr>
@@ -44,12 +43,14 @@
                                         <th>Tracking #</th>
                                         <th>Actions</th>
                                     </tr>
-                                    <tr data-ng-repeat="order in invoice.orders">
-                                        <td>{{order.orderNumber}}</td>
-                                        <td>{{formatDate(order.orderDate)}}</td>
+                                    <tr data-ng-repeat="shipment in invoice.shipments">
                                         <td>--</td>
-                                        <td>{{order.items.length}}</td>
-                                        <td><a href="#">Void</a> | <a href="#">Refund</a></td>
+                                        <td>{{formatDate(shipment.shippedDate)}}</td>
+                                        <td>{{shipment.carrier}}</td>
+                                        <td>{{shipment.items.length}}</td>
+                                        <td>{{shipment.toAddress1}}</td>
+                                        <td>{{shipment.trackingCode}}</td>
+                                        <td><a href="#">Edit</a></td>
                                     </tr>
                                 </tbody>
                             </table>

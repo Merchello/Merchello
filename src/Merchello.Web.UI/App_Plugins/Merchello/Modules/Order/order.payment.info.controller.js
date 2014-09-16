@@ -100,7 +100,6 @@
                         lineItem.lineItemType = matchedTypeField;
                     }
                 });
-                console.info($scope.invoice);
                 $scope.loaded = true;
                 $scope.loadPayments($scope.invoice);
             }, function (reason) {
