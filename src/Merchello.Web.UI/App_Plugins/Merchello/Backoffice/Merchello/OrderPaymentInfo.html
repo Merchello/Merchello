@@ -1,0 +1,24 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+<div data-ng-controller="Merchello.Editors.Order.PaymentInfoController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline"><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
+                </div>
+            </div>
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <!-- New Order Button -->
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-success">Print</a>
+                    </div>
+                </div>
+            </div>
+        </umb-header>
+        <merchello-panel>
+            <div class="merchello-pane">
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</div>
