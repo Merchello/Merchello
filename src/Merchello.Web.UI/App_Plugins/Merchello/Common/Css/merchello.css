@@ -509,4 +509,14 @@
   .merchello-product-picker table td {
     padding: 5px; }
 
+.merchello-product-editor .merchello-panel-body {
+  position: static; }
+.merchello-product-editor label {
+  display: block;
+  padding: 0; }
+.merchello-product-editor input, .merchello-product-editor select, .merchello-product-editor textarea {
+  margin-bottom: 10px; }
+.merchello-product-editor input[type="radio"], .merchello-product-editor input[type="checkbox"] {
+  margin-top: 4px; }
+
 /*# sourceMappingURL=merchello.css.map */
