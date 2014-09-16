@@ -65,6 +65,8 @@
                 Length = FieldAsDecimal(result, "length"),
                 Height = FieldAsDecimal(result, "height"),
                 Width = FieldAsDecimal(result, "width"),
+                Manufacturer = FieldAsString(result, "manufacturer"),
+                ManufacturerModelNumber = FieldAsString(result, "modelNumber"),
                 Barcode = result.Fields.ContainsKey("barcode") ? result.Fields["barcode"] : string.Empty,
                 Available = FieldAsBoolean(result.Fields["available"]),
                 TrackInventory = FieldAsBoolean(result.Fields["trackInventory"]),
