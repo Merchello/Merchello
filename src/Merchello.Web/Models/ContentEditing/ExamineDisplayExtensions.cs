@@ -266,7 +266,7 @@
             var value = result.Fields[alias];
 
             decimal converted;
-            return decimal.TryParse(value, out converted) ? converted : 0;
+            return decimal.TryParse(value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0;
         }
 
         /// <summary>
