@@ -69,6 +69,19 @@
 
         /**
          * @ngdoc method
+         * @name formatDate
+         * @function
+         * 
+         * @description
+         * Format the provided date to something more readable.
+         */
+        $scope.formatDate = function (date) {
+            // TODO: Provide localized date formatting.
+            return date.split('T')[0];
+        }
+
+        /**
+         * @ngdoc method
          * @name loadInvoice
          * @function
          * 
