@@ -1,20 +1,18 @@
-﻿using System;
-using System.Security;
-using Merchello.Core;
-using Merchello.Core.Persistence.Querying;
-
-namespace Merchello.Examine.DataServices
+﻿namespace Merchello.Examine.DataServices
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Models;
-    using Core.Services;
-    using Providers;
+    using System.Security;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Examine.Providers;
 
     /// <summary>
     /// The customer data service.
     /// </summary>
-    public class CustomerDataService : ICustomerDataService
+    internal class CustomerDataService : ICustomerDataService
     {
         /// <summary>
         /// The merchello context.

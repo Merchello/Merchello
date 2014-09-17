@@ -419,7 +419,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
@@ -448,7 +448,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         internal Page<Guid> GetPagedKeys(string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
@@ -487,6 +487,34 @@
             {
                 return repository.GetAll(keys.ToArray());
             }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IProductVariant"/> by it's key.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        public IProductVariant GetProductVariantByKey(Guid productVariantKey)
+        {
+            return _productVariantService.GetByKey(productVariantKey);
+        }
+
+        /// <summary>
+        /// The get product variants by product key.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariant}"/>.
+        /// </returns>
+        public IEnumerable<IProductVariant> GetProductVariantsByProductKey(Guid productKey)
+        {
+            return _productVariantService.GetByProductKey(productKey);
         }
 
         /// <summary>
@@ -532,6 +560,6 @@
             {
                 return repository.GetAll();
             }
-        }     
+        }
     }
 }
