@@ -8,7 +8,7 @@
      * @description
      * The controller for the order payment info page
      */
-    controllers.PaymentInfoController = function ($scope, $routeParams, dialogService, localizationService, notificationsService, merchelloInvoiceService, merchelloPaymentService, merchelloSettingsService) {
+    controllers.PaymentInfoController = function ($scope, $routeParams, dialogService, localizationService, notificationsService, merchelloInvoiceService, merchelloPaymentService, merchelloSettingsService, merchelloShipmentService) {
 
         //--------------------------------------------------------------------------------------
         // Initialization Methods
@@ -82,6 +82,42 @@
 
         /**
          * @ngdoc method
+         * @name hasOrder
+         * @function
+         * 
+         * @description
+         * Returns false if the invoice has no orders.
+         */
+        $scope.hasOrder = function () {
+            var result = false;
+            if ($scope.invoice.orders !== undefined) {
+                if ($scope.invoice.orders.length > 0) {
+                    result = true;
+                }
+            }
+            return result;
+        };
+
+        /**
+         * @ngdoc method
+         * @name hasShipments
+         * @function
+         * 
+         * @description
+         * Returns false if the invoice has no shipments.
+         */
+        $scope.hasShipments = function () {
+            var result = false;
+            if ($scope.invoice.shipments) {
+                if ($scope.invoice.shipments.length > 0) {
+                    result = true;
+                }
+            }
+            return result;
+        };
+
+        /**
+         * @ngdoc method
          * @name loadInvoice
          * @function
          * 
@@ -137,8 +173,7 @@
                 invoice.groupedAppliedPayments = _.groupBy(invoice.appliedPayments, function (appliedPayment) {
                     return appliedPayment.payment.paymentMethodName;
                 });
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
+                $scope.loadShipments($scope.invoice);
             }, function (reason) {
                 notificationsService.error("Payments Load Failed", reason.message);
             });
@@ -162,6 +197,28 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name loadShipments
+         * @function
+         * 
+         * @description
+         * Load the shipments associated with the provided invoice.
+         */
+        $scope.loadShipments = function (invoice) {
+            if ($scope.hasOrder()) {
+                var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
+                promise.then(function (shipments) {
+                    invoice.shipments = _.map(shipments, function (shipment) {
+                        return new merchello.Models.Shipment(shipment);
+                    });
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Shipments Load Failed", reason.message);
+                });
+            }
+        };
 
         /**
          * @ngdoc method
@@ -192,7 +249,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Editors.Order.PaymentInfoController", ['$scope', '$routeParams', 'dialogService', 'localizationService', 'notificationsService', 'merchelloInvoiceService', 'merchelloPaymentService', 'merchelloSettingsService', merchello.Controllers.PaymentInfoController]);
+    angular.module("umbraco").controller("Merchello.Editors.Order.PaymentInfoController", ['$scope', '$routeParams', 'dialogService', 'localizationService', 'notificationsService', 'merchelloInvoiceService', 'merchelloPaymentService', 'merchelloSettingsService', 'merchelloShipmentService', merchello.Controllers.PaymentInfoController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

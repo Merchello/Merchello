@@ -198,6 +198,24 @@
 
         /**
          * @ngdoc method
+         * @name hasAppliedPayments
+         * @function
+         * 
+         * @description
+         * Returns false if the invoice has no applied payments.
+         */
+        $scope.hasAppliedPayments = function () {
+            var result = false;
+            if ($scope.invoice.appliedPayments) {
+                if ($scope.invoice.appliedPayments.length > 0) {
+                    result = true;
+                }
+            }
+            return result;
+        };
+
+        /**
+         * @ngdoc method
          * @name hasOrder
          * @function
          * 
@@ -208,6 +226,24 @@
             var result = false;
             if ($scope.invoice.orders !== undefined) {
                 if ($scope.invoice.orders.length > 0) {
+                    result = true;
+                }
+            }
+            return result;
+        };
+
+        /**
+         * @ngdoc method
+         * @name hasShipments
+         * @function
+         * 
+         * @description
+         * Returns false if the invoice has no shipments.
+         */
+        $scope.hasShipments = function() {
+            var result = false;
+            if ($scope.invoice.shipments) {
+                if ($scope.invoice.shipments.length > 0) {
                     result = true;
                 }
             }
