@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
