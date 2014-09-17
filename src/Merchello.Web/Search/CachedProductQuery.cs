@@ -11,6 +11,9 @@
     using Examine;
     using global::Examine;
     using global::Examine.Providers;
+
+    using log4net.Util;
+
     using Models.ContentEditing;
     using Models.Querying;
 
@@ -61,7 +64,7 @@
         public CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider) 
             : base(service, indexProvider, searchProvider)
         {
-            _productService = (ProductService) service;
+            _productService = (ProductService)service;
         }
 
         /// <summary>
@@ -100,7 +103,15 @@
             var criteria = SearchProvider.CreateSearchCriteria();
             criteria.Field("productVariantKey", key.ToString());
 
-            return CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
+            var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
+
+            if (result != null) return result;
+
+            var variant = _productService.GetProductVariantByKey(key);
+
+            if (variant != null) this.ReindexEntity(variant);
+
+            return variant.ToProductVariantDisplay();
         }
 
 
@@ -179,6 +190,11 @@
         /// The entity.
         /// </param>
         internal override void ReindexEntity(IProduct entity)
+        {
+            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
+        }
+
+        internal void ReindexEntity(IProductVariant entity)
         {
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
