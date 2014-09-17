@@ -250,6 +250,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\ProductApiController.cs" />
     <Compile Include="Builders\BuilderTestBase.cs" />
     <Compile Include="Builders\InvoiceBuilderTests.cs" />
     <Compile Include="Builders\OrderBuilderTests.cs" />

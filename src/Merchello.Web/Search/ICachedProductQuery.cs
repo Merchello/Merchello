@@ -22,6 +22,17 @@
         ProductDisplay GetByKey(Guid key);
 
         /// <summary>
+        /// Gets a <see cref="ProductVariantDisplay"/> by it's key
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        ProductVariantDisplay GetProductVariantByKey(Guid key);
+
+        /// <summary>
         /// Searches all products
         /// </summary>
         /// <param name="page">

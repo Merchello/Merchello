@@ -41,7 +41,7 @@
 	<!-- UPDATE VERSION NUMBERS IN ASSEMBLYINFO FILES, NUSPEC AND UMBRACOPACKAGE-->
 	<Target Name="UpdateAssemblyInfo" DependsOnTargets="MakeBuildDirectory">
 		
-			<Version Major="$(VersionMajor)" Minor="$(VersionMinor)" BuildType="Automatic" RevisionType="Automatic" StartDate="07/23/2013">
+			<Version Major="$(VersionMajor)" Minor="$(VersionMinor)" BuildType="Automatic" RevisionType="Automatic" StartDate="2013-07-23">
 					<Output TaskParameter="Build" PropertyName="Build" />
 					<Output TaskParameter="Revision" PropertyName="Revision" />
 			</Version>

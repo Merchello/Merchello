@@ -8,7 +8,7 @@
      * @description
      * The controller for the product editor
      */
-    controllers.ProductEditWithOptionsController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService, merchelloProductVariantService) {
+    controllers.ProductEditWithOptionsController = function ($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, angularHelper, serverValidationManager, merchelloProductService) {
 
         //load the seperat css for the editor to avoid it blocking our js loading
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
@@ -105,17 +105,17 @@
 
                         $scope.product = product;
 
-                        if (rebuildVariants) {
-                            notificationsService.info("rebuilding Variants", "");
-                            $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
+                        //if (rebuildVariants) {
+                        //    notificationsService.info("rebuilding Variants", "");
+                        //    $scope.product = merchelloProductService.createVariantsFromOptions($scope.product);
 
-                            promise = merchelloProductService.updateProductWithVariants($scope.product, false);
-                            promise.then(function(product2) {
-                                notificationsService.success("Product Saved 2", "");
-                                $scope.product = product2;
-                                $scope.toggleAllVariants(false);
-                            });
-                        }
+                        //    promise = merchelloProductService.updateProductWithVariants($scope.product, false);
+                        //    promise.then(function(product2) {
+                        //        notificationsService.success("Product Saved 2", "");
+                        //        $scope.product = product2;
+                        //        $scope.toggleAllVariants(false);
+                        //    });
+                        //}
 
                         if (!$scope.product.hasVariants && !$scope.product.hasOptions) {
                             $location.url("/merchello/merchello/ProductEdit/" + $scope.product.key, true);
@@ -282,7 +282,7 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Editors.Product.EditWithOptionsController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', 'merchelloProductVariantService', merchello.Controllers.ProductEditWithOptionsController]);
+    angular.module("umbraco").controller("Merchello.Editors.Product.EditWithOptionsController", ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'angularHelper', 'serverValidationManager', 'merchelloProductService', merchello.Controllers.ProductEditWithOptionsController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
 

@@ -340,6 +340,14 @@ namespace Merchello.Web.Models.ContentEditing
 			destination.Exported = orderDisplay.Exported;
 
 			// TODO remove existing line items from destination not present in orderDisplay
+		    var items = destination.Items.Where(x => orderDisplay.Items.Any(display => display.Key == x.Key));
+		    var collection = new LineItemCollection();
+		    foreach (var item in items)
+		    {
+		        collection.Add(item);
+		    }
+
+		    ((Order)destination).Items = collection;
 
 			return destination;
 		}

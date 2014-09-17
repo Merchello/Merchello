@@ -332,6 +332,7 @@
     <key alias="selectMerchelloProduct">Select Merchello Product</key>
     <key alias="selectYourProduct">Select Your Product</key>
     <key alias="removeProduct">Disconnect This Product</key>
+    <key alias="itemLocation">Item Location</key>
   </area>
 
   <area alias="merchelloAuditLogs">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Builders;
 using Merchello.Core.Models;
@@ -37,7 +38,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             const int taskCount = 3;
             
             //// Act
-            var builder = new ShipmentBuilderChain(MerchelloContext, _order);
+            var builder = new ShipmentBuilderChain(MerchelloContext, _order, _order.Items.Select(x => x.Key));
 
             //// Assert
             Assert.NotNull(builder);
@@ -51,7 +52,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public void ShipmentBuilder_Creates_And_Saves_A_Shipment_And_OrderLineItems_Are_Updated()
         {
             //// Arrage
-            var builder = new ShipmentBuilderChain(MerchelloContext, _order);
+            var builder = new ShipmentBuilderChain(MerchelloContext, _order, _order.Items.Select(x => x.Key));
 
             //// Act
             var attempt = builder.Build();

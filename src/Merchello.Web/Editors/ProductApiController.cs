@@ -33,6 +33,11 @@
         private readonly IWarehouseService _warehouseService;
 
         /// <summary>
+        /// The product variant service.
+        /// </summary>
+        private readonly IProductVariantService _productVariantService;
+
+        /// <summary>
         /// The <see cref="MerchelloHelper"/>.
         /// </summary>
         private readonly MerchelloHelper _merchello;
@@ -57,7 +62,9 @@
             : base(merchelloContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
+
             _merchello = new MerchelloHelper(MerchelloContext.Services);
         }
 
@@ -75,6 +82,7 @@
             : base(merchelloContext, umbracoContext)
         {
             _productService = MerchelloContext.Services.ProductService;
+            _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
             _merchello = new MerchelloHelper(MerchelloContext.Services);
         }
@@ -93,6 +101,38 @@
         public ProductDisplay GetProduct(Guid id)
         {            
             return _merchello.Query.Product.GetByKey(id);            
+        }
+
+        /// <summary>
+        /// Returns a Product Variant by id (key)
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProductVariant/{guid}
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        public ProductVariantDisplay GetProductVariant(Guid id)
+        {
+            return _merchello.Query.Product.GetProductVariantByKey(id);
+        }
+
+        /// <summary>
+        /// Returns a Product by id (key) directly from the service
+        /// 
+        /// GET /umbraco/Merchello/ProductApi/GetProduct/{guid}
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public ProductDisplay GetProductFromService(Guid id)
+        {
+            return _productService.GetByKey(id).ToProductDisplay();
         }
 
         /// <summary>
@@ -128,128 +168,117 @@
                   query.SortDirection);
         }
 
+
         /// <summary>
-        /// Returns Product by keys separated by a comma
-        /// 
-        /// GET /umbraco/Merchello/ProductApi/GetProducts?keys={guid}&keys={guid}
+        /// Creates a new product with variants
         /// </summary>
-        /// <param name="keys"></param>
-        public IEnumerable<ProductDisplay> GetProducts([FromUri]IEnumerable<Guid> keys)
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public ProductDisplay AddProduct(ProductDisplay product)
         {
-            if (keys != null)
+            var merchProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
+
+            merchProduct = product.ToProduct(merchProduct);
+            _productService.Save(merchProduct);
+
+            // special case where a catalog was associated before the creation of the product
+            if (product.CatalogInventories.Any())
             {
-                var products = _productService.GetByKeys(keys);
-                if (products == null)
+                foreach (var cat in product.CatalogInventories)
                 {
-                    //throw new HttpResponseException(HttpStatusCode.NotFound);
+                    ((Product)merchProduct).MasterVariant.AddToCatalogInventory(cat.CatalogKey);
                 }
-
-                foreach(IProduct product in products)
-                {
-                    yield return product.ToProductDisplay();
-                }
             }
-            else
+
+            _productService.Save(merchProduct);
+
+            if (!merchProduct.ProductOptions.Any()) return merchProduct.ToProductDisplay();
+
+            var attributeLists = merchProduct.GetPossibleProductAttributeCombinations();
+
+            foreach (var list in attributeLists)
             {
-                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    Content = new StringContent(string.Format("Parameter keys is null")),
-                    ReasonPhrase = "Invalid Parameter"
-                };
-                throw new HttpResponseException(resp);
-            }
-        }
-
-        /// <summary>
-        /// Creates a product from Sku, Name, Price
-        ///
-        /// GET /umbraco/Merchello/ProductApi/NewProduct?sku=SKU&name=NAME&price=PRICE
-        /// </summary>
-        /// <param name="item"></param>
-        [AcceptVerbs("GET","POST")]
-        public ProductDisplay NewProduct(string name, string sku, decimal price)
-        {
-            Product newProduct = null;
-
-            try
-            {
-                newProduct = _productService.CreateProductWithKey(name, sku, price) as Product;
-                _productService.Save(newProduct);
-
-                newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-                _productService.Save(newProduct);
-            }
-            catch (Exception ex)
-            {
-                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                _productVariantService.CreateProductVariantWithKey(merchProduct, list.ToProductAttributeCollection());
             }
 
-            return newProduct.ToProductDisplay();
-        }
-
-        /// <summary>
-        /// Creates a product from ProductDisplay
-        ///
-        /// POST /umbraco/Merchello/ProductApi/NewProduct
-        /// </summary>
-        /// <param name="product">POSTed JSON product model</param>
-        [AcceptVerbs("GET", "POST")]
-        public ProductDisplay NewProductFromProduct(ProductDisplay product)
-        {
-            IProduct newProduct = null;
-
-            try
-            {
-                newProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
-                _productService.Save(newProduct);
-
-                newProduct.AddToCatalogInventory(_warehouseService.GetDefaultWarehouse().DefaultCatalog());
-
-                newProduct = product.ToProduct(newProduct);
-                _productService.Save(newProduct);
-            }
-            catch (Exception ex)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
-            }
-
-            return newProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay();
         }
 
         /// <summary>
         /// Updates an existing product
-        ///
+        /// 
         /// PUT /umbraco/Merchello/ProductApi/PutProduct
         /// </summary>
-        /// <param name="product">ProductDisplay object serialized from WebApi</param>
-        [AcceptVerbs("POST", "PUT")]
-        public HttpResponseMessage PutProduct(ProductDisplay product)
+        /// <param name="product">
+        /// ProductDisplay object serialized from WebApi
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [HttpPost, HttpPut]
+        public ProductDisplay PutProduct(ProductDisplay product)
+        {            
+            var merchProduct = _productService.GetByKey(product.Key);         
+            merchProduct = product.ToProduct(merchProduct);
+            _productService.Save(merchProduct);
+
+            if (!merchProduct.ProductOptions.Any()) return merchProduct.ToProductDisplay();
+
+
+
+            // verify that all attributes have been created
+            var attributeLists = merchProduct.GetPossibleProductAttributeCombinations().ToArray();
+            foreach (var list in from list in attributeLists let variant = merchProduct.GetProductVariantForPurchase(list) where variant == null select list)
+            {
+                _productVariantService.CreateProductVariantWithKey(merchProduct, list.ToProductAttributeCollection());
+            }
+
+            return merchProduct.ToProductDisplay();
+        }
+
+        //[HttpPost]
+        //public ProductVariantDisplay AddProductVariant(ProductVariantDisplay productVariant)
+        //{
+
+        //}
+
+        /// <summary>
+        /// The put product variant.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        [HttpPost, HttpPut]
+        public ProductVariantDisplay PutProductVariant(ProductVariantDisplay productVariant)
         {
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-                        
-            try
-            {
-                IProduct merchProduct = _productService.GetByKey(product.Key);
-                merchProduct = product.ToProduct(merchProduct);
+            var variant = _productVariantService.GetByKey(productVariant.Key);
+            variant = productVariant.ToProductVariant(variant);
 
-                _productService.Save(merchProduct);
+            _productVariantService.Save(variant);
 
-            }
-            catch (Exception ex) 
-            {
-                response = Request.CreateResponse(HttpStatusCode.NotFound, String.Format("{0}", ex.Message));
-            }
-
-            return response;
+            return variant.ToProductVariantDisplay();
         }
 
         /// <summary>
         /// Deletes an existing product
-        ///
+        /// 
         /// DELETE /umbraco/Merchello/ProductApi/{guid}
         /// </summary>
-        /// <param name="id"></param>
-        [AcceptVerbs("POST", "DELETE")]
+        /// <param name="id">
+        /// The key of the product to delete
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost, HttpDelete, HttpGet]
         public HttpResponseMessage DeleteProduct(Guid id)
         {
             var productToDelete = _productService.GetByKey(id);
@@ -262,5 +291,11 @@
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+
+        //[HttpPost, HttpDelete]
+        //public HttpResponseMessage DeleteProductVariant(Guid id)
+        //{
+
+        //}
     }
 }

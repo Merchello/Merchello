@@ -120,14 +120,18 @@ namespace Merchello.Web.Editors
 		/// <returns></returns>
 		public IEnumerable<ShipmentDisplay> GetShipments([FromUri]IEnumerable<Guid> ids)
 		{
-			var shipments = _shipmentService.GetByKeys(ids);
-            if (shipments == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
+            var keys = ids.Where(x => !x.Equals(Guid.Empty)).Distinct().ToArray();
+		    
+            if (!keys.Any()) return Enumerable.Empty<ShipmentDisplay>();
+		    
+            var shipments = _shipmentService.GetByKeys(keys);
+		    if (shipments == null)
+		    {
+		        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+		    }
 
-            return shipments.Select(s => s.ToShipmentDisplay());
-	    }
+		    return shipments.Select(s => s.ToShipmentDisplay());
+		}
 
         /// <summary>
         /// Gets the Shipmethod that was quoted for an order
@@ -206,12 +210,13 @@ namespace Merchello.Web.Editors
                 
                 var merchOrder = _orderService.GetByKey(order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, order.ToOrder(merchOrder));
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key));
 
                 var attempt = builder.Build();
                 
                 if (!attempt.Success)
                     throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
+
                                                                                                         
                 return attempt.Result.ToShipmentDisplay();
 
