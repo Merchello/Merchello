@@ -124,7 +124,8 @@
         /// </returns>
         public IEnumerable<T> CachedSearch<T>(ISearchCriteria criteria, Func<SearchResult, T> mapper)
         {
-            return _searchProvider.Search(criteria).Select(mapper);
+            var results = _searchProvider.Search(criteria);
+            return results.Select(mapper);
         }
 
 

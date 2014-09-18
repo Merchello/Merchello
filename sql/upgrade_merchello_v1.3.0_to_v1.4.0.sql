@@ -1,6 +1,6 @@
 ALTER TABLE merchProductVariant
 ADD versionKey UNIQUEIDENTIFIER NOT NULL
-CONSTRAINT [DF_merchProductVariant_versionKey] DEFAULT ('newid()')
+CONSTRAINT [DF_merchProductVariant_versionKey] DEFAULT (newid())
 
 GO
 
@@ -28,7 +28,7 @@ CREATE TABLE [dbo].[merchAuditLog](
 
 GO
 
-ALTER TABLE [dbo].[merchAuditLog] ADD  CONSTRAINT [DF_merchAuditLog_pk]  DEFAULT ('newid()') FOR [pk]
+ALTER TABLE [dbo].[merchAuditLog] ADD  CONSTRAINT [DF_merchAuditLog_pk]  DEFAULT (newid()) FOR [pk]
 GO
 
 ALTER TABLE [dbo].[merchAuditLog] ADD  CONSTRAINT [DF_merchAuditLog_verbosity]  DEFAULT ('0') FOR [verbosity]
