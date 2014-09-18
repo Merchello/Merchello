@@ -249,6 +249,7 @@
     <Compile Include="Configuration\RegionalProvinceConfigurationCollectionTest.cs" />
     <Compile Include="ExtendedData\ExtendedDataExtensionTests.cs" />
     <Compile Include="Mappers\AutoMapperTests.cs" />
+    <Compile Include="Models\AddressTests.cs" />
     <Compile Include="Models\BasketTests.cs" />
     <Compile Include="Configuration\MerchelloSectionTests.cs" />
     <Compile Include="Configuration\Versioning.cs" />
