@@ -355,7 +355,8 @@
         /// </returns>
         public static decimal GetPriceValue(this ExtendedDataCollection extendedData)
         {
-            return extendedData.GetValue(Constants.ExtendedDataKeys.Price).AsDecimal();
+            decimal converted = decimal.TryParse(extendedData.GetValue(Constants.ExtendedDataKeys.Price), System.Globalization.NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;
+            return converted;
         }
 
         /// <summary>
