@@ -263,10 +263,10 @@
         public static decimal FieldAsDecimal(SearchResult result, string alias)
         {
             if (!result.Fields.ContainsKey(alias)) return 0;
-            var value = result.Fields[alias];
+            string value = result.Fields[alias];
 
-            decimal converted;
-            return decimal.TryParse(value, out converted) ? converted : 0;
+            decimal converted = decimal.TryParse(value, System.Globalization.NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;
+            return converted;
         }
 
         /// <summary>
