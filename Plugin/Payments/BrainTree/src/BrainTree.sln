@@ -5,9 +5,9 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C63E81EB-22C7-4B40-BBCE-1FC5D858C380}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Plugin.Payments.BrainTree", "Merchello.Plugin.Payments.BrainTree\Merchello.Plugin.Payments.BrainTree.csproj", "{97CC0F2B-D55D-481F-A614-B509ED3D76FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Plugin.Payments.Braintree", "Merchello.Plugin.Payments.BrainTree\Merchello.Plugin.Payments.Braintree.csproj", "{97CC0F2B-D55D-481F-A614-B509ED3D76FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.BrainTree.Integration", "..\tests\Merchello.Tests.BrainTree.Integration\Merchello.Tests.BrainTree.Integration.csproj", "{8D646848-83D0-4D53-84C1-6DF39081E653}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Braintree.Integration", "..\tests\Merchello.Tests.BrainTree.Integration\Merchello.Tests.Braintree.Integration.csproj", "{8D646848-83D0-4D53-84C1-6DF39081E653}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{BE01E8CF-C0EF-4E1A-99C1-38D55D0698DB}"
 EndProject
