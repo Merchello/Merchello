@@ -1,10 +1,10 @@
-﻿namespace Merchello.Plugin.Payments.Braintree
+﻿using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
+
+namespace Merchello.Plugin.Payments.Braintree
 {
     using System;
 
     using global::Braintree;
-
-    using Merchello.Plugin.Payments.Braintree.Factories;
 
     public class BraintreeHelper
     {

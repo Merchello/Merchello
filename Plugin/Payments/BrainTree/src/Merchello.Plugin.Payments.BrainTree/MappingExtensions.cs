@@ -1,4 +1,7 @@
-﻿namespace Merchello.Plugin.Payments.Braintree
+﻿using System;
+using AutoMapper;
+
+namespace Merchello.Plugin.Payments.Braintree
 {
     using global::Braintree;
 
@@ -58,11 +61,61 @@
         /// </returns>
         public static BraintreeGateway AsBraintreeGateway(this BraintreeProviderSettings settings)
         {
-            return AutoMapper.Mapper.Map<BraintreeGateway>(settings);
+            return Mapper.Map<BraintreeGateway>(settings);
         }
 
         #endregion
 
+        #region DescriptorRequest
 
+        /// <summary>
+        /// Maps a 
+        /// </summary>
+        /// <param name="descriptor">
+        /// The descriptor.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DescriptorRequest"/>.
+        /// </returns>
+        public static DescriptorRequest AsDescriptorRequest(this MerchantDescriptor descriptor)
+        {
+            return Mapper.Map<DescriptorRequest>(descriptor);
+        }
+
+        /// <summary>
+        /// Provides and indication if any values have been set in <see cref="MerchantDescriptor"/>
+        /// </summary>
+        /// <param name="descriptor">
+        /// The descriptor.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool HasValues(this MerchantDescriptor descriptor)
+        {
+            var values = new[] { descriptor.Name, descriptor.Url, descriptor.Phone };
+            var all = string.Join(" ", values).Trim();
+
+            return !string.IsNullOrEmpty(all);
+        }
+
+        /// <summary>
+        /// Provides and indication if any values have been set in <see cref="DescriptorRequest"/>
+        /// </summary>
+        /// <param name="descriptor">
+        /// The descriptor.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool HasValues(this DescriptorRequest descriptor)
+        {
+            var values = new[] { descriptor.Name, descriptor.Url, descriptor.Phone };
+            var all = string.Join(" ", values).Trim();
+
+            return !string.IsNullOrEmpty(all);
+        }
+
+        #endregion
     }
 }

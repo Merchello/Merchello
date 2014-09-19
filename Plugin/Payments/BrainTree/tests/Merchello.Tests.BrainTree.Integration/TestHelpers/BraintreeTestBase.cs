@@ -23,7 +23,7 @@
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            this.BraintreeProviderSettings = new BraintreeProviderSettings()
+            BraintreeProviderSettings = new BraintreeProviderSettings()
                             {
                                 Environment = Environment.SANDBOX,
                                 PublicKey = ConfigurationManager.AppSettings["publicKey"],
@@ -34,10 +34,11 @@
                                         Name = ConfigurationManager.AppSettings["merchantName"],
                                         Url = ConfigurationManager.AppSettings["merchantUrl"],
                                         Phone = ConfigurationManager.AppSettings["merchantPhone"]
-                                    }
+                                    },
+                                DefaultTransactionOption = (TransactionOption)Enum.Parse(typeof(TransactionOption), ConfigurationManager.AppSettings["defaultTransactionOption"])
                             };
 
-            AutoMapper.Mapper.CreateMap<BraintreeProviderSettings, BraintreeGateway>();
+            AutoMapperMappings.CreateMappings();
 
             Gateway = BraintreeProviderSettings.AsBraintreeGateway();
         }

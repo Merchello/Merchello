@@ -1,11 +1,12 @@
-﻿namespace Merchello.Tests.Braintree.Integration.Api
+﻿using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
+
+namespace Merchello.Tests.Braintree.Integration.Api
 {
     using System;
 
     using global::Braintree;
 
     using Merchello.Plugin.Payments.Braintree;
-    using Merchello.Plugin.Payments.Braintree.Factories;
     using Merchello.Tests.Braintree.Integration.TestHelpers;
 
     using NUnit.Framework;
@@ -31,33 +32,7 @@
             }
         }
 
-        /// <summary>
-        /// Verifies that the BraintreeProviderSettings can be mapped to a BraintreeGateway
-        /// </summary>
-        [Test]
-        public void Can_Map_BrainTreeProviderSettings_To_BrainTreeGateway()
-        {
-            //// Arrange
-            
-            //// Act
-            var gateway = AutoMapper.Mapper.Map<BraintreeGateway>(this.BraintreeProviderSettings);
-
-            //// Assert
-            Assert.NotNull(gateway);
-            Assert.AreEqual(this.BraintreeProviderSettings.Environment, gateway.Environment);
-            Assert.AreEqual(this.BraintreeProviderSettings.PublicKey, gateway.PublicKey);
-            Assert.AreEqual(this.BraintreeProviderSettings.PrivateKey, gateway.PrivateKey);
-            Assert.AreEqual(this.BraintreeProviderSettings.MerchantId, gateway.MerchantId);
-        }
-
-        public void Can_Create_A_DescriptorRequest()
-        {
-            //// Arrange
-            
-            //// Act
-            
-        }
-
+        
         /// <summary>
         /// Verifies that a transaction request can be created
         /// </summary>

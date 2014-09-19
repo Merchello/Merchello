@@ -1,4 +1,6 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Controllers
+﻿using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
+
+namespace Merchello.Plugin.Payments.Braintree.Controllers
 {
     using System;
     using System.Web.Http;
@@ -8,7 +10,6 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Plugin.Payments.Braintree.Factories;
     using Merchello.Plugin.Payments.Braintree.Provider;
 
     using Umbraco.Core.Logging;
