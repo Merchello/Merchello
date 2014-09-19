@@ -65,8 +65,6 @@
                 Length = FieldAsDecimal(result, "length"),
                 Height = FieldAsDecimal(result, "height"),
                 Width = FieldAsDecimal(result, "width"),
-                Manufacturer = FieldAsString(result, "manufacturer"),
-                ManufacturerModelNumber = FieldAsString(result, "modelNumber"),
                 Barcode = result.Fields.ContainsKey("barcode") ? result.Fields["barcode"] : string.Empty,
                 Available = FieldAsBoolean(result.Fields["available"]),
                 TrackInventory = FieldAsBoolean(result.Fields["trackInventory"]),
@@ -265,10 +263,10 @@
         public static decimal FieldAsDecimal(SearchResult result, string alias)
         {
             if (!result.Fields.ContainsKey(alias)) return 0;
-            var value = result.Fields[alias];
+            string value = result.Fields[alias];
 
-            decimal converted;
-            return decimal.TryParse(value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0;
+            decimal converted = decimal.TryParse(value, System.Globalization.NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;
+            return converted;
         }
 
         /// <summary>
