@@ -11,5 +11,13 @@
         Customer GetBraintreeCustomer(Guid customerKey);
 
         Customer GetBraintreeCustomer(ICustomer customer);
+
+        string GenerateClientRequestToken();
+
+        string GenerateClientRequestToken(Guid customerKey);
+
+
     }
+
+   
 }

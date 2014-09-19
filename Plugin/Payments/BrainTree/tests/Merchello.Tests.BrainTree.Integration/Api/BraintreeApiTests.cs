@@ -18,9 +18,17 @@
         [SetUp]
         public void Setup()
         {
-            var customer = Gateway.Customer.Find(CustomerKey.ToString());
+            try
+            {
 
-            if (customer != null) Gateway.Customer.Delete(CustomerKey.ToString());
+                var customer = Gateway.Customer.Find(CustomerKey.ToString());
+
+                Gateway.Customer.Delete(CustomerKey.ToString());
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         /// <summary>
@@ -40,6 +48,14 @@
             Assert.AreEqual(this.BraintreeProviderSettings.PublicKey, gateway.PublicKey);
             Assert.AreEqual(this.BraintreeProviderSettings.PrivateKey, gateway.PrivateKey);
             Assert.AreEqual(this.BraintreeProviderSettings.MerchantId, gateway.MerchantId);
+        }
+
+        public void Can_Create_A_DescriptorRequest()
+        {
+            //// Arrange
+            
+            //// Act
+            
         }
 
         /// <summary>

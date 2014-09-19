@@ -30,6 +30,8 @@
         /// Gets or sets the merchant id.
         /// </summary>
         public string MerchantId { get; set; }
-    }
 
+        public MerchantDescriptor MerchantDescriptor { get; set; }
+        
+    }
 }

@@ -1,13 +1,15 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Factories
 {
     using System;
+    using System.Linq;
 
     using global::Braintree;
 
     using Merchello.Core.Models;
+    using Merchello.Plugin.Payments.Braintree.Models;
 
     /// <summary>
-    /// The request factory.
+    /// The <see cref="BraintreeRequestFactory"/>.
     /// </summary>
     internal class BraintreeRequestFactory
     {
@@ -30,5 +32,37 @@
                     };
         }
 
+        public CustomerRequest CreateCustomerRequest(ICustomer customer)
+        {
+            if (customer == null) throw new ArgumentNullException("customer");
+
+            return new CustomerRequest()
+                       {
+                       };
+        }
+
+        public DescriptorRequest CreateDescriptorRequest(BraintreeProviderSettings settings)
+        {
+            return new DescriptorRequest()
+                       {
+                           
+                       };
+        }
+
+        //public CreditCardRequest CreateCreditCardRequest()
+
+        public TransactionRequest CreateTransactionRequest(IInvoice invoice, string paymentMethodNonce, Func<Guid, ICustomer> getCustomer)
+        {
+            var customer = invoice.CustomerKey != null ? getCustomer(invoice.CustomerKey.Value) : null;
+
+            return new TransactionRequest()
+                       {
+                           Amount = invoice.Total,
+                           OrderId = invoice.PrefixedInvoiceNumber(),
+                           PaymentMethodNonce = paymentMethodNonce,
+                       };
+        }
     }
+
+    
 }

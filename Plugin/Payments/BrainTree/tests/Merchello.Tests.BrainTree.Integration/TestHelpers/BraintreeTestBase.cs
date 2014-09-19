@@ -28,7 +28,13 @@
                                 Environment = Environment.SANDBOX,
                                 PublicKey = ConfigurationManager.AppSettings["publicKey"],
                                 PrivateKey = ConfigurationManager.AppSettings["privateKey"],
-                                MerchantId = ConfigurationManager.AppSettings["merchantId"]
+                                MerchantId = ConfigurationManager.AppSettings["merchantId"],
+                                MerchantDescriptor = new MerchantDescriptor()
+                                    {
+                                        Name = ConfigurationManager.AppSettings["merchantName"],
+                                        Url = ConfigurationManager.AppSettings["merchantUrl"],
+                                        Phone = ConfigurationManager.AppSettings["merchantPhone"]
+                                    }
                             };
 
             AutoMapper.Mapper.CreateMap<BraintreeProviderSettings, BraintreeGateway>();
