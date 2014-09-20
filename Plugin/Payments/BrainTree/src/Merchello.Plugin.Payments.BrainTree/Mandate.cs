@@ -81,7 +81,7 @@
     public static void That<TException>(bool condition) where TException : Exception, new()
     {
 	    if (!condition)
-		    throw ActivatorHelper.CreateInstance<TException>();
+		    throw Activator.CreateInstance<TException>();
     }
 
     /// <summary>

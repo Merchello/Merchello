@@ -208,9 +208,10 @@
     <Compile Include="Caching\CacheKeys.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BraintreeApiController.cs" />
+    <Compile Include="Exceptions\BraintreeApiException.cs" />
     <Compile Include="Mandate.cs" />
     <Compile Include="Models\TransactionOption.cs" />
-    <Compile Include="Persistence\Factories\BraintreeRequestFactory.cs" />
+    <Compile Include="Services\CustomerRequestFactory.cs" />
     <Compile Include="MappingExtensions.cs" />
     <Compile Include="Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\MerchantDescriptor.cs" />

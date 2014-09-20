@@ -6,6 +6,11 @@
 
     using Merchello.Core.Models;
 
+    using Umbraco.Core;
+
+    /// <summary>
+    /// Defines the BraintreeCustomerService.
+    /// </summary>
     public interface IBraintreeCustomerService
     {
         /// <summary>
@@ -14,11 +19,16 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <param name="includeCustomerAddresses">A value indicating whether or not to include the customer addresses in the creation</param>
+        /// <param name="paymentMethodNonce">
+        /// The "nonce-from-the-client"
+        /// </param>
+        /// <param name="billingAddress">
+        /// The billing Address.
+        /// </param>
         /// <returns>
-        /// The <see cref="Customer"/>.
+        /// The <see cref="Attempt{Customer}"/>.
         /// </returns>
-        Customer Create(ICustomer customer, bool includeCustomerAddresses = true);
+        Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null);
 
         /// <summary>
         /// The update.
@@ -26,11 +36,16 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <param name="includeCustomerAddresses">A value indicating whether or not to include the customer addresses in the update</param>
+        /// <param name="paymentMethodNonce">
+        /// The "nonce-from-the-client"
+        /// </param>
+        /// <param name="billingAddress">
+        /// The billing Address.
+        /// </param>
         /// <returns>
-        /// The <see cref="Customer"/>.
+        /// The <see cref="Attempt{Customer}"/>.
         /// </returns>
-        Customer Update(ICustomer customer, bool includeCustomerAddresses = true);
+        Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null);
 
         /// <summary>
         /// Deletes the Braintree <see cref="Customer"/> corresponding with the Merchello <see cref="ICustomer"/>
@@ -38,7 +53,10 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        void Delete(ICustomer customer);
+        /// <returns>
+        /// The true of false indicating the delete success.
+        /// </returns>
+        bool Delete(ICustomer customer);
 
         /// <summary>
         /// Gets the Braintree <see cref="Customer"/> corresponding to the Merchello <see cref="ICustomer"/>
@@ -46,10 +64,11 @@
         /// <param name="customerKey">
         /// The customer key.
         /// </param>
+        /// <param name="createOnNotFound">True or false indicating whether or not the customer should be automatically created if not found</param>
         /// <returns>
         /// The <see cref="Customer"/>.
         /// </returns>
-        Customer GetBraintreeCustomer(Guid customerKey);
+        Customer GetBraintreeCustomer(Guid customerKey, bool createOnNotFound = true);
 
         /// <summary>
         /// Gets the Braintree <see cref="Customer"/> corresponding to the Merchello <see cref="ICustomer"/>
@@ -57,10 +76,13 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
+        /// <param name="createOnNotFound">
+        /// True or false indicating whether or not the customer should be automatically created if not found
+        /// </param>
         /// <returns>
         /// The <see cref="Customer"/>.
         /// </returns>
-        Customer GetBraintreeCustomer(ICustomer customer);
+        Customer GetBraintreeCustomer(ICustomer customer, bool createOnNotFound = true);
 
         /// <summary>
         /// Generates a ClientRequestToken for an anonymous customer

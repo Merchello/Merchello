@@ -1,6 +1,4 @@
-﻿using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
-
-namespace Merchello.Plugin.Payments.Braintree.Controllers
+﻿namespace Merchello.Plugin.Payments.Braintree.Controllers
 {
     using System;
     using System.Web.Http;
@@ -11,6 +9,7 @@ namespace Merchello.Plugin.Payments.Braintree.Controllers
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Plugin.Payments.Braintree.Provider;
+    using Merchello.Plugin.Payments.Braintree.Services;
 
     using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
@@ -28,9 +27,9 @@ namespace Merchello.Plugin.Payments.Braintree.Controllers
         private readonly BraintreeGateway _gateway;
 
         /// <summary>
-        /// The <see cref="BraintreeRequestFactory"/>.
+        /// The <see cref="CustomerRequestFactory"/>.
         /// </summary>
-        private readonly BraintreeRequestFactory _requestFactory;
+        private readonly CustomerRequestFactory _requestFactory;
 
         private readonly ICustomerService _customerService;
 
@@ -65,7 +64,7 @@ namespace Merchello.Plugin.Payments.Braintree.Controllers
 
             _gateway = provider.ExtendedData.GetBrainTreeProviderSettings().AsBraintreeGateway();
 
-            _requestFactory = new BraintreeRequestFactory();
+            _requestFactory = new CustomerRequestFactory();
         }
 
         /// <summary>

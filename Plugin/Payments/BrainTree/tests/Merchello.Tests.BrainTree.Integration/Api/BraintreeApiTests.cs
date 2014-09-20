@@ -1,12 +1,11 @@
-﻿using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
-
-namespace Merchello.Tests.Braintree.Integration.Api
+﻿namespace Merchello.Tests.Braintree.Integration.Api
 {
     using System;
 
     using global::Braintree;
 
     using Merchello.Plugin.Payments.Braintree;
+    using Merchello.Plugin.Payments.Braintree.Services;
     using Merchello.Tests.Braintree.Integration.TestHelpers;
 
     using NUnit.Framework;
@@ -28,6 +27,7 @@ namespace Merchello.Tests.Braintree.Integration.Api
             }
             catch (Exception)
             {
+                // skip it
 
             }
         }
@@ -45,7 +45,7 @@ namespace Merchello.Tests.Braintree.Integration.Api
             var request = new TransactionRequest()
                               {
                                   Amount = 100M,
-                                  PaymentMethodNonce = "nonce-from-the-client"
+                                  PaymentMethodNonce = TestHelper.PaymentMethodNonce
                               };
 
             //// Act
@@ -83,7 +83,7 @@ namespace Merchello.Tests.Braintree.Integration.Api
         public void Can_Generate_A_ClientTokenRequest_And_GetToken()
         {
             //// Arrange
-            var factory = new BraintreeRequestFactory();
+            var factory = new CustomerRequestFactory();
 
             var request = factory.CreateClientTokenRequest(Guid.Empty);
 
@@ -99,9 +99,9 @@ namespace Merchello.Tests.Braintree.Integration.Api
         public void Can_Generate_A_ClientTokenRequest_For_A_Customer_And_GetToken()
         {
             //// Arrange
-            var factory = new BraintreeRequestFactory();
+            var factory = new CustomerRequestFactory();
 
-            var request = factory.CreateClientTokenRequest(CustomerKey);
+            var request = factory.CreateClientTokenRequest(Guid.Empty);
 
             //// Act
             var token = Gateway.ClientToken.generate(request);

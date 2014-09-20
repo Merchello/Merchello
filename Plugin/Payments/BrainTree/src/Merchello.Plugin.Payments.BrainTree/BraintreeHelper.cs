@@ -1,10 +1,10 @@
-﻿using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
-
-namespace Merchello.Plugin.Payments.Braintree
+﻿namespace Merchello.Plugin.Payments.Braintree
 {
     using System;
 
     using global::Braintree;
+
+    using Merchello.Plugin.Payments.Braintree.Services;
 
     public class BraintreeHelper
     {
@@ -13,7 +13,7 @@ namespace Merchello.Plugin.Payments.Braintree
         /// </summary>
         private readonly BraintreeGateway _gateway;
 
-        private readonly Lazy<BraintreeRequestFactory> _factory = new Lazy<BraintreeRequestFactory>(() => new BraintreeRequestFactory());
+        private readonly Lazy<CustomerRequestFactory> _factory = new Lazy<CustomerRequestFactory>(() => new CustomerRequestFactory());
 
         public BraintreeHelper(BraintreeGateway gateway)
         {
