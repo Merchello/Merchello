@@ -31,7 +31,16 @@
         /// </summary>
         public string MerchantId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the merchant descriptor.
+        /// </summary>
         public MerchantDescriptor MerchantDescriptor { get; set; }
-        
+
+
+        /// <summary>
+        /// Gets or sets the default transaction option.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TransactionOption DefaultTransactionOption { get; set; }        
     }
 }

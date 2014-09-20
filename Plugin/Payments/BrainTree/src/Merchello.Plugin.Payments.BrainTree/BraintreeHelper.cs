@@ -4,7 +4,7 @@
 
     using global::Braintree;
 
-    using Merchello.Plugin.Payments.Braintree.Factories;
+    using Merchello.Plugin.Payments.Braintree.Services;
 
     public class BraintreeHelper
     {
@@ -13,7 +13,7 @@
         /// </summary>
         private readonly BraintreeGateway _gateway;
 
-        private readonly Lazy<BraintreeRequestFactory> _factory = new Lazy<BraintreeRequestFactory>(() => new BraintreeRequestFactory());
+        private readonly Lazy<CustomerRequestFactory> _factory = new Lazy<CustomerRequestFactory>(() => new CustomerRequestFactory());
 
         public BraintreeHelper(BraintreeGateway gateway)
         {

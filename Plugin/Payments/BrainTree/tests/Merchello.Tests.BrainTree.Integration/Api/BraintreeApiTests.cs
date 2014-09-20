@@ -5,7 +5,7 @@
     using global::Braintree;
 
     using Merchello.Plugin.Payments.Braintree;
-    using Merchello.Plugin.Payments.Braintree.Factories;
+    using Merchello.Plugin.Payments.Braintree.Services;
     using Merchello.Tests.Braintree.Integration.TestHelpers;
 
     using NUnit.Framework;
@@ -27,37 +27,12 @@
             }
             catch (Exception)
             {
+                // skip it
 
             }
         }
 
-        /// <summary>
-        /// Verifies that the BraintreeProviderSettings can be mapped to a BraintreeGateway
-        /// </summary>
-        [Test]
-        public void Can_Map_BrainTreeProviderSettings_To_BrainTreeGateway()
-        {
-            //// Arrange
-            
-            //// Act
-            var gateway = AutoMapper.Mapper.Map<BraintreeGateway>(this.BraintreeProviderSettings);
-
-            //// Assert
-            Assert.NotNull(gateway);
-            Assert.AreEqual(this.BraintreeProviderSettings.Environment, gateway.Environment);
-            Assert.AreEqual(this.BraintreeProviderSettings.PublicKey, gateway.PublicKey);
-            Assert.AreEqual(this.BraintreeProviderSettings.PrivateKey, gateway.PrivateKey);
-            Assert.AreEqual(this.BraintreeProviderSettings.MerchantId, gateway.MerchantId);
-        }
-
-        public void Can_Create_A_DescriptorRequest()
-        {
-            //// Arrange
-            
-            //// Act
-            
-        }
-
+        
         /// <summary>
         /// Verifies that a transaction request can be created
         /// </summary>
@@ -70,7 +45,7 @@
             var request = new TransactionRequest()
                               {
                                   Amount = 100M,
-                                  PaymentMethodNonce = "nonce-from-the-client"
+                                  PaymentMethodNonce = TestHelper.PaymentMethodNonce
                               };
 
             //// Act
@@ -108,7 +83,7 @@
         public void Can_Generate_A_ClientTokenRequest_And_GetToken()
         {
             //// Arrange
-            var factory = new BraintreeRequestFactory();
+            var factory = new CustomerRequestFactory();
 
             var request = factory.CreateClientTokenRequest(Guid.Empty);
 
@@ -124,9 +99,9 @@
         public void Can_Generate_A_ClientTokenRequest_For_A_Customer_And_GetToken()
         {
             //// Arrange
-            var factory = new BraintreeRequestFactory();
+            var factory = new CustomerRequestFactory();
 
-            var request = factory.CreateClientTokenRequest(CustomerKey);
+            var request = factory.CreateClientTokenRequest(Guid.Empty);
 
             //// Act
             var token = Gateway.ClientToken.generate(request);

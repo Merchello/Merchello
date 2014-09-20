@@ -16,6 +16,14 @@
         }
 
         /// <summary>
+        /// Gets the transaction channel.
+        /// </summary>
+        public static string TransactionChannel
+        {
+            get { return "MerchelloBraintreePaymentProvider"; }
+        }
+
+        /// <summary>
         /// Constant ExtendedDataCollection keys
         /// </summary>
         public static class ExtendedDataKeys

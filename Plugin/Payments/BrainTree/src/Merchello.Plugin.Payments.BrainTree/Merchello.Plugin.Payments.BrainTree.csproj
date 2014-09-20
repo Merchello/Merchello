@@ -200,13 +200,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="BraintreeHelper.cs" />
+    <Compile Include="Builders\IBuilder.cs" />
+    <Compile Include="Builders\InvoiceTransactionRequestBuilder.cs" />
+    <Compile Include="Builders\RequestBuilderBase.cs" />
+    <Compile Include="Caching\CacheKeys.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BraintreeApiController.cs" />
-    <Compile Include="Factories\BraintreeRequestFactory.cs" />
+    <Compile Include="Exceptions\BraintreeApiException.cs" />
+    <Compile Include="Mandate.cs" />
+    <Compile Include="Models\TransactionOption.cs" />
+    <Compile Include="Services\CustomerRequestFactory.cs" />
     <Compile Include="MappingExtensions.cs" />
     <Compile Include="Models\BraintreeProviderSettings.cs" />
-    <Compile Include="Models\CreditCardFormData.cs" />
     <Compile Include="Models\MerchantDescriptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
@@ -214,6 +221,8 @@
     <Compile Include="Provider\BraintreePaymentGatewayProvider.cs" />
     <Compile Include="Provider\IBraintreePaymentGatewayMethod.cs" />
     <Compile Include="Provider\IBraintreePaymentGatewayProvider2.cs" />
+    <Compile Include="Services\BraintreeCustomerService.cs" />
+    <Compile Include="Services\BraintreeServiceBase.cs" />
     <Compile Include="Services\IBraintreeCustomerService.cs" />
     <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
@@ -225,9 +234,7 @@
     <Content Include="App_Plugins\Merchello.Braintree\paymentmethod.html" />
     <Content Include="App_Plugins\Merchello.Braintree\providerSettingsDialog.html" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Persistence\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -40,7 +40,7 @@
 
             GatewayProviderService.Saving += GatewayProviderServiceOnSaving;
 
-            AutoMapper.Mapper.CreateMap<BraintreeProviderSettings, BraintreeGateway>();
+            AutoMapperMappings.CreateMappings();
         }
 
         /// <summary>

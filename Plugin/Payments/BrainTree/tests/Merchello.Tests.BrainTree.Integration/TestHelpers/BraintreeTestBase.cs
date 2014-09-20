@@ -1,16 +1,15 @@
 ﻿namespace Merchello.Tests.Braintree.Integration.TestHelpers
 {
     using System;
-    using System.Configuration;
 
     using global::Braintree;
 
+    using Merchello.Core.Persistence.UnitOfWork;
+    using Merchello.Core.Services;
     using Merchello.Plugin.Payments.Braintree;
     using Merchello.Plugin.Payments.Braintree.Models;
 
     using NUnit.Framework;
-
-    using Environment = global::Braintree.Environment;
 
     public abstract class BraintreeTestBase
     {
@@ -21,23 +20,15 @@
         protected BraintreeGateway Gateway;
 
         [TestFixtureSetUp]
-        public void TestFixtureSetup()
+        public virtual void TestFixtureSetup()
         {
-            this.BraintreeProviderSettings = new BraintreeProviderSettings()
-                            {
-                                Environment = Environment.SANDBOX,
-                                PublicKey = ConfigurationManager.AppSettings["publicKey"],
-                                PrivateKey = ConfigurationManager.AppSettings["privateKey"],
-                                MerchantId = ConfigurationManager.AppSettings["merchantId"],
-                                MerchantDescriptor = new MerchantDescriptor()
-                                    {
-                                        Name = ConfigurationManager.AppSettings["merchantName"],
-                                        Url = ConfigurationManager.AppSettings["merchantUrl"],
-                                        Phone = ConfigurationManager.AppSettings["merchantPhone"]
-                                    }
-                            };
+            BraintreeProviderSettings = TestHelper.GetBraintreeProviderSettings();
 
-            AutoMapper.Mapper.CreateMap<BraintreeProviderSettings, BraintreeGateway>();
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
+
+            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
+            
+            AutoMapperMappings.CreateMappings();
 
             Gateway = BraintreeProviderSettings.AsBraintreeGateway();
         }
