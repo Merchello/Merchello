@@ -4,14 +4,12 @@
 
     using global::Braintree;
 
-    using Merchello.Core.Persistence.UnitOfWork;
-    using Merchello.Core.Services;
     using Merchello.Plugin.Payments.Braintree;
     using Merchello.Plugin.Payments.Braintree.Models;
 
     using NUnit.Framework;
 
-    public abstract class BraintreeTestBase
+    public abstract class BraintreeTestBase 
     {
         protected BraintreeProviderSettings BraintreeProviderSettings;
 
@@ -19,18 +17,17 @@
 
         protected BraintreeGateway Gateway;
 
+
         [TestFixtureSetUp]
         public virtual void TestFixtureSetup()
         {
+
             BraintreeProviderSettings = TestHelper.GetBraintreeProviderSettings();
 
-            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
-
-            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
-            
             AutoMapperMappings.CreateMappings();
 
             Gateway = BraintreeProviderSettings.AsBraintreeGateway();
+
         }
     }
 }

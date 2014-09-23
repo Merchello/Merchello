@@ -1,4 +1,4 @@
-﻿namespace Merchello.Tests.Braintree.Integration.TestHelpers
+﻿namespace Merchello.Tests.Base.SqlSyntax
 {
     internal enum DbSyntax
     {

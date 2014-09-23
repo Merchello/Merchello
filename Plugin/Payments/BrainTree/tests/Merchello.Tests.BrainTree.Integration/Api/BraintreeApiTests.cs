@@ -14,7 +14,6 @@
     public class BraintreeApiTests : BraintreeTestBase
     {
 
-
         [SetUp]
         public void Setup()
         {
@@ -64,7 +63,7 @@
 
             var customerRequest = new CustomerRequest()
                                       {
-                                          Id = CustomerKey.ToString(),
+                                          CustomerId = CustomerKey.ToString(),
                                           FirstName = "Rusty",
                                           LastName = "Swayne",
                                           Company = "Mindfly",
