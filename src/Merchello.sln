@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251
 		..\build\NuSpec\Merchello.Core.nuspec = ..\build\NuSpec\Merchello.Core.nuspec
 		..\tools\Merchello\Merchello.props = ..\tools\Merchello\Merchello.props
 		..\tools\Merchello\Merchello.targets = ..\tools\Merchello\Merchello.targets
+		..\build\NuSpec\Merchello.TestsBase.nuspec = ..\build\NuSpec\Merchello.TestsBase.nuspec
 		..\build\Merchello.Version.props = ..\build\Merchello.Version.props
 		..\build\package.xml = ..\build\package.xml
 		..\build\readme.md = ..\build\readme.md

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Merchello.Core.Models.Rdbms;
 using Merchello.Core.Persistence.Migrations.Initial;
+using Merchello.Tests.Base.TestHelpers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Umbraco.Core.Persistence;
