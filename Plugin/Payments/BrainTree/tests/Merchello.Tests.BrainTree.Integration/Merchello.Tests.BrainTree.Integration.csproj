@@ -83,15 +83,18 @@
     </Reference>
     <Reference Include="Merchello.Core, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Tests.Base">
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Tests.Base.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.6\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>

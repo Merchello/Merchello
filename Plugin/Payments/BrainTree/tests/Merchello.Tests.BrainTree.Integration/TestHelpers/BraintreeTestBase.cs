@@ -1,4 +1,6 @@
-﻿namespace Merchello.Tests.Braintree.Integration.TestHelpers
+﻿using Merchello.Tests.Base.TestHelpers;
+
+namespace Merchello.Tests.Braintree.Integration.TestHelpers
 {
     using System;
 
