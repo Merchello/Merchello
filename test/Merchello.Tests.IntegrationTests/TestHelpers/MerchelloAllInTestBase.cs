@@ -2,9 +2,7 @@
 using System.Globalization;
 using Examine;
 using Merchello.Core;
-using Merchello.Core.Gateways;
 using Merchello.Core.Models;
-using Merchello.Core.ObjectResolution;
 using Merchello.Core.Services;
 using Merchello.Examine;
 using Merchello.Web;

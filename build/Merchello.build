@@ -77,8 +77,8 @@
 			<Exec WorkingDirectory="$(PackageDir)" Command="..\..\..\src\.nuget\NuGet.exe pack ..\..\..\build\nuspec\Merchello.Core.nuspec" />
 
 		<Message Text="Finished NuGet Pack Merchello.Core.$(AssemblyInformationVersion).nupkg" Importance="high" />
-		
-	</Target>
+
+  </Target>
 	
 	
 	

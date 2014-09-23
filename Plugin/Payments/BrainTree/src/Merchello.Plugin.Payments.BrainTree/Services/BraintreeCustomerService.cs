@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
+    using System.Web.Configuration;
+
     using global::Braintree;
     using Core;
     using Core.Models;
@@ -69,7 +71,7 @@
 
             if (result.IsSuccess())
             {
-                return Attempt.Succeed((Customer)RuntimeCache.GetCacheItem(Caching.CacheKeys.BraintreeCustomer(customer.Key), () => result.Target));
+                return Attempt.Succeed((Customer)RuntimeCache.GetCacheItem(MakeCacheKey(customer), () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
@@ -91,7 +93,24 @@
         /// </returns>
         public Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null)
         {
-            throw new NotImplementedException();
+            if (!Exists(customer)) return Attempt<Customer>.Fail(new NullReferenceException("Could not finde matching Braintree customer."));
+
+            var request = _requestFactory.Value.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress, true);
+
+            var result = BraintreeGateway.Customer.Update(customer.Key.ToString(), request);
+
+            if (result.IsSuccess())
+            {
+                var cacheKey = MakeCacheKey(customer);
+                RuntimeCache.ClearCacheItem(cacheKey);
+
+                return Attempt<Customer>.Succeed((Customer)RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
+            }
+
+            var error = new BraintreeApiException(result.Errors);
+            LogHelper.Error<BraintreeCustomerService>("Braintree API Customer Create return a failure", error);
+
+            return Attempt<Customer>.Fail(error);
         }
 
         /// <summary>
@@ -108,7 +127,7 @@
             if (!this.Exists(customer)) return false;
            
             BraintreeGateway.Customer.Delete(customer.Key.ToString());
-            RuntimeCache.ClearCacheItem(Caching.CacheKeys.BraintreeCustomer(customer.Key));
+            RuntimeCache.ClearCacheItem(MakeCacheKey(customer));
 
             return true;
         }
@@ -148,7 +167,9 @@
 
             if (Exists(customer))
             {
-                return (Customer)RuntimeCache.GetCacheItem(Caching.CacheKeys.BraintreeCustomer(customer.Key), () => BraintreeGateway.Customer.Find(customer.Key.ToString()));
+                var cacheKey = MakeCacheKey(customer);
+
+                return (Customer)RuntimeCache.GetCacheItem(cacheKey, () => BraintreeGateway.Customer.Find(customer.Key.ToString()));
             }
 
             if (!createOnNotFound) return null;
@@ -202,7 +223,7 @@
         {
             try
             {
-                var braintreeCustomer = RuntimeCache.GetCacheItem(Caching.CacheKeys.BraintreeCustomer(customer.Key), () => BraintreeGateway.Customer.Find(customer.Key.ToString()));
+                var braintreeCustomer = RuntimeCache.GetCacheItem(MakeCacheKey(customer), () => BraintreeGateway.Customer.Find(customer.Key.ToString()));
 
                 return braintreeCustomer != null;
             }
@@ -210,6 +231,12 @@
             {
                 return false;
             }
+        }
+
+
+        private string MakeCacheKey(ICustomer customer)
+        {
+            return Caching.CacheKeys.BraintreeCustomer(customer.Key);
         }
     }
 }
