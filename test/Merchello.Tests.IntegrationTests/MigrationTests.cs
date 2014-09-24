@@ -1,4 +1,5 @@
-﻿using Merchello.Tests.IntegrationTests.TestHelpers;
+﻿using Merchello.Tests.Base.TestHelpers;
+using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests
