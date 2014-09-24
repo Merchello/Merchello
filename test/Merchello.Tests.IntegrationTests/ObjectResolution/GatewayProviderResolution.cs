@@ -6,6 +6,7 @@ using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Taxation;
+using Merchello.Tests.Base.TestHelpers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 using Umbraco.Core;

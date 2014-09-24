@@ -77,8 +77,15 @@
 			<Exec WorkingDirectory="$(PackageDir)" Command="..\..\..\src\.nuget\NuGet.exe pack ..\..\..\build\nuspec\Merchello.Core.nuspec" />
 
 		<Message Text="Finished NuGet Pack Merchello.Core.$(AssemblyInformationVersion).nupkg" Importance="high" />
-		
-	</Target>
+
+
+    <Message Text="Beginning NuGet Pack Merchello.TestBase.$(AssemblyInformationVersion).nupkg" Importance="high" />
+
+    <Exec WorkingDirectory="$(PackageDir)" Command="..\..\..\src\.nuget\NuGet.exe pack ..\..\..\build\nuspec\Merchello.TestsBase.nuspec" />
+
+    <Message Text="Finished NuGet Pack Merchello.TestBase.$(AssemblyInformationVersion).nupkg" Importance="high" />
+    
+  </Target>
 	
 	
 	

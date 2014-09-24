@@ -1,4 +1,6 @@
-﻿namespace Merchello.Tests.IntegrationTests.Invoices
+﻿using Merchello.Tests.Base.TestHelpers;
+
+namespace Merchello.Tests.IntegrationTests.Invoices
 {
     using System.Linq;
 

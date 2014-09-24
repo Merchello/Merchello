@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Merchello.TestsBase</id>
+    <version>1.4.1</version>
+    <title>Merchello Test Helpers</title>
+    <authors>Rusty Swayne</authors>
+    <owners>Mindfly, Inc.</owners>
+    <licenseUrl>https://github.com/meritage/Merchello/blob/master/License.md</licenseUrl>
+    <projectUrl>http://merchello.com</projectUrl>
+    <iconUrl>http://merchello.com/icon40x40-transparent.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Contains Merchello test assemblies intended to assist in Merchello plugin testing.</description>
+    <summary>Contains Merchello test assemblies intended to assist in Merchello plugin testing.</summary>
+    <language>en-US</language>
+    <tags>umbraco, merchello</tags>
+    <dependencies />
+  </metadata>
+  <files>
+    <file src="..\Temp\bin\Merchello.Tests.Base.dll" target="lib\net40\Merchello.Tests.Base.dll" />
+    <file src="..\Temp\bin\Merchello.Tests.Base.pdb" target="lib\net40\Merchello.Tests.Base.pdb" />
+    <file src="..\Temp\bin\Merchello.Core.dll" target="lib\net40\Merchello.Core.dll" />
+    <file src="..\Temp\bin\Merchello.Core.pdb" target="lib\net40\Merchello.Core.pdb" />
+    <file src="..\Temp\bin\Merchello.Web.dll" target="lib\net40\Merchello.Web.dll" />
+    <file src="..\Temp\bin\Merchello.Web.pdb" target="lib\net40\Merchello.Web.pdb" />
+    <file src="..\Temp\bin\Merchello.Examine.dll" target="lib\net40\Merchello.Examine.dll" />
+    <file src="..\Temp\bin\Merchello.Examine.pdb" target="lib\net40\Merchello.Examine.pdb" />
+  </files>
+</package>

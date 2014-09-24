@@ -1,4 +1,6 @@
-﻿namespace Merchello.Tests.IntegrationTests.Reports
+﻿using Merchello.Tests.Base.TestHelpers;
+
+namespace Merchello.Tests.IntegrationTests.Reports
 {
     using System.Linq;
 

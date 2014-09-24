@@ -116,9 +116,9 @@
       <HintPath>..\..\src\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\..\src\packages\Moq.4.2.1408.0717\lib\net40\Moq.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Moq, Version=4.2.1409.1722, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\src\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\src\packages\MySql.Data.6.6.5\lib\net40\MySql.Data.dll</HintPath>
@@ -268,6 +268,8 @@
     <Compile Include="Services\ServiceTestsBase.cs" />
     <Compile Include="SqlSyntax\DbSyntax.cs" />
     <Compile Include="SqlSyntax\SqlSyntaxProviderTestHelper.cs" />
+    <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
+    <Compile Include="TestHelpers\MerchelloAllInTestBase.cs" />
     <Compile Include="TypeFields\TypeFieldMock.cs" />
     <Compile Include="SqlSyntax\BaseUsingSqlServerSyntax.cs" />
     <Compile Include="Umbraco\ApplicationContext\FakeUmbracoApplication.cs" />
@@ -277,6 +279,10 @@
     <ProjectReference Include="..\..\src\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
       <Name>Merchello.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Merchello.Examine\Merchello.Examine.csproj">
+      <Project>{28a665a9-2aad-4230-ab8c-0f0b0f1b2115}</Project>
+      <Name>Merchello.Examine</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Merchello.Web\Merchello.Web.csproj">
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>

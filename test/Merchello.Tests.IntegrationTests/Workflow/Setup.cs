@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Merchello.Tests.Base.TestHelpers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 
