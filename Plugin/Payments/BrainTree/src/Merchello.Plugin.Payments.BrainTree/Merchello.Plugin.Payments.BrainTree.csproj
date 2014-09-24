@@ -200,6 +200,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\BraintreeApiProvider.cs" />
+    <Compile Include="Api\BraintreePaymentMethodApiProvider.cs" />
+    <Compile Include="Api\BraintreeSubscriptionApiProvider.cs" />
+    <Compile Include="Api\BraintreeTransactionApiProvider.cs" />
+    <Compile Include="Api\IBraintreeApiProvider.cs" />
+    <Compile Include="Api\IBraintreePaymentMethodApiProvider.cs" />
+    <Compile Include="Api\IBraintreeSubscriptionApiProvider.cs" />
+    <Compile Include="Api\IBraintreeTransactionApiProvider.cs" />
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="BraintreeHelper.cs" />
     <Compile Include="Builders\IBuilder.cs" />
@@ -211,7 +219,7 @@
     <Compile Include="Exceptions\BraintreeApiException.cs" />
     <Compile Include="Mandate.cs" />
     <Compile Include="Models\TransactionOption.cs" />
-    <Compile Include="Services\CustomerRequestFactory.cs" />
+    <Compile Include="Persistence\Factories\BraintreeApiRequestFactory.cs" />
     <Compile Include="MappingExtensions.cs" />
     <Compile Include="Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\MerchantDescriptor.cs" />
@@ -220,10 +228,10 @@
     <Compile Include="Provider\BraintreePaymentGatewayMethod.cs" />
     <Compile Include="Provider\BraintreePaymentGatewayProvider.cs" />
     <Compile Include="Provider\IBraintreePaymentGatewayMethod.cs" />
-    <Compile Include="Provider\IBraintreePaymentGatewayProvider2.cs" />
-    <Compile Include="Services\BraintreeCustomerService.cs" />
-    <Compile Include="Services\BraintreeServiceBase.cs" />
-    <Compile Include="Services\IBraintreeCustomerService.cs" />
+    <Compile Include="Provider\IBraintreePaymentGatewayProvider.cs" />
+    <Compile Include="Api\BraintreeCustomerApiProvider.cs" />
+    <Compile Include="Api\BraintreeApiProviderBase.cs" />
+    <Compile Include="Api\IBraintreeCustomerApiProvider.cs" />
     <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>

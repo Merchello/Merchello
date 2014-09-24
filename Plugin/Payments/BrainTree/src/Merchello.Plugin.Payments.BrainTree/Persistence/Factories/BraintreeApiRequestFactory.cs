@@ -1,15 +1,16 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Services
+﻿namespace Merchello.Plugin.Payments.Braintree.Persistence.Factories
 {
     using System;
 
     using global::Braintree;
 
     using Merchello.Core.Models;
+    using Merchello.Plugin.Payments.Braintree.Models;
 
     /// <summary>
-    /// The <see cref="CustomerRequestFactory"/>.
+    /// The <see cref="BraintreeApiRequestFactory"/>.
     /// </summary>
-    internal class CustomerRequestFactory
+    internal class BraintreeApiRequestFactory
     {
         /// <summary>
         /// Creates a <see cref="ClientTokenRequest"/>.
@@ -45,6 +46,7 @@
 
             return new CustomerRequest()
                        {
+                           Id = customer.Key.ToString(),
                            CustomerId = customer.Key.ToString(),
                            FirstName = customer.FirstName,
                            LastName = customer.LastName,
@@ -66,7 +68,7 @@
         /// </returns>
         public CustomerRequest CreateCustomerRequest(ICustomer customer, string paymentMethodNonce)
         {
-            var request = CreateCustomerRequest(customer);
+            var request = this.CreateCustomerRequest(customer);
             if (!string.IsNullOrEmpty(paymentMethodNonce)) request.PaymentMethodNonce = paymentMethodNonce;
             return request;
         }
@@ -88,9 +90,9 @@
         /// </exception>
         public CustomerRequest CreateCustomerRequest(ICustomer customer, string paymentMethodNonce, IAddress billingAddress, bool isUpdate = false)
         {
-            var request = CreateCustomerRequest(customer);
+            var request = this.CreateCustomerRequest(customer);
 
-            if (!string.IsNullOrEmpty(paymentMethodNonce)) request.CreditCard = CreateCreditCardRequest(paymentMethodNonce, billingAddress, isUpdate);
+            if (!string.IsNullOrEmpty(paymentMethodNonce)) request.CreditCard = this.CreateCreditCardRequest(paymentMethodNonce, billingAddress, isUpdate);
 
             return request;
         }
@@ -111,7 +113,7 @@
         /// </remarks>
         public CreditCardRequest CreateCreditCardRequest(string paymentMethodNonce, IAddress billingAddress = null, bool isUpdate = false)
         {
-            return CreateCreditCardRequest(paymentMethodNonce, new CreditCardOptionsRequest() { VerifyCard = true }, billingAddress, isUpdate);
+            return this.CreateCreditCardRequest(paymentMethodNonce, new CreditCardOptionsRequest() { VerifyCard = true }, billingAddress, isUpdate);
         }
 
         /// <summary>
@@ -169,6 +171,68 @@
                            CountryCodeAlpha2 = address.CountryCode,
                            Options = new CreditCardAddressOptionsRequest() { UpdateExisting = isUpdate }
                        };
+        }
+
+        /// <summary>
+        /// Creates an <see cref="AddressRequest"/>.
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="AddressRequest"/>.
+        /// </returns>
+        public AddressRequest CreateAddressRequest(IAddress address)
+        {
+            return new AddressRequest()
+                       {
+                           FirstName = address.TrySplitFirstName(),
+                           LastName = address.TrySplitLastName(),
+                           Company = address.Organization,
+                           StreetAddress = address.Address1,
+                           ExtendedAddress = address.Address2,
+                           Locality = address.Locality,
+                           Region = address.Region,
+                           PostalCode = address.PostalCode,
+                           CountryCodeAlpha2 = address.CountryCode   
+                       };
+        }
+
+        /// <summary>
+        /// Creates a <see cref="TransactionRequest"/>.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="paymentMethodNonce">
+        /// The payment Method Nonce.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="transactionOption">
+        /// The transaction Option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TransactionRequest"/>.
+        /// </returns>
+        public TransactionRequest CreateTransactionRequest(IInvoice invoice, string paymentMethodNonce, ICustomer customer = null, TransactionOption transactionOption = TransactionOption.Authorize)
+        {
+            var request = new TransactionRequest()
+                       {
+                           Amount = invoice.Total,
+                           OrderId = invoice.PrefixedInvoiceNumber(),
+                           PaymentMethodNonce = paymentMethodNonce,
+                           BillingAddress = CreateAddressRequest(invoice.GetBillingAddress()),
+                           Channel = Constants.TransactionChannel
+                       };
+            if (customer != null) request.Customer = CreateCustomerRequest(customer);
+            if (transactionOption == TransactionOption.SubmitForSettlement)
+            {
+                request.Options = new TransactionOptionsRequest() { SubmitForSettlement = true };
+            }
+
+            return request;
         }
     }    
 }

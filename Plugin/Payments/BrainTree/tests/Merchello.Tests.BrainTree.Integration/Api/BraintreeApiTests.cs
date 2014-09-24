@@ -5,7 +5,7 @@
     using global::Braintree;
 
     using Merchello.Plugin.Payments.Braintree;
-    using Merchello.Plugin.Payments.Braintree.Services;
+    using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
     using Merchello.Tests.Braintree.Integration.TestHelpers;
 
     using NUnit.Framework;
@@ -82,7 +82,7 @@
         public void Can_Generate_A_ClientTokenRequest_And_GetToken()
         {
             //// Arrange
-            var factory = new CustomerRequestFactory();
+            var factory = new BraintreeApiRequestFactory();
 
             var request = factory.CreateClientTokenRequest(Guid.Empty);
 
@@ -98,9 +98,9 @@
         public void Can_Generate_A_ClientTokenRequest_For_A_Customer_And_GetToken()
         {
             //// Arrange
-            var factory = new CustomerRequestFactory();
+            var factory = new BraintreeApiRequestFactory();
 
-            var request = factory.CreateClientTokenRequest(Guid.Empty);
+            var request = factory.CreateClientTokenRequest(TestCustomer.Key);
 
             //// Act
             var token = Gateway.ClientToken.generate(request);
