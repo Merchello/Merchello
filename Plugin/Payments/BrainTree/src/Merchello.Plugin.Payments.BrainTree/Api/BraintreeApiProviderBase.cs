@@ -1,16 +1,27 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Services
+﻿namespace Merchello.Plugin.Payments.Braintree.Api
 {
+    using System;
+
     using global::Braintree;
-    using Core;
+
+    using Merchello.Core;
+    using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
+
     using Umbraco.Core.Cache;
 
     /// <summary>
     /// A base class for local Braintree services.
     /// </summary>
-    internal abstract class BraintreeServiceBase
+    internal abstract class BraintreeApiProviderBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeServiceBase"/> class.
+        /// The <see cref="BraintreeApiRequestFactory"/>.
+        /// </summary>
+        private readonly Lazy<BraintreeApiRequestFactory> _requestFactory = new Lazy<BraintreeApiRequestFactory>(() => new BraintreeApiRequestFactory());  
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BraintreeApiProviderBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>.
@@ -18,14 +29,14 @@
         /// <param name="braintreeGateway">
         /// The <see cref="BraintreeGateway"/>.
         /// </param>
-        protected BraintreeServiceBase(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
+        protected BraintreeApiProviderBase(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(braintreeGateway, "braintreeGateway");
 
-            MerchelloContext = merchelloContext;
+            this.MerchelloContext = merchelloContext;
 
-            BraintreeGateway = braintreeGateway;
+            this.BraintreeGateway = braintreeGateway;
         }
 
         /// <summary>
@@ -43,7 +54,18 @@
         /// </summary>
         protected IRuntimeCacheProvider RuntimeCache 
         { 
-            get { return MerchelloContext.Cache.RuntimeCache; } 
+            get { return this.MerchelloContext.Cache.RuntimeCache; } 
+        }
+
+        /// <summary>
+        /// Gets the request factory.
+        /// </summary>
+        protected BraintreeApiRequestFactory RequestFactory
+        {
+            get
+            {
+                return _requestFactory.Value;
+            }
         }
 
         /// <summary>
@@ -59,7 +81,7 @@
         /// </returns>
         protected T TryGetCached<T>(string cacheKey)
         {
-            return (T)RuntimeCache.GetCacheItem(cacheKey);
+            return (T)this.RuntimeCache.GetCacheItem(cacheKey);
         }
     }
 }

@@ -15,7 +15,7 @@
     /// <summary>
     /// The search provider extension.
     /// </summary>
-    public static class SearchHelper
+    internal static class SearchHelper
     {
         
         /// <summary>
@@ -80,7 +80,7 @@
         /// The search string.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{SearchTerm}"/>.
         /// </returns>
         internal static IEnumerable<SearchTerm> ToSearchTerms(this string searchString)
         {

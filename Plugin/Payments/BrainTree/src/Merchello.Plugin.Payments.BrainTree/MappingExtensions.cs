@@ -1,11 +1,9 @@
-﻿using System;
-using AutoMapper;
-
-namespace Merchello.Plugin.Payments.Braintree
+﻿namespace Merchello.Plugin.Payments.Braintree
 {
+    using AutoMapper;
+
     using global::Braintree;
 
-    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Plugin.Payments.Braintree.Models;
 

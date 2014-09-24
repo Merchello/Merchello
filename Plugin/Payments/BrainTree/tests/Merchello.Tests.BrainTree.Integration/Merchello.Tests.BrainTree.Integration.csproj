@@ -81,17 +81,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\..\src\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core">
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine">
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Tests.Base">
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Tests.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Web">
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.6\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -212,6 +212,7 @@
     <Compile Include="Api\BraintreeApiTests.cs" />
     <Compile Include="Api\MappingAndFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BraintreeCustomerServiceTests.cs" />
     <Compile Include="TestHelpers\BraintreeTestBase.cs" />
     <Compile Include="TestHelpers\GatewayProviderSettingsDto.cs" />
     <Compile Include="TestHelpers\ProviderTestsBase.cs" />

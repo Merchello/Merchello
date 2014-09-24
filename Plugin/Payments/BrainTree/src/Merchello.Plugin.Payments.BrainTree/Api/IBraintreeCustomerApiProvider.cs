@@ -1,4 +1,4 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Services
+﻿namespace Merchello.Plugin.Payments.Braintree.Api
 {
     using System;
 
@@ -9,9 +9,9 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// Defines the BraintreeCustomerService.
+    /// Defines the BraintreeCustomerApiProvider.
     /// </summary>
-    public interface IBraintreeCustomerService
+    public interface IBraintreeCustomerApiProvider
     {
         /// <summary>
         /// Creates a Braintree <see cref="Customer"/> from a Merchello <see cref="ICustomer"/>

@@ -2,7 +2,10 @@
 using System.Globalization;
 using Examine;
 using Merchello.Core;
+using Merchello.Core.Events;
+using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
+using Merchello.Core.Sales;
 using Merchello.Core.Services;
 using Merchello.Examine;
 using Merchello.Web;
@@ -13,12 +16,8 @@ using Umbraco.Core.Events;
 using Umbraco.Web;
 using WebBootManager = Merchello.Web.WebBootManager;
 
-namespace Merchello.Tests.IntegrationTests.TestHelpers
+namespace Merchello.Tests.Base.TestHelpers
 {
-    using Merchello.Core.Events;
-    using Merchello.Core.Gateways.Payment;
-    using Merchello.Core.Sales;
-
     public abstract class MerchelloAllInTestBase
     {
         protected ICustomerBase CurrentCustomer;

@@ -1,43 +1,35 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Services
+﻿namespace Merchello.Plugin.Payments.Braintree.Api
 {
     using System;
-    using System.Web.Configuration;
 
     using global::Braintree;
-    using Core;
-    using Core.Models;
-
     using global::Braintree.Exceptions;
 
+    using Merchello.Core;
+    using Merchello.Core.Models;
     using Merchello.Plugin.Payments.Braintree.Exceptions;
 
     using Umbraco.Core;
-    using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
 
     /// <summary>
     /// The braintree customer service.
     /// </summary>
-    internal class BraintreeCustomerService : BraintreeServiceBase, IBraintreeCustomerService
+    internal class BraintreeCustomerApiProvider : BraintreeApiProviderBase, IBraintreeCustomerApiProvider
     {
         /// <summary>
-        /// The <see cref="CustomerRequestFactory"/>.
-        /// </summary>
-        private readonly Lazy<CustomerRequestFactory> _requestFactory = new Lazy<CustomerRequestFactory>(() => new CustomerRequestFactory());  
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeCustomerService"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeCustomerApiProvider"/> class.
         /// </summary>
         /// <param name="braintreeGateway">
         /// The braintree gateway.
         /// </param>
-        public BraintreeCustomerService(BraintreeGateway braintreeGateway)
+        public BraintreeCustomerApiProvider(BraintreeGateway braintreeGateway)
             : this(Core.MerchelloContext.Current, braintreeGateway)
         {            
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeCustomerService"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeCustomerApiProvider"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -45,7 +37,7 @@
         /// <param name="braintreeGateway">
         /// The braintree gateway.
         /// </param>
-        internal BraintreeCustomerService(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
+        internal BraintreeCustomerApiProvider(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
             : base(merchelloContext, braintreeGateway)
         {
         }
@@ -63,19 +55,19 @@
         /// </returns>
         public Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null)
         {
-            if (Exists(customer)) return Attempt.Succeed(GetBraintreeCustomer(customer));
+            if (this.Exists(customer)) return Attempt.Succeed(this.GetBraintreeCustomer(customer));
 
-           var request = _requestFactory.Value.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress);
+           var request = RequestFactory.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress);
 
-            var result = BraintreeGateway.Customer.Create(request);
+            var result = this.BraintreeGateway.Customer.Create(request);
 
             if (result.IsSuccess())
             {
-                return Attempt.Succeed((Customer)RuntimeCache.GetCacheItem(MakeCacheKey(customer), () => result.Target));
+                return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCacheKey(customer), () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
-            LogHelper.Error<BraintreeCustomerService>("Braintree API Customer Create return a failure", error);
+            LogHelper.Error<BraintreeCustomerApiProvider>("Braintree API Customer Create return a failure", error);
 
             return Attempt<Customer>.Fail(error);
         }
@@ -93,22 +85,22 @@
         /// </returns>
         public Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null)
         {
-            if (!Exists(customer)) return Attempt<Customer>.Fail(new NullReferenceException("Could not finde matching Braintree customer."));
+            if (!this.Exists(customer)) return Attempt<Customer>.Fail(new NullReferenceException("Could not finde matching Braintree customer."));
 
-            var request = _requestFactory.Value.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress, true);
+            var request = RequestFactory.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress, true);
 
-            var result = BraintreeGateway.Customer.Update(customer.Key.ToString(), request);
+            var result = this.BraintreeGateway.Customer.Update(customer.Key.ToString(), request);
 
             if (result.IsSuccess())
             {
-                var cacheKey = MakeCacheKey(customer);
-                RuntimeCache.ClearCacheItem(cacheKey);
+                var cacheKey = this.MakeCacheKey(customer);
+                this.RuntimeCache.ClearCacheItem(cacheKey);
 
-                return Attempt<Customer>.Succeed((Customer)RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
+                return Attempt<Customer>.Succeed((Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
-            LogHelper.Error<BraintreeCustomerService>("Braintree API Customer Create return a failure", error);
+            LogHelper.Error<BraintreeCustomerApiProvider>("Braintree API Customer Create return a failure", error);
 
             return Attempt<Customer>.Fail(error);
         }
@@ -126,8 +118,8 @@
         {
             if (!this.Exists(customer)) return false;
            
-            BraintreeGateway.Customer.Delete(customer.Key.ToString());
-            RuntimeCache.ClearCacheItem(MakeCacheKey(customer));
+            this.BraintreeGateway.Customer.Delete(customer.Key.ToString());
+            this.RuntimeCache.ClearCacheItem(this.MakeCacheKey(customer));
 
             return true;
         }
@@ -144,9 +136,9 @@
         /// </returns>
         public Customer GetBraintreeCustomer(Guid customerKey, bool createOnNotFound = true)
         {
-            var customer = MerchelloContext.Services.CustomerService.GetByKey(customerKey);
+            var customer = this.MerchelloContext.Services.CustomerService.GetByKey(customerKey);
 
-            return GetBraintreeCustomer(customer, createOnNotFound);
+            return this.GetBraintreeCustomer(customer, createOnNotFound);
         }
 
         /// <summary>
@@ -165,11 +157,11 @@
         {
             Mandate.ParameterNotNull(customer, "customer");
 
-            if (Exists(customer))
+            if (this.Exists(customer))
             {
-                var cacheKey = MakeCacheKey(customer);
+                var cacheKey = this.MakeCacheKey(customer);
 
-                return (Customer)RuntimeCache.GetCacheItem(cacheKey, () => BraintreeGateway.Customer.Find(customer.Key.ToString()));
+                return (Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
             }
 
             if (!createOnNotFound) return null;
@@ -187,7 +179,7 @@
         /// </returns>
         public string GenerateClientRequestToken()
         {
-            return BraintreeGateway.ClientToken.generate(_requestFactory.Value.CreateClientTokenRequest(Guid.Empty));
+            return this.BraintreeGateway.ClientToken.generate(RequestFactory.CreateClientTokenRequest(Guid.Empty));
         }
 
         /// <summary>
@@ -200,14 +192,15 @@
         /// The <see cref="string"/>.
         /// </returns>
         /// <exception cref="BraintreeException">
+        /// Throws an exception if the braintree customer returns null
         /// </exception>
         public string GenerateClientRequestToken(ICustomer customer)
         {
-            var braintreeCustomer = GetBraintreeCustomer(customer);
+            var braintreeCustomer = this.GetBraintreeCustomer(customer);
 
             if (braintreeCustomer == null) throw new BraintreeException("Failed to retrieve and/or create a Braintree Customer");
 
-            return BraintreeGateway.ClientToken.generate(_requestFactory.Value.CreateClientTokenRequest(customer.Key));
+            return this.BraintreeGateway.ClientToken.generate(RequestFactory.CreateClientTokenRequest(customer.Key));
         }
 
         /// <summary>
@@ -223,7 +216,7 @@
         {
             try
             {
-                var braintreeCustomer = RuntimeCache.GetCacheItem(MakeCacheKey(customer), () => BraintreeGateway.Customer.Find(customer.Key.ToString()));
+                var braintreeCustomer = this.RuntimeCache.GetCacheItem(this.MakeCacheKey(customer), () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
 
                 return braintreeCustomer != null;
             }
@@ -233,7 +226,15 @@
             }
         }
 
-
+        /// <summary>
+        /// Makes a cache key.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         private string MakeCacheKey(ICustomer customer)
         {
             return Caching.CacheKeys.BraintreeCustomer(customer.Key);

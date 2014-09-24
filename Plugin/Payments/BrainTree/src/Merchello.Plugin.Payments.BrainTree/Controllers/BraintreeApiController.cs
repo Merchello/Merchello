@@ -8,8 +8,8 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
     using Merchello.Plugin.Payments.Braintree.Provider;
-    using Merchello.Plugin.Payments.Braintree.Services;
 
     using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
@@ -27,9 +27,9 @@
         private readonly BraintreeGateway _gateway;
 
         /// <summary>
-        /// The <see cref="CustomerRequestFactory"/>.
+        /// The <see cref="BraintreeApiRequestFactory"/>.
         /// </summary>
-        private readonly CustomerRequestFactory _requestFactory;
+        private readonly BraintreeApiRequestFactory _requestFactory;
 
         private readonly ICustomerService _customerService;
 
@@ -64,7 +64,7 @@
 
             _gateway = provider.ExtendedData.GetBrainTreeProviderSettings().AsBraintreeGateway();
 
-            _requestFactory = new CustomerRequestFactory();
+            _requestFactory = new BraintreeApiRequestFactory();
         }
 
         /// <summary>

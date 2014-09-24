@@ -302,13 +302,11 @@
     <Compile Include="Services\ProductVariant\ProductVariantTests.cs" />
     <Compile Include="Services\Product\ProductOptionTests.cs" />
     <Compile Include="Services\Product\ProductTests.cs" />
-    <Compile Include="TestHelpers\MerchelloAllInTestBase.cs" />
     <Compile Include="TestHelpers\DatabaseIntegrationTestBase.cs" />
     <Compile Include="Shipping\ShipCountryTests.cs" />
     <Compile Include="Taxation\TaxMethodTaxationGatewayProviderTests.cs" />
     <Compile Include="Taxation\TaxationProviderTestBase.cs" />
     <Compile Include="Taxation\TaxationProviderTests.cs" />
-    <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
     <Compile Include="Workflow\Setup.cs" />
   </ItemGroup>
   <ItemGroup>
