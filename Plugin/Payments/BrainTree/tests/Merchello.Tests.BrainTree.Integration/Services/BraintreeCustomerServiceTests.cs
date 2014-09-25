@@ -21,7 +21,7 @@
 
             this._braintreeCustomerApiProvider = new BraintreeCustomerApiProvider(
                 MerchelloContext.Current,
-                BraintreeProviderSettings.AsBraintreeGateway());   
+                BraintreeProviderSettings);   
         }
 
         [Test]

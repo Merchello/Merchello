@@ -5,6 +5,7 @@
     using global::Braintree;
 
     using Merchello.Core;
+    using Merchello.Plugin.Payments.Braintree.Models;
     using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
 
     using Umbraco.Core.Cache;
@@ -17,7 +18,7 @@
         /// <summary>
         /// The <see cref="BraintreeApiRequestFactory"/>.
         /// </summary>
-        private readonly Lazy<BraintreeApiRequestFactory> _requestFactory = new Lazy<BraintreeApiRequestFactory>(() => new BraintreeApiRequestFactory());  
+        private Lazy<BraintreeApiRequestFactory> _requestFactory;  
 
 
         /// <summary>
@@ -26,17 +27,19 @@
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>.
         /// </param>
-        /// <param name="braintreeGateway">
-        /// The <see cref="BraintreeGateway"/>.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        protected BraintreeApiProviderBase(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
+        protected BraintreeApiProviderBase(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(braintreeGateway, "braintreeGateway");
+            Mandate.ParameterNotNull(settings, "settings");
 
-            this.MerchelloContext = merchelloContext;
+            MerchelloContext = merchelloContext;
 
-            this.BraintreeGateway = braintreeGateway;
+            BraintreeGateway = settings.AsBraintreeGateway();
+
+            Initialize(settings);
         }
 
         /// <summary>
@@ -75,6 +78,7 @@
         /// The cache key.
         /// </param>
         /// <typeparam name="T">
+        /// The type of the cached item to be returned
         /// </typeparam>
         /// <returns>
         /// The <see cref="T"/>.
@@ -82,6 +86,17 @@
         protected T TryGetCached<T>(string cacheKey)
         {
             return (T)this.RuntimeCache.GetCacheItem(cacheKey);
+        }
+
+        /// <summary>
+        /// Performs class initialization logic.
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        private void Initialize(BraintreeProviderSettings settings)
+        {
+            _requestFactory = new Lazy<BraintreeApiRequestFactory>(() => new BraintreeApiRequestFactory(settings));
         }
     }
 }

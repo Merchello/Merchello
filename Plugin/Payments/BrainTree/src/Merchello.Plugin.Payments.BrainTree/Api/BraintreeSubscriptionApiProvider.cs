@@ -3,6 +3,7 @@
     using global::Braintree;
 
     using Merchello.Core;
+    using Merchello.Plugin.Payments.Braintree.Models;
 
     /// <summary>
     /// Represents a BraintreeSubscriptionApiProvider.
@@ -12,11 +13,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreeSubscriptionApiProvider"/> class.
         /// </summary>
-        /// <param name="braintreeGateway">
-        /// The braintree gateway.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        public BraintreeSubscriptionApiProvider(BraintreeGateway braintreeGateway)
-            : this(Core.MerchelloContext.Current, braintreeGateway)
+        public BraintreeSubscriptionApiProvider(BraintreeProviderSettings settings)
+            : this(Core.MerchelloContext.Current, settings)
         {
         }
 
@@ -26,11 +27,11 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        /// <param name="braintreeGateway">
-        /// The braintree gateway.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        internal BraintreeSubscriptionApiProvider(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
-            : base(merchelloContext, braintreeGateway)
+        internal BraintreeSubscriptionApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+            : base(merchelloContext, settings)
         {
         }
     }

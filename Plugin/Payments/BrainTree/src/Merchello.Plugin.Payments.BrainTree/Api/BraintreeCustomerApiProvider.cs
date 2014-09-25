@@ -8,6 +8,7 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Plugin.Payments.Braintree.Exceptions;
+    using Merchello.Plugin.Payments.Braintree.Models;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -20,11 +21,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreeCustomerApiProvider"/> class.
         /// </summary>
-        /// <param name="braintreeGateway">
-        /// The braintree gateway.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        public BraintreeCustomerApiProvider(BraintreeGateway braintreeGateway)
-            : this(Core.MerchelloContext.Current, braintreeGateway)
+        public BraintreeCustomerApiProvider(BraintreeProviderSettings settings)
+            : this(Core.MerchelloContext.Current, settings)
         {            
         }
 
@@ -34,11 +35,11 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        /// <param name="braintreeGateway">
-        /// The braintree gateway.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        internal BraintreeCustomerApiProvider(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
-            : base(merchelloContext, braintreeGateway)
+        internal BraintreeCustomerApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+            : base(merchelloContext, settings)
         {
         }
 
@@ -48,12 +49,19 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <param name="paymentMethodNonce">The "nonce-from-the-client"</param>
-        /// <param name="billingAddress">The billing address</param>
+        /// <param name="paymentMethodNonce">
+        /// The "nonce-from-the-client"
+        /// </param>
+        /// <param name="billingAddress">
+        /// The billing address
+        /// </param>
+        /// <param name="shippingAddress">
+        /// The shipping Address.
+        /// </param>
         /// <returns>
         /// The <see cref="Attempt{Customer}"/>.
         /// </returns>
-        public Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null)
+        public Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippingAddress = null)
         {
             if (this.Exists(customer)) return Attempt.Succeed(this.GetBraintreeCustomer(customer));
 
@@ -80,10 +88,11 @@
         /// </param>
         /// <param name="paymentMethodNonce">The "nonce-from-the-client"</param>
         /// <param name="billingAddress">The customer billing address</param>
+        /// <param name="shippinggAddress">The shipping address</param>
         /// <returns>
         /// The <see cref="Customer"/>.
         /// </returns>
-        public Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null)
+        public Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippinggAddress = null)
         {
             if (!this.Exists(customer)) return Attempt<Customer>.Fail(new NullReferenceException("Could not finde matching Braintree customer."));
 
@@ -104,6 +113,7 @@
 
             return Attempt<Customer>.Fail(error);
         }
+
 
         /// <summary>
         /// Deletes the Braintree <see cref="Customer"/> corresponding with the Merchello <see cref="ICustomer"/>
@@ -201,6 +211,63 @@
             if (braintreeCustomer == null) throw new BraintreeException("Failed to retrieve and/or create a Braintree Customer");
 
             return this.BraintreeGateway.ClientToken.generate(RequestFactory.CreateClientTokenRequest(customer.Key));
+        }
+
+        /// <summary>
+        /// Adds a credit card to an existing customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="paymentMethodNonce">
+        /// The payment method nonce.
+        /// </param>
+        /// <param name="billingAddress">
+        /// The billing address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool AddCreditCardToCustomer(ICustomer customer, string paymentMethodNonce, IAddress billingAddress = null)
+        {
+            return AddCreditCardToCustomer(customer, paymentMethodNonce, string.Empty, billingAddress);
+        }
+
+        /// <summary>
+        /// Adds a credit card to an existing customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="paymentMethodNonce">
+        /// The payment method nonce.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <param name="billingAddress">
+        /// The billing address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool AddCreditCardToCustomer(ICustomer customer, string paymentMethodNonce, string token, IAddress billingAddress = null)
+        {
+            var request = RequestFactory.CreatePaymentMethodRequest(customer, paymentMethodNonce);
+            
+            if (!string.IsNullOrEmpty(token)) request.Token = token;
+
+            if (billingAddress != null) request.BillingAddress = RequestFactory.CreatePaymentMethodAddressRequest(billingAddress);
+
+            var result = BraintreeGateway.PaymentMethod.Create(request);
+
+            if (result.IsSuccess()) return true;
+
+            var error = new BraintreeApiException(result.Errors);
+
+            LogHelper.Error<BraintreeCustomerApiProvider>("Failed to add a credit card to a customer", error);
+
+            return false;
         }
 
         /// <summary>

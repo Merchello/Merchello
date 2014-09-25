@@ -20,15 +20,18 @@
         /// The customer.
         /// </param>
         /// <param name="paymentMethodNonce">
-        /// The "nonce-from-the-client"
+        /// The "nonce-from-the-client"  (Optional)
         /// </param>
         /// <param name="billingAddress">
-        /// The billing Address.
+        /// The billing Address.  (Optional)
+        /// </param>
+        /// <param name="shippingAddress">
+        /// The shipping Address.  (Optional)
         /// </param>
         /// <returns>
         /// The <see cref="Attempt{Customer}"/>.
         /// </returns>
-        Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null);
+        Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippingAddress = null);
 
         /// <summary>
         /// The update.
@@ -37,15 +40,18 @@
         /// The customer.
         /// </param>
         /// <param name="paymentMethodNonce">
-        /// The "nonce-from-the-client"
+        /// The "nonce-from-the-client" (Optional)
         /// </param>
         /// <param name="billingAddress">
-        /// The billing Address.
+        /// The billing Address.  (Optional)
+        /// </param>
+        /// <param name="shippingAddress">
+        /// The shipping Address.  (Optional)
         /// </param>
         /// <returns>
         /// The <see cref="Attempt{Customer}"/>.
         /// </returns>
-        Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null);
+        Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippingAddress = null);
 
         /// <summary>
         /// Deletes the Braintree <see cref="Customer"/> corresponding with the Merchello <see cref="ICustomer"/>
@@ -102,6 +108,41 @@
         /// The <see cref="string"/>.
         /// </returns>
         string GenerateClientRequestToken(ICustomer customer);
+
+        /// <summary>
+        /// Adds a .
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="paymentMethodNonce">
+        /// The payment method nonce.
+        /// </param>
+        /// <param name="billingAddress">The billing address</param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool AddCreditCardToCustomer(ICustomer customer, string paymentMethodNonce, IAddress billingAddress = null);
+
+        /// <summary>
+        /// The add credit card to customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="paymentMethodNonce">
+        /// The payment method nonce.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <param name="billingAddress">
+        /// The billing address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool AddCreditCardToCustomer(ICustomer customer, string paymentMethodNonce, string token, IAddress billingAddress = null);
 
         /// <summary>
         /// Returns true or false indicating whether the customer exists in Braintree
