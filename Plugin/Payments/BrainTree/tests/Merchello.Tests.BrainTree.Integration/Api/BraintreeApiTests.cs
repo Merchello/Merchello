@@ -19,7 +19,6 @@
         {
             try
             {
-
                 var customer = Gateway.Customer.Find(CustomerKey.ToString());
 
                 Gateway.Customer.Delete(CustomerKey.ToString());
@@ -52,7 +51,6 @@
 
             //// Assert
             Assert.IsTrue(result.IsSuccess());
-
         }
 
         [Test]
@@ -82,7 +80,7 @@
         public void Can_Generate_A_ClientTokenRequest_And_GetToken()
         {
             //// Arrange
-            var factory = new BraintreeApiRequestFactory();
+            var factory = new BraintreeApiRequestFactory(BraintreeProviderSettings);
 
             var request = factory.CreateClientTokenRequest(Guid.Empty);
 
@@ -98,7 +96,7 @@
         public void Can_Generate_A_ClientTokenRequest_For_A_Customer_And_GetToken()
         {
             //// Arrange
-            var factory = new BraintreeApiRequestFactory();
+            var factory = new BraintreeApiRequestFactory(BraintreeProviderSettings);
 
             var request = factory.CreateClientTokenRequest(TestCustomer.Key);
 
@@ -109,6 +107,5 @@
             Assert.IsNotNullOrEmpty(token);
             Console.Write(token);
         }
-
     }
 }

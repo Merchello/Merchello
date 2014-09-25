@@ -62,9 +62,11 @@
 
             _customerService = merchelloContext.Services.CustomerService;
 
-            _gateway = provider.ExtendedData.GetBrainTreeProviderSettings().AsBraintreeGateway();
+            var settings = provider.ExtendedData.GetBrainTreeProviderSettings();
 
-            _requestFactory = new BraintreeApiRequestFactory();
+            _gateway = settings.AsBraintreeGateway();
+
+            _requestFactory = new BraintreeApiRequestFactory(settings);
         }
 
         /// <summary>

@@ -1,8 +1,7 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Api
 {
-    using global::Braintree;
-
     using Merchello.Core;
+    using Merchello.Plugin.Payments.Braintree.Models;
 
     /// <summary>
     /// Represents the BraintreePaymentMethodApiProvider.
@@ -12,11 +11,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreePaymentMethodApiProvider"/> class.
         /// </summary>
-        /// <param name="braintreeGateway">
-        /// The braintree gateway.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        public BraintreePaymentMethodApiProvider(BraintreeGateway braintreeGateway)
-            : this(Core.MerchelloContext.Current, braintreeGateway)
+        public BraintreePaymentMethodApiProvider(BraintreeProviderSettings settings)
+            : this(Core.MerchelloContext.Current, settings)
         {
         }
 
@@ -26,11 +25,11 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        /// <param name="braintreeGateway">
-        /// The braintree gateway.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        public BraintreePaymentMethodApiProvider(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
-            : base(merchelloContext, braintreeGateway)
+        public BraintreePaymentMethodApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+            : base(merchelloContext, settings)
         {
         }
     }
