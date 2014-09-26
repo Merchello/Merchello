@@ -5,6 +5,7 @@
     using global::Braintree;
 
     using Merchello.Core;
+    using Merchello.Core.Models;
     using Merchello.Plugin.Payments.Braintree.Models;
     using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
 
@@ -86,6 +87,34 @@
         protected T TryGetCached<T>(string cacheKey)
         {
             return (T)this.RuntimeCache.GetCacheItem(cacheKey);
+        }
+
+        /// <summary>
+        /// Makes a customer cache key.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        protected string MakeCustomerCacheKey(ICustomer customer)
+        {
+            return Caching.CacheKeys.BraintreeCustomer(customer.Key);
+        }
+
+        /// <summary>
+        /// Makes a payment method cache key.
+        /// </summary>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        protected string MakePaymentMethodCacheKey(string token)
+        {
+            return Caching.CacheKeys.BraintreePaymentMethod(token);
         }
 
         /// <summary>

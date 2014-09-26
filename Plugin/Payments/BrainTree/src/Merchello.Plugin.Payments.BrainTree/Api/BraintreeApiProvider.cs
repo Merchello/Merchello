@@ -122,7 +122,7 @@ namespace Merchello.Plugin.Payments.Braintree.Api
                 _customer = new Lazy<IBraintreeCustomerApiProvider>(() => new BraintreeCustomerApiProvider(merchelloContext, _settings));
 
             if (_paymentMethod == null)
-                _paymentMethod = new Lazy<IBraintreePaymentMethodApiProvider>(() => new BraintreePaymentMethodApiProvider(merchelloContext, _settings));
+                _paymentMethod = new Lazy<IBraintreePaymentMethodApiProvider>(() => new BraintreePaymentMethodApiProvider(merchelloContext, _settings, _customer.Value));
 
             if (_subscription == null)
                 _subscription = new Lazy<IBraintreeSubscriptionApiProvider>(() => new BraintreeSubscriptionApiProvider(merchelloContext, _settings));

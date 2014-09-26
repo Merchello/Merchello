@@ -71,7 +71,7 @@
 
             if (result.IsSuccess())
             {
-                return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCacheKey(customer), () => result.Target));
+                return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
@@ -102,7 +102,7 @@
 
             if (result.IsSuccess())
             {
-                var cacheKey = this.MakeCacheKey(customer);
+                var cacheKey = this.MakeCustomerCacheKey(customer);
                 this.RuntimeCache.ClearCacheItem(cacheKey);
 
                 return Attempt<Customer>.Succeed((Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
@@ -129,7 +129,7 @@
             if (!this.Exists(customer)) return false;
            
             this.BraintreeGateway.Customer.Delete(customer.Key.ToString());
-            this.RuntimeCache.ClearCacheItem(this.MakeCacheKey(customer));
+            this.RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customer));
 
             return true;
         }
@@ -169,7 +169,7 @@
 
             if (this.Exists(customer))
             {
-                var cacheKey = this.MakeCacheKey(customer);
+                var cacheKey = this.MakeCustomerCacheKey(customer);
 
                 return (Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
             }
@@ -214,63 +214,6 @@
         }
 
         /// <summary>
-        /// Adds a credit card to an existing customer.
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="paymentMethodNonce">
-        /// The payment method nonce.
-        /// </param>
-        /// <param name="billingAddress">
-        /// The billing address.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public bool AddCreditCardToCustomer(ICustomer customer, string paymentMethodNonce, IAddress billingAddress = null)
-        {
-            return AddCreditCardToCustomer(customer, paymentMethodNonce, string.Empty, billingAddress);
-        }
-
-        /// <summary>
-        /// Adds a credit card to an existing customer.
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="paymentMethodNonce">
-        /// The payment method nonce.
-        /// </param>
-        /// <param name="token">
-        /// The token.
-        /// </param>
-        /// <param name="billingAddress">
-        /// The billing address.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public bool AddCreditCardToCustomer(ICustomer customer, string paymentMethodNonce, string token, IAddress billingAddress = null)
-        {
-            var request = RequestFactory.CreatePaymentMethodRequest(customer, paymentMethodNonce);
-            
-            if (!string.IsNullOrEmpty(token)) request.Token = token;
-
-            if (billingAddress != null) request.BillingAddress = RequestFactory.CreatePaymentMethodAddressRequest(billingAddress);
-
-            var result = BraintreeGateway.PaymentMethod.Create(request);
-
-            if (result.IsSuccess()) return true;
-
-            var error = new BraintreeApiException(result.Errors);
-
-            LogHelper.Error<BraintreeCustomerApiProvider>("Failed to add a credit card to a customer", error);
-
-            return false;
-        }
-
-        /// <summary>
         /// Returns true or false indicating whether the customer exists in Braintree
         /// </summary>
         /// <param name="customer">
@@ -283,28 +226,40 @@
         {
             try
             {
-                var braintreeCustomer = this.RuntimeCache.GetCacheItem(this.MakeCacheKey(customer), () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
+                var braintreeCustomer = this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
 
                 return braintreeCustomer != null;
             }
             catch (Exception)
             {
+                RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customer));
                 return false;
             }
         }
 
         /// <summary>
-        /// Makes a cache key.
+        /// Performs a direct search query again the BrainTree API
         /// </summary>
-        /// <param name="customer">
-        /// The customer.
+        /// <param name="query">
+        /// The <see cref="CustomerSearchRequest"/>
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The <see cref="ResourceCollection{Customer}"/>.
         /// </returns>
-        private string MakeCacheKey(ICustomer customer)
+        public ResourceCollection<Customer> Search(CustomerSearchRequest query)
         {
-            return Caching.CacheKeys.BraintreeCustomer(customer.Key);
+            return BraintreeGateway.Customer.Search(query);
+        }
+
+        /// <summary>
+        /// Performs a direct get all operation against the BrainTree API.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ResourceCollection{Customer}"/>.
+        /// </returns>
+        public ResourceCollection<Customer> GetAll()
+        {
+            return BraintreeGateway.Customer.All();
         }
     }
 }
