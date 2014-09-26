@@ -49,6 +49,7 @@
 		<key alias="mustUniqueSku">Debe tener una referencia SKU única</key>
 		<key alias="inventoryWarning"><![CDATA[<p>Importante: si seleccionas gestionar el inventario, debe ser configurado manualmente para cada variante (abajo) una vez que este producto se haya guardado. También puedes configurar un inventario por defecto, aque se aplicará a <strong>todas las variantes</strong>.</p>]]></key>
 		<key alias="startingInventoryWarning"><![CDATA[(Comenzará el inventario para <strong>todas las variantes</strong> y <strong>todos los almacenes</strong>)]]></key>
+    <key alias="productOnSale">Product on sale</key>
   </area>
 	<area alias="merchelloOrder">
 		<!-- things -->

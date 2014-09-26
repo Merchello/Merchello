@@ -21,6 +21,9 @@
                     <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty == '-totalInventoryCount'}"></i> 
                     <localize key="merchelloGeneral_total" /> <localize key="merchelloGeneral_quantity" />
                 </th>
+                <th>
+                    <localize key="merchelloVariant_isOnSale" />
+                </th>
                 <th><localize key="general_edit" /></th>
             </tr>
             <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
@@ -50,6 +53,8 @@
                 <td>{{variant.sku}}</td>
                 <td>{{variant.price}}</td>
                 <td>{{variant.totalInventoryCount}}</td>
+                <td data-ng-hide="variant.onSale"><localize key="general_no" /></td>
+                <td data-ng-show="variant.onSale"><localize key="general_yes" /></td>
                 <td><a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{variant.productKey}}?variantid={{variant.key}}"><localize key="general_edit" /></a></td>
             </tr>
         </tbody>
