@@ -20,15 +20,18 @@
         /// The customer.
         /// </param>
         /// <param name="paymentMethodNonce">
-        /// The "nonce-from-the-client"
+        /// The "nonce-from-the-client"  (Optional)
         /// </param>
         /// <param name="billingAddress">
-        /// The billing Address.
+        /// The billing Address.  (Optional)
+        /// </param>
+        /// <param name="shippingAddress">
+        /// The shipping Address.  (Optional)
         /// </param>
         /// <returns>
         /// The <see cref="Attempt{Customer}"/>.
         /// </returns>
-        Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null);
+        Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippingAddress = null);
 
         /// <summary>
         /// The update.
@@ -37,15 +40,18 @@
         /// The customer.
         /// </param>
         /// <param name="paymentMethodNonce">
-        /// The "nonce-from-the-client"
+        /// The "nonce-from-the-client" (Optional)
         /// </param>
         /// <param name="billingAddress">
-        /// The billing Address.
+        /// The billing Address.  (Optional)
+        /// </param>
+        /// <param name="shippingAddress">
+        /// The shipping Address.  (Optional)
         /// </param>
         /// <returns>
         /// The <see cref="Attempt{Customer}"/>.
         /// </returns>
-        Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null);
+        Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippingAddress = null);
 
         /// <summary>
         /// Deletes the Braintree <see cref="Customer"/> corresponding with the Merchello <see cref="ICustomer"/>
@@ -113,5 +119,24 @@
         /// The <see cref="bool"/>.
         /// </returns>
         bool Exists(ICustomer customer);
+
+        /// <summary>
+        /// Performs a direct search query again the BrainTree API
+        /// </summary>
+        /// <param name="query">
+        /// The <see cref="CustomerSearchRequest"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="ResourceCollection{Customer}"/>.
+        /// </returns>
+        ResourceCollection<Customer> Search(CustomerSearchRequest query);
+
+        /// <summary>
+        /// Performs a direct get all operation against the BrainTree API.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ResourceCollection{Customer}"/>.
+        /// </returns>
+        ResourceCollection<Customer> GetAll();
     }   
 }
