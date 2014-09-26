@@ -110,41 +110,6 @@
         string GenerateClientRequestToken(ICustomer customer);
 
         /// <summary>
-        /// Adds a .
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="paymentMethodNonce">
-        /// The payment method nonce.
-        /// </param>
-        /// <param name="billingAddress">The billing address</param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        bool AddCreditCardToCustomer(ICustomer customer, string paymentMethodNonce, IAddress billingAddress = null);
-
-        /// <summary>
-        /// The add credit card to customer.
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="paymentMethodNonce">
-        /// The payment method nonce.
-        /// </param>
-        /// <param name="token">
-        /// The token.
-        /// </param>
-        /// <param name="billingAddress">
-        /// The billing address.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        bool AddCreditCardToCustomer(ICustomer customer, string paymentMethodNonce, string token, IAddress billingAddress = null);
-
-        /// <summary>
         /// Returns true or false indicating whether the customer exists in Braintree
         /// </summary>
         /// <param name="customer">
@@ -154,5 +119,24 @@
         /// The <see cref="bool"/>.
         /// </returns>
         bool Exists(ICustomer customer);
+
+        /// <summary>
+        /// Performs a direct search query again the BrainTree API
+        /// </summary>
+        /// <param name="query">
+        /// The <see cref="CustomerSearchRequest"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="ResourceCollection{Customer}"/>.
+        /// </returns>
+        ResourceCollection<Customer> Search(CustomerSearchRequest query);
+
+        /// <summary>
+        /// Performs a direct get all operation against the BrainTree API.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ResourceCollection{Customer}"/>.
+        /// </returns>
+        ResourceCollection<Customer> GetAll();
     }   
 }
