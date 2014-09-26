@@ -8,17 +8,31 @@
     internal static class CacheKeys
     {
         /// <summary>
-        /// Cache key to save Braintree customer.
+        /// Cache key to cache a Braintree customer.
         /// </summary>
         /// <param name="customerKey">
         /// The customer key.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The <see cref="string"/> cache key.
         /// </returns>
         public static string BraintreeCustomer(Guid customerKey)
         {
             return string.Format("braintree.customerId.{0}", customerKey);
+        }
+
+        /// <summary>
+        /// Cache key to cache a payment method.
+        /// </summary>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        public static string BraintreePaymentMethod(string token)
+        {
+            return string.Format("braintree.paymentmethod.{0}", token);
         }
     }
 }

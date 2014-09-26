@@ -43,6 +43,8 @@
         /// </returns>
         public static string TrySplitFirstName(this IAddress address)
         {
+            if (string.IsNullOrEmpty(address.Name)) return string.Empty;
+
             var names = address.Name.Split(' ');
 
             return names.Any() ? names.First().Trim() : string.Empty;
@@ -59,6 +61,8 @@
         /// </returns>
         public static string TrySplitLastName(this IAddress address)
         {
+            if (string.IsNullOrEmpty(address.Name)) return string.Empty;
+
             var names = address.Name.Split(' ');
 
             return names.Length > 1 ? string.Join(" ", names.Skip(1)).Trim() : string.Empty;

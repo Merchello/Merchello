@@ -8,6 +8,7 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Plugin.Payments.Braintree.Exceptions;
+    using Merchello.Plugin.Payments.Braintree.Models;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -20,11 +21,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreeCustomerApiProvider"/> class.
         /// </summary>
-        /// <param name="braintreeGateway">
-        /// The braintree gateway.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        public BraintreeCustomerApiProvider(BraintreeGateway braintreeGateway)
-            : this(Core.MerchelloContext.Current, braintreeGateway)
+        public BraintreeCustomerApiProvider(BraintreeProviderSettings settings)
+            : this(Core.MerchelloContext.Current, settings)
         {            
         }
 
@@ -34,11 +35,11 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        /// <param name="braintreeGateway">
-        /// The braintree gateway.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        internal BraintreeCustomerApiProvider(IMerchelloContext merchelloContext, BraintreeGateway braintreeGateway)
-            : base(merchelloContext, braintreeGateway)
+        internal BraintreeCustomerApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+            : base(merchelloContext, settings)
         {
         }
 
@@ -48,12 +49,19 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <param name="paymentMethodNonce">The "nonce-from-the-client"</param>
-        /// <param name="billingAddress">The billing address</param>
+        /// <param name="paymentMethodNonce">
+        /// The "nonce-from-the-client"
+        /// </param>
+        /// <param name="billingAddress">
+        /// The billing address
+        /// </param>
+        /// <param name="shippingAddress">
+        /// The shipping Address.
+        /// </param>
         /// <returns>
         /// The <see cref="Attempt{Customer}"/>.
         /// </returns>
-        public Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null)
+        public Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippingAddress = null)
         {
             if (this.Exists(customer)) return Attempt.Succeed(this.GetBraintreeCustomer(customer));
 
@@ -63,7 +71,7 @@
 
             if (result.IsSuccess())
             {
-                return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCacheKey(customer), () => result.Target));
+                return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
@@ -80,10 +88,11 @@
         /// </param>
         /// <param name="paymentMethodNonce">The "nonce-from-the-client"</param>
         /// <param name="billingAddress">The customer billing address</param>
+        /// <param name="shippinggAddress">The shipping address</param>
         /// <returns>
         /// The <see cref="Customer"/>.
         /// </returns>
-        public Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null)
+        public Attempt<Customer> Update(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippinggAddress = null)
         {
             if (!this.Exists(customer)) return Attempt<Customer>.Fail(new NullReferenceException("Could not finde matching Braintree customer."));
 
@@ -93,7 +102,7 @@
 
             if (result.IsSuccess())
             {
-                var cacheKey = this.MakeCacheKey(customer);
+                var cacheKey = this.MakeCustomerCacheKey(customer);
                 this.RuntimeCache.ClearCacheItem(cacheKey);
 
                 return Attempt<Customer>.Succeed((Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
@@ -104,6 +113,7 @@
 
             return Attempt<Customer>.Fail(error);
         }
+
 
         /// <summary>
         /// Deletes the Braintree <see cref="Customer"/> corresponding with the Merchello <see cref="ICustomer"/>
@@ -119,7 +129,7 @@
             if (!this.Exists(customer)) return false;
            
             this.BraintreeGateway.Customer.Delete(customer.Key.ToString());
-            this.RuntimeCache.ClearCacheItem(this.MakeCacheKey(customer));
+            this.RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customer));
 
             return true;
         }
@@ -159,7 +169,7 @@
 
             if (this.Exists(customer))
             {
-                var cacheKey = this.MakeCacheKey(customer);
+                var cacheKey = this.MakeCustomerCacheKey(customer);
 
                 return (Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
             }
@@ -216,28 +226,40 @@
         {
             try
             {
-                var braintreeCustomer = this.RuntimeCache.GetCacheItem(this.MakeCacheKey(customer), () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
+                var braintreeCustomer = this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
 
                 return braintreeCustomer != null;
             }
             catch (Exception)
             {
+                RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customer));
                 return false;
             }
         }
 
         /// <summary>
-        /// Makes a cache key.
+        /// Performs a direct search query again the BrainTree API
         /// </summary>
-        /// <param name="customer">
-        /// The customer.
+        /// <param name="query">
+        /// The <see cref="CustomerSearchRequest"/>
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The <see cref="ResourceCollection{Customer}"/>.
         /// </returns>
-        private string MakeCacheKey(ICustomer customer)
+        public ResourceCollection<Customer> Search(CustomerSearchRequest query)
         {
-            return Caching.CacheKeys.BraintreeCustomer(customer.Key);
+            return BraintreeGateway.Customer.Search(query);
+        }
+
+        /// <summary>
+        /// Performs a direct get all operation against the BrainTree API.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ResourceCollection{Customer}"/>.
+        /// </returns>
+        public ResourceCollection<Customer> GetAll()
+        {
+            return BraintreeGateway.Customer.All();
         }
     }
 }

@@ -209,7 +209,6 @@
     <Compile Include="Api\IBraintreeSubscriptionApiProvider.cs" />
     <Compile Include="Api\IBraintreeTransactionApiProvider.cs" />
     <Compile Include="AutoMapperMappings.cs" />
-    <Compile Include="BraintreeHelper.cs" />
     <Compile Include="Builders\IBuilder.cs" />
     <Compile Include="Builders\InvoiceTransactionRequestBuilder.cs" />
     <Compile Include="Builders\RequestBuilderBase.cs" />
