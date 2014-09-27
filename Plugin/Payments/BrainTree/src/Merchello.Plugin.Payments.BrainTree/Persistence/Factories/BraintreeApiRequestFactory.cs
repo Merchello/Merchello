@@ -269,6 +269,8 @@
 
         #endregion
 
+        #region Payment Method
+
         /// <summary>
         /// Creates a <see cref="PaymentMethodRequest"/>.
         /// </summary>
@@ -303,6 +305,30 @@
         }
 
         /// <summary>
+        /// Creates a <see cref="PaymentMethodRequest"/> for an update.
+        /// </summary>
+        /// <param name="billingAddress">
+        /// The billing address.
+        /// </param>
+        /// <param name="updateExisting">
+        /// The update existing.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PaymentMethodRequest"/>.
+        /// </returns>
+        public PaymentMethodRequest CreatePaymentMethodRequest(IAddress billingAddress, bool updateExisting = true)
+        {
+            var addressRequest = CreatePaymentMethodAddressRequest(billingAddress);
+
+            if (updateExisting) addressRequest.Options = new PaymentMethodAddressOptionsRequest() { UpdateExisting = true };
+
+            return new PaymentMethodRequest()
+                    {
+                        BillingAddress = addressRequest
+                    };
+        }
+
+        /// <summary>
         /// Creates a <see cref="PaymentMethodAddressRequest"/>.
         /// </summary>
         /// <param name="address">
@@ -326,6 +352,64 @@
                            CountryCodeAlpha2 = address.CountryCode
                        };
         }
+
+        #endregion
+
+        #region Subscription
+
+        /// <summary>
+        /// Creates a <see cref="SubscriptionRequest"/>.
+        /// </summary>
+        /// <param name="paymentMethodToken">
+        /// The payment method token.
+        /// </param>
+        /// <param name="planId">
+        /// The plan id.
+        /// </param>
+        /// <param name="price">
+        /// An optional price used to override the plan price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SubscriptionRequest"/>.
+        /// </returns>
+        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, decimal? price = null)
+        {
+            var request = new SubscriptionRequest()
+                       {
+                           PaymentMethodToken = paymentMethodToken, 
+                           PlanId = planId
+                       };
+
+            if (price != null) request.Price = price.Value;
+
+            return request;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="SubscriptionRequest"/>.
+        /// </summary>
+        /// <param name="paymentMethodToken">
+        /// The payment method token.
+        /// </param>
+        /// <param name="planId">
+        /// The plan id.
+        /// </param>
+        /// <param name="firstBillingDate">
+        /// The first billing date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SubscriptionRequest"/>.
+        /// </returns>
+        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, DateTime firstBillingDate)
+        {
+            var request = CreateSubscriptionRequest(paymentMethodToken, planId);
+
+            request.FirstBillingDate = firstBillingDate;
+
+            return request;
+        }
+
+        #endregion
 
         #region Transaction Request
 

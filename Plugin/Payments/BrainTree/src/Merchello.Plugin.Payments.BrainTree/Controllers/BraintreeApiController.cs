@@ -1,16 +1,12 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Controllers
 {
     using System;
-    using System.Runtime.InteropServices.WindowsRuntime;
     using System.Web.Http;
-
-    using global::Braintree;
 
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Plugin.Payments.Braintree.Api;
-    using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
     using Merchello.Plugin.Payments.Braintree.Provider;
 
     using Umbraco.Core.Logging;

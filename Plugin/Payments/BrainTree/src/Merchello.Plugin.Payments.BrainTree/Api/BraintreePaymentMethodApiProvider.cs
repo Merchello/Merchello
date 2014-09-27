@@ -131,7 +131,7 @@
                 return Attempt<PaymentMethod>.Succeed(result.Target);
             }
 
-            var error = new BraintreeApiException(result.Errors);
+            var error = new BraintreeApiException(result.Errors, result.Message);
 
             LogHelper.Error<BraintreeCustomerApiProvider>("Failed to add a credit card to a customer", error);
 
@@ -155,7 +155,20 @@
         /// </returns>
         public Attempt<PaymentMethod> Update(string token, IAddress billingAddress, bool updateExisting = true)
         {
-            throw new NotImplementedException();
+            var request = RequestFactory.CreatePaymentMethodRequest(billingAddress, updateExisting);
+
+            var result = BraintreeGateway.PaymentMethod.Update(token, request);
+
+            if (result.IsSuccess())
+            {
+                return Attempt<PaymentMethod>.Succeed(result.Target);
+            }
+
+            var error = new BraintreeApiException(result.Errors, result.Message);
+
+            LogHelper.Error<BraintreePaymentMethodApiProvider>("Failed to update payment method", error);
+
+            return Attempt<PaymentMethod>.Fail(error);
         }
 
         /// <summary>
