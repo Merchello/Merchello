@@ -49,6 +49,7 @@
 		<key alias="mustUniqueSku">Deve avere un univoco SKU</key>
 		<key alias="inventoryWarning"><![CDATA[<p>Importante: se si sceglie di gestire la disponibilità, si deve settare manualmente ogni variante (lista sotto) una volta che questo prodotto venga salvato. Comunque, puoi settare una dispobibilità di default da applicare a <strong>tutte le varianti</strong>.</p>]]></key>
 		<key alias="startingInventoryWarning"><![CDATA[(Verrà impostata la disponibilità per <strong>tutte le varianti</strong> e <strong>tutti i magazzini</strong>)]]></key>
+    <key alias="productOnSale">Product on sale</key>
   </area>
 	<area alias="merchelloOrder">
 		<!-- things -->
