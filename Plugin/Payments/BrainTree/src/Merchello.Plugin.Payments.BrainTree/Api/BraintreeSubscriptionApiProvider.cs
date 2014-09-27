@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Api
 {
+    using System.Collections.Generic;
+
     using global::Braintree;
 
     using Merchello.Core;
@@ -33,6 +35,16 @@
         internal BraintreeSubscriptionApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
             : base(merchelloContext, settings)
         {
+        }
+
+        public IEnumerable<Discount> GetAllDiscounts()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<AddOn> GetAllAddOns()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
