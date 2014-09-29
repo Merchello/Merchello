@@ -1,4 +1,6 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Controllers
+﻿using Merchello.Plugin.Payments.Braintree.Services;
+
+namespace Merchello.Plugin.Payments.Braintree.Controllers
 {
     using System;
     using System.Web.Http;
@@ -6,7 +8,6 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Plugin.Payments.Braintree.Api;
     using Merchello.Plugin.Payments.Braintree.Provider;
 
     using Umbraco.Core.Logging;
@@ -20,9 +21,9 @@
     public class BraintreeApiController : UmbracoApiController
     {
         /// <summary>
-        /// The <see cref="IBraintreeApiProvider"/>.
+        /// The <see cref="IBraintreeApiService"/>.
         /// </summary>
-        private readonly IBraintreeApiProvider _braintreeApiProvider;
+        private readonly IBraintreeApiService _braintreeApiService;
 
         /// <summary>
         /// The customer service.
@@ -60,7 +61,7 @@
 
             var settings = provider.ExtendedData.GetBrainTreeProviderSettings();
 
-            this._braintreeApiProvider = new BraintreeApiProvider(merchelloContext, settings);
+            this._braintreeApiService = new BraintreeApiService(merchelloContext, settings);
         }
 
         /// <summary>
@@ -80,8 +81,8 @@
             var customer = _customerService.GetAnyByKey(customerKey);
 
             return customer.IsAnonymous
-                       ? _braintreeApiProvider.Customer.GenerateClientRequestToken()
-                       : _braintreeApiProvider.Customer.GenerateClientRequestToken((ICustomer)customer);
+                       ? _braintreeApiService.Customer.GenerateClientRequestToken()
+                       : _braintreeApiService.Customer.GenerateClientRequestToken((ICustomer)customer);
         }
     }
 }

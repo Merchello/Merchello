@@ -1,4 +1,6 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Provider
+﻿using Merchello.Plugin.Payments.Braintree.Services;
+
+namespace Merchello.Plugin.Payments.Braintree.Provider
 {
     using System;
 
@@ -18,9 +20,9 @@
     public class BraintreePaymentGatewayMethod : PaymentGatewayMethodBase, IBraintreePaymentGatewayMethod
     {
         /// <summary>
-        /// The _settings.
+        /// The <see cref="IBraintreeApiService"/>
         /// </summary>
-        private readonly BraintreeGateway _gateway;
+        private readonly IBraintreeApiService _braintreeApiService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreePaymentGatewayMethod"/> class.
@@ -31,19 +33,21 @@
         /// <param name="paymentMethod">
         /// The payment method.
         /// </param>
-        /// <param name="gateway">
-        /// The <see cref="BraintreeGateway"/>
+        /// <param name="braintreeApiService">
+        /// The braintree Api Service.
         /// </param>
-        public BraintreePaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, BraintreeGateway gateway)
+        public BraintreePaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
             : base(gatewayProviderService, paymentMethod)
         {
-            if (gateway == null) throw new ArgumentNullException("gateway");
-            _gateway = gateway;
+            Mandate.ParameterNotNull(braintreeApiService, "braintreeApiService");
+
+            _braintreeApiService = braintreeApiService;
         }
 
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            throw new System.NotImplementedException();
+            // this will fail if MerchelloContext.Current is null
+            var customer = invoice.Customer();
         }
 
         protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
@@ -65,5 +69,7 @@
         {
             throw new System.NotImplementedException();
         }
+
+
     }
 }

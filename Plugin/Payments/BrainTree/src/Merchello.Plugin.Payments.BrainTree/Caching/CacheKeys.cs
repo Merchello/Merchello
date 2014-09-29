@@ -34,5 +34,6 @@
         {
             return string.Format("braintree.paymentmethod.{0}", token);
         }
+
     }
 }

@@ -200,14 +200,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\BraintreeApiProvider.cs" />
-    <Compile Include="Api\BraintreePaymentMethodApiProvider.cs" />
-    <Compile Include="Api\BraintreeSubscriptionApiProvider.cs" />
-    <Compile Include="Api\BraintreeTransactionApiProvider.cs" />
-    <Compile Include="Api\IBraintreeApiProvider.cs" />
-    <Compile Include="Api\IBraintreePaymentMethodApiProvider.cs" />
-    <Compile Include="Api\IBraintreeSubscriptionApiProvider.cs" />
-    <Compile Include="Api\IBraintreeTransactionApiProvider.cs" />
+    <Compile Include="Services\BraintreeApiService.cs" />
+    <Compile Include="Services\BraintreePaymentMethodApiService.cs" />
+    <Compile Include="Services\BraintreeSubscriptionApiService.cs" />
+    <Compile Include="Services\BraintreeTransactionApiService.cs" />
+    <Compile Include="Services\IBraintreeApiService.cs" />
+    <Compile Include="Services\IBraintreePaymentMethodApiService.cs" />
+    <Compile Include="Services\IBraintreeSubscriptionApiService.cs" />
+    <Compile Include="Services\IBraintreeTransactionApiService.cs" />
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="Builders\IBuilder.cs" />
     <Compile Include="Builders\InvoiceTransactionRequestBuilder.cs" />
@@ -228,9 +228,9 @@
     <Compile Include="Provider\BraintreePaymentGatewayProvider.cs" />
     <Compile Include="Provider\IBraintreePaymentGatewayMethod.cs" />
     <Compile Include="Provider\IBraintreePaymentGatewayProvider.cs" />
-    <Compile Include="Api\BraintreeCustomerApiProvider.cs" />
-    <Compile Include="Api\BraintreeApiProviderBase.cs" />
-    <Compile Include="Api\IBraintreeCustomerApiProvider.cs" />
+    <Compile Include="Services\BraintreeCustomerApiService.cs" />
+    <Compile Include="Services\BraintreeApiServiceBase.cs" />
+    <Compile Include="Services\IBraintreeCustomerApiService.cs" />
     <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>

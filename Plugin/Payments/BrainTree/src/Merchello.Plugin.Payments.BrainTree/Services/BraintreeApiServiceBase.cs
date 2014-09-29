@@ -1,20 +1,17 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Api
+﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
-
     using global::Braintree;
-
-    using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Models;
-    using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
-
+    using Core;
+    using Core.Models;
+    using Models;
+    using Persistence.Factories;
     using Umbraco.Core.Cache;
 
     /// <summary>
     /// A base class for local Braintree services.
     /// </summary>
-    internal abstract class BraintreeApiProviderBase
+    internal abstract class BraintreeApiServiceBase
     {
         /// <summary>
         /// The <see cref="BraintreeApiRequestFactory"/>.
@@ -23,7 +20,7 @@
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeApiProviderBase"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeApiServiceBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>.
@@ -31,7 +28,7 @@
         /// <param name="settings">
         /// The settings.
         /// </param>
-        protected BraintreeApiProviderBase(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+        protected BraintreeApiServiceBase(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(settings, "settings");

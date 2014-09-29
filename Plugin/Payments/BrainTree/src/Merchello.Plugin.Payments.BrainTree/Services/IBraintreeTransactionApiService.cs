@@ -1,15 +1,14 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Api
+﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using global::Braintree;
-
-    using Merchello.Core.Gateways.Payment;
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Models;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Models;
 
     /// <summary>
     /// Defines the BraintreeTransactionApiProvider.
     /// </summary>
-    public interface IBraintreeTransactionApiProvider
+    public interface IBraintreeTransactionApiService
     {
         /// <summary>
         /// Performs a Braintree sales transaction.
