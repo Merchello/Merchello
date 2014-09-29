@@ -1,32 +1,20 @@
-﻿using Merchello.Plugin.Payments.Chase.Models;
+﻿using System;
+using System.Configuration;
+using  Merchello.Plugin.Payments.Chase.Models;
 
-namespace Merchello.Tests.Braintree.Integration.TestHelpers
+namespace Merchello.Tests.Chase.Integration.TestHelpers
 {
-    using System;
-    using System.Configuration;
-
-    using Merchello.Plugin.Payments.Braintree.Models;
-
-    using Environment = global::Braintree.Environment;
-
     public class TestHelper
     {
-        public static ChaseProcessorSettings GetBraintreeProviderSettings()
+        public static ChaseProcessorSettings GetChaseProviderSettings()
         {
             return new ChaseProcessorSettings()
-                            {
-                                Environment = Environment.SANDBOX,
-                                PublicKey = ConfigurationManager.AppSettings["publicKey"],
-                                PrivateKey = ConfigurationManager.AppSettings["privateKey"],
-                                MerchantId = ConfigurationManager.AppSettings["merchantId"],
-                                MerchantDescriptor = new MerchantDescriptor()
-                                    {
-                                        Name = ConfigurationManager.AppSettings["merchantName"],
-                                        Url = ConfigurationManager.AppSettings["merchantUrl"],
-                                        Phone = ConfigurationManager.AppSettings["merchantPhone"]
-                                    },
-                                DefaultTransactionOption = (TransactionOption)Enum.Parse(typeof(TransactionOption), ConfigurationManager.AppSettings["defaultTransactionOption"])
-                            };
+            {
+                MerchantId = ConfigurationManager.AppSettings["merchantId"],
+                Bin = ConfigurationManager.AppSettings["bin"],
+                Username = ConfigurationManager.AppSettings["username"],
+                Password = ConfigurationManager.AppSettings["password"],
+            };
         }
 
         public static string PaymentMethodNonce

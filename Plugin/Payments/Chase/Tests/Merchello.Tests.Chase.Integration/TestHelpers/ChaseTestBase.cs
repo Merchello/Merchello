@@ -1,42 +1,99 @@
-﻿using Merchello.Plugin.Payments.Chase.Models;
+﻿using System;
+using System.Configuration;
+using System.Linq;
+using Merchello.Core;
+using Merchello.Core.Models;
+using Merchello.Core.Services;
+using Merchello.Plugin.Payments.Chase;
+using Merchello.Plugin.Payments.Chase.Models;
 using Merchello.Plugin.Payments.Chase.Provider;
 using Merchello.Tests.Base.TestHelpers;
+using Moq;
+using NUnit.Framework;
+using Umbraco.Core.Cache;
+using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.UnitOfWork;
+using Constants = Merchello.Core.Constants;
 
-namespace Merchello.Tests.Braintree.Integration.TestHelpers
+namespace Merchello.Tests.Chase.Integration.TestHelpers
 {
-    using System;
-
-    using Merchello.Core;
-    using Merchello.Core.Models;
-
-    using NUnit.Framework;             
-
-    public abstract class ChaseTestBase : MerchelloAllInTestBase
+    public abstract class ChaseTestBase
     {
         protected ChaseProcessorSettings ChaseProcessorSettings;
 
         protected ICustomer TestCustomer;
 
-        protected Guid CustomerKey = new Guid("1A6E8170-9CB9-41C0-B944-36F16B97BED2");
+        protected Guid CustomerKey = new Guid("D584F356-454B-4D14-BE44-13D9D25D6A74");
 
-        protected ChasePaymentGatewayProvider Gateway;
+        protected ChasePaymentGatewayProvider Provider;
 
+        protected IGatewayProviderSettings GatewayProviderSettings;
+        protected IGatewayProviderService GatewayProviderService;
 
         [TestFixtureSetUp]
-        public virtual void TestFixtureSetup()
+        public void TestFixtureSetup()
         {
-            TestCustomer = MerchelloContext.Current.Services.CustomerService.CreateCustomerWithKey(
-                Guid.NewGuid().ToString(),
-                "debug",
-                "debug",
-                "debug@debug.com");
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
+                   
+            var cacheProvider = new Mock<IRuntimeCacheProvider>();
 
-            ChaseProcessorSettings = TestHelper.GetBraintreeProviderSettings();
+            GatewayProviderService = new GatewayProviderService();
 
-            AutoMapperMappings.CreateMappings();
+            var providers =
+                GatewayProviderService.GetAllGatewayProviders()
+                    .Where(x => x.GatewayProviderType == GatewayProviderType.Payment);
 
-            Gateway = BraintreeProviderSettings.AsBraintreeGateway();
+            GatewayProviderSettings = providers.FirstOrDefault(x => x.Key == new Guid("D584F356-454B-4D14-BE44-13D9D25D6A74"));
 
+            if (GatewayProviderSettings != null)
+            {
+                GatewayProviderService.Delete(GatewayProviderSettings);
+            }
+
+            var petaPoco = new PetaPocoUnitOfWorkProvider();
+
+            var merchantId = ConfigurationManager.AppSettings["merchantId"];
+            var bin = ConfigurationManager.AppSettings["bin"];
+            var username = ConfigurationManager.AppSettings["username"];
+            var password = ConfigurationManager.AppSettings["password"];
+            var sql = new Sql();
+
+            var dto = new GatewayProviderSettingsDto()
+            {
+                Key = new Guid("D584F356-454B-4D14-BE44-13D9D25D6A74"),
+                Name = "Chase",
+                Description = "Chase",
+                ExtendedData = "<extendedData />",
+                EncryptExtendedData = false,
+                ProviderTfKey = Constants.TypeFieldKeys.GatewayProvider.PaymentProviderKey,
+                CreateDate = DateTime.Now,
+                UpdateDate = DateTime.Now
+            };
+
+
+            petaPoco.GetUnitOfWork().Database.Insert(dto);
+
+            GatewayProviderSettings =
+                GatewayProviderService.GetGatewayProviderByKey(new Guid("D584F356-454B-4D14-BE44-13D9D25D6A74"));
+
+            var providerSettings = new ChaseProcessorSettings()
+            {
+                MerchantId = merchantId,
+                Bin = bin,
+                Username = username,
+                Password = password
+            };
+
+            GatewayProviderSettings.ExtendedData.SaveProcessorSettings(providerSettings);
+
+            Provider = new ChasePaymentGatewayProvider(GatewayProviderService, GatewayProviderSettings,
+                cacheProvider.Object);
+
+            //TestCustomer = MerchelloContext.Current.Services.CustomerService.CreateCustomerWithKey(
+            //    Guid.NewGuid().ToString(),
+            //    "debug",
+            //    "debug",
+            //    "debug@debug.com");
         }
     }
 }

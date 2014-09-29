@@ -1,22 +1,14 @@
-﻿namespace Merchello.Tests.Braintree.Integration.TestHelpers
+﻿using NUnit.Framework;
+
+namespace Merchello.Tests.Chase.Integration.TestHelpers
 {
-    using Merchello.Plugin.Payments.Braintree.Provider;
-
-    using NUnit.Framework;
-
-    public abstract class ProviderTestsBase : BraintreeTestBase
-    {
-
-        protected BraintreePaymentGatewayProvider Provider;
-
+    public abstract class ProviderTestsBase : ChaseTestBase
+    {                                                      
         
         [TestFixtureSetUp]
-        public override void TestFixtureSetup()
+        public void TestFixtureSetup()
         {
             base.TestFixtureSetup();
-
-
-
             // Sets Umbraco SqlSytax and ensure database is setup
 
         }

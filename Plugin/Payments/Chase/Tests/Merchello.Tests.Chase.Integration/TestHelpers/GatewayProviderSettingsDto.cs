@@ -1,10 +1,9 @@
-﻿namespace Merchello.Tests.Braintree.Integration.TestHelpers
+﻿using System;
+using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.DatabaseAnnotations;
+
+namespace Merchello.Tests.Chase.Integration.TestHelpers
 {
-    using System;
-
-    using Umbraco.Core.Persistence;
-    using Umbraco.Core.Persistence.DatabaseAnnotations;
-
     [TableName("merchGatewayProviderSettings")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]

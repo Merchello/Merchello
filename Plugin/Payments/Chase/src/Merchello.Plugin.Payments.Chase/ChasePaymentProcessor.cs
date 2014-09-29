@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Xml;
+using System.Xml.Linq;
 using Merchello.Core.Gateways.Payment;
 using Merchello.Core.Models;
 using Merchello.Plugin.Payments.Chase.Models;
@@ -141,8 +143,18 @@ namespace Merchello.Plugin.Payments.Chase
             }
             if (response.Approved)
             {
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, string.Format("Approved ({0})", response.TxRefNum));
+                var txRefIdx = "";
+                if (response.XML != null)
+                {
+                    var xml = XDocument.Parse(response.MaskedXML);
+                    txRefIdx = xml.Descendants("TxRefIdx").First().Value;
+                }
+
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceIndex, txRefIdx);
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
+
+             
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
                 payment.Authorized = true;
                 if (transactionMode == TransactionMode.AuthorizeAndCapture)
@@ -215,7 +227,15 @@ namespace Merchello.Plugin.Payments.Chase
             }
             if (response.Approved)
             {
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, string.Format("Approved ({0})", response.TxRefNum));
+                var txRefIdx = "";
+                if (response.XML != null)
+                {
+                    var xml = XDocument.Parse(response.MaskedXML);
+                    txRefIdx = xml.Descendants("TxRefIdx").First().Value;
+                }
+
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceIndex, txRefIdx);
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
                 
@@ -284,11 +304,19 @@ namespace Merchello.Plugin.Payments.Chase
             }
             if (response.Approved)
             {
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, string.Format("Approved ({0})", response.TxRefNum));
+                var txRefIdx = "";
+                if (response.XML != null)
+                {
+                    var xml = XDocument.Parse(response.MaskedXML);
+                    txRefIdx = xml.Descendants("TxRefIdx").First().Value;
+                }
+
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceIndex, txRefIdx);
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
 
-                payment.Collected = true;
+                payment.Collected = false;
 
                 return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
             }
@@ -317,12 +345,14 @@ namespace Merchello.Plugin.Payments.Chase
             transaction["OrbitalConnectionUsername"] = _settings.Username;
             transaction["OrbitalConnectionPassword"] = _settings.Password;
 
+            transaction["IndustryType"] = "EC";
+            transaction["MessageType"] = "R";
+
             transaction["MerchantID"] = _settings.MerchantId;
             transaction["BIN"] = _settings.Bin;
 
             transaction["OrderID"] = invoice.InvoiceNumber.ToString(CultureInfo.InstalledUICulture);
-            transaction["TxRefNum"] = txRefNum;
-            transaction["TxRefIdx"] = "0";
+            transaction["TxRefNum"] = txRefNum; 
 
             response = transaction.Process();
 
@@ -344,11 +374,11 @@ namespace Merchello.Plugin.Payments.Chase
             }
             if (response.Approved)
             {
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, string.Format("Approved ({0})", response.TxRefNum));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
 
-                payment.Collected = true;
+                payment.Collected = false;
 
                 return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
             }
