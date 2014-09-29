@@ -48,6 +48,8 @@ namespace Merchello.Plugin.Payments.Chase
 			// Populate the required fields for the given transaction type. You can use’
 			// the Paymentech Transaction Appendix to help you populate the transaction’
 
+            transaction["OrbitalConnectionUsername"] = _settings.Username;
+            transaction["OrbitalConnectionPassword"] = _settings.Password;
             /*
                 * Message Types
                 * MO – Mail Order transaction
@@ -66,19 +68,23 @@ namespace Merchello.Plugin.Payments.Chase
             */           
 			transaction["MessageType"] = transactionMode == TransactionMode.Authorize ? "A" : "AC";
 
-			transaction["MerchantID"] = "041756";
-			transaction["BIN"] = "000001";
-
+			transaction["MerchantID"] = _settings.MerchantId;
+			transaction["BIN"] = _settings.Bin;
             
             // Credit Card Number
             transaction["AccountNum"] = creditCard.CardNumber;
 
             transaction["OrderID"] = invoice.InvoiceNumber.ToString(CultureInfo.InstalledUICulture);
 
-			transaction["Amount"] = amount.ToString("0.00", CultureInfo.InstalledUICulture);
+			transaction["Amount"] = amount.ToString();
 
             // Expiration date
-			transaction["Exp"] = creditCard.ExpireMonth.PadLeft(2) + creditCard.ExpireYear;
+            var creditCardExpMonth = creditCard.ExpireMonth;
+            var creditCardExpYear = creditCard.ExpireYear.Length > 2
+                ? creditCard.ExpireYear.Substring(2, 2)
+                : creditCard.ExpireYear;
+
+			transaction["Exp"] = creditCardExpMonth.PadLeft(2) + creditCardExpYear;
 
 			transaction["AVSname"] = address.Name;
 			transaction["AVSaddress1"] = address.Address1;  
@@ -136,7 +142,7 @@ namespace Merchello.Plugin.Payments.Chase
             if (response.Approved)
             {
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, string.Format("Approved ({0})", response.TxRefNum));
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.ResponseCode));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
                 payment.Authorized = true;
                 if (transactionMode == TransactionMode.AuthorizeAndCapture)
@@ -172,9 +178,12 @@ namespace Merchello.Plugin.Payments.Chase
             {
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or TransactionCodes not present")), invoice, false);
             }
+            transaction["OrbitalConnectionUsername"] = _settings.Username;
+            transaction["OrbitalConnectionPassword"] = _settings.Password;
 
-            transaction["MerchantID"] = "041756";
-            transaction["BIN"] = "000001";
+            transaction["MerchantID"] = _settings.MerchantId;
+            transaction["BIN"] = _settings.Bin;
+
             transaction["OrderID"] = invoice.InvoiceNumber.ToString(CultureInfo.InstalledUICulture);
             transaction["TaxInd"] = "1";
             transaction["Tax"] = invoice.TotalTax().ToString(CultureInfo.InstalledUICulture);     
@@ -207,7 +216,7 @@ namespace Merchello.Plugin.Payments.Chase
             if (response.Approved)
             {
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, string.Format("Approved ({0})", response.TxRefNum));
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.ResponseCode));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
                 
                 payment.Collected = true;
@@ -243,11 +252,15 @@ namespace Merchello.Plugin.Payments.Chase
             {
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or TransactionCodes not present")), invoice, false);
             }
+            transaction["OrbitalConnectionUsername"] = _settings.Username;
+            transaction["OrbitalConnectionPassword"] = _settings.Password;
 
             transaction["IndustryType"] = "EC";
             transaction["MessageType"] = "R";
-            transaction["MerchantID"] = "041756";
-            transaction["BIN"] = "000001";    
+
+            transaction["MerchantID"] = _settings.MerchantId;
+            transaction["BIN"] = _settings.Bin;
+ 
             transaction["OrderID"] = invoice.InvoiceNumber.ToString(CultureInfo.InstalledUICulture);
             transaction["TxRefNum"] = txRefNum;                
 
@@ -272,7 +285,7 @@ namespace Merchello.Plugin.Payments.Chase
             if (response.Approved)
             {
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, string.Format("Approved ({0})", response.TxRefNum));
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.ResponseCode));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
 
                 payment.Collected = true;
@@ -301,8 +314,12 @@ namespace Merchello.Plugin.Payments.Chase
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or TransactionCodes not present")), invoice, false);
             }
 
-            transaction["MerchantID"] = "041756";
-            transaction["BIN"] = "000001";
+            transaction["OrbitalConnectionUsername"] = _settings.Username;
+            transaction["OrbitalConnectionPassword"] = _settings.Password;
+
+            transaction["MerchantID"] = _settings.MerchantId;
+            transaction["BIN"] = _settings.Bin;
+
             transaction["OrderID"] = invoice.InvoiceNumber.ToString(CultureInfo.InstalledUICulture);
             transaction["TxRefNum"] = txRefNum;
             transaction["TxRefIdx"] = "0";
@@ -328,7 +345,7 @@ namespace Merchello.Plugin.Payments.Chase
             if (response.Approved)
             {
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, string.Format("Approved ({0})", response.TxRefNum));
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.ResponseCode));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
 
                 payment.Collected = true;
