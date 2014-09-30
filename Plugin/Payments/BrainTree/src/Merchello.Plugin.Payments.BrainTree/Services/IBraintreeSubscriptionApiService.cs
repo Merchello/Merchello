@@ -120,6 +120,17 @@
         Subscription GetSubscription(string subscriptionId);
 
         /// <summary>
+        /// Determines if a subscription exists
+        /// </summary>
+        /// <param name="subscriptionId">
+        /// The subscription id.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not a subscription exists.
+        /// </returns>
+        bool Exists(string subscriptionId);
+
+        /// <summary>
         /// Gets a list of all discounts.
         /// </summary>
         /// <returns>

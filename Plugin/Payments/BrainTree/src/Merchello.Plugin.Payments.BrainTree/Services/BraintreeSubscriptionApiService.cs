@@ -1,6 +1,4 @@
-﻿using Umbraco.Core.Events;
-
-namespace Merchello.Plugin.Payments.Braintree.Services
+﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
     using System.Collections.Generic;
@@ -9,6 +7,7 @@ namespace Merchello.Plugin.Payments.Braintree.Services
     using Exceptions;
     using Models;
     using Umbraco.Core;
+    using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
 
     /// <summary>
@@ -148,6 +147,8 @@ namespace Merchello.Plugin.Payments.Braintree.Services
 
             if (result.IsSuccess())
             {
+                Created.RaiseEvent(new Core.Events.NewEventArgs<Subscription>(result.Target), this);
+
                 return Attempt<Subscription>.Succeed(result.Target);
             }
 
@@ -158,17 +159,50 @@ namespace Merchello.Plugin.Payments.Braintree.Services
             return Attempt<Subscription>.Fail(error);
         }
 
+        /// <summary>
+        /// Cancels an existing subscription
+        /// </summary>
+        /// <param name="subscriptionId">
+        /// The subscription id.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not the cancellation was successful.
+        /// </returns>
         public bool Cancel(string subscriptionId)
         {
-            throw new NotImplementedException();
+            var result = BraintreeGateway.Subscription.Cancel(subscriptionId);
+
+            if (result.IsSuccess())
+            {
+                return true;
+            }
+
+            var error = new BraintreeApiException(result.Errors, result.Message);
+
+            LogHelper.Error<BraintreeSubscriptionApiService>("Failed to cancel a subscription", error);
+
+            return false;
         }
 
+        /// <summary>
+        /// Updates an existing subscription
+        /// </summary>
+        /// <param name="request">
+        /// The request.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         public Attempt<Subscription> Update(SubscriptionRequest request)
         {
+            Updating.RaiseEvent(new SaveEventArgs<SubscriptionRequest>(request), this);
+
             var result = BraintreeGateway.Subscription.Create(request);
 
             if (result.IsSuccess())
             {
+                Updated.RaiseEvent(new SaveEventArgs<Subscription>(result.Target), this);
+
                 return Attempt<Subscription>.Succeed(result.Target);
             }
 
@@ -179,20 +213,70 @@ namespace Merchello.Plugin.Payments.Braintree.Services
             return Attempt<Subscription>.Fail(error);
         }
 
+        /// <summary>
+        /// Gets the details of an existing subscription.
+        /// </summary>
+        /// <param name="subscriptionId">
+        /// The subscription id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Subscription"/>.
+        /// </returns>        
         public Subscription GetSubscription(string subscriptionId)
         {
-            throw new NotImplementedException();
+            if (Exists(subscriptionId))
+                return (Subscription)RuntimeCache.GetCacheItem(MakeSubscriptionCacheKey(subscriptionId), () => BraintreeGateway.Subscription.Find(subscriptionId));
+
+            return null;
         }
 
+        /// <summary>
+        /// Determines if a subscription exists
+        /// </summary>
+        /// <param name="subscriptionId">
+        /// The subscription id.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not a subscription exists.
+        /// </returns>
+        public bool Exists(string subscriptionId)
+        {
+            var cacheKey = MakeSubscriptionCacheKey(subscriptionId);
+
+            try
+            {                
+                var subscription = RuntimeCache.GetCacheItem(cacheKey, () => BraintreeGateway.Subscription.Find(subscriptionId));
+
+                return subscription != null;
+            }
+            catch (Exception)
+            {
+                RuntimeCache.ClearCacheItem(cacheKey);
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of all discounts.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{Discount}"/>.
+        /// </returns>
         public IEnumerable<Discount> GetAllDiscounts()
         {
-            throw new System.NotImplementedException();
+            return BraintreeGateway.Discount.All();
         }
 
+        /// <summary>
+        /// Gets a list of all AddOn(s).
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{AddOn}"/>.
+        /// </returns>
         public IEnumerable<AddOn> GetAllAddOns()
         {
-            throw new System.NotImplementedException();
+            return BraintreeGateway.AddOn.All();
         }
-
     }
 }

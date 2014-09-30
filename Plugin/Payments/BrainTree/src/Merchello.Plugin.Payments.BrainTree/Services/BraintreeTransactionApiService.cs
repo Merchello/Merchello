@@ -120,6 +120,37 @@
         }
 
         /// <summary>
+        /// Performs a Braintree submit for settlement transaction
+        /// </summary>
+        /// <param name="transactionId">
+        /// The transaction id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Result{Transaction}"/>.
+        /// </returns>
+        public Result<Transaction> SubmitForSettlement(string transactionId)
+        {
+            return BraintreeGateway.Transaction.SubmitForSettlement(transactionId);
+        }
+
+        /// <summary>
+        /// Performs a Braintree submit for settlement transaction with a specified amount
+        /// </summary>
+        /// <param name="transactionId">
+        /// The transaction id.
+        /// </param>
+        /// <param name="amount">
+        /// The amount of the transaction to be captured
+        /// </param>
+        /// <returns>
+        /// The <see cref="Result{Transaction}"/>.
+        /// </returns>
+        public Result<Transaction> SubmitForSettlement(string transactionId, decimal amount)
+        {
+            return BraintreeGateway.Transaction.SubmitForSettlement(transactionId, amount);
+        }
+
+        /// <summary>
         /// Performs a total refund.
         /// </summary>
         /// <param name="transactionId">

@@ -1,11 +1,9 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Persistence.Factories
+﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
-
     using global::Braintree;
-
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Models;
+    using Core.Models;
+    using Models;
 
     /// <summary>
     /// The <see cref="BraintreeApiRequestFactory"/>.

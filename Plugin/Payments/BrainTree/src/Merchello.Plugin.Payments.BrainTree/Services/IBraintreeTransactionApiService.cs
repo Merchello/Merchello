@@ -80,6 +80,29 @@
         Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, IAddress shippingAddress, TransactionOption option = TransactionOption.SubmitForSettlement);
 
         /// <summary>
+        /// Performs a Braintree submit for settlement transaction
+        /// </summary>
+        /// <param name="transactionId">
+        /// The transaction id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Result{Transaction}"/>.
+        /// </returns>
+        Result<Transaction> SubmitForSettlement(string transactionId);
+
+        /// <summary>
+        /// Performs a Braintree submit for settlement transaction with a specified amount
+        /// </summary>
+        /// <param name="transactionId">
+        /// The transaction id.
+        /// </param>
+        /// <param name="amount">The amount of the transaction to be captured</param>
+        /// <returns>
+        /// The <see cref="Result{Transaction}"/>.
+        /// </returns>
+        Result<Transaction> SubmitForSettlement(string transactionId, decimal amount);
+            
+        /// <summary>
         /// Performs a total refund.
         /// </summary>
         /// <param name="transactionId">

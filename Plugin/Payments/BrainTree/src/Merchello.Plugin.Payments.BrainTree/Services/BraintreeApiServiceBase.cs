@@ -5,7 +5,6 @@
     using Core;
     using Core.Models;
     using Models;
-    using Persistence.Factories;
     using Umbraco.Core.Cache;
 
     /// <summary>
@@ -112,6 +111,20 @@
         protected string MakePaymentMethodCacheKey(string token)
         {
             return Caching.CacheKeys.BraintreePaymentMethod(token);
+        }
+
+        /// <summary>
+        /// Makes a subscription cache key.
+        /// </summary>
+        /// <param name="subscriptionId">
+        /// The subscription id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        protected string MakeSubscriptionCacheKey(string subscriptionId)
+        {
+            return Caching.CacheKeys.BraintreeSubscription(subscriptionId);
         }
 
         /// <summary>

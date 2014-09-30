@@ -1,11 +1,12 @@
-﻿namespace Merchello.Tests.Braintree.Integration.Api
+﻿using Merchello.Plugin.Payments.Braintree.Services;
+
+namespace Merchello.Tests.Braintree.Integration.Api
 {
     using System;
 
     using global::Braintree;
 
     using Merchello.Plugin.Payments.Braintree;
-    using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
     using Merchello.Tests.Braintree.Integration.TestHelpers;
 
     using NUnit.Framework;
