@@ -1,33 +1,28 @@
-﻿using System;
-using System.Diagnostics;
-using Braintree;
-using Merchello.Core;
-using Merchello.Plugin.Payments.Braintree.Exceptions;
-using Merchello.Plugin.Payments.Braintree.Models;
-using Newtonsoft.Json;
-using Umbraco.Core;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Plugin.Payments.Braintree.Provider
+﻿namespace Merchello.Plugin.Payments.Braintree.Provider
 {
-    using Core.Gateways;
-    using Core.Gateways.Payment;
-    using Core.Models;
-    using Core.Services;
-    using Services;
+    using System;
+
+    using global::Braintree;
+
+    using Merchello.Core;
+    using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Plugin.Payments.Braintree.Exceptions;
+    using Merchello.Plugin.Payments.Braintree.Models;
+    using Merchello.Plugin.Payments.Braintree.Services;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the BraintreePaymentGatewayMethod
     /// </summary>
-    [GatewayMethodUi("BrainTree.CreditCard")]
+    [GatewayMethodUi("BrainTree.SimpleTransaction")]
     [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello.BrainTree/paymentmethod.html")]
-    public class BraintreeSimpleTransactionPaymentGatewayMethod : PaymentGatewayMethodBase, IBraintreeSimpleTransactionPaymentGatewayMethod
+    public class BraintreeSimpleTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase, IBraintreeSimpleTransactionPaymentGatewayMethod
     {
-        /// <summary>
-        /// The <see cref="IBraintreeApiService"/>
-        /// </summary>
-        private readonly IBraintreeApiService _braintreeApiService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreeSimpleTransactionPaymentGatewayMethod"/> class.
         /// </summary>
@@ -41,11 +36,8 @@ namespace Merchello.Plugin.Payments.Braintree.Provider
         /// The braintree Api Service.
         /// </param>
         public BraintreeSimpleTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
-            : base(gatewayProviderService, paymentMethod)
+            : base(gatewayProviderService, paymentMethod, braintreeApiService)
         {
-            Mandate.ParameterNotNull(braintreeApiService, "braintreeApiService");
-
-            _braintreeApiService = braintreeApiService;
         }
 
         /// <summary>
@@ -136,40 +128,6 @@ namespace Merchello.Plugin.Payments.Braintree.Provider
             return attempt;
         }
 
-        protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Performs the actual work of voiding a payment in Merchello ONLY
-        /// </summary>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <param name="payment">
-        /// The payment.
-        /// </param>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPaymentResult"/>.
-        /// </returns>
-        /// <remarks>
-        /// This merely VOIDs the payment in Merchello and does nothing against the Braintree API as Braintree does not do a VOID
-        /// </remarks>
-        protected override IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
-        {
-            throw new NotImplementedException();
-        }
-
-
         /// <summary>
         /// Processes a payment against the Braintree API using the BraintreeApiService.
         /// </summary>
@@ -189,9 +147,9 @@ namespace Merchello.Plugin.Payments.Braintree.Provider
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
         /// <remarks>
-        /// This converts the <see cref="Result{Transaction}"/> into Merchello's <see cref="IPaymentResult"/>
+        /// This converts the <see cref="Result{T}"/> into Merchello's <see cref="IPaymentResult"/>
         /// </remarks>
-        private IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string paymentMethodNonce)
+        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string paymentMethodNonce)
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, amount, PaymentMethod.Key);
 
@@ -199,9 +157,9 @@ namespace Merchello.Plugin.Payments.Braintree.Provider
             payment.Authorized = false;
             payment.Collected = false;
             payment.PaymentMethodName = "Braintree Transaction";
-            payment.ExtendedData.SetValue(Constants.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
+            payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
 
-            var result = _braintreeApiService.Transaction.Sale(invoice, paymentMethodNonce, option: option);
+            var result = BraintreeApiService.Transaction.Sale(invoice, paymentMethodNonce, option: option);
 
             if (result.IsSuccess())
             {
@@ -212,8 +170,8 @@ namespace Merchello.Plugin.Payments.Braintree.Provider
                 {
                     payment.Authorized = true;
                     payment.Collected = true;
-                }   
-          
+                }
+
 
                 return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
             }
@@ -221,6 +179,6 @@ namespace Merchello.Plugin.Payments.Braintree.Provider
             var error = new BraintreeApiException(result.Errors, result.Message);
 
             return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);
-        }        
+        }
     }
 }

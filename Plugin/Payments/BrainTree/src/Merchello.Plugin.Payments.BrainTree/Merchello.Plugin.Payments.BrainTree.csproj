@@ -81,16 +81,13 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Merchello.Core">
       <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Merchello.Examine">
       <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Merchello.Web">
       <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
@@ -201,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Provider\BraintreeCustomerTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\BraintreePaymentGatewayMethodBase.cs" />
     <Compile Include="Provider\IBraintreeCustomerTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Services\BraintreeApiService.cs" />
     <Compile Include="Services\BraintreePaymentMethodApiService.cs" />
