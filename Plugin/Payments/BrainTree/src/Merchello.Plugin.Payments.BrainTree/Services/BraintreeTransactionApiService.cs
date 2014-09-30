@@ -1,32 +1,29 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Api
+﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using global::Braintree;
-
-    using Merchello.Core;
-    using Merchello.Core.Gateways.Payment;
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Models;
-
-    using Umbraco.Core;
+    using Core;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Models;
 
     /// <summary>
-    /// Represents the <see cref="BraintreeTransactionApiProvider"/>.
+    /// Represents the <see cref="BraintreeTransactionApiService"/>.
     /// </summary>
-    internal class BraintreeTransactionApiProvider : BraintreeApiProviderBase, IBraintreeTransactionApiProvider
+    internal class BraintreeTransactionApiService : BraintreeApiServiceBase, IBraintreeTransactionApiService
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeTransactionApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeTransactionApiService"/> class.
         /// </summary>
         /// <param name="settings">
         /// The settings.
         /// </param>
-        public BraintreeTransactionApiProvider(BraintreeProviderSettings settings)
+        public BraintreeTransactionApiService(BraintreeProviderSettings settings)
             : this(Core.MerchelloContext.Current, settings)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeTransactionApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeTransactionApiService"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -34,7 +31,7 @@
         /// <param name="settings">
         /// The settings.
         /// </param>
-        internal BraintreeTransactionApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+        internal BraintreeTransactionApiService(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
             : base(merchelloContext, settings)
         {
         }
@@ -120,6 +117,37 @@
             if (shippingAddress != null) request.ShippingAddress = RequestFactory.CreateAddressRequest(shippingAddress);
 
             return BraintreeGateway.Transaction.Sale(request);
+        }
+
+        /// <summary>
+        /// Performs a Braintree submit for settlement transaction
+        /// </summary>
+        /// <param name="transactionId">
+        /// The transaction id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Result{Transaction}"/>.
+        /// </returns>
+        public Result<Transaction> SubmitForSettlement(string transactionId)
+        {
+            return BraintreeGateway.Transaction.SubmitForSettlement(transactionId);
+        }
+
+        /// <summary>
+        /// Performs a Braintree submit for settlement transaction with a specified amount
+        /// </summary>
+        /// <param name="transactionId">
+        /// The transaction id.
+        /// </param>
+        /// <param name="amount">
+        /// The amount of the transaction to be captured
+        /// </param>
+        /// <returns>
+        /// The <see cref="Result{Transaction}"/>.
+        /// </returns>
+        public Result<Transaction> SubmitForSettlement(string transactionId, decimal amount)
+        {
+            return BraintreeGateway.Transaction.SubmitForSettlement(transactionId, amount);
         }
 
         /// <summary>

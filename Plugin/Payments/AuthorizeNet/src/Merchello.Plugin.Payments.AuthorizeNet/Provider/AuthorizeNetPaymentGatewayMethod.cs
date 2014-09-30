@@ -67,13 +67,12 @@
         {
             var cc = args.AsCreditCardFormData();
 
-            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, invoice.Total, PaymentMethod.Key);
+            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, amount, PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
             payment.Authorized = false;
             payment.Collected = false;
             payment.PaymentMethodName = string.Format("{0} Authorize.Net Credit Card", cc.CreditCardType);
             payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CcLastFour, cc.CardNumber.Substring(cc.CardNumber.Length - 4, 4).EncryptWithMachineKey());
-
             
             var result = _processor.ProcessPayment(invoice, payment, transactionMode, amount, cc);
 

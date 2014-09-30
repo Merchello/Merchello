@@ -1,36 +1,34 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Api
+﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
-
     using global::Braintree;
     using global::Braintree.Exceptions;
-
-    using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Exceptions;
-    using Merchello.Plugin.Payments.Braintree.Models;
-
+    using Core;
+    using Core.Models;
+    using Exceptions;
+    using Models;
     using Umbraco.Core;
+    using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
 
     /// <summary>
     /// The braintree customer service.
     /// </summary>
-    internal class BraintreeCustomerApiProvider : BraintreeApiProviderBase, IBraintreeCustomerApiProvider
+    internal class BraintreeCustomerApiService : BraintreeApiServiceBase, IBraintreeCustomerApiService
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeCustomerApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeCustomerApiService"/> class.
         /// </summary>
         /// <param name="settings">
         /// The settings.
         /// </param>
-        public BraintreeCustomerApiProvider(BraintreeProviderSettings settings)
+        public BraintreeCustomerApiService(BraintreeProviderSettings settings)
             : this(Core.MerchelloContext.Current, settings)
         {            
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeCustomerApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeCustomerApiService"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -38,10 +36,34 @@
         /// <param name="settings">
         /// The settings.
         /// </param>
-        internal BraintreeCustomerApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+        internal BraintreeCustomerApiService(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
             : base(merchelloContext, settings)
         {
         }
+
+        #region Events
+
+        /// <summary>
+        /// Occurs before the Create
+        /// </summary>
+        public static event TypedEventHandler<BraintreeCustomerApiService, Core.Events.NewEventArgs<CustomerRequest>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<BraintreeCustomerApiService, Core.Events.NewEventArgs<Customer>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<BraintreeCustomerApiService, SaveEventArgs<CustomerRequest>> Updating;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<BraintreeCustomerApiService, SaveEventArgs<Customer>> Updated;
+
+        #endregion
 
         /// <summary>
         /// Creates a Braintree <see cref="Customer"/> from a Merchello <see cref="ICustomer"/>
@@ -65,17 +87,21 @@
         {
             if (this.Exists(customer)) return Attempt.Succeed(this.GetBraintreeCustomer(customer));
 
-           var request = RequestFactory.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress);
+            var request = RequestFactory.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress);
+
+            Creating.RaiseEvent(new Core.Events.NewEventArgs<CustomerRequest>(request), this);
 
             var result = this.BraintreeGateway.Customer.Create(request);
 
             if (result.IsSuccess())
             {
+                Created.RaiseEvent(new Core.Events.NewEventArgs<Customer>(result.Target), this);
+
                 return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
-            LogHelper.Error<BraintreeCustomerApiProvider>("Braintree API Customer Create return a failure", error);
+            LogHelper.Error<BraintreeCustomerApiService>("Braintree API Customer Create return a failure", error);
 
             return Attempt<Customer>.Fail(error);
         }
@@ -98,6 +124,8 @@
 
             var request = RequestFactory.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress, true);
 
+            Updating.RaiseEvent(new SaveEventArgs<CustomerRequest>(request), this);
+
             var result = this.BraintreeGateway.Customer.Update(customer.Key.ToString(), request);
 
             if (result.IsSuccess())
@@ -105,11 +133,13 @@
                 var cacheKey = this.MakeCustomerCacheKey(customer);
                 this.RuntimeCache.ClearCacheItem(cacheKey);
 
+                Updated.RaiseEvent(new SaveEventArgs<Customer>(result.Target), this);
+
                 return Attempt<Customer>.Succeed((Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
-            LogHelper.Error<BraintreeCustomerApiProvider>("Braintree API Customer Create return a failure", error);
+            LogHelper.Error<BraintreeCustomerApiService>("Braintree API Customer Create return a failure", error);
 
             return Attempt<Customer>.Fail(error);
         }

@@ -1,4 +1,6 @@
-﻿namespace Merchello.Tests.Braintree.Integration.Services
+﻿using Merchello.Plugin.Payments.Braintree.Services;
+
+namespace Merchello.Tests.Braintree.Integration.Services
 {
     using System;
     using System.Linq;
@@ -6,7 +8,6 @@
     using global::Braintree;
 
     using Merchello.Core;
-    using Merchello.Plugin.Payments.Braintree.Api;
     using Merchello.Tests.Braintree.Integration.TestHelpers;
 
     using NUnit.Framework;
@@ -14,14 +15,14 @@
     [TestFixture]
     public class BraintreeCustomerServiceTests : BraintreeTestBase
     {
-        private IBraintreeCustomerApiProvider _braintreeCustomerApiProvider;
+        private IBraintreeCustomerApiService _braintreeCustomerApiService;
 
         [TestFixtureSetUp]
         public override void TestFixtureSetup()
         {
             base.TestFixtureSetup();
 
-            this._braintreeCustomerApiProvider = new BraintreeCustomerApiProvider(MerchelloContext.Current, BraintreeProviderSettings);   
+            this._braintreeCustomerApiService = new BraintreeCustomerApiService(MerchelloContext.Current, BraintreeProviderSettings);   
         }
 
         /// <summary>
@@ -33,7 +34,7 @@
             //// Arrange
             
             //// Act
-            var customer = this._braintreeCustomerApiProvider.GetBraintreeCustomer(TestCustomer);
+            var customer = this._braintreeCustomerApiService.GetBraintreeCustomer(TestCustomer);
 
             Assert.NotNull(customer);
 
@@ -46,7 +47,7 @@
         [Test]
         public void Can_Generate_A_ClientToken_For_An_AnonymousCustomer()
         {
-            var token = this._braintreeCustomerApiProvider.GenerateClientRequestToken();
+            var token = this._braintreeCustomerApiService.GenerateClientRequestToken();
 
             Console.Write(token);
             Assert.IsNotNullOrEmpty(token);
@@ -58,7 +59,7 @@
         [Test]
         public void Can_Generate_A_ClientToken_For_A_Customer()
         {
-            var token = this._braintreeCustomerApiProvider.GenerateClientRequestToken(TestCustomer);
+            var token = this._braintreeCustomerApiService.GenerateClientRequestToken(TestCustomer);
 
             Console.Write(token);
             Assert.IsNotNullOrEmpty(token);

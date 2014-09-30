@@ -130,6 +130,43 @@
        
         #endregion
 
+        #region Customer
+
+        /// <summary>
+        /// Gets the customer from an invoice (if applicable)
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomer"/>.
+        /// </returns>
+        public static ICustomer Customer(this IInvoice invoice)
+        {
+            return invoice.Customer(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomer"/>.
+        /// </returns>
+        public static ICustomer Customer(this IInvoice invoice, IMerchelloContext merchelloContext)
+        {
+            if (invoice.CustomerKey == null) return null;
+
+            return merchelloContext.Services.CustomerService.GetByKey(invoice.CustomerKey.Value);
+        }
+
+        #endregion
+
         #region Order
 
         /// <summary>

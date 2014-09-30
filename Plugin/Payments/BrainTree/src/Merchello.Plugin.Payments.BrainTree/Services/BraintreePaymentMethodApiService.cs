@@ -1,40 +1,39 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Api
+﻿using Umbraco.Core.Events;
+
+namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
-
     using global::Braintree;
-
-    using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Exceptions;
-    using Merchello.Plugin.Payments.Braintree.Models;
-
+    using Core;
+    using Core.Models;
+    using Exceptions;
+    using Models;
     using Umbraco.Core;
     using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the BraintreePaymentMethodApiProvider.
     /// </summary>
-    internal class BraintreePaymentMethodApiProvider : BraintreeApiProviderBase, IBraintreePaymentMethodApiProvider
+    internal class BraintreePaymentMethodApiService : BraintreeApiServiceBase, IBraintreePaymentMethodApiService
     {
         /// <summary>
-        /// The <see cref="IBraintreeCustomerApiProvider"/>.
+        /// The <see cref="IBraintreeCustomerApiService"/>.
         /// </summary>
-        private readonly IBraintreeCustomerApiProvider _braintreeCustomerApiProvider;
+        private readonly IBraintreeCustomerApiService _braintreeCustomerApiService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreePaymentMethodApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreePaymentMethodApiService"/> class.
         /// </summary>
         /// <param name="settings">
         /// The settings.
         /// </param>
-        public BraintreePaymentMethodApiProvider(BraintreeProviderSettings settings)
+        public BraintreePaymentMethodApiService(BraintreeProviderSettings settings)
             : this(Core.MerchelloContext.Current, settings)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreePaymentMethodApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreePaymentMethodApiService"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -42,13 +41,13 @@
         /// <param name="settings">
         /// The settings.
         /// </param>
-        public BraintreePaymentMethodApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
-            : this(merchelloContext, settings, new BraintreeCustomerApiProvider(merchelloContext, settings))
+        public BraintreePaymentMethodApiService(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+            : this(merchelloContext, settings, new BraintreeCustomerApiService(merchelloContext, settings))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreePaymentMethodApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreePaymentMethodApiService"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -56,16 +55,40 @@
         /// <param name="settings">
         /// The settings.
         /// </param>
-        /// <param name="customerApiProvider">
+        /// <param name="customerApiService">
         /// The customer api provider.
         /// </param>
-        internal BraintreePaymentMethodApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings, IBraintreeCustomerApiProvider customerApiProvider)
+        internal BraintreePaymentMethodApiService(IMerchelloContext merchelloContext, BraintreeProviderSettings settings, IBraintreeCustomerApiService customerApiService)
             : base(merchelloContext, settings)
         {
-            Mandate.ParameterNotNull(customerApiProvider, "customerApiProvider");
+            Mandate.ParameterNotNull(customerApiService, "customerApiProvider");
 
-            _braintreeCustomerApiProvider = customerApiProvider;
+            _braintreeCustomerApiService = customerApiService;
         }
+
+        #region Events
+
+        /// <summary>
+        /// Occurs before the Create
+        /// </summary>
+        public static event TypedEventHandler<BraintreePaymentMethodApiService, Core.Events.NewEventArgs<PaymentMethodRequest>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<BraintreePaymentMethodApiService, Core.Events.NewEventArgs<PaymentMethod>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<BraintreePaymentMethodApiService, SaveEventArgs<PaymentMethodRequest>> Updating;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<BraintreePaymentMethodApiService, SaveEventArgs<PaymentMethod>> Updated;
+
+        #endregion
 
         /// <summary>
         /// Adds a credit card to an existing customer.
@@ -114,7 +137,7 @@
         public Attempt<PaymentMethod> Create(ICustomer customer, string paymentMethodNonce, string token, IAddress billingAddress = null, bool isDefault = true)
         {
             //// Asserts the customer exists or creates one in BrainTree if it does not exist
-            var btc = _braintreeCustomerApiProvider.GetBraintreeCustomer(customer);
+            var btc = _braintreeCustomerApiService.GetBraintreeCustomer(customer);
 
             var request = RequestFactory.CreatePaymentMethodRequest(customer, paymentMethodNonce);
 
@@ -122,18 +145,25 @@
 
             if (billingAddress != null) request.BillingAddress = RequestFactory.CreatePaymentMethodAddressRequest(billingAddress);
 
+
+            Creating.RaiseEvent(new Core.Events.NewEventArgs<PaymentMethodRequest>(request), this);
+
             var result = BraintreeGateway.PaymentMethod.Create(request);
 
             if (result.IsSuccess())
             {
-                RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customer));
+                var cacheKey = MakePaymentMethodCacheKey(token);
 
-                return Attempt<PaymentMethod>.Succeed(result.Target);
+                RuntimeCache.ClearCacheItem(cacheKey);
+
+                Created.RaiseEvent(new Core.Events.NewEventArgs<PaymentMethod>(result.Target), this);
+
+                return Attempt<PaymentMethod>.Succeed((PaymentMethod)RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors, result.Message);
 
-            LogHelper.Error<BraintreeCustomerApiProvider>("Failed to add a credit card to a customer", error);
+            LogHelper.Error<BraintreeCustomerApiService>("Failed to add a credit card to a customer", error);
 
             return Attempt<PaymentMethod>.Fail(error);
         }
@@ -157,16 +187,25 @@
         {
             var request = RequestFactory.CreatePaymentMethodRequest(billingAddress, updateExisting);
 
+
+            Updating.RaiseEvent(new SaveEventArgs<PaymentMethodRequest>(request), this);
+
             var result = BraintreeGateway.PaymentMethod.Update(token, request);
 
             if (result.IsSuccess())
             {
-                return Attempt<PaymentMethod>.Succeed(result.Target);
+                var cacheKey = MakePaymentMethodCacheKey(token);
+                
+                RuntimeCache.ClearCacheItem(cacheKey);
+
+                Updated.RaiseEvent(new SaveEventArgs<PaymentMethod>(result.Target), this);
+
+                return Attempt<PaymentMethod>.Succeed((PaymentMethod)RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors, result.Message);
 
-            LogHelper.Error<BraintreePaymentMethodApiProvider>("Failed to update payment method", error);
+            LogHelper.Error<BraintreePaymentMethodApiService>("Failed to update payment method", error);
 
             return Attempt<PaymentMethod>.Fail(error);
         }

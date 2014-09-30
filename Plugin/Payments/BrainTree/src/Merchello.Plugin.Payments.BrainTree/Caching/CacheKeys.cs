@@ -34,5 +34,19 @@
         {
             return string.Format("braintree.paymentmethod.{0}", token);
         }
+
+        /// <summary>
+        /// Cache key used to cache a Braintree subscription.
+        /// </summary>
+        /// <param name="subscriptionId">
+        /// The subscription id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        public static string BraintreeSubscription(string subscriptionId)
+        {
+            return string.Format("braintree.subscription.{0}", subscriptionId);
+        }
     }
 }

@@ -3,6 +3,7 @@
     <CollectionProperty Name="RecognizedWords">
       <Value>Api</Value>
       <Value>Merchello</Value>
+      <Value>Merchello's</Value>
       <Value>Umbraco</Value>
     </CollectionProperty>
   </GlobalSettings>

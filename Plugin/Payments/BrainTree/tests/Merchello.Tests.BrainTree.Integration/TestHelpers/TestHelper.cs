@@ -35,5 +35,11 @@
             }
         }
 
+        public static string PaymentMethodToken
+        {
+            get { return "the_token"; }
+        }
+
+
     }
 }
