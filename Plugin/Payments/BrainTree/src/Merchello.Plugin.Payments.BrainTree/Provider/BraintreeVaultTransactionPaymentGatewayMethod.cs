@@ -54,8 +54,6 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var customer = invoice.Customer();
-
             throw new NotImplementedException();
         }
 
@@ -73,17 +71,16 @@
             payment.Collected = false;
             payment.PaymentMethodName = "Braintree Transaction";
             payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
+            
+            var merchCustomer = invoice.Customer();
 
-
-            var customer = invoice.Customer();
-
-            if (customer == null)
+            if (merchCustomer == null)
             {
-                var customerError = new NullReferenceException("A customer is not associated with the invoice");
+                var customerError = new NullReferenceException("A customer is not associated with the invoice.  Braintree vault transactions require a customer reference.");
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, customerError), invoice, false);
             }
 
-            var result = BraintreeApiService.Transaction.Sale(invoice, paymentMethodNonce, customer, invoice.GetBillingAddress(), option);
+            var result = BraintreeApiService.Transaction.Sale(invoice, paymentMethodNonce, merchCustomer, invoice.GetBillingAddress(), option);
 
             if (result.IsSuccess())
             {

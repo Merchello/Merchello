@@ -85,19 +85,24 @@
         /// </returns>
         public Attempt<Customer> Create(ICustomer customer, string paymentMethodNonce = "", IAddress billingAddress = null, IAddress shippingAddress = null)
         {
-            if (this.Exists(customer)) return Attempt.Succeed(this.GetBraintreeCustomer(customer));
+            if (Exists(customer)) return Attempt.Succeed(GetBraintreeCustomer(customer));
 
             var request = RequestFactory.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress);
 
             Creating.RaiseEvent(new Core.Events.NewEventArgs<CustomerRequest>(request), this);
 
-            var result = this.BraintreeGateway.Customer.Create(request);
+            // attempt the API call
+            var attempt = TryGetApiResult(() => BraintreeGateway.Customer.Create(request));
+
+            if (!attempt.Success) return Attempt<Customer>.Fail(attempt.Exception);
+
+            var result = attempt.Result;
 
             if (result.IsSuccess())
             {
                 Created.RaiseEvent(new Core.Events.NewEventArgs<Customer>(result.Target), this);
 
-                return Attempt.Succeed((Customer)this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => result.Target));
+                return Attempt.Succeed((Customer)RuntimeCache.GetCacheItem(MakeCustomerCacheKey(customer), () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
@@ -126,16 +131,21 @@
 
             Updating.RaiseEvent(new SaveEventArgs<CustomerRequest>(request), this);
 
-            var result = this.BraintreeGateway.Customer.Update(customer.Key.ToString(), request);
+            // attempt the API call
+            var attempt = TryGetApiResult(() => BraintreeGateway.Customer.Update(customer.Key.ToString(), request));
+
+            if (!attempt.Success) return Attempt<Customer>.Fail(attempt.Exception);
+
+            var result = attempt.Result;
 
             if (result.IsSuccess())
             {
-                var cacheKey = this.MakeCustomerCacheKey(customer);
-                this.RuntimeCache.ClearCacheItem(cacheKey);
+                var cacheKey = MakeCustomerCacheKey(customer);
+                RuntimeCache.ClearCacheItem(cacheKey);
 
                 Updated.RaiseEvent(new SaveEventArgs<Customer>(result.Target), this);
 
-                return Attempt<Customer>.Succeed((Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
+                return Attempt<Customer>.Succeed((Customer)RuntimeCache.GetCacheItem(cacheKey, () => result.Target));
             }
 
             var error = new BraintreeApiException(result.Errors);
@@ -156,9 +166,7 @@
         /// </returns>
         public bool Delete(ICustomer customer)
         {
-            if (!this.Exists(customer)) return true;
-
-            return Delete(customer.Key.ToString());
+            return !Exists(customer) || Delete(customer.Key.ToString());
         }
 
         /// <summary>
@@ -172,8 +180,17 @@
         /// </returns>
         public bool Delete(string customerId)
         {
-            this.BraintreeGateway.Customer.Delete(customerId);
-            this.RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customerId));
+            try
+            {
+                BraintreeGateway.Customer.Delete(customerId);
+                RuntimeCache.ClearCacheItem(MakeCustomerCacheKey(customerId));
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<BraintreeCustomerApiService>("Braintree API customer delete request failed.", ex);
+                return false;
+            }
+            
 
             return true;
         }
@@ -190,9 +207,9 @@
         /// </returns>
         public Customer GetBraintreeCustomer(Guid customerKey, bool createOnNotFound = true)
         {
-            var customer = this.MerchelloContext.Services.CustomerService.GetByKey(customerKey);
+            var customer = MerchelloContext.Services.CustomerService.GetByKey(customerKey);
 
-            return this.GetBraintreeCustomer(customer, createOnNotFound);
+            return GetBraintreeCustomer(customer, createOnNotFound);
         }
 
         /// <summary>
@@ -211,11 +228,11 @@
         {
             Mandate.ParameterNotNull(customer, "customer");
 
-            if (this.Exists(customer))
+            if (Exists(customer))
             {
-                var cacheKey = this.MakeCustomerCacheKey(customer);
+                var cacheKey = MakeCustomerCacheKey(customer);
 
-                return (Customer)this.RuntimeCache.GetCacheItem(cacheKey, () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
+                return (Customer)RuntimeCache.GetCacheItem(cacheKey, () => BraintreeGateway.Customer.Find(customer.Key.ToString()));
             }
 
             if (!createOnNotFound) return null;
@@ -233,7 +250,9 @@
         /// </returns>
         public string GenerateClientRequestToken()
         {
-            return this.BraintreeGateway.ClientToken.generate(RequestFactory.CreateClientTokenRequest(Guid.Empty));
+            var attempt = TryGetApiResult(() => BraintreeGateway.ClientToken.generate(RequestFactory.CreateClientTokenRequest(Guid.Empty)));
+
+            return attempt.Success ? attempt.Result : string.Empty;
         }
 
         /// <summary>
@@ -250,11 +269,13 @@
         /// </exception>
         public string GenerateClientRequestToken(ICustomer customer)
         {
-            var braintreeCustomer = this.GetBraintreeCustomer(customer);
+            var braintreeCustomer = GetBraintreeCustomer(customer);
 
             if (braintreeCustomer == null) throw new BraintreeException("Failed to retrieve and/or create a Braintree Customer");
 
-            return this.BraintreeGateway.ClientToken.generate(RequestFactory.CreateClientTokenRequest(customer.Key));
+            var attempt = TryGetApiResult(() => BraintreeGateway.ClientToken.generate(RequestFactory.CreateClientTokenRequest(customer.Key)));
+
+            return attempt.Success ? attempt.Result : string.Empty;
         }
 
         /// <summary>
@@ -268,17 +289,25 @@
         /// </returns>
         public bool Exists(ICustomer customer)
         {
-            try
-            {
-                var braintreeCustomer = this.RuntimeCache.GetCacheItem(this.MakeCustomerCacheKey(customer), () => this.BraintreeGateway.Customer.Find(customer.Key.ToString()));
+            var cacheKey = MakeCustomerCacheKey(customer);
+        
+            var braintreeCustomer = RuntimeCache.GetCacheItem(cacheKey);
 
-                return braintreeCustomer != null;
-            }
-            catch (Exception)
+            if (braintreeCustomer == null)
             {
-                RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customer));
-                return false;
+                var attempt = TryGetApiResult(() => BraintreeGateway.Customer.Find(customer.Key.ToString()));
+
+                if (!attempt.Success)
+                {
+                    return false;
+                }
+
+                braintreeCustomer = attempt.Result;
+
+                RuntimeCache.GetCacheItem(cacheKey, () => braintreeCustomer);
             }
+
+            return braintreeCustomer != null;            
         }
 
         /// <summary>
@@ -292,7 +321,8 @@
         /// </returns>
         public ResourceCollection<Customer> Search(CustomerSearchRequest query)
         {
-            return BraintreeGateway.Customer.Search(query);
+            var attempt = TryGetApiResult(() => BraintreeGateway.Customer.Search(query));
+            return attempt.Success ? attempt.Result : null;
         }
 
         /// <summary>
@@ -303,7 +333,9 @@
         /// </returns>
         public ResourceCollection<Customer> GetAll()
         {
-            return BraintreeGateway.Customer.All();
+            var attempt = TryGetApiResult(() => BraintreeGateway.Customer.All());
+
+            return attempt.Success ? attempt.Result : null;
         }
     }
 }

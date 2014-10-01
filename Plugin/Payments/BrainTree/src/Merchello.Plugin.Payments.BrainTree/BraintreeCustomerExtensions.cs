@@ -45,10 +45,19 @@
         /// </returns>
         private static bool IsEqual(this Address bta, IAddress ma)
         {
-            return bta.Company == ma.Organization && bta.FirstName == ma.TrySplitFirstName()
-                   && bta.LastName == ma.TrySplitLastName() && bta.StreetAddress == ma.Address1
+            var initial = bta.Company == ma.Organization && bta.StreetAddress == ma.Address1
                    && bta.ExtendedAddress == ma.Address2 && bta.Locality == ma.Locality && bta.Region == ma.Region
                    && bta.CountryCodeAlpha2 == ma.CountryCode && bta.PostalCode == ma.PostalCode;
+
+            if (!initial) return false;
+
+
+            if (!string.IsNullOrEmpty(ma.Name))
+            {
+                return bta.FirstName == ma.TrySplitFirstName() && bta.LastName == ma.TrySplitLastName();
+            }
+
+            return true;
         }
     }
 }

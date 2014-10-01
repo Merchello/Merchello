@@ -13,8 +13,6 @@ namespace Merchello.Tests.Braintree.Integration.TestHelpers
 
     using NUnit.Framework;
 
-    using umbraco.cms.businesslogic;
-
     public abstract class BraintreeTestBase : MerchelloAllInTestBase
     {
         protected BraintreeProviderSettings BraintreeProviderSettings;

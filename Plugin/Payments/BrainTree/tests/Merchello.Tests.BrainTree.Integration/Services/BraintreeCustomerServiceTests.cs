@@ -39,7 +39,7 @@ namespace Merchello.Tests.Braintree.Integration.Services
         {
             base.TestFixtureSetup();
 
-            this._braintreeCustomerApiService = new BraintreeCustomerApiService(MerchelloContext.Current, BraintreeProviderSettings);
+            _braintreeCustomerApiService = new BraintreeCustomerApiService(MerchelloContext.Current, BraintreeProviderSettings);
 
             _address = new Core.Models.Address()
             {
@@ -62,7 +62,7 @@ namespace Merchello.Tests.Braintree.Integration.Services
             //// Arrange
             
             //// Act
-            var customer = this._braintreeCustomerApiService.GetBraintreeCustomer(TestCustomer);
+            var customer = _braintreeCustomerApiService.GetBraintreeCustomer(TestCustomer);
 
             Assert.NotNull(customer);
 
@@ -75,7 +75,7 @@ namespace Merchello.Tests.Braintree.Integration.Services
         [Test]
         public void Can_Generate_A_ClientToken_For_An_AnonymousCustomer()
         {
-            var token = this._braintreeCustomerApiService.GenerateClientRequestToken();
+            var token = _braintreeCustomerApiService.GenerateClientRequestToken();
 
             Console.Write(token);
             Assert.IsNotNullOrEmpty(token);
@@ -87,7 +87,7 @@ namespace Merchello.Tests.Braintree.Integration.Services
         [Test]
         public void Can_Generate_A_ClientToken_For_A_Customer()
         {
-            var token = this._braintreeCustomerApiService.GenerateClientRequestToken(TestCustomer);
+            var token = _braintreeCustomerApiService.GenerateClientRequestToken(TestCustomer);
 
             Console.Write(token);
             Assert.IsNotNullOrEmpty(token);
@@ -108,11 +108,11 @@ namespace Merchello.Tests.Braintree.Integration.Services
             var matching = customer.GetMatchingAddress(_address);
 
             //// Assert
-            Assert.IsTrue(success);
-            Assert.IsTrue(customer.Addresses.Any());
-            Assert.IsTrue(customer.PaymentMethods.Any());
-            Assert.IsTrue(customer.CreditCards.Any());
-            Assert.NotNull(matching);
+            Assert.IsTrue(success, "Failed to create the customer");
+            Assert.IsTrue(customer.Addresses.Any(), "Customer did not have any addresses");
+            Assert.IsTrue(customer.PaymentMethods.Any(), "Customer did not have any payment methods");
+            Assert.IsTrue(customer.CreditCards.Any(), "Customer did not have any credit cards");
+            Assert.NotNull(matching, "A matching address was not found");
         }
 
         /// <summary>
@@ -128,6 +128,8 @@ namespace Merchello.Tests.Braintree.Integration.Services
 
             //// Assert
             Assert.NotNull(customers);
+            Assert.Greater(customers.MaximumCount, 0);
+            Console.Write(customers.MaximumCount);
         }
 
     }
