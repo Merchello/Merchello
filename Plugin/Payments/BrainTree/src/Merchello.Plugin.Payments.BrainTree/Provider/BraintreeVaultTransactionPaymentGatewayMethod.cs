@@ -14,17 +14,17 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// Represents a BraintreeCustomerTransactionPaymentGatewayMethod
+    /// Represents a BraintreeVaultTransactionPaymentGatewayMethod
     /// </summary>
     /// <remarks>
     /// This method assumes that the invoice is associated with a customer
     /// </remarks>
     [GatewayMethodUi("BrainTree.CustomerTransaction")]
     [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello.BrainTree/paymentmethod.html")]
-    public class BraintreeCustomerTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase,  IBraintreeCustomerTransactionPaymentGatewayMethod
+    public class BraintreeVaultTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase,  IBraintreeVaultTransactionPaymentGatewayMethod
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeCustomerTransactionPaymentGatewayMethod"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeVaultTransactionPaymentGatewayMethod"/> class.
         /// </summary>
         /// <param name="gatewayProviderService">
         /// The gateway provider service.
@@ -35,7 +35,7 @@
         /// <param name="braintreeApiService">
         /// The braintree api service.
         /// </param>
-        public BraintreeCustomerTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService) 
+        public BraintreeVaultTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService) 
             : base(gatewayProviderService, paymentMethod, braintreeApiService)
         {
         }

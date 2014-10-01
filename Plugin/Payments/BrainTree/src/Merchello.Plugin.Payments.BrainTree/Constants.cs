@@ -77,6 +77,28 @@
             {
                 get { return "planId"; }
             }
+
+            /// <summary>
+            /// Gets the billing address id.
+            /// </summary>
+            public static string BillingAddressId
+            {
+                get
+                {
+                    return "billingAddressId";
+                }
+            }
+
+            /// <summary>
+            /// Gets the shipping address id.
+            /// </summary>
+            public static string ShippingAddressId
+            {
+                get
+                {
+                    return "shippingAddressId";
+                }
+            }
         }
     }
 }

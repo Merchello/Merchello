@@ -31,8 +31,8 @@ namespace Merchello.Tests.Braintree.Integration.TestHelpers
         {
             TestCustomer = MerchelloContext.Current.Services.CustomerService.CreateCustomerWithKey(
                 Guid.NewGuid().ToString(),
-                "debug",
-                "debug",
+                "first",
+                "last",
                 "debug@debug.com");
 
             BraintreeProviderSettings = TestHelper.GetBraintreeProviderSettings();

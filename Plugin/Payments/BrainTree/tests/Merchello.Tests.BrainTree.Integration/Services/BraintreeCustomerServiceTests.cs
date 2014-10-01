@@ -8,6 +8,8 @@ namespace Merchello.Tests.Braintree.Integration.Services
     using global::Braintree;
 
     using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Plugin.Payments.Braintree;
     using Merchello.Tests.Braintree.Integration.TestHelpers;
 
     using NUnit.Framework;
@@ -17,12 +19,38 @@ namespace Merchello.Tests.Braintree.Integration.Services
     {
         private IBraintreeCustomerApiService _braintreeCustomerApiService;
 
+        private IAddress _address;
+
+        /// <summary>
+        /// Remove commented [Test] and run this method to delete all customers from Braintree
+        /// </summary>
+        //[Test]
+        public void DeleteAllCustomers()
+        {
+            var customers = _braintreeCustomerApiService.GetAll();
+            foreach (var customer in customers)
+            {
+                _braintreeCustomerApiService.Delete(((Customer)customer).Id);
+            }
+        }
+
         [TestFixtureSetUp]
         public override void TestFixtureSetup()
         {
             base.TestFixtureSetup();
 
-            this._braintreeCustomerApiService = new BraintreeCustomerApiService(MerchelloContext.Current, BraintreeProviderSettings);   
+            this._braintreeCustomerApiService = new BraintreeCustomerApiService(MerchelloContext.Current, BraintreeProviderSettings);
+
+            _address = new Core.Models.Address()
+            {
+                AddressType = AddressType.Billing,
+                Organization = "Mindfly",
+                Address1 = "114 W. Magnolia St. Suite 300",
+                Locality = "Bellingham",
+                Region = "WA",
+                PostalCode = "98225",
+                CountryCode = "US"
+            };
         }
 
         /// <summary>
@@ -65,33 +93,42 @@ namespace Merchello.Tests.Braintree.Integration.Services
             Assert.IsNotNullOrEmpty(token);
         }
 
-        ///// <summary>
-        ///// Shows an address can be saved to a customer
-        ///// </summary>
-        //[Test]
-        //public void Can_Save_A_Customer_Address()
-        //{
-        //    //// Arrange
-        //    var address = new Core.Models.Address()
-        //                      {
-        //                          AddressType = AddressType.Billing,
-        //                          Organization = "Mindfly",
-        //                          Address1 = "114 W. Magnolia St. Suite 300",
-        //                          Locality = "Bellingham",
-        //                          Region = "WA",
-        //                          PostalCode = "98225"
-        //                      };
+        /// <summary>
+        /// Shows an address can be saved to a customer
+        /// </summary>
+        [Test]
+        public void Can_Save_A_Customer_Address()
+        {
+            //// Arrange
 
-        //    //// Act
-        //    var success = _braintreeCustomerApiProvider.Create(TestCustomer, TestHelper.PaymentMethodNonce, address);
-        //    var customer = _braintreeCustomerApiProvider.GetBraintreeCustomer(TestCustomer);
-        //    //// Assert
-        //    Assert.IsTrue(success);
-        //    Assert.IsTrue(customer.Addresses.Any());
-        //    Assert.IsTrue(customer.PaymentMethods.Any());
-        //    Assert.IsTrue(customer.CreditCards.Any());
-        //}
 
+            //// Act
+            var success = _braintreeCustomerApiService.Create(TestCustomer, TestHelper.PaymentMethodNonce, _address);
+            var customer = _braintreeCustomerApiService.GetBraintreeCustomer(TestCustomer);
+            var matching = customer.GetMatchingAddress(_address);
+
+            //// Assert
+            Assert.IsTrue(success);
+            Assert.IsTrue(customer.Addresses.Any());
+            Assert.IsTrue(customer.PaymentMethods.Any());
+            Assert.IsTrue(customer.CreditCards.Any());
+            Assert.NotNull(matching);
+        }
+
+        /// <summary>
+        /// Test shows it is possible to get a list of all customers from the API
+        /// </summary>
+        [Test]
+        public void Can_Get_A_List_Of_All_Cutomers()
+        {
+            //// Arrange
+            
+            //// Act
+            var customers = _braintreeCustomerApiService.GetAll();
+
+            //// Assert
+            Assert.NotNull(customers);
+        }
 
     }
 }

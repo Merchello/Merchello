@@ -62,6 +62,17 @@
         bool Delete(ICustomer customer);
 
         /// <summary>
+        /// Deletes a Braintree <see cref="Customer"/>
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool Delete(string customerId);
+
+        /// <summary>
         /// Gets the Braintree <see cref="Customer"/> corresponding to the Merchello <see cref="ICustomer"/>
         /// </summary>
         /// <param name="customerKey">

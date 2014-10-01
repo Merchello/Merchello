@@ -197,9 +197,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Provider\BraintreeCustomerTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="BraintreeCustomerExtensions.cs" />
+    <Compile Include="Provider\BraintreeVaultTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Provider\BraintreePaymentGatewayMethodBase.cs" />
-    <Compile Include="Provider\IBraintreeCustomerTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Provider\IBraintreeVaultTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Services\BraintreeApiService.cs" />
     <Compile Include="Services\BraintreePaymentMethodApiService.cs" />
     <Compile Include="Services\BraintreeSubscriptionApiService.cs" />

@@ -100,6 +100,20 @@
         }
 
         /// <summary>
+        /// Makes a customer cache key.
+        /// </summary>
+        /// <param name="customerId">
+        /// The Braintree customer id
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        protected string MakeCustomerCacheKey(string customerId)
+        {
+            return Caching.CacheKeys.BraintreeCustomer(customerId);
+        }
+
+        /// <summary>
         /// Makes a payment method cache key.
         /// </summary>
         /// <param name="token">

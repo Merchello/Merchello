@@ -17,7 +17,7 @@
     /// <summary>
     /// The braintree payment gateway method base.
     /// </summary>
-    public abstract class BraintreePaymentGatewayMethodBase : PaymentGatewayMethodBase, IBraintreeCustomerTransactionPaymentGatewayMethod
+    public abstract class BraintreePaymentGatewayMethodBase : PaymentGatewayMethodBase, IBraintreeVaultTransactionPaymentGatewayMethod
     {
         /// <summary>
         /// The <see cref="IBraintreeApiService"/>.

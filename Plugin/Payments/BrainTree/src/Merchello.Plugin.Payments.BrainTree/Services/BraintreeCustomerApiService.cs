@@ -156,10 +156,24 @@
         /// </returns>
         public bool Delete(ICustomer customer)
         {
-            if (!this.Exists(customer)) return false;
-           
-            this.BraintreeGateway.Customer.Delete(customer.Key.ToString());
-            this.RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customer));
+            if (!this.Exists(customer)) return true;
+
+            return Delete(customer.Key.ToString());
+        }
+
+        /// <summary>
+        /// Deletes the Braintree <see cref="Customer"/> by it's customer id.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Delete(string customerId)
+        {
+            this.BraintreeGateway.Customer.Delete(customerId);
+            this.RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customerId));
 
             return true;
         }

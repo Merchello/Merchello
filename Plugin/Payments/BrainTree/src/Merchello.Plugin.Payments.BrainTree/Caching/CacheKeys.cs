@@ -18,7 +18,21 @@
         /// </returns>
         public static string BraintreeCustomer(Guid customerKey)
         {
-            return string.Format("braintree.customerId.{0}", customerKey);
+            return BraintreeCustomer(customerKey.ToString());
+        }
+
+        /// <summary>
+        /// Cache key to cache a Braintree customer.
+        /// </summary>
+        /// <param name="customerId">
+        /// The Braintree customer Id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        public static string BraintreeCustomer(string customerId)
+        {
+            return string.Format("braintree.customerId.{0}", customerId);
         }
 
         /// <summary>
