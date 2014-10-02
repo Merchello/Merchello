@@ -63,6 +63,12 @@ namespace Merchello.Tests.Base.TestHelpers
 
         }
 
+        [TestFixtureTearDown]
+        public virtual void FixtureTearDown()
+        {
+            DbPreTestDataWorker.DisposeIfDisposable();
+        }
+
         private void SalePreparationBaseOnFinalizing(SalePreparationBase sender, SalesPreparationEventArgs<IPaymentResult> args)
         {
             var result = args.Entity;

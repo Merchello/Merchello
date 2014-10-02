@@ -29,7 +29,7 @@ namespace Merchello.Tests.UnitTests.Querying
                 .From("[merchInvoice]")
                 .InnerJoin("[merchCustomer]").On("[merchCustomer].[pk] = [merchInvoice].[customerKey]")
                 .InnerJoin("[merchInvoiceStatus]").On("[merchInvoiceStatus].[pk] = [merchInvoice].[invoiceStatusKey]")
-                .Where("[merchInvoice].[pk] = '" + key.ToString() + "'");
+                .Where("[merchInvoice].[pk] = @0", new { key });
 
             //// Act
             var sql = new Sql();
@@ -57,7 +57,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoice]")
-                .Where("[merchInvoice].[customerKey] = '" + key.ToString() + "'");
+                .Where("[merchInvoice].[customerKey] = @0", new { key });
 
             //// Act
             var sql = new Sql();
@@ -82,7 +82,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoice]")
-                .Where("[merchInvoice].[invoiceStatusKey] = '" + invoiceStatusKey.ToString() + "'");
+                .Where("[merchInvoice].[invoiceStatusKey] = @0", new { invoiceStatusKey });
 
             //// Act
             var sql = new Sql();

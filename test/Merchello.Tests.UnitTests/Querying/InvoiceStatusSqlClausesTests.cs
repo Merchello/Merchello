@@ -25,7 +25,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchInvoiceStatus]")
-                .Where("[merchInvoiceStatus].[pk] = '" + key.ToString() + "'");
+                .Where("[merchInvoiceStatus].[pk] = @0", new { key });
 
             //// Act
             var sql = new Sql();

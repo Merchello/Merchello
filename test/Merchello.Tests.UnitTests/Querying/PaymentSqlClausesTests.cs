@@ -29,7 +29,7 @@ namespace Merchello.Tests.UnitTests.Querying
             expected.Select("*")
                 .From("[merchPayment]")
                 .InnerJoin("[merchCustomer]").On("[merchPayment].[customerKey] = [merchCustomer].[pk]")                
-                .Where("[merchPayment].[pk] = '" + key.ToString() + "'");
+                .Where("[merchPayment].[pk] = @0", new { key });
 
             //// Act
             var sql = new Sql();
