@@ -141,9 +141,14 @@
         /// </returns>
         public Attempt<Subscription> Create(SubscriptionRequest request)
         {
-            var result = BraintreeGateway.Subscription.Create(request);
-
+            
             Creating.RaiseEvent(new Core.Events.NewEventArgs<SubscriptionRequest>(request), this);
+
+            var attempt = TryGetApiResult(() => BraintreeGateway.Subscription.Create(request));
+
+            if (!attempt.Success) return Attempt<Subscription>.Fail(attempt.Exception);
+
+            var result = attempt.Result;
 
             if (result.IsSuccess())
             {
@@ -170,7 +175,11 @@
         /// </returns>
         public bool Cancel(string subscriptionId)
         {
-            var result = BraintreeGateway.Subscription.Cancel(subscriptionId);
+            var attempt = TryGetApiResult(() => BraintreeGateway.Subscription.Cancel(subscriptionId));
+
+            if (!attempt.Success) return false;
+
+            var result = attempt.Result;
 
             if (result.IsSuccess())
             {
@@ -197,7 +206,11 @@
         {
             Updating.RaiseEvent(new SaveEventArgs<SubscriptionRequest>(request), this);
 
-            var result = BraintreeGateway.Subscription.Create(request);
+            var attempt = TryGetApiResult(() => BraintreeGateway.Subscription.Create(request));
+
+            if (!attempt.Success) return Attempt<Subscription>.Fail(attempt.Exception);
+
+            var result = attempt.Result;
 
             if (result.IsSuccess())
             {
@@ -224,9 +237,22 @@
         /// </returns>        
         public Subscription GetSubscription(string subscriptionId)
         {
-            if (Exists(subscriptionId))
-                return (Subscription)RuntimeCache.GetCacheItem(MakeSubscriptionCacheKey(subscriptionId), () => BraintreeGateway.Subscription.Find(subscriptionId));
+            var cacheKey = MakeSubscriptionCacheKey(subscriptionId);
 
+            if (Exists(subscriptionId))
+            {
+                var subscription = (Subscription)RuntimeCache.GetCacheItem(cacheKey);
+
+                if (subscription != null) return subscription;
+
+                var attempt = TryGetApiResult(() => BraintreeGateway.Subscription.Find(subscriptionId));
+
+                if (!attempt.Success) return null;
+                
+                subscription = attempt.Result;
+                return (Subscription)RuntimeCache.GetCacheItem(cacheKey, () => subscription);
+            }    
+        
             return null;
         }
 
@@ -243,18 +269,21 @@
         {
             var cacheKey = MakeSubscriptionCacheKey(subscriptionId);
 
-            try
-            {                
-                var subscription = RuntimeCache.GetCacheItem(cacheKey, () => BraintreeGateway.Subscription.Find(subscriptionId));
+            var subscription = (Subscription)RuntimeCache.GetCacheItem(cacheKey);
 
-                return subscription != null;
-            }
-            catch (Exception)
+            if (subscription != null) return true;
+
+            var attempt = TryGetApiResult(() => BraintreeGateway.Subscription.Find(subscriptionId));
+
+            if (attempt.Success)
             {
-                RuntimeCache.ClearCacheItem(cacheKey);
-
-                return false;
+                subscription = attempt.Result;
+                RuntimeCache.GetCacheItem(cacheKey, () => subscription);
+                return true;
             }
+
+            RuntimeCache.ClearCacheItem(cacheKey);
+            return false;            
         }
 
         /// <summary>
@@ -265,7 +294,8 @@
         /// </returns>
         public IEnumerable<Discount> GetAllDiscounts()
         {
-            return BraintreeGateway.Discount.All();
+            var attempt = TryGetApiResult(() => BraintreeGateway.Discount.All());
+            return attempt.Success ? attempt.Result : null;
         }
 
         /// <summary>
@@ -276,7 +306,8 @@
         /// </returns>
         public IEnumerable<AddOn> GetAllAddOns()
         {
-            return BraintreeGateway.AddOn.All();
+            var attempt = TryGetApiResult(() => BraintreeGateway.AddOn.All());
+            return attempt.Success ? attempt.Result : null;
         }
     }
 }

@@ -116,7 +116,9 @@
             if (billingAddress != null) request.BillingAddress = RequestFactory.CreateAddressRequest(billingAddress);
             if (shippingAddress != null) request.ShippingAddress = RequestFactory.CreateAddressRequest(shippingAddress);
 
-            return BraintreeGateway.Transaction.Sale(request);
+            var attempt = TryGetApiResult(() => BraintreeGateway.Transaction.Sale(request));
+
+            return attempt.Success ? attempt.Result : null;
         }
 
         /// <summary>
@@ -130,7 +132,8 @@
         /// </returns>
         public Result<Transaction> SubmitForSettlement(string transactionId)
         {
-            return BraintreeGateway.Transaction.SubmitForSettlement(transactionId);
+            var attempt = TryGetApiResult(() => BraintreeGateway.Transaction.SubmitForSettlement(transactionId));
+            return attempt.Success ? attempt.Result : null;
         }
 
         /// <summary>
@@ -147,7 +150,8 @@
         /// </returns>
         public Result<Transaction> SubmitForSettlement(string transactionId, decimal amount)
         {
-            return BraintreeGateway.Transaction.SubmitForSettlement(transactionId, amount);
+            var attempt = TryGetApiResult(() => BraintreeGateway.Transaction.SubmitForSettlement(transactionId, amount));
+            return attempt.Success ? attempt.Result : null;
         }
 
         /// <summary>
@@ -161,7 +165,8 @@
         /// </returns>
         public Result<Transaction> Refund(string transactionId)
         {
-            return BraintreeGateway.Transaction.Refund(transactionId);
+            var attempt = TryGetApiResult(() => BraintreeGateway.Transaction.Refund(transactionId));
+            return attempt.Success ? attempt.Result : null;
         }
 
         /// <summary>
@@ -178,7 +183,8 @@
         /// </returns>
         public Result<Transaction> Refund(string transactionId, decimal amount)
         {
-            return BraintreeGateway.Transaction.Refund(transactionId, amount);
+            var attempt = TryGetApiResult(() => BraintreeGateway.Transaction.Refund(transactionId, amount));
+            return attempt.Success ? attempt.Result : null;
         }
     }
 }

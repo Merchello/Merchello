@@ -14,17 +14,17 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// Represents a BraintreeCustomerTransactionPaymentGatewayMethod
+    /// Represents a BraintreeVaultTransactionPaymentGatewayMethod
     /// </summary>
     /// <remarks>
     /// This method assumes that the invoice is associated with a customer
     /// </remarks>
     [GatewayMethodUi("BrainTree.CustomerTransaction")]
     [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello.BrainTree/paymentmethod.html")]
-    public class BraintreeCustomerTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase,  IBraintreeCustomerTransactionPaymentGatewayMethod
+    public class BraintreeVaultTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase,  IBraintreeVaultTransactionPaymentGatewayMethod
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeCustomerTransactionPaymentGatewayMethod"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeVaultTransactionPaymentGatewayMethod"/> class.
         /// </summary>
         /// <param name="gatewayProviderService">
         /// The gateway provider service.
@@ -35,7 +35,7 @@
         /// <param name="braintreeApiService">
         /// The braintree api service.
         /// </param>
-        public BraintreeCustomerTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService) 
+        public BraintreeVaultTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService) 
             : base(gatewayProviderService, paymentMethod, braintreeApiService)
         {
         }
@@ -54,8 +54,6 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            var customer = invoice.Customer();
-
             throw new NotImplementedException();
         }
 
@@ -73,17 +71,16 @@
             payment.Collected = false;
             payment.PaymentMethodName = "Braintree Transaction";
             payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
+            
+            var merchCustomer = invoice.Customer();
 
-
-            var customer = invoice.Customer();
-
-            if (customer == null)
+            if (merchCustomer == null)
             {
-                var customerError = new NullReferenceException("A customer is not associated with the invoice");
+                var customerError = new NullReferenceException("A customer is not associated with the invoice.  Braintree vault transactions require a customer reference.");
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, customerError), invoice, false);
             }
 
-            var result = BraintreeApiService.Transaction.Sale(invoice, paymentMethodNonce, customer, invoice.GetBillingAddress(), option);
+            var result = BraintreeApiService.Transaction.Sale(invoice, paymentMethodNonce, merchCustomer, invoice.GetBillingAddress(), option);
 
             if (result.IsSuccess())
             {

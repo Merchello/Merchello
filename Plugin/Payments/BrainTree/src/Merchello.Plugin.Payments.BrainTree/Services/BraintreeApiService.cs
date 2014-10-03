@@ -119,7 +119,6 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         /// </param>
         private void Initialize(IMerchelloContext merchelloContext)
         {
-
             if (_customer == null)
                 _customer = new Lazy<IBraintreeCustomerApiService>(() => new BraintreeCustomerApiService(merchelloContext, _settings));
 

@@ -110,7 +110,7 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         /// </returns>
         public Attempt<PaymentMethod> Create(ICustomer customer, string paymentMethodNonce, IAddress billingAddress = null, bool isDefault = true)
         {
-            return this.Create(customer, paymentMethodNonce, string.Empty, billingAddress, isDefault);
+            return Create(customer, paymentMethodNonce, string.Empty, billingAddress, isDefault);
         }
 
         /// <summary>
@@ -148,7 +148,11 @@ namespace Merchello.Plugin.Payments.Braintree.Services
 
             Creating.RaiseEvent(new Core.Events.NewEventArgs<PaymentMethodRequest>(request), this);
 
-            var result = BraintreeGateway.PaymentMethod.Create(request);
+            var attempt = TryGetApiResult(() => BraintreeGateway.PaymentMethod.Create(request));
+
+            if (!attempt.Success) return Attempt<PaymentMethod>.Fail(attempt.Exception);
+
+            var result = attempt.Result;
 
             if (result.IsSuccess())
             {
@@ -190,7 +194,11 @@ namespace Merchello.Plugin.Payments.Braintree.Services
 
             Updating.RaiseEvent(new SaveEventArgs<PaymentMethodRequest>(request), this);
 
-            var result = BraintreeGateway.PaymentMethod.Update(token, request);
+            var attempt = TryGetApiResult(() => BraintreeGateway.PaymentMethod.Update(token, request));
+
+            if (!attempt.Success) return Attempt<PaymentMethod>.Fail(attempt.Exception);
+
+            var result = attempt.Result;
 
             if (result.IsSuccess())
             {
@@ -221,10 +229,19 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         /// </returns>
         public bool Delete(string token)
         {
-            if (!this.Exists(token)) return false;
+            if (!Exists(token)) return false;
 
-            BraintreeGateway.PaymentMethod.Delete(token);
-
+            try
+            {
+                BraintreeGateway.PaymentMethod.Delete(token);
+                RuntimeCache.ClearCacheItem(MakePaymentMethodCacheKey(token));
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<BraintreePaymentMethodApiService>("Braintree API payment method delete request failed.", ex);
+                return false;
+            }
+            
             return true;
         }
 
@@ -239,17 +256,23 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         /// </returns>
         public bool Exists(string token)
         {
-            try
+
+            var cacheKey = MakePaymentMethodCacheKey(token);
+
+            var paymentMethod = (PaymentMethod) RuntimeCache.GetCacheItem(cacheKey);
+
+            if (paymentMethod == null)
             {
-                var paymentMethod = (PaymentMethod)RuntimeCache.GetCacheItem(this.MakePaymentMethodCacheKey(token), () => BraintreeGateway.PaymentMethod.Find(token));
-                
-                return paymentMethod != null;
+                var attempt = TryGetApiResult(() => BraintreeGateway.PaymentMethod.Find(token));
+
+                if (!attempt.Success) return false;
+                paymentMethod = attempt.Result;
+                RuntimeCache.GetCacheItem(cacheKey, () => paymentMethod);
+
+                return true;
             }
-            catch (Exception)
-            {
-                RuntimeCache.ClearCacheItem(this.MakePaymentMethodCacheKey(token));
-                return false;
-            }
+
+            return true;
         }
 
         /// <summary>
@@ -263,13 +286,23 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         /// </returns>
         public PaymentMethod GetPaymentMethod(string token)
         {
-            if (this.Exists(token))
+            var cacheKey = MakePaymentMethodCacheKey(token);
+
+            if (Exists(token))
             {
-                return
-                    (PaymentMethod)
-                    RuntimeCache.GetCacheItem(
-                        this.MakePaymentMethodCacheKey(token),
-                        () => BraintreeGateway.PaymentMethod.Find(token));
+                var paymentMethod = (PaymentMethod) RuntimeCache.GetCacheItem(cacheKey);
+
+                if (paymentMethod != null) return paymentMethod;
+
+                // this following should never happen as the Exists should cache it but its a good fallback
+                var attempt = TryGetApiResult(() => BraintreeGateway.PaymentMethod.Find(token));
+
+                if (attempt.Success)
+                {
+                    RuntimeCache.GetCacheItem(cacheKey, () => attempt.Result);
+                }
+
+                return attempt.Success ? attempt.Result : null;
             }
 
             return null;
@@ -283,7 +316,8 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         /// </returns>
         public ResourceCollection<CreditCard> GetExpiredCreditCards()
         {
-            return BraintreeGateway.CreditCard.Expired();
+            var attempt = TryGetApiResult(() => BraintreeGateway.CreditCard.Expired());
+            return attempt.Success ? attempt.Result : null;
         }
 
         /// <summary>
@@ -300,7 +334,8 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         /// </returns>
         public ResourceCollection<CreditCard> GetCreditCardsExpiring(DateTime beginRange, DateTime endRange)
         {
-            return BraintreeGateway.CreditCard.ExpiringBetween(beginRange, endRange);
+            var attempt = TryGetApiResult(() => BraintreeGateway.CreditCard.ExpiringBetween(beginRange, endRange));
+            return attempt.Success ? attempt.Result : null;
         }
     }
 }
