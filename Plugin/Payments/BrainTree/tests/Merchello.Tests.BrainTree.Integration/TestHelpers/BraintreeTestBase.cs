@@ -13,8 +13,6 @@ namespace Merchello.Tests.Braintree.Integration.TestHelpers
 
     using NUnit.Framework;
 
-    using umbraco.cms.businesslogic;
-
     public abstract class BraintreeTestBase : MerchelloAllInTestBase
     {
         protected BraintreeProviderSettings BraintreeProviderSettings;
@@ -31,8 +29,8 @@ namespace Merchello.Tests.Braintree.Integration.TestHelpers
         {
             TestCustomer = MerchelloContext.Current.Services.CustomerService.CreateCustomerWithKey(
                 Guid.NewGuid().ToString(),
-                "debug",
-                "debug",
+                "first",
+                "last",
                 "debug@debug.com");
 
             BraintreeProviderSettings = TestHelper.GetBraintreeProviderSettings();

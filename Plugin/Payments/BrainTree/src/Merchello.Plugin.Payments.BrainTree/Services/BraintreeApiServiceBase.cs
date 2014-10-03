@@ -1,4 +1,7 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Services
+﻿using Umbraco.Core;
+using Umbraco.Core.Logging;
+
+namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
     using global::Braintree;
@@ -81,10 +84,38 @@
         /// The <see cref="T"/>.
         /// </returns>
         protected T TryGetCached<T>(string cacheKey)
-        {
+        {            
             return (T)this.RuntimeCache.GetCacheItem(cacheKey);
         }
 
+
+        /// <summary>
+        /// Attempts to execute an API request
+        /// </summary>
+        /// <param name="apiMethod">
+        /// The api method.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of Result to return
+        /// </typeparam>
+        /// <returns>
+        /// The result <see cref="Attempt{T}"/> of the API request.
+        /// </returns>
+        protected Attempt<T> TryGetApiResult<T>(Func<T> apiMethod)
+        {
+            try
+            {
+                var result = apiMethod.Invoke();
+
+                return Attempt<T>.Succeed(result);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<BraintreeApiServiceBase>("Braintree API request failed.", ex);
+                return Attempt<T>.Fail(default(T), ex);
+            }
+        }
+        
         /// <summary>
         /// Makes a customer cache key.
         /// </summary>
@@ -97,6 +128,20 @@
         protected string MakeCustomerCacheKey(ICustomer customer)
         {
             return Caching.CacheKeys.BraintreeCustomer(customer.Key);
+        }
+
+        /// <summary>
+        /// Makes a customer cache key.
+        /// </summary>
+        /// <param name="customerId">
+        /// The Braintree customer id
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        protected string MakeCustomerCacheKey(string customerId)
+        {
+            return Caching.CacheKeys.BraintreeCustomer(customerId);
         }
 
         /// <summary>
