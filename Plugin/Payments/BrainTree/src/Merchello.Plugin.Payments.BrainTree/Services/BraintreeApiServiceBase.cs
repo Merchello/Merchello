@@ -84,7 +84,7 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         /// The <see cref="T"/>.
         /// </returns>
         protected T TryGetCached<T>(string cacheKey)
-        {
+        {            
             return (T)this.RuntimeCache.GetCacheItem(cacheKey);
         }
 
