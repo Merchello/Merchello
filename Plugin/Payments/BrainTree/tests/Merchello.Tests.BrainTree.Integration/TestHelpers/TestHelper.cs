@@ -3,7 +3,9 @@
     using System;
     using System.Configuration;
 
+    using Merchello.Core;
     using Merchello.Plugin.Payments.Braintree.Models;
+    using Merchello.Plugin.Payments.Braintree.Services;
 
     using Environment = global::Braintree.Environment;
 
@@ -35,5 +37,9 @@
             }
         }
 
+        public static string PaymentMethodToken
+        {
+            get { return "the_token"; }
+        }
     }
 }

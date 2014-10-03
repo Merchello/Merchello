@@ -1,20 +1,19 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Api
+﻿using Umbraco.Core;
+using Umbraco.Core.Logging;
+
+namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
-
     using global::Braintree;
-
-    using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Models;
-    using Merchello.Plugin.Payments.Braintree.Persistence.Factories;
-
+    using Core;
+    using Core.Models;
+    using Models;
     using Umbraco.Core.Cache;
 
     /// <summary>
     /// A base class for local Braintree services.
     /// </summary>
-    internal abstract class BraintreeApiProviderBase
+    internal abstract class BraintreeApiServiceBase
     {
         /// <summary>
         /// The <see cref="BraintreeApiRequestFactory"/>.
@@ -23,7 +22,7 @@
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeApiProviderBase"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeApiServiceBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>.
@@ -31,7 +30,7 @@
         /// <param name="settings">
         /// The settings.
         /// </param>
-        protected BraintreeApiProviderBase(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+        protected BraintreeApiServiceBase(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(settings, "settings");
@@ -85,10 +84,38 @@
         /// The <see cref="T"/>.
         /// </returns>
         protected T TryGetCached<T>(string cacheKey)
-        {
+        {            
             return (T)this.RuntimeCache.GetCacheItem(cacheKey);
         }
 
+
+        /// <summary>
+        /// Attempts to execute an API request
+        /// </summary>
+        /// <param name="apiMethod">
+        /// The api method.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of Result to return
+        /// </typeparam>
+        /// <returns>
+        /// The result <see cref="Attempt{T}"/> of the API request.
+        /// </returns>
+        protected Attempt<T> TryGetApiResult<T>(Func<T> apiMethod)
+        {
+            try
+            {
+                var result = apiMethod.Invoke();
+
+                return Attempt<T>.Succeed(result);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<BraintreeApiServiceBase>("Braintree API request failed.", ex);
+                return Attempt<T>.Fail(default(T), ex);
+            }
+        }
+        
         /// <summary>
         /// Makes a customer cache key.
         /// </summary>
@@ -104,6 +131,20 @@
         }
 
         /// <summary>
+        /// Makes a customer cache key.
+        /// </summary>
+        /// <param name="customerId">
+        /// The Braintree customer id
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        protected string MakeCustomerCacheKey(string customerId)
+        {
+            return Caching.CacheKeys.BraintreeCustomer(customerId);
+        }
+
+        /// <summary>
         /// Makes a payment method cache key.
         /// </summary>
         /// <param name="token">
@@ -115,6 +156,20 @@
         protected string MakePaymentMethodCacheKey(string token)
         {
             return Caching.CacheKeys.BraintreePaymentMethod(token);
+        }
+
+        /// <summary>
+        /// Makes a subscription cache key.
+        /// </summary>
+        /// <param name="subscriptionId">
+        /// The subscription id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> cache key.
+        /// </returns>
+        protected string MakeSubscriptionCacheKey(string subscriptionId)
+        {
+            return Caching.CacheKeys.BraintreeSubscription(subscriptionId);
         }
 
         /// <summary>

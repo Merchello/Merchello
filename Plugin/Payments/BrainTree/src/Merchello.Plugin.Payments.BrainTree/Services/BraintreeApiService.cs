@@ -1,14 +1,13 @@
-namespace Merchello.Plugin.Payments.Braintree.Api
+namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
-
-    using Merchello.Core;
-    using Merchello.Plugin.Payments.Braintree.Models;
+    using Core;
+    using Models;
 
     /// <summary>
-    /// Represents a <see cref="BraintreeApiProvider"/>.
+    /// Represents a <see cref="BraintreeApiService"/>.
     /// </summary>
-    public class BraintreeApiProvider : IBraintreeApiProvider
+    public class BraintreeApiService : IBraintreeApiService
     {
         /// <summary>
         /// The <see cref="BraintreeProviderSettings"/>.
@@ -16,38 +15,38 @@ namespace Merchello.Plugin.Payments.Braintree.Api
         private readonly BraintreeProviderSettings _settings;
 
         /// <summary>
-        /// The <see cref="IBraintreeCustomerApiProvider"/>.
+        /// The <see cref="IBraintreeCustomerApiService"/>.
         /// </summary>
-        private Lazy<IBraintreeCustomerApiProvider> _customer;
+        private Lazy<IBraintreeCustomerApiService> _customer;
 
         /// <summary>
-        /// The <see cref="IBraintreePaymentMethodApiProvider"/>.
+        /// The <see cref="IBraintreePaymentMethodApiService"/>.
         /// </summary>
-        private Lazy<IBraintreePaymentMethodApiProvider> _paymentMethod;
+        private Lazy<IBraintreePaymentMethodApiService> _paymentMethod;
 
         /// <summary>
-        /// The <see cref="IBraintreeSubscriptionApiProvider"/>.
+        /// The <see cref="IBraintreeSubscriptionApiService"/>.
         /// </summary>
-        private Lazy<IBraintreeSubscriptionApiProvider> _subscription; 
+        private Lazy<IBraintreeSubscriptionApiService> _subscription; 
 
         /// <summary>
-        /// The <see cref="IBraintreeTransactionApiProvider"/>.
+        /// The <see cref="IBraintreeTransactionApiService"/>.
         /// </summary>
-        private Lazy<IBraintreeTransactionApiProvider> _transaction;
+        private Lazy<IBraintreeTransactionApiService> _transaction;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeApiService"/> class.
         /// </summary>
         /// <param name="settings">
         /// The settings.
         /// </param>
-        public BraintreeApiProvider(BraintreeProviderSettings settings)
+        public BraintreeApiService(BraintreeProviderSettings settings)
             : this(MerchelloContext.Current, settings)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeApiProvider"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeApiService"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -55,7 +54,10 @@ namespace Merchello.Plugin.Payments.Braintree.Api
         /// <param name="settings">
         /// The settings.
         /// </param>
-        internal BraintreeApiProvider(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
+        /// <remarks>
+        /// Used for testing
+        /// </remarks>
+        internal BraintreeApiService(IMerchelloContext merchelloContext, BraintreeProviderSettings settings)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(settings, "settings");
@@ -68,7 +70,7 @@ namespace Merchello.Plugin.Payments.Braintree.Api
         /// <summary>
         /// Gets the customer API provider.
         /// </summary>
-        public IBraintreeCustomerApiProvider Customer
+        public IBraintreeCustomerApiService Customer
         {
             get
             {
@@ -79,7 +81,7 @@ namespace Merchello.Plugin.Payments.Braintree.Api
         /// <summary>
         /// Gets the payment method API provider.
         /// </summary>
-        public IBraintreePaymentMethodApiProvider PaymentMethod
+        public IBraintreePaymentMethodApiService PaymentMethod
         {
             get
             {
@@ -90,7 +92,7 @@ namespace Merchello.Plugin.Payments.Braintree.Api
         /// <summary>
         /// Gets the subscription API provider.
         /// </summary>
-        public IBraintreeSubscriptionApiProvider Subscription
+        public IBraintreeSubscriptionApiService Subscription
         {
             get
             {
@@ -101,7 +103,7 @@ namespace Merchello.Plugin.Payments.Braintree.Api
         /// <summary>
         /// Gets the transaction API provider.
         /// </summary>
-        public IBraintreeTransactionApiProvider Transaction
+        public IBraintreeTransactionApiService Transaction
         {
             get
             {
@@ -117,18 +119,17 @@ namespace Merchello.Plugin.Payments.Braintree.Api
         /// </param>
         private void Initialize(IMerchelloContext merchelloContext)
         {
-
             if (_customer == null)
-                _customer = new Lazy<IBraintreeCustomerApiProvider>(() => new BraintreeCustomerApiProvider(merchelloContext, _settings));
+                _customer = new Lazy<IBraintreeCustomerApiService>(() => new BraintreeCustomerApiService(merchelloContext, _settings));
 
             if (_paymentMethod == null)
-                _paymentMethod = new Lazy<IBraintreePaymentMethodApiProvider>(() => new BraintreePaymentMethodApiProvider(merchelloContext, _settings, _customer.Value));
+                _paymentMethod = new Lazy<IBraintreePaymentMethodApiService>(() => new BraintreePaymentMethodApiService(merchelloContext, _settings, _customer.Value));
 
             if (_subscription == null)
-                _subscription = new Lazy<IBraintreeSubscriptionApiProvider>(() => new BraintreeSubscriptionApiProvider(merchelloContext, _settings));
+                _subscription = new Lazy<IBraintreeSubscriptionApiService>(() => new BraintreeSubscriptionApiService(merchelloContext, _settings));
 
             if (_transaction == null)
-                _transaction = new Lazy<IBraintreeTransactionApiProvider>(() => new BraintreeTransactionApiProvider(merchelloContext, _settings));
+                _transaction = new Lazy<IBraintreeTransactionApiService>(() => new BraintreeTransactionApiService(merchelloContext, _settings));
         }
     }
 }

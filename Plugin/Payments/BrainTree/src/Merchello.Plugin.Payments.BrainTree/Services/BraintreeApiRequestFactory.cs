@@ -1,11 +1,9 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Persistence.Factories
+﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
-
     using global::Braintree;
-
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Models;
+    using Core.Models;
+    using Models;
 
     /// <summary>
     /// The <see cref="BraintreeApiRequestFactory"/>.
@@ -214,7 +212,7 @@
         }
 
         /// <summary>
-        /// The create customer request.
+        /// Creates a <see cref="CustomerRequest"/>.
         /// </summary>
         /// <param name="customer">
         /// The customer.
@@ -269,6 +267,8 @@
 
         #endregion
 
+        #region Payment Method
+
         /// <summary>
         /// Creates a <see cref="PaymentMethodRequest"/>.
         /// </summary>
@@ -303,6 +303,30 @@
         }
 
         /// <summary>
+        /// Creates a <see cref="PaymentMethodRequest"/> for an update.
+        /// </summary>
+        /// <param name="billingAddress">
+        /// The billing address.
+        /// </param>
+        /// <param name="updateExisting">
+        /// The update existing.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PaymentMethodRequest"/>.
+        /// </returns>
+        public PaymentMethodRequest CreatePaymentMethodRequest(IAddress billingAddress, bool updateExisting = true)
+        {
+            var addressRequest = CreatePaymentMethodAddressRequest(billingAddress);
+
+            if (updateExisting) addressRequest.Options = new PaymentMethodAddressOptionsRequest() { UpdateExisting = true };
+
+            return new PaymentMethodRequest()
+                    {
+                        BillingAddress = addressRequest                    
+                    };
+        }
+
+        /// <summary>
         /// Creates a <see cref="PaymentMethodAddressRequest"/>.
         /// </summary>
         /// <param name="address">
@@ -326,6 +350,130 @@
                            CountryCodeAlpha2 = address.CountryCode
                        };
         }
+
+        #endregion
+
+        #region Subscription
+
+        /// <summary>
+        /// Creates a <see cref="SubscriptionRequest"/>.
+        /// </summary>
+        /// <param name="paymentMethodToken">
+        /// The payment method token.
+        /// </param>
+        /// <param name="planId">
+        /// The plan id.
+        /// </param>
+        /// <param name="price">
+        /// An optional price used to override the plan price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SubscriptionRequest"/>.
+        /// </returns>
+        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, decimal? price = null)
+        {
+            Mandate.ParameterNotNullOrEmpty(paymentMethodToken, "paymentMethodToken");
+            Mandate.ParameterNotNullOrEmpty(planId, "planId");
+
+            var request = new SubscriptionRequest()
+                       {
+                           PaymentMethodToken = paymentMethodToken, 
+                           PlanId = planId,
+                       };
+
+            if (_settings.MerchantDescriptor.HasValues()) request.Descriptor = _settings.MerchantDescriptor.AsDescriptorRequest();
+
+            if (price != null) request.Price = price.Value;
+
+            return request;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="SubscriptionRequest"/>.
+        /// </summary>
+        /// <param name="paymentMethodToken">
+        /// The payment method token.
+        /// </param>
+        /// <param name="planId">
+        /// The plan id.
+        /// </param>
+        /// <param name="trialDuration">
+        /// The trial duration.
+        /// </param>
+        /// <param name="trialDurationUnit">
+        /// The trial duration unit.
+        /// </param>
+        /// <param name="addTrialPeriod">
+        /// Adds a trial period to a plan that normally does not have one.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SubscriptionRequest"/>.
+        /// </returns>
+        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, int trialDuration, SubscriptionDurationUnit trialDurationUnit, bool addTrialPeriod = false)
+        {
+            if (trialDurationUnit == null) trialDurationUnit = SubscriptionDurationUnit.MONTH;
+
+            var request = CreateSubscriptionRequest(paymentMethodToken, planId);
+
+            if (request.TrialDuration > 0) request.TrialDuration = trialDuration;
+
+            request.TrialDurationUnit = trialDurationUnit;
+
+            if (addTrialPeriod) request.HasTrialPeriod = true;
+
+            return request;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="SubscriptionRequest"/>.
+        /// </summary>
+        /// <param name="paymentMethodToken">
+        /// The payment method token.
+        /// </param>
+        /// <param name="planId">
+        /// The plan id.
+        /// </param>
+        /// <param name="firstBillingDate">
+        /// The first billing date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SubscriptionRequest"/>.
+        /// </returns>
+        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, DateTime firstBillingDate)
+        {
+            var request = CreateSubscriptionRequest(paymentMethodToken, planId);
+
+            request.FirstBillingDate = firstBillingDate;
+
+            return request;
+        }
+
+        /// <summary>
+        /// The create subscription request.
+        /// </summary>
+        /// <param name="paymentMethodToken">
+        /// The payment method token.
+        /// </param>
+        /// <param name="planId">
+        /// The plan id.
+        /// </param>
+        /// <param name="billingDayOfMonth">
+        /// The billing day of month.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SubscriptionRequest"/>.
+        /// </returns>
+        public SubscriptionRequest CreateSubscriptionRequest(string paymentMethodToken, string planId, int billingDayOfMonth)
+        {
+            Mandate.ParameterCondition(0 < billingDayOfMonth && 31 <= billingDayOfMonth, "billingDayOfMonth");
+
+            var request = CreateSubscriptionRequest(paymentMethodToken, planId);
+            request.BillingDayOfMonth = billingDayOfMonth;
+
+            return request;
+        }
+
+        #endregion
 
         #region Transaction Request
 
@@ -357,7 +505,9 @@
                            BillingAddress = CreateAddressRequest(invoice.GetBillingAddress()),
                            Channel = Constants.TransactionChannel
                        };
+
             if (customer != null) request.Customer = CreateCustomerRequest(customer);
+            
             if (transactionOption == TransactionOption.SubmitForSettlement)
             {
                 request.Options = new TransactionOptionsRequest() { SubmitForSettlement = true };
