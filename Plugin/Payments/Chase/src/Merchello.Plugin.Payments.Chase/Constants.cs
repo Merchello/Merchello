@@ -59,6 +59,11 @@
             public static string TransactionReferenceNumber = "txRefNum";
 
             /// <summary>
+            /// The authorization transaction result.
+            /// </summary>
+            public static string TransactionReferenceIndex = "txRefIdx";
+
+            /// <summary>
             /// The capture declined result.
             /// </summary>
             public static string CaptureDeclinedResult = "chaseCaptureDeclined";
