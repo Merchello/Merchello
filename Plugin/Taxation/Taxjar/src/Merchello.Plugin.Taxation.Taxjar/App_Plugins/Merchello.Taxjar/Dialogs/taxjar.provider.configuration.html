@@ -1,0 +1,44 @@
+﻿<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Plugin.GatewayProviders.Taxation.Dialogs.TaxJarGatewayProviderController">
+
+    <div class="umb-modalcolumn-header">
+        <h4><strong>TaxJar Provider Configuration</strong></h4>
+    </div>
+    <form name="editProviderForm" id="editProviderForm">
+        <div class="umb-panel-body with-header with-footer">
+
+
+            <div class="control-group row-fluid">
+                <p>API Token<br /></p>
+                <div class="col-xs-12 span12">
+                    <input class="col-xs-12 span12" type="text" data-ng-model="taxjartaxSettings.ApiToken">
+                </div>
+            </div>
+
+            <ul>
+                <li>API Version: {{taxjartaxSettings.ApiVersion}}</li>
+            </ul>
+
+        </div>
+
+        <div class="umb-panel-footer">
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                    <a href data-ng-click="close()" class="btn btn-link">
+                        <localize key="general_cancel">Cancel</localize>
+                    </a>
+
+                    <a href
+                       class="btn btn-primary"
+                       data-ng-click="saveSettings()">
+                        <localize key="buttons_save">Save</localize>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
