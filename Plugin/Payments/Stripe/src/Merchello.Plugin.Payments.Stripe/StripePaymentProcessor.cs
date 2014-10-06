@@ -137,13 +137,13 @@ namespace Merchello.Plugin.Payments.Stripe
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("Error {0}", responseJson["message"]))), invoice, false);
+                                new Exception(string.Format("{0}", responseJson["error"]["message"]))), invoice, false);
 
                 default:
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("Error {0}", "Stripe unknown error"))), invoice, false);
+                                new Exception(string.Format("{0}", "Stripe unknown error"))), invoice, false);
             }
         }
 
