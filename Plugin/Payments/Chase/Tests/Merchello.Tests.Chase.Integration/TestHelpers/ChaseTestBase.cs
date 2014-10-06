@@ -17,7 +17,7 @@ using Constants = Merchello.Core.Constants;
 
 namespace Merchello.Tests.Chase.Integration.TestHelpers
 {
-    public abstract class ChaseTestBase
+    public abstract class ChaseTestBase : MerchelloAllInTestBase
     {
         protected ChaseProcessorSettings ChaseProcessorSettings;
 
