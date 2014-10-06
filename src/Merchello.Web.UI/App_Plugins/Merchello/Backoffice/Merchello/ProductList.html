@@ -65,6 +65,9 @@
                             <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price' ||  sortProperty == '-price'}">
 	                            <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty == '-price'}"></i> <localize key="merchelloGeneral_price"/>
                             </th>
+                            <th>
+                                <localize key="merchelloVariant_productOnSale" />
+                            </th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -77,6 +80,11 @@
                             <td>{{product.sku}}</td>
                             <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
                             <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
+
+                            <td data-ng-show="!product.hasVariants && !product.onSale"><localize key="general_no" /></td>
+                            <td data-ng-show="!product.hasVariants && product.onSale"><localize key="general_yes" /></td>
+                            <td data-ng-show="product.hasVariants">&nbsp;</td>
+
                             <td>
                                 <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}"><i class="icon-edit"></i></a>
                                 <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEditWithOptions/{{product.key}}"><i class="icon-edit"></i></a>

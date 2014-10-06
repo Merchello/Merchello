@@ -51,6 +51,7 @@
     <key alias="mustUniqueSku">Must have a unique SKU</key>
     <key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
+    <key alias="productOnSale">Product on sale</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->
