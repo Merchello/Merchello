@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{40CDEB04-8B36-4DD1-9A52-278796E0965E}</ProjectGuid>
+    <ProjectGuid>{C46A5D1F-F428-4BC3-8596-FFC9902A3E19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Merchello.Plugin.Payments.Chase</RootNamespace>
-    <AssemblyName>Merchello.Plugin.Payments.Chase</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Merchello.Plugin.Taxation.Taxjar</RootNamespace>
+    <AssemblyName>Merchello.Plugin.Taxation.Taxjar</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,8 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="AutoMapper">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper.Net4">
@@ -73,22 +72,20 @@
     <Reference Include="interfaces">
       <HintPath>..\packages\UmbracoCms.Core.7.1.6\lib\interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="log4net">
       <HintPath>..\packages\UmbracoCms.Core.7.1.6\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core">
+      <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\..\..\..\..\..\Juniper\ExternalBin\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web">
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.1.6\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -113,10 +110,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Paymentech, Version=7.3.0.0, Culture=neutral, PublicKeyToken=c7002af83b0fc7a1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\..\Paymentech\sdk\DotNet40\7.3.0\lib\Paymentech.dll</HintPath>
-    </Reference>
     <Reference Include="SQLCE4Umbraco">
       <HintPath>..\packages\UmbracoCms.Core.7.1.6\lib\SQLCE4Umbraco.dll</HintPath>
     </Reference>
@@ -124,13 +117,16 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\UmbracoCms.Core.7.1.6\lib\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\UmbracoCms.Core.7.1.6\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -144,6 +140,7 @@
     </Reference>
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -151,12 +148,15 @@
     </Reference>
     <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -198,39 +198,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChaseEvents.cs" />
-    <Compile Include="ChasePaymentProcessor.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="ExtendedDataExtensions.cs" />
-    <Compile Include="Models\ChaseProcessorSettings.cs" />
-    <Compile Include="Models\CreditCardFormData.cs" />
-    <Compile Include="Models\CreditCardInfoExtensions.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="MappingExtensions.cs" />
+    <Compile Include="Models\TaxJarProviderSettings.cs" />
+    <Compile Include="Models\TaxRequest.cs" />
+    <Compile Include="Models\TaxResult.cs" />
+    <Compile Include="Provider\ITaxJarTaxationGatewayMethod.cs" />
+    <Compile Include="Provider\ITaxJarTaxationGatewayProvider.cs" />
+    <Compile Include="Provider\TaxJarTaxationGatewayMethod.cs" />
+    <Compile Include="Provider\TaxJarTaxationGatewayProvider.cs" />
+    <Compile Include="Services\ITaxJarTaxService.cs" />
+    <Compile Include="Services\TaxJarTaxService.cs" />
+    <Compile Include="UmbracoApplicationEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Provider\ChasePaymentGatewayMethod.cs" />
-    <Compile Include="Provider\ChasePaymentGatewayProvider.cs" />
-    <Compile Include="Provider\IChasePaymentGatewayMethod.cs" />
-    <Compile Include="Provider\IChasePaymentGatewayProvider.cs" />
-    <Compile Include="TransactionMode.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_Plugins\Merchello.Chase\editor.html" />
-    <Content Include="App_Plugins\Merchello.Chase\merchello.chase.controller.js" />
-    <Content Include="App_Plugins\Merchello.Chase\merchello.chase.paymentmethod.controller.js" />
-    <Content Include="App_Plugins\Merchello.Chase\paymentmethod.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="App_Plugins\Merchello.Chase\package.manifest" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="App_Plugins\Merchello.Taxjar\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\Debug\" />
-    <Folder Include="bin\Release\" />
-    <Folder Include="obj\Debug\TempPE\" />
+    <Content Include="App_Plugins\Merchello.Taxjar\Dialogs\taxjar.provider.configuration.controller.js" />
+    <Content Include="App_Plugins\Merchello.Taxjar\Dialogs\taxjar.provider.configuration.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
