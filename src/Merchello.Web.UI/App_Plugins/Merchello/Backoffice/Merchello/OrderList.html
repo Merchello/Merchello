@@ -11,7 +11,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <!-- New Order Button -->
                     <div class="btn-group">
-                        <a href="#/merchello/merchello/edit/orders?create" class="btn btn-success">New Order</a>sdfg
+                        <a href="#/merchello/merchello/edit/orders?create" class="btn btn-success"><localize key="merchelloOrder_createOrder" /></a>
                     </div>
                 </div>
             </div>
@@ -31,17 +31,58 @@
                     </div>
                     <!-- Order Filters -->
                     <div class="form-group control-group">
-                        <label for="orderFilter" class="col-xs-2 control-label"><localize key="merchelloOrder_filter" />:</label>
+                        <div class="control-label">
+                            <a data-ng-click="filterAction = !filterAction" class="btn"><localize key="merchelloOrder_filter" /> <!--<i class="icon-navigation-down"></i>--></a>
+                        </div>
                         <div class="col-xs-10 controls">
                             <input id="orderFilter" class="form-control span6" name="orderFilter" data-ng-model="filterText" localize="placeholder" placeholder="Search by invoice number or customer name" />
                             <!-- ACTION: Filter Orders -->
-                            <button id="orderFilterGo" class="btn" data-ng-click="loadInvoices(filterText)"><localize key="merchelloGeneral_filter" /></button>
+                            <button id="orderFilterGo" class="btn" data-ng-click="filterWithWildcard(filterText)"><localize key="merchelloGeneral_filter" /></button>
                         </div>
                     </div>
                 </form>
+                <merchello-slide-open-panel is-open="filterAction" classes="'well row-fluid col-xs-10 span10'">
+
+                    <div>
+                        <button class="btn close" data-ng-click="close($event)"><i class="icon-delete"></i></button>
+                        <p>Show all invoices where</p>
+
+                        <div class="form-inline">
+                            <div>
+                                Dates:
+                                <div class="input-append date datepicker" id="filterStartDate">
+                                    <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
+                                           data-ng-model="filterStartDate" />
+                                    <span class="add-on">
+                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                                    </span>
+                                </div>
+                                -
+                                <div class="input-append date datepicker" id="filterEndDate">
+                                    <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
+                                           data-ng-model="filterEndDate" />
+                                    <span class="add-on">
+                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                                    </span>
+                                </div>
+                                <button id="orderFilterDateGo" class="btn" data-ng-click="filterWithDates(filterStartDate,filterEndDate)"><localize key="merchelloGeneral_filter" /></button>
+                            </div>
+                        </div>
+                        <!--<div>Invoice Status: <input type="text" /></div>
+                        <div>Order Status: <input type="text" /></div>-->
+
+                    </div>
+
+                </merchello-slide-open-panel>
+
                 <div class="row warning" data-ng-show="orderIssues.length > 0">
                     <h2><i class="icon-alert"></i> <localize key="merchelloOrder_attentionRequired" /></h2>
                     <p><a href="#">There is 1 payment authorization expiring</a>. <localize key="merchelloOrder_paymentExpirationWarning" /> </p>
+                </div>
+
+                <div class="form-inline" data-ng-show="currentFilters.length > 0">
+                    <strong>Current Filters</strong> <span data-ng-repeat="filter in currentFilters"> <span class="label label-inverse">{{ filter.fieldname }} '{{ filter.value }}'</span>  </span>
+                    <button class="btn" data-ng-click="resetFilters()"><localize key="merchelloGeneral_resetFilters" /></button>
                 </div>
             </div>
             <!-- Tabular Order List -->
