@@ -18,7 +18,7 @@ namespace Merchello.Tests.Base.TestHelpers
     /// Assists with integration tests which require data to be present in the database and is useful in
     /// quickly populating the database with data for UI testing.
     /// </summary>
-    public class DbPreTestDataWorker
+    public class DbPreTestDataWorker : IDisposable
     {
         
         private readonly ServiceContext _serviceContext;
@@ -519,5 +519,9 @@ namespace Merchello.Tests.Base.TestHelpers
             baseDataCreation.InitializeBaseData("merchStoreSetting");
         }
 
+        public void Dispose()
+        {
+            Database.Dispose();
+        }
     }
 }

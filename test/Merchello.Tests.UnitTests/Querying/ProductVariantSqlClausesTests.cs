@@ -28,8 +28,7 @@ namespace Merchello.Tests.UnitTests.Querying
                 .On("[merchProduct].[pk] = [merchProductVariant].[productKey]")
                 .InnerJoin("[merchProductVariantIndex]")
                 .On("[merchProductVariant].[pk] = [merchProductVariantIndex].[productVariantKey]")
-                .Where("[merchProductVariant].[master]=1")
-                .Where("[merchProduct].[pk] = '" + key.ToString() + "'");
+                .Where("[merchProductVariant].[master]= @0 AND [merchProduct].[pk] = @1", new object[] { 1 , key });
 
             Console.Write(expected.SQL);
 
