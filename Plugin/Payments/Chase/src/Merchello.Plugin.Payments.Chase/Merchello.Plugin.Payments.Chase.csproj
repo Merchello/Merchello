@@ -30,7 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
+    <Reference Include="AutoMapper, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper.Net4">
@@ -79,11 +80,12 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core">
+    <Reference Include="Merchello.Core, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Examine.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Juniper\ExternalBin\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web">
       <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Web.dll</HintPath>

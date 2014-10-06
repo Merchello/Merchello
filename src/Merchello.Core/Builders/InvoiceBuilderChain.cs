@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using Models;
     using Sales;
@@ -84,9 +85,9 @@
             var discounts = attempt.Result.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
 
             // total the invoice
-            attempt.Result.Total = decimal.Parse((charges - discounts).ToString("#.##"));
+            decimal converted;
+            attempt.Result.Total = decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0;
                
-
             return attempt;
         }
     }

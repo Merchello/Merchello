@@ -132,7 +132,7 @@
         #region Event Handlers
 
         /// <summary>
-        /// Occurs after Create
+        /// Occurs before the Create
         /// </summary>
         public static event TypedEventHandler<IInvoiceService, Events.NewEventArgs<IInvoice>> Creating;
 

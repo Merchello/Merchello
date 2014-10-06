@@ -1,13 +1,12 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree
 {
     using AutoMapper;
-
     using global::Braintree;
-
-    using Merchello.Core.Models;
-    using Merchello.Plugin.Payments.Braintree.Models;
-
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Models;
     using Newtonsoft.Json;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Utility extensions that assist in mapping and serializing/de-serializing models
@@ -115,5 +114,62 @@
         }
 
         #endregion
+
+        #region ExtendedData
+
+        /// <summary>
+        /// Serializes and saves a <see cref="Transaction"/> in extended data
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="transaction">
+        /// The transaction.
+        /// </param>
+        public static void SetBraintreeTransaction(this ExtendedDataCollection extendedData, Transaction transaction)
+        {
+            extendedData.SetValue(Constants.ExtendedDataKeys.BraintreeTransaction, JsonConvert.SerializeObject(transaction));
+        }
+
+        /// <summary>
+        /// Deserializes and returns a <see cref="Transaction"/> from the extended data collection
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Transaction"/>.
+        /// </returns>
+        public static Transaction GetBraintreeTransaction(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.BraintreeTransaction)
+                ? JsonConvert.DeserializeObject<Transaction>(
+                    extendedData.GetValue(Constants.ExtendedDataKeys.BraintreeTransaction))
+                : null;
+        }
+
+        #endregion
+
+        #region ProcessorArguments
+
+        /// <summary>
+        /// Gets the payment method nonce from the <see cref="ProcessorArgumentCollection"/>
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The payment method nonce.
+        /// </returns>
+        public static string GetPaymentMethodNonce(this ProcessorArgumentCollection args)
+        {
+            if (args.ContainsKey(Constants.ProcessorArguments.PaymentMethodNonce)) return args[Constants.ProcessorArguments.PaymentMethodNonce];
+
+            LogHelper.Debug(typeof(MappingExtensions), "Payment Method Nonce not found in process argument collection");
+
+            return string.Empty;
+        }
+
+#endregion
     }
 }
