@@ -14,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         private BaseDataCreation _creation;
         private UmbracoDatabase _database;
 
-        [SetUp]
+        [TestFixtureSetUp]
         public void Init()
         {
             var worker = new DbPreTestDataWorker();
@@ -22,7 +22,13 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
             _creation = new BaseDataCreation(_database);
         }
 
-        /// <summary>
+        [TestFixtureTearDown]
+        public void Teardown()
+        {
+            _database.Dispose();
+        }
+
+                /// <summary>
         /// Test to verify Merchello 
         /// </summary>
         [Test]
