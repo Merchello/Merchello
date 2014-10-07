@@ -36,8 +36,8 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\..\src\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
-    <Reference Include="Braintree-2.34.0">
-      <HintPath>..\..\src\packages\Braintree.2.34.0\lib\Braintree-2.34.0.dll</HintPath>
+    <Reference Include="Braintree-2.35.0">
+      <HintPath>..\..\src\packages\Braintree.2.35.0\lib\Braintree-2.35.0.dll</HintPath>
     </Reference>
     <Reference Include="businesslogic">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.6\lib\businesslogic.dll</HintPath>
