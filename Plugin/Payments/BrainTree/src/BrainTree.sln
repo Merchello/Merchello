@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{BE01E8CF
 	ProjectSection(SolutionItems) = preProject
 		..\build\Braintree.build = ..\build\Braintree.build
 		..\build\build.bat = ..\build\build.bat
-		..\build\Merchello.AuthorizeNet.Payment_1.0.1.zip = ..\build\Merchello.AuthorizeNet.Payment_1.0.1.zip
+		..\build\NuSpec\Merchello.Plugin.Braintree.nuspec = ..\build\NuSpec\Merchello.Plugin.Braintree.nuspec
 		..\build\package.xml = ..\build\package.xml
 		..\build\readme.txt = ..\build\readme.txt
 	EndProjectSection
