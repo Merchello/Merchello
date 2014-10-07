@@ -24,7 +24,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchShipRateTier]")
-                .Where("[merchShipRateTier].[pk] = '" + key.ToString() + "'");
+                .Where("[merchShipRateTier].[pk] = @0", new { key });
 
             //// Act
             var sql = new Sql();

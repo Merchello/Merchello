@@ -49,6 +49,7 @@
     <key alias="mustUniqueSku">Skal have en unik SKU</key>
     <key alias="inventoryWarning"><![CDATA[<p>Vigtigt: Hvis du vælger at spore lagerbeholdningen skal det opsættes manuelt for hver enkelt variant (Herunder), når produktet er gemt. Du kan opsætte en basis lagerbeholdning som tilknyttes <strong>alle varianter</strong> her.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Dette vil opsætte en start lagerbeholdning for <strong>alle varianter</strong> og <strong>alle lagre</strong>)]]></key> <!-- WHat is this?-->
+    <key alias="productOnSale">Product on sale</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->

@@ -145,11 +145,10 @@ namespace Merchello.Web
             var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
 
             if (cookie != null)
-            {
-                ContextData = cookie.ToCustomerContextData();
-
+            {                
                 try
                 {
+                    ContextData = cookie.ToCustomerContextData();
                     TryGetCustomer(ContextData.Key);
                 }
                 catch (Exception ex)

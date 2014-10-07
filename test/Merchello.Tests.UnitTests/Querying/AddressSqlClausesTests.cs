@@ -27,7 +27,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomerAddress]")
-                .Where("[merchCustomerAddress].[pk] = '" + key.ToString() + "'");
+                .Where("[merchCustomerAddress].[pk] = @0", new { key });
 
             //// Act
             var sql = new Sql();
@@ -51,7 +51,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchCustomerAddress]")
-                .Where("[merchCustomerAddress].[customerKey] = '" + key.ToString() + "'");
+                .Where("[merchCustomerAddress].[customerKey] = @0", new { key });
 
             //// Act
             var sql = new Sql();

@@ -27,6 +27,7 @@
         {
             return Workflow.Backoffice.GetBackoffice(customer);
         }
+
         /// <summary>
         /// The wish list.
         /// </summary>

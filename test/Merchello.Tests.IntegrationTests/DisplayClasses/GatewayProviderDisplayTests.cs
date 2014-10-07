@@ -2,6 +2,7 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Gateways.Payment;
+using Merchello.Tests.Base.TestHelpers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web.Models.ContentEditing;
 using NUnit.Framework;
