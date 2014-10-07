@@ -10,6 +10,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Braintree.Integration", "..\tests\Merchello.Tests.BrainTree.Integration\Merchello.Tests.Braintree.Integration.csproj", "{8D646848-83D0-4D53-84C1-6DF39081E653}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{BE01E8CF-C0EF-4E1A-99C1-38D55D0698DB}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\Braintree.build = ..\build\Braintree.build
+		..\build\build.bat = ..\build\build.bat
+		..\build\Merchello.AuthorizeNet.Payment_1.0.1.zip = ..\build\Merchello.AuthorizeNet.Payment_1.0.1.zip
+		..\build\package.xml = ..\build\package.xml
+		..\build\readme.txt = ..\build\readme.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

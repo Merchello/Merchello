@@ -1,0 +1,57 @@
+﻿<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Plugin.GatewayProviders.Payments.Dialogs.BraintreeGatewayProviderController">
+
+    <div class="umb-modalcolumn-header">
+        <h4><strong>BrainTree Payments Provider Configuration</strong></h4>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="control-group row-fluid">
+            <p>API Login Id<br /></p>
+            <div class="col-xs-12 span12">
+                <input class="col-xs-12 span12" type="text" data-ng-model="brainTreeSettings.LoginId">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>Transaction Key<br /></p>
+            <div class="col-xs-12 span12">
+                <input class="col-xs-12 span12" type="text" data-ng-model="brainTreeSettings.TransactionKey">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="brainTreeSettings.UseSandbox"> Use Sandbox
+            </label>
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration
+            </label>
+        </div>
+        <ul>
+            <li>Delimited Data: {{brainTreeSettings.DelimitedData}}</li>
+            <li>Delimited Char: {{brainTreeSettings.DelimitedChar}}</li>
+            <li>Relay Response: {{brainTreeSettings.RelayResponse}}</li>
+            <li>API Version: {{brainTreeSettings.ApiVersion}}</li>
+        </ul>
+
+    </div>
+
+</div>
+
+
+<div class="umb-panel-footer">
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+            <a href data-ng-click="close()" class="btn btn-link">
+                <localize key="general_cancel">Cancel</localize>
+            </a>
+
+            <a href
+               class="btn btn-primary"
+               data-ng-click="submit(dialogData)">
+                <localize key="buttons_save">Save</localize>
+            </a>
+
+        </div>
+    </div>
+</div>
