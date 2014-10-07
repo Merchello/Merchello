@@ -9,6 +9,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence.Querying;
     using Umbraco.Core.Persistence.Repositories;
 
@@ -84,8 +85,9 @@
                 PersistNewItem((TEntity)entity);
                 _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LogHelper.Error(GetType(), "An error occurred trying to add a new entity", ex);
                 ////if an exception is thrown we need to remove the entry from cache, this is ONLY a work around because of the way
                 //// that we cache entities: http://issues.umbraco.org/issue/U4-4259
                 _cache.ClearCacheItem(GetCacheKey(entity.Key));
@@ -104,8 +106,10 @@
                 PersistUpdatedItem((TEntity)entity);
                 _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+
+                LogHelper.Error(GetType(), "An error occurred trying to update an exiting entity", ex);
                 ////if an exception is thrown we need to remove the entry from cache, this is ONLY a work around because of the way
                 //// that we cache entities: http://issues.umbraco.org/issue/U4-4259
                 _cache.ClearCacheItem(GetCacheKey(entity.Key));
