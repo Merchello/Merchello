@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<umbPackage>
+	<info>
+		<package>
+			<name>Merchello.AuthorizeNet.Payment</name>
+			<version>1.0.2</version>
+            <license url="https://github.com/Merchello/Merchello/blob/master/License.md">MIT license</license>
+            <url>http://our.umbraco.org/projects/website-utilities/merchello</url>
+			<requirements>
+				<major>7</major>
+				<minor>1</minor>
+				<patch>6</patch>
+			</requirements>
+		</package>
+        <author>
+            <name>Rusty Swayne</name>
+            <website>http://www.merchello.com/</website>
+        </author>
+		<readme><![CDATA[Merchello.Plugin.Payments.AuthorizeNet
+
+Plugin Payment Gateway Provider for Merchello.]]></readme>
+	</info>
+	<DocumentTypes />
+	<Templates />
+	<Stylesheets />
+	<Macros />
+	<DictionaryItems />
+	<Languages />
+	<DataTypes />
+	<Actions />
+	<control />
+	<files><file><guid>64fcf2c5-9065-4de5-a304-eacf256b7b10.dll</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll</orgName></file><file><guid>67a8d70e-32b4-454e-bc2d-65c512be97f6.config</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll.config</orgName></file><file><guid>7686464d-73d0-4ac9-a580-e5260bcf8a71.pdb</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.pdb</orgName></file><file><guid>c023d025-9fe4-4d59-b438-d033ca9d5af3.html</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>paymentmethod.html</orgName></file><file><guid>624786e5-ef77-46de-b40c-3e1bd7a39a71.html</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>providerSettingsDialog.html</orgName></file><file><guid>9b4d25cb-8bd6-47cf-a293-2cd43314d762.dll</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll</orgName></file><file><guid>81c22094-d3f2-4381-a216-05726d47d7ae.config</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll.config</orgName></file><file><guid>e3e320f5-167d-488e-8302-0664d25ae381.pdb</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.pdb</orgName></file></files>
+</umbPackage>

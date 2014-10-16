@@ -1,4 +1,6 @@
-﻿namespace Merchello.Plugin.Payments.Braintree.Services
+﻿using System.Linq;
+
+namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
     using System.Collections.Generic;
@@ -284,6 +286,19 @@
 
             RuntimeCache.ClearCacheItem(cacheKey);
             return false;            
+        }
+
+        /// <summary>
+        /// Gets a list of all <see cref="Plan"/>.
+        /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="Plan"/>.
+        /// </returns>       
+        public IEnumerable<Plan> GetAllPlans()
+        {
+            var attempt = TryGetApiResult(() => BraintreeGateway.Plan.All());            
+
+            return attempt.Success ? attempt.Result : Enumerable.Empty<Plan>();
         }
 
         /// <summary>

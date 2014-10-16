@@ -76,7 +76,19 @@
         /// </returns>
         public static DescriptorRequest AsDescriptorRequest(this MerchantDescriptor descriptor)
         {
-            return Mapper.Map<DescriptorRequest>(descriptor);
+            var mapped = Mapper.Map<DescriptorRequest>(descriptor);
+
+            mapped.Name = mapped.Name.Replace(" ", "*");
+
+            if (mapped.Name.Length < 22)
+            {
+                mapped.Name = mapped.Name.PadRight(22, '*');
+            }
+            else
+            {
+                mapped.Name = mapped.Name.Substring(0, 21);
+            }
+            return mapped;
         }
 
         /// <summary>
