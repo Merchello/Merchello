@@ -170,7 +170,7 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         protected string MakeSubscriptionCacheKey(string subscriptionId)
         {
             return Caching.CacheKeys.BraintreeSubscription(subscriptionId);
-        }
+        }       
 
         /// <summary>
         /// Performs class initialization logic.

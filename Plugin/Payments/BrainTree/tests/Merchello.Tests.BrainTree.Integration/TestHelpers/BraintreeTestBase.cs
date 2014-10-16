@@ -1,4 +1,5 @@
-﻿using Merchello.Tests.Base.TestHelpers;
+﻿using Merchello.Plugin.Payments.Braintree.Services;
+using Merchello.Tests.Base.TestHelpers;
 
 namespace Merchello.Tests.Braintree.Integration.TestHelpers
 {
@@ -23,6 +24,8 @@ namespace Merchello.Tests.Braintree.Integration.TestHelpers
 
         protected BraintreeGateway Gateway;
 
+        protected IBraintreeApiService BraintreeApiService;
+
 
         [TestFixtureSetUp]
         public virtual void TestFixtureSetup()
@@ -38,6 +41,8 @@ namespace Merchello.Tests.Braintree.Integration.TestHelpers
             AutoMapperMappings.CreateMappings();
 
             Gateway = BraintreeProviderSettings.AsBraintreeGateway();
+
+            BraintreeApiService = new BraintreeApiService(BraintreeProviderSettings);
 
         }
     }
