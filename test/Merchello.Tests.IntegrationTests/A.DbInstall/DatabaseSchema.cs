@@ -14,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
     {
         private UmbracoDatabase _database;
 
-        [SetUp]
+        [TestFixtureSetUp]
         public void Init()
         {
             var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
@@ -34,6 +34,14 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         {
             var creation = new DatabaseSchemaCreation(_database);
             creation.InitializeDatabaseSchema();
+        }
+
+
+        [TestFixtureTearDown]
+        public void TearDown()
+        {           
+            
+            _database.Dispose();
         }
 
     }

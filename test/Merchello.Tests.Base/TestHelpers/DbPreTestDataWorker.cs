@@ -18,7 +18,7 @@ namespace Merchello.Tests.Base.TestHelpers
     /// Assists with integration tests which require data to be present in the database and is useful in
     /// quickly populating the database with data for UI testing.
     /// </summary>
-    public class DbPreTestDataWorker
+    public class DbPreTestDataWorker : IDisposable
     {
         
         private readonly ServiceContext _serviceContext;
@@ -480,22 +480,26 @@ namespace Merchello.Tests.Base.TestHelpers
 
         public void ValidateDatabaseSetup()
         {
-            if (!Database.TableExist("merchGatewayProviderSettings"))
-                RebuildDatabase();
-    
-            var providerDtos =  Database.Query<GatewayProviderSettingsDto>("SELECT * FROM merchGatewayProviderSettings");
-            var warehouseDtos = Database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
-            var catalogDtos =   Database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");
-            var typeFieldDtos = Database.Query<TypeFieldDto>("SELECT * FROM merchTypeField");
-            var invoiceStatusDtos = Database.Query<InvoiceStatusDto>("SELECT * FROM merchInvoiceStatus");
-            var orderStatusDtos = Database.Query<OrderStatusDto>("SELECT * FROM merchOrderStatus");
-            var storeSettingDtos = Database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
-
-            if (!providerDtos.Any() || !warehouseDtos.Any() || !catalogDtos.Any() || !typeFieldDtos.Any() || !invoiceStatusDtos.Any() || !orderStatusDtos.Any() || !storeSettingDtos.Any())
+            try
             {
-                RebuildDatabase();
+                var providerDtos = Database.Query<GatewayProviderSettingsDto>("SELECT * FROM merchGatewayProviderSettings");
+                var warehouseDtos = Database.Query<WarehouseDto>("SELECT * FROM merchWarehouse");
+                var catalogDtos = Database.Query<WarehouseCatalogDto>("SELECT * FROM merchWarehouseCatalog");
+                var typeFieldDtos = Database.Query<TypeFieldDto>("SELECT * FROM merchTypeField");
+                var invoiceStatusDtos = Database.Query<InvoiceStatusDto>("SELECT * FROM merchInvoiceStatus");
+                var orderStatusDtos = Database.Query<OrderStatusDto>("SELECT * FROM merchOrderStatus");
+                var storeSettingDtos = Database.Query<StoreSettingDto>("SELECT * FROM merchStoreSetting");
+
+                if (!providerDtos.Any() || !warehouseDtos.Any() || !catalogDtos.Any() || !typeFieldDtos.Any() || !invoiceStatusDtos.Any() || !orderStatusDtos.Any() || !storeSettingDtos.Any())
+                {
+                    RebuildDatabase();
+                }
             }
-            
+            catch (Exception)
+            {
+                
+                RebuildDatabase();
+            }            
         }
 
         private void RebuildDatabase()
@@ -519,5 +523,9 @@ namespace Merchello.Tests.Base.TestHelpers
             baseDataCreation.InitializeBaseData("merchStoreSetting");
         }
 
+        public void Dispose()
+        {
+            Database.Dispose();
+        }
     }
 }
