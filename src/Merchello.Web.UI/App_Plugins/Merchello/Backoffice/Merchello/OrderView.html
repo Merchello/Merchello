@@ -113,8 +113,8 @@
                         <span class="tel" data-ng-show="invoice.billToPhone != ''">Phone: {{invoice.billToPhone}}</span>
                         <span data-ng-show="invoice.billToEmail != ''"><a data-ng-href="mailto:{{invoice.billToEmail}}" class="email">{{invoice.billToEmail}}</a></span>
                     </div>
-                    <h3><localize key="merchelloOrderView_shippingAddress" /></h3><br />
-                    <div class="vcard">
+                    <h3 data-ng-show="shippingAddress == '{}'"><localize key="merchelloOrderView_shippingAddress" /></h3><br data-ng-show="shippingAddress == '{}'" />
+                    <div class="vcard" data-ng-show="shippingAddress == '{}'">
                         <span class="fn" data-ng-show="shippingAddress.name != null">{{shippingAddress.name}}</span>
                         <span class="org" data-ng-show="shippingAddress.organization != null">{{shippingAddress.organization}}</span>
                         <span class="adr">

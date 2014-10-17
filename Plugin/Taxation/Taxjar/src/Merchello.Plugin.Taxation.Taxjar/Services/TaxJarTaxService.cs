@@ -36,20 +36,28 @@
                 + "&to_zip=" + request.ToZip;
             JObject response = MakeTaxJarApiRequest(url);
 
-            TaxResult result = new TaxResult();
-            result.TotalTax = (decimal)response["amount_to_collect"];
-            result.Rate = (decimal)response["rate"];
-            result.HasNexus = (bool)response["has_nexus"];
-            result.FreightTaxable = (bool)response["freight_taxable"];
-            result.TaxSource = (string)response["tax_source"];
-            result.Success = true;
+            var result = new TaxResult();
+            try
+            {
+                result.TotalTax = (decimal) response["amount_to_collect"];
+                result.Rate = (decimal) response["rate"];
+                result.HasNexus = (bool) response["has_nexus"];
+                if (response["freight_taxable"].HasValues)
+                    result.FreightTaxable = (bool) response["freight_taxable"];
+                if (response["tax_source"].HasValues)
+                    result.TaxSource = (string) response["tax_source"];
+                result.Success = true;
+            }
+            catch
+            {
+                result.Success = false;
+            }
+
             return result;
         }
 
         private JObject MakeTaxJarApiRequest(string url)
         {
-
-
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
             request.Headers.Add("Authorization", "Token token=\"" + this._apiToken + "\"");
