@@ -115,7 +115,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_StoreSettings()
         {
             //// Arrange
-            const int expected = 10;
+            const int expected = 11;
 
             //// Act
             _creation.InitializeBaseData("merchStoreSetting");
@@ -125,6 +125,21 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
             Assert.IsTrue(dtos.Any());
             Assert.AreEqual(expected, dtos.Count());
 
+        }
+
+        [Test]
+        public void Can_Populate_ShipmentStatuses()
+        {
+            //// Arrange
+            var expected = 3;
+
+            //// Act
+            _creation.InitializeBaseData("merchShipmentStatus");
+            var dtos = _database.Query<ShipmentStatusDto>("SELECT * FROM merchShipmentStatus");
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+            Assert.AreEqual(expected, dtos.Count());
         }
 
     }

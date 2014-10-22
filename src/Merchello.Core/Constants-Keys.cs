@@ -56,7 +56,7 @@
                 }
 
                 /// <summary>
-                /// Gets the partially payed invoice status key.
+                /// Gets the partially paid invoice status key.
                 /// </summary>
                 public static Guid Partial
                 {
@@ -115,6 +115,36 @@
                 public static Guid Cancelled
                 {
                     get { return new Guid("77DAF52E-C79C-4E1B-898C-5E977A9A6027"); }
+                }
+            }
+
+            /// <summary>
+            /// The shipment status.
+            /// </summary>
+            public static class ShipmentStatus
+            {
+                /// <summary>
+                /// Gets the packaging status key.
+                /// </summary>
+                public static Guid Packaging
+                {
+                    get { return new Guid("7342DCD6-8113-44B6-BFD0-4555B82F9503"); }
+                }
+
+                /// <summary>
+                /// Gets the shipment ready status key.
+                /// </summary>
+                public static Guid Ready
+                {
+                    get { return new Guid("CB24D43F-2774-4E56-85D8-653E49E3F542"); }
+                }
+
+                /// <summary>
+                /// Gets the shipment shipped status key.
+                /// </summary>
+                public static Guid Shipped
+                {
+                    get { return new Guid("B37BE101-CEC9-4608-9330-54E56FA0537A"); }
                 }
             }
         }
@@ -208,6 +238,14 @@
             public static Guid NextInvoiceNumberKey
             {
                 get { return new Guid("10BF357E-2E91-4888-9AE5-5B9D7E897052"); }
+            }
+
+            /// <summary>
+            /// Gets the next shipment number key.
+            /// </summary>
+            public static Guid NextShipmentNumberKey
+            {
+                get { return new Guid("487F1C4E-DDBC-4DCD-9882-A9F7C78892B5"); }
             }
 
             /// <summary>
