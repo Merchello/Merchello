@@ -288,6 +288,7 @@
     <Compile Include="Models\Querying\public InvoiceOrderByFields.cs" />
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
+    <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />
