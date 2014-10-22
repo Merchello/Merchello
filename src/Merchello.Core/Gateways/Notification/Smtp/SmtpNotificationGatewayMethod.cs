@@ -19,6 +19,18 @@
         /// </summary>
         private readonly SmtpNotificationGatewayProviderSettings _settings;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmtpNotificationGatewayMethod"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="notificationMethod">
+        /// The notification method.
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
         public SmtpNotificationGatewayMethod(IGatewayProviderService gatewayProviderService, INotificationMethod notificationMethod, ExtendedDataCollection extendedData) 
             : base(gatewayProviderService, notificationMethod)
         {
