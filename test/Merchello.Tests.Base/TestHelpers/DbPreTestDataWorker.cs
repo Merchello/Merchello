@@ -521,6 +521,7 @@ namespace Merchello.Tests.Base.TestHelpers
             baseDataCreation.InitializeBaseData("merchWarehouse");
             baseDataCreation.InitializeBaseData("merchGatewayProviderSettings");
             baseDataCreation.InitializeBaseData("merchStoreSetting");
+            baseDataCreation.InitializeBaseData("merchShipmentStatus");
         }
 
         public void Dispose()

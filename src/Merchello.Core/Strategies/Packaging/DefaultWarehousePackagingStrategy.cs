@@ -75,6 +75,10 @@
         /// </returns>
         public override IEnumerable<IShipment> PackageShipments()
         {
+            // All packaged shipments will start with a shipment status of "Quoted" as these are being used for the Shipment Rate Quote
+            // NOTE:  the "Packaging" status to indicate the shipment is physically being packaged/boxed up.
+            var quoted = MerchelloContext.Services.ShipmentService.GetShipmentStatusByKey(Constants.DefaultKeys.ShipmentStatus.Quoted);
+
             // filter basket items for shippable items
             var shippableVisitor = new ShippableProductVisitor();            
             LineItemCollection.Accept(shippableVisitor);            
@@ -87,7 +91,7 @@
             var origin = warehouse.AsAddress();
             
             ////For the initial version we are only exposing a single shipment
-            var shipment = new Shipment(origin, Destination)
+            var shipment = new Shipment(quoted, origin, Destination)
                 {
                     VersionKey = VersionKey // this is used in cache keys
                 };

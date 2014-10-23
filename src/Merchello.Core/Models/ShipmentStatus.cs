@@ -4,11 +4,11 @@
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// Represents an order status.
+    /// The shipment status.
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class OrderStatus : NotifiedStatusBase, IOrderStatus
+    public class ShipmentStatus : NotifiedStatusBase, IShipmentStatus
     {
     }
 }

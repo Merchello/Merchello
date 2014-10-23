@@ -2,6 +2,7 @@
 using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Core.Models.Interfaces;
+using Merchello.Tests.Base.Mocks;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Shipping
@@ -51,7 +52,7 @@ namespace Merchello.Tests.UnitTests.Shipping
                 {new ItemCacheLineItem(LineItemType.Product, "Product3", "Sku3", 3, 14, extendedData)},
             };
 
-            _shipment = new Shipment(_origin, _destination, lineItemCollection);
+            _shipment = new Shipment(new ShipmentStatusMock(), _origin, _destination, lineItemCollection);
              
         }
 

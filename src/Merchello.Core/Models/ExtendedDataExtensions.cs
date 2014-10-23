@@ -594,7 +594,19 @@
             if (destination == null) throw new NullReferenceException("ExtendedDataCollection does not container a 'destination shipping address'");
             if (lineItemCollection == null) throw new NullReferenceException("ExtendedDataCollection does not contain a 'line item collection'");
 
-            return new Shipment(origin, destination, lineItemCollection)
+            // TODO - this is a total hack since this value can be changed in the database
+            var quoted = new ShipmentStatus()
+            {
+                Key = Constants.DefaultKeys.ShipmentStatus.Quoted,
+                Alias = "quoted",
+                Name = "Quoted",
+                Active = true,
+                CreateDate = DateTime.Now,
+                UpdateDate = DateTime.Now
+            };
+
+
+            return new Shipment(quoted, origin, destination, lineItemCollection)
                 {
                     ShipMethodKey = extendedData.ContainsKey(Constants.ExtendedDataKeys.ShipMethodKey) ?
                         extendedData.GetShipMethodKey() :

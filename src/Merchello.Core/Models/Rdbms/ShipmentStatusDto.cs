@@ -6,12 +6,12 @@
     using Umbraco.Core.Persistence.DatabaseAnnotations;
 
     /// <summary>
-    /// The invoice status dto.
+    /// The shipment status dto.
     /// </summary>
-    [TableName("merchInvoiceStatus")]
+    [TableName("merchShipmentStatus")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class InvoiceStatusDto
+    public class ShipmentStatusDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -63,6 +63,6 @@
         /// </summary>
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } 
     }
 }
