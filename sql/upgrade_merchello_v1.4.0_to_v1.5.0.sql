@@ -1,3 +1,5 @@
+-- TODO make shipmentStatusKey NULL and ShipmentNumber NULL - assign values and then reset
+
 ALTER TABLE merchShipment
 ADD 	shipmentStatusKey UNIQUEIDENTIFIER NOT NULL,
 		shipmentNumber INT NOT NULL,
@@ -36,30 +38,38 @@ ALTER TABLE [dbo].[merchShipment]  WITH CHECK ADD  CONSTRAINT [FK_merchShipment_
 REFERENCES [dbo].[merchShipmentStatus] ([pk])
 GO
 
+-- INSERT THE new shipment statuses
 
 INSERT INTO merchShipmentStatus
 ( pk, name, alias, reportable, active, sortOrder, updateDate, createDate)
-values
+VALUES
 ('6FA425A9-7802-4DA0-BD33-083C100E30F3', 'Quoted', 'quoted', 1, 1, 1, GETDATE(), GETDATE())
 
 
 INSERT INTO merchShipmentStatus
 ( pk, name, alias, reportable, active, sortOrder, updateDate, createDate)
-values
+VALUES
 ('7342DCD6-8113-44B6-BFD0-4555B82F9503', 'Packaging', 'packaging', 1, 1, 1, GETDATE(), GETDATE())
 
 
 INSERT INTO merchShipmentStatus
 ( pk, name, alias, reportable, active, sortOrder, updateDate, createDate)
-values
+VALUES
 ('CB24D43F-2774-4E56-85D8-653E49E3F542', 'Ready', 'ready', 1, 1, 1, GETDATE(), GETDATE())
 
 INSERT INTO merchShipmentStatus
 ( pk, name, alias, reportable, active, sortOrder, updateDate, createDate)
-values
+VALUES
 ('B37BE101-CEC9-4608-9330-54E56FA0537A', 'Shipped', 'shipped', 1, 1, 1, GETDATE(), GETDATE())
 
 INSERT INTO merchShipmentStatus
 ( pk, name, alias, reportable, active, sortOrder, updateDate, createDate)
-values
+VALUES
 ('3A279633-4919-485D-8C3B-479848A053D9', 'Delivered', 'delivered', 1, 1, 1, GETDATE(), GETDATE())
+
+
+-- INSERT the new store setting
+INSERT INTO merchStoreSetting
+( pk, name, [value], typeName, updateDate, createDate)
+VALUES
+( '487F1C4E-DDBC-4DCD-9882-A9F7C78892B5', 'nextShipmentNumber', 1, 'System.Int32', GETDATE(), GETDATE() )

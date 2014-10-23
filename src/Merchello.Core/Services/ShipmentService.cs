@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Persistence;
     using Persistence.Querying;
@@ -22,7 +25,7 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// The uow provider.
+        /// The Unit of Work provider.
         /// </summary>
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
 
@@ -30,6 +33,11 @@
         /// The repository factory.
         /// </summary>
         private readonly RepositoryFactory _repositoryFactory;
+
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
+        private readonly IStoreSettingService _storeSettingService;
 
 
         /// <summary>
@@ -47,7 +55,7 @@
         /// The repository factory.
         /// </param>
         public ShipmentService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, new StoreSettingService(repositoryFactory))
         {            
         }
 
@@ -60,13 +68,18 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="storeSettingService">
+        /// The store Setting Service.
+        /// </param>
+        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+            _storeSettingService = storeSettingService;
         }
 
 
@@ -83,6 +96,16 @@
         public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saved;
 
         /// <summary>
+        /// Occurs before an invoice status has changed
+        /// </summary>
+        public static event TypedEventHandler<IShipmentService, StatusChangeEventArgs<IShipment>> StatusChanging;
+
+        /// <summary>
+        /// Occurs after an invoice status has changed
+        /// </summary>
+        public static event TypedEventHandler<IShipmentService, StatusChangeEventArgs<IShipment>> StatusChanged;
+
+        /// <summary>
         /// Occurs before Delete
         /// </summary>		
         public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleting;
@@ -91,6 +114,11 @@
         /// Occurs after Delete
         /// </summary>
         public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleted;
+
+        /// <summary>
+        /// Special event that fires when an order record is updated
+        /// </summary>
+        internal static event TypedEventHandler<IShipmentService, SaveEventArgs<IOrder>> UpdatedOrder; 
 
         #endregion
 
@@ -104,6 +132,29 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IShipment shipment, bool raiseEvents = true)
         {
+
+
+            if (!((Shipment)shipment).HasIdentity && shipment.ShipmentNumber <= 0)
+            {
+                // We have to generate a new 'unique' invoice number off the configurable value
+                ((Shipment)shipment).ShipmentNumber = _storeSettingService.GetNextShipmentNumber();
+            }
+
+            var includesStatusChange = ((Shipment)shipment).IsPropertyDirty("ShipmentStatusKey") &&
+                                       ((Shipment)shipment).HasIdentity == false;
+
+            if (raiseEvents)
+            {
+                if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IShipment>(shipment), this))
+                {
+                    ((Shipment)shipment).WasCancelled = true;
+                    return;
+                }
+
+                if (includesStatusChange) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IShipment>(shipment), this);
+            }
+
+
             if (raiseEvents)
                 if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IShipment>(shipment), this))
                 {
@@ -121,7 +172,10 @@
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IShipment>(shipment), this);
+            if (!raiseEvents) return;
+            
+            Saved.RaiseEvent(new SaveEventArgs<IShipment>(shipment), this);
+            if (includesStatusChange) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IShipment>(shipment), this);
         }
 
         /// <summary>
@@ -132,6 +186,35 @@
         public void Save(IEnumerable<IShipment> shipmentList, bool raiseEvents = true)
         {
             var shipmentsArray = shipmentList as IShipment[] ?? shipmentList.ToArray();
+
+            var newShipmentCount = shipmentsArray.Count(x => x.ShipmentNumber <= 0 && !((Shipment)x).HasIdentity);
+
+
+            if (newShipmentCount > 0)
+            {
+                var lastShipmentumber =
+                    _storeSettingService.GetNextShipmentNumber(newShipmentCount);
+                foreach (var newShipment in shipmentsArray.Where(x => x.ShipmentNumber <= 0 && !((Shipment)x).HasIdentity))
+                {
+                    ((Shipment)newShipment).ShipmentNumber = lastShipmentumber;
+                    lastShipmentumber = lastShipmentumber - 1;
+                }
+            }
+
+            var existingShipmentsWithStatusChanges =
+                shipmentsArray.Where(
+                    x => ((Shipment)x).HasIdentity == false && ((Shipment)x).IsPropertyDirty("ShipmentStatusKey"))
+                    .ToArray();
+
+            if (raiseEvents)
+            {
+                Saving.RaiseEvent(new SaveEventArgs<IShipment>(shipmentsArray), this);
+                if (existingShipmentsWithStatusChanges.Any())
+                    StatusChanging.RaiseEvent(
+                        new StatusChangeEventArgs<IShipment>(existingShipmentsWithStatusChanges),
+                        this);
+            }
+
             if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IShipment>(shipmentsArray), this);
 
             using (new WriteLock(Locker))
@@ -147,7 +230,10 @@
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IShipment>(shipmentsArray), this);
+            if (!raiseEvents) return;
+            Saved.RaiseEvent(new SaveEventArgs<IShipment>(shipmentsArray), this);
+            if (existingShipmentsWithStatusChanges.Any())
+                StatusChanged.RaiseEvent(new StatusChangeEventArgs<IShipment>(existingShipmentsWithStatusChanges), this);
         }
 
         /// <summary>
@@ -326,7 +412,12 @@
 
         #endregion
 
-        // TODO this will leave lucene indexed orders with shipment keys
+        /// <summary>
+        /// Updates any order line items when a shipment is deleted to null
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
         private void UpdateOrderLineItemShipmentKeys(IShipment shipment)
         {
             using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
@@ -338,14 +429,18 @@
                 {
                     var order = repository.Get(orderKey);
 
-                    var items = order.Items.Where(x => ((OrderLineItem) x).ShipmentKey == shipment.Key);
-
-                    foreach (var item in items)
+                    if (order != null)
                     {
-                        ((OrderLineItem) item).ShipmentKey = null;
-                    }
+                        var items = order.Items.Where(x => ((OrderLineItem)x).ShipmentKey == shipment.Key);
 
-                    repository.AddOrUpdate(order);
+                        foreach (var item in items)
+                        {
+                            ((OrderLineItem)item).ShipmentKey = null;
+                        }
+
+                        repository.AddOrUpdate(order);
+                        UpdatedOrder.RaiseEvent(new SaveEventArgs<IOrder>(order), this);
+                    }
                 }
             }
         }
