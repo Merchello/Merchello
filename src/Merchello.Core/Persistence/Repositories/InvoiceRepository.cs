@@ -117,6 +117,19 @@
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+
+        /// <summary>
+        /// The get max document number.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int GetMaxDocumentNumber()
+        {
+            var value = Database.ExecuteScalar<object>("SELECT TOP 1 invoiceNumber FROM merchInvoice ORDER BY invoiceNumber DESC");
+            return value == null ? 0 : int.Parse(value.ToString());
+        }
+
         /// <summary>
         /// Gets an <see cref="IInvoice"/>.
         /// </summary>
@@ -337,16 +350,5 @@
             return collection;            
         }
 
-        /// <summary>
-        /// The get max document number.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        public int GetMaxDocumentNumber()
-        {
-            var value = Database.ExecuteScalar<object>("SELECT TOP 1 invoiceNumber FROM merchInvoice ORDER BY invoiceNumber DESC");
-            return value == null ? 0 : int.Parse(value.ToString());
-        }
     }
 }

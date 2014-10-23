@@ -124,6 +124,14 @@
             public static class ShipmentStatus
             {
                 /// <summary>
+                /// Gets the quoted shipment status key
+                /// </summary>
+                public static Guid Quoted
+                {
+                    get { return new Guid("6FA425A9-7802-4DA0-BD33-083C100E30F3"); }
+                }
+
+                /// <summary>
                 /// Gets the packaging status key.
                 /// </summary>
                 public static Guid Packaging
@@ -145,6 +153,14 @@
                 public static Guid Shipped
                 {
                     get { return new Guid("B37BE101-CEC9-4608-9330-54E56FA0537A"); }
+                }
+
+                /// <summary>
+                /// Gets the delivered shipment status key.
+                /// </summary>
+                public static Guid Delivered
+                {
+                    get { return new Guid("3A279633-4919-485D-8C3B-479848A053D9"); }
                 }
             }
         }

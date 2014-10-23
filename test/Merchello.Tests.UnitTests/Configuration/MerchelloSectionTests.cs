@@ -25,14 +25,6 @@ namespace Merchello.Tests.UnitTests.Configuration
         }
 
 
-        /// <summary>
-        /// Verifies the enableLogging attribute is accessible
-        /// </summary>
-        [Test]
-        public void EnableLogging_Is_False()
-        {
-            Assert.IsFalse(_config.EnableLogging);
-        }
 
         /// <summary>
         /// Verifies the defaultCountryCode attribute is accessible

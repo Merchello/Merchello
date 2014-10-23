@@ -5,9 +5,9 @@
     using Umbraco.Core.Persistence.Repositories;
 
     /// <summary>
-    /// Marker interface for the shipiment repository
+    /// Marker interface for the ShipmentStatusRepository.
     /// </summary>
-    internal interface IShipmentRepository : IRepositoryQueryable<Guid, IShipment>, IAssertsMaxDocumentNumber
-    {
+    internal interface IShipmentStatusRepository : IRepositoryQueryable<Guid, IShipmentStatus>
+    {         
     }
 }

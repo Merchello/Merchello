@@ -141,9 +141,11 @@
         /// </summary>
         private void CreateShipmentStatusData()
         {
-            _database.Insert("merchShipmentStatus", "Key", new ShipmentStatusDto() { Key = Constants.DefaultKeys.ShipmentStatus.Packaging, Alias = "packaging", Name = "Packaging", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchShipmentStatus", "Key", new ShipmentStatusDto() { Key = Constants.DefaultKeys.ShipmentStatus.Ready, Alias = "ready", Name = "Ready", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchShipmentStatus", "Key", new ShipmentStatusDto() { Key = Constants.DefaultKeys.ShipmentStatus.Shipped, Alias = "shipped", Name = "Shipped", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchShipmentStatus", "Key", new ShipmentStatusDto() { Key = Constants.DefaultKeys.ShipmentStatus.Quoted, Alias = "quoted", Name = "Quoted", Active = true, Reportable = true, SortOrder = 1, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchShipmentStatus", "Key", new ShipmentStatusDto() { Key = Constants.DefaultKeys.ShipmentStatus.Packaging, Alias = "packaging", Name = "Packaging", Active = true, Reportable = true, SortOrder = 2, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchShipmentStatus", "Key", new ShipmentStatusDto() { Key = Constants.DefaultKeys.ShipmentStatus.Ready, Alias = "ready", Name = "Ready", Active = true, Reportable = true, SortOrder = 3, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchShipmentStatus", "Key", new ShipmentStatusDto() { Key = Constants.DefaultKeys.ShipmentStatus.Shipped, Alias = "shipped", Name = "Shipped", Active = true, Reportable = true, SortOrder = 4, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchShipmentStatus", "Key", new ShipmentStatusDto() { Key = Constants.DefaultKeys.ShipmentStatus.Delivered, Alias = "delivered", Name = "Delivered", Active = true, Reportable = true, SortOrder = 5, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         /// <summary>

@@ -3,75 +3,73 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Merchello.Core.Models;
-    using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Models.Rdbms;
-    using Merchello.Core.Persistence.Factories;
-    using Merchello.Core.Persistence.Querying;
-    using Merchello.Core.Persistence.UnitOfWork;
-
+    using Factories;
+    using Models;
+    using Models.EntityBase;
+    using Models.Rdbms;    
+    using Querying;    
     using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using UnitOfWork;
 
     /// <summary>
-    /// The invoice status repository.
+    /// Represents the ShipmentStatusRepository.
     /// </summary>
-    internal class InvoiceStatusRepository : MerchelloPetaPocoRepositoryBase<IInvoiceStatus>, IInvoiceStatusRepository
+    internal class ShipmentStatusRepository : MerchelloPetaPocoRepositoryBase<IShipmentStatus>, IShipmentStatusRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvoiceStatusRepository"/> class.
+        /// Initializes a new instance of the <see cref="ShipmentStatusRepository"/> class.
         /// </summary>
         /// <param name="work">
-        /// The work.
+        /// The <see cref="IDatabaseUnitOfWork"/>.
         /// </param>
         /// <param name="cache">
-        /// The cache.
+        /// The <see cref="IRuntimeCacheProvider"/>.
         /// </param>
-        public InvoiceStatusRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+        public ShipmentStatusRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
             : base(work, cache)
         {
         }
 
         /// <summary>
-        /// Gets a <see cref="IInvoice"/> by it's unique key.
+        /// Gets a <see cref="IShipmentStatus"/> by it's key
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="IInvoiceStatus"/>.
+        /// The <see cref="IShipmentStatus"/>.
         /// </returns>
-        protected override IInvoiceStatus PerformGet(Guid key)
+        protected override IShipmentStatus PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-                .Where(GetBaseWhereClause(), new { Key = key });
+               .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<InvoiceStatusDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<ShipmentStatusDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new InvoiceStatusFactory();
+            var factory = new ShipmentStatusFactory();
 
-            var invoiceStatus = factory.BuildEntity(dto);
+            var status = factory.BuildEntity(dto);
 
-            return invoiceStatus;
+            return status;
         }
 
         /// <summary>
-        /// Gets a collection of all <see cref="IInvoiceStatus"/>.
+        /// Gets a collection of all <see cref="IShipmentStatus"/>.
         /// </summary>
         /// <param name="keys">
         /// The keys.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="IInvoiceStatus"/>.
+        /// The collection of <see cref="IShipmentStatus"/>.
         /// </returns>
-        protected override IEnumerable<IInvoiceStatus> PerformGetAll(params Guid[] keys)
-        {
+        protected override IEnumerable<IShipmentStatus> PerformGetAll(params Guid[] keys)
+        {                    
             if (keys.Any())
             {
                 foreach (var id in keys)
@@ -81,8 +79,8 @@
             }
             else
             {
-                var factory = new InvoiceStatusFactory();
-                var dtos = Database.Fetch<InvoiceStatusDto>(GetBaseQuery(false));
+                var factory = new ShipmentStatusFactory();
+                var dtos = Database.Fetch<ShipmentStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -91,27 +89,27 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IInvoiceStatus"/> by query.
+        /// Gets a collection of <see cref="IShipmentStatus"/> by query
         /// </summary>
         /// <param name="query">
         /// The query.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="IInvoiceStatus"/>.
+        /// The collection of <see cref="IShipmentStatus"/>
         /// </returns>
-        protected override IEnumerable<IInvoiceStatus> PerformGetByQuery(IQuery<IInvoiceStatus> query)
+        protected override IEnumerable<IShipmentStatus> PerformGetByQuery(IQuery<IShipmentStatus> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IInvoiceStatus>(sqlClause, query);
+            var translator = new SqlTranslator<IShipmentStatus>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<InvoiceStatusDto>(sql);
+            var dtos = Database.Fetch<ShipmentStatusDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
 
         /// <summary>
-        /// Gets the base query.
+        /// Gets the base query
         /// </summary>
         /// <param name="isCount">
         /// The is count.
@@ -123,24 +121,24 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<InvoiceStatusDto>();
+               .From<ShipmentStatusDto>();
 
             return sql;
         }
 
         /// <summary>
-        /// Gets the base where clause.
+        /// The get base where clause.
         /// </summary>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
         protected override string GetBaseWhereClause()
         {
-            return "merchInvoiceStatus.pk = @Key";
+            return "merchShipmentStatus.pk = @Key";
         }
 
         /// <summary>
-        /// Gets the delete clauses.
+        /// Gets a collection of delete clauses.
         /// </summary>
         /// <returns>
         /// The collection of delete clauses.
@@ -149,23 +147,23 @@
         {
             var list = new List<string>
                 {                    
-                    "DELETE FROM merchInvoiceStatus WHERE pk = @Key"
+                    "DELETE FROM merchShipmentStatus WHERE pk = @Key"
                 };
 
             return list;
         }
 
         /// <summary>
-        /// Persists a new invoice.
+        /// Persists a new shipment status.
         /// </summary>
         /// <param name="entity">
-        /// The entity.
+        /// The shipment status.
         /// </param>
-        protected override void PersistNewItem(IInvoiceStatus entity)
+        protected override void PersistNewItem(IShipmentStatus entity)
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new InvoiceStatusFactory();
+            var factory = new ShipmentStatusFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -174,16 +172,16 @@
         }
 
         /// <summary>
-        /// Persists an updated invoice.
+        /// Persists an updated shipment status.
         /// </summary>
         /// <param name="entity">
         /// The entity.
         /// </param>
-        protected override void PersistUpdatedItem(IInvoiceStatus entity)
+        protected override void PersistUpdatedItem(IShipmentStatus entity)
         {
             ((Entity)entity).UpdatingEntity();
 
-            var factory = new InvoiceStatusFactory();
+            var factory = new ShipmentStatusFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);

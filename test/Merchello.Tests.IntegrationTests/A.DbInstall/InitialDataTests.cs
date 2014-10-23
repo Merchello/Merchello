@@ -131,7 +131,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_ShipmentStatuses()
         {
             //// Arrange
-            var expected = 3;
+            var expected = 5;
 
             //// Act
             _creation.InitializeBaseData("merchShipmentStatus");
