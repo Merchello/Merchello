@@ -67,6 +67,12 @@
 							 XPath="nu:package/nu:metadata/nu:version"
 							 Value="$(AssemblyInformationVersion)" />
 
+    <XmlUpdate prefix="nu"
+							 namespace="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
+							 XmlFileName="$(MSBuildProjectDirectory)\nuspec\Merchello.TestsBase.nuspec"
+							 XPath="nu:package/nu:metadata/nu:version"
+							 Value="$(AssemblyInformationVersion)" />
+
 	</Target>
 
 </Project>
