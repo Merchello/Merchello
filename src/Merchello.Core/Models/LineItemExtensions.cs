@@ -253,7 +253,7 @@
                 {
                     EnumTypeFieldConverter.LineItemType.Shipping.TypeKey,
                     shipmentRateQuote.ShipmentLineItemName(),
-                    shipmentRateQuote.ShipMethod.ServiceCode, // TODO this may not be unique (SKU) once multiple shipments are exposed
+                    shipmentRateQuote.ShipMethod.Key.ToString(),//OLD shipmentRateQuote.ShipMethod.ServiceCode, // TODO this may not be unique (SKU) once multiple shipments are exposed
                     1,
                     shipmentRateQuote.Rate,
                     extendedData
