@@ -237,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BraintreeCustomerExtensions.cs" />
+    <Compile Include="Controllers\BraintreeWebhooksController.cs" />
     <Compile Include="Provider\BraintreeVaultTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Provider\BraintreePaymentGatewayMethodBase.cs" />
     <Compile Include="Provider\IBraintreeVaultTransactionPaymentGatewayMethod.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="Services\BraintreePaymentMethodApiService.cs" />
     <Compile Include="Services\BraintreeSubscriptionApiService.cs" />
     <Compile Include="Services\BraintreeTransactionApiService.cs" />
+    <Compile Include="Services\BraintreeWebhooksApiService.cs" />
     <Compile Include="Services\IBraintreeApiService.cs" />
     <Compile Include="Services\IBraintreePaymentMethodApiService.cs" />
     <Compile Include="Services\IBraintreeSubscriptionApiService.cs" />
@@ -271,6 +273,7 @@
     <Compile Include="Services\BraintreeCustomerApiService.cs" />
     <Compile Include="Services\BraintreeApiServiceBase.cs" />
     <Compile Include="Services\IBraintreeCustomerApiService.cs" />
+    <Compile Include="Services\IBraintreeWebhooksApiService.cs" />
     <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>
