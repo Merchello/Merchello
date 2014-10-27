@@ -76,6 +76,15 @@ namespace Merchello.Tests.Braintree.Integration.Subscriptions
 
             //// Assert
             Assert.IsTrue(subscriptionAttempt.Success, "Failed to create the subscription ");
+
+
+            var subscription = subscriptionAttempt.Result;
+
+            var trans = subscription.Transactions.FirstOrDefault();
+
+            var cs = trans.Customer;
+
+            Assert.NotNull(cs);
         }
     }
 }

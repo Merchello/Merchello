@@ -40,9 +40,40 @@
             return BraintreeGateway.WebhookNotification.Verify(challenge);
         }
 
+        /// <summary>
+        /// The parse.
+        /// </summary>
+        /// <param name="signature">
+        /// The signature.
+        /// </param>
+        /// <param name="payload">
+        /// The payload.
+        /// </param>
+        /// <returns>
+        /// The <see cref="WebhookNotification"/>.
+        /// </returns>
         public WebhookNotification Parse(string signature, string payload)
         {
-            throw new System.NotImplementedException();
+            return BraintreeGateway.WebhookNotification.Parse(signature, payload);
+        }
+
+        /// <summary>
+        /// The sample notification.
+        /// </summary>
+        /// <param name="kind">
+        /// The kind.
+        /// </param>
+        /// <param name="sampleId">
+        /// The sample id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="WebhookNotification"/>.
+        /// </returns>
+        public WebhookNotification SampleNotification(WebhookKind kind, string sampleId)
+        {
+            var sample = BraintreeGateway.WebhookTesting.SampleNotification(kind, sampleId);
+
+            return this.Parse(sample["signature"], sample["payload"]);
         }
     }
 }

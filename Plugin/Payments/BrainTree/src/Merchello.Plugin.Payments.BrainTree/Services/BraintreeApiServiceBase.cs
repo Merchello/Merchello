@@ -1,14 +1,16 @@
-﻿using Umbraco.Core;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Plugin.Payments.Braintree.Services
+﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
     using System;
+
     using global::Braintree;
-    using Core;
-    using Core.Models;
-    using Models;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Plugin.Payments.Braintree.Models;
+
+    using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// A base class for local Braintree services.
