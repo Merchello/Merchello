@@ -36,8 +36,8 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\..\src\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
-    <Reference Include="Braintree-2.35.0">
-      <HintPath>..\..\src\packages\Braintree.2.35.0\lib\Braintree-2.35.0.dll</HintPath>
+    <Reference Include="Braintree-2.36.0">
+      <HintPath>..\..\src\packages\Braintree.2.36.0\lib\Braintree-2.36.0.dll</HintPath>
     </Reference>
     <Reference Include="businesslogic">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.8\lib\businesslogic.dll</HintPath>
@@ -81,17 +81,21 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\..\src\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core">
-      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.5.0\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine">
-      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.5.0\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Tests.Base">
-      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Tests.Base.dll</HintPath>
+    <Reference Include="Merchello.Tests.Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.5.0\lib\net40\Merchello.Tests.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web">
-      <HintPath>..\..\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\src\packages\Merchello.TestsBase.1.5.0\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.8\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -228,6 +232,7 @@
     <Compile Include="TestHelpers\GatewayProviderSettingsDto.cs" />
     <Compile Include="TestHelpers\ProviderTestsBase.cs" />
     <Compile Include="TestHelpers\TestHelper.cs" />
+    <Compile Include="Webhooks\WebhooksTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -241,6 +246,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Html\braintree.html" />
+    <Content Include="Merchello.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

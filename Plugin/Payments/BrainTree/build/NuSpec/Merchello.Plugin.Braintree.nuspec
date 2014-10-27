@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Merchello.Plugin.Braintree</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>Braintree Payment Provider</title>
     <authors>Rusty Swayne</authors>
     <owners>Mindfly Web Design Studio</owners>
@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>umbraco, Merchello</tags>
     <dependencies>
-      <dependency id="Braintree" version="2.35.0" />
+      <dependency id="Braintree" version="2.36.0" />
     </dependencies>
   </metadata>
   <files>
