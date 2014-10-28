@@ -14,7 +14,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         private BaseDataCreation _creation;
         private UmbracoDatabase _database;
 
-        [SetUp]
+        [TestFixtureSetUp]
         public void Init()
         {
             var worker = new DbPreTestDataWorker();
@@ -22,7 +22,13 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
             _creation = new BaseDataCreation(_database);
         }
 
-        /// <summary>
+        [TestFixtureTearDown]
+        public void Teardown()
+        {
+            _database.Dispose();
+        }
+
+                /// <summary>
         /// Test to verify Merchello 
         /// </summary>
         [Test]
@@ -109,7 +115,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_StoreSettings()
         {
             //// Arrange
-            const int expected = 10;
+            const int expected = 11;
 
             //// Act
             _creation.InitializeBaseData("merchStoreSetting");
@@ -119,6 +125,21 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
             Assert.IsTrue(dtos.Any());
             Assert.AreEqual(expected, dtos.Count());
 
+        }
+
+        [Test]
+        public void Can_Populate_ShipmentStatuses()
+        {
+            //// Arrange
+            var expected = 5;
+
+            //// Act
+            _creation.InitializeBaseData("merchShipmentStatus");
+            var dtos = _database.Query<ShipmentStatusDto>("SELECT * FROM merchShipmentStatus");
+
+            //// Assert
+            Assert.IsTrue(dtos.Any());
+            Assert.AreEqual(expected, dtos.Count());
         }
 
     }

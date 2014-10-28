@@ -1,43 +1,126 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    using Merchello.Core.Events;
+
+    using Models;
+    using Persistence;
+    using Persistence.Querying;
+    using Persistence.UnitOfWork;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the ShipmentService
     /// </summary>
     public class ShipmentService : IShipmentService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         public ShipmentService()
+        /// <summary>
+        /// The Unit of Work provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
+
+        /// <summary>
+        /// The repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
+        private readonly IStoreSettingService _storeSettingService;
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentService"/> class.
+        /// </summary>
+        public ShipmentService()
             : this(new RepositoryFactory())
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
         public ShipmentService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
+            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, new StoreSettingService(repositoryFactory))
+        {            
+        }
 
-        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store Setting Service.
+        /// </param>
+        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(provider, "provider");
             Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
 
             _uowProvider = provider;
             _repositoryFactory = repositoryFactory;
+            _storeSettingService = storeSettingService;
         }
 
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saved;
+
+        /// <summary>
+        /// Occurs before an invoice status has changed
+        /// </summary>
+        public static event TypedEventHandler<IShipmentService, StatusChangeEventArgs<IShipment>> StatusChanging;
+
+        /// <summary>
+        /// Occurs after an invoice status has changed
+        /// </summary>
+        public static event TypedEventHandler<IShipmentService, StatusChangeEventArgs<IShipment>> StatusChanged;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleted;
+
+        /// <summary>
+        /// Special event that fires when an order record is updated
+        /// </summary>
+        internal static event TypedEventHandler<IShipmentService, SaveEventArgs<IOrder>> UpdatedOrder; 
+
+        #endregion
 
         #region Shipment
 
@@ -49,6 +132,29 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IShipment shipment, bool raiseEvents = true)
         {
+
+
+            if (!((Shipment)shipment).HasIdentity && shipment.ShipmentNumber <= 0)
+            {
+                // We have to generate a new 'unique' invoice number off the configurable value
+                ((Shipment)shipment).ShipmentNumber = _storeSettingService.GetNextShipmentNumber();
+            }
+
+            var includesStatusChange = ((Shipment)shipment).IsPropertyDirty("ShipmentStatusKey") &&
+                                       ((Shipment)shipment).HasIdentity == false;
+
+            if (raiseEvents)
+            {
+                if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IShipment>(shipment), this))
+                {
+                    ((Shipment)shipment).WasCancelled = true;
+                    return;
+                }
+
+                if (includesStatusChange) StatusChanging.RaiseEvent(new StatusChangeEventArgs<IShipment>(shipment), this);
+            }
+
+
             if (raiseEvents)
                 if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IShipment>(shipment), this))
                 {
@@ -66,7 +172,10 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IShipment>(shipment), this);
+            if (!raiseEvents) return;
+            
+            Saved.RaiseEvent(new SaveEventArgs<IShipment>(shipment), this);
+            if (includesStatusChange) StatusChanged.RaiseEvent(new StatusChangeEventArgs<IShipment>(shipment), this);
         }
 
         /// <summary>
@@ -77,6 +186,35 @@ namespace Merchello.Core.Services
         public void Save(IEnumerable<IShipment> shipmentList, bool raiseEvents = true)
         {
             var shipmentsArray = shipmentList as IShipment[] ?? shipmentList.ToArray();
+
+            var newShipmentCount = shipmentsArray.Count(x => x.ShipmentNumber <= 0 && !((Shipment)x).HasIdentity);
+
+
+            if (newShipmentCount > 0)
+            {
+                var lastShipmentumber =
+                    _storeSettingService.GetNextShipmentNumber(newShipmentCount);
+                foreach (var newShipment in shipmentsArray.Where(x => x.ShipmentNumber <= 0 && !((Shipment)x).HasIdentity))
+                {
+                    ((Shipment)newShipment).ShipmentNumber = lastShipmentumber;
+                    lastShipmentumber = lastShipmentumber - 1;
+                }
+            }
+
+            var existingShipmentsWithStatusChanges =
+                shipmentsArray.Where(
+                    x => ((Shipment)x).HasIdentity == false && ((Shipment)x).IsPropertyDirty("ShipmentStatusKey"))
+                    .ToArray();
+
+            if (raiseEvents)
+            {
+                Saving.RaiseEvent(new SaveEventArgs<IShipment>(shipmentsArray), this);
+                if (existingShipmentsWithStatusChanges.Any())
+                    StatusChanging.RaiseEvent(
+                        new StatusChangeEventArgs<IShipment>(existingShipmentsWithStatusChanges),
+                        this);
+            }
+
             if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IShipment>(shipmentsArray), this);
 
             using (new WriteLock(Locker))
@@ -92,7 +230,10 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IShipment>(shipmentsArray), this);
+            if (!raiseEvents) return;
+            Saved.RaiseEvent(new SaveEventArgs<IShipment>(shipmentsArray), this);
+            if (existingShipmentsWithStatusChanges.Any())
+                StatusChanged.RaiseEvent(new StatusChangeEventArgs<IShipment>(existingShipmentsWithStatusChanges), this);
         }
 
         /// <summary>
@@ -151,30 +292,7 @@ namespace Merchello.Core.Services
 
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IShipment>(shipmentsArray), this);
         }
-
-        // TODO this will leave lucene indexed orders with shipment keys
-        private void UpdateOrderLineItemShipmentKeys(IShipment shipment)
-        {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
-            {
-                // there really should only ever be one of these
-                var orderKeys = shipment.Items.Select(x => ((OrderLineItem) x).ContainerKey).Distinct();
-
-                foreach(var orderKey in orderKeys)
-                {
-                    var order = repository.Get(orderKey);
-
-                    var items = order.Items.Where(x => ((OrderLineItem) x).ShipmentKey == shipment.Key);
-
-                    foreach (var item in items)
-                    {
-                        ((OrderLineItem) item).ShipmentKey = null;
-                    }
-
-                    repository.AddOrUpdate(order);
-                }
-            }
-        }
+       
 
         /// <summary>
         /// Gets an <see cref="IShipment"/> object by its 'UniqueId'
@@ -222,21 +340,62 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a collection of <see cref="IShipment"/> give an order key
         /// </summary>
-        /// <param name="orderKey"></param>
-        /// <returns></returns>
+        /// <param name="orderKey">
+        /// The order Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IShipment}"/>.
+        /// </returns>
         public IEnumerable<IShipment> GetShipmentsByOrderKey(Guid orderKey)
         {
-            throw new NotImplementedException();
+            var items = Enumerable.Empty<IOrderLineItem>();
+
+            using (var repository = _repositoryFactory.CreateOrderLineItemRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IOrderLineItem>.Builder.Where(x => x.ContainerKey == orderKey && x.ShipmentKey != Guid.Empty);
+
+                items = repository.GetByQuery(query);
+            }
+
+            var orderLineItems = items as IOrderLineItem[] ?? items.ToArray();
+            if (orderLineItems.Any())
+            {
+                var keys = orderLineItems.Where(x => x.ShipmentKey != null).Select(x => x.ShipmentKey.Value).ToArray();
+                using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+                {
+                    return repository.GetAll(keys);
+                }
+            }
+
+            return Enumerable.Empty<IShipment>();
+        }
+
+
+        /// <summary>
+        /// Gets an <see cref="IShipmentStatus"/> by it's key
+        /// </summary>
+        /// <param name="key">The <see cref="IShipmentStatus"/> key</param>
+        /// <returns><see cref="IShipmentStatus"/></returns>
+        public IShipmentStatus GetShipmentStatusByKey(Guid key)
+        {
+            using (var repository = _repositoryFactory.CreateShipmentStatusRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IOrderLineItem"/> by a shipment key
+        /// Returns a collection of all <see cref="IShipmentStatus"/>
         /// </summary>
-        /// <param name="key">The <see cref="IShipment"/> key</param>
-        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
-        public IEnumerable<IOrderLineItem> GetShipmentLineItems(Guid key)
+        /// <returns>
+        /// The collection of <see cref="IShipmentStatus"/>.
+        /// </returns>
+        public IEnumerable<IShipmentStatus> GetAllShipmentStatuses()
         {
-            throw new NotImplementedException();
+            using (var repository = _repositoryFactory.CreateShipmentStatusRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll().OrderBy(x => x.SortOrder);
+            }
         }
 
         /// <summary>
@@ -253,42 +412,37 @@ namespace Merchello.Core.Services
 
         #endregion
 
-
-
-        #region Event Handlers
-
         /// <summary>
-        /// Occurs after Create
+        /// Updates any order line items when a shipment is deleted to null
         /// </summary>
-        public static event TypedEventHandler<IShipmentService, Events.NewEventArgs<IShipment>> Creating;
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        private void UpdateOrderLineItemShipmentKeys(IShipment shipment)
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                // there really should only ever be one of these
+                var orderKeys = shipment.Items.Select(x => ((OrderLineItem) x).ContainerKey).Distinct();
 
+                foreach (var orderKey in orderKeys)
+                {
+                    var order = repository.Get(orderKey);
 
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IShipmentService, Events.NewEventArgs<IShipment>> Created;
+                    if (order != null)
+                    {
+                        var items = order.Items.Where(x => ((OrderLineItem)x).ShipmentKey == shipment.Key);
 
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saving;
+                        foreach (var item in items)
+                        {
+                            ((OrderLineItem)item).ShipmentKey = null;
+                        }
 
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IShipmentService, SaveEventArgs<IShipment>> Saved;
-
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IShipmentService, DeleteEventArgs<IShipment>> Deleted;
-
-        #endregion
-     
+                        repository.AddOrUpdate(order);
+                        UpdatedOrder.RaiseEvent(new SaveEventArgs<IOrder>(order), this);
+                    }
+                }
+            }
+        }
     }
 }

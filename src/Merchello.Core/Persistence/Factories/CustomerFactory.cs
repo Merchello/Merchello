@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
-    using System.Collections;
     using System.Collections.Generic;
 
     using Merchello.Core.Models;

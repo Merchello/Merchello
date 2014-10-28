@@ -24,5 +24,10 @@
         /// Gets the <see cref="IBraintreeTransactionApiService"/>.
         /// </summary>
         IBraintreeTransactionApiService Transaction { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IBraintreeWebhooksApiService"/>
+        /// </summary>
+        IBraintreeWebhooksApiService Webhook { get; }
     }
 }

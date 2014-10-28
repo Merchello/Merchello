@@ -34,7 +34,14 @@
                     <label class="merchello-control-label">
                         {{provider.name}}
                         <small data-ng-bind="provider.description"></small>
+                        <div data-ng-show="provider.resources.length > 0">
                         <a data-ng-click="addNotificationMethod(provider)"><i class="icon-chat"></i><localize key="merchelloNotifications_addNotification" /> </a>
+                            <div class="well" data-ng-class="{ 'open': provider.showSelectResource, 'closed': (!provider.showSelectResource) }">
+                                <label><localize key="merchelloNotification_resourceType" /> </label>      
+                                <select class="form-control col-xs-12 span12" data-ng-model="provider.selectedResource" data-ng-options="r.name for r in provider.resources track by r.serviceCode"></select>
+                                <a data-ng-click="addEditNotificationMethod(provider)"><localize key="general_add" /></a>
+                            </div>
+                        </div>
                     </label>
 
                     <div class="merchello-controls row-fluid">

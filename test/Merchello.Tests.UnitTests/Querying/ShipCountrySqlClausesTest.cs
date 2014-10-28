@@ -23,7 +23,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchShipCountry]")
-                .Where("[merchShipCountry].[pk] = '" + key.ToString() + "'");
+                .Where("[merchShipCountry].[pk] = @0", new { key });
 
             //// Act
             var sql = new Sql();
