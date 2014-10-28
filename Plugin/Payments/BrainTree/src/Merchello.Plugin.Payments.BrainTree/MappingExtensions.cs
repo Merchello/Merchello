@@ -4,6 +4,9 @@
     using global::Braintree;
     using Core.Gateways.Payment;
     using Core.Models;
+
+    using Merchello.Core;
+
     using Models;
     using Newtonsoft.Json;
     using Umbraco.Core.Logging;
@@ -13,6 +16,37 @@
     /// </summary>
     public static class MappingExtensions
     {
+
+        #region Address
+
+        /// <summary>
+        /// Converts a braintree address to a <see cref="IAddress"/>.
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <param name="addressType">
+        /// The address type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAddress"/>.
+        /// </returns>
+        public static IAddress ToAddress(this global::Braintree.Address address, AddressType addressType)
+        {
+            return new Core.Models.Address()
+                       {
+                           Name = string.Format("{0} {1}", address.FirstName, address.LastName),
+                           Address1 = address.StreetAddress,
+                           Locality = address.Locality,
+                           Region = address.Region,
+                           PostalCode = address.PostalCode,
+                           CountryCode = address.CountryCodeAlpha2,
+                           AddressType = addressType
+                       };
+        }
+
+        #endregion
+
         #region BraintreeProviderSettings and BraintreeGateway
 
         /// <summary>
@@ -183,5 +217,6 @@
         }
 
 #endregion
+
     }
 }
