@@ -34,5 +34,19 @@
         /// The <see cref="WebhookNotification"/>.
         /// </returns>
         WebhookNotification Parse(string signature, string payload);
+
+        /// <summary>
+        /// The sample notification.
+        /// </summary>
+        /// <param name="kind">
+        /// The kind.
+        /// </param>
+        /// <param name="sampleId">
+        /// The sample id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="WebhookNotification"/>.
+        /// </returns>
+        WebhookNotification SampleNotification(WebhookKind kind, string sampleId);
     }
 }
