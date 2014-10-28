@@ -9,9 +9,11 @@ namespace Merchello.Core.Gateways.Shipping
     /// </summary>
     internal class DefaultShipmentRateQuoteStrategy : ShipmentRateQuoteStrategyBase
     {
-        public DefaultShipmentRateQuoteStrategy(IShipment shipment, IShippingGatewayMethod[] shippingGatewayMethods, IRuntimeCacheProvider runtimeCache) 
+        public DefaultShipmentRateQuoteStrategy(IShipment shipment, IShippingGatewayMethod[] shippingGatewayMethods,
+            IRuntimeCacheProvider runtimeCache)
             : base(shipment, shippingGatewayMethods, runtimeCache)
-        { }
+        {            
+        }
 
         /// <summary>
         /// Quotes all available shipmethods
@@ -34,6 +36,7 @@ namespace Merchello.Core.Gateways.Shipping
                         RuntimeCache.GetCacheItem(GetShipmentRateQuoteCacheKey(Shipment, gwShipMethod), () => rateQuote);
                     }
                 }
+
                 if (rateQuote != null) quotes.Add(rateQuote);
             }
 

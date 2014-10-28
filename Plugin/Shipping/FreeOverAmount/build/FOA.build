@@ -15,9 +15,9 @@
     <PropertyGroup>
         <VersionMajor>1</VersionMajor>
         <VersionMinor>0</VersionMinor>
-        <VersionPatch>0</VersionPatch>
+        <VersionPatch>1</VersionPatch>
         <VersionSuffix>0</VersionSuffix>
-        <UmbracoVersion>7.1.1</UmbracoVersion>
+        <UmbracoVersion>7.1.8</UmbracoVersion>
     </PropertyGroup>
 
 
@@ -25,7 +25,7 @@
         <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
         <BuildDir>$(MSBuildProjectDirectory)\Temp</BuildDir>
         <PackageDir>$(MSBuildProjectDirectory)</PackageDir>
-        <ProjectDir>$(RootDir)\src\Merchello.Plugin.Shipping.USPS</ProjectDir>
+        <ProjectDir>$(RootDir)\src\Merchello.Plugin.Shipping.FOA</ProjectDir>
     </PropertyGroup>
 
     
@@ -48,7 +48,7 @@
             <Output TaskParameter="Revision" PropertyName="Revision" />
         </Version>
         <AssemblyInfo CodeLanguage="CS"
-			OutputFile="$(ProjectDir)\Properties\VersionInfo.cs"
+			OutputFile="$(ProjectDir)\Properties\AssemblyInfo.cs"
 			AssemblyVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
 			AssemblyFileVersion="$(VersionMajor).$(VersionMinor).$(Build).$(Revision)"
 			AssemblyInformationalVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)"/>
@@ -56,14 +56,14 @@
 
     <!-- COMPILE -->
     <Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
-        <MSBuild Projects="$(RootDir)\src\Merchello.Plugin.Shipping.USPS.sln" Properties="Configuration=Release;Platform=Any CPU;" />
+        <MSBuild Projects="$(RootDir)\src\Merchello.Plugin.Shipping.FOA.sln" Properties="Configuration=Release;Platform=Any CPU;" />
     </Target>
 
     <!-- PREPARE FILES -->
     <Target Name="PrepairFiles" DependsOnTargets="Compile">
         <ItemGroup>
             <AppPluginFiles Include="$(ProjectDir)\App_Plugins\**\*.*" />
-            <BinFiles Include="$(ProjectDir)\bin\Release\Merchello.Plugin.Shipping.USPS.*" />
+            <BinFiles Include="$(ProjectDir)\bin\Release\Merchello.Plugin.Shipping.FOA.*" />
             <PackageFile Include="$(PackageDir)\package.xml" />
         </ItemGroup>
       
@@ -81,7 +81,7 @@
         <ManifestUpdate ManifestFile="$(BuildDir)\package.xml"
 			WorkingDirectory="$(BuildDir)"
 			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
-			PackageVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)"
+			PackageVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
 			Readme="$([System.IO.File]::ReadAllText(readme.txt))"
 			Files="@(ManifestFiles)" />
     </Target>
