@@ -83,7 +83,7 @@
             var shippableVisitor = new ShippableProductVisitor();            
             LineItemCollection.Accept(shippableVisitor);            
 
-            if(!shippableVisitor.ShippableItems.Any()) return new List<IShipment>();
+            if (!shippableVisitor.ShippableItems.Any()) return new List<IShipment>();
    
             // the origin address will be the default warehouse
             // For the initial version we are only exposing a single warehouse
@@ -118,6 +118,9 @@
                 }
                 else
                 {
+                    // TODO this needs to be refactored to look at the entire shipment
+                    // since products could be in multiple catalogs which could have
+                    // opposing shippng rules and we have the destination address.
                     lineItem.ExtendedData.SetValue(
                         "merchWarehouseCatalogKey",
                         variant.CatalogInventories.First().CatalogKey.ToString());
