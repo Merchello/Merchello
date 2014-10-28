@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
+
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the SettingsService, which provides access to operations involving configurable Merchello configurations and settings
     /// </summary>
@@ -32,21 +33,21 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Deletes a <see cref="IStoreSetting"/>
         /// </summary>
-        /// <param name="storeSetting"></param>
+        /// <param name="storeSetting">The store setting to delete</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IStoreSetting storeSetting, bool raiseEvents = true);
 
         /// <summary>
-        /// Gets a <see cref="IStoreSetting"/> by it's unique 'Key' (Guid)
+        /// Gets a <see cref="IStoreSetting"/> by it's unique 'Key'
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="key">The store setting key</param>
+        /// <returns>The <see cref="IStoreSetting"/></returns>
         IStoreSetting GetByKey(Guid key);
 
         /// <summary>
         /// Gets a collection of all <see cref="IStoreSetting"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The collection of all <see cref="IStoreSetting"/></returns>
         IEnumerable<IStoreSetting> GetAll();
 
         /// <summary>
@@ -59,17 +60,23 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a collection of all <see cref="ICountry"/>
         /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{ICountry"/>.
+        /// </returns>
         IEnumerable<ICountry> GetAllCountries();
 
         /// <summary>
         /// Gets a collection of all <see cref="ICurrency"/>
         /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{ICurrency}"/>.
+        /// </returns>
         IEnumerable<ICurrency> GetAllCurrencies();
 
         /// <summary>
         /// Gets a <see cref="ICurrency"/> for the currency code passed
         /// </summary>
-        /// <param name="currencyCode">The ISO Currency Code (eg. USD)</param>
+        /// <param name="currencyCode">The ISO Currency Code (ex. USD)</param>
         /// <returns>The <see cref="ICurrency"/></returns>
         ICurrency GetCurrencyByCode(string currencyCode);
 
@@ -83,21 +90,36 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets the next usable InvoiceNumber
         /// </summary>
-        /// <returns></returns>
+        /// <param name="invoicesCount">
+        /// The number of invoices.
+        /// </param>
+        /// <returns>
+        /// The next invoice number
+        /// </returns>
         int GetNextInvoiceNumber(int invoicesCount = 1);
 
         /// <summary>
         /// Gets the next usable OrderNumber
         /// </summary>
-        /// <param name="ordersCount"></param>
-        /// <returns></returns>
+        /// <param name="ordersCount">The number of orders</param>
+        /// <returns>The next order number</returns>
         int GetNextOrderNumber(int ordersCount = 1);
 
         /// <summary>
-        /// Gets the complete collection of registered typefields
+        /// Gets the next usable ShipmentNumber.
         /// </summary>
-        /// <returns></returns>
-        IEnumerable<ITypeField> GetTypeFields();
+        /// <param name="shipmentsCount">
+        /// The shipments count.
+        /// </param>
+        /// <returns>
+        /// The next shipment number.
+        /// </returns>
+        int GetNextShipmentNumber(int shipmentsCount = 1);
 
+        /// <summary>
+        /// Gets the complete collection of registered type fields
+        /// </summary>
+        /// <returns>The collection of <see cref="ITypeField"/></returns>
+        IEnumerable<ITypeField> GetTypeFields();
     }
 }

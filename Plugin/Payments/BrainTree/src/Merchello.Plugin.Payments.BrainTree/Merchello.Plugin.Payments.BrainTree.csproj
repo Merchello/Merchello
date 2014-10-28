@@ -38,8 +38,8 @@
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Braintree-2.35.0">
-      <HintPath>..\packages\Braintree.2.35.0\lib\Braintree-2.35.0.dll</HintPath>
+    <Reference Include="Braintree-2.36.0">
+      <HintPath>..\packages\Braintree.2.36.0\lib\Braintree-2.36.0.dll</HintPath>
     </Reference>
     <Reference Include="businesslogic">
       <HintPath>..\packages\UmbracoCms.Core.7.1.8\lib\businesslogic.dll</HintPath>
@@ -97,14 +97,17 @@
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.5.0\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.5.0\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web">
-      <HintPath>..\packages\Merchello.Core.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.5.0\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.1.8\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -237,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BraintreeCustomerExtensions.cs" />
+    <Compile Include="Controllers\BraintreeWebhooksController.cs" />
     <Compile Include="Provider\BraintreeVaultTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Provider\BraintreePaymentGatewayMethodBase.cs" />
     <Compile Include="Provider\IBraintreeVaultTransactionPaymentGatewayMethod.cs" />
@@ -244,6 +248,7 @@
     <Compile Include="Services\BraintreePaymentMethodApiService.cs" />
     <Compile Include="Services\BraintreeSubscriptionApiService.cs" />
     <Compile Include="Services\BraintreeTransactionApiService.cs" />
+    <Compile Include="Services\BraintreeWebhooksApiService.cs" />
     <Compile Include="Services\IBraintreeApiService.cs" />
     <Compile Include="Services\IBraintreePaymentMethodApiService.cs" />
     <Compile Include="Services\IBraintreeSubscriptionApiService.cs" />
@@ -271,6 +276,7 @@
     <Compile Include="Services\BraintreeCustomerApiService.cs" />
     <Compile Include="Services\BraintreeApiServiceBase.cs" />
     <Compile Include="Services\IBraintreeCustomerApiService.cs" />
+    <Compile Include="Services\IBraintreeWebhooksApiService.cs" />
     <Compile Include="UmbracoApplicationEvents.cs" />
   </ItemGroup>
   <ItemGroup>

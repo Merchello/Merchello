@@ -270,7 +270,6 @@
     <Compile Include="Querying\InvoiceSqlClausesTest.cs" />
     <Compile Include="Querying\InvoiceStatusSqlClausesTests.cs" />
     <Compile Include="Querying\PaymentSqlClausesTests.cs" />
-    <Compile Include="Querying\ProductVariantSqlClausesTests.cs" />
     <Compile Include="Querying\ShipCountrySqlClausesTest.cs" />
     <Compile Include="Querying\ShipmentSqlClausesTest.cs" />
     <Compile Include="Querying\ShipMethodSqlClausesTests.cs" />

@@ -75,11 +75,15 @@
         /// </returns>
         public override IEnumerable<IShipment> PackageShipments()
         {
+            // All packaged shipments will start with a shipment status of "Quoted" as these are being used for the Shipment Rate Quote
+            // NOTE:  the "Packaging" status to indicate the shipment is physically being packaged/boxed up.
+            var quoted = MerchelloContext.Services.ShipmentService.GetShipmentStatusByKey(Constants.DefaultKeys.ShipmentStatus.Quoted);
+
             // filter basket items for shippable items
             var shippableVisitor = new ShippableProductVisitor();            
             LineItemCollection.Accept(shippableVisitor);            
 
-            if(!shippableVisitor.ShippableItems.Any()) return new List<IShipment>();
+            if (!shippableVisitor.ShippableItems.Any()) return new List<IShipment>();
    
             // the origin address will be the default warehouse
             // For the initial version we are only exposing a single warehouse
@@ -87,7 +91,7 @@
             var origin = warehouse.AsAddress();
             
             ////For the initial version we are only exposing a single shipment
-            var shipment = new Shipment(origin, Destination)
+            var shipment = new Shipment(quoted, origin, Destination)
                 {
                     VersionKey = VersionKey // this is used in cache keys
                 };
@@ -114,6 +118,9 @@
                 }
                 else
                 {
+                    // TODO this needs to be refactored to look at the entire shipment
+                    // since products could be in multiple catalogs which could have
+                    // opposing shippng rules and we have the destination address.
                     lineItem.ExtendedData.SetValue(
                         "merchWarehouseCatalogKey",
                         variant.CatalogInventories.First().CatalogKey.ToString());
