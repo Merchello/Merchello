@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Plugin.Shipping.FOA.Provider
 {
-    interface IFoaShippingGatewayMethod
+    /// <summary>
+    /// Marker interface for the FoaShippingGatewayMethod.
+    /// </summary>
+    public interface IFoaShippingGatewayMethod
     {
     }
 }

@@ -166,7 +166,7 @@
                 }
                 else
                 {
-                    if(province.AllowShipping) available.Add(gwshipmethod);
+                    if (province.AllowShipping) available.Add(gwshipmethod);
                 }
             }
 

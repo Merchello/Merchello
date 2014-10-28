@@ -26,27 +26,6 @@ namespace Merchello.Core.Gateways.Shipping
         }
 
         /// <summary>
-        /// Adjusts the rate of the quote based on the province Associated with the ShipMethod
-        /// </summary>
-        /// <param name="baseRate">The base (unadjusted) rate</param>
-        /// <param name="province">The <see cref="IShipProvince"/> associated with the ShipMethod</param>
-        /// <returns></returns>
-        protected decimal AdjustedRate(decimal baseRate, IShipProvince province)
-        {
-            if (province == null) return baseRate;
-            return province.RateAdjustmentType == RateAdjustmentType.Numeric
-                       ? baseRate + province.RateAdjustment
-                       : baseRate*(1 + (province.RateAdjustment/100));
-        }
-        
-        /// <summary>
-        /// Returns a rate quote for a given shipment
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
-        public abstract Attempt<IShipmentRateQuote> QuoteShipment(IShipment shipment);
-
-        /// <summary>
         /// Gets the ship method
         /// </summary>
         public IShipMethod ShipMethod
@@ -69,5 +48,27 @@ namespace Merchello.Core.Gateways.Shipping
         {
             get { return _gatewayResource; }
         }        
+
+        /// <summary>
+        /// Adjusts the rate of the quote based on the province Associated with the ShipMethod
+        /// </summary>
+        /// <param name="baseRate">The base (unadjusted) rate</param>
+        /// <param name="province">The <see cref="IShipProvince"/> associated with the ShipMethod</param>
+        /// <returns></returns>
+        protected decimal AdjustedRate(decimal baseRate, IShipProvince province)
+        {
+            if (province == null) return baseRate;
+            return province.RateAdjustmentType == RateAdjustmentType.Numeric
+                       ? baseRate + province.RateAdjustment
+                       : baseRate*(1 + (province.RateAdjustment/100));
+        }
+        
+        /// <summary>
+        /// Returns a rate quote for a given shipment
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        public abstract Attempt<IShipmentRateQuote> QuoteShipment(IShipment shipment);
+
     }
 }
