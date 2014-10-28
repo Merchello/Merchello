@@ -71,7 +71,7 @@
             payment.CustomerKey = invoice.CustomerKey;
             payment.Authorized = false;
             payment.Collected = false;
-            payment.PaymentMethodName = string.Format("{0} Authorize.Net Credit Card", cc.CreditCardType);
+            payment.PaymentMethodName = string.Format("{0} Chase Credit Card", cc.CreditCardType);
             payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CcLastFour, cc.CardNumber.Substring(cc.CardNumber.Length - 4, 4).EncryptWithMachineKey());
 
             
