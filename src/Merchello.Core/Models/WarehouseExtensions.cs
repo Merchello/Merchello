@@ -1,22 +1,22 @@
-﻿using System.Linq;
-using Merchello.Core.Models.Interfaces;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Linq;
+
     /// <summary>
     /// Extension methods for <see cref="IWarehouse"/>
     /// </summary>
-    internal static class WarehouseExtensions
+    public static class WarehouseExtensions
     {
         /// <summary>
-        /// Helper extension that returns the first <see cref="IWarehouseCatalog"/> for the warehouse
+        /// Returns a Warehouse address as an <see cref="IAddress"/>
         /// </summary>
-        internal static IWarehouseCatalog DefaultCatalog(this IWarehouse warehouse)
-        {
-            return ((Warehouse) warehouse).WarehouseCatalogs.FirstOrDefault();
-        }
-
-        internal static IAddress AsAddress(this IWarehouse warehouse)
+        /// <param name="warehouse">
+        /// The warehouse.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAddress"/>.
+        /// </returns>
+        public static IAddress AsAddress(this IWarehouse warehouse)
         {
             return new Address()
             {
@@ -30,5 +30,15 @@ namespace Merchello.Core.Models
                 Phone = warehouse.Phone
             };
         }
+
+        /// <summary>
+        /// Helper extension that returns the first <see cref="IWarehouseCatalog"/> for the warehouse
+        /// </summary>
+        internal static IWarehouseCatalog DefaultCatalog(this IWarehouse warehouse)
+        {
+            return ((Warehouse) warehouse).WarehouseCatalogs.FirstOrDefault();
+        }
+
+
     }
 }
