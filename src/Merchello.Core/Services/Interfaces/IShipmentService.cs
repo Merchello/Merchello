@@ -1,15 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models;
+
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the ShipmentService which provides access to shipment operations
     /// </summary>
     public interface IShipmentService : IService
     {
+        /// <summary>
+        /// Creates a <see cref="IShipment"/> without persisting it to the database.
+        /// </summary>
+        /// <param name="shipmentStatus">
+        /// The shipment status.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
+        IShipment CreateShipment(IShipmentStatus shipmentStatus, bool raiseEvents = true);
+
+        /// <summary>
+        /// Creates a <see cref="IShipment"/> without persisting it to the database.
+        /// </summary>
+        /// <param name="shipmentStatus">
+        /// The shipment status.
+        /// </param>
+        /// <param name="origin">
+        /// The origin.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
+        IShipment CreateShipment(IShipmentStatus shipmentStatus, IAddress origin, IAddress destination, bool raiseEvents = true);
+
+        /// <summary>
+        /// Creates a <see cref="IShipment"/> without persisting it to the database.
+        /// </summary>
+        /// <param name="shipmentStatus">
+        /// The shipment status.
+        /// </param>
+        /// <param name="origin">
+        /// The origin.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
+        IShipment CreateShipment(IShipmentStatus shipmentStatus, IAddress origin, IAddress destination, LineItemCollection items, bool raiseEvents = true);
+
         /// <summary>
         /// Saves a single <see cref="IShipment"/> object
         /// </summary>
@@ -24,7 +83,6 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(IEnumerable<IShipment> shipmentList, bool raiseEvents = true);
 
-       
         /// <summary>
         /// Deletes a single <see cref="IShipment"/> object
         /// </summary>
