@@ -122,7 +122,7 @@
                     // since products could be in multiple catalogs which could have
                     // opposing shippng rules and we have the destination address.
                     lineItem.ExtendedData.SetValue(
-                        "merchWarehouseCatalogKey",
+                        Constants.ExtendedDataKeys.WarehouseCatalogKey,
                         variant.CatalogInventories.First().CatalogKey.ToString());
                     shipment.Items.Add(lineItem);
                 }
