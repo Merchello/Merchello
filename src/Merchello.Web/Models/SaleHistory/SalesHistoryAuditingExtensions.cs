@@ -13,7 +13,7 @@
     /// <summary>
     /// The auditing extensions.
     /// </summary>
-    internal static class SalesHistoryAuditingExtensions
+    public static class SalesHistoryAuditingExtensions
     {
         /// <summary>
         /// The localization area
@@ -26,7 +26,7 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
-        internal static void AuditCreated(this IInvoice invoice)
+        public static void AuditCreated(this IInvoice invoice)
         {
             var obj = new
             {
@@ -45,7 +45,7 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
-        internal static void AuditDeleted(this IInvoice invoice)
+        public static void AuditDeleted(this IInvoice invoice)
         {
             var obj = new
             {
@@ -65,7 +65,7 @@
         /// <param name="order">
         /// The order.
         /// </param>
-        internal static void AuditCreated(this IOrder order)
+        public static void AuditCreated(this IOrder order)
         {
             var obj = new
             {
@@ -84,7 +84,7 @@
         /// <param name="order">
         /// The order.
         /// </param>
-        internal static void AuditDeleted(this IOrder order)
+        public static void AuditDeleted(this IOrder order)
         {
             var obj = new
             {
@@ -104,7 +104,7 @@
         /// <param name="shipment">
         /// The shipment.
         /// </param>
-        internal static void AuditCreated(this IShipment shipment)
+        public static void AuditCreated(this IShipment shipment)
         {            
 
             var obj = new
@@ -127,7 +127,7 @@
         /// <param name="invoice">
         /// The invoice for which the payment was authorized 
         /// </param>
-        internal static void AuditPaymentAuthorize(this IPayment payment, IInvoice invoice)
+        public static void AuditPaymentAuthorize(this IPayment payment, IInvoice invoice)
         {            
             var obj = new
             {
@@ -147,7 +147,7 @@
         /// The payment.
         /// </param>
         /// <param name="amount">The amount captured</param>
-        internal static void AuditPaymentCaptured(this IPayment payment, decimal amount)
+        public static void AuditPaymentCaptured(this IPayment payment, decimal amount)
         {
             var obj = new
             {
@@ -166,7 +166,7 @@
         /// <param name="payment">
         /// The payment.
         /// </param>
-        internal static void AuditPaymentDeclined(this IPayment payment)
+        public static void AuditPaymentDeclined(this IPayment payment)
         {
             var obj = new
             {
@@ -183,7 +183,7 @@
         /// <param name="payment">
         /// The payment.
         /// </param>
-        internal static void AuditPaymentVoided(this IPayment payment)
+        public static void AuditPaymentVoided(this IPayment payment)
         {
             var obj = new
             {
@@ -203,7 +203,7 @@
         /// <param name="amount">
         /// The refund amount
         /// </param>
-        internal static void AuditPaymentRefunded(this IPayment payment, decimal amount)
+        public static void AuditPaymentRefunded(this IPayment payment, decimal amount)
         {
             var obj = new
             {
