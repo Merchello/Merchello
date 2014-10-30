@@ -12,7 +12,7 @@
     [Serializable]
     [DataContract(IsReference = true)]
     [KnownType(typeof(LineItemCollection))]
-    internal class Shipment : VersionTaggedEntity, IShipment
+    public class Shipment : VersionTaggedEntity, IShipment
     {
         #region Fields
 
