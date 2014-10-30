@@ -255,18 +255,14 @@
 
             if (!MerchelloConfiguration.Current.Section.EnableLogging) return;
 
-            Task.Factory.StartNew(
-            () =>
+            try
             {
-                try
-                {
-                    merchelloContext.Services.AuditLogService.CreateAuditLogWithKey(key, entityType, message);
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.Error(typeof(SalesHistoryAuditingExtensions), string.Format("Failed to log {0} for entityType {1} with key {2}", message, entityType, key), ex);
-                }
-            });
+                merchelloContext.Services.AuditLogService.CreateAuditLogWithKey(key, entityType, message);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(typeof(SalesHistoryAuditingExtensions), string.Format("Failed to log {0} for entityType {1} with key {2}", message, entityType, key), ex);
+            }
         }
 
         /// <summary>
