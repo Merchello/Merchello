@@ -14,6 +14,26 @@
         public Guid Key { get; set; }
 
         /// <summary>
+        /// Gets or sets the shipment number prefix.
+        /// </summary>
+        public string ShipmentNumberPrefix { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipment number.
+        /// </summary>
+        public int ShipmentNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipment status.
+        /// </summary>
+        public ShipmentStatusDisplay ShipmentStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipment status key.
+        /// </summary>
+        public Guid ShipmentStatusKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the shipped date.
         /// </summary>
         public DateTime ShippedDate { get; set; }
