@@ -48,7 +48,7 @@ namespace Merchello.Tests.UnitTests.Serialization
                 {new ItemCacheLineItem(LineItemType.Product, "Product3", "Sku3", 3, 14, extendedData)},
             };
 
-            _shipment = new Shipment(_address, _address, lineItemCollection);
+            _shipment = new Shipment(new ShipmentStatusMock(), _address, _address, lineItemCollection);
         }
 
         /// <summary>

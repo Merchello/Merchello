@@ -1,16 +1,31 @@
-﻿using System.Text;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The shipment factory.
+    /// </summary>
     internal class ShipmentFactory : IEntityFactory<IShipment, ShipmentDto>
     {
+        /// <summary>
+        /// Builds a shipment entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
         public IShipment BuildEntity(ShipmentDto dto)
         {
-            var shipment = new Shipment()
+            var factory = new ShipmentStatusFactory();
+
+            var shipment = new Shipment(factory.BuildEntity(dto.ShipmentStatusDto))
             {
                 Key = dto.Key,
+                ShipmentNumberPrefix = dto.ShipmentNumberPrefix,
+                ShipmentNumber = dto.ShipmentNumber,
                 ShippedDate = dto.ShippedDate,
                 FromOrganization = dto.FromOrganization,
                 FromName = dto.FromName,
@@ -45,11 +60,23 @@ namespace Merchello.Core.Persistence.Factories
             return shipment;
         }
 
+        /// <summary>
+        /// Builds a shipment dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipmentDto"/>.
+        /// </returns>
         public ShipmentDto BuildDto(IShipment entity)
         {
             var dto = new ShipmentDto()
             {
                 Key = entity.Key,
+                ShipmentNumberPrefix = entity.ShipmentNumberPrefix,
+                ShipmentNumber = entity.ShipmentNumber,
+                ShipmentStatusKey = entity.ShipmentStatusKey,
                 ShippedDate = entity.ShippedDate,
                 FromOrganization = entity.FromOrganization,
                 FromName = entity.FromName,
@@ -76,7 +103,7 @@ namespace Merchello.Core.Persistence.Factories
                 Carrier = entity.Carrier,
                 TrackingCode = entity.TrackingCode,
                 UpdateDate = entity.UpdateDate,
-                CreateDate = entity.CreateDate                
+                CreateDate = entity.CreateDate
             };
 
             return dto;

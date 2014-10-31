@@ -36,7 +36,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         {
             //// Arrange
             const int taskCount = 3;
-            
+
             //// Act
             var builder = new ShipmentBuilderChain(MerchelloContext, _order, _order.Items.Select(x => x.Key));
 
@@ -51,15 +51,33 @@ namespace Merchello.Tests.IntegrationTests.Builders
         [Test]
         public void ShipmentBuilder_Creates_And_Saves_A_Shipment_And_OrderLineItems_Are_Updated()
         {
-            //// Arrage
+            //// Arrange
             var builder = new ShipmentBuilderChain(MerchelloContext, _order, _order.Items.Select(x => x.Key));
 
             //// Act
             var attempt = builder.Build();
-            if(!attempt.Success) Console.WriteLine(attempt.Exception.Message);
+            if (!attempt.Success) Console.WriteLine(attempt.Exception.Message);
 
             //// Assert
             Assert.IsTrue(attempt.Success);
+        }
+
+        [Test]
+        public void Can_Save_A_Shipment_After_Its_Built()
+        {
+            //// Arrange
+            var shipmentService = MerchelloContext.Services.ShipmentService;
+            var builder = new ShipmentBuilderChain(MerchelloContext, _order, _order.Items.Select(x => x.Key));
+            var attempt = builder.Build();
+            Assert.IsTrue(attempt.Success, "Failed to build shipment");
+
+            //// Act
+            var shipment = attempt.Result;
+            shipmentService.Save(shipment);
+
+            //// Assert
+            Assert.IsTrue(shipment.HasIdentity);
+
         }
     }
 }

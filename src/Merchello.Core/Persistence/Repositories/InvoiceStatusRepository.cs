@@ -62,13 +62,13 @@
         }
 
         /// <summary>
-        /// Gets a collection of all <see cref="IInvoice"/>.
+        /// Gets a collection of all <see cref="IInvoiceStatus"/>.
         /// </summary>
         /// <param name="keys">
         /// The keys.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="IInvoice"/>.
+        /// A collection of <see cref="IInvoiceStatus"/>.
         /// </returns>
         protected override IEnumerable<IInvoiceStatus> PerformGetAll(params Guid[] keys)
         {
@@ -91,13 +91,13 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IInvoice"/> by query.
+        /// Gets a collection of <see cref="IInvoiceStatus"/> by query.
         /// </summary>
         /// <param name="query">
         /// The query.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="IInvoice"/>.
+        /// A collection of <see cref="IInvoiceStatus"/>.
         /// </returns>
         protected override IEnumerable<IInvoiceStatus> PerformGetByQuery(IQuery<IInvoiceStatus> query)
         {

@@ -15,6 +15,14 @@
         private readonly List<ILineItem> _lineItems = new List<ILineItem>();
 
         /// <summary>
+        /// Gets the shippable items.
+        /// </summary>
+        public IEnumerable<ILineItem> ShippableItems
+        {
+            get { return _lineItems; }
+        } 
+
+        /// <summary>
         /// The visit.
         /// </summary>
         /// <param name="lineItem">
@@ -28,13 +36,5 @@
                 _lineItems.Add(lineItem.AsLineItemOf<OrderLineItem>());
             }
         }
-
-        /// <summary>
-        /// Gets the shippable items.
-        /// </summary>
-        public IEnumerable<ILineItem> ShippableItems 
-        {
-            get { return _lineItems; }
-        } 
     }
 }
