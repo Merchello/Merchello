@@ -94,6 +94,7 @@
          * Prepare the data to be sent back to the order view controller for saving.
          */
         $scope.save = function () {
+            // TODO: Convert the shipping status selected below into something meaningful to send into the NewShipment API endpoint.
             $scope.dialogData.items = _.filter($scope.dialogData.items, function (item) {
                 return item.selected == true;
             });
@@ -111,6 +112,16 @@
 	    $scope.setVariables = function() {
 	        $scope.dialogData.trackingNumber = "";
 	        $scope.shipMethod = {};
+            $scope.options = {
+                status: [
+                    { id: 0, name: 'Shipped' },
+                    { id: 1, name: 'Partially Shipped' },
+                    { id: 2, name: 'Not Shipped' }
+                ]
+            }
+	        $scope.selected = {
+	            status: $scope.options.status[0]
+	    }
 	    };
 
         $scope.init();
