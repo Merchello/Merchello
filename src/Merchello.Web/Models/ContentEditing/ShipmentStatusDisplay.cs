@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Merchello.Core.Models;
 
     /// <summary>
     /// The shipment status display.
@@ -36,5 +39,26 @@
         /// Gets or sets the sort order.
         /// </summary>
         public int SortOrder { get; set; } 
+    }
+
+    /// <summary>
+    /// The shipment status display extensions.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    internal static class ShipmentStatusDisplayExtensions
+    {
+        /// <summary>
+        /// Maps a <see cref="IShipmentStatus"/> to a <see cref="ShipmentStatusDisplay"/>
+        /// </summary>
+        /// <param name="status">
+        /// The status.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipmentStatusDisplay"/>.
+        /// </returns>
+        public static ShipmentStatusDisplay ToShipmentStatusDisplay(this IShipmentStatus status)
+        {
+            return AutoMapper.Mapper.Map<ShipmentStatusDisplay>(status);
+        }
     }
 }
