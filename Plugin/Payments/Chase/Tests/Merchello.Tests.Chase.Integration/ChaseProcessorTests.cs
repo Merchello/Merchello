@@ -584,12 +584,13 @@ namespace Merchello.Tests.Chase.Integration
 
             // this is typically added automatically in the checkout workflow
             extendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, "USD");
-
+            
             _invoice.BillToPostalCode = postalCode;
-
+            
             // Set the total value for the invoice.
             _invoice.Total = amount + taxAmount;
-
+            _invoice.PoNumber = "PW0001";
+            
             // make up some line items for the invoice                                                    
             var l1 = new InvoiceLineItem(LineItemType.Product, "Item 1", "I1", 1, amount - taxAmount, extendedData);
             var l2 = new InvoiceLineItem(LineItemType.Tax, "Item 2", "I2", 1, taxAmount, extendedData);
@@ -601,7 +602,7 @@ namespace Merchello.Tests.Chase.Integration
             Assert.NotNull(creditCardMethod);
 
             var ccEntry = TestHelper.GetCreditCardFormData(cardType, card, cardCode);
-
+            
             // Act
             var result = _payment.AuthorizePayment(_invoice, ccEntry.AsProcessorArgumentCollection());
             var result2 = _payment.CapturePayment(_invoice, result.Payment.Result, amount, ccEntry.AsProcessorArgumentCollection());
@@ -2501,7 +2502,7 @@ namespace Merchello.Tests.Chase.Integration
 
             // this is typically added automatically in the checkout workflow
             extendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, "USD");
-
+            
             _invoice.BillToPostalCode = postalCode;
 
             // Set the total value for the invoice.
@@ -2517,6 +2518,9 @@ namespace Merchello.Tests.Chase.Integration
 
             var ccEntry = TestHelper.GetCreditCardFormData(cardType, card, cardCode);
 
+
+            /////// 1a
+
             // Act                                                                                                        
             var result = _payment.AuthorizeCapturePayment(_invoice, amount, ccEntry.AsProcessorArgumentCollection());
 
@@ -2527,7 +2531,23 @@ namespace Merchello.Tests.Chase.Integration
             Assert.IsTrue(result.Payment.Success);
 
             // Log Results for certification      
-            TestHelper.LogInformation("Test 1 Section F", result);
+            TestHelper.LogInformation("Test 1a Section F", result);
+
+
+            /////// 1b
+
+            // Act                                                                                                        
+            result = _payment.AuthorizeCapturePayment(_invoice, amount, ccEntry.AsProcessorArgumentCollection());
+
+            // Assert
+            Assert.IsTrue(result.Payment.Success);
+            Assert.IsTrue(result.ApproveOrderCreation);
+
+            Assert.IsTrue(result.Payment.Success);
+
+            // Log Results for certification      
+            TestHelper.LogInformation("Test 1b Section F", result);
+
         }                            
 
         [Test]
@@ -2560,7 +2580,9 @@ namespace Merchello.Tests.Chase.Integration
             Assert.NotNull(creditCardMethod);
 
             var ccEntry = TestHelper.GetCreditCardFormData(cardType, card, cardCode);
-
+            
+            /////// 2a
+            
             // Act                                                                                            
             var result = _payment.AuthorizeCapturePayment(_invoice, amount, ccEntry.AsProcessorArgumentCollection());
 
@@ -2569,7 +2591,19 @@ namespace Merchello.Tests.Chase.Integration
             Assert.IsTrue(result.ApproveOrderCreation);
 
             // Log Results for certification      
-            TestHelper.LogInformation("Test 2 Section F", result);
+            TestHelper.LogInformation("Test 2a Section F", result);
+
+            /////// 2b
+            // Act                                                                                            
+            result = _payment.AuthorizeCapturePayment(_invoice, amount, ccEntry.AsProcessorArgumentCollection());
+
+            // Assert
+            Assert.IsTrue(result.Payment.Success);
+            Assert.IsTrue(result.ApproveOrderCreation);
+
+            // Log Results for certification      
+            TestHelper.LogInformation("Test 2b Section F", result);
+
         }
 
         [Test]
@@ -2603,6 +2637,8 @@ namespace Merchello.Tests.Chase.Integration
 
             var ccEntry = TestHelper.GetCreditCardFormData(cardType, card, cardCode);
 
+            ////////// 3a
+            
             // Act                                                                                            
             var result = _payment.AuthorizeCapturePayment(_invoice, amount, ccEntry.AsProcessorArgumentCollection());
 
@@ -2611,7 +2647,19 @@ namespace Merchello.Tests.Chase.Integration
             Assert.IsTrue(result.ApproveOrderCreation);
 
             // Log Results for certification      
-            TestHelper.LogInformation("Test 2 Section F", result);
+            TestHelper.LogInformation("Test 3a Section F", result);
+
+            ////////// 3b
+
+            // Act                                                                                            
+            result = _payment.AuthorizeCapturePayment(_invoice, amount, ccEntry.AsProcessorArgumentCollection());
+
+            // Assert
+            Assert.IsTrue(result.Payment.Success);
+            Assert.IsTrue(result.ApproveOrderCreation);
+
+            // Log Results for certification      
+            TestHelper.LogInformation("Test 3b Section F", result);
         }            
     }
 }

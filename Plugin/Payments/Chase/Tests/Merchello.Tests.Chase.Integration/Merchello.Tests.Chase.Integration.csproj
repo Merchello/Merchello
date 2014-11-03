@@ -198,6 +198,8 @@
       <HintPath>..\..\src\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Serialization" />
     <Reference Include="TidyNet">
       <HintPath>..\..\src\packages\UmbracoCms.Core.7.1.8\lib\TidyNet.dll</HintPath>
       <Private>True</Private>
@@ -260,6 +262,7 @@
     <Compile Include="TestHelpers\ChaseTestBase.cs" />
     <Compile Include="TestHelpers\DbSyntax.cs" />
     <Compile Include="TestHelpers\GatewayProviderSettingsDto.cs" />
+    <Compile Include="TestHelpers\logging.cs" />
     <Compile Include="TestHelpers\ProviderTestsBase.cs" />
     <Compile Include="TestHelpers\Resolution.cs" />
     <Compile Include="TestHelpers\SqlSyntaxProviderTestHelper.cs" />
