@@ -355,6 +355,7 @@
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
+    <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
