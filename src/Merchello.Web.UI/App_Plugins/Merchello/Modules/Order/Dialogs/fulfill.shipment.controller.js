@@ -10,6 +10,15 @@
      */
 	controllers.FulfillShipmentController = function ($scope, merchelloOrderService, merchelloShipmentService, notificationsService, merchelloSettingsService) {
 
+	    $scope.getAllShipmentStatuses = function() {
+	        var promise = merchelloShipmentService.getAllShipmentStatuses();
+	        promise.then(function(response) {
+	            console.info(response);
+	        }, function(reason) {
+	            notificationsService.error('Failed to load shipment statuses', reason.message);
+	        });
+	    };
+
 	    /**
          * @ngdoc method
          * @name getShipMethodForOrder
@@ -79,6 +88,7 @@
          * Method called on intial page load.  Loads in data from server and sets up scope.
          */
         $scope.init = function () {
+            $scope.getAllShipmentStatuses();
             $scope.setVariables();
         	$scope.loadSettings();
             $scope.getUnFulfilledItems($scope.dialogData.key);
@@ -94,6 +104,7 @@
          * Prepare the data to be sent back to the order view controller for saving.
          */
         $scope.save = function () {
+            // TODO: Convert the shipping status selected below into something meaningful to send into the NewShipment API endpoint.
             $scope.dialogData.items = _.filter($scope.dialogData.items, function (item) {
                 return item.selected == true;
             });
@@ -111,6 +122,16 @@
 	    $scope.setVariables = function() {
 	        $scope.dialogData.trackingNumber = "";
 	        $scope.shipMethod = {};
+            $scope.options = {
+                status: [
+                    { id: 0, name: 'Shipped' },
+                    { id: 1, name: 'Partially Shipped' },
+                    { id: 2, name: 'Not Shipped' }
+                ]
+            }
+	        $scope.selected = {
+	            status: $scope.options.status[0]
+	    }
 	    };
 
         $scope.init();

@@ -11,6 +11,8 @@
                 <label>{{shipMethod.name}}</label>
                 <!--<select name="provider" disabled="disabled" class="col-xs-6 span6"><option>{{shipMethod}}</option></select>-->
                 <!--<label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>-->
+                <label>Shipment Status</label>
+                <select name="status" class="col-xs-6 span6" data-ng-model="selected.status" data-ng-options="option.name for option in options.status"></select>
             </div>
             <table class="table table-striped merchello-striped-table order-items">
                 <tbody>
