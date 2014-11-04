@@ -10,6 +10,15 @@
      */
 	controllers.FulfillShipmentController = function ($scope, merchelloOrderService, merchelloShipmentService, notificationsService, merchelloSettingsService) {
 
+	    $scope.getAllShipmentStatuses = function() {
+	        var promise = merchelloShipmentService.getAllShipmentStatuses();
+	        promise.then(function(response) {
+	            console.info(response);
+	        }, function(reason) {
+	            notificationsService.error('Failed to load shipment statuses', reason.message);
+	        });
+	    };
+
 	    /**
          * @ngdoc method
          * @name getShipMethodForOrder
@@ -79,6 +88,7 @@
          * Method called on intial page load.  Loads in data from server and sets up scope.
          */
         $scope.init = function () {
+            $scope.getAllShipmentStatuses();
             $scope.setVariables();
         	$scope.loadSettings();
             $scope.getUnFulfilledItems($scope.dialogData.key);

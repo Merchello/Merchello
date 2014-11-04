@@ -265,6 +265,7 @@ namespace Merchello.Web.Editors
         /// <returns>
         /// The <see cref="IEnumerable{ShipmentStatusDisplay}"/>.
         /// </returns>
+        [HttpGet]
         public IEnumerable<ShipmentStatusDisplay> GetAllShipmentStatuses()
         {
             var statuses = _shipmentService.GetAllShipmentStatuses().OrderBy(x => x.SortOrder);
