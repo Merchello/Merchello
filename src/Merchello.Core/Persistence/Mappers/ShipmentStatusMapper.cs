@@ -24,14 +24,14 @@
         {
             if (!PropertyInfoCache.IsEmpty) return;
 
-            CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.Key, dto => dto.Key);
-            CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.Name, dto => dto.Name);
-            CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.Alias, dto => dto.Alias);
-            CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.Reportable, dto => dto.Reportable);
-            CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.Active, dto => dto.Active);
-            CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.SortOrder, dto => dto.SortOrder);
-            CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.CreateDate, dto => dto.CreateDate);
-            CacheMap<InvoiceStatus, InvoiceStatusDto>(src => src.UpdateDate, dto => dto.UpdateDate);
+            CacheMap<ShipmentStatus, ShipmentStatusDto>(src => src.Key, dto => dto.Key);
+            CacheMap<ShipmentStatus, ShipmentStatusDto>(src => src.Name, dto => dto.Name);
+            CacheMap<ShipmentStatus, ShipmentStatusDto>(src => src.Alias, dto => dto.Alias);
+            CacheMap<ShipmentStatus, ShipmentStatusDto>(src => src.Reportable, dto => dto.Reportable);
+            CacheMap<ShipmentStatus, ShipmentStatusDto>(src => src.Active, dto => dto.Active);
+            CacheMap<ShipmentStatus, ShipmentStatusDto>(src => src.SortOrder, dto => dto.SortOrder);
+            CacheMap<ShipmentStatus, ShipmentStatusDto>(src => src.CreateDate, dto => dto.CreateDate);
+            CacheMap<ShipmentStatus, ShipmentStatusDto>(src => src.UpdateDate, dto => dto.UpdateDate);
         }
     }
 }
