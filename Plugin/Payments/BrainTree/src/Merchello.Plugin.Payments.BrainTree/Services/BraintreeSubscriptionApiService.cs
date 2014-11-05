@@ -208,7 +208,7 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         {
             Updating.RaiseEvent(new SaveEventArgs<SubscriptionRequest>(request), this);
 
-            var attempt = TryGetApiResult(() => BraintreeGateway.Subscription.Create(request));
+            var attempt = TryGetApiResult(() => BraintreeGateway.Subscription.Update(request.Id, request));
 
             if (!attempt.Success) return Attempt<Subscription>.Fail(attempt.Exception);
 
