@@ -47,14 +47,16 @@
             Mandate.ParameterCondition(1 >= invoicesCount, "invoicesCount");
 
             var setting = Get(storeSettingKey);
+            if (string.IsNullOrEmpty(setting.Value)) setting.Value = "1";
             var nextInvoiceNumber = int.Parse(setting.Value);
             var max = validate();
+            if (max == 0) max++;
             nextInvoiceNumber = nextInvoiceNumber >= max ? nextInvoiceNumber : max + 5;
             var invoiceNumber = nextInvoiceNumber + invoicesCount;
 
             setting.Value = invoiceNumber.ToString(CultureInfo.InvariantCulture);
 
-            AddOrUpdate(setting); // this will deal with the cache as well
+            PersistUpdatedItem(setting); // this will deal with the cache as well
 
             return invoiceNumber;
         }
@@ -71,14 +73,16 @@
             Mandate.ParameterCondition(1 >= ordersCount, "ordersCount");
 
             var setting = Get(storeSettingKey);
+            if (string.IsNullOrEmpty(setting.Value)) setting.Value = "1";
             var max = validate();
+            if (max == 0) max++;
             var nextOrderNumber = int.Parse(setting.Value);
             nextOrderNumber = nextOrderNumber >= max ? nextOrderNumber : max + 5;
             var orderNumber = nextOrderNumber + ordersCount;
 
             setting.Value = orderNumber.ToString(CultureInfo.InvariantCulture);
 
-            AddOrUpdate(setting);
+            PersistUpdatedItem(setting);
 
             return orderNumber;
         }
@@ -95,14 +99,16 @@
             Mandate.ParameterCondition(1 >= shipmentsCount, "shipmentsCount");
 
             var setting = Get(storeSettingKey);
+            if (string.IsNullOrEmpty(setting.Value)) setting.Value = "1";
             var max = validate();
+            if (max == 0) max++;
             var nextShipmentNumber = int.Parse(setting.Value);
             nextShipmentNumber = nextShipmentNumber >= max ? nextShipmentNumber : max + 5;
             var shipmentNumber = nextShipmentNumber + shipmentsCount;
 
             setting.Value = shipmentNumber.ToString(CultureInfo.InvariantCulture);
 
-            AddOrUpdate(setting);
+            PersistUpdatedItem(setting);
 
             return shipmentNumber;
         }
