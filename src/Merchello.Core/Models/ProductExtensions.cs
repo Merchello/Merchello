@@ -20,7 +20,6 @@ namespace Merchello.Core
     public static class ProductExtensions
     {
 
-        #region IProduct Collections
 
         /// <summary>
         /// Returns a collection of ProductOption given as list of attributes (choices)
@@ -110,6 +109,57 @@ namespace Merchello.Core
         }
 
         /// <summary>
+        /// Associates a product with a warehouse catalog
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <param name="catalog">The <see cref="IWarehouseCatalog"/></param>
+        public static void AddToCatalogInventory(this IProduct product, IWarehouseCatalog catalog)
+        {
+            ((Product)product).MasterVariant.AddToCatalogInventory(catalog);
+        }
+
+        /// <summary>
+        /// Associates a product variant with a warehouse
+        /// </summary>
+        /// <param name="productVariant">The <see cref="IProductVariant"/></param>
+        /// <param name="catalog">The <see cref="IWarehouseCatalog"/></param>
+        public static void AddToCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
+        {
+            productVariant.AddToCatalogInventory(catalog.Key);
+        }
+
+        /// <summary>
+        /// Associates a product variant with a warehouse
+        /// </summary>
+        /// <param name="productVariant">
+        /// The <see cref="IProductVariant"/>
+        /// </param>
+        /// <param name="catalogKey">
+        /// The catalog Key.
+        /// </param>
+        public static void AddToCatalogInventory(this IProductVariant productVariant, Guid catalogKey)
+        {
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalogKey, productVariant.Key));
+        }
+
+
+        /// <summary>
+        /// Removes a product varaint from a catalog inventory.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <param name="catalog">
+        /// The catalog.
+        /// </param>
+        public static void RemoveFromCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
+        {
+            if (productVariant.CatalogInventories.All(inv => inv.CatalogKey != catalog.Key)) return;
+
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).RemoveAt(productVariant.CatalogInventories.FindIndex(x => x.CatalogKey == catalog.Key));
+        }
+
+        /// <summary>
         /// The get possible product attribute combinations.
         /// </summary>
         /// <param name="product">
@@ -127,7 +177,6 @@ namespace Merchello.Core
             return optionChoices.CartesianProduct();
         }
 
-        #endregion
 
 
         #region ProductAttributeCollection
@@ -155,60 +204,7 @@ namespace Merchello.Core
         #endregion
 
 
-        #region IProductVariant Collections
-
-        /// <summary>
-        /// Associates a product with a warehouse catalog
-        /// </summary>
-        /// <param name="product">The <see cref="IProduct"/></param>
-        /// <param name="catalog">The <see cref="IWarehouseCatalog"/></param>
-        internal static void AddToCatalogInventory(this IProduct product, IWarehouseCatalog catalog)
-        {
-            ((Product)product).MasterVariant.AddToCatalogInventory(catalog);
-        }
-     
-        /// <summary>
-        /// Associates a product variant with a warehouse
-        /// </summary>
-        /// <param name="productVariant">The <see cref="IProductVariant"/></param>
-        /// <param name="catalog">The <see cref="IWarehouseCatalog"/></param>
-        internal static void AddToCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
-        {
-            productVariant.AddToCatalogInventory(catalog.Key);
-        }
-
-        /// <summary>
-        /// Associates a product variant with a warehouse
-        /// </summary>
-        /// <param name="productVariant">
-        /// The <see cref="IProductVariant"/>
-        /// </param>
-        /// <param name="catalogKey">
-        /// The catalog Key.
-        /// </param>
-        internal static void AddToCatalogInventory(this IProductVariant productVariant, Guid catalogKey)
-        {
-            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalogKey, productVariant.Key));
-        }
-
-
-        /// <summary>
-        /// Removes a product varaint from a catalog inventory.
-        /// </summary>
-        /// <param name="productVariant">
-        /// The product variant.
-        /// </param>
-        /// <param name="catalog">
-        /// The catalog.
-        /// </param>
-        internal static void RemoveFromCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
-        {
-            if (productVariant.CatalogInventories.All(inv => inv.CatalogKey != catalog.Key)) return;
-
-            ((CatalogInventoryCollection)productVariant.CatalogInventories).RemoveAt(productVariant.CatalogInventories.FindIndex(x => x.CatalogKey == catalog.Key));
-        }
-
-        #endregion
+       
 
         #region Examine Serialization
 
