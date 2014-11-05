@@ -246,6 +246,12 @@ namespace Merchello.Web
             }
         }
 
+        /// <summary>
+        /// Invalidates the current initialization and starts over
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
         private void Reinitialize(ICustomerBase customer)
         {
             // customer has logged out, so we need to go back to an anonymous customer
@@ -265,6 +271,15 @@ namespace Merchello.Web
             Initialize();      
         }
 
+        /// <summary>
+        /// Provides an assertion that the customer cookie is associated with the correct customer Umbraco member relation.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <remarks>
+        /// http://issues.merchello.com/youtrack/issue/M-454
+        /// </remarks>
         private void EnsureIsLoggedInCustomer(ICustomerBase customer)
         {
             if (_cache.RequestCache.GetCacheItem(CacheKeys.EnsureIsLoggedInCustomerValidated(customer.Key)) != null) return;
