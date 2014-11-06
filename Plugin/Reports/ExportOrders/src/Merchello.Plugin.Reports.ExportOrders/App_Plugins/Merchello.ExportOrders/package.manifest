@@ -1,0 +1,6 @@
+﻿{
+	javascript : [
+		'~/App_Plugins/Merchello.ExportOrders/exportOrders.controller.js',
+		'~/App_Plugins/Merchello.ExportOrders/exportOrders.service.js'
+	]
+}

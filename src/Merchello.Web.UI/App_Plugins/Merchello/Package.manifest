@@ -77,6 +77,7 @@
 		'~/App_Plugins/Merchello/Modules/Order/Directives/ordercreate.directives.js',
 		'~/App_Plugins/Merchello/Modules/Order/Directives/shipping-history-directives.js',
 		'~/App_Plugins/Merchello/Modules/Report/reports.list.controller.js',
+		'~/App_Plugins/Merchello/Modules/Report/report.bootstrap.controller.js',
 		'~/App_Plugins/Merchello/Modules/Report/reports.salesByItem.controller.js',
 		'~/App_Plugins/Merchello/Modules/Report/reports.salesOverTime.controller.js',
 		'~/App_Plugins/Merchello/Modules/Report/reports.taxesByDestination.controller.js',
