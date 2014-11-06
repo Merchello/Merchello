@@ -126,6 +126,10 @@
                         <span class="tel" data-ng-show="shippingAddress.phone != null">Phone: {{shippingAddress.phone}}</span>
                     </div>
                 </div>
+                <!-- ACTION: Open Shipments Page -->
+                <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderShipmentInfo/{{invoice.key}}" data-ng-show="hasShipments()">Shipments</a>
+                <!-- ACTION: Open Payments Page -->
+                <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderPaymentInfo/{{invoice.key}}" data-ng-show="hasAppliedPayments()">Payments</a>
             </div>
             <!-- Debug -->
             <merchello-debug-section data-props-to-debug="invoice"></merchello-debug-section>

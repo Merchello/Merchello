@@ -328,8 +328,10 @@
     <key alias="invoiceDeleted">Invoice %0% was deleted</key>
     <key alias="paymentDeleted">Payment was deleted</key>
     <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
+    <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
     <key alias="orderCreated">Order %0% was created</key>
-    <key alias="shipmentCreated">We successfully fulfilled %0% line items</key>
+    <key alias="shipmentCreated">Shipment was created with %0% line items</key>
+    <key alas="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
   
 </language>

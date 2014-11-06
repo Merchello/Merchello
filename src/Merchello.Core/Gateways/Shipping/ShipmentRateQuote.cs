@@ -44,6 +44,8 @@
             Shipment = shipment;
             ShipMethod = shipMethod;
             ExtendedData = extendedData;
+
+            this.Initialize();
         }
 
         /// <summary>
@@ -66,5 +68,14 @@
         /// a carrier based shipping.
         /// </summary>
         public ExtendedDataCollection ExtendedData { get; private set; }
+
+        /// <summary>
+        /// Initializes values
+        /// </summary>
+        private void Initialize()
+        {
+            http://issues.merchello.com/youtrack/issue/M-458
+            Shipment.ShipMethodKey = ShipMethod.Key;
+        }
     }
 }

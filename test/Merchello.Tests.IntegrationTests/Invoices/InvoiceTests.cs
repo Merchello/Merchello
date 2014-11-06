@@ -28,7 +28,6 @@ namespace Merchello.Tests.IntegrationTests.Invoices
             DbPreTestDataWorker.DeleteAllShipCountries();
         }
 
-        [Test]
         public void Can_Create_A_Customer_Invoice_And_Order()
         {
             // Adding the shipmethod is typically done in the back office through the UI.

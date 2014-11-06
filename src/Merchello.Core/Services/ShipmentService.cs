@@ -6,6 +6,7 @@
     using System.Threading;
 
     using Merchello.Core.Events;
+    using Merchello.Core.Strategies.Packaging;
 
     using Models;
     using Persistence;
@@ -85,6 +86,8 @@
 
         #region Event Handlers
 
+        public static event TypedEventHandler<IShipmentService, Events.NewEventArgs<IShipment>> Creating;
+
         /// <summary>
         /// Occurs before Save
         /// </summary>
@@ -124,6 +127,95 @@
 
         #region Shipment
 
+        /// <summary>
+        /// Creates a <see cref="IShipment"/> without persisting it to the database.
+        /// </summary>
+        /// <param name="shipmentStatus">
+        /// The shipment status.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
+        public IShipment CreateShipment(IShipmentStatus shipmentStatus, bool raiseEvents = true)
+        {
+            return CreateShipment(shipmentStatus, new Address(), new Address(), new LineItemCollection());
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IShipment"/> without persisting it to the database.
+        /// </summary>
+        /// <param name="shipmentStatus">
+        /// The shipment status.
+        /// </param>
+        /// <param name="origin">
+        /// The origin.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
+        public IShipment CreateShipment(IShipmentStatus shipmentStatus, IAddress origin, IAddress destination, bool raiseEvents = true)
+        {
+            return CreateShipment(shipmentStatus, origin, destination, new LineItemCollection());
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IShipment"/> without persisting it to the database.
+        /// </summary>
+        /// <param name="shipmentStatus">
+        /// The shipment status.
+        /// </param>
+        /// <param name="origin">
+        /// The origin.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
+        public IShipment CreateShipment(IShipmentStatus shipmentStatus, IAddress origin, IAddress destination, LineItemCollection items, bool raiseEvents = true)
+        {
+            Mandate.ParameterNotNull(shipmentStatus, "shipmentStatus");
+            Mandate.ParameterNotNull(origin, "origin");
+            Mandate.ParameterNotNull(destination, "destination");
+            Mandate.ParameterNotNull(items, "items");
+
+            // Use the visitor to filter out and validate shippable line items
+            var visitor = new ShippableProductVisitor();
+            items.Accept(visitor);
+
+            var lineItemCollection = new LineItemCollection();
+
+            foreach (var item in visitor.ShippableItems)
+            {
+                lineItemCollection.Add(item);
+            }
+
+            var shipment = new Shipment(shipmentStatus, origin, destination, lineItemCollection);
+
+            if (!raiseEvents)
+            {
+                return shipment;
+            }
+
+            Creating.RaiseEvent(new Events.NewEventArgs<IShipment>(shipment), this);
+            return shipment;
+        }
 
         /// <summary>
         /// Saves a single <see cref="IShipment"/> object
@@ -132,8 +224,6 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IShipment shipment, bool raiseEvents = true)
         {
-
-
             if (!((Shipment)shipment).HasIdentity && shipment.ShipmentNumber <= 0)
             {
                 // We have to generate a new 'unique' invoice number off the configurable value

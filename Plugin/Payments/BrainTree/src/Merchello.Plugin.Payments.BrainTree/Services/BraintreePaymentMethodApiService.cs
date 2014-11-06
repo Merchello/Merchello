@@ -190,7 +190,48 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         public Attempt<PaymentMethod> Update(string token, IAddress billingAddress, bool updateExisting = true)
         {
             var request = RequestFactory.CreatePaymentMethodRequest(billingAddress, updateExisting);
+            return Update(token, request);
+        }
 
+        /// <summary>
+        /// Updates a payment method
+        /// </summary>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <param name="paymentMethodNonce">
+        /// The payment method nonce.
+        /// </param>
+        /// <param name="billingAddress">
+        /// The billing address.
+        /// </param>
+        /// <param name="updateExisting">
+        /// The update existing.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public Attempt<PaymentMethod> Update(string token, string paymentMethodNonce, IAddress billingAddress, bool updateExisting = true)
+        {
+            var request = RequestFactory.CreatePaymentMethodRequest(billingAddress, updateExisting);
+            request.PaymentMethodNonce = paymentMethodNonce;
+
+            return Update(token, request);
+        }
+
+        /// <summary>
+        /// Updates a payment method
+        /// </summary>
+        /// <param name="token">The payment method token</param>
+        /// <param name="request">
+        /// The request.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public Attempt<PaymentMethod> Update(string token, PaymentMethodRequest request)
+        {
+            Mandate.ParameterNotNull(request, "request");
 
             Updating.RaiseEvent(new SaveEventArgs<PaymentMethodRequest>(request), this);
 
@@ -203,7 +244,7 @@ namespace Merchello.Plugin.Payments.Braintree.Services
             if (result.IsSuccess())
             {
                 var cacheKey = MakePaymentMethodCacheKey(token);
-                
+
                 RuntimeCache.ClearCacheItem(cacheKey);
 
                 Updated.RaiseEvent(new SaveEventArgs<PaymentMethod>(result.Target), this);

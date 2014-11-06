@@ -1,0 +1,61 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+<div data-ng-controller="Merchello.Editors.Order.ShipmentInfoController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline"><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
+                </div>
+            </div>
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <!-- New Order Button -->
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-standard">Print</a>
+                    </div>
+                </div>
+            </div>
+        </umb-header>
+        <merchello-panel class="row-fluid">
+            <!-- Main Content Area -->
+            <div class="merchello-pane primary">
+                <div class="control-group umb-control-group">
+                    <div class="merchello-section-label">
+                        Shipment Information
+                        <small>Shipments & Providers</small>
+                    </div>
+                    <div class="merchello-controls">
+                        <div>
+                            <!-- ACTION: Return To Invoice -->
+                            <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderView/{{invoice.key}}">Return to Invoice</a>
+                            <!-- ACTION: View Payment Information -->
+                            <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderPaymentInfo/{{invoice.key}}">Payments</a>
+                        </div>
+                        <div class="row-fluid">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Provider</th>
+                                        <th>Items</th>
+                                        <th>Street</th>
+                                        <th>Tracking #</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    <tr data-ng-repeat="shipment in invoice.shipments">
+                                        <td>{{formatDate(shipment.shippedDate)}}</td>
+                                        <td>{{shipment.carrier}}</td>
+                                        <td>{{shipment.items.length}}</td>
+                                        <td>{{shipment.toAddress1}}</td>
+                                        <td>{{shipment.trackingCode}}</td>
+                                        <td><a href="#">Edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</div>

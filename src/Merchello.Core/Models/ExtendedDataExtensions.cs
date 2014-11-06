@@ -214,7 +214,7 @@
         }
 
         /// <summary>
-        /// True/falce indicating whether or not this extended data collection contains information 
+        /// True/false indicating whether or not this extended data collection contains information 
         /// which could define a <see cref="IProductVariant"/>
         /// </summary>
         /// <param name="extendedData">
@@ -229,7 +229,7 @@
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a ProductVariantKey
+        /// True/false indicating whether or not the collection contains a ProductVariantKey
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -257,7 +257,7 @@
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a ProductKey
+        /// True/false indicating whether or not the collection contains a ProductKey
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -629,7 +629,7 @@
         }
 
         /// <summary>
-        /// Returns the merchShipmentKey value as a Guid
+        /// Returns the merchShipmentKey value as a GUID
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -643,7 +643,7 @@
         }
 
         /// <summary>
-        /// Returns the merchShipMethodKey value as a Guid
+        /// Returns the merchShipMethodKey value as a GUID
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -657,7 +657,7 @@
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a WarehouseCatalogKey
+        /// True/false indicating whether or not the collection contains a WarehouseCatalogKey
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.

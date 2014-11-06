@@ -13,7 +13,7 @@
     /// <summary>
     /// The auditing extensions.
     /// </summary>
-    internal static class SalesHistoryAuditingExtensions
+    public static class SalesHistoryAuditingExtensions
     {
         /// <summary>
         /// The localization area
@@ -26,7 +26,7 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
-        internal static void AuditCreated(this IInvoice invoice)
+        public static void AuditCreated(this IInvoice invoice)
         {
             var obj = new
             {
@@ -45,7 +45,7 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
-        internal static void AuditDeleted(this IInvoice invoice)
+        public static void AuditDeleted(this IInvoice invoice)
         {
             var obj = new
             {
@@ -57,7 +57,23 @@
             UpdateAuditLog(invoice.Key, EntityType.Invoice, obj.Serialize());
         }
 
+        /// <summary>
+        /// Logs an invoice status change
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        public static void AuditStatusChanged(this IInvoice invoice)
+        {
+            var obj = new
+            {
+                area = Area,
+                key = "invoiceStatusChanged",
+                invoiceStatus = invoice.InvoiceStatus.Name
+            };
 
+            UpdateAuditLog(invoice.Key, EntityType.Invoice, obj.Serialize());
+        }
 
         /// <summary>
         /// Logs the order creation
@@ -65,13 +81,13 @@
         /// <param name="order">
         /// The order.
         /// </param>
-        internal static void AuditCreated(this IOrder order)
+        public static void AuditCreated(this IOrder order)
         {
             var obj = new
             {
                 area = Area,
                 key = "orderCreated",
-                invoiceNumber = order.PrefixedOrderNumber()
+                orderNumber = order.PrefixedOrderNumber()
             };
 
             UpdateAuditLog(order.Key, EntityType.Order, obj.Serialize());
@@ -84,7 +100,7 @@
         /// <param name="order">
         /// The order.
         /// </param>
-        internal static void AuditDeleted(this IOrder order)
+        public static void AuditDeleted(this IOrder order)
         {
             var obj = new
             {
@@ -104,9 +120,8 @@
         /// <param name="shipment">
         /// The shipment.
         /// </param>
-        internal static void AuditCreated(this IShipment shipment)
+        public static void AuditCreated(this IShipment shipment)
         {            
-
             var obj = new
             {
                 area = Area,
@@ -114,9 +129,28 @@
                 itemCount = shipment.Items.Count.ToString(CultureInfo.InvariantCulture)
             };
 
+            UpdateAuditLog(shipment.Key, EntityType.Shipment, obj.Serialize());
+        }
+
+        /// <summary>
+        /// Logs a shipment status change
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        public static void AuditStatusChanged(this IShipment shipment)
+        {
+            var obj = new
+            {
+                area = Area,
+                key = "shipmentStatusChanged",
+                shipmentStatus = shipment.ShipmentStatus.Name
+            };
 
             UpdateAuditLog(shipment.Key, EntityType.Shipment, obj.Serialize());
         }
+
+       
 
         /// <summary>
         /// Logs an authorized payment
@@ -127,7 +161,7 @@
         /// <param name="invoice">
         /// The invoice for which the payment was authorized 
         /// </param>
-        internal static void AuditPaymentAuthorize(this IPayment payment, IInvoice invoice)
+        public static void AuditPaymentAuthorize(this IPayment payment, IInvoice invoice)
         {            
             var obj = new
             {
@@ -147,7 +181,7 @@
         /// The payment.
         /// </param>
         /// <param name="amount">The amount captured</param>
-        internal static void AuditPaymentCaptured(this IPayment payment, decimal amount)
+        public static void AuditPaymentCaptured(this IPayment payment, decimal amount)
         {
             var obj = new
             {
@@ -166,7 +200,7 @@
         /// <param name="payment">
         /// The payment.
         /// </param>
-        internal static void AuditPaymentDeclined(this IPayment payment)
+        public static void AuditPaymentDeclined(this IPayment payment)
         {
             var obj = new
             {
@@ -183,7 +217,7 @@
         /// <param name="payment">
         /// The payment.
         /// </param>
-        internal static void AuditPaymentVoided(this IPayment payment)
+        public static void AuditPaymentVoided(this IPayment payment)
         {
             var obj = new
             {
@@ -203,7 +237,7 @@
         /// <param name="amount">
         /// The refund amount
         /// </param>
-        internal static void AuditPaymentRefunded(this IPayment payment, decimal amount)
+        public static void AuditPaymentRefunded(this IPayment payment, decimal amount)
         {
             var obj = new
             {
@@ -255,18 +289,14 @@
 
             if (!MerchelloConfiguration.Current.Section.EnableLogging) return;
 
-            Task.Factory.StartNew(
-            () =>
+            try
             {
-                try
-                {
-                    merchelloContext.Services.AuditLogService.CreateAuditLogWithKey(key, entityType, message);
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.Error(typeof(SalesHistoryAuditingExtensions), string.Format("Failed to log {0} for entityType {1} with key {2}", message, entityType, key), ex);
-                }
-            });
+                merchelloContext.Services.AuditLogService.CreateAuditLogWithKey(key, entityType, message);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(typeof(SalesHistoryAuditingExtensions), string.Format("Failed to log {0} for entityType {1} with key {2}", message, entityType, key), ex);
+            }
         }
 
         /// <summary>

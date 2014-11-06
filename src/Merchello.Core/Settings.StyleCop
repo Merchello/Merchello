@@ -3,6 +3,7 @@
     <CollectionProperty Name="RecognizedWords">
       <Value>dto</Value>
       <Value>Lucene</Value>
+      <Value>merch</Value>
       <Value>Merchello</Value>
       <Value>Merchello's</Value>
       <Value>PetaPoco</Value>
@@ -34,6 +35,11 @@
           </RuleSettings>
         </Rule>
         <Rule Name="StaticReadonlyFieldsMustBeginWithUpperCaseLetter">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="FieldNamesMustNotUseHungarianNotation">
           <RuleSettings>
             <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>

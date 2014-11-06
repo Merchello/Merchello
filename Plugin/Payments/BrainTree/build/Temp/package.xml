@@ -3,7 +3,7 @@
 	<info>
 		<package>
 			<name>Merchello.AuthorizeNet.Payment</name>
-			<version>1.0.4</version>
+			<version>1.0.6</version>
             <license url="https://github.com/Merchello/Merchello/blob/master/License.md">MIT license</license>
             <url>http://our.umbraco.org/projects/website-utilities/merchello</url>
 			<requirements>
@@ -29,5 +29,5 @@ Plugin Payment Gateway Provider for Merchello.]]></readme>
 	<DataTypes />
 	<Actions />
 	<control />
-	<files><file><guid>a92a9c97-54ec-45fc-8f3f-c74a424a7424.dll</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll</orgName></file><file><guid>736e09c5-7996-42d8-9a5a-77528939a936.config</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll.config</orgName></file><file><guid>e271f0f5-e121-4b63-abc7-6412760e9004.pdb</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.pdb</orgName></file><file><guid>e5e82fa3-026c-4c61-8b6e-f929dea685ca.html</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>paymentmethod.html</orgName></file><file><guid>6d0c8eec-b658-4d13-8f14-3df7331f0866.html</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>providerSettingsDialog.html</orgName></file><file><guid>e1d5dec4-059e-4ca9-a6e2-4234d8a720fd.dll</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll</orgName></file><file><guid>25589963-d2c0-4c82-8b24-f26989e34171.config</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll.config</orgName></file><file><guid>abc3ef64-6873-400b-9e9b-fdba8b97acc2.pdb</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.pdb</orgName></file></files>
+	<files><file><guid>bda2a89f-d463-486a-8c72-326e7104274f.dll</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll</orgName></file><file><guid>9944530f-241c-4842-a31f-3d5f7cdb72ee.config</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll.config</orgName></file><file><guid>556188ea-b61e-4d42-9963-5359e74826cc.pdb</guid><orgPath>/AllBinaries</orgPath><orgName>Merchello.Plugin.Payments.Braintree.pdb</orgName></file><file><guid>2326bc3e-9c33-4dd7-87ec-0fef16d37c70.html</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>paymentmethod.html</orgName></file><file><guid>590ec325-7f44-44de-9422-735060fc6118.html</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>providerSettingsDialog.html</orgName></file><file><guid>913e334f-0558-4256-acb2-8fb87af7c2db.dll</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll</orgName></file><file><guid>7075063e-2f85-44e3-80ee-74968d18e7e4.config</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll.config</orgName></file><file><guid>9d679f86-eba4-440e-a911-f6403a3b63d7.pdb</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.pdb</orgName></file></files>
 </umbPackage>
