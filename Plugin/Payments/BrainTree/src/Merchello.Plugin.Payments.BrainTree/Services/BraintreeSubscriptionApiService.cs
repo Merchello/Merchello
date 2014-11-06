@@ -218,6 +218,9 @@ namespace Merchello.Plugin.Payments.Braintree.Services
             {
                 Updated.RaiseEvent(new SaveEventArgs<Subscription>(result.Target), this);
 
+                var cacheKey = MakeSubscriptionCacheKey(request.Id);
+                RuntimeCache.ClearCacheItem(cacheKey);
+
                 return Attempt<Subscription>.Succeed(result.Target);
             }
 

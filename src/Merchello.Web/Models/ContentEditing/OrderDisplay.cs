@@ -6,7 +6,7 @@
     /// <summary>
     /// The order display.
     /// </summary>
-    public class OrderDisplay
+    public class OrderDisplay : LineItemDisplayCollectionBase<OrderLineItemDisplay>
     {
         /// <summary>
         /// Gets or sets the key.
@@ -56,6 +56,6 @@
         /// <summary>
         /// Gets or sets the items.
         /// </summary>
-        public IEnumerable<OrderLineItemDisplay> Items { get; set; }
+        public override IEnumerable<OrderLineItemDisplay> Items { get; set; }
     }
 }
