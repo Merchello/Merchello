@@ -76,7 +76,7 @@
 
             
             var result = _processor.ProcessPayment(invoice, payment, transactionMode, amount, cc);
-
+            
             GatewayProviderService.Save(payment);
 
             if (!result.Payment.Success)
