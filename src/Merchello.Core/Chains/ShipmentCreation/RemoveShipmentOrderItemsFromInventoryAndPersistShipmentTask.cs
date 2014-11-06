@@ -86,7 +86,7 @@
 
             // persist the shipment and update the line items
             if (value.ShipMethodKey == Guid.Empty) value.ShipMethodKey = null;
-            _shipmentService.Save(value);
+            _shipmentService.Save(value);            
 
             return Attempt<IShipment>.Succeed(value);
         }

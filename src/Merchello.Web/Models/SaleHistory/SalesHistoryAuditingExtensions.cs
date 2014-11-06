@@ -57,7 +57,23 @@
             UpdateAuditLog(invoice.Key, EntityType.Invoice, obj.Serialize());
         }
 
+        /// <summary>
+        /// Logs an invoice status change
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        public static void AuditStatusChanged(this IInvoice invoice)
+        {
+            var obj = new
+            {
+                area = Area,
+                key = "invoiceStatusChanged",
+                invoiceStatus = invoice.InvoiceStatus.Name
+            };
 
+            UpdateAuditLog(invoice.Key, EntityType.Invoice, obj.Serialize());
+        }
 
         /// <summary>
         /// Logs the order creation
@@ -71,7 +87,7 @@
             {
                 area = Area,
                 key = "orderCreated",
-                invoiceNumber = order.PrefixedOrderNumber()
+                orderNumber = order.PrefixedOrderNumber()
             };
 
             UpdateAuditLog(order.Key, EntityType.Order, obj.Serialize());
@@ -106,7 +122,6 @@
         /// </param>
         public static void AuditCreated(this IShipment shipment)
         {            
-
             var obj = new
             {
                 area = Area,
@@ -114,9 +129,28 @@
                 itemCount = shipment.Items.Count.ToString(CultureInfo.InvariantCulture)
             };
 
+            UpdateAuditLog(shipment.Key, EntityType.Shipment, obj.Serialize());
+        }
+
+        /// <summary>
+        /// Logs a shipment status change
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        public static void AuditStatusChanged(this IShipment shipment)
+        {
+            var obj = new
+            {
+                area = Area,
+                key = "shipmentStatusChanged",
+                shipmentStatus = shipment.ShipmentStatus.Name
+            };
 
             UpdateAuditLog(shipment.Key, EntityType.Shipment, obj.Serialize());
         }
+
+       
 
         /// <summary>
         /// Logs an authorized payment

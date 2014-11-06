@@ -1,4 +1,6 @@
-﻿namespace Merchello.Web
+﻿using System.Runtime.InteropServices;
+
+namespace Merchello.Web
 {
     using System;
     using System.Linq;
@@ -76,8 +78,53 @@
 
             InvoiceService.Deleted += InvoiceServiceOnDeleted;
             OrderService.Deleted += OrderServiceOnDeleted;
+
+            // Auditing
+            PaymentGatewayMethodBase.VoidAttempted += PaymentGatewayMethodBaseOnVoidAttempted;
+
+            ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
         }
 
+        #region Shipment Audits
+
+        /// <summary>
+        /// Handles the <see cref="ShipmentService"/> status changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The event args
+        /// </param>
+        private void ShipmentServiceOnStatusChanged(IShipmentService sender, StatusChangeEventArgs<IShipment> e)
+        {
+            foreach (var shipment in e.StatusChangedEntities)
+            {
+                shipment.AuditStatusChanged();
+            }
+        }
+
+
+
+        #endregion
+
+        #region Payment Audits
+
+        /// <summary>
+        /// Handles the <see cref="PaymentGatewayMethodBase"/> Void Attempted
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The event args
+        /// </param>
+        private void PaymentGatewayMethodBaseOnVoidAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> e)
+        {
+            if (e.Entity.Payment.Success) e.Entity.Payment.Result.AuditPaymentVoided();
+        }
+
+        #endregion
 
         /// <summary>
         /// Handles the <see cref="InvoiceService"/> Deleted event
