@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
 using System.Xml.Linq;
@@ -74,7 +75,7 @@ namespace Merchello.Plugin.Payments.Chase
 			transaction["BIN"] = _settings.Bin;
             
             // Credit Card Number
-            transaction["AccountNum"] = creditCard.CardNumber;
+            transaction["AccountNum"] = creditCard.CardNumber.Replace(" ", "").Replace("-", "").Replace("|", "");
 
             transaction["OrderID"] = invoice.InvoiceNumber.ToString(CultureInfo.InstalledUICulture);
 
@@ -97,8 +98,13 @@ namespace Merchello.Plugin.Payments.Chase
 			transaction["CardSecVal"] = creditCard.CardCode;
 
             transaction["TraceNumber"] = invoice.InvoiceNumber.ToString();
-           
-            if (creditCard.CreditCardType.ToLower().Contains("visa"))
+
+            if (string.IsNullOrEmpty(creditCard.CreditCardType))
+            {
+                creditCard.CreditCardType = GetCreditCardType(creditCard.CardNumber);
+            }
+
+            if (creditCard.CreditCardType.ToLower().Contains("visa") || creditCard.CreditCardType.ToLower().Contains("chase"))
             {
                 transaction["CAVV"] = creditCard.AuthenticationVerification;
 
@@ -160,7 +166,10 @@ namespace Merchello.Plugin.Payments.Chase
             if (response.XML != null)
             {
                 var xml = XDocument.Parse(response.MaskedXML);
-                approvalStatus = xml.Descendants("ApprovalStatus").First().Value;
+                if (xml.Descendants("ApprovalStatus").FirstOrDefault() != null)
+                {
+                    approvalStatus = xml.Descendants("ApprovalStatus").First().Value;
+                }
             }
 
 
@@ -312,7 +321,7 @@ namespace Merchello.Plugin.Payments.Chase
             Paymentech.Response response;
 
             // Create an authorize transaction
-            var transaction = new Transaction(RequestType.NEW_ORDER_TRANSACTION);
+            var transaction = new Transaction(RequestType.ECOMMERCE_REFUND);
 
             var txRefNum = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber);
 
@@ -480,5 +489,64 @@ namespace Merchello.Plugin.Payments.Chase
         {
             get { return "7.3.0"; }
         }
+
+        protected const String AMEXPattern = @"^3[47][0-9]{13}$";
+        protected const String MasterCardPattern = @"^5[1-5][0-9]{14}$";
+        protected const String VisaCardPattern = @"^4[0-9]{12}(?:[0-9]{3})?$";
+        protected const String DinersClubCardPattern = @"^3(?:0[0-5]|[68][0-9])[0-9]{11}$";
+        protected const String enRouteCardPattern = @"^(2014|2149)";
+        protected const String DiscoverCardPattern = @"^6(?:011|5[0-9]{2})[0-9]{12}$";
+        protected const String JCBCardPattern = @"^(?:2131|1800|35\d{3})\d{11}$";
+
+        protected static NameValueCollection Patterns;
+        protected static NameValueCollection CardPatterns
+        {
+            get
+            {
+                if (Patterns == null)
+                {
+                    Patterns = new NameValueCollection
+                    {
+                        {"AMEX", AMEXPattern},
+                        {"MasterCard", MasterCardPattern},
+                        {"Visa", VisaCardPattern},
+                        {"DinersClub", DinersClubCardPattern},
+                        {"enRoute", enRouteCardPattern},
+                        {"Discover", DiscoverCardPattern},
+                        {"JCB", JCBCardPattern}
+                    };
+                }
+                return Patterns;
+            }
+            set
+            {
+                Patterns = value;
+            }
+        }
+
+        protected static string GetCreditCardType(string cardNumber)
+        {
+            var cardType = "Unknown";
+
+            try
+            {
+                var cardNum = cardNumber.Replace(" ", "").Replace("-", "").Replace("|","");
+                foreach (String cardTypeName in CardPatterns.Keys)
+                {
+                    var regex = new Regex(CardPatterns[cardTypeName]);
+                    if (regex.IsMatch(cardNum))
+                    {
+                        cardType = cardTypeName;
+                        break;
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return cardType.ToUpper();
+        }
+
     }
 }

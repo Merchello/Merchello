@@ -384,8 +384,8 @@ namespace Merchello.Tests.Chase.Integration
             Assert.AreEqual("0", result2.Payment.Result.ExtendedData.GetValue(Constants.ExtendedDataKeys.VoidProcStatus));
 
             // Log Results for certification    
-            TestHelper.LogInformation("Test 7 Section A", result);
-            TestHelper.LogInformation("Test 7 Section A", result2);
+            TestHelper.LogInformation("Test 7a Section A", result);
+            TestHelper.LogInformation("Test 7b Section A", result2);
         }
 
         [Test]
@@ -862,7 +862,7 @@ namespace Merchello.Tests.Chase.Integration
             const string cardType = "VISA";
             const string card = "4788250000028291";
             const string cardCode = "";
-            const string postalCode = "1111";
+            const string postalCode = "11111";
             const decimal amount = 38.01M;
 
             // Setup extended data for invoice
