@@ -127,7 +127,7 @@
                                                      totalWeight.ToString(CultureInfo.InvariantCulture) +
                                                      " which is outside any rate tier defined by the current rate table."));
 
-                return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, ShipMethod) {Rate = AdjustedRate(tier.Rate, province)});
+                return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, ShipMethod) { Rate = AdjustedRate(tier.Rate, province) });
         }
 
         /// <summary>
