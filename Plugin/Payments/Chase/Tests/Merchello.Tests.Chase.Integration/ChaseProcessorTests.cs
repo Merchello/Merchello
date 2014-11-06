@@ -2427,7 +2427,7 @@ namespace Merchello.Tests.Chase.Integration
             var ccEntry = TestHelper.GetCreditCardFormData(cardType, card, cardCode);
 
             // Act                                                                                                        
-            var result = _payment.AuthorizePayment(_invoice, ccEntry.AsProcessorArgumentCollection());
+            var result = _payment.AuthorizeCapturePayment(_invoice, amount, ccEntry.AsProcessorArgumentCollection());
             var result2 = _payment.RefundPayment(_invoice, result.Payment.Result, amount, ccEntry.AsProcessorArgumentCollection());
 
             // Assert
