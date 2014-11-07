@@ -6,7 +6,7 @@
     /// <summary>
     /// The shipment display.
     /// </summary>
-    public class ShipmentDisplay
+    public class ShipmentDisplay : LineItemDisplayCollectionBase<OrderLineItemDisplay>
     {
         /// <summary>
         /// Gets or sets the key.
@@ -161,6 +161,6 @@
         /// <summary>
         /// Gets or sets the items.
         /// </summary>
-        public IEnumerable<OrderLineItemDisplay> Items { get; set; }
+        public override IEnumerable<OrderLineItemDisplay> Items { get; set; }
     }
 }
