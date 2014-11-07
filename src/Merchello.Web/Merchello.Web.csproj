@@ -229,7 +229,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
-    <Compile Include="Models\ContentEditing\LineItemDisplayCollection.cs" />
+    <Compile Include="Models\ContentEditing\LineItemDisplayBase.cs" />
+    <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\MapperResolvers\EntityTypeResolver.cs" />
     <Compile Include="Models\Payments\PaymentResultDisplay.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
+    <Compile Include="Visitors\ILineItemDisplayVisitor.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
     <Compile Include="Workflow\Backoffice.cs" />
     <Compile Include="Workflow\BackofficeSalePreparation.cs" />

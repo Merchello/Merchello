@@ -1,9 +1,11 @@
-﻿namespace Merchello.Core.Models
+﻿namespace Merchello.Web.Visitors
 {
+    using Merchello.Web.Models.ContentEditing;
+
     /// <summary>
-    /// Defines a line item visitor
+    /// Defines a LineItemDisplayVisitor.
     /// </summary>
-    public interface ILineItemVisitor
+    public interface ILineItemDisplayVisitor
     {
         /// <summary>
         /// Executes the "visit"
@@ -14,6 +16,6 @@
         /// <remarks>
         /// This is the Visitor design pattern.  PluralSight has some great intros
         /// </remarks>
-        void Visit(ILineItem lineItem);
+        void Visit(LineItemDisplayBase lineItem);
     }
 }
