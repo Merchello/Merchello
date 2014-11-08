@@ -34,17 +34,25 @@
         /// <summary>
         /// Quotes all available ship methods
         /// </summary>
-        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        public override IEnumerable<IShipmentRateQuote> GetShipmentRateQuotes()
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IShipmentRateQuote"/>
+        /// </returns>
+        public override IEnumerable<IShipmentRateQuote> GetShipmentRateQuotes(bool tryGetCached = true)
         {
             var quotes = new List<IShipmentRateQuote>();
 
             foreach (var gwShipMethod in ShippingGatewayMethods)
             {
-                var rateQuote = TryGetCachedShipmentRateQuote(Shipment, gwShipMethod);
+                
+                var rateQuote = tryGetCached ? TryGetCachedShipmentRateQuote(Shipment, gwShipMethod) : default(ShipmentRateQuote);
 
                 if (rateQuote == null)
                 {
+                    RuntimeCache.ClearCacheItem(GetShipmentRateQuoteCacheKey(Shipment, gwShipMethod));
+
                     //// http://issues.merchello.com/youtrack/issue/M-458
                     //// Clones the shipment so that with each iteration so that we can have the same shipment
                     //// with different ship methods
