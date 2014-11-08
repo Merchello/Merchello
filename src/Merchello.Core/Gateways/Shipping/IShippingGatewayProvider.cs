@@ -73,8 +73,11 @@ namespace Merchello.Core.Gateways.Shipping
         /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/> to be quoted</param>
+        /// <param name="tryGetCached">
+        /// The try Get Cached.
+        /// </param>
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        IEnumerable<IShipmentRateQuote> QuoteShippingGatewayMethodsForShipment(IShipment shipment);
+        IEnumerable<IShipmentRateQuote> QuoteShippingGatewayMethodsForShipment(IShipment shipment, bool tryGetCached = true);
 
         /// <summary>
         /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment

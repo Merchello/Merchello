@@ -43,11 +43,12 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
                 shipment.Items.Accept(visitor);
 
                 var province = ShipMethod.Provinces.FirstOrDefault(x => x.Code == shipment.ToRegion);
-                                                  
+                                          
+                // JASON: Removing Cache check as the strategy handles this. (However, the Provider is getting quotes to know what methods to return...)
                 var collection = GetCollectionFromCache(shipment);
 
-                if (collection == null)
-                {
+                //if (collection == null)
+                //{
                     try
                     {
                         var http = new UpsHttpRequestHandler();
@@ -65,7 +66,7 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
                                           " Please contact your administrator or try again."));
                     }
 
-                }
+                //}
                 var shippingPrice = 0M;
 
                 var firstCarrierRate = collection.FirstOrDefault(option => option.Service == _shipMethod.ServiceCode);
