@@ -116,6 +116,9 @@ namespace Merchello.Web.Models.ContentEditing
 					case "nextInvoiceNumber":
 						setting.Value = settingDisplay.NextInvoiceNumber.ToString();	 
 						break;
+                    case "nextShipmentNumber":
+				        setting.Value = settingDisplay.NextShipmentNumber.ToString();
+				        break;
 					case "dateFormat":
 						setting.Value = settingDisplay.DateFormat;					 
 						break;

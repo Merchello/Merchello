@@ -157,6 +157,7 @@
     <key alias="startingOrderNumber">Número de pedido desde</key>
     <key alias="timeFormat">Formato horario</key>
     <key alias="startingInvoiceNumber">Número de factura desde</key>
+    <key alias="startingShipmentNumber">Starting Shipment No.</key>
     <key alias="catalogDefaults">Configuración del catálogo</key>
     <key alias="catalogDefaultsHelper">Configura las opciones por defecto del producto. Puedes cambiarlo después en cada producto.</key>
     <key alias="globalTaxable">Todos los productos están sujetos a impuestos</key>
