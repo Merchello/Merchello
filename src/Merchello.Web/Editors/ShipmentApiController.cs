@@ -237,16 +237,22 @@ namespace Merchello.Web.Editors
                 }
 
                 merchShipment = shipment.ToShipment(merchShipment);
-                if (order.Items.Count() == shipment.Items.Count())
-                {
-                    merchShipment.AuditCreated();
-                    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
-                }
-                else
-                {
-                    merchShipment.AuditCreated();            
-                    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
-                }
+
+                var status = _shipmentService.GetShipmentStatusByKey(shipmentOrder.ShipmentDisplay.ShipmentStatusKey);
+
+                merchShipment.ShipmentStatus = status;
+
+                // TODO this needs to be refactored in 1.5.1
+                //if (order.Items.Count() == shipment.Items.Count())
+                //{
+                //    merchShipment.AuditCreated();
+                //    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
+                //}
+                //else
+                //{
+                //    merchShipment.AuditCreated();            
+                //    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
+                //}
 
                 _shipmentService.Save(merchShipment);
 

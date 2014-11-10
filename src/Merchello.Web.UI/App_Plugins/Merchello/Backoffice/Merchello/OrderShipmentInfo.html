@@ -36,19 +36,19 @@
                                 <tbody>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Provider</th>
+                                        <!--<th>Provider</th>-->
                                         <th>Items</th>
                                         <th>Street</th>
                                         <th>Tracking #</th>
-                                        <th>Actions</th>
+                                        <!--th>Actions</th-->
                                     </tr>
                                     <tr data-ng-repeat="shipment in invoice.shipments">
                                         <td>{{formatDate(shipment.shippedDate)}}</td>
-                                        <td>{{shipment.carrier}}</td>
+                                        <!--<td>{{shipment.carrier}}</td>-->
                                         <td>{{shipment.items.length}}</td>
                                         <td>{{shipment.toAddress1}}</td>
                                         <td>{{shipment.trackingCode}}</td>
-                                        <td><a href="#">Edit</a></td>
+                                        <!--td><a href="#">Edit</a></td-->
                                     </tr>
                                 </tbody>
                             </table>
