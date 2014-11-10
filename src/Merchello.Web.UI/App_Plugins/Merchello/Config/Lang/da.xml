@@ -162,6 +162,7 @@
     <key alias="startingOrderNumber">Startende ordre nummer</key>
     <key alias="timeFormat">Format for dato/tid</key>
     <key alias="startingInvoiceNumber">Startende faktura nummer</key>
+    <key alias="startingShipmentNumber">Starting Shipment No.</key>
     <key alias="catalogDefaults">Standard Katalog</key>
     <key alias="catalogDefaultsHelper">Opsæt standard katelog enheders (produkt) muligheder. Kan ændres pr. enhed senere.</key>
     <key alias="globalTaxable">Alle enheder er momspligtige</key>

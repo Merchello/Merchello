@@ -49,6 +49,13 @@ namespace Merchello.Web.Models.ContentEditing
 						}
 						settingDisplay.NextInvoiceNumber = intValue;
 						break;
+                    case "nextShipmentNumber":
+				        if (!int.TryParse(setting.Value, out intValue))
+				        {
+				            intValue = 0;
+				        }
+				        settingDisplay.NextShipmentNumber = intValue;
+				        break;
 					case "dateFormat":
 						settingDisplay.DateFormat = setting.Value;
 						break;
@@ -109,6 +116,9 @@ namespace Merchello.Web.Models.ContentEditing
 					case "nextInvoiceNumber":
 						setting.Value = settingDisplay.NextInvoiceNumber.ToString();	 
 						break;
+                    case "nextShipmentNumber":
+				        setting.Value = settingDisplay.NextShipmentNumber.ToString();
+				        break;
 					case "dateFormat":
 						setting.Value = settingDisplay.DateFormat;					 
 						break;
