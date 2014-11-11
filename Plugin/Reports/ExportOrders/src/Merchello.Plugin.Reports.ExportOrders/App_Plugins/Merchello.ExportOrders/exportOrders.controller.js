@@ -8,20 +8,30 @@
      * @description
      * The controller for the reports Export Orders page
      */
-    controllers.ExportOrdersController = function ($scope) {
+    controllers.ExportOrdersController = function ($scope, merchelloPluginReportOrderExportService) {
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
 
         $scope.exportStatus = "";
 
-        $scope.exportOrders = function() {
-            $scope.exportStatus = "Export Orders button was clicked!";
+        $scope.exportOrders = function () {
+            $scope.exportStatus = "Exporting Orders!";
+            var promise = merchelloPluginReportOrderExportService.getAllOrders();
+            promise.then(function (data) {
+                $scope.loaded = true;
+                $scope.invoices = data;
+                $scope.exportStatus = "Download";
+            });
+        }
+
+        $scope.finishDownload = function () {
+            $scope.exportStatus = "";
         }
     };
 
 
-    angular.module("umbraco").controller("Merchello.Plugins.Reports.ExportOrders", ['$scope', merchello.Controllers.ExportOrdersController]);
+    angular.module("umbraco").controller("Merchello.Plugins.Reports.ExportOrders", ['$scope', 'merchelloPluginReportOrderExportService', merchello.Controllers.ExportOrdersController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
