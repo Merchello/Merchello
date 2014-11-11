@@ -407,6 +407,7 @@ namespace Merchello.Web.Models.ContentEditing
 			destination.VersionKey = shipmentDisplay.VersionKey;
 			destination.Carrier = shipmentDisplay.Carrier;
 			destination.TrackingCode = shipmentDisplay.TrackingCode;
+		    destination.ShipmentStatus = shipmentDisplay.ShipmentStatus.ToShipmentStatus();
 
 			var existing = shipmentDisplay.Items.Where(x => x.Key != Guid.Empty);
 			var removed = destination.Items.Where(x => x.Key != Guid.Empty && existing.All(y => y.Key != x.Key)).ToArray();
@@ -420,6 +421,11 @@ namespace Merchello.Web.Models.ContentEditing
 
 			return destination;
 		}
+
+	    internal static ShipmentStatus ToShipmentStatus(this ShipmentStatusDisplay status)
+	    {
+	        return AutoMapper.Mapper.Map<ShipmentStatus>(status);
+	    }
 
 		#endregion
 

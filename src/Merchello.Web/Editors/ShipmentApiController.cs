@@ -197,7 +197,7 @@ namespace Merchello.Web.Editors
                 
                 var merchOrder = _orderService.GetByKey(order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key));
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key), Constants.DefaultKeys.ShipmentStatus.Quoted);
 
                 var attempt = builder.Build();
                 
@@ -238,9 +238,6 @@ namespace Merchello.Web.Editors
 
                 merchShipment = shipment.ToShipment(merchShipment);
 
-                var status = _shipmentService.GetShipmentStatusByKey(shipmentOrder.ShipmentDisplay.ShipmentStatusKey);
-
-                merchShipment.ShipmentStatus = status;
 
                 // TODO this needs to be refactored in 1.5.1
                 //if (order.Items.Count() == shipment.Items.Count())
