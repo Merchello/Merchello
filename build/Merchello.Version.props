@@ -13,12 +13,12 @@
         <BuildConfiguration>Release</BuildConfiguration>
         <ReleaseAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch)</ReleaseAssemblyInformationVersion>
         <DevAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)</DevAssemblyInformationVersion>
-        <AssemblyInformationVersion>$(DevAssemblyInformationVersion)</AssemblyInformationVersion>
+        <AssemblyInformationVersion>$(ReleaseAssemblyInformationVersion)</AssemblyInformationVersion>
 
 
         <UmbracoVersionMajor>7</UmbracoVersionMajor>
         <UmbracoVersionMinor>1</UmbracoVersionMinor>
-        <UmbracoVersionPatch>7</UmbracoVersionPatch>
+        <UmbracoVersionPatch>8</UmbracoVersionPatch>
         <UmbracoVersionSuffix>0</UmbracoVersionSuffix>
         <UmbracoVersion>$(UmbracoVersionMajor).$(UmbracoVersionMinor).$(UmbracoVersionPatch)</UmbracoVersion>
         
