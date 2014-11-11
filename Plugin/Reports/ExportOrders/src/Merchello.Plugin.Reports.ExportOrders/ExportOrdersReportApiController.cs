@@ -122,8 +122,9 @@ namespace Merchello.Plugin.Reports.ExportOrders
                 {
                     csvExport.AddRow();
 
-                    csvExport["Number"] = invoice.InvoiceNumber;
-                    csvExport["Date"] = invoice.InvoiceDate;
+                    csvExport["Invoice Number"] = invoice.InvoiceNumber;
+                    csvExport["PO Number"] = invoice.PoNumber;
+                    csvExport["Order Date"] = invoice.InvoiceDate;
                     csvExport["Bill To Name"] = invoice.BillToName;
                     csvExport["Bill To Company"] = invoice.BillToCompany;
                     csvExport["Bill To Address"] = invoice.BillToAddress1;
@@ -138,7 +139,6 @@ namespace Merchello.Plugin.Reports.ExportOrders
 
                     foreach (var invoiceItems in invoice.Items)
                     {
-
                         foreach (var invoiceItem in invoice.Items)
                         {
                             if (invoiceItem.LineItemType == LineItemType.Product)
