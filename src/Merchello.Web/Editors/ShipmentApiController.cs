@@ -197,7 +197,7 @@ namespace Merchello.Web.Editors
                 
                 var merchOrder = _orderService.GetByKey(order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key));
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key), Constants.DefaultKeys.ShipmentStatus.Quoted);
 
                 var attempt = builder.Build();
                 
@@ -237,16 +237,19 @@ namespace Merchello.Web.Editors
                 }
 
                 merchShipment = shipment.ToShipment(merchShipment);
-                if (order.Items.Count() == shipment.Items.Count())
-                {
-                    merchShipment.AuditCreated();
-                    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
-                }
-                else
-                {
-                    merchShipment.AuditCreated();            
-                    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
-                }
+
+
+                // TODO this needs to be refactored in 1.5.1
+                //if (order.Items.Count() == shipment.Items.Count())
+                //{
+                //    merchShipment.AuditCreated();
+                //    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
+                //}
+                //else
+                //{
+                //    merchShipment.AuditCreated();            
+                //    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
+                //}
 
                 _shipmentService.Save(merchShipment);
 

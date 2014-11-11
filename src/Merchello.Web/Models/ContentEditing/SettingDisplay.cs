@@ -21,6 +21,11 @@
         public int NextInvoiceNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets the next shipment number.
+        /// </summary>
+        public int NextShipmentNumber { get; set; }
+
+        /// <summary>
         /// Gets or sets the date format.
         /// </summary>
         public string DateFormat { get; set; }

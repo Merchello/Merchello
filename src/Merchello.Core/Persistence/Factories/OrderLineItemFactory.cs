@@ -14,6 +14,7 @@ namespace Merchello.Core.Persistence.Factories
                 string.IsNullOrEmpty(dto.ExtendedData) ? new ExtendedDataCollection() : new ExtendedDataCollection(dto.ExtendedData))
             {
                 Key = dto.Key,
+                ShipmentKey = dto.ShipmentKey,
                 ContainerKey = dto.ContainerKey,
                 BackOrder = dto.BackOrder,
                 Exported = dto.Exported,
@@ -31,6 +32,7 @@ namespace Merchello.Core.Persistence.Factories
             var dto = new OrderItemDto()
             {
                 Key = entity.Key,
+                ShipmentKey = entity.ShipmentKey,
                 ContainerKey = entity.ContainerKey,
                 LineItemTfKey = entity.LineItemTfKey,
                 Sku = entity.Sku,

@@ -172,6 +172,7 @@
     <key alias="timeFormat">Time Format</key>   
     <key alias="unitSystem">Unit System</key>
     <key alias="startingInvoiceNumber">Starting Invoice No.</key>
+    <key alias="startingShipmentNumber">Starting Shipment No.</key>
     <key alias="catalogDefaults">Catalog Defaults</key>
     <key alias="catalogDefaultsHelper">Set the default catalog item (product) options. Can be changed later on a per item basis.</key>
     <key alias="globalTaxable">All items are taxable</key>
