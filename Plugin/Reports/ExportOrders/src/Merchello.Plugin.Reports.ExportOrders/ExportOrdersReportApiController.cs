@@ -91,7 +91,7 @@ namespace Merchello.Plugin.Reports.ExportOrders
             sb.Append(extendedData.Address1).AppendLine();
             if (extendedData.Address2.Length > 0)
             {
-                sb.Append(extendedData.Address1).AppendLine();
+                sb.Append(extendedData.Address2).AppendLine();
             }
             sb.AppendFormat("{0},{1} {2}", extendedData.Locality, extendedData.Region, extendedData.PostalCode).AppendLine();
             sb.Append(extendedData.CountryCode);
