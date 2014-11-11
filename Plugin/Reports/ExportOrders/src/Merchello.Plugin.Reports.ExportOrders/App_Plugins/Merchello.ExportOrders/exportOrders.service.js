@@ -10,20 +10,18 @@
 
         return {
 
-            //getOrder: function (orderKey) {
+            getAllOrders: function () {
 
-            //    return umbRequestHelper.resourcePromise(
-            //        $http({
-            //            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetOrder'),
-            //            method: "GET",
-            //            params: { id: orderKey }
-            //        }),
-            //        'Failed to get order: ' + orderKey);
-            //},
-
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloReportExportOrders', 'GetOrderReportData'),
+                        method: "GET"
+                    }),
+                    'Failed to get orders');
+            }
         };
     };
 
-    angular.module('umbraco.resources').factory('merchelloOrderService', ['$http', 'umbRequestHelper', merchello.Services.ReportPluginExportOrders]);
+    angular.module('umbraco.resources').factory('merchelloPluginReportOrderExportService', ['$http', 'umbRequestHelper', merchello.Services.ReportPluginExportOrders]);
 
 }(window.merchello.Services = window.merchello.Services || {}));
