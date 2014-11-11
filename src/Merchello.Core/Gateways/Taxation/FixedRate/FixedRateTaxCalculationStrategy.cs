@@ -63,7 +63,7 @@
 
                 Invoice.Items.Accept(visitor);
 
-                var totalTax = visitor.TaxableLineItems.Sum(x => decimal.Parse(x.ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.LineItemTaxAmount)));
+                var totalTax = visitor.TaxableLineItems.Sum(x => decimal.Parse(x.ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.LineItemTaxAmount), CultureInfo.InvariantCulture));
 
                 return Attempt<ITaxCalculationResult>.Succeed(
                     new TaxCalculationResult(_taxMethod.Name, baseTaxRate, totalTax, extendedData));

@@ -49,6 +49,7 @@
     <key alias="mustUniqueSku">Skal have en unik SKU</key>
     <key alias="inventoryWarning"><![CDATA[<p>Vigtigt: Hvis du vælger at spore lagerbeholdningen skal det opsættes manuelt for hver enkelt variant (Herunder), når produktet er gemt. Du kan opsætte en basis lagerbeholdning som tilknyttes <strong>alle varianter</strong> her.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Dette vil opsætte en start lagerbeholdning for <strong>alle varianter</strong> og <strong>alle lagre</strong>)]]></key> <!-- WHat is this?-->
+    <key alias="productOnSale">Product on sale</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->
@@ -161,6 +162,7 @@
     <key alias="startingOrderNumber">Startende ordre nummer</key>
     <key alias="timeFormat">Format for dato/tid</key>
     <key alias="startingInvoiceNumber">Startende faktura nummer</key>
+    <key alias="startingShipmentNumber">Starting Shipment No.</key>
     <key alias="catalogDefaults">Standard Katalog</key>
     <key alias="catalogDefaultsHelper">Opsæt standard katelog enheders (produkt) muligheder. Kan ændres pr. enhed senere.</key>
     <key alias="globalTaxable">Alle enheder er momspligtige</key>
@@ -334,8 +336,10 @@
     <key alias="invoiceDeleted">Invoice %0% was deleted</key>
     <key alias="paymentDeleted">Payment was deleted</key>
     <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
+    <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
     <key alias="orderCreated">Order %0% was created</key>
-    <key alias="shipmentCreated">We successfully fulfilled %0% line items</key>
+    <key alias="shipmentCreated">Shipment was created with %0% line items</key>
+    <key alas="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
   
 </language>

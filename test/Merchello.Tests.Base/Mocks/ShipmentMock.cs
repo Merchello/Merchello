@@ -9,6 +9,10 @@
     {
         public ShipmentMock(IAddress origin, IAddress destination, LineItemCollection items)
         {
+
+            ShipmentNumber = 1;
+            ShipmentStatus = new ShipmentStatusMock();
+
             this.ShippedDate = DateTime.Now;
             this.FromOrganization = origin.Organization;
             this.FromName = origin.Name;
@@ -39,6 +43,10 @@
 
         public LineItemCollection Items { get; private set; }
 
+        public string ShipmentNumberPrefix { get; set; }
+        public int ShipmentNumber { get; set; }
+        public Guid ShipmentStatusKey { get { return ShipmentStatus.Key; } }
+        public IShipmentStatus ShipmentStatus { get; set; }
         public DateTime ShippedDate { get; set; }
 
         public string FromOrganization { get; set; }

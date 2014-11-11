@@ -166,7 +166,7 @@
                 }
                 else
                 {
-                    if(province.AllowShipping) available.Add(gwshipmethod);
+                    if (province.AllowShipping) available.Add(gwshipmethod);
                 }
             }
 
@@ -176,13 +176,13 @@
         /// <summary>
         /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
         /// </summary>
-        /// <param name="shipment"><see cref="IShipmentRateQuote"/></param>
+        /// <param name="shipment">The <see cref="IShipmentRateQuote"/></param>
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
         public virtual IEnumerable<IShipmentRateQuote> QuoteShippingGatewayMethodsForShipment(IShipment shipment)
         {
             var gatewayShipMethods = GetShippingGatewayMethodsForShipment(shipment);
 
-            var ctrValues = new object[] {shipment, gatewayShipMethods.ToArray(), RuntimeCache};
+            var ctrValues = new object[] { shipment, gatewayShipMethods.ToArray(), RuntimeCache };
 
             var typeName = MerchelloConfiguration.Current.GetStrategyElement(Constants.StrategyTypeAlias.DefaultShipmentRateQuote).Type;
             

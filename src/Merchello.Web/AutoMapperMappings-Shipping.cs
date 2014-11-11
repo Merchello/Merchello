@@ -41,6 +41,8 @@
             AutoMapper.Mapper.CreateMap<IShipRateTier, ShipRateTierDisplay>();
 
             // Shipment
+            AutoMapper.Mapper.CreateMap<IShipmentStatus, ShipmentStatusDisplay>();
+            AutoMapper.Mapper.CreateMap<ShipmentStatusDisplay, ShipmentStatus>();
             AutoMapper.Mapper.CreateMap<IShipment, ShipmentDisplay>();
         }
     }

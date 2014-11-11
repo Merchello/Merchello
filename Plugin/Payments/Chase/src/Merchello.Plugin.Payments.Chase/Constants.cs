@@ -54,9 +54,19 @@
             public static string AvsResult = "chaseAvsResult";
 
             /// <summary>
+            /// The avs result.
+            /// </summary>
+            public static string Cvv2Result = "chaseCvv2Result";
+
+            /// <summary>
             /// The authorization transaction result.
             /// </summary>
             public static string TransactionReferenceNumber = "txRefNum";
+
+            /// <summary>
+            /// The authorization transaction result.
+            /// </summary>
+            public static string TransactionReferenceIndex = "txRefIdx";
 
             /// <summary>
             /// The capture declined result.
@@ -82,6 +92,12 @@
             /// The void declined result.
             /// </summary>
             public static string VoidDeclinedResult = "chaseVoidDeclined";
+
+            /// <summary>
+            /// The void proc status result.
+            /// </summary>
+            public static string VoidProcStatus = "chaseVoidProcStatus";
+
         }
     }
 }

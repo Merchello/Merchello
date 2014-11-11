@@ -10,7 +10,7 @@
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <!-- ACTION: Refund -->
-                    <button type="button" class="btn btn-default btn-trash" data-ng-click="">Refund</button>
+                    <!--<button type="button" class="btn btn-default btn-trash" data-ng-click="">Refund</button>-->
                 </div>
             </div>
         </umb-header>
@@ -113,8 +113,8 @@
                         <span class="tel" data-ng-show="invoice.billToPhone != ''">Phone: {{invoice.billToPhone}}</span>
                         <span data-ng-show="invoice.billToEmail != ''"><a data-ng-href="mailto:{{invoice.billToEmail}}" class="email">{{invoice.billToEmail}}</a></span>
                     </div>
-                    <h3><localize key="merchelloOrderView_shippingAddress" /></h3><br />
-                    <div class="vcard">
+                    <h3 data-ng-show="shippingAddress == '{}'"><localize key="merchelloOrderView_shippingAddress" /></h3><br data-ng-show="shippingAddress == '{}'" />
+                    <div class="vcard" data-ng-show="shippingAddress == '{}'">
                         <span class="fn" data-ng-show="shippingAddress.name != null">{{shippingAddress.name}}</span>
                         <span class="org" data-ng-show="shippingAddress.organization != null">{{shippingAddress.organization}}</span>
                         <span class="adr">
@@ -126,6 +126,10 @@
                         <span class="tel" data-ng-show="shippingAddress.phone != null">Phone: {{shippingAddress.phone}}</span>
                     </div>
                 </div>
+                <!-- ACTION: Open Shipments Page -->
+                <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderShipmentInfo/{{invoice.key}}" data-ng-show="hasShipments()">Shipments</a>
+                <!-- ACTION: Open Payments Page -->
+                <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderPaymentInfo/{{invoice.key}}" data-ng-show="hasAppliedPayments()">Payments</a>
             </div>
             <!-- Debug -->
             <merchello-debug-section data-props-to-debug="invoice"></merchello-debug-section>

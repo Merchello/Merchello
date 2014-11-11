@@ -1,0 +1,43 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+
+<div data-ng-controller="Merchello.Plugins.Reports.ExportOrders" data-ng-show="loaded">
+
+    <umb-panel>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline">Reports - Export Orders</h1>
+                </div>
+            </div>
+
+<div class="span8">
+    <div class="btn-toolbar pull-right umb-btn-toolbar">
+
+        <div class="btn-group">
+            <a ng-href data-ng-click="exportOrders()" class="btn btn-primary">Export</a>
+
+        </div>
+    </div>
+</div>
+
+        </umb-header>
+
+<merchello-panel>
+
+    <div class="merchello-pane row-fluid">
+
+        <div>
+            Export Status:
+            <div class="well">
+                <a ng-href="/orders.csv" download="orders.csv" data-ng-click="finishDownload()" class="download_file">{{exportStatus}}</a>
+            </div>
+        </div>
+    </div>
+
+</merchello-panel>
+
+    </umb-panel>
+</div>

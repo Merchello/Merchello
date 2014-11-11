@@ -6,6 +6,7 @@ using Merchello.Core.Models;
 using Merchello.Core.Observation;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
+using Merchello.Tests.Base.TestHelpers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using NUnit.Framework;
 

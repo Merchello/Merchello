@@ -6,6 +6,7 @@ using Merchello.Core.Gateways;
 using Merchello.Core.Observation;
 using Merchello.Core.Persistence.UnitOfWork;
 using Merchello.Core.Services;
+using Merchello.Tests.Base.TestHelpers;
 using Merchello.Web;
 using NUnit.Framework;
 using Umbraco.Core;

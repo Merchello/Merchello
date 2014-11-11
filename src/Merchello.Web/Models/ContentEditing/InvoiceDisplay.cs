@@ -9,7 +9,7 @@
     /// <summary>
     /// The invoice display.
     /// </summary>
-    public class InvoiceDisplay
+    public class InvoiceDisplay : LineItemDisplayCollectionBase<InvoiceLineItemDisplay>
     {
         /// <summary>
         /// Gets or sets the key.
@@ -129,7 +129,7 @@
         /// <summary>
         /// Gets or sets the items.
         /// </summary>
-        public IEnumerable<InvoiceLineItemDisplay> Items { get; set; }
+        public override IEnumerable<InvoiceLineItemDisplay> Items { get; set; }
     }
 
     /// <summary>

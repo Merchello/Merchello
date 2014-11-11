@@ -64,12 +64,12 @@
         /// <param name="sender">
         /// The sender.
         /// </param>
-        /// <param name="paymentAttemptEventArgs">
+        /// <param name="e">
         /// The payment attempt event args.
         /// </param>
-        private void PaymentGatewayMethodBaseOnCaptureAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> paymentAttemptEventArgs)
+        private void PaymentGatewayMethodBaseOnCaptureAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> e)
         {
-            CreateOrder(paymentAttemptEventArgs.Entity);
+            CreateOrder(e.Entity);
         }
 
         /// <summary>
@@ -78,12 +78,12 @@
         /// <param name="sender">
         /// The sender.
         /// </param>
-        /// <param name="paymentAttemptEventArgs">
+        /// <param name="e">
         /// The payment attempt event args.
         /// </param>
-        private void PaymentGatewayMethodBaseOnAuthorizeCaptureAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> paymentAttemptEventArgs)
+        private void PaymentGatewayMethodBaseOnAuthorizeCaptureAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> e)
         {
-            CreateOrder(paymentAttemptEventArgs.Entity);
+            CreateOrder(e.Entity);
         }
 
         /// <summary>
@@ -92,12 +92,12 @@
         /// <param name="sender">
         /// The sender.
         /// </param>
-        /// <param name="paymentAttemptEventArgs">
+        /// <param name="e">
         /// The payment attempt event args.
         /// </param>
-        private void PaymentGatewayMethodBaseOnAuthorizeAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> paymentAttemptEventArgs)
+        private void PaymentGatewayMethodBaseOnAuthorizeAttempted(PaymentGatewayMethodBase sender, PaymentAttemptEventArgs<IPaymentResult> e)
         {
-            CreateOrder(paymentAttemptEventArgs.Entity);
+            CreateOrder(e.Entity);
         }
         
 

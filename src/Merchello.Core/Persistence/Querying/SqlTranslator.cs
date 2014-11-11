@@ -22,9 +22,9 @@ namespace Merchello.Core.Persistence.Querying
                 throw new Exception("Query cannot be null");
 
             _sql = sql;
-            foreach (var clause in query1.WhereClauses())
+            foreach (var clause in query1.GetWhereClauses())
             {
-                _sql.Where(clause);
+                _sql.Where(clause.Item1, clause.Item2);
             }
         }
 

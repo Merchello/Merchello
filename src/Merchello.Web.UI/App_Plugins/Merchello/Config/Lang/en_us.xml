@@ -51,6 +51,7 @@
 		<key alias="mustUniqueSku">Must have a unique SKU</key>
 		<key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
 		<key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
+    <key alias="productOnSale">Product on sale</key>
   </area>
 	<area alias="merchelloOrder">
 		<!-- things -->
@@ -171,6 +172,7 @@
     <key alias="startingOrderNumber">Starting Order No.</key>
     <key alias="timeFormat">Time Format</key>
     <key alias="startingInvoiceNumber">Starting Invoice No.</key>
+    <key alias="startingShipmentNumber">Starting Shipment No.</key>
     <key alias="catalogDefaults">Catalog Defaults</key>
     <key alias="catalogDefaultsHelper">Set the default catalog item (product) options. Can be changed later on a per item basis.</key>
     <key alias="globalTaxable">All items are taxable</key>
@@ -346,7 +348,9 @@
     <key alias="invoiceDeleted">Invoice %0% was deleted</key>
     <key alias="paymentDeleted">Payment was deleted</key>
     <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
+    <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
     <key alias="orderCreated">Order %0% was created</key>
-    <key alias="shipmentCreated">We successfully fulfilled %0% line items</key>
+    <key alias="shipmentCreated">Shipment was created with %0% line items</key>
+    <key alas="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
 </language>

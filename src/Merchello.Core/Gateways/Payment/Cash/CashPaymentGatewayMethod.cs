@@ -121,7 +121,6 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-
             foreach (var applied in payment.AppliedPayments())
             {
                 applied.TransactionType = AppliedPaymentType.Refund;

@@ -85,7 +85,29 @@
         /// <returns>
         /// The collection of all <see cref="IProduct"/>.
         /// </returns>
-        IEnumerable<IProduct> GetAll(); 
+        IEnumerable<IProduct> GetAll();
+
+        /// <summary>
+        /// The get product variants by product key.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariant}"/>.
+        /// </returns>
+        IEnumerable<IProductVariant> GetProductVariantsByProductKey(Guid productKey);
+
+        /// <summary>
+        /// The get product variant by key.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        IProductVariant GetProductVariantByKey(Guid productVariantKey);
 
         /// <summary>
         /// Returns the count of all products
