@@ -375,6 +375,7 @@
 			self.trackingCode = "";
 			self.shippedDate = "";
 			self.items = [];
+			self.shipmentStatus = new merchello.Models.ShipmentStatus();
 		} else {
 			self.key = data.key;
 			self.versionKey = data.versionKey;
@@ -405,7 +406,29 @@
 			self.items = _.map(data.items, function (lineitem) {
 				return new merchello.Models.OrderLineItem(lineitem);
 			});
+			self.shipmentStatus = new merchello.Models.ShipmentStatus(data.shipmentStatus);
 		}
+	};
+
+	models.ShipmentStatus = function (data) {
+
+	    var self = this;
+
+	    if (data == undefined) {
+	        self.key = "";
+	        self.name = "";
+	        self.alias = "";
+	        self.reportable = "";
+	        self.active = "";
+	        self.sortOrder = "";
+	    } else {
+	        self.key = data.key;
+	        self.name = data.name;
+	        self.alias = data.alias;
+	        self.reportable = data.reportable;
+	        self.active = data.active;
+	        self.sortOrder = data.sortOrder;
+	    }
 	};
 
 	models.OrderSummary = function (data) {
