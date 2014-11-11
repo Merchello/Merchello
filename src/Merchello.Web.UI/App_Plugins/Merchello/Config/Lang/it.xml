@@ -49,6 +49,7 @@
 		<key alias="mustUniqueSku">Deve avere un univoco SKU</key>
 		<key alias="inventoryWarning"><![CDATA[<p>Importante: se si sceglie di gestire la disponibilità, si deve settare manualmente ogni variante (lista sotto) una volta che questo prodotto venga salvato. Comunque, puoi settare una dispobibilità di default da applicare a <strong>tutte le varianti</strong>.</p>]]></key>
 		<key alias="startingInventoryWarning"><![CDATA[(Verrà impostata la disponibilità per <strong>tutte le varianti</strong> e <strong>tutti i magazzini</strong>)]]></key>
+    <key alias="productOnSale">Product on sale</key>
   </area>
 	<area alias="merchelloOrder">
 		<!-- things -->
@@ -156,6 +157,7 @@
     <key alias="startingOrderNumber">Número de pedido desde</key>
     <key alias="timeFormat">Formato ora</key>
     <key alias="startingInvoiceNumber">Numero fattura iniziale</key>
+    <key alias="startingShipmentNumber">Starting Shipment No.</key>
     <key alias="catalogDefaults">Impostazioni del catalogo</key>
     <key alias="catalogDefaultsHelper">Consente di impostare le opzioni predefinite del catalogo. Potranno comunque essere cambiate nelle impostazioni di ciascun prodotto.</key>
     <key alias="globalTaxable">Tutti i prodotti sono tassabili</key>
@@ -327,8 +329,10 @@
     <key alias="invoiceDeleted">Invoice %0% was deleted</key>
     <key alias="paymentDeleted">Payment was deleted</key>
     <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
+    <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
     <key alias="orderCreated">Order %0% was created</key>
-    <key alias="shipmentCreated">We successfully fulfilled %0% line items</key>
+    <key alias="shipmentCreated">Shipment was created with %0% line items</key>
+    <key alas="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
   
 </language>

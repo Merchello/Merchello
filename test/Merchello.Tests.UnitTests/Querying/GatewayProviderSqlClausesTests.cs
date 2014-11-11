@@ -23,7 +23,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchGatewayProviderSettings]")
-                .Where("[merchGatewayProviderSettings].[pk] = '" + key.ToString() + "'");
+                .Where("[merchGatewayProviderSettings].[pk] = @0", new { key });
 
             //// Act
             var sql = new Sql();

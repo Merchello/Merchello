@@ -355,6 +355,35 @@
         }
 
         /// <summary>
+        /// Gets the next usable ShipmentNumber.
+        /// </summary>
+        /// <param name="shipmentsCount">
+        /// The shipments count.
+        /// </param>
+        /// <returns>
+        /// The next shipment number.
+        /// </returns>
+        public int GetNextShipmentNumber(int shipmentsCount = 1)
+        {
+            var shipmentNumber = 0;
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                {
+                    using (var validationRepository = _repositoryFactory.CreateShipmentRepository(uow))
+                    {
+                        shipmentNumber = repository.GetNextShipmentNumber(Core.Constants.StoreSettingKeys.NextShipmentNumberKey, validationRepository.GetMaxDocumentNumber, shipmentsCount);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            return shipmentNumber;
+        }
+
+        /// <summary>
         /// Gets the complete collection of registered typefields
         /// </summary>
         /// <returns>

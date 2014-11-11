@@ -45,6 +45,20 @@
         }
 
         /// <summary>
+        /// CacheKey for request cache only. Used to check if current customer login has been validated against the member.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string EnsureIsLoggedInCustomerValidated(Guid entityKey)
+        {
+            return string.Format("merchello.customer.ensureIsLoggedIn.{0}", entityKey);
+        }
+
+        /// <summary>
         /// Returns a cache key intend for runtime caching of a <see cref="IItemCache"/>
         /// </summary>
         /// <param name="entityKey">

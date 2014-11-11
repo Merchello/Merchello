@@ -294,7 +294,7 @@
         }
 
         /// <summary>
-        /// Gets the unique customer 'key' to associated with the invoice
+        /// Gets or sets the unique customer 'key' to associated with the invoice
         /// </summary>
         [DataMember]
         public Guid? CustomerKey
@@ -304,7 +304,7 @@
                 return _customerKey;
             }
 
-            internal set
+            set
             {
                 SetPropertyValueAndDetectChanges(
                     o =>

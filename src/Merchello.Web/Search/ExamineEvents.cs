@@ -95,6 +95,8 @@
             OrderService.Saved += OrderServiceSaved;
             OrderService.Deleted += OrderServiceDeleted;
 
+            ShipmentService.UpdatedOrder += ShipmentServiceOnUpdatedOrder;
+
             CustomerService.Created += CustomerServiceCreated;
             CustomerService.Saved += CustomerServiceSaved;
             CustomerService.Deleted += CustomerServiceDeleted;
@@ -300,6 +302,21 @@
         #endregion
 
         #region Order
+
+
+        /// <summary>
+        /// Reindexes an invoice based on order saved
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ShipmentServiceOnUpdatedOrder(IShipmentService sender, SaveEventArgs<IOrder> e)
+        {
+            e.SavedEntities.ForEach(IndexOrder);
+        }
 
         /// <summary>
         /// Reindexes an invoice based on order saved

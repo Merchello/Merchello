@@ -6,11 +6,18 @@
     using Models;
     using Umbraco.Core;
 
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// Builds a shipment
     /// </summary>
     internal sealed class ShipmentBuilderChain : BuildChainBase<IShipment>
     {
+        /// <summary>
+        /// The shipment status key.
+        /// </summary>
+        private readonly Guid _shipmentStatusKey;
+
         /// <summary>
         /// The _order.
         /// </summary>
@@ -43,16 +50,20 @@
         /// <param name="keysToShip">
         /// A collection of line item keys which identifies which line items in the order are to be included in the shipment being packaged
         /// </param>
-        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip)
+        /// <param name="shipmentStatusKey">
+        /// The shipment Status Key.
+        /// </param>
+        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip, Guid shipmentStatusKey)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(order, "order");
             Mandate.ParameterNotNull(keysToShip, "keysToShip");
+            Mandate.ParameterCondition(!shipmentStatusKey.Equals(Guid.Empty), "shipmentStatusKey");
 
             _merchelloContext = merchelloContext;
             _order = order;
             _keysToShip = keysToShip;
-
+            _shipmentStatusKey = shipmentStatusKey;
             ResolveChain(Core.Constants.TaskChainAlias.OrderPreparationShipmentCreate);
         }
 
@@ -80,7 +91,7 @@
         /// </summary>
         /// <returns>The Attempt{IShipment}</returns>
         public override Attempt<IShipment> Build()
-        {
+        {            
             // invoice 
             var invoice = _merchelloContext.Services.InvoiceService.GetByKey(_order.InvoiceKey);
             if (invoice == null) return Attempt<IShipment>.Fail(new NullReferenceException("An invoice could not be found for the order passed"));
@@ -93,10 +104,13 @@
             var quoted = shipmentLineItem.ExtendedData.GetShipment<InvoiceLineItem>();
             if (quoted == null) return Attempt<IShipment>.Fail(new NullReferenceException("An shipment could not be found in the invoice assoiciated with the order passed"));
 
+            var status = _merchelloContext.Services.ShipmentService.GetShipmentStatusByKey(_shipmentStatusKey) ?? 
+                _merchelloContext.Services.ShipmentService.GetShipmentStatusByKey(Core.Constants.DefaultKeys.ShipmentStatus.Quoted);
+
             // execute the change
             var attempt = TaskHandlers.Any()
                 ? TaskHandlers.First().Execute(
-                        new Shipment(quoted.GetOriginAddress(), quoted.GetDestinationAddress())
+                        new Shipment(status, quoted.GetOriginAddress(), quoted.GetDestinationAddress())
                             {
                                 ShipMethodKey = quoted.ShipMethodKey,
                                 VersionKey = quoted.VersionKey

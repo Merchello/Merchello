@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -134,7 +132,7 @@ namespace Merchello.Core.Services
         #region Event Handlers
 
         /// <summary>
-        /// Occurs after Create
+        /// Occurs before the Create
         /// </summary>
         public static event TypedEventHandler<IInvoiceService, Events.NewEventArgs<IInvoice>> Creating;
 
@@ -282,7 +280,7 @@ namespace Merchello.Core.Services
         {
             // Generate Invoice Number for new Invoices in the collection
             var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
-            var newInvoiceCount = invoicesArray.Count(x => x.InvoiceNumber <= 0 && !((Invoice) x).HasIdentity);
+            var newInvoiceCount = invoicesArray.Count(x => x.InvoiceNumber <= 0 && !((Invoice)x).HasIdentity);
             if (newInvoiceCount > 0)
             {
                 var lastInvoiceNumber =

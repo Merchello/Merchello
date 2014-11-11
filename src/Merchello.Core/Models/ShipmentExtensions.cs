@@ -26,8 +26,7 @@ namespace Merchello.Core.Models
         /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
         /// <returns>An <see cref="Attempt{T}"/> where success result is the matching <see cref="IShipCountry"/></returns>
         public static Attempt<IShipCountry> GetValidatedShipCountry(this IShipment shipment, IGatewayProviderService gatewayProviderService)
-         {
-
+        {
              var visitor = new WarehouseCatalogValidationVisitor();
              shipment.Items.Accept(visitor);
 
@@ -202,6 +201,40 @@ namespace Merchello.Core.Models
             patterns.AddRange(shipment.LineItemReplaceablePatterns());
 
             return patterns;
+        }
+
+        /// <summary>
+        /// Clones a shipment
+        /// </summary>
+        /// <param name="org">
+        /// The org.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
+        /// <remarks>
+        /// http://issues.merchello.com/youtrack/issue/M-458
+        /// </remarks>
+        internal static IShipment Clone(this IShipment org)
+        {
+            var lineItemCollection = new LineItemCollection();
+
+            foreach (var li in org.Items)
+            {
+                lineItemCollection.Add(li.AsLineItemOf<OrderLineItem>());
+            }
+
+            return new Shipment(org.ShipmentStatus, org.GetOriginAddress(), org.GetDestinationAddress(), lineItemCollection)
+                               {
+                                   ShipmentNumberPrefix = org.ShipmentNumberPrefix,
+                                   ShipmentNumber = org.ShipmentNumber,
+                                   ShippedDate = org.ShippedDate,
+                                   TrackingCode = org.TrackingCode,
+                                   Carrier = org.Carrier,
+                                   ShipMethodKey = org.ShipMethodKey,
+                                   Phone = org.Phone,
+                                   Email = org.Email
+                               };
         }
     }
 }

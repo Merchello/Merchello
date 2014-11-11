@@ -1,5 +1,10 @@
 ﻿namespace Merchello.Core.Models
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Cache;
+
     using Services;
 
     /// <summary>
@@ -24,6 +29,43 @@
                 {
                     ProvinceLabel = StoreSettingService.GetProvinceLabelForCountry(address.CountryCode)
                 };
+        }
+
+
+        /// <summary>
+        /// Attempts to split the first name out of the <see cref="IAddress"/> name field
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string TrySplitFirstName(this IAddress address)
+        {
+            if (string.IsNullOrEmpty(address.Name)) return string.Empty;
+
+            var names = address.Name.Split(' ');
+
+            return names.Any() ? names.First().Trim() : string.Empty;
+        }
+
+        /// <summary>
+        /// Attempts to split the last name (surname) out of the <see cref="IAddress"/> name field.
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string TrySplitLastName(this IAddress address)
+        {
+            if (string.IsNullOrEmpty(address.Name)) return string.Empty;
+
+            var names = address.Name.Split(' ');
+
+            return names.Length > 1 ? string.Join(" ", names.Skip(1)).Trim() : string.Empty;
         }
 
         /// <summary>

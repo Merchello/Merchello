@@ -116,7 +116,8 @@
         /// </returns>
         public ProductVariantDisplay GetProductVariant(Guid id)
         {
-            return _merchello.Query.Product.GetProductVariantByKey(id);
+            var variant = _merchello.Query.Product.GetProductVariantByKey(id);
+            return variant;
         }
 
         /// <summary>

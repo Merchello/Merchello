@@ -5,6 +5,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Tests.Base.TestHelpers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using NUnit.Framework;
@@ -69,7 +70,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             #region Add a GatewayProvider (RateTableShippingGatewayProvider)
 
             var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
-            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.CreateInstance(key);
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.GetProviderByKey(key);
 
             #region Add and configure 3 rate table shipmethods
 

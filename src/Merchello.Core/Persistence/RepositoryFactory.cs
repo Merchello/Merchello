@@ -408,6 +408,20 @@
         }
 
         /// <summary>
+        /// Returns an instance of the <see cref="IShipmentStatusRepository"/>
+        /// </summary>
+        /// <param name="uow">
+        /// The uow.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipmentStatusRepository"/>.
+        /// </returns>
+        internal virtual IShipmentStatusRepository CreateShipmentStatusRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ShipmentStatusRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="IStoreSettingRepository"/>
         /// </summary>
         /// <param name="uow">

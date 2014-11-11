@@ -101,6 +101,7 @@ namespace Merchello.Web.Editors
         /// GET /umbraco/Merchello/ShipmentApi/GetShipment/{guid}
         /// </summary>
         /// <param name="id">The shipment key</param>
+        [HttpGet]
         public ShipmentDisplay GetShipment(Guid id)
         {
             var shipment = _shipmentService.GetByKey(id) as Shipment;
@@ -118,7 +119,8 @@ namespace Merchello.Web.Editors
 		/// </summary>
 		/// <param name="ids"></param>
 		/// <returns></returns>
-		public IEnumerable<ShipmentDisplay> GetShipments([FromUri]IEnumerable<Guid> ids)
+		[HttpGet]
+        public IEnumerable<ShipmentDisplay> GetShipments([FromUri]IEnumerable<Guid> ids)
 		{
             var keys = ids.Where(x => !x.Equals(Guid.Empty)).Distinct().ToArray();
 		    
@@ -138,7 +140,7 @@ namespace Merchello.Web.Editors
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        [AcceptVerbs("POST", "GET")]
+        [HttpPost]
         public ShipMethodDisplay GetShipMethod(OrderDisplay order)
         {
             var invoice = _invoiceService.GetByKey(order.InvoiceKey);
@@ -172,21 +174,6 @@ namespace Merchello.Web.Editors
             return new ShipMethodDisplay() { Name = "Not Found" };
         }
 
-        //public ShipMethodDisplay GetShipMethod(OrderDisplay order)
-        //{
-        //    var invoice = _merchello.Query.Invoice.GetByKey(order.InvoiceKey);
-
-        //    if (invoice == null) throw new KeyNotFoundException("Could not find an invoice associated with the order passed");
-
-        //    var shipmentItems = invoice.Items.Where(x => x.LineItemTfKey == EnumTypeFieldConverter.LineItemType.GetTypeField(LineItemType.Shipping).TypeKey);
-
-        //    if (!shipmentItems.Any()) throw new KeyNotFoundException("No shipment line items found on the invoice");
-
-
-
-        //}
-
-
         /// <summary>
         /// Adds a shipment
         ///
@@ -201,7 +188,7 @@ namespace Merchello.Web.Editors
         /// other order data, such as the invoiceKey are important for this process.
         /// 
         /// </remarks>
-        [AcceptVerbs("POST", "GET")]
+        [HttpPost]
         public ShipmentDisplay NewShipment(OrderDisplay order)
         {
             try
@@ -210,14 +197,13 @@ namespace Merchello.Web.Editors
                 
                 var merchOrder = _orderService.GetByKey(order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key));
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key), Constants.DefaultKeys.ShipmentStatus.Quoted);
 
                 var attempt = builder.Build();
                 
                 if (!attempt.Success)
                     throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
-
-                                                                                                        
+                                                                     
                 return attempt.Result.ToShipmentDisplay();
 
             }
@@ -234,7 +220,7 @@ namespace Merchello.Web.Editors
         /// <param name="shipment">ShipmentDisplay object serialized from WebApi</param>
         /// <param name="order">The order.</param>
         /// <returns></returns>
-        [AcceptVerbs("POST", "PUT", "GET")]
+        [HttpPost, HttpPut]
         public HttpResponseMessage PutShipment(ShipmentOrderDisplay shipmentOrder)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -251,16 +237,19 @@ namespace Merchello.Web.Editors
                 }
 
                 merchShipment = shipment.ToShipment(merchShipment);
-                if (order.Items.Count() == shipment.Items.Count())
-                {
-                    merchShipment.AuditCreated();
-                    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
-                }
-                else
-                {
-                    merchShipment.AuditCreated();            
-                    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
-                }
+
+
+                // TODO this needs to be refactored in 1.5.1
+                //if (order.Items.Count() == shipment.Items.Count())
+                //{
+                //    merchShipment.AuditCreated();
+                //    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
+                //}
+                //else
+                //{
+                //    merchShipment.AuditCreated();            
+                //    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
+                //}
 
                 _shipmentService.Save(merchShipment);
 
@@ -271,6 +260,20 @@ namespace Merchello.Web.Editors
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// Returns a list of all <see cref="IShipmentStatus"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{ShipmentStatusDisplay}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<ShipmentStatusDisplay> GetAllShipmentStatuses()
+        {
+            var statuses = _shipmentService.GetAllShipmentStatuses().OrderBy(x => x.SortOrder);
+
+            return statuses.Select(x => x.ToShipmentStatusDisplay());
         }
     }
 }

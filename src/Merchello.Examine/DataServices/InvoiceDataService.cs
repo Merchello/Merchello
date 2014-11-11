@@ -11,7 +11,7 @@
     /// <summary>
     /// The invoice data service.
     /// </summary>
-    public class InvoiceDataService : IInvoiceDataService
+    internal class InvoiceDataService : IInvoiceDataService
     {
         /// <summary>
         /// The merchello context.
