@@ -56,7 +56,7 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
 
                         collection = UpsParseRates(rateXml);
 
-                        _runtimeCache.InsertCacheItem(MakeCacheKey(shipment), () => collection);  
+                        //_runtimeCache.InsertCacheItem(MakeCacheKey(shipment), () => collection);  
                     }
                     catch (Exception ex)
                     {
@@ -69,9 +69,18 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
                 //}
                 var shippingPrice = 0M;
 
-                var firstCarrierRate = collection.FirstOrDefault(option => option.Service == _shipMethod.ServiceCode);
-                if (firstCarrierRate != null)
-                    shippingPrice = firstCarrierRate.Rate;
+                if (_processorSettings.UpsFreeGroundShipping && _shipMethod.ServiceCode == UPSShippingGatewayProvider.UPSGround)
+                {
+                    shippingPrice = 0M;
+                }
+                else
+                {
+                    var firstCarrierRate = collection.FirstOrDefault(option => option.Service == _shipMethod.ServiceCode);
+                    if (firstCarrierRate != null)
+                    {
+                        shippingPrice = firstCarrierRate.Rate;
+                    }
+                }
                 
                 return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, _shipMethod) { Rate = shippingPrice });
 
