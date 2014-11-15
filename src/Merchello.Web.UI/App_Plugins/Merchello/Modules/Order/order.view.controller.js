@@ -315,6 +315,7 @@
             var promiseNewShipment = merchelloShipmentService.newShipment(data);
             promiseNewShipment.then(function (shipment) {
                 shipment.trackingCode = data.trackingNumber;
+                shipment.shipmentStatus = data.shipmentStatus;
                 var promiseSave = merchelloShipmentService.putShipment(shipment, data);
                 promiseSave.then(function () {
                     notificationsService.success("Shipment Created");

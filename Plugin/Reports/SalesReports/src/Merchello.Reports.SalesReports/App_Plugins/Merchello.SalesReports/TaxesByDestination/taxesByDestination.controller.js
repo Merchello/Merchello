@@ -16,7 +16,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Report.TaxesByDestinationController", ['$scope', merchello.Controllers.TaxesByDestinationController]);
+    angular.module("umbraco").controller("Merchello.Plugins.Reports.TaxesByDestinationController", ['$scope', merchello.Controllers.TaxesByDestinationController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

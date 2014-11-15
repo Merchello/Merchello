@@ -11,7 +11,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <!-- New Order Button -->
                     <div class="btn-group">
-                        <a href="#" class="btn btn-standard">Print</a>
+                        <!--<a href="#" class="btn btn-standard">Print</a>-->
                     </div>
                 </div>
             </div>
@@ -37,6 +37,7 @@
                                     <tr>
                                         <th>Date</th>
                                         <!--<th>Provider</th>-->
+                                        <th>Status</th>
                                         <th>Items</th>
                                         <th>Street</th>
                                         <th>Tracking #</th>
@@ -45,6 +46,7 @@
                                     <tr data-ng-repeat="shipment in invoice.shipments">
                                         <td>{{formatDate(shipment.shippedDate)}}</td>
                                         <!--<td>{{shipment.carrier}}</td>-->
+                                        <td>{{shipment.shipmentStatus.name}}</td>
                                         <td>{{shipment.items.length}}</td>
                                         <td>{{shipment.toAddress1}}</td>
                                         <td>{{shipment.trackingCode}}</td>

@@ -16,7 +16,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Report.SalesByItemController", ['$scope', merchello.Controllers.SalesByItemController]);
+    angular.module("umbraco").controller("Merchello.Plugins.Reports.SalesByItemController", ['$scope', merchello.Controllers.SalesByItemController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
