@@ -16,7 +16,7 @@
     }
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Report.SalesOverTimeController", ['$scope', merchello.Controllers.SalesOverTimeController]);
+    angular.module("umbraco").controller("Merchello.Plugins.Reports.SalesOverTimeController", ['$scope', merchello.Controllers.SalesOverTimeController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

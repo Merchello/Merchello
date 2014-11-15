@@ -368,9 +368,6 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.editwithoptions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.invoice.models.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesByItem.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.taxesByDestination.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesOverTime.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Report\reports.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Directives\tag.manager.directive.js" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\css\bootstrap-theme.min.css" />

@@ -201,10 +201,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Plugins\Merchello.SalesReports\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="App_Plugins\Merchello.SalesReports\" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.controller.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesOverTime.controller.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\TaxesByDestination\taxesByDestination.controller.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\report.html" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\report.html" />
+    <Content Include="App_Plugins\Merchello.SalesReports\TaxesByDestination\report.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

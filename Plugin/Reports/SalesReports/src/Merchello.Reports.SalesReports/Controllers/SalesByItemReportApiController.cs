@@ -1,15 +1,16 @@
-﻿namespace Merchello.Web.Reporting.Sales
+﻿namespace Merchello.Reports.SalesReports.Controllers
 {
     using System.Collections.Generic;
 
     using Merchello.Core;
     using Merchello.Web.Models.Querying;
+    using Merchello.Web.Reporting;
     using Merchello.Web.Trees;
 
     /// <summary>
-    /// The sales by item report api controller.
+    /// The sales by item report API controller.
     /// </summary>
-    [BackOfficeTree("salesByItem", "reports", "Sales By Item", "icon-barcode", "Merchello.SalesRports|SalesByItem|report", 20)]
+    [BackOfficeTree("salesByItem", "reports", "Sales By Item", "icon-barcode", "Merchello.SalesReports|SalesByItem|report", 20)]
     public class SalesByItemReportApiController : ReportController
     {
         /// <summary>
