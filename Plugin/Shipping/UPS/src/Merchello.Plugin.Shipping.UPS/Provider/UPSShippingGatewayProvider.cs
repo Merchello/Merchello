@@ -6,6 +6,7 @@ using Merchello.Core.Gateways;
 using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Plugin.Shipping.UPS.Models;
 using Umbraco.Core.Cache;
 
 namespace Merchello.Plugin.Shipping.UPS.Provider
@@ -26,12 +27,14 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         public const string UPSNextDayAirEarlyAM = "14";
         public const string UPSWorldwideExpressPlus = "54";
         public const string UPS2ndDayAirAM = "59";
-                                                          
+
+        private UPSProcessorSettings _processorSettings;
+                                                      
         public UPSShippingGatewayProvider(IGatewayProviderService gatewayProviderService,
             IGatewayProviderSettings gatewayProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProvider, runtimeCacheProvider)
         {
-
+            _processorSettings = base.GatewayProviderSettings.ExtendedData.GetProcessorSettings();
         }
 
         // In this case, the GatewayResource can be used to create multiple shipmethods of the same resource type.
@@ -178,6 +181,10 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
                 var quote = method.QuoteShipment(shipment);
 
                 if (quote.Result.Rate > (decimal)0.00)
+                {
+                    shippingMethods.Add(method);
+                }
+                else if (_processorSettings.UpsFreeGroundShipping && method.ShipMethod.ServiceCode == UPSGround)
                 {
                     shippingMethods.Add(method);
                 }

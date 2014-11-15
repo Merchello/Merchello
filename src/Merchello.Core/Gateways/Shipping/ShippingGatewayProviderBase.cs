@@ -177,8 +177,11 @@
         /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
         /// </summary>
         /// <param name="shipment">The <see cref="IShipmentRateQuote"/></param>
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        public virtual IEnumerable<IShipmentRateQuote> QuoteShippingGatewayMethodsForShipment(IShipment shipment)
+        public virtual IEnumerable<IShipmentRateQuote> QuoteShippingGatewayMethodsForShipment(IShipment shipment, bool tryGetCached = true)
         {
             var gatewayShipMethods = GetShippingGatewayMethodsForShipment(shipment);
 
@@ -194,7 +197,7 @@
                 throw attempt.Exception;
             }
 
-            return QuoteShippingGatewayMethodsForShipment(attempt.Result);
+            return QuoteShippingGatewayMethodsForShipment(attempt.Result, tryGetCached);
         }
 
         /// <summary>
@@ -202,8 +205,11 @@
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/> used to generate the rate quote</param>
         /// <param name="shippingGatewayMethod">The <see cref="IShippingGatewayMethod"/> used to generate the rate quote</param>
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
         /// <returns>The <see cref="IShipmentRateQuote"/></returns>
-        public virtual IShipmentRateQuote QuoteShipMethodForShipment(IShipment shipment, IShippingGatewayMethod shippingGatewayMethod)
+        public virtual IShipmentRateQuote QuoteShipMethodForShipment(IShipment shipment, IShippingGatewayMethod shippingGatewayMethod, bool tryGetCached = true)
         {
             var ctrValues = new object[] { shipment, new[] { shippingGatewayMethod }, RuntimeCache };
 
@@ -217,17 +223,24 @@
                 throw attempt.Exception;
             }
 
-            return QuoteShippingGatewayMethodsForShipment(attempt.Result).FirstOrDefault();
+            return QuoteShippingGatewayMethodsForShipment(attempt.Result, tryGetCached).FirstOrDefault();
         }
 
         /// <summary>
         /// Returns a collection of all available <see cref="IShipmentRateQuote"/> for a given shipment
         /// </summary>
-        /// <param name="strategy">The quotation strategy</param>
-        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        public IEnumerable<IShipmentRateQuote> QuoteShippingGatewayMethodsForShipment(ShipmentRateQuoteStrategyBase strategy)
+        /// <param name="strategy">
+        /// The quotation strategy
+        /// </param>
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IShipmentRateQuote"/>
+        /// </returns>
+        public IEnumerable<IShipmentRateQuote> QuoteShippingGatewayMethodsForShipment(ShipmentRateQuoteStrategyBase strategy, bool tryGetCached = true)
         {
-            return strategy.GetShipmentRateQuotes();
+            return strategy.GetShipmentRateQuotes(tryGetCached);
         }
 
         /// <summary>
