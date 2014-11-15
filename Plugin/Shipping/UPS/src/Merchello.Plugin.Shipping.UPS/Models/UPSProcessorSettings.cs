@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Merchello.Plugin.Shipping.UPS.Models
 {
     public class UPSProcessorSettings
-    {        
+    {
         public bool UseSandbox { get; set; }
 
         public UPSProcessorSettings()
@@ -26,6 +26,7 @@ namespace Merchello.Plugin.Shipping.UPS.Models
         public string UpsCustomerClassification  { get; set; }
         public string UpsPackagingTypeCode { get; set; }
         public string UpsAdditionalHandlingCharge { get; set; }
+        public bool UpsFreeGroundShipping { get; set; }
 
         public string ApiVersion
         {

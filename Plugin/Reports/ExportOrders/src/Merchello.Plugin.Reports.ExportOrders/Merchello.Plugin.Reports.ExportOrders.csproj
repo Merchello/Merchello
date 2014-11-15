@@ -92,15 +92,15 @@
     </Reference>
     <Reference Include="Merchello.Core, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Payments\Chase\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\Temp\bin\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Payments\Chase\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\Temp\bin\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Payments\Chase\src\packages\Merchello.TestsBase.1.4.1\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\Temp\bin\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
