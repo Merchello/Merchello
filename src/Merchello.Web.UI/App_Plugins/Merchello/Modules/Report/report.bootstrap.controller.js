@@ -23,7 +23,7 @@
 
         var result = $scope.reportParam.replace(re, subst);
 
-        //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders/ExportOrders.html";
+        //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
         $scope.reportPath = "/App_Plugins/" + result + ".html";
 
     };
