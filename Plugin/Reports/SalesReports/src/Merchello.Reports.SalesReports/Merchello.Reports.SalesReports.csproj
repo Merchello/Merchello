@@ -201,6 +201,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Plugins\Merchello.SalesReports\assets\css\modules\_graphs.scss" />
+    <None Include="App_Plugins\Merchello.SalesReports\assets\css\styles.scss" />
     <None Include="App_Plugins\Merchello.SalesReports\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>

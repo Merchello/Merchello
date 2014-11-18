@@ -10,7 +10,7 @@
     /// <summary>
     /// The sales by item report API controller.
     /// </summary>
-    [BackOfficeTree("salesByItem", "reports", "Sales By Item", "icon-barcode", "Merchello.SalesReports|SalesByItem|report", 20)]
+    [BackOfficeTree("salesByItem", "reports", "Sales By Item", "icon-barcode", "Merchello.SalesReports\\SalesByItem\\report", 20)]
     public class SalesByItemReportApiController : ReportController
     {
         /// <summary>
