@@ -86,17 +86,6 @@
             </div>
             <!-- Tabular Order List -->
             <div class="merchello-pane">
-                
-                <!-- Pagination -->
-                <!--div class="pager" data-ng-show="maxPages > 1">
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
-                        <localize key="general_previous" />
-                    </button>
-                    {{currentPage+1}}/{{maxPages}}
-                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)">
-                        <localize key="general_next" />
-                    </button>
-                </div -->
 
                 <merchello-pager></merchello-pager>
 
@@ -108,9 +97,9 @@
                 <table class="table table-hover merchello-selectable-table" data-ng-show="salesLoaded">
                     <thead>
                         <tr data-ng-show="!visible.bulkActionDropdown">
-                            <th>
+                            <!--<th>
                                 <input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" />
-                            </th>
+                            </th>-->
                             <th data-ng-click="changeSortOrder('invoiceNumber')" data-ng-class="{'sorted': sortProperty == 'invoiceNumber' ||  sortProperty == '-invoiceNumber'}">
                                 <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceNumber', 'icon-navigation-down': sortProperty == '-invoiceNumber'}"></i>
                                 <localize key="merchelloOrder_invoiceNumber" />
@@ -135,7 +124,7 @@
                         </tr>
                         <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
                         <tr data-ng-show="visible.bulkActionDropdown">
-                            <th><input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" /></th>
+                            <!--<th><input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" /></th>-->
                             <th colspan="6">
                                 <div class="btn-group">
                                     <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedOrderCount}} orders selected) <i class="icon-navigation-down"></i></a>
@@ -155,7 +144,7 @@
                     <tbody>
                         <!-- Invoices -->
                         <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="updateBulkActionDropdownStatus(false, invoice.key)">
-                            <td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>
+                            <!--<td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>-->
                             <td>#<a data-ng-href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
                             <td>{{invoice.invoiceDate | date : settings.dateFormat}}</td>
                             <td>{{invoice.billToName}}</td>
@@ -166,18 +155,6 @@
                     </tbody>
                 </table>
                 <!-- Pagination -->
-                <!--<div class="pager" data-ng-show="maxPages > 1">
-                        <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
-                            <localize key="general_previous" />
-                        </button>
-                        {{currentPage+1}}/{{maxPages}}
-                        <button class="btn" data-ng-disabled="currentPage >= maxPages- 1" data-ng-click="changePage(currentPage + 1)">
-                            <localize key="general_next" />
-                        </button>
-                    </div>
-                    <div class="pager well" data-ng-show="invoices.length == 0">
-                        <localize key="merchelloOrder_noOrders" />
-                    </div>-->
 
                 <merchello-pager></merchello-pager>
 

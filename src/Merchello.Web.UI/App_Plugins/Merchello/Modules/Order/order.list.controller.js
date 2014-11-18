@@ -319,6 +319,7 @@
                     $scope.selectedOrderCount += 1;
                 }
             }
+            shouldShowDropdown = false;
             $scope.visible.bulkActionDropdown = shouldShowDropdown;
         };
 

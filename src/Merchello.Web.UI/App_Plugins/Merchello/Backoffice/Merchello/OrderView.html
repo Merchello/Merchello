@@ -26,8 +26,8 @@
                     <div class="merchello-controls">
                         <div>
                             <!-- ACTION: Cancel Sale -->
-                            <!--<button type="button" class="btn btn-default btn-trash pull-right" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>-->
-                            <button type="button" class="btn btn-default btn-trash pull-right"  data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>
+                            <button type="button" class="btn btn-default btn-trash pull-right" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled'" data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>
+                            <!--<button type="button" class="btn btn-default btn-trash pull-right"  data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>-->
                             <!-- ACTION: Fulfill Shipment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.getFulfillmentStatus()=='Fulfilled' || !hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                             <!-- ACTION: Capture Payment -->
