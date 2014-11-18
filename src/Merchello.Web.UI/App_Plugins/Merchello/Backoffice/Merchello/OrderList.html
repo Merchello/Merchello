@@ -1,5 +1,4 @@
-﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
-<div ng-controller="Merchello.Dashboards.Order.ListController" ng-show="loaded">
+﻿<div ng-controller="Merchello.Dashboards.Order.ListController" ng-show="loaded">
     <umb-panel>
         <umb-header>
             <div class="span4">
@@ -87,8 +86,9 @@
             </div>
             <!-- Tabular Order List -->
             <div class="merchello-pane">
+                
                 <!-- Pagination -->
-                <div class="pager" data-ng-show="maxPages > 1">
+                <!--div class="pager" data-ng-show="maxPages > 1">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
                         <localize key="general_previous" />
                     </button>
@@ -96,7 +96,10 @@
                     <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)">
                         <localize key="general_next" />
                     </button>
-                </div>
+                </div -->
+
+                <merchello-pager></merchello-pager>
+
                 <!-- Loader -->
                 <div class="pager" data-ng-show="!salesLoaded">
                     <img src="/umbraco/assets/img/loader.gif" />
@@ -163,18 +166,21 @@
                     </tbody>
                 </table>
                 <!-- Pagination -->
-                <div class="pager" data-ng-show="maxPages > 1">
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
-                        <localize key="general_previous" />
-                    </button>
-                    {{currentPage+1}}/{{maxPages}}
-                    <button class="btn" data-ng-disabled="currentPage >= maxPages- 1" data-ng-click="changePage(currentPage + 1)">
-                        <localize key="general_next" />
-                    </button>
-                </div>
-                <div class="pager well" data-ng-show="invoices.length == 0">
-                    <localize key="merchelloOrder_noOrders" />
-                </div>
+                <!--<div class="pager" data-ng-show="maxPages > 1">
+                        <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)">
+                            <localize key="general_previous" />
+                        </button>
+                        {{currentPage+1}}/{{maxPages}}
+                        <button class="btn" data-ng-disabled="currentPage >= maxPages- 1" data-ng-click="changePage(currentPage + 1)">
+                            <localize key="general_next" />
+                        </button>
+                    </div>
+                    <div class="pager well" data-ng-show="invoices.length == 0">
+                        <localize key="merchelloOrder_noOrders" />
+                    </div>-->
+
+                <merchello-pager></merchello-pager>
+
             </div>
         </merchello-panel>
     </umb-panel>
