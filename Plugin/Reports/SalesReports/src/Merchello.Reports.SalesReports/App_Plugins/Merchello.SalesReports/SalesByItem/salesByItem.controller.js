@@ -8,10 +8,11 @@
      * @description
      * The controller for the reports SalesByItem page
      */
-    controllers.SalesByItemController = function($scope) {
+    controllers.SalesByItemController = function ($scope, assetsService) {
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
+
 
     };
 
