@@ -131,14 +131,15 @@
                                 new QueryDisplayParameter()
                                     {
                                     FieldName = "invoiceDateStart",
-                                    Value = DateTime.Now.AddDays(-1).ToShortDateString()
+                                    Value = DateTime.Now.AddMonths(-1).ToShortDateString()
                                     },
                                 new QueryDisplayParameter()
                                     {
                                         FieldName = "invoiceDateEnd",
                                         Value = DateTime.Now.ToShortDateString()
                                     }
-                            }
+                            },
+                            SortBy = "invoiceDate"
                         };
 
             return SearchByDateRange(query);

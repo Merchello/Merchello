@@ -10,14 +10,14 @@
 
         return {
 
-            getAllOrders: function () {
+            getDefaultData: function () {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
                         url: umbRequestHelper.getApiUrl('merchelloReportSalesByItem', 'GetDefaultReportData'),
                         method: "GET"
                     }),
-                    'Failed to get invoices');
+                    'Failed to get default data');
             }
         };
     };
