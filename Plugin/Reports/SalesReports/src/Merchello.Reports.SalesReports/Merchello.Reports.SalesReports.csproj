@@ -197,7 +197,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\SalesByItemReportApiController.cs" />
+    <Compile Include="Models\SalesByItemResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visitors\SalesByItemVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -217,6 +219,7 @@
     <Content Include="App_Plugins\Merchello.SalesReports\Common\datePicker.css" />
     <Content Include="App_Plugins\Merchello.SalesReports\Common\datePicker.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.controller.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.service.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesOverTime.controller.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\TaxesByDestination\taxesByDestination.controller.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\report.html" />

@@ -8,12 +8,27 @@
      * @description
      * The controller for the reports SalesByItem page
      */
-    controllers.SalesByItemController = function ($scope, assetsService) {
+    controllers.SalesByItemController = function ($scope, merchelloPluginReportSalesByItemService) {
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
+        $scope.invoices = [];
 
+        $scope.defaultData = function () {
+            
+            var promise = merchelloPluginReportSalesByItemService.getDefaultData();
+            promise.then(function (data) {
+                $scope.loaded = true;
+                $scope.invoices = data;
+            });
 
+        };
+
+        $scope.init = function () {
+            $scope.defaultData();
+        };
+
+        $scope.init();
     };
 
 
