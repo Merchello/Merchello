@@ -18,7 +18,7 @@
         // Property to control the report to show
         $scope.reportParam = $routeParams.id;
 
-        var re = /(\|)+/;
+        var re = /(\\)+/;
         var subst = '/';
 
         var result = $scope.reportParam.replace(re, subst);

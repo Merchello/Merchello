@@ -201,11 +201,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Plugins\Merchello.SalesReports\assets\css\modules\_graphs.scss" />
+    <None Include="App_Plugins\Merchello.SalesReports\assets\css\styles.css.map">
+      <DependentUpon>styles.css</DependentUpon>
+    </None>
+    <None Include="App_Plugins\Merchello.SalesReports\assets\css\styles.scss" />
     <None Include="App_Plugins\Merchello.SalesReports\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="App_Plugins\Merchello.SalesReports\assets\css\styles.css">
+      <DependentUpon>styles.scss</DependentUpon>
+    </Content>
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.controller.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesOverTime.controller.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\TaxesByDestination\taxesByDestination.controller.js" />

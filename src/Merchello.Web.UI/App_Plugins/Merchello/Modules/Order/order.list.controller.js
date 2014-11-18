@@ -31,7 +31,7 @@
             $scope.filterStartDate = '';
             $scope.filterEndDate = '';
             $scope.invoices = [];
-            $scope.limitAmount = '100';
+            $scope.limitAmount = '25';
             $scope.maxPages = 0;
             $scope.orderIssues = [];
             $scope.salesLoaded = false;
@@ -136,23 +136,6 @@
             });
         };
 
-        /**
-         * @ngdoc method
-         * @name init
-         * @function
-         * 
-         * @description
-         * Method called on intial page load.  Loads in data from server and sets up scope.
-         */
-        $scope.init = function () {
-            $scope.setVariables();
-            $scope.loadInvoices();
-            $scope.loadSettings();
-        };
-
-
-        $scope.init();
-
         //--------------------------------------------------------------------------------------
         // Event Handlers
         //--------------------------------------------------------------------------------------
@@ -167,7 +150,8 @@
          */
         $scope.changePage = function (page) {
             $scope.currentPage = page;
-            $scope.loadInvoices($scope.filterText);
+            var listQuery = $scope.buildQuery($scope.filterText);
+            $scope.loadInvoices(listQuery);
         };
 
         /**
@@ -192,7 +176,8 @@
                 $scope.sortProperty = propertyToSort;
                 $scope.sortOrder = "asc";
             }
-            $scope.loadInvoices($scope.filterText);
+            var listQuery = $scope.buildQuery($scope.filterText);
+            $scope.loadInvoices(listQuery);
         };
 
 
@@ -207,7 +192,8 @@
         $scope.limitChanged = function (newVal) {
             $scope.limitAmount = newVal;
             $scope.currentPage = 0;
-            $scope.loadInvoices($scope.filterText);
+            var listQuery = $scope.buildQuery($scope.filterText);
+            $scope.loadInvoices(listQuery);
         };
 
 
@@ -333,6 +319,7 @@
                     $scope.selectedOrderCount += 1;
                 }
             }
+            shouldShowDropdown = false;
             $scope.visible.bulkActionDropdown = shouldShowDropdown;
         };
 
@@ -445,6 +432,40 @@
             });
         };
 
+        //--------------------------------------------------------------------------------------
+        // Calculations
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name numberOfPages
+         * @function
+         * 
+         * @description
+         * Helper function to get the amount of items to show per page for the paging
+         */
+        $scope.numberOfPages = function () {
+            return $scope.maxPages;
+            //return Math.ceil($scope.products.length / $scope.limitAmount);
+        };
+
+
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * Method called on intial page load.  Loads in data from server and sets up scope.
+         */
+        $scope.init = function () {
+            $scope.setVariables();
+            $scope.loadInvoices();
+            $scope.loadSettings();
+        };
+
+
+        $scope.init();
 
     };
 
