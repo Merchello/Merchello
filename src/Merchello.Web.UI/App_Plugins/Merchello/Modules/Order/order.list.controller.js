@@ -136,6 +136,23 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         * 
+         * @description
+         * Method called on intial page load.  Loads in data from server and sets up scope.
+         */
+        $scope.init = function () {
+            $scope.setVariables();
+            $scope.loadInvoices();
+            $scope.loadSettings();
+        };
+
+
+        $scope.init();
+
         //--------------------------------------------------------------------------------------
         // Event Handlers
         //--------------------------------------------------------------------------------------

@@ -88,9 +88,6 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreate.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantCreate.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ViewReport.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Notifications.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Vendors.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Taxation.html" />
