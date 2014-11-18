@@ -162,6 +162,14 @@ $active: lighten($green, 50%);
         }
     }
 
+    // DFB: restyle tax table
+	.tax-table{
+		td.last-of-type{width:10%;}
+
+        //  DFB: give more visual space to input box so tax can include more digits like 8.765
+		.percent{width:70%;}
+	}
+
     td.edit { text-align: left;
         .btn { display: inline-block; margin: 0 auto; }
     }
