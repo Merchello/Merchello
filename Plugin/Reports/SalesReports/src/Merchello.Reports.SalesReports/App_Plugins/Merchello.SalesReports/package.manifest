@@ -1,6 +1,7 @@
 ﻿{
 	javascript : [
 	    '~/App_Plugins/Merchello.SalesReports/Common/datePicker.js',
+		'~/App_Plugins/Merchello.SalesReports/Common/salesReports.models.js',
 		'~/App_Plugins/Merchello.SalesReports/SalesByItem/salesByItem.service.js',
 		'~/App_Plugins/Merchello.SalesReports/SalesByItem/salesByItem.controller.js',
 		'~/App_Plugins/Merchello.SalesReports/SalesOverTime/salesOverTime.controller.js'

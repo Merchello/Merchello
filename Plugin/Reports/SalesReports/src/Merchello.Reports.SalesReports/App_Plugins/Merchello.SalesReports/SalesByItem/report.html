@@ -56,7 +56,7 @@
 
                 </div>
 
-
+                {{totalItems}}
                 <table class="table table-hover merchello-selectable-table sortable reports-table">
                     <thead>
                         <tr>
@@ -67,35 +67,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>HTML &lt;body&gt; Soap</td>
-                            <td>bod1</td>
-                            <td>1200</td>
-                            <td>$3000.00</td>
-                        </tr>
-                        <tr>
-                            <td>CSS Invisible Soap</td>
-                            <td>ninja25</td>
-                            <td>1651</td>
-                            <td>$2063.75</td>
-                        </tr>
-                        <tr>
-                            <td>uSoapsy</td>
-                            <td>usoapsy</td>
-                            <td>389</td>
-                            <td>$875.25</td>
-                        </tr>
-                        <tr>
-                            <td>Geeky Soap Holiday Kit</td>
-                            <td>holiKit</td>
-                            <td>8</td>
-                            <td>$394.00</td>
-                        </tr>
-                        <tr>
-                            <td>Make Your Own Geeky Soap Kit / Lavendar</td>
-                            <td>$DIY1-2</td>
-                            <td>2</td>
-                            <td>$206.00</td>
+                        <tr data-ng-repeat="result in results">
+                            <td>{{result.product.name}}</td>
+                            <td>{{result.product.sku}}</td>
+                            <td>{{result.quantity}}</td>
+                            <td>{{result.total}}</td>
                         </tr>
                     </tbody>
                 </table>
