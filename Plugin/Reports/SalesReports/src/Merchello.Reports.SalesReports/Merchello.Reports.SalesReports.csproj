@@ -197,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\SalesByItemReportApiController.cs" />
+    <Compile Include="Controllers\SalesOverTimeReportApiController.cs" />
     <Compile Include="Models\SalesByItemResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Visitors\SalesByItemVisitor.cs" />

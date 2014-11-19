@@ -99,7 +99,7 @@
 
             // Use a visitor to build the collection of report data
             var vistor = new SalesByItemVisitor(_merchello);
-
+           
             foreach (var invoice in invoices.Items)
             {
                 ((InvoiceDisplay)invoice).Accept(vistor);
