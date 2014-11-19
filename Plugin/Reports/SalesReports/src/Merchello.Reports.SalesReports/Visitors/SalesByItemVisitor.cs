@@ -10,6 +10,8 @@
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Visitors;
 
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// The sales by item visitor.
     /// </summary>
@@ -70,29 +72,35 @@
         {
             if (lineItem.LineItemTfKey != Constants.TypeFieldKeys.LineItem.ProductKey) return;
 
-            var key = lineItem.ExtendedData.FirstOrDefault(x => x.Key == Constants.ExtendedDataKeys.ProductVariantKey);
-            
-            Guid productVariantKey;
-            if (Guid.TryParse(key.Value, out productVariantKey))
+            try
             {
-                if (_results.ContainsKey(productVariantKey))
+                var key = lineItem.ExtendedData.FirstOrDefault(x => x.Key == Constants.ExtendedDataKeys.ProductVariantKey);
+
+                Guid productVariantKey;
+                if (Guid.TryParse(key.Value, out productVariantKey))
                 {
-                    _results[productVariantKey].Quantity += lineItem.Quantity;
-                    _results[productVariantKey].Total += lineItem.Quantity * lineItem.Price;
-                    return;
+                    if (_results.ContainsKey(productVariantKey))
+                    {
+                        _results[productVariantKey].Quantity += lineItem.Quantity;
+                        _results[productVariantKey].Total += lineItem.Quantity * lineItem.Price;
+                        return;
+                    }
+
+                    var variant = _merchello.Query.Product.GetProductVariantByKey(productVariantKey);
+                    if (variant == null) return;
+
+                    _results.Add(productVariantKey, new SalesByItemResult()
+                    {
+                        ProductVariant = variant,
+                        Quantity = lineItem.Quantity,
+                        Total = lineItem.Quantity * lineItem.Price
+                    });
                 }
-
-                var variant = _merchello.Query.Product.GetProductVariantByKey(productVariantKey);
-                if (variant == null) return;
-
-                _results.Add(productVariantKey, new SalesByItemResult()
-                                                    {
-                                                        ProductVariant = variant,
-                                                        Quantity = lineItem.Quantity,
-                                                        Total = lineItem.Quantity * lineItem.Price
-                                                    });
             }
-
+            catch (Exception ex)
+            {
+                LogHelper.Debug<SalesByItemVisitor>("Could not retrieve product variant key from the extended data collection.  This may be a result of an issue fixed in 1.5.1 or indicate a custom product line item which is not valid for this report.");
+            }
         }
     }
 }
