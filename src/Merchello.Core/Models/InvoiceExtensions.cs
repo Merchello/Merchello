@@ -821,7 +821,8 @@
                             sku = x.Sku,
                             price = x.Price,
                             quantity = x.Quantity,
-                            exported = x.Exported
+                            exported = x.Exported,
+                            extendedData = x.ExtendedData.AsEnumerable()
                         }), 
                 Formatting.None);
         }
