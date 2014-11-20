@@ -120,6 +120,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
+        [HttpGet]
         public override QueryResultDisplay GetDefaultReportData()
         {
             var query = new QueryDisplay()
