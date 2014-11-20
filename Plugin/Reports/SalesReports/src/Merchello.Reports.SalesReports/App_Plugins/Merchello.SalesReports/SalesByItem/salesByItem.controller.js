@@ -76,8 +76,8 @@
             var month = actual.getMonth() == 0 ? 11 : actual.getMonth() - 1;
 
             var start = new Date(actual.getFullYear(), month, actual.getDay());
-            $scope.applyDateStart(start.toIsoDateString());
-            $scope.applyDateEnd(actual.toIsoDateString());
+            $scope.applyDateStart(start);
+            $scope.applyDateEnd(actual);
         }
 
         
