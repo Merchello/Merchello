@@ -217,8 +217,7 @@
     <Content Include="App_Plugins\Merchello.SalesReports\assets\css\styles.css">
       <DependentUpon>styles.scss</DependentUpon>
     </Content>
-    <Content Include="App_Plugins\Merchello.SalesReports\Common\datePicker.css" />
-    <Content Include="App_Plugins\Merchello.SalesReports\Common\datePicker.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\Common\salesReports.models.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.controller.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.service.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesOverTime.controller.js" />
