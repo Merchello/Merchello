@@ -5,11 +5,11 @@
         var self = this;
 
         if (data == undefined) {
-            self.product = {};
+            self.productVariant = {};
             self.quantity = 0;
             self.total = 0;
         } else {
-            self.product = new merchello.Models.ProductVariant(data.productVariant, true);
+            self.productVariant = new merchello.Models.ProductVariant(data.productVariant, true);
             self.quantity = data.quantity;
             self.total = data.total;
         }

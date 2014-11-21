@@ -15,7 +15,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
 
                     <div class="btn-group">
-                        <a href="#" class="btn btn-primary">Export</a>
+                        <button id="reportExportBtn" data-ng-click="exportFilterWithDates(filterStartDate,filterEndDate)" class="btn btn-primary">Export</button>
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 
 
                 <div class="well row-fluid col-xs-10 span10">
-                    <p>Show all invoices where</p>
+                    <p>Show items for sales between</p>
 
                     <div class="form-inline">
                         <div>
@@ -50,7 +50,7 @@
                                     <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                                 </span>
                             </div>
-                            <button id="orderFilterDateGo" class="btn" data-ng-click="filterWithDates(filterStartDate,filterEndDate)"><localize key="merchelloGeneral_filter" /></button>
+                            <button id="salesFilterDateGo" class="btn" data-ng-click="filterWithDates(filterStartDate,filterEndDate)"><localize key="merchelloGeneral_filter" /></button>
                         </div>
                     </div>
 
@@ -59,18 +59,18 @@
                 <table class="table table-hover merchello-selectable-table sortable reports-table">
                     <thead>
                         <tr>
-                            <td><i class="icon-navigation-down"></i> Name</td>
-                            <td><i class="icon-navigation-down"></i> SKU</td>
-                            <td><i class="icon-navigation-down"></i> Units Sold</td>
-                            <td><i class="icon-navigation-down"></i> Gross Sales</td>
+                            <td>Name</td>
+                            <td>SKU</td>
+                            <td>Units Sold</td>
+                            <td>Gross Sales</td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr data-ng-repeat="result in results">
-                            <td>{{result.product.name}}</td>
-                            <td>{{result.product.sku}}</td>
+                            <td>{{result.productVariant.name}}</td>
+                            <td>{{result.productVariant.sku}}</td>
                             <td>{{result.quantity}}</td>
-                            <td>{{result.total}}</td>
+                            <td>{{result.total | currency : currencySymbol }}</td>
                         </tr>
                     </tbody>
                 </table>
