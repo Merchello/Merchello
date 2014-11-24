@@ -4,7 +4,7 @@ ADD COLUMN 	shipmentStatusKey UNIQUEIDENTIFIER NULL
 GO
 
 ALTER TABLE merchShipment
-ADD COLUMN 	shipmentNumber INT NULL,
+ADD COLUMN 	shipmentNumber INT NULL
 
 GO
 
