@@ -154,15 +154,17 @@
 	                if (providerFromServer.length > 0) {
 
 	                    _.each(providerFromServer, function (element, index, list) {
-	                        var newProvider = new merchello.Models.ShippingGatewayProvider(element);
-	                        // Need this to get the name for now.
-	                        var tempGlobalProvider = _.find($scope.providers, function (p) { return p.key == newProvider.key; });
-	                        newProvider.name = tempGlobalProvider.name;
-	                        newProvider.typeFullName = tempGlobalProvider.typeFullName;
-	                        newProvider.resources = tempGlobalProvider.resources;
-	                        newProvider.shipMethods = [];
-	                        country.shippingGatewayProviders.push(newProvider);
-	                        $scope.loadProviderMethods(newProvider, country);
+	                        if (element) {
+	                            var newProvider = new merchello.Models.ShippingGatewayProvider(element);
+	                            // Need this to get the name for now.
+	                            var tempGlobalProvider = _.find($scope.providers, function (p) { return p.key == newProvider.key; });
+	                            newProvider.name = tempGlobalProvider.name;
+	                            newProvider.typeFullName = tempGlobalProvider.typeFullName;
+	                            newProvider.resources = tempGlobalProvider.resources;
+	                            newProvider.shipMethods = [];
+	                            country.shippingGatewayProviders.push(newProvider);
+	                            $scope.loadProviderMethods(newProvider, country);                     
+	                        }
 	                    });
 
 	                    $scope.loaded = true;
@@ -507,8 +509,8 @@
             // Acquire the provider's available resources.
 		    var availableResources = gatewayProvider.resources;
 
-            // Get the editor template for the provider's dialog.
-            var templatePage = provider.dialogEditorView.editorView;
+            // Get the editor template for the method's dialog.
+		    var templatePage = dialogMethod.dialogEditorView.editorView;
 
 		    var myDialogData = {
 		        method: dialogMethod,
@@ -836,10 +838,13 @@
          */
 		$scope.shippingMethodDialogConfirm = function (data) {
 
+		    var promiseShipMethodSave = merchelloCatalogShippingService.saveShipMethod(data.method);
+		    promiseShipMethodSave.then(function() {
+		    }, function (reason) {
+		        notificationsService.error("Shipping Method Save Failed", reason.message);
+		    });
 		    data.provider.shipMethods = [];
 		    $scope.loadProviderMethods(data.provider, data.country);
-		    //$scope.loadFixedRateProviderMethods(data.country);
-
 		};
 
 	    /**
