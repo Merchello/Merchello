@@ -451,6 +451,11 @@
                     self.hasVariants = true;
                     self.minPrice = _.min(productFromServer.productVariants, function (v) { return v.price; }).price;
                     self.maxPrice = _.max(productFromServer.productVariants, function (v) { return v.price; }).price;
+
+                    self.name = productFromServer.name + " [" + productFromServer.productVariants.length + "]";
+
+                    };
+
                 }
             }
         }
@@ -593,6 +598,8 @@
                 return self.maxPrice;
             }
         };
+
+
 
     };
 
