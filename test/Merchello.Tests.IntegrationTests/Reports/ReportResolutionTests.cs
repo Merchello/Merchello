@@ -23,20 +23,20 @@ namespace Merchello.Tests.IntegrationTests.Reports
         {
         }
 
-        /// <summary>
-        /// Can resolve reports api controller 
-        /// </summary>
-        [Test]
-        public void Can_Resolve_Reports_Types_With_Umbraco_Plugin_Manager()
-        {
-            //// Arrange
+        ///// <summary>
+        ///// Can resolve reports api controller 
+        ///// </summary>
+        //[Test]
+        //public void Can_Resolve_Reports_Types_With_Umbraco_Plugin_Manager()
+        //{
+        //    //// Arrange
             
-            //// Act
-            var types = PluginManager.Current.ResolveReportApiControllers();
+        //    //// Act
+        //    var types = PluginManager.Current.ResolveReportApiControllers();
 
-            //// Assert
-            Assert.IsTrue(types.Any());
-        }
+        //    //// Assert
+        //    Assert.IsTrue(types.Any());
+        //}
 
 
         [Test]
@@ -46,17 +46,17 @@ namespace Merchello.Tests.IntegrationTests.Reports
             Assert.IsTrue(ReportApiControllerResolver.HasCurrent);
         }
 
-        [Test]
-        public void Can_Resolve_Types_With_The_Reports_Resolver()
-        {
-            //// Arrange
+        //[Test]
+        //public void Can_Resolve_Types_With_The_Reports_Resolver()
+        //{
+        //    //// Arrange
             
-            //// Act
-            var types = ReportApiControllerResolver.Current.ResolvedTypes;
+        //    //// Act
+        //    var types = ReportApiControllerResolver.Current.ResolvedTypes;
 
-            //// Assert
-            Assert.IsTrue(types.Any());
-        }
+        //    //// Assert
+        //    Assert.IsTrue(types.Any());
+        //}
 
         ///// <summary>
         ///// Can resolve api controller 
