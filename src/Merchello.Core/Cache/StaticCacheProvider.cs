@@ -63,7 +63,9 @@ namespace Merchello.Core.Cache
 
         public IEnumerable<object> GetCacheItemsByKeyExpression(string regexString)
         {
-            return Enumerable.Empty<object>();
+            return (from KeyValuePair<string, object> c in StaticCache
+                    where Regex.IsMatch(c.Key, regexString) 
+                    select c.Value).ToList();
         }
 
         public virtual object GetCacheItem(string cacheKey)

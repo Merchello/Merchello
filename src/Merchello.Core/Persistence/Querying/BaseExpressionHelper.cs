@@ -627,6 +627,13 @@ namespace Merchello.Core.Persistence.Querying
         //               ? "'" + escapeCallback(value) + "'"
         //               : value.ToString();
         //}
+
+        public virtual string EscapeParam(object paramValue)
+        {
+            return paramValue == null 
+                ? string.Empty 
+                : SqlSyntaxContext.SqlSyntaxProvider.EscapeString(paramValue.ToString());
+        }
         
         public virtual bool ShouldQuoteValue(Type fieldType)
         {
