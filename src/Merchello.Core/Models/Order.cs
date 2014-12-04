@@ -5,6 +5,8 @@
     using System.Runtime.Serialization;
     using EntityBase;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents an Order
     /// </summary>

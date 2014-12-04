@@ -2,6 +2,8 @@
 
 namespace Merchello.Core.Gateways.Taxation
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents an invoice tax calculation result
     /// </summary>

@@ -4,6 +4,7 @@
 
     using Merchello.Core.Models;
 
+    using Umbraco.Core;
     using Umbraco.Core.Cache;
 
     /// <summary>

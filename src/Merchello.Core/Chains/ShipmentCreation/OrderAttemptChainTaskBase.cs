@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using Models;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The order attempt chain task base.
     /// </summary>

@@ -987,7 +987,6 @@
     <Compile Include="Configuration\MerchelloVersion.cs" />
     <Compile Include="ExpressionHelper.cs" />
     <Compile Include="LambdaExpressionCacheKey.cs" />
-    <Compile Include="Mandate.cs" />
     <Compile Include="Models\TypeFields\PaymentMethodTypeField.cs" />
     <Compile Include="Models\Rdbms\CustomerAddressDto.cs" />
     <Compile Include="Models\Rdbms\AnonymousCustomerDto.cs" />

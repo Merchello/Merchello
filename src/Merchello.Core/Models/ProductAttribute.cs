@@ -4,6 +4,8 @@
     using System.Runtime.Serialization;
     using EntityBase;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a product attribute
     /// </summary>

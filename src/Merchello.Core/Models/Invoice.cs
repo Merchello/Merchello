@@ -7,6 +7,8 @@
 
     using Merchello.Core.Models.EntityBase;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The invoice.
     /// </summary>

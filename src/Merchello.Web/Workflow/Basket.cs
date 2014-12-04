@@ -6,6 +6,8 @@
     using Core.Cache;
     using Core.Models;
     using Core.Models.TypeFields;
+
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
 
     /// <summary>

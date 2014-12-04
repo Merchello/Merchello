@@ -2,6 +2,8 @@
 {
     using Models;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a shipment rate quote
     /// </summary>

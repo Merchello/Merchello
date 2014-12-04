@@ -6,6 +6,8 @@
     using Core;
     using Core.Configuration;
     using Core.Services;
+
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.WebApi;

@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using Models;
     using Services;
+
+    using Umbraco.Core;
     using Umbraco.Core.Cache;
 
     /// <summary>

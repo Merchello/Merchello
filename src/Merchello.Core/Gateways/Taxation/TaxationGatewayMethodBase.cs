@@ -2,6 +2,8 @@
 {
     using Merchello.Core.Models;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents the abstract GatewayTaxMethod
     /// </summary>

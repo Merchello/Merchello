@@ -6,6 +6,8 @@
 
     using Merchello.Core.Models.EntityBase;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a shipment.
     /// </summary>

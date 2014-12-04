@@ -2,6 +2,8 @@
 
 namespace Merchello.Core.Gateways
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// An attribute used to decorate gateway providers to be resolved and "activated/deactivated"
     /// </summary>

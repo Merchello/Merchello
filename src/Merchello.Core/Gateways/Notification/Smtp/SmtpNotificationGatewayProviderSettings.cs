@@ -2,6 +2,8 @@
 {
     using System.Net;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents SMTP Notification Gateway Provider Settings
     /// </summary>

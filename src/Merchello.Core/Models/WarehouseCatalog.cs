@@ -6,6 +6,8 @@
     using EntityBase;
     using Interfaces;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a warehouse catalog
     /// </summary>

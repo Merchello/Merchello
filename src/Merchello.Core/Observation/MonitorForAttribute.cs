@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Umbraco.Core;
+
     public class MonitorForAttribute : Attribute 
     {
         public MonitorForAttribute(string key, Type observableTrigger, string name)
