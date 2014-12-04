@@ -110,5 +110,14 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             Assert.IsTrue(2 == _basket.Items.Count);
             
         }
+
+        /// <remarks>
+        /// http://issues.merchello.com/youtrack/issue/M-511
+        /// </remarks>
+        [Test]
+        public void Can_Add_A_CustomLineItemType_To_The_Basket()
+        {
+            
+        }
     }
 }
