@@ -224,6 +224,7 @@
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.controller.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.service.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesOverTime.controller.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesOverTime.service.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\TaxesByDestination\taxesByDestination.controller.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\report.html" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\report.html" />
