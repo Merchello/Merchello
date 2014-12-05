@@ -8,7 +8,7 @@
      * @description
      * The controller for the reports SalesByItem page
      */
-    controllers.SalesByItemController = function ($scope, $element, assetsService, angularHelper, notificationsService, merchelloSettingsService, merchelloPluginReportSalesByItemService) {
+    controllers.SalesOverTimeController = function ($scope, $element, assetsService, angularHelper, notificationsService, merchelloSettingsService, merchelloPluginReportSalesByItemService) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = true;
@@ -132,7 +132,7 @@
             promiseResults.then(function (response) {
                 var queryResult = new merchello.Models.QueryResult(response);
                 $scope.results = _.map(queryResult.items, function (resultFromServer) {
-                    return new merchello.Models.SaleByItemResult(resultFromServer, true);
+                    return new merchello.Models.SaleOverTimeResult(resultFromServer, true);
                 });
                 $scope.itemsPerPage = queryResult.itemsPerPage;
                 $scope.totalItems = queryResult.totalItems;
@@ -222,7 +222,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Plugins.Reports.SalesByItemController", ['$scope', '$element', 'assetsService', 'angularHelper', 'notificationsService', 'merchelloSettingsService', 'merchelloPluginReportSalesByItemService', merchello.Controllers.SalesByItemController]);
+    angular.module("umbraco").controller("Merchello.Plugins.Reports.SalesOverTimeController", ['$scope', '$element', 'assetsService', 'angularHelper', 'notificationsService', 'merchelloSettingsService', 'merchelloPluginReportSalesByItemService', merchello.Controllers.SalesOverTimeController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
