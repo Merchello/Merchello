@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Merchello.Core.Models.TypeFields
+﻿namespace Merchello.Core.Models.TypeFields
 {
-
+    /// <summary>
+    /// The enum type field converter.
+    /// </summary>
     public class EnumTypeFieldConverter
     {
-
         /// <summary>
         /// Creates an instance of an <see cref="IAddressTypeField"/> object
         /// </summary>
@@ -42,7 +37,6 @@ namespace Merchello.Core.Models.TypeFields
         {
             get { return new LineItemTypeField(); }
         }
-
       
         /// <summary>
         /// Creates an instance of an <see cref="IPaymentMethodTypeField"/> object
@@ -52,15 +46,6 @@ namespace Merchello.Core.Models.TypeFields
         {
             get { return new PaymentMethodTypeField(); }
         }
-
-        ///// <summary>
-        ///// Creates an instance of an <see cref="IShipmentMethodTypeField"/> object
-        ///// </summary>
-        ///// <returns></returns>
-        //internal static IShipmentMethodTypeField ShipmentMethod
-        //{
-        //    get { return new ShipMethodTypeField(); }
-        //}
 
         /// <summary>
         /// Creates an instance of an <see cref="IAppliedPaymentTypeField"/>
