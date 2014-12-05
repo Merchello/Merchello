@@ -15,4 +15,20 @@
         }
     }
 
+    models.SaleOverTimeResult = function (data) {
+
+        var self = this;
+
+        if (data == undefined) {
+            self.date = {};
+            self.salestotal = 0;
+            self.salescount = 0;
+        } else {
+            self.date = data.date;
+            self.salestotal = data.salestotal;
+            self.salescount = data.salescount;
+        }
+    }
+
+
 }(window.merchello.Models = window.merchello.Models || {}));
