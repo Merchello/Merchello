@@ -69,7 +69,7 @@
                 controller => controller.SearchProducts(new QueryDisplay()
                     {
                         CurrentPage = 0,
-                        ItemsPerPage = 100,
+                        ItemsPerPage = 25,
                         Parameters = new QueryDisplayParameter[] { }
                     })));
 
@@ -84,7 +84,7 @@
                 controller => controller.SearchCustomers(new QueryDisplay()
                     {
                         CurrentPage = 0,
-                        ItemsPerPage = 100,
+                        ItemsPerPage = 25,
                         Parameters = new QueryDisplayParameter[] { }
                     })));
 
@@ -124,7 +124,7 @@
                 controller => controller.SearchInvoices(new QueryDisplay()
                 {
                     CurrentPage = 0,
-                    ItemsPerPage = 100,
+                    ItemsPerPage = 25,
                     Parameters = new QueryDisplayParameter[] { }
                 })));
 
