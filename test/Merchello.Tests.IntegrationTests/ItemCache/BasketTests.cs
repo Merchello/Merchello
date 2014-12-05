@@ -7,6 +7,9 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.ItemCache
 {
+    using Merchello.Core.Configuration;
+    using Merchello.Core.Models.TypeFields;
+
     [TestFixture]
     public class BasketTests : DatabaseIntegrationTestBase
     {
@@ -117,7 +120,15 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
         [Test]
         public void Can_Add_A_CustomLineItemType_To_The_Basket()
         {
-            
+            //// Arrange
+            var typefield = EnumTypeFieldConverter.LineItemType.Custom("CcFee");
+            Assert.NotNull(typefield);
+
+            // create a custom line item
+            var itemCacheLineItem = new ItemCacheLineItem(typefield.TypeKey, typefield.Name, "fee", 1, 10, new ExtendedDataCollection());
+
+            _basket.Items.Add(itemCacheLineItem);
+
         }
     }
 }
