@@ -39,6 +39,7 @@
         public SalesOverTimeReportApiController()
             : this(Core.MerchelloContext.Current)
         {
+
         }
 
         /// <summary>
@@ -50,6 +51,7 @@
         public SalesOverTimeReportApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
+            _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
         /// <summary>
