@@ -71,6 +71,7 @@
       <key alias="attentionRequired">Tienes pedidos que gestionar</key>
       <key alias="paymentExpirationWarning">Puede que no recibas el pago si la autorización caduca.</key>
       <key alias="processedBy">Procesado por</key>
+    <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
