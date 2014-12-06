@@ -366,14 +366,15 @@
                 itemsPerPage: perPage,
                 sortBy: sortBy,
                 sortDirection: sortDirection,
-                parameters: [
-                {
+                parameters: [{
                     fieldName: 'term',
                     value: filterText
                 }]
             });
 
-            $scope.currentFilters = listQuery.parameters;
+            if (filterText.length > 0) {
+                $scope.currentFilters = listQuery.parameters;               
+            }
 
             return listQuery;
         };

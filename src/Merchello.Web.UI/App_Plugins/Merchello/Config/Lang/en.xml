@@ -97,6 +97,7 @@
     <key alias="saleHistory">Sale History</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>
     <key alias="paymentProcessedBy">Payment processed by:</key>
+    <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloFulfillShipment">
     <!-- phrases -->

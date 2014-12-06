@@ -71,6 +71,7 @@
 		<key alias="attentionRequired">Ci sono ordini da controllare</key>
 		<key alias="paymentExpirationWarning">Potresti non ricevere pagamenti se l'autorizzazione è scaduta.</key>
 		<key alias="processedBy">Effettuato da</key>
+    <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->

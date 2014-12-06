@@ -87,7 +87,7 @@
                 if (query === undefined) {
                     query = new merchello.Models.ListQuery({
                         currentPage: 0,
-                        itemsPerPage: 100,
+                        itemsPerPage: 25,
                         sortBy: '',
                         sortDirection: ''
                     });
