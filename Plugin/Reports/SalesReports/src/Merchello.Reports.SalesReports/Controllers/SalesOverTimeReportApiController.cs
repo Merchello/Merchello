@@ -113,10 +113,11 @@
                          where invoiceItem.InvoiceStatus.Name == "Paid"
                          group invoiceItem by invoiceItem.InvoiceDate.Date
                              into g
+                             orderby g.Key descending
                              select
                                  new
                                  {
-                                     date = g.Key,
+                                     date = g.Key.ToString("MMMM dd, yyyy"),
                                      salestotal = g.Sum<InvoiceDisplay>((Func<InvoiceDisplay, decimal>)(item => item.Total)),
                                      salescount = g.Count<InvoiceDisplay>()
 
