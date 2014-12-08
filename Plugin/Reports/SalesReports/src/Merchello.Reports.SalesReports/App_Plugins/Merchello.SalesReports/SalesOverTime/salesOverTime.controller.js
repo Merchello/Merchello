@@ -2,11 +2,11 @@
 
     /**
      * @ngdoc controller
-     * @name Merchello.Dashboards.Report.SalesByItemController
+     * @name Merchello.Dashboards.Report.SalesOverTimeController
      * @function
      * 
      * @description
-     * The controller for the reports SalesByItem page
+     * The controller for the reports SalesOverTime page
      */
     controllers.SalesOverTimeController = function ($scope, $element, assetsService, angularHelper, notificationsService, merchelloSettingsService, merchelloPluginReportSalesOverTimeService) {
 
@@ -138,7 +138,7 @@
                 $scope.totalItems = queryResult.totalItems;
                 $scope.loaded = true;
             }, function (reason) {
-                notificationsService.error("Failed To sales by item data", reason.message);
+                notificationsService.error("Failed To sales over time data", reason.message);
             });
         };
 
@@ -148,7 +148,7 @@
          * @function
          * 
          * @description
-         * Loads a sales by item report filtered by a date range
+         * Loads a sales over time report filtered by a date range
          */
         $scope.filterWithDates = function (filterStartDate, filterEndDate) {
 
@@ -164,12 +164,12 @@
         // * @function
         // * 
         // * @description
-        // * Loads a sales by item report filtered by a date range and exports the data to a csv file
+        // * Loads a sales over time report filtered by a date range and exports the data to a csv file
         // */
         //$scope.exportFilterWithDates = function(filterStartDate, filterEndDate) {
         //    $scope.loaded = false;
         //    var listQuery = $scope.buildQueryDates(filterStartDate, filterEndDate);
-        //    $scope.renderReport(merchelloPluginReportSalesByItemService.searchByDateRange(listQuery));
+        //    $scope.renderReport(merchelloPluginReportSalesOverTimeService.searchByDateRange(listQuery));
         //};
 
         /**
@@ -178,7 +178,7 @@
          * @function
          * 
          * @description
-         * Loads a sales by item report with default data
+         * Loads a sales over time report with default data
          */
         $scope.defaultData = function () {
             $scope.renderReport(merchelloPluginReportSalesOverTimeService.getDefaultData());
