@@ -2,13 +2,13 @@
 
     /**
      * @ngdoc controller
-     * @name Merchello.Dashboards.Report.SalesByItemController
+     * @name Merchello.Dashboards.Report.SalesOverTimeController
      * @function
      * 
      * @description
-     * The controller for the reports SalesByItem page
+     * The controller for the reports SalesOverTime page
      */
-    controllers.SalesOverTimeController = function ($scope, $element, assetsService, angularHelper, notificationsService, merchelloSettingsService, merchelloPluginReportSalesByItemService) {
+    controllers.SalesOverTimeController = function ($scope, $element, assetsService, angularHelper, notificationsService, merchelloSettingsService, merchelloPluginReportSalesOverTimeService) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = true;
@@ -154,7 +154,7 @@
 
             $scope.loaded = false;
             var listQuery = $scope.buildQueryDates(filterStartDate, filterEndDate);
-            $scope.renderReport(merchelloPluginReportSalesByItemService.searchByDateRange(listQuery));
+            $scope.renderReport(merchelloPluginReportSalesOverTimeService.searchByDateRange(listQuery));
 
         };
 
@@ -169,7 +169,7 @@
         //$scope.exportFilterWithDates = function(filterStartDate, filterEndDate) {
         //    $scope.loaded = false;
         //    var listQuery = $scope.buildQueryDates(filterStartDate, filterEndDate);
-        //    $scope.renderReport(merchelloPluginReportSalesByItemService.searchByDateRange(listQuery));
+        //    $scope.renderReport(merchelloPluginReportSalesOverTimeService.searchByDateRange(listQuery));
         //};
 
         /**
@@ -181,7 +181,7 @@
          * Loads a sales by item report with default data
          */
         $scope.defaultData = function () {
-            $scope.renderReport(merchelloPluginReportSalesByItemService.getDefaultData());
+            $scope.renderReport(merchelloPluginReportSalesOverTimeService.getDefaultData());
         };
 
         /**
