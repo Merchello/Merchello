@@ -138,7 +138,7 @@
                 $scope.totalItems = queryResult.totalItems;
                 $scope.loaded = true;
             }, function (reason) {
-                notificationsService.error("Failed To sales by item data", reason.message);
+                notificationsService.error("Failed To sales over time data", reason.message);
             });
         };
 
@@ -148,7 +148,7 @@
          * @function
          * 
          * @description
-         * Loads a sales by item report filtered by a date range
+         * Loads a sales over time report filtered by a date range
          */
         $scope.filterWithDates = function (filterStartDate, filterEndDate) {
 
@@ -164,7 +164,7 @@
         // * @function
         // * 
         // * @description
-        // * Loads a sales by item report filtered by a date range and exports the data to a csv file
+        // * Loads a sales over time report filtered by a date range and exports the data to a csv file
         // */
         //$scope.exportFilterWithDates = function(filterStartDate, filterEndDate) {
         //    $scope.loaded = false;
@@ -178,7 +178,7 @@
          * @function
          * 
          * @description
-         * Loads a sales by item report with default data
+         * Loads a sales over time report with default data
          */
         $scope.defaultData = function () {
             $scope.renderReport(merchelloPluginReportSalesOverTimeService.getDefaultData());
@@ -222,7 +222,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Plugins.Reports.SalesOverTimeController", ['$scope', '$element', 'assetsService', 'angularHelper', 'notificationsService', 'merchelloSettingsService', 'merchelloPluginReportSalesByItemService', merchello.Controllers.SalesOverTimeController]);
+    angular.module("umbraco").controller("Merchello.Plugins.Reports.SalesOverTimeController", ['$scope', '$element', 'assetsService', 'angularHelper', 'notificationsService', 'merchelloSettingsService', 'merchelloPluginReportSalesOverTimeService', merchello.Controllers.SalesOverTimeController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
