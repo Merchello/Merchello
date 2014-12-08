@@ -8,7 +8,7 @@
      * @description
      * The controller for the reports SalesByItem page
      */
-    controllers.SalesOverTimeController = function ($scope, $element, assetsService, angularHelper, notificationsService, merchelloSettingsService, merchelloPluginReportSalesByItemService) {
+    controllers.SalesOverTimeController = function ($scope, $element, assetsService, angularHelper, notificationsService, merchelloSettingsService, merchelloPluginReportSalesOverTimeService) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = true;
@@ -154,7 +154,7 @@
 
             $scope.loaded = false;
             var listQuery = $scope.buildQueryDates(filterStartDate, filterEndDate);
-            $scope.renderReport(merchelloPluginReportSalesByItemService.searchByDateRange(listQuery));
+            $scope.renderReport(merchelloPluginReportSalesOverTimeService.searchByDateRange(listQuery));
 
         };
 
@@ -181,7 +181,7 @@
          * Loads a sales by item report with default data
          */
         $scope.defaultData = function () {
-            $scope.renderReport(merchelloPluginReportSalesByItemService.getDefaultData());
+            $scope.renderReport(merchelloPluginReportSalesOverTimeService.getDefaultData());
         };
 
         /**
@@ -222,7 +222,7 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Plugins.Reports.SalesOverTimeController", ['$scope', '$element', 'assetsService', 'angularHelper', 'notificationsService', 'merchelloSettingsService', 'merchelloPluginReportSalesByItemService', merchello.Controllers.SalesOverTimeController]);
+    angular.module("umbraco").controller("Merchello.Plugins.Reports.SalesOverTimeController", ['$scope', '$element', 'assetsService', 'angularHelper', 'notificationsService', 'merchelloSettingsService', 'merchelloPluginReportSalesOverTimeService', merchello.Controllers.SalesOverTimeController]);
 
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
