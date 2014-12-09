@@ -26,6 +26,7 @@
     /// The sales over time report controller.
     /// </summary>
     [BackOfficeTree("salesOverTime", "reports", "Sales Over Time", "icon-loading", "Merchello.SalesReports\\SalesOverTime\\report", 10)]
+    [PluginController("MerchelloSalesReports")]
     public class SalesOverTimeReportApiController : ReportController
     {
         /// <summary>
@@ -109,30 +110,23 @@
             else
             {
                 //build list of items grouped by date. each item has "date", "salestotal", "salescount"
-            var source = from invoiceItem in invoices.Items.ToList().Cast<InvoiceDisplay>()
-                         where invoiceItem.InvoiceStatus.Name == "Paid"
-                         group invoiceItem by invoiceItem.InvoiceDate.Date
-                             into g
-                             orderby g.Key descending
-                             select
-                                 new
-                                 {
-                                     date = g.Key.ToString("MMMM dd, yyyy"),
-                                     salestotal = g.Sum<InvoiceDisplay>((Func<InvoiceDisplay, decimal>)(item => item.Total)),
-                                     salescount = g.Count<InvoiceDisplay>()
+                var source = from invoiceItem in invoices.Items.ToList().Cast<InvoiceDisplay>()
+                             where invoiceItem.InvoiceStatus.Name == "Paid"
+                             group invoiceItem by invoiceItem.InvoiceDate.Date
+                                 into g
+                                 orderby g.Key descending
+                                 select
+                                     new
+                                     {
+                                         date = g.Key.ToString("MMMM dd, yyyy"),
+                                         salestotal = g.Sum<InvoiceDisplay>((Func<InvoiceDisplay, decimal>)(item => item.Total)),
+                                         salescount = g.Count<InvoiceDisplay>()
 
 
-                                 };
+                                     };
 
-            //    var list = new[]
-            //{
-            //    new {date = "12/1/2014", salestotal = 100, salescount = 3},
-            //    new {date = "12/10/2014", salestotal = 33, salescount = 2},
-            //    new {date = "12/15/2014", salestotal = 66, salescount = 1}
-            //};
-
-            result.Items = source;
-            result.TotalItems = source.Count();
+                result.Items = source;
+                result.TotalItems = source.Count();
                 result.ItemsPerPage = 10;
                 result.CurrentPage = 0;
                 result.TotalPages = result.TotalItems / result.ItemsPerPage;
@@ -142,41 +136,6 @@
             }
 
         }
-
-        /// <summary>
-        /// Exports a search by date range.
-        /// </summary>
-        /// <param name="query">
-        /// The query.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        //[HttpPost]
-        //public QueryResultDisplay ExportByDateRange(QueryDisplay query)
-        //{
-        //    var result = this.SearchByDateRange(query);
-
-        //    var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
-        //    var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
-
-        //    if (!result.Items.Any()) return result;
-
-        //    // check if the directory exists
-        //    var exportDir = IOHelper.MapPath("~/App_Data/TEMP/Merchello/");
-        //    if (!Directory.Exists(exportDir))
-        //        Directory.CreateDirectory(exportDir);
-
-
-        //    var dump = CsvSerializer.SerializeToCsv(result.Items);
-
-        //    // write dump to export file
-        //    var exportFileName = string.Concat("SalesOverTimeReport_", DateTime.Parse(invoiceDateStart.Value).ToString("_yyyyMMdd"), "_", DateTime.Parse(invoiceDateEnd.Value).ToString("_yyyyMMdd"), ".csv");
-        //    var exportPath = string.Concat(exportDir, exportFileName);
-        //    File.WriteAllText(exportPath, dump);
-
-        //    return result;
-        //}
 
         /// <summary>
         /// The get default report data.
