@@ -50,7 +50,6 @@ namespace Merchello.Tests.IntegrationTests.Examine
             
             var merchello = new MerchelloHelper(MerchelloContext.Services);
 
-            var productVariantService = PreTestDataWorker.ProductVariantService;
             var productService = PreTestDataWorker.ProductService;
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
@@ -71,14 +70,6 @@ namespace Merchello.Tests.IntegrationTests.Examine
             product.SalePrice = 18M;
             productService.Save(product);
 
-
-            var attributes = new ProductAttributeCollection()
-            {
-                product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blue" ),
-                product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "XL")
-            };
-
-            productVariantService.CreateProductVariantWithKey(product, attributes);
 
             _provider.AddProductToIndex(product);
 

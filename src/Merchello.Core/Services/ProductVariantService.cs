@@ -303,7 +303,6 @@
         /// <param name="product"><see cref="IProduct"/> to varify</param>
         public void EnsureProductVariantsHaveAttributes(IProduct product)
         {
-            var optionKeys = product.ProductOptions.Select(x => x.Key);
             var variants = GetByProductKey(product.Key);
             var productVariants = variants as IProductVariant[] ?? variants.ToArray();
             if (!productVariants.Any()) return;

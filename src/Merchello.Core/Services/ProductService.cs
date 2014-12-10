@@ -225,10 +225,10 @@
                     repository.AddOrUpdate(product);
                     uow.Commit();
                 }
-            }
 
-            // Synchronize product variants
-            SynchronizeVariants(product);
+                // Synchronize product variants
+                this.EnsureVariants(product);
+            }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
 
@@ -263,6 +263,9 @@
 
                     uow.Commit();
                 }
+
+                // Synchronize the products array
+                EnsureVariants(productArray);
             }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
@@ -561,12 +564,24 @@
             }
         }
 
-        private void SynchronizeVariants(IEnumerable<IProduct> products)
+        /// <summary>
+        /// Ensures that variants are created for each option and option choice combination
+        /// </summary>
+        /// <param name="products">
+        /// The collection of products.
+        /// </param>
+        private void EnsureVariants(IEnumerable<IProduct> products)
         {
-            products.ForEach(SynchronizeVariants);
+            products.ForEach(this.EnsureVariants);
         }
 
-        private void SynchronizeVariants(IProduct product)
+        /// <summary>
+        /// Ensures that variants are created for each option and option choice combination
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        private void EnsureVariants(IProduct product)
         {
             // Create the product varaints
             if (!product.ProductOptions.Any()) return;
@@ -578,8 +593,10 @@
                 // delete any variants that don't have the correct number of attributes
                 var attCount = attributeLists.First().Count();
 
-                foreach (var remover in product.ProductVariants.Where(x => x.Attributes.Count() != attCount))
+                var removers = product.ProductVariants.Where(x => x.Attributes.Count() != attCount);
+                foreach (var remover in removers.ToArray())
                 {
+                    product.ProductVariants.Remove(remover.Sku);
                     _productVariantService.Delete(remover);
                 }
             }
@@ -591,11 +608,11 @@
                    
                 if (product.GetProductVariantForPurchase(productAttributes) != null) continue;
                    
-                var variant = this._productVariantService.CreateProductVariantWithKey(product, productAttributes.ToProductAttributeCollection());
+                var variant = this._productVariantService.CreateProductVariantWithKey(product, productAttributes.ToProductAttributeCollection(), false);
                 foreach (var inv in product.CatalogInventories)
                 {
                     variant.AddToCatalogInventory(inv.CatalogKey);
-                    _productVariantService.Save(variant);
+                    _productVariantService.Save(variant, false);
                 }
             }
         }

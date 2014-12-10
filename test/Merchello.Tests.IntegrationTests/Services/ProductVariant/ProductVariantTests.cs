@@ -151,7 +151,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a product variant can be created
         /// </summary>
-        [Test]
+        [Obsolete("This is now handled by saving a product with options")]
         public void Can_Create_A_ProductVariant()
         {
             //// Arrange
@@ -181,7 +181,6 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
                 _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
             };
-            var variant = _productVariantService.CreateProductVariantWithKey(_product, attributes);
 
             //// Act 
             
@@ -197,12 +196,8 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         public void Can_Retrieve_A_ProductVariant_by_Its_Key()
         {
             //// Arrange
-            var attributes = new ProductAttributeCollection
-            {
-                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
-            };
-            var expected = _productVariantService.CreateProductVariantWithKey(_product, attributes);
+            Assert.IsTrue(_product.ProductVariants.Any());
+            var expected = _product.ProductVariants.First();
             var id = expected.Key;
             Assert.AreNotEqual(id, Guid.Empty);
 
@@ -221,28 +216,15 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         public void Can_Retrieve_All_Variants_For_A_Product()
         {
             //// Arrange
-            var attributes1 = new ProductAttributeCollection
-            {
-                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
-            };
-            var attributes2 = new ProductAttributeCollection
-            {
-                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "XL" )
-            };
-            _productVariantService.CreateProductVariantWithKey(_product, attributes1);
-            _productVariantService.CreateProductVariantWithKey(_product, attributes2);
-
-            Assert.IsTrue(_product.ProductVariants.Count == 2);
+            Assert.AreEqual(16, _product.ProductVariants.Count);
 
             //// Act
-            var variants = _productVariantService.GetByProductKey(_product.Key);
+            var variants = _productVariantService.GetByProductKey(_product.Key).ToArray();
 
             //// Assert
            Assert.IsTrue(variants.Any());
-           Assert.IsTrue(2 == variants.Count());
-
+           Assert.AreEqual(16, variants.Count());
+            
         }
 
         /// <summary>
@@ -252,14 +234,9 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         public void Can_Delete_A_Variant()
         {
             //// Arrange
-            var attributes = new ProductAttributeCollection
-            {
-               _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
-            };
-            var variant = _productVariantService.CreateProductVariantWithKey(_product, attributes);
-            var key = variant.Key;
             Assert.IsTrue(_product.ProductVariants.Any());
+            var variant = _product.ProductVariants.First();
+            var key = variant.Key;
 
             //// Act
             _productVariantService.Delete(variant);
@@ -277,21 +254,17 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         public void Can_Verify_That_ProductVariant_Is_Deleted_When_An_Option_Is_Deleted()
         {
             //// Arrange
-            var attributes = new ProductAttributeCollection
-            {
-                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg" )
-            };
-            _productVariantService.CreateProductVariantWithKey(_product, attributes);
-            
+            var remover = _product.ProductOptions.First(x => x.Name == "Size");
             Assert.IsTrue(_product.ProductVariants.Any());
 
             //// Act
-            _product.ProductOptions.Remove(_product.ProductOptions.First(x => x.Name == "Size"));
+            _product.ProductOptions.Remove(remover);
             _productService.Save(_product);
 
             //// Assert
-            Assert.IsFalse(_product.ProductVariants.Any());
+            Assert.AreEqual(1, _product.ProductOptions.Count);
+            Assert.AreEqual(4, _product.ProductVariants.Count);
+            Assert.IsFalse(_product.ProductOptions.Contains(remover));
         }
 
         /// <summary>
@@ -301,21 +274,15 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         public void Can_Verify_Removing_An_Attribute_Deletes_Variants_That_Have_That_Attribute()
         {
             //// Arrange
-            var attributes = new ProductAttributeCollection
-            {
-                _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
-                _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg")
-            };
-            _productVariantService.CreateProductVariantWithKey(_product, attributes);
-
+            var remover = _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg");
             Assert.IsTrue(_product.ProductVariants.Any());
 
             //// Act
-            _product.ProductOptions.First(x => x.Name == "Size").Choices.Remove(_product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg"));
+            _product.ProductOptions.First(x => x.Name == "Size").Choices.Remove(remover);
             _productService.Save(_product);
 
             //// Assert
-            Assert.IsFalse(_product.ProductVariants.Any());
+            Assert.IsFalse(_product.ProductVariants.Any(x => x.Attributes.Contains(remover)));
         }
 
         /// <summary>
@@ -330,14 +297,13 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
                 _product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blk"),
                 _product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "Lg")
             };
-            _productVariantService.CreateProductVariantWithKey(_product, attributes);
+            
             
             Assert.IsTrue(_product.ProductVariants.Any());
 
-            var ids = _product.ProductVariants.First().Attributes.Select(att => att.Key).ToArray();
-
             //// Act
-            var retrieved = _productVariantService.GetProductVariantWithAttributes(_product, ids);
+            var attIds = attributes.Select(x => x.Key).ToArray();
+            var retrieved = _productVariantService.GetProductVariantWithAttributes(_product, attIds);
 
             //// Assert
             Assert.NotNull(retrieved);

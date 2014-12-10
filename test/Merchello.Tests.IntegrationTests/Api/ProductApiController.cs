@@ -52,16 +52,6 @@ namespace Merchello.Tests.IntegrationTests.Api
             var p = _productService.CreateProduct(product.Name, product.Sku, product.Price);
             p = product.ToProduct(p);
             _productService.Save(p);
-
-            if (!p.ProductOptions.Any()) return p;
-
-            var attributeLists = p.GetPossibleProductAttributeCombinations();
-
-            foreach (var list  in attributeLists)
-            {
-                _productVariantService.CreateProductVariantWithKey(p, list.ToProductAttributeCollection());
-            }
-
             return p;
         }
 

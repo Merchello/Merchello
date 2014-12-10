@@ -236,7 +236,7 @@
 
             foreach (var inv in productVariant.CatalogInventories.Where((inv => !existing.Contains(inv.CatalogKey))))
             {
-                AddCatalogInventory(inv);
+                AddCatalogInventory(productVariant, inv);
             }
 
             foreach (var inv in productVariant.CatalogInventories.Where((x => existing.Contains(x.CatalogKey))))
@@ -245,7 +245,7 @@
             }
         }
 
-        private void AddCatalogInventory(ICatalogInventory inv)
+        private void AddCatalogInventory(IProductVariant productVariant, ICatalogInventory inv)
         {
             inv.CreateDate = DateTime.Now;
             inv.UpdateDate = DateTime.Now;
@@ -253,7 +253,7 @@
             var dto = new CatalogInventoryDto()
             {
                 CatalogKey = inv.CatalogKey,
-                ProductVariantKey = inv.ProductVariantKey,
+                ProductVariantKey = productVariant.Key,
                 Count = inv.Count,
                 LowCount = inv.LowCount,
                 Location = inv.Location,
