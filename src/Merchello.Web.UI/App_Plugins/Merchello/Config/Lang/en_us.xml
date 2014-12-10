@@ -322,6 +322,7 @@
     <key alias="changePrices">Change prices</key>
     <key alias="updateInventory">Update inventory</key>
     <key alias="toggleAvailable">Toggle Available</key>
+    <key alias="toggleOnSale">Toggle On Sale</key>
     <key alias="duplicateVariant"> Duplicate Variant</key>
     <key alias="inAnother">In another</key>
     <key alias="editOptions">Edit Options</key>

@@ -300,6 +300,27 @@
                     }
                 };
 
+
+                $scope.toggleOnSale = function() {
+                    var success = true;
+                    var selected = $scope.selectedVariants();
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[i].onSale = !selected[i].onSale;
+                        var savepromise = merchelloProductService.updateProductVariant(selected[i]);
+                        savepromise.then(function () {
+                            //notificationsService.success("Product Variant Saved", "");
+                        }, function (reason) {
+                            success = false;
+                            //notificationsService.error("Product Variant Save Failed", reason.message);
+                        });
+                    }
+                    if (success) {
+                        notificationsService.success("Confirmed on sale update", "");
+                    } else {
+                        notificationsService.error("Failed to update on sale setting", "");
+                    }
+                };
+
                 /**
                  * @ngdoc method
                  * @name deleteVariantsDialogConfirm
