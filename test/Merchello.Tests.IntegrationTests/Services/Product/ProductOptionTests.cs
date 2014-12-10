@@ -181,6 +181,8 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Lg"));
             product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Sm"));
 
+            // this creates a record in the CatalogInventory as if the product was marked "shippable"
+            // all variants generated with this option will also be marked shippable.
             product.AddToCatalogInventory(catalog);
 
             _productService.Save(product);
