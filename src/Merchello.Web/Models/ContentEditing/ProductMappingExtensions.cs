@@ -257,7 +257,7 @@ namespace Merchello.Web.Models.ContentEditing
             {
                 IProductAttribute destinationProductAttribute;
 
-                var attr = destination.Attributes.First(x => x.Key == attribute.Key);
+                var attr = destination.Attributes.FirstOrDefault(x => x.Key == attribute.Key);
                 if (attr != null)
                 {
                     destinationProductAttribute = attr;

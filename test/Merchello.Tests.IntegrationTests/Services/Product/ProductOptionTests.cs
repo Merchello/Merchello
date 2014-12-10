@@ -6,6 +6,9 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services.Product
 {
+    using Merchello.Core;
+    using Merchello.Tests.Base.TestHelpers;
+
     [TestFixture]
     [Category("Service Integration")]
     public class ProductOptionTests : DatabaseIntegrationTestBase
@@ -135,6 +138,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         public void Can_Remove_A_Choice_From_An_Option()
         {
             //// Arrange
+            var catalog = PreTestDataWorker.WarehouseCatalog;
             var product = PreTestDataWorker.MakeExistingProduct();
             product.ProductOptions.Add(new ProductOption("Color"));
             product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
@@ -142,15 +146,71 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             var removeChoice = new ProductAttribute("Grey", "Grey");
             product.ProductOptions.First(x => x.Name == "Color").Choices.Add(removeChoice);
             product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Green"));
+
+            product.AddToCatalogInventory(catalog);
+
             _productService.Save(product);
+
+            Assert.AreEqual(1, product.ProductOptions.Count, "ProductOption count is not 1");
+            Assert.AreEqual(4, product.ProductVariants.Count, "ProductVariant count is not 4");
 
             //// Act
             product.ProductOptions.First(x => x.Name == "Color").Choices.Remove(removeChoice);
             _productService.Save(product);
-           
-            //// Assert
+
+            // Assert
             Assert.IsTrue(product.ProductOptions.First(x => x.Name == "Color").Choices.Count == 3);   
-            
+            Assert.AreEqual(3, product.ProductVariants.Count, "ProductVariant count is not 3");
+        }
+
+        /// <summary>
+        /// Test to verify that product options & variants can be manipulated correctly 
+        /// </summary>
+        [Test]
+        public void Can_Create_A_Product_Then_Add_Options_And_Modify_Choices1()
+        {
+            //// Arrange
+            var catalog = PreTestDataWorker.WarehouseCatalog;
+            var product = PreTestDataWorker.MakeExistingProduct();
+            product.ProductOptions.Add(new ProductOption("Color"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
+            var removeChoice = new ProductAttribute("Grey", "Grey");
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(removeChoice);
+            product.ProductOptions.Add(new ProductOption("Size"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Lg"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Sm"));
+
+            product.AddToCatalogInventory(catalog);
+
+            _productService.Save(product);
+
+            Assert.AreEqual(2, product.ProductOptions.Count, "ProductOption count is not 2");
+            Assert.AreEqual(6, product.ProductVariants.Count, "ProductVariant count is not 6");
+
+            //// Remove a choice
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Remove(removeChoice);
+            _productService.Save(product);
+
+            // Assert the variants
+            Assert.AreEqual(2, product.ProductOptions.Count, "ProductOption count is not 2");
+            Assert.AreEqual(4, product.ProductVariants.Count, "ProductVariant count is not 4");
+
+            //// Add a new size
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "Md"));
+
+            _productService.Save(product);
+            Assert.AreEqual(2, product.ProductOptions.Count, "ProductOption count is not 2");
+            Assert.AreEqual(6, product.ProductVariants.Count, "ProductVariant count is not 6");
+
+            //// Add a new product option
+            product.ProductOptions.Add(new ProductOption("Material"));
+            product.ProductOptions.First(x => x.Name == "Material").Choices.Add(new ProductAttribute("Wool", "Wool"));
+            product.ProductOptions.First(x => x.Name == "Material").Choices.Add(new ProductAttribute("Cotton", "Cotton"));
+            _productService.Save(product);
+
+            Assert.AreEqual(3, product.ProductOptions.Count, "ProductOption count is not 3");
+            Assert.AreEqual(12, product.ProductVariants.Count, "ProductVariant count is not 12");
         }
        
     }

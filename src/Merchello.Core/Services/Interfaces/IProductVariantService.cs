@@ -11,7 +11,6 @@
     /// </summary>
     public interface IProductVariantService : IService
     {
-
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// </summary>

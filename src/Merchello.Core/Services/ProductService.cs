@@ -13,6 +13,8 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
 
+    using umbraco.presentation.actions;
+
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
@@ -225,6 +227,9 @@
                 }
             }
 
+            // Synchronize product variants
+            SynchronizeVariants(product);
+
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
 
             // verify that all variants of this product still have attributes - or delete them
@@ -264,12 +269,6 @@
 
             // verify that all variants of these products still have attributes - or delete them
             _productVariantService.EnsureProductVariantsHaveAttributes(productArray);
-
-            // save any remaining variants changes in the variants collections
-            foreach (var collection in productArray.Select(x => x.ProductVariants).Where(collection => collection.Any()))
-            {
-                _productVariantService.Save(collection);
-            }
         }
 
         /// <summary>
@@ -283,7 +282,7 @@
             {
                 if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IProduct>(product), this))
                 {
-                    ((Product) product).WasCancelled = true;
+                    ((Product)product).WasCancelled = true;
                     return;
                 }
             }
@@ -559,6 +558,45 @@
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
+            }
+        }
+
+        private void SynchronizeVariants(IEnumerable<IProduct> products)
+        {
+            products.ForEach(SynchronizeVariants);
+        }
+
+        private void SynchronizeVariants(IProduct product)
+        {
+            // Create the product varaints
+            if (!product.ProductOptions.Any()) return;
+            
+            var attributeLists = product.GetPossibleProductAttributeCombinations().ToArray();
+
+            if (attributeLists.Any())
+            {
+                // delete any variants that don't have the correct number of attributes
+                var attCount = attributeLists.First().Count();
+
+                foreach (var remover in product.ProductVariants.Where(x => x.Attributes.Count() != attCount))
+                {
+                    _productVariantService.Delete(remover);
+                }
+            }
+
+            foreach (var list in attributeLists)
+            {
+                // Check to see if the variant exists
+                var productAttributes = list as IProductAttribute[] ?? list.ToArray();
+                   
+                if (product.GetProductVariantForPurchase(productAttributes) != null) continue;
+                   
+                var variant = this._productVariantService.CreateProductVariantWithKey(product, productAttributes.ToProductAttributeCollection());
+                foreach (var inv in product.CatalogInventories)
+                {
+                    variant.AddToCatalogInventory(inv.CatalogKey);
+                    _productVariantService.Save(variant);
+                }
             }
         }
     }

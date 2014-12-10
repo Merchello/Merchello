@@ -16,11 +16,28 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
 
+    /// <summary>
+    /// The product repository.
+    /// </summary>
     internal class ProductRepository : PagedRepositoryBase<IProduct, ProductDto>, IProductRepository
     {
+        /// <summary>
+        /// The product variant repository.
+        /// </summary>
         private readonly IProductVariantRepository _productVariantRepository;
-        
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="productVariantRepository">
+        /// The product variant repository.
+        /// </param>
         public ProductRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IProductVariantRepository productVariantRepository)
             : base(work, cache)
         {
@@ -132,21 +149,19 @@
             };
         }
 
-        private Page<ProductVariantDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
-        {
-            if (!string.IsNullOrEmpty(orderExpression))
-            {
-                sql.Append(sortDirection == SortDirection.Ascending
-                    ? string.Format("ORDER BY {0} ASC", orderExpression)
-                    : string.Format("ORDER BY {0} DESC", orderExpression));
-            }
-
-            return Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
-        } 
+        
 
         #region Overrides of RepositoryBase<IProduct>
 
-
+        /// <summary>
+        /// The perform get.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         protected override IProduct PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -252,9 +267,9 @@
             Database.Insert(dto.ProductVariantDto);
             Database.Insert(dto.ProductVariantDto.ProductVariantIndexDto);
 
-            ((Product) entity).MasterVariant.ProductKey = dto.ProductVariantDto.ProductKey;
-            ((Product) entity).MasterVariant.Key = dto.ProductVariantDto.Key;
-            ((ProductVariant) ((Product)entity).MasterVariant).ExamineId = dto.ProductVariantDto.ProductVariantIndexDto.Id;
+            ((Product)entity).MasterVariant.ProductKey = dto.ProductVariantDto.ProductKey;
+            ((Product)entity).MasterVariant.Key = dto.ProductVariantDto.Key;
+            ((ProductVariant)((Product)entity).MasterVariant).ExamineId = dto.ProductVariantDto.ProductVariantIndexDto.Id;
 
             // save the product options
             SaveProductOptions(entity);
@@ -305,7 +320,43 @@
 
         }
 
+        /// <summary>
+        /// The get dto page.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sql">
+        /// The SQL string.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{ProductVariantDto}"/>.
+        /// </returns>
+        private Page<ProductVariantDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+            if (!string.IsNullOrEmpty(orderExpression))
+            {
+                // TODO this may contribute to the PetaPoco memory leak issue
+                sql.Append(sortDirection == SortDirection.Ascending
+                    ? string.Format("ORDER BY {0} ASC", orderExpression)
+                    : string.Format("ORDER BY {0} DESC", orderExpression));
+            }
+
+            return Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
+        } 
+
         #endregion
+
+
 
         #region Product Options and Attributes
 
@@ -377,6 +428,7 @@
                     resetSorts = true;
                 }
             }
+
             if (resetSorts)
             {
                 var count = 1;
@@ -425,7 +477,6 @@
                 var dto = factory.BuildDto(productOption);
                 Database.Update(dto);
 
-                // TODO : this should be refactored
                 const string update = "UPDATE merchProduct2ProductOption SET SortOrder = @So, updateDate = @Ud WHERE productKey = @pk AND optionKey = @OKey";
 
                 Database.Execute(update,
