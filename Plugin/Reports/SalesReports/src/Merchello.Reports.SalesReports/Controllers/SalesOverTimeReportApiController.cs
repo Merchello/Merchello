@@ -169,6 +169,4 @@
             return SearchByDateRange(query);
         }
     }
-
-
 }

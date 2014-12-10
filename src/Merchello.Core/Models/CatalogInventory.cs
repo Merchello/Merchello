@@ -32,7 +32,7 @@
         public CatalogInventory(Guid catalogKey, Guid productVariantKey)
         {            
             Mandate.ParameterCondition(catalogKey != Guid.Empty, "catalogKey");
-            Mandate.ParameterCondition(productVariantKey != Guid.Empty, "productVariantKey");
+            //Mandate.ParameterCondition(productVariantKey != Guid.Empty, "productVariantKey");
             _catalogKey = catalogKey;
             _productVariantKey = productVariantKey;
         }
