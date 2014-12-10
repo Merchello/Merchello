@@ -273,6 +273,55 @@
                 };
 
                 /**
+                * @ngdoc method
+                * @name toggleAvailable
+                * @function
+                * 
+                * @description
+                * Toggles the variant available setting
+                */
+                $scope.toggleAvailable = function () {
+                    var success = true;
+                    var selected = $scope.selectedVariants();
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[i].available = !selected[i].available;
+                        var savepromise = merchelloProductService.updateProductVariant(selected[i]);
+                        savepromise.then(function () {
+                            //notificationsService.success("Product Variant Saved", "");
+                        }, function (reason) {
+                            success = false;
+                            //notificationsService.error("Product Variant Save Failed", reason.message);
+                        });
+                    }
+                    if (success) {
+                        notificationsService.success("Confirmed available update", "");
+                    } else {
+                        notificationsService.error("Failed to update available", "");
+                    }
+                };
+
+
+                $scope.toggleOnSale = function() {
+                    var success = true;
+                    var selected = $scope.selectedVariants();
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[i].onSale = !selected[i].onSale;
+                        var savepromise = merchelloProductService.updateProductVariant(selected[i]);
+                        savepromise.then(function () {
+                            //notificationsService.success("Product Variant Saved", "");
+                        }, function (reason) {
+                            success = false;
+                            //notificationsService.error("Product Variant Save Failed", reason.message);
+                        });
+                    }
+                    if (success) {
+                        notificationsService.success("Confirmed on sale update", "");
+                    } else {
+                        notificationsService.error("Failed to update on sale setting", "");
+                    }
+                };
+
+                /**
                  * @ngdoc method
                  * @name deleteVariantsDialogConfirm
                  * @param {dialogData} contains the confirm text that validates they really want to delete the variants
