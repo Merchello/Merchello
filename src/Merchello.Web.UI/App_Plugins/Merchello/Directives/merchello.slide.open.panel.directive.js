@@ -15,7 +15,7 @@
             transclude: 'true',
             scope: {
                 isOpen: '=',
-                classes: '='
+                classes: '=?'
             },
             templateUrl: '/App_Plugins/Merchello/Directives/merchello-slide-open-panel.html',
             link: function ($scope, $element, attrs) {

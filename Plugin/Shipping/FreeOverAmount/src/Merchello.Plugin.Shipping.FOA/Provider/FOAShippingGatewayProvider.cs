@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
-
-namespace Merchello.Plugin.Shipping.FOA.Provider
+﻿namespace Merchello.Plugin.Shipping.FOA.Provider
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Core.Gateways;
+    using Core.Gateways.Shipping;
+    using Core.Models;
+    using Core.Services;
+    using Umbraco.Core.Cache;
+
     [GatewayProviderActivation("9ACEE07C-94A7-4D28-8193-6BD7D221A902", "Free Over Amount Shipping Provider", "Free Over Amount Shipping Provider")]
     [GatewayProviderEditor("Free Over Amount configuration", "~/App_Plugins/Merchello.FOA/editor.html")]
     public class FoaShippingGatewayProvider : ShippingGatewayProviderBase, IFoaShippingGatewayProvider

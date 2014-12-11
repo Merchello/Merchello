@@ -131,6 +131,14 @@
         bool Exists(string subscriptionId);
 
         /// <summary>
+        /// Gets a list of all <see cref="Plan"/>.
+        /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="Plan"/>.
+        /// </returns>
+        IEnumerable<Plan> GetAllPlans();
+            
+        /// <summary>
         /// Gets a list of all discounts.
         /// </summary>
         /// <returns>

@@ -81,10 +81,10 @@
                 menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
             }     
 
-            if (id == "orders")
-            {
-                menu.Items.Add<CreateChildEntity, ActionNew>("Create Order", true).Alias = "createOrder";
-            }
+            //if (id == "orders")
+            //{
+            //    menu.Items.Add<CreateChildEntity, ActionNew>("Create Order", true).Alias = "createOrder";
+            //}
 
             ////if (id == "catalog")
             ////{
@@ -150,7 +150,7 @@
                         att.Title,
                         att.Icon,
                         false,
-                        att.RoutePath));
+                        string.Format("{0}{1}", "/merchello/merchello/ViewReport/", att.RoutePath)));
         }
     }
 }

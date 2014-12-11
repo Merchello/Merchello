@@ -10,12 +10,42 @@
     using Newtonsoft.Json;
 
     using Services;
-   
+
+    using Umbraco.Core;
+
     /// <summary>
     /// The customer extensions.
     /// </summary>
     public static class CustomerExtensions
     {
+        /// <summary>
+        /// Maps a <see cref="ICustomerAddress"/> to a <see cref="IAddress"/>.
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAddress"/>.
+        /// </returns>
+        public static IAddress AsAddress(this ICustomerAddress address, string name)
+        {
+            return new Address()
+                       {
+                           Name = name,
+                           Organization = address.Company,
+                           Address1 = address.Address1,
+                           Address2 = address.Address2,
+                           Locality = address.Locality,
+                           Region = address.Region,
+                           PostalCode = address.PostalCode,
+                           CountryCode = address.CountryCode,
+                           Phone = address.Phone,
+                           AddressType = address.AddressType
+                       };
+        }
 
         /// <summary>
         /// The default customer address associated with a customer of a given type

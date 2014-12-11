@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Merchello.Plugin.Braintree</id>
+    <version>1.0.8</version>
+    <title>Braintree Payment Provider</title>
+    <authors>Rusty Swayne</authors>
+    <owners>Mindfly Web Design Studio</owners>
+    <licenseUrl>https://github.com/Merchello/Merchello/blob/master/License.md</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A Braintree Payment provider for Merchello</description>
+    <summary>A Braintree Payment provider for Merchello.</summary>
+    <language>en-US</language>
+    <tags>umbraco, Merchello</tags>
+    <dependencies>
+      <dependency id="Braintree" version="2.36.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Temp\AllBinaries\Merchello.Plugin.Payments.Braintree.dll" target="lib\net40\Merchello.Plugin.Payments.Braintree.dll" />
+  </files>
+</package>

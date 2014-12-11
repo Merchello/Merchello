@@ -89,15 +89,6 @@ namespace Merchello.Tests.IntegrationTests.Examine
             product.SalePrice = 18M;
             _productService.Save(product);
             
-
-            var attributes = new ProductAttributeCollection()
-            {
-                product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blue" ),
-                product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "XL")
-            };
-
-            productVariantService.CreateProductVariantWithKey(product, attributes);
-
             provider.AddProductToIndex(product);
 
             //// Assert

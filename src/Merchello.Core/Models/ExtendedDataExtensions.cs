@@ -214,7 +214,7 @@
         }
 
         /// <summary>
-        /// True/falce indicating whether or not this extended data collection contains information 
+        /// True/false indicating whether or not this extended data collection contains information 
         /// which could define a <see cref="IProductVariant"/>
         /// </summary>
         /// <param name="extendedData">
@@ -229,7 +229,7 @@
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a ProductVariantKey
+        /// True/false indicating whether or not the collection contains a ProductVariantKey
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -257,7 +257,7 @@
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a ProductKey
+        /// True/false indicating whether or not the collection contains a ProductKey
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -594,7 +594,19 @@
             if (destination == null) throw new NullReferenceException("ExtendedDataCollection does not container a 'destination shipping address'");
             if (lineItemCollection == null) throw new NullReferenceException("ExtendedDataCollection does not contain a 'line item collection'");
 
-            return new Shipment(origin, destination, lineItemCollection)
+            // TODO - this is a total hack since this value can be changed in the database
+            var quoted = new ShipmentStatus()
+            {
+                Key = Constants.DefaultKeys.ShipmentStatus.Quoted,
+                Alias = "quoted",
+                Name = "Quoted",
+                Active = true,
+                CreateDate = DateTime.Now,
+                UpdateDate = DateTime.Now
+            };
+
+
+            return new Shipment(quoted, origin, destination, lineItemCollection)
                 {
                     ShipMethodKey = extendedData.ContainsKey(Constants.ExtendedDataKeys.ShipMethodKey) ?
                         extendedData.GetShipMethodKey() :
@@ -617,7 +629,7 @@
         }
 
         /// <summary>
-        /// Returns the merchShipmentKey value as a Guid
+        /// Returns the merchShipmentKey value as a GUID
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -631,7 +643,7 @@
         }
 
         /// <summary>
-        /// Returns the merchShipMethodKey value as a Guid
+        /// Returns the merchShipMethodKey value as a GUID
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -645,7 +657,7 @@
         }
 
         /// <summary>
-        /// True/false indicating whether or not the colleciton contains a WarehouseCatalogKey
+        /// True/false indicating whether or not the collection contains a WarehouseCatalogKey
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.

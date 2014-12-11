@@ -14,7 +14,11 @@
     using Gateways.Taxation;    
     using Newtonsoft.Json;
     using Services;
+
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
+
+    using Constants = Merchello.Core.Constants;
     using Formatting = Newtonsoft.Json.Formatting;    
 
     /// <summary>
@@ -821,7 +825,8 @@
                             sku = x.Sku,
                             price = x.Price,
                             quantity = x.Quantity,
-                            exported = x.Exported
+                            exported = x.Exported,
+                            extendedData = x.ExtendedData.AsEnumerable()
                         }), 
                 Formatting.None);
         }

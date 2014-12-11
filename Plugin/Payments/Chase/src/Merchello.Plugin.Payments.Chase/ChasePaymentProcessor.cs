@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
 using System.Xml.Linq;
@@ -74,12 +75,11 @@ namespace Merchello.Plugin.Payments.Chase
 			transaction["BIN"] = _settings.Bin;
             
             // Credit Card Number
-            transaction["AccountNum"] = creditCard.CardNumber;
+            transaction["AccountNum"] = creditCard.CardNumber.Replace(" ", "").Replace("-", "").Replace("|", "");
 
             transaction["OrderID"] = invoice.InvoiceNumber.ToString(CultureInfo.InstalledUICulture);
 
-			transaction["Amount"] = amount.ToString();
-
+            transaction["Amount"] = string.Format("{0:0}", amount * 100);
             // Expiration date
             var creditCardExpMonth = creditCard.ExpireMonth;
             var creditCardExpYear = creditCard.ExpireYear.Length > 2
@@ -97,20 +97,51 @@ namespace Merchello.Plugin.Payments.Chase
 			transaction["AVScountryCode"] = address.CountryCode;
 			transaction["CardSecVal"] = creditCard.CardCode;
 
+            transaction["TraceNumber"] = invoice.InvoiceNumber.ToString();
+
+            if (string.IsNullOrEmpty(creditCard.CreditCardType))
+            {
+                creditCard.CreditCardType = GetCreditCardType(creditCard.CardNumber);
+            }
+
+            if (creditCard.CreditCardType.ToLower().Contains("visa") || creditCard.CreditCardType.ToLower().Contains("chase"))
+            {
+                transaction["CAVV"] = creditCard.AuthenticationVerification;
+
+                // If no value for creditCard.CardCode, then CardSecValInd cannot be 1.  Send 2 or 9 instead
+                if (string.IsNullOrEmpty(creditCard.CardCode))
+                {
+                    transaction["CardSecValInd"] = "9";
+                }
+                else
+                {
+                    transaction["CardSecValInd"] = "1";
+                }
+            }
+            else if (creditCard.CreditCardType.ToLower().Contains("mastercard"))
+            {
+                transaction["AAV"] = creditCard.AuthenticationVerification;
+                transaction["CardSecValInd"] = "";
+            }
+            transaction["AuthenticationECIInd"] = creditCard.AuthenticationVerificationEci;
+
             /*
                 * CardSecValInd
                 * 1 - Value is Present
                 * 2 - Value on card but illegible
                 * 9 - Cardholder states data not available              
             */
-            transaction["CardSecValInd"] = "1";
+            // Only send if ChaseNet, Visa and Discover transactions
+            // transaction["CardSecValInd"] = "1";
 
             /*
                 * CardSecValInd                               
                 * A – Auto Generate the CustomerRefNum
                 * S – Use CustomerRefNum Element            
             */
-			transaction["CustomerProfileFromOrderInd"] = "A";
+
+            // profile management will not be supported, do not send CustomerProfileFromOrderInd
+			//transaction["CustomerProfileFromOrderInd"] = "A";
 
             /*
                 * CustomerProfileOrderOverrideInd                   
@@ -131,6 +162,16 @@ namespace Merchello.Plugin.Payments.Chase
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Chase Paymentech unknown error")), invoice, false);
             }
 
+            string approvalStatus = "";
+            if (response.XML != null)
+            {
+                var xml = XDocument.Parse(response.MaskedXML);
+                if (xml.Descendants("ApprovalStatus").FirstOrDefault() != null)
+                {
+                    approvalStatus = xml.Descendants("ApprovalStatus").First().Value;
+                }
+            }
+
 
             if (response.Error)
             {
@@ -139,6 +180,10 @@ namespace Merchello.Plugin.Payments.Chase
             if (response.Declined)
             {
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizeDeclinedResult, string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1},{2}", response.AuthCode, response.ResponseCode, approvalStatus));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.Cvv2Result, string.Format("{0},{1}", response.CVV2RespCode, response.CVV2ResponseCode));
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message))), invoice, false);
             }
             if (response.Approved)
@@ -152,10 +197,10 @@ namespace Merchello.Plugin.Payments.Chase
 
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceIndex, txRefIdx);
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
-
-             
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1},{2}", response.AuthCode, response.ResponseCode, approvalStatus));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.Cvv2Result, string.Format("{0},{1}", response.CVV2RespCode, response.CVV2ResponseCode));
+
                 payment.Authorized = true;
                 if (transactionMode == TransactionMode.AuthorizeAndCapture)
                 {
@@ -205,7 +250,7 @@ namespace Merchello.Plugin.Payments.Chase
             transaction["PCDestAddress2"] = address.Address2;
             transaction["PCDestCity"] = address.Locality;
             transaction["PCDestState"] = address.Region;
-            transaction["TxRefNum"] = txRefNum;                
+            transaction["TxRefNum"] = txRefNum;                     
 
             response = transaction.Process();
 
@@ -213,6 +258,13 @@ namespace Merchello.Plugin.Payments.Chase
             if (response == null)
             {
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Chase Paymentech unknown error")), invoice, false);
+            }
+
+            string approvalStatus = "";
+            if (response.XML != null)
+            {
+                var xml = XDocument.Parse(response.MaskedXML);
+                approvalStatus = xml.Descendants("ApprovalStatus").First().Value;
             }
 
 
@@ -223,6 +275,11 @@ namespace Merchello.Plugin.Payments.Chase
             if (response.Declined)
             {
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizeDeclinedResult, string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1},{2}", response.AuthCode, response.ResponseCode, approvalStatus));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.Cvv2Result, string.Format("{0},{1}", response.CVV2RespCode, response.CVV2ResponseCode));
+
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message))), invoice, false);
             }
             if (response.Approved)
@@ -236,8 +293,9 @@ namespace Merchello.Plugin.Payments.Chase
 
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceIndex, txRefIdx);
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1},{2}", response.AuthCode, response.ResponseCode, approvalStatus));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.Cvv2Result, string.Format("{0},{1}", response.CVV2RespCode, response.CVV2ResponseCode));
                 
                 payment.Collected = true;
                 
@@ -263,7 +321,7 @@ namespace Merchello.Plugin.Payments.Chase
             Paymentech.Response response;
 
             // Create an authorize transaction
-            var transaction = new Transaction(RequestType.NEW_ORDER_TRANSACTION);
+            var transaction = new Transaction(RequestType.ECOMMERCE_REFUND);
 
             var txRefNum = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber);
 
@@ -280,7 +338,8 @@ namespace Merchello.Plugin.Payments.Chase
 
             transaction["MerchantID"] = _settings.MerchantId;
             transaction["BIN"] = _settings.Bin;
- 
+
+            transaction["Amount"] = string.Format("{0:0}", amount * 100);
             transaction["OrderID"] = invoice.InvoiceNumber.ToString(CultureInfo.InstalledUICulture);
             transaction["TxRefNum"] = txRefNum;                
 
@@ -292,6 +351,12 @@ namespace Merchello.Plugin.Payments.Chase
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Chase Paymentech unknown error")), invoice, false);
             }
 
+            string approvalStatus = "";
+            if (response.XML != null)
+            {
+                var xml = XDocument.Parse(response.MaskedXML);
+                approvalStatus = xml.Descendants("ApprovalStatus").First().Value;
+            }
 
             if (response.Error)
             {
@@ -299,7 +364,12 @@ namespace Merchello.Plugin.Payments.Chase
             }
             if (response.Declined)
             {
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizeDeclinedResult, string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizeDeclinedResult, string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message)); 
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1},{2}", response.AuthCode, response.ResponseCode, approvalStatus));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.Cvv2Result, string.Format("{0},{1}", response.CVV2RespCode, response.CVV2ResponseCode));
+
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message))), invoice, false);
             }
             if (response.Approved)
@@ -313,8 +383,9 @@ namespace Merchello.Plugin.Payments.Chase
 
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceIndex, txRefIdx);
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1},{2}", response.AuthCode, response.ResponseCode, approvalStatus));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.Cvv2Result, string.Format("{0},{1}", response.CVV2RespCode, response.CVV2ResponseCode));
 
                 payment.Collected = false;
 
@@ -332,7 +403,7 @@ namespace Merchello.Plugin.Payments.Chase
             Paymentech.Response response;
 
             // Create an authorize transaction
-            var transaction = new Transaction(RequestType.NEW_ORDER_TRANSACTION);
+            var transaction = new Transaction(RequestType.VOID);
 
             var txRefNum = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber);
 
@@ -344,9 +415,6 @@ namespace Merchello.Plugin.Payments.Chase
 
             transaction["OrbitalConnectionUsername"] = _settings.Username;
             transaction["OrbitalConnectionPassword"] = _settings.Password;
-
-            transaction["IndustryType"] = "EC";
-            transaction["MessageType"] = "R";
 
             transaction["MerchantID"] = _settings.MerchantId;
             transaction["BIN"] = _settings.Bin;
@@ -362,7 +430,6 @@ namespace Merchello.Plugin.Payments.Chase
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception("Chase Paymentech unknown error")), invoice, false);
             }
 
-
             if (response.Error)
             {
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", response))), invoice, false);
@@ -370,66 +437,39 @@ namespace Merchello.Plugin.Payments.Chase
             if (response.Declined)
             {
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizeDeclinedResult, string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1},{2}", response.AuthCode, response.ResponseCode, "NA"));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.Cvv2Result, string.Format("{0},{1}", response.CVV2RespCode, response.CVV2ResponseCode));
+
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Declined ({0} : {1})", response.ResponseCode, response.Message))), invoice, false);
             }
             if (response.Approved)
             {
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionReferenceNumber, response.TxRefNum);
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1}", response.AuthCode, response.ResponseCode));
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode, string.Format("{0},{1},{2}", response.AuthCode, response.ResponseCode, "NA"));
                 payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AvsResult, response.AVSRespCode);
-
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.Cvv2Result, string.Format("{0},{1}", response.CVV2RespCode, response.CVV2ResponseCode));
+                
                 payment.Collected = false;
 
                 return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
             }
 
+            var procStatus = "";
+            if (response.XML != null)
+            {
+                var xml = XDocument.Parse(response.MaskedXML);
+                procStatus = xml.Descendants("ProcStatus").First().Value;
+            }
+
+            if (!string.IsNullOrEmpty(procStatus) && procStatus == "0")
+            {
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.VoidProcStatus, procStatus);                                                               
+                
+                return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);  
+            }
             return new PaymentResult(Attempt<IPayment>.Fail(payment, new Exception(string.Format("Error {0}", response))), invoice, false);
-        }
-
-         
-        private string GetChaseReply(NameValueCollection form)
-        {
-            try
-            {
-                var postData = form.AllKeys.Aggregate("", (current, key) => current + (key + "=" + HttpUtility.UrlEncode(form[key]) + "&")).TrimEnd('&');
-
-                var request = (HttpWebRequest)WebRequest.Create(GetChaseUrl());
-                request.Method = "POST";
-                request.ContentLength = postData.Length;
-                request.ContentType = "application/x-www-form-urlencoded";
-
-                using (var writer = new StreamWriter(request.GetRequestStream()))
-                {
-                    writer.Write(postData);
-                }
-
-                var response = (HttpWebResponse)request.GetResponse();
-
-                if (response == null) throw new NullReferenceException("Gateway response was null");
-                using (var reader = new StreamReader(response.GetResponseStream()))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
-
-        private NameValueCollection GetInitialRequestForm(string currencyCode)
-        {
-            return new NameValueCollection()
-            {
-                { "x_login", _settings.MerchantId },
-                { "x_delim_data", _settings.DelimitedData.ToString().ToUpperInvariant() },
-                { "x_delim_char", _settings.DelimitedChar },
-                { "x_encap_char", _settings.EncapChar },
-                { "x_version", _settings.ApiVersion },
-                { "x_relay_response", _settings.RelayResponse.ToString().ToUpperInvariant() },
-                { "x_method", _settings.Method },
-                { "x_currency_code", currencyCode }
-            };
         }
 
         /// <summary>
@@ -441,9 +481,7 @@ namespace Merchello.Plugin.Payments.Chase
                 ? "orbitalvar1.paymentech.net"
                 : "orbital1.paymentech.net";
         }
-
-
-
+                                                  
         /// <summary>
         /// The Authorize.Net API version
         /// </summary>
@@ -451,5 +489,64 @@ namespace Merchello.Plugin.Payments.Chase
         {
             get { return "7.3.0"; }
         }
+
+        protected const String AMEXPattern = @"^3[47][0-9]{13}$";
+        protected const String MasterCardPattern = @"^5[1-5][0-9]{14}$";
+        protected const String VisaCardPattern = @"^4[0-9]{12}(?:[0-9]{3})?$";
+        protected const String DinersClubCardPattern = @"^3(?:0[0-5]|[68][0-9])[0-9]{11}$";
+        protected const String enRouteCardPattern = @"^(2014|2149)";
+        protected const String DiscoverCardPattern = @"^6(?:011|5[0-9]{2})[0-9]{12}$";
+        protected const String JCBCardPattern = @"^(?:2131|1800|35\d{3})\d{11}$";
+
+        protected static NameValueCollection Patterns;
+        protected static NameValueCollection CardPatterns
+        {
+            get
+            {
+                if (Patterns == null)
+                {
+                    Patterns = new NameValueCollection
+                    {
+                        {"AMEX", AMEXPattern},
+                        {"MasterCard", MasterCardPattern},
+                        {"Visa", VisaCardPattern},
+                        {"DinersClub", DinersClubCardPattern},
+                        {"enRoute", enRouteCardPattern},
+                        {"Discover", DiscoverCardPattern},
+                        {"JCB", JCBCardPattern}
+                    };
+                }
+                return Patterns;
+            }
+            set
+            {
+                Patterns = value;
+            }
+        }
+
+        protected static string GetCreditCardType(string cardNumber)
+        {
+            var cardType = "Unknown";
+
+            try
+            {
+                var cardNum = cardNumber.Replace(" ", "").Replace("-", "").Replace("|","");
+                foreach (String cardTypeName in CardPatterns.Keys)
+                {
+                    var regex = new Regex(CardPatterns[cardTypeName]);
+                    if (regex.IsMatch(cardNum))
+                    {
+                        cardType = cardTypeName;
+                        break;
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return cardType.ToUpper();
+        }
+
     }
 }

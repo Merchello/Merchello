@@ -9,6 +9,8 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The warehouse.
     /// </summary>

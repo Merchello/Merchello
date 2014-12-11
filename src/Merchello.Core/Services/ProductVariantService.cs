@@ -72,6 +72,40 @@
             _repositoryFactory = repositoryFactory;
         }
 
+        #region Events
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IProductVariantService, Events.NewEventArgs<IProductVariant>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IProductVariantService, Events.NewEventArgs<IProductVariant>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IProductVariantService, SaveEventArgs<IProductVariant>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IProductVariantService, SaveEventArgs<IProductVariant>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IProductVariantService, DeleteEventArgs<IProductVariant>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IProductVariantService, DeleteEventArgs<IProductVariant>> Deleted;
+
+        #endregion
+
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// </summary>
@@ -131,7 +165,7 @@
                 }
             }
 
-            if(raiseEvents)
+            if (raiseEvents)
             Created.RaiseEvent(new Events.NewEventArgs<IProductVariant>(productVariant), this);
 
             product.ProductVariants.Add(productVariant);
@@ -493,41 +527,5 @@
                 return repository.Count(query);
             }
         }
-
-        #region Events
-        
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IProductVariantService, Events.NewEventArgs<IProductVariant>> Creating;
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IProductVariantService, Events.NewEventArgs<IProductVariant>> Created;
-
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IProductVariantService, SaveEventArgs<IProductVariant>> Saving;
-
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IProductVariantService, SaveEventArgs<IProductVariant>> Saved;
-
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IProductVariantService, DeleteEventArgs<IProductVariant>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IProductVariantService, DeleteEventArgs<IProductVariant>> Deleted;
-
-        #endregion
-
-
     }
 }

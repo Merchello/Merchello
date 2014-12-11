@@ -116,7 +116,8 @@ namespace Merchello.Plugin.Payments.Stripe
             return Convert.ToInt32(stripeAmountDecimal).ToString(CultureInfo.InvariantCulture);
         }
 
-        private static IPaymentResult GetProcessPaymentResult(IInvoice invoice, IPayment payment, HttpWebResponse response)
+        private static IPaymentResult GetProcessPaymentResult(IInvoice invoice, IPayment payment,
+            HttpWebResponse response)
         {
             string apiResponse = null;
             using (var reader = new StreamReader(response.GetResponseStream()))
@@ -132,18 +133,19 @@ namespace Merchello.Plugin.Payments.Stripe
                         (string) responseJson["id"]);
                     payment.Authorized = true;
                     if ((bool) responseJson["captured"]) payment.Collected = true;
-                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice,
+                        invoice.ShippingLineItems().Any());
                 case HttpStatusCode.PaymentRequired: // 402
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("Error {0}", responseJson["message"]))), invoice, false);
+                                new Exception(string.Format("{0}", responseJson["error"]["message"]))), invoice, false);
 
                 default:
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("Error {0}", "Stripe unknown error"))), invoice, false);
+                                new Exception(string.Format("{0}", "Stripe unknown error"))), invoice, false);
             }
         }
 
@@ -158,12 +160,13 @@ namespace Merchello.Plugin.Payments.Stripe
             }
             catch (WebException ex)
             {
-                return GetCapturePaymentResult(invoice, payment, (HttpWebResponse)ex.Response);
+                return GetCapturePaymentResult(invoice, payment, (HttpWebResponse) ex.Response);
             }
         }
 
         // TODO: is this identical to GetProcessPaymentResult()? If so, consolidate...
-        private static IPaymentResult GetCapturePaymentResult(IInvoice invoice, IPayment payment, HttpWebResponse response)
+        private static IPaymentResult GetCapturePaymentResult(IInvoice invoice, IPayment payment,
+            HttpWebResponse response)
         {
             string apiResponse = null;
             using (var reader = new StreamReader(response.GetResponseStream()))
@@ -178,24 +181,30 @@ namespace Merchello.Plugin.Payments.Stripe
                     payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.StripeChargeId, (string) responseJson["id"]);
                     payment.Authorized = true;
                     if ((bool) responseJson["captured"]) payment.Collected = true;
-                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice,
+                        invoice.ShippingLineItems().Any());
                 case HttpStatusCode.PaymentRequired: // 402
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("Error {0}", responseJson["message"]))), invoice, false);
+                                new Exception(string.Format("{0}", responseJson["error"]["message"]))), invoice, false);
                 default:
                     return
                         new PaymentResult(
                             Attempt<IPayment>.Fail(payment,
-                                new Exception(string.Format("Error {0}", "Stripe unknown error"))), invoice, false);
+                                new Exception(string.Format("{0}", "Stripe unknown error"))), invoice, false);
             }
         }
 
         public IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, decimal amount)
         {
             string stripeChargeId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.StripeChargeId);
-            if (!payment.Authorized || string.IsNullOrEmpty(stripeChargeId)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or Stripe charge id not present")), invoice, false);
+            if (!payment.Authorized || string.IsNullOrEmpty(stripeChargeId))
+                return
+                    new PaymentResult(
+                        Attempt<IPayment>.Fail(payment,
+                            new InvalidOperationException("Payment is not Authorized or Stripe charge id not present")),
+                        invoice, false);
             string url = string.Format("https://api.stripe.com/v1/charges/{0}/refunds", stripeChargeId);
             var requestParams = new NameValueCollection();
             requestParams.Add("amount", ConvertAmount(invoice, amount));
@@ -215,7 +224,8 @@ namespace Merchello.Plugin.Payments.Stripe
             switch (response.StatusCode)
             {
                 case HttpStatusCode.OK: // 200
-                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+                    return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice,
+                        invoice.ShippingLineItems().Any());
                 case HttpStatusCode.PaymentRequired: // 402
                     return
                         new PaymentResult(
@@ -233,7 +243,12 @@ namespace Merchello.Plugin.Payments.Stripe
         {
             // Stripe does not seem to have a Void method, so we do a full refund
             string stripeChargeId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.StripeChargeId);
-            if (!payment.Authorized || string.IsNullOrEmpty(stripeChargeId)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or Stripe charge id not present")), invoice, false);
+            if (!payment.Authorized || string.IsNullOrEmpty(stripeChargeId))
+                return
+                    new PaymentResult(
+                        Attempt<IPayment>.Fail(payment,
+                            new InvalidOperationException("Payment is not Authorized or Stripe charge id not present")),
+                        invoice, false);
             string url = string.Format("https://api.stripe.com/v1/charges/{0}/refunds", stripeChargeId);
             var response = MakeStripeApiRequest(url, "POST", null);
             return GetRefundPaymentResult(invoice, payment, response);
@@ -242,8 +257,9 @@ namespace Merchello.Plugin.Payments.Stripe
         private HttpWebResponse MakeStripeApiRequest(string apiUrl, string httpMethod,
             NameValueCollection requestParameters)
         {
-            string postData = requestParameters == null ? "" : 
-                requestParameters.AllKeys.Aggregate("",
+            string postData = requestParameters == null
+                ? ""
+                : requestParameters.AllKeys.Aggregate("",
                     (current, key) => current + (key + "=" + HttpUtility.UrlEncode(requestParameters[key]) + "&"))
                     .TrimEnd('&');
 
@@ -313,46 +329,5 @@ namespace Merchello.Plugin.Payments.Stripe
             }
             return false;
         }
-
-
-
-/*
-        private string GetStripeReply(NameValueCollection form)
-        {
-            try
-            {
-                string postData =
-                    form.AllKeys.Aggregate("",
-                        (current, key) => current + (key + "=" + HttpUtility.UrlEncode(form[key]) + "&")).TrimEnd('&');
-
-                var request = (HttpWebRequest) WebRequest.Create("https://api.stripe.com/v1/charges");
-                request.Method = "POST";
-                request.PreAuthenticate = true;
-                var credentialCache = new CredentialCache();
-                credentialCache.Add(new Uri("https://api.stripe.com/v1/charges"), "Basic",
-                    new NetworkCredential("sk_test_BQokikJOvBiI2HlWgH4olfQ2", ""));
-                request.Credentials = credentialCache;
-                request.ContentLength = postData.Length;
-                request.ContentType = "application/x-www-form-urlencoded";
-
-                using (var writer = new StreamWriter(request.GetRequestStream()))
-                {
-                    writer.Write(postData);
-                }
-
-                var response = (HttpWebResponse) request.GetResponse();
-
-                if (response == null) throw new NullReferenceException("Gateway response was null");
-                using (var reader = new StreamReader(response.GetResponseStream()))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
-*/
     }
 }

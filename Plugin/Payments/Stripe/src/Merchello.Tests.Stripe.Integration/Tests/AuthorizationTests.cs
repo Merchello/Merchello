@@ -100,6 +100,33 @@ namespace Merchello.Tests.Stripe.Integration.Tests
             var payment = result.Payment.Result;
         }
 
+        [Test]
+        public void Can_AuthFail_A_Payment()
+        {
+            //// Arrange
+            var creditCardMethod = Provider.GetPaymentGatewayMethodByPaymentCode("CreditCard");
+            Assert.NotNull(creditCardMethod);
+
+            var ccEntry = new CreditCardFormData()
+            {
+                CreditCardType = "VISA",
+                CardholderName = "Alex Lindgren",
+                CardNumber = "1234123412341234",
+                CardCode = "111",
+                ExpireMonth = "09",
+                ExpireYear = "15"
+            };
+
+            //// Act
+            var result = creditCardMethod.AuthorizePayment(_invoice, ccEntry.AsProcessorArgumentCollection());
+
+            //// Assert
+            Assert.NotNull(result);
+            Assert.IsFalse(result.Payment.Success);
+            Assert.IsTrue(result.Payment.Exception.Message == "Your card number is incorrect.");
+            
+        }
+
         /// <summary>
         /// Testing Sandbox and Authorize and Capture a Payment
         /// </summary>

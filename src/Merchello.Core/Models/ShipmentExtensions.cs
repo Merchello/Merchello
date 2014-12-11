@@ -26,8 +26,7 @@ namespace Merchello.Core.Models
         /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
         /// <returns>An <see cref="Attempt{T}"/> where success result is the matching <see cref="IShipCountry"/></returns>
         public static Attempt<IShipCountry> GetValidatedShipCountry(this IShipment shipment, IGatewayProviderService gatewayProviderService)
-         {
-
+        {
              var visitor = new WarehouseCatalogValidationVisitor();
              shipment.Items.Accept(visitor);
 
@@ -90,10 +89,13 @@ namespace Merchello.Core.Models
         /// Returns a collection of <see cref="IShipmentRateQuote"/> from the various configured shipping providers
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        public static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment)
+        public static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, bool tryGetCached = true)
         {
-            return shipment.ShipmentRateQuotes(MerchelloContext.Current);
+            return shipment.ShipmentRateQuotes(MerchelloContext.Current, tryGetCached);
         }
 
         /// <summary>
@@ -141,12 +143,15 @@ namespace Merchello.Core.Models
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
         /// <returns>
         /// The collection of <see cref="IShipmentRateQuote"/>
         /// </returns>
-        internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext)
+        internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext, bool tryGetCached = true)
         {
-            return merchelloContext.Gateways.Shipping.GetShipRateQuotesForShipment(shipment);
+            return merchelloContext.Gateways.Shipping.GetShipRateQuotesForShipment(shipment, tryGetCached);
         }
 
         /// <summary>
@@ -202,6 +207,40 @@ namespace Merchello.Core.Models
             patterns.AddRange(shipment.LineItemReplaceablePatterns());
 
             return patterns;
+        }
+
+        /// <summary>
+        /// Clones a shipment
+        /// </summary>
+        /// <param name="org">
+        /// The org.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IShipment"/>.
+        /// </returns>
+        /// <remarks>
+        /// http://issues.merchello.com/youtrack/issue/M-458
+        /// </remarks>
+        internal static IShipment Clone(this IShipment org)
+        {
+            var lineItemCollection = new LineItemCollection();
+
+            foreach (var li in org.Items)
+            {
+                lineItemCollection.Add(li.AsLineItemOf<OrderLineItem>());
+            }
+
+            return new Shipment(org.ShipmentStatus, org.GetOriginAddress(), org.GetDestinationAddress(), lineItemCollection)
+                               {
+                                   ShipmentNumberPrefix = org.ShipmentNumberPrefix,
+                                   ShipmentNumber = org.ShipmentNumber,
+                                   ShippedDate = org.ShippedDate,
+                                   TrackingCode = org.TrackingCode,
+                                   Carrier = org.Carrier,
+                                   ShipMethodKey = org.ShipMethodKey,
+                                   Phone = org.Phone,
+                                   Email = org.Email
+                               };
         }
     }
 }

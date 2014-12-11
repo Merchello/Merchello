@@ -457,7 +457,5 @@
         {
             return result.ToInvoiceDisplay(_getOrders);
         }
-
-
     }
 }

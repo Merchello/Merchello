@@ -6,7 +6,7 @@ namespace Merchello.Plugin.Payments.Chase.Provider
     /// <summary>
     /// Marker interface for an Chase payment method
     /// </summary>
-    public interface IChasePaymentGatewayMethod
+    public interface IChasePaymentGatewayMethod : IPaymentGatewayMethod
     {
  
     }

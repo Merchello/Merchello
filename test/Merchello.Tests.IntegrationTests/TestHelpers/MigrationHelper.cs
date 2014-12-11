@@ -15,6 +15,8 @@ using Umbraco.Core.Persistence.Migrations;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Exposes access to internal Migration (Database installation and Upgrade) classes
     /// 

@@ -14,7 +14,9 @@ namespace Merchello.Plugin.Payments.Chase.Models
                 { "expireMonth", creditCard.ExpireMonth },
                 { "expireYear", creditCard.ExpireYear },
                 { "cardCode", creditCard.CardCode },
-                { "customerIp", creditCard.CustomerIp }
+                { "customerIp", creditCard.CustomerIp },  
+                { "authenticationVerification", creditCard.AuthenticationVerification },
+                { "authenticationVerificationEci", creditCard.AuthenticationVerificationEci }
             };
         }
 
@@ -28,7 +30,9 @@ namespace Merchello.Plugin.Payments.Chase.Models
                 ExpireMonth = args.ArgValue("expireMonth"),
                 ExpireYear = args.ArgValue("expireYear"),
                 CardCode = args.ArgValue("cardCode"),
-                CustomerIp = args.ArgValue("customerIp")
+                CustomerIp = args.ArgValue("customerIp"),
+                AuthenticationVerification = args.ArgValue("authenticationVerification"),
+                AuthenticationVerificationEci = args.ArgValue("authenticationVerificationEci")
             };
         }
 

@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The gateway method ui attribute.
     /// </summary>

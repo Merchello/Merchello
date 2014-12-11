@@ -5,6 +5,8 @@
 
     using Merchello.Core;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The report view attribute.
     /// </summary>

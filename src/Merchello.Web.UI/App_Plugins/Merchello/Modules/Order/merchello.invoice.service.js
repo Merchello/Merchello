@@ -87,7 +87,7 @@
                 if (query === undefined) {
                     query = new merchello.Models.ListQuery({
                         currentPage: 0,
-                        itemsPerPage: 100,
+                        itemsPerPage: 25,
                         sortBy: '',
                         sortDirection: ''
                     });
@@ -104,21 +104,21 @@
             * @description 
             **/
             searchInvoicesByDateRange: function (query) {
-            var listQuery;
-            if (query === undefined) {
-                query = new merchello.Models.ListQuery({
-                    currentPage: 0,
-                    itemsPerPage: 100,
-                    sortBy: '',
-                    sortDirection: ''
-                });
+                var listQuery;
+                if (query === undefined) {
+                    query = new merchello.Models.ListQuery({
+                        currentPage: 0,
+                        itemsPerPage: 100,
+                        sortBy: '',
+                        sortDirection: ''
+                    });
+                }
+                listQuery = new merchello.Models.ListQuery(query);
+                return umbRequestHelper.resourcePromise(
+                        $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchByDateRange'), listQuery),
+                        'Failed to retreive invoices');
             }
-            listQuery = new merchello.Models.ListQuery(query);
-            return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchByDateRange'), listQuery),
-                    'Failed to retreive invoices');
-        }
-    };
+        };
     };
 
     angular.module('umbraco.resources').factory('merchelloInvoiceService', ['$http', 'umbRequestHelper', merchello.Services.MerchelloInvoiceService]);

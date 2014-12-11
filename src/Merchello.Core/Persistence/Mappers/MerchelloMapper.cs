@@ -70,6 +70,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IShipCountry), typeof(ShipCountryMapper));
             CacheMapper(typeof(IShipment), typeof(ShipmentMapper));
             CacheMapper(typeof(IShipMethod), typeof(ShipMethodMapper));
+            CacheMapper(typeof(IShipmentStatus), typeof(ShipmentStatusMapper));
             CacheMapper(typeof(IShipRateTier), typeof(ShipRateTierMapper));
             CacheMapper(typeof(IStoreSetting), typeof(StoreSettingMapper));
             CacheMapper(typeof(IWarehouse), typeof(WarehouseMapper));

@@ -35,6 +35,11 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         private Lazy<IBraintreeTransactionApiService> _transaction;
 
         /// <summary>
+        /// The <see cref="IBraintreeWebhooksApiService"/>.
+        /// </summary>
+        private Lazy<IBraintreeWebhooksApiService> _webhooks; 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BraintreeApiService"/> class.
         /// </summary>
         /// <param name="settings">
@@ -112,6 +117,17 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         }
 
         /// <summary>
+        /// Gets the <see cref="IBraintreeWebhooksApiService"/>.
+        /// </summary>
+        public IBraintreeWebhooksApiService Webhook 
+        {
+            get
+            {
+                return _webhooks.Value;
+            }
+        }
+
+        /// <summary>
         /// Initializes the provider
         /// </summary>
         /// <param name="merchelloContext">
@@ -130,6 +146,9 @@ namespace Merchello.Plugin.Payments.Braintree.Services
 
             if (_transaction == null)
                 _transaction = new Lazy<IBraintreeTransactionApiService>(() => new BraintreeTransactionApiService(merchelloContext, _settings));
+
+            if (_webhooks == null)
+                _webhooks = new Lazy<IBraintreeWebhooksApiService>(() => new BraintreeWebhooksApiService(merchelloContext, _settings));
         }
     }
 }

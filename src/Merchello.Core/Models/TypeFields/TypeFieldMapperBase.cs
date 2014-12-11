@@ -1,11 +1,14 @@
-﻿using System;
-
-namespace Merchello.Core.Models.TypeFields
+﻿namespace Merchello.Core.Models.TypeFields
 {
+    using System;
+
+    /// <summary>
+    /// The type field mapper base.
+    /// </summary>
     public abstract class TypeFieldMapperBase
     {
         /// <summary>
-        /// An empty type field
+        /// Gets the not found.
         /// </summary>
         internal static ITypeField NotFound
         {

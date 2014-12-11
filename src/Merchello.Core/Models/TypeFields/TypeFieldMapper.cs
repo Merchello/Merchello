@@ -1,28 +1,35 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Configuration;
-using System.Linq;
-using Merchello.Core.Configuration;
-using Merchello.Core.Configuration.Outline;
-
-namespace Merchello.Core.Models.TypeFields
+﻿namespace Merchello.Core.Models.TypeFields
 {
+    using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Linq;
 
+    using Merchello.Core.Configuration;
+    using Merchello.Core.Configuration.Outline;
+
+    /// <summary>
+    /// The type field mapper.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The type of TypeField
+    /// </typeparam>
     public abstract class TypeFieldMapper<T> : TypeFieldMapperBase, ITypeFieldMapper<T>
     {
-
-        protected static readonly ConcurrentDictionary<T,ITypeField> CachedTypeFields = new ConcurrentDictionary<T, ITypeField>();
- 
         /// <summary>
-        /// Builds the TypeField cache for the respective type
+        /// The cached type fields.
         /// </summary>
-        internal abstract void BuildCache();
+        protected static readonly ConcurrentDictionary<T,ITypeField> CachedTypeFields = new ConcurrentDictionary<T, ITypeField>();
 
         /// <summary>
         /// Gets the custom type fields.
         /// </summary>
-        public abstract IEnumerable<ITypeField> CustomTypeFields { get; } 
+        public abstract IEnumerable<ITypeField> CustomTypeFields { get; }
+
+        /// <summary>
+        /// Builds the TypeField cache for the respective type
+        /// </summary>
+        internal abstract void BuildCache();
 
         /// <summary>
         /// Returns the respective enum value for a given <see cref="TypeField"/> TypeKey
@@ -69,7 +76,15 @@ namespace Merchello.Core.Models.TypeFields
                        : new TypeField(element);
         }
 
-
+        /// <summary>
+        /// The get custom.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITypeField"/>.
+        /// </returns>
         protected abstract ITypeField GetCustom(string alias);
 
         /// <summary>

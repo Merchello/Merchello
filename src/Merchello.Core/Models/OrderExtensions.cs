@@ -168,7 +168,8 @@ namespace Merchello.Core.Models
                         price = x.Price,
                         quantity = x.Quantity,
                         exported = x.Exported,
-                        backOrder = ((OrderLineItem)x).BackOrder
+                        backOrder = ((OrderLineItem)x).BackOrder,
+                        extendedData = x.ExtendedData.AsEnumerable()
                     }
                 ), Newtonsoft.Json.Formatting.None);
         }

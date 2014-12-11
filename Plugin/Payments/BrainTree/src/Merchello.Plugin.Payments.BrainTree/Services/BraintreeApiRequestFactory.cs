@@ -381,7 +381,12 @@
                            PlanId = planId,
                        };
 
-            if (_settings.MerchantDescriptor.HasValues()) request.Descriptor = _settings.MerchantDescriptor.AsDescriptorRequest();
+            // TODO figure out the descriptor for nicer Credit Card statements
+            // TODO https://www.braintreepayments.com/docs/dotnet/transactions/dynamic_descriptors
+            //if (_settings.MerchantDescriptor.HasValues())
+            //{
+            //    request.Descriptor = _settings.MerchantDescriptor.AsDescriptorRequest();
+            //}
 
             if (price != null) request.Price = price.Value;
 

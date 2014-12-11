@@ -3,6 +3,8 @@
     using System;
     using System.Runtime.Serialization;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The currency.
     /// </summary>

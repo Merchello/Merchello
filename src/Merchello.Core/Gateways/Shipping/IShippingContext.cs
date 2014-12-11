@@ -12,8 +12,11 @@
         /// Returns a collection of all <see cref="IShipmentRateQuote"/> that are available for the <see cref="IShipment"/>
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/> to quote</param>
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment);
+        IEnumerable<IShipmentRateQuote> GetShipRateQuotesForShipment(IShipment shipment, bool tryGetCached = true);
 
         /// <summary>
         /// Returns a list of all countries that can be assigned to a shipment

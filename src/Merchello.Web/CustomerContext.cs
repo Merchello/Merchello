@@ -2,6 +2,8 @@
 namespace Merchello.Web
 {
     using System;
+    using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web;
 
@@ -25,6 +27,11 @@ namespace Merchello.Web
     public class CustomerContext
     {
         #region Fields
+
+        /// <summary>
+        /// The key used to store the Umbraco Member Id in CustomerContextData.
+        /// </summary>
+        private const string UmbracoMemberIdDataKey = "umbMemberId";
 
         /// <summary>
         /// The consumer cookie key.
@@ -173,7 +180,6 @@ namespace Merchello.Web
 
             var isLoggedIn = (bool)_cache.RequestCache.GetCacheItem(CacheKeys.CustomerIsLoggedIn(key), () => _membershipHelper.IsLoggedIn());
 
-
             // check the cache for a previously retrieved customer
             if (customer != null)
             {
@@ -195,7 +201,7 @@ namespace Merchello.Web
 
 
                             ContextData.Key = customer.Key;
-
+                            ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, memberId.ToString(CultureInfo.InvariantCulture)));
                             var customerBasket = Basket.GetBasket(_merchelloContext, customer);
 
                             //// convert the customer basket
@@ -210,19 +216,14 @@ namespace Merchello.Web
                 }
                 else if (customer.IsAnonymous == false && isLoggedIn == false)
                 {
-                    // customer has logged out, so we need to go back to an anonymous customer
-                    var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
-                    
-                    cookie.Expires = DateTime.Now.AddDays(-1);
-
-                    _cache.RequestCache.ClearCacheItem(CustomerCookieName);
-                    _cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key)); 
-                    
-                    Initialize();
-                    
+                    CreateAnonymousCustomer();
                     return;
                 }
-                
+                else if (customer.IsAnonymous == false && isLoggedIn)
+                {
+                    this.EnsureIsLoggedInCustomer(customer);
+                }
+
                 ContextData.Key = customer.Key;
 
                 return;
@@ -235,6 +236,7 @@ namespace Merchello.Web
             {
                 CurrentCustomer = customer;
                 ContextData.Key = customer.Key;
+                if (isLoggedIn) ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, _membershipHelper.GetCurrentMemberId().ToString(CultureInfo.InvariantCulture)));
                 CacheCustomer(customer);
             }
             else 
@@ -242,6 +244,58 @@ namespace Merchello.Web
                 // create a new anonymous customer
                 CreateAnonymousCustomer();
             }
+        }
+
+        /// <summary>
+        /// Invalidates the current initialization and starts over
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        private void Reinitialize(ICustomerBase customer)
+        {
+            // customer has logged out, so we need to go back to an anonymous customer
+            var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
+
+            if (cookie == null)
+            {
+                this.Initialize();
+                return;
+            }
+
+            cookie.Expires = DateTime.Now.AddDays(-1);
+
+            _cache.RequestCache.ClearCacheItem(CustomerCookieName);
+            _cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key));
+
+            Initialize();      
+        }
+
+        /// <summary>
+        /// Provides an assertion that the customer cookie is associated with the correct customer Umbraco member relation.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <remarks>
+        /// http://issues.merchello.com/youtrack/issue/M-454
+        /// </remarks>
+        private void EnsureIsLoggedInCustomer(ICustomerBase customer)
+        {
+            if (_cache.RequestCache.GetCacheItem(CacheKeys.EnsureIsLoggedInCustomerValidated(customer.Key)) != null) return;
+
+            var memberId = _membershipHelper.GetCurrentMemberId();
+            var dataValue = ContextData.Values.FirstOrDefault(x => x.Key == UmbracoMemberIdDataKey);
+
+            // If the dataValues do not contain the umbraco member id reinitialize
+            if (!string.IsNullOrEmpty(dataValue.Value))
+            {
+                // Assert are equal
+                if (!dataValue.Value.Equals(memberId.ToString(CultureInfo.InvariantCulture))) this.Reinitialize(customer);
+                return;
+            }
+
+            if (dataValue.Value != memberId.ToString(CultureInfo.InvariantCulture)) this.Reinitialize(customer);
         }
 
         /// <summary>
@@ -301,6 +355,9 @@ namespace Merchello.Web
             {
                 Value = ContextData.ToJson()
             };
+
+            // Ensure a session cookie for Anonymous customers
+            if (customer.IsAnonymous) cookie.Expires = DateTime.MinValue;
 
             _umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 

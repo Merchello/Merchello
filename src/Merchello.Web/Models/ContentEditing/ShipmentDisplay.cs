@@ -6,12 +6,32 @@
     /// <summary>
     /// The shipment display.
     /// </summary>
-    public class ShipmentDisplay
+    public class ShipmentDisplay : LineItemDisplayCollectionBase<OrderLineItemDisplay>
     {
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
         public Guid Key { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipment number prefix.
+        /// </summary>
+        public string ShipmentNumberPrefix { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipment number.
+        /// </summary>
+        public int ShipmentNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipment status.
+        /// </summary>
+        public ShipmentStatusDisplay ShipmentStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipment status key.
+        /// </summary>
+        public Guid ShipmentStatusKey { get; set; }
 
         /// <summary>
         /// Gets or sets the shipped date.
@@ -141,6 +161,6 @@
         /// <summary>
         /// Gets or sets the items.
         /// </summary>
-        public IEnumerable<OrderLineItemDisplay> Items { get; set; }
+        public override IEnumerable<OrderLineItemDisplay> Items { get; set; }
     }
 }

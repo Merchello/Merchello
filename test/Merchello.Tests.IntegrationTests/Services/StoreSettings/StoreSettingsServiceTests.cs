@@ -123,5 +123,29 @@ namespace Merchello.Tests.IntegrationTests.Services.StoreSettings
             Assert.IsTrue(8 <= settings.Count());
 
         }
+
+        [Test]
+        public void Can_Get_The_Next_InvoiceNumber()
+        {
+            var number = _settingsService.GetNextInvoiceNumber(1);
+
+            Assert.Greater(number, 1);
+        }
+
+        [Test]
+        public void Can_Get_The_Next_OrderNumber()
+        {
+            var number = _settingsService.GetNextOrderNumber(1);
+
+            Assert.Greater(number, 1);
+        }
+
+        [Test]
+        public void Can_Get_The_Next_ShipmentNumber()
+        {
+            var number = _settingsService.GetNextShipmentNumber(1);
+
+            Assert.Greater(number, 1);
+        }
     }
 }

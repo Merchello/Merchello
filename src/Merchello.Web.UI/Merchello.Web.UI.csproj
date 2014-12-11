@@ -78,6 +78,8 @@
   <ItemGroup>
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderCustomer.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderFulfillment.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderPaymentInfo.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderShipmentInfo.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreateActionMenu.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
@@ -85,9 +87,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreate.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantCreate.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ViewReport.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Notifications.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Vendors.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Taxation.html" />
@@ -332,6 +332,9 @@
     <Content Include="App_Plugins\Merchello\Modules\Order\Directives\ordercreate.directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\order.payment.info.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\order.shipment.info.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Report\report.bootstrap.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.controller.js" />
@@ -362,9 +365,6 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.editwithoptions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.invoice.models.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesByItem.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.taxesByDestination.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesOverTime.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Report\reports.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Directives\tag.manager.directive.js" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\css\bootstrap-theme.min.css" />

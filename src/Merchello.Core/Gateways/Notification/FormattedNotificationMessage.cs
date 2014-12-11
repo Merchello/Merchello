@@ -6,6 +6,8 @@
     using System.Linq;
     using Formatters;
     using Models;
+
+    using Umbraco.Core;
     using Umbraco.Core.IO;
     using Umbraco.Core.Logging;
 

@@ -1,4 +1,4 @@
-Merchello version 1.0 is licensed under the OSI approved MIT License:
+Merchello 1.X is licensed under the OSI approved MIT License:
 
 Copyright (c) 2013-2014 Mindfly, Inc.
 

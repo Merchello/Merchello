@@ -10,6 +10,16 @@
 
         return {
 
+            getAllShipmentStatuses: function() {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetAllShipmentStatuses'),
+                        method: 'GET'}),
+                    'Failed to get shipment statuses');
+
+            },
+
             getShipment: function (key) {
 
                 return umbRequestHelper.resourcePromise(

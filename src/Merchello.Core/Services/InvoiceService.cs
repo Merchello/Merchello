@@ -280,7 +280,7 @@
         {
             // Generate Invoice Number for new Invoices in the collection
             var invoicesArray = invoices as IInvoice[] ?? invoices.ToArray();
-            var newInvoiceCount = invoicesArray.Count(x => x.InvoiceNumber <= 0 && !((Invoice) x).HasIdentity);
+            var newInvoiceCount = invoicesArray.Count(x => x.InvoiceNumber <= 0 && !((Invoice)x).HasIdentity);
             if (newInvoiceCount > 0)
             {
                 var lastInvoiceNumber =

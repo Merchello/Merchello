@@ -1,7 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Plugin.Payments.Stripe", "Merchello.Plugin.Payments.Stripe\Merchello.Plugin.Payments.Stripe.csproj", "{5EFD39C4-52BE-4608-9886-C317C8AFC953}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Stripe.Integration", "Merchello.Tests.Stripe.Integration\Merchello.Tests.Stripe.Integration.csproj", "{CFE2B3E0-817C-42EF-969E-06E32474B94C}"

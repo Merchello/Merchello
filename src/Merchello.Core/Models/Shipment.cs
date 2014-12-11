@@ -6,15 +6,32 @@
 
     using Merchello.Core.Models.EntityBase;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a shipment.
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
     [KnownType(typeof(LineItemCollection))]
-    internal class Shipment : VersionTaggedEntity, IShipment
+    public class Shipment : VersionTaggedEntity, IShipment
     {
         #region Fields
+
+        /// <summary>
+        /// The shipment number prefix selector.
+        /// </summary>
+        private static readonly PropertyInfo ShipmentNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.ShipmentNumberPrefix);
+
+        /// <summary>
+        /// The shipment number selector.
+        /// </summary>
+        private static readonly PropertyInfo ShipmentNumberSelector = ExpressionHelper.GetPropertyInfo<Shipment, int>(x => x.ShipmentNumber);
+
+        /// <summary>
+        /// The shipment status selector.
+        /// </summary>
+        private static readonly PropertyInfo ShipmentStatusSelector = ExpressionHelper.GetPropertyInfo<Shipment, IShipmentStatus>(x => x.ShipmentStatus);
 
         /// <summary>
         /// The shipped date selector.
@@ -136,7 +153,9 @@
         /// </summary>
         private static readonly PropertyInfo CarrierSelector = ExpressionHelper.GetPropertyInfo<Shipment, string>(x => x.Carrier);
 
-
+        private IShipmentStatus _shipmentStatus;
+        private string _shipmentNumberPrefix;
+        private int _shipmentNumber;
         private DateTime _shippedDate;
         private string _fromOrganization;
         private string _fromName;
@@ -168,28 +187,37 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Shipment"/> class.
         /// </summary>
-        internal Shipment()
-            : this(new Address(), new Address(), new LineItemCollection())
+        /// <param name="shipmentStatus">
+        /// The shipment Status.
+        /// </param>
+        internal Shipment(IShipmentStatus shipmentStatus)
+            : this(shipmentStatus, new Address(), new Address(), new LineItemCollection())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Shipment"/> class.
         /// </summary>
+        /// <param name="shipmentStatus">
+        /// The shipment Status.
+        /// </param>
         /// <param name="origin">
         /// The origin.
         /// </param>
         /// <param name="destination">
         /// The destination.
         /// </param>
-        internal Shipment(IAddress origin, IAddress destination)
-            : this(origin, destination, new LineItemCollection())
+        internal Shipment(IShipmentStatus shipmentStatus, IAddress origin, IAddress destination)
+            : this(shipmentStatus, origin, destination, new LineItemCollection())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Shipment"/> class.
         /// </summary>
+        /// <param name="shipmentStatus">
+        /// The shipment Status.
+        /// </param>
         /// <param name="origin">
         /// The origin.
         /// </param>
@@ -199,8 +227,9 @@
         /// <param name="items">
         /// The items.
         /// </param>
-        internal Shipment(IAddress origin, IAddress destination, LineItemCollection items)
+        internal Shipment(IShipmentStatus shipmentStatus, IAddress origin, IAddress destination, LineItemCollection items)
         {
+            Mandate.ParameterNotNull(shipmentStatus, "shipmentStatus");
             Mandate.ParameterNotNull(origin, "origin");
             Mandate.ParameterNotNull(destination, "destination");
             Mandate.ParameterNotNull(items, "items");
@@ -228,7 +257,92 @@
             _phone = destination.Phone;
             _email = destination.Email;
 
+            _shipmentStatus = shipmentStatus;
             _items = items;
+        }
+
+        /// <summary>
+        /// Gets or sets the shipment number prefix.
+        /// </summary>
+        [DataMember]
+        public string ShipmentNumberPrefix
+        {
+            get
+            {
+                return _shipmentNumberPrefix;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                   o =>
+                   {
+                       _shipmentNumberPrefix = value;
+                       return _shipmentNumberPrefix;
+                   },
+               _shipmentNumberPrefix,
+               ShipmentNumberPrefixSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the shipment number.
+        /// </summary>
+        [DataMember]
+        public int ShipmentNumber
+        {
+            get
+            {
+                return _shipmentNumber;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _shipmentNumber = value;
+                        return _shipmentNumber;
+                    },
+                _shipmentNumber,
+                ShipmentNumberSelector); 
+            }
+        }
+
+        /// <summary>
+        /// Gets the shipment status key.
+        /// </summary>
+        [DataMember]
+        public Guid ShipmentStatusKey
+        {
+            get
+            {
+                return _shipmentStatus.Key;
+            }  
+        }
+
+        /// <summary>
+        /// Gets or sets the shipment status.
+        /// </summary>
+        [DataMember]
+        public IShipmentStatus ShipmentStatus
+        {
+            get
+            {
+                return _shipmentStatus;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _shipmentStatus = value;
+                        return _shipmentStatus;
+                    },
+                _shipmentStatus,
+                ShipmentStatusSelector);
+            }
         }
 
         /// <summary>

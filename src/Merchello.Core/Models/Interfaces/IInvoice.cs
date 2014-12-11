@@ -9,10 +9,10 @@
     public interface IInvoice : ILineItemContainer
     {
         /// <summary>
-        /// Gets the unique customer 'key' to associated with the invoice
+        /// Gets or sets the unique customer 'key' to associated with the invoice
         /// </summary>
         [DataMember]
-        Guid? CustomerKey { get; }
+        Guid? CustomerKey { get; set; }
 
         /// <summary>
         /// Gets or sets the optional invoice number prefix

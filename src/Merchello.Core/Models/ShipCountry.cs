@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a country associated with a warehouse
     /// </summary>

@@ -11,6 +11,8 @@
     using global::Examine.SearchCriteria;
 
     using Merchello.Web.Models.Querying;
+
+    using Umbraco.Core;
     using Umbraco.Core.Persistence;
 
     /// <summary>
