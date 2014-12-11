@@ -6,6 +6,8 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents the ShippingContext
     /// </summary>

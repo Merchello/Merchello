@@ -4,6 +4,8 @@ using Merchello.Core.Models;
 
 namespace Merchello.Core.Strategies.Packaging
 {
+    using Umbraco.Core;
+
     public abstract class PackagingStrategyBase : IPackagingStrategy
     {
 

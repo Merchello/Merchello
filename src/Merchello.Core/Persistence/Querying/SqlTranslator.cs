@@ -17,12 +17,8 @@ namespace Merchello.Core.Persistence.Querying
             if (sql == null)
                 throw new Exception("Sql cannot be null");
 
-            var query1 = query as Query<T>;
-            if (query1 == null)
-                throw new Exception("Query cannot be null");
-
             _sql = sql;
-            foreach (var clause in query1.GetWhereClauses())
+            foreach (var clause in query.GetWhereClauses())
             {
                 _sql.Where(clause.Item1, clause.Item2);
             }

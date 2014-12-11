@@ -13,7 +13,6 @@ namespace Merchello.Core.Persistence.Mappers
 
         internal abstract ConcurrentDictionary<string, DtoMapModel> PropertyInfoCache { get; }
 
-        
 
         internal string Map(string propertyName)
         {

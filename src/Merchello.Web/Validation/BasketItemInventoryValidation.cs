@@ -7,6 +7,8 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Visitor to audit basket line item for inventory requirements
     /// </summary>

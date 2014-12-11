@@ -6,6 +6,7 @@
     using Merchello.Core;
     using Merchello.Core.ObjectResolution;
 
+    using Umbraco.Core;
     using Umbraco.Web;
 
     /// <summary>

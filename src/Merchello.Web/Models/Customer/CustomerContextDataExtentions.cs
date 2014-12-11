@@ -5,6 +5,8 @@ namespace Merchello.Web.Models.Customer
     using System.Web;
     using Core;
     using Newtonsoft.Json;
+
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
 
     /// <summary>

@@ -4,6 +4,8 @@
     using Core;
     using Core.Services;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a CachedQueryProvider
     /// </summary>

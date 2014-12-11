@@ -7,6 +7,7 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
 
     [Serializable]
     [DataContract(IsReference = true)]

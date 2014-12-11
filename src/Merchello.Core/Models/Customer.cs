@@ -5,6 +5,8 @@
     using System.Reflection;
     using System.Runtime.Serialization;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The customer.
     /// </summary>

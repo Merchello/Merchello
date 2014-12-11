@@ -5,6 +5,8 @@
     using Models;
     using Services;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Base class for GatewayContext objects
     /// </summary>

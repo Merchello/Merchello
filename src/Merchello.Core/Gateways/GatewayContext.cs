@@ -9,6 +9,8 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents the GatewayContext.  Provides access to <see cref="IGatewayProviderSettings"/>s
     /// </summary>

@@ -7,6 +7,8 @@
 
     using Services;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Extension methods for IAddress
     /// </summary>

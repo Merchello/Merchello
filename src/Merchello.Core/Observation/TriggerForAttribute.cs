@@ -3,6 +3,8 @@ namespace Merchello.Core.Observation
     using System;
     using Gateways.Notification.Triggering;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents the TriggerForAttribute used to decorate <see cref="INotificationTrigger"/>s
     /// </summary>
