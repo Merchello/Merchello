@@ -12,7 +12,7 @@
         <div class="form-group row-fluid">
             <label for="method-type">Method</label>
             <div class="col-xs-6 span6 row-fluid">
-                <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0"></select>
+                <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.serviceCode" data-ng-options="r.serviceCode as r.name for r in dialogData.gatewayResources" data-ng-disabled="dialogData.method.shipMethod.key.length > 0"></select>
             </div>
         </div>
         <!--<div data-ng-hide="dialogData.method.shipMethod.provinces.length == 0">

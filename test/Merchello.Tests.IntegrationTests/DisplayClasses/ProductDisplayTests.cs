@@ -31,8 +31,6 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
 
             var warehouseService = PreTestDataWorker.WarehouseService;
             _warehouse = warehouseService.GetDefaultWarehouse();
-
-            var productVariantService = PreTestDataWorker.ProductVariantService;
             var productService = PreTestDataWorker.ProductService;
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
@@ -54,21 +52,14 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             product.Manufacturer = "Nike";
             product.ManufacturerModelNumber = "N01-012021-A";
             product.TrackInventory = true;
+            product.AddToCatalogInventory(_warehouse.WarehouseCatalogs.First());
             productService.Save(product);
 
             _productKey = product.Key;
 
-            var attributes = new ProductAttributeCollection()
-            {
-                product.ProductOptions.First(x => x.Name == "Color").Choices.First(x => x.Sku == "Blue"),
-                product.ProductOptions.First(x => x.Name == "Size").Choices.First(x => x.Sku == "XL" )
-            };
-
-            var variant = productVariantService.CreateProductVariantWithKey(product, attributes);
-            variant.AddToCatalogInventory(_warehouse.DefaultCatalog());
-            productVariantService.Save(variant);
-            _productVariantKey = variant.Key;
-            _examineId = ((ProductVariant) variant).ExamineId;
+        
+            _productVariantKey = product.ProductVariants.First().Key;
+            _examineId = ((ProductVariant)product.ProductVariants.First()).ExamineId;
 
             var provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
             provider.AddProductToIndex(product);

@@ -30,6 +30,8 @@
 		<key alias="addOptions">Add options to this variant and auto-populate additional variants for each option</key>
 		<key alias="deleteProduct">Delete Product</key>
 		<key alias="deleteVariant">Delete Variant</key>
+    <key alias="toggleOnSale">On Sale</key>
+    <key alias="toggleAvailable">Available</key>
 		<key alias="configVariant">Configure this variant</key>
 		<key alias="selectVariantOptions">Select the variant/options that you would like to create.</key>
 		<key alias="addFile">Add a file to your product variant</key>
@@ -80,6 +82,7 @@
     <key alias="attentionRequired">You Have Orders That Require Attention</key>
     <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
     <key alias="processedBy">Processed by</key>
+    <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -318,6 +321,8 @@
     <key alias="dragAndReorderHelper">If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</key>
     <key alias="changePrices">Change prices</key>
     <key alias="updateInventory">Update inventory</key>
+    <key alias="toggleAvailable">Toggle Available</key>
+    <key alias="toggleOnSale">Toggle On Sale</key>
     <key alias="duplicateVariant"> Duplicate Variant</key>
     <key alias="inAnother">In another</key>
     <key alias="editOptions">Edit Options</key>

@@ -23,7 +23,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
     {
         private const int ProductCount = 55;
 
-        private const int InvoiceCount = 50;
+        private const int InvoiceCount = 300;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -44,6 +44,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             
         }
 
+        //[Test]
         public void ReportTestsSetup()
         {
             DbPreTestDataWorker.DeleteAllAnonymousCustomers();
@@ -104,13 +105,14 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             var invoiceDate = DateTime.Today.AddDays(-1 * InvoiceCount);
 
             for(var j = 0; j < InvoiceCount; j++)
-
-            { 
-            for (var i = 0; i < itemCount; i++)
             {
-                CurrentCustomer.Basket().AddItem(products[MockDataMakerBase.NoWhammyStop.Next(maxProductIndex)], MockDataMakerBase.NoWhammyStop.Next(5));
-            }
-            CurrentCustomer.Basket().Save();
+                if (j % 2 == 0) CurrentCustomer = DbPreTestDataWorker.MakeExistingAnonymousCustomer();
+
+                for (var i = 0; i < itemCount; i++)
+                {
+                    CurrentCustomer.Basket().AddItem(products[MockDataMakerBase.NoWhammyStop.Next(maxProductIndex)], MockDataMakerBase.NoWhammyStop.Next(5));
+                }
+                CurrentCustomer.Basket().Save();
 
 
 

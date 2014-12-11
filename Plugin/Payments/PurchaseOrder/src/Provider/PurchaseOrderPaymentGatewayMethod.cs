@@ -83,6 +83,7 @@ namespace Merchello.Plugin.Payments.PurchaseOrder.Provider
             }
             else
             {
+                MerchelloContext.Current.Services.InvoiceService.Save(invoice, false);
                 GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit,
                     payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionResult) +
                     (transactionMode == TransactionMode.AuthorizeAndCapture ? string.Empty : " to show record of Authorization"),

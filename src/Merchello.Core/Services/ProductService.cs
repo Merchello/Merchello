@@ -13,6 +13,8 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
 
+    using umbraco.presentation.actions;
+
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
@@ -223,6 +225,9 @@
                     repository.AddOrUpdate(product);
                     uow.Commit();
                 }
+
+                // Synchronize product variants
+                this.EnsureVariants(product);
             }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
@@ -258,18 +263,15 @@
 
                     uow.Commit();
                 }
+
+                // Synchronize the products array
+                EnsureVariants(productArray);
             }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
 
             // verify that all variants of these products still have attributes - or delete them
             _productVariantService.EnsureProductVariantsHaveAttributes(productArray);
-
-            // save any remaining variants changes in the variants collections
-            foreach (var collection in productArray.Select(x => x.ProductVariants).Where(collection => collection.Any()))
-            {
-                _productVariantService.Save(collection);
-            }
         }
 
         /// <summary>
@@ -283,7 +285,7 @@
             {
                 if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IProduct>(product), this))
                 {
-                    ((Product) product).WasCancelled = true;
+                    ((Product)product).WasCancelled = true;
                     return;
                 }
             }
@@ -559,6 +561,59 @@
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
+            }
+        }
+
+        /// <summary>
+        /// Ensures that variants are created for each option and option choice combination
+        /// </summary>
+        /// <param name="products">
+        /// The collection of products.
+        /// </param>
+        private void EnsureVariants(IEnumerable<IProduct> products)
+        {
+            products.ForEach(this.EnsureVariants);
+        }
+
+        /// <summary>
+        /// Ensures that variants are created for each option and option choice combination
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        private void EnsureVariants(IProduct product)
+        {
+            // Create the product varaints
+            if (!product.ProductOptions.Any()) return;
+            
+            var attributeLists = product.GetPossibleProductAttributeCombinations().ToArray();
+
+            if (attributeLists.Any())
+            {
+                // delete any variants that don't have the correct number of attributes
+                var attCount = attributeLists.First().Count();
+
+                var removers = product.ProductVariants.Where(x => x.Attributes.Count() != attCount);
+                foreach (var remover in removers.ToArray())
+                {
+                    product.ProductVariants.Remove(remover.Sku);
+                    _productVariantService.Delete(remover);
+                }
+            }
+
+            foreach (var list in attributeLists)
+            {
+                // Check to see if the variant exists
+                var productAttributes = list as IProductAttribute[] ?? list.ToArray();
+                   
+                if (product.GetProductVariantForPurchase(productAttributes) != null) continue;
+                   
+                var variant = this._productVariantService.CreateProductVariantWithKey(product, productAttributes.ToProductAttributeCollection(), false);
+                foreach (var inv in product.CatalogInventories)
+                {
+                    variant.AddToCatalogInventory(inv.CatalogKey);
+                    _productVariantService.Save(variant, false);
+                }
             }
         }
     }

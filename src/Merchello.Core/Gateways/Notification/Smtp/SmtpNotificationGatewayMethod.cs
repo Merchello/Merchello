@@ -64,7 +64,42 @@
             }
             
             //// We want to send the email async
-            Task<bool> sendAsync = this.SendAsync(msg);
+            ////Task<bool> sendAsync = this.SendAsync(msg);
+
+            this.Send(msg);
+        }
+
+        /// <summary>
+        /// Sends an email, logging any errors.
+        /// </summary>
+        /// <param name="msg">
+        /// The <see cref="MailMessage"/>.
+        /// </param>
+        /// <param name="credentials">
+        /// The credentials.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Send(MailMessage msg, NetworkCredential credentials = null)
+        {
+            try
+            {
+                // We want to send the email async
+                using (var smtpClient = new SmtpClient(_settings.Host))
+                {
+                    if (_settings.HasCredentials) smtpClient.Credentials = _settings.Credentials;
+                    if (_settings.EnableSsl) smtpClient.EnableSsl = true;
+                    smtpClient.Send(msg);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
+                return false;
+            }
         }
 
         /// <summary>

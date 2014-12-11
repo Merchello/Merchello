@@ -314,7 +314,9 @@
         $scope.processFulfillShipmentDialog = function (data) {
             var promiseNewShipment = merchelloShipmentService.newShipment(data);
             promiseNewShipment.then(function (shipment) {
+                // TODO this is a total hack.  A new model should be defined.
                 shipment.trackingCode = data.trackingNumber;
+                shipment.shipmentStatus = data.shipmentStatus;
                 var promiseSave = merchelloShipmentService.putShipment(shipment, data);
                 promiseSave.then(function () {
                     notificationsService.success("Shipment Created");

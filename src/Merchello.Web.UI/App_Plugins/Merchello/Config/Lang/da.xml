@@ -71,6 +71,7 @@
     <key alias="attentionRequired">Der er ordrer der skal behandles</key>
     <key alias="paymentExpirationWarning">Du modtager muligvis ikke betaling, hvis tilladelsen udløber.</key>
     <key alias="processedBy">Behandlet af</key>
+    <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->

@@ -76,8 +76,13 @@
         /// <summary>
         /// Quotes all available ship methods
         /// </summary>
-        /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        public abstract IEnumerable<IShipmentRateQuote> GetShipmentRateQuotes();
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IShipmentRateQuote"/>
+        /// </returns>
+        public abstract IEnumerable<IShipmentRateQuote> GetShipmentRateQuotes(bool tryGetCached = true);
 
         /// <summary>
         /// Creates a cache key for caching <see cref="IShipmentRateQuote"/>s

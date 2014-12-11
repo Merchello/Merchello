@@ -352,12 +352,11 @@
         };
     };
 
-    models.Product = function (productFromServer, dontMapChildren) {
+    models.Product = function(productFromServer, dontMapChildren) {
 
         var self = this;
 
-        if (productFromServer == undefined)
-        {
+        if (productFromServer == undefined) {
             self.key = "";
             self.name = "";
             self.sku = "";
@@ -387,9 +386,7 @@
             self.productVariants = [];
 
             self.catalogInventories = [];
-        }
-        else
-        {
+        } else {
             self.key = productFromServer.key;
             self.name = productFromServer.name;
             self.sku = productFromServer.sku;
@@ -414,19 +411,18 @@
             self.hasOptions = false;
             self.hasVariants = false;
 
-            if (!dontMapChildren)
-            {
-                self.productOptions = _.map(productFromServer.productOptions, function (option) {
+            if (!dontMapChildren) {
+                self.productOptions = _.map(productFromServer.productOptions, function(option) {
                     return new merchello.Models.ProductOption(option);
                 });
 
-                self.productOptions = _.sortBy(self.productOptions, function (option) { return option.sortOrder; });
+                self.productOptions = _.sortBy(self.productOptions, function(option) { return option.sortOrder; });
 
                 if (self.productOptions.length > 0) {
                     self.hasOptions = true;
                 }
 
-                self.productVariants = _.map(productFromServer.productVariants, function (variant) {
+                self.productVariants = _.map(productFromServer.productVariants, function(variant) {
                     var jsvariant = new merchello.Models.ProductVariant(variant);
                     jsvariant.fixAttributeSortOrders(self.productOptions);
                     jsvariant.addAttributesAsProperties(self.productOptions);
@@ -437,26 +433,29 @@
                     self.hasVariants = true;
                 }
 
-                self.catalogInventories = _.map(productFromServer.catalogInventories, function (catalogInventory) {
+                self.catalogInventories = _.map(productFromServer.catalogInventories, function(catalogInventory) {
                     return new merchello.Models.CatalogInventory(catalogInventory);
                 });
-            }
-            else
-            {
+            } else {
                 if (productFromServer.productOptions.length > 0) {
                     self.hasOptions = true;
                 }
 
                 if (productFromServer.productVariants.length > 0) {
                     self.hasVariants = true;
-                    self.minPrice = _.min(productFromServer.productVariants, function (v) { return v.price; }).price;
-                    self.maxPrice = _.max(productFromServer.productVariants, function (v) { return v.price; }).price;
-                }
+                    self.minPrice = _.min(productFromServer.productVariants, function(v) { return v.price; }).price;
+                    self.maxPrice = _.max(productFromServer.productVariants, function(v) { return v.price; }).price;
+
+                    self.name = productFromServer.name + " [" + productFromServer.productVariants.length + "]";
+
+                };
+
             }
         }
 
+
         // Helper to copy from master variant
-        self.copyFromVariant = function (productVariant) {
+        self.copyFromVariant = function(productVariant) {
 
             self.key = productVariant.productKey;
             self.name = productVariant.name;
@@ -485,14 +484,14 @@
         };
 
         // Helper to remove catalog inventories that aren't used / checked
-        self.removeUnusedCatalogInventories = function (catalogInventories) {
+        self.removeUnusedCatalogInventories = function(catalogInventories) {
 
-            return _.reject(catalogInventories, function (inventory) { return !inventory.productInCatalog; });
+            return _.reject(catalogInventories, function(inventory) { return !inventory.productInCatalog; });
 
         };
 
         // Helper to add a variant to this product
-        self.addBlankOption = function () {
+        self.addBlankOption = function() {
 
             if (self.productOptions == undefined) {
                 self.productOptions = [];
@@ -507,9 +506,9 @@
         };
 
         // Helper to remove an option from this product
-        self.removeOption = function (option) {
+        self.removeOption = function(option) {
 
-            self.productOptions = _.reject(self.productOptions, function (opt) { return _.isEqual(opt, option); });
+            self.productOptions = _.reject(self.productOptions, function(opt) { return _.isEqual(opt, option); });
 
         };
 
@@ -528,7 +527,7 @@
 
 
         // Helper to add a variant to this product
-        self.addVariant = function (attributes) {
+        self.addVariant = function(attributes) {
 
             var newVariant = new merchello.Models.ProductVariant();
             newVariant.copyFromProduct(self);
@@ -545,19 +544,19 @@
         };
 
         // Helper to remove a variant from this product
-        self.removeVariant = function (idx) {
+        self.removeVariant = function(idx) {
 
             self.productVariants.splice(idx, 1);
         };
 
-        self.fixAttributeSortOrders = function () {
+        self.fixAttributeSortOrders = function() {
             for (var i = 0; i < self.productVariants.length; i++) {
                 self.productVariants[i].fixAttributeSortOrders(self.productOptions);
             }
         };
 
         // for sorting in a table
-        self.addAttributesAsPropertiesToVariants = function () {
+        self.addAttributesAsPropertiesToVariants = function() {
             for (var i = 0; i < self.productVariants.length; i++) {
                 self.productVariants[i].addAttributesAsProperties(self.productOptions);
             }
@@ -578,7 +577,7 @@
             return availablePermutations;
         };
 
-        self.variantsMinimumPrice = function () {
+        self.variantsMinimumPrice = function() {
             if (self.productVariants) {
                 return _.min(self.productVariants, function(v) { return v.price; });
             } else {
@@ -586,7 +585,7 @@
             }
         };
 
-        self.variantsMaximumPrice = function () {
+        self.variantsMaximumPrice = function() {
             if (self.productVariants) {
                 return _.max(self.productVariants, function(v) { return v.price; });
             } else {
@@ -595,6 +594,5 @@
         };
 
     };
-
 
 }(window.merchello.Models = window.merchello.Models || {}));

@@ -89,10 +89,13 @@ namespace Merchello.Core.Models
         /// Returns a collection of <see cref="IShipmentRateQuote"/> from the various configured shipping providers
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/></param>
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
         /// <returns>A collection of <see cref="IShipmentRateQuote"/></returns>
-        public static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment)
+        public static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, bool tryGetCached = true)
         {
-            return shipment.ShipmentRateQuotes(MerchelloContext.Current);
+            return shipment.ShipmentRateQuotes(MerchelloContext.Current, tryGetCached);
         }
 
         /// <summary>
@@ -140,12 +143,15 @@ namespace Merchello.Core.Models
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
+        /// <param name="tryGetCached">
+        /// If set true the strategy will try to get a quote from cache
+        /// </param>
         /// <returns>
         /// The collection of <see cref="IShipmentRateQuote"/>
         /// </returns>
-        internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext)
+        internal static IEnumerable<IShipmentRateQuote> ShipmentRateQuotes(this IShipment shipment, IMerchelloContext merchelloContext, bool tryGetCached = true)
         {
-            return merchelloContext.Gateways.Shipping.GetShipRateQuotesForShipment(shipment);
+            return merchelloContext.Gateways.Shipping.GetShipRateQuotesForShipment(shipment, tryGetCached);
         }
 
         /// <summary>
