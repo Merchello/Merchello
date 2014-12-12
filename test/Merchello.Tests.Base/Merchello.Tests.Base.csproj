@@ -258,6 +258,7 @@
     <Compile Include="Respositories\MockUnitOfWorkProvider.cs" />
     <Compile Include="Respositories\UnitOfWork\MockDatabaseUnitOfWork.cs" />
     <Compile Include="Respositories\UnitOfWork\TransactionType.cs" />
+    <Compile Include="ScratchTests.cs" />
     <Compile Include="Services\MockProductService.cs" />
     <Compile Include="Services\ServiceTestsBase.cs" />
     <Compile Include="SqlSyntax\DbSyntax.cs" />
