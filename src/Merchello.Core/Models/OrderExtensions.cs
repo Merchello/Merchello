@@ -161,7 +161,7 @@ namespace Merchello.Core.Models
                         key = x.Key,
                         containerKey = x.ContainerKey,
                         name = x.Name,
-                        shipmentKey = ((OrderLineItem)x).ShipmentKey,
+                        shipmentKey = ((OrderLineItem)x).ShipmentKey.GetValueOrDefault(),
                         lineItemTfKey = x.LineItemTfKey,
                         lineItemType = x.LineItemType.ToString(),
                         sku = x.Sku,
