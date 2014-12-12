@@ -63,7 +63,7 @@
         [Obsolete("Use MerchelloHelper.Query.Product.GetByKey")]
         public ProductDisplay Product(string key)
         {
-            return Product(key.EncodeAsGuid());
+            return Product(new Guid(key));
         }
 
         /// <summary>
@@ -104,7 +104,7 @@
         [Obsolete("Use MerchelloHelper.Query.Product.GetProductVariantByKey")]
         public ProductVariantDisplay ProductVariant(string key)
         {
-            return ProductVariant(key.EncodeAsGuid());
+            return ProductVariant(new Guid(key));
         }
 
         /// <summary>
