@@ -138,7 +138,7 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("versionKey", order.VersionKey.ToString());
                     writer.WriteAttributeString("exported", order.Exported.ToString());
                     writer.WriteAttributeString("orderStatus", GetOrderStatusJson(order.OrderStatus));
-                    writer.WriteAttributeString("orderItems", GetGenericItemsCollection(order.Items));
+                    writer.WriteAttributeString("orderItems", GetGenericItemsCollection(order.Items.Select(x => (OrderLineItem)x)));
                     writer.WriteAttributeString("createDate", order.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", order.UpdateDate.ToString("s"));
                     writer.WriteAttributeString("allDocs", "1");
@@ -152,7 +152,7 @@ namespace Merchello.Core.Models
             
         }
 
-        private static string GetGenericItemsCollection(IEnumerable<ILineItem> items)
+        private static string GetGenericItemsCollection(IEnumerable<IOrderLineItem> items)
         {
             return JsonConvert.SerializeObject(
                 items.Select(x =>
@@ -161,14 +161,14 @@ namespace Merchello.Core.Models
                         key = x.Key,
                         containerKey = x.ContainerKey,
                         name = x.Name,
-                        shipmentKey = ((OrderLineItem)x).ShipmentKey,
+                        shipmentKey = x.ShipmentKey,
                         lineItemTfKey = x.LineItemTfKey,
                         lineItemType = x.LineItemType.ToString(),
                         sku = x.Sku,
                         price = x.Price,
                         quantity = x.Quantity,
                         exported = x.Exported,
-                        backOrder = ((OrderLineItem)x).BackOrder,
+                        backOrder = x.BackOrder,
                         extendedData = x.ExtendedData.AsEnumerable()
                     }
                 ), Newtonsoft.Json.Formatting.None);
