@@ -127,6 +127,8 @@
 
             saveShipMethod: function (shipMethod) {
 
+                if (shipMethod.key === '') return this.addShipMethod(shipMethod);
+
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'PutShipMethod'),
                         shipMethod

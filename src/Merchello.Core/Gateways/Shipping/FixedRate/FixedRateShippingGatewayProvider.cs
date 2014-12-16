@@ -113,6 +113,7 @@
         public override void SaveShippingGatewayMethod(IShippingGatewayMethod shippingGatewayMethod)
         {
             GatewayProviderService.Save(shippingGatewayMethod.ShipMethod);
+            ResetShipMethods();
             ShippingFixedRateTable.Save(GatewayProviderService, RuntimeCache, ((FixedRateShippingGatewayMethod) shippingGatewayMethod).RateTable);
         }
 
