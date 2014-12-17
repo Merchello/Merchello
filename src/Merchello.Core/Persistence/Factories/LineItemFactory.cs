@@ -56,6 +56,7 @@ namespace Merchello.Core.Persistence.Factories
                 Name = entity.Name,
                 Quantity = entity.Quantity,
                 Price = entity.Price,
+                ShipmentKey = entity.ShipmentKey,
                 ExtendedData = entity.ExtendedData.SerializeToXml(),
                 BackOrder = entity.BackOrder,
                 Exported = entity.Exported,
@@ -108,6 +109,7 @@ namespace Merchello.Core.Persistence.Factories
                 Key = dto.Key,
                 ContainerKey = dto.ContainerKey,
                 BackOrder = dto.BackOrder,
+                ShipmentKey = dto.ShipmentKey,
                 Exported = dto.Exported,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
