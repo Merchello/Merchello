@@ -2,6 +2,8 @@
 {
     using System;
     using Merchello.Core;
+
+    using Umbraco.Core;
     using Umbraco.Web;
     using Umbraco.Web.Editors;
 

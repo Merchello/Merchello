@@ -3,6 +3,8 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Core.Persistence.UnitOfWork
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a Unit of Work Provider for creating a <see cref="Merchello.Core.Persistence.UnitOfWork.PetaPocoUnitOfWork"/>
     /// </summary>

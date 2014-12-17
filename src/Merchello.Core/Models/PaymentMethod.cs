@@ -5,6 +5,8 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a payment method
     /// </summary>

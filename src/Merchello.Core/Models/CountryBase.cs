@@ -8,6 +8,10 @@
 
     using Merchello.Core.Models.EntityBase;
 
+    using Umbraco.Core;
+
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// Represents a shipping or tax region (country)
     /// </summary>

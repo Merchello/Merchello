@@ -7,6 +7,8 @@ using System.Runtime.Serialization;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a product variant
     /// </summary>

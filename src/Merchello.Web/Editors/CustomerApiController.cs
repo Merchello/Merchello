@@ -15,6 +15,7 @@
     using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
+    using Umbraco.Core;
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;

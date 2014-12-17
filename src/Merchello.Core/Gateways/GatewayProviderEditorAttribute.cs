@@ -2,6 +2,8 @@
 
 namespace Merchello.Core.Gateways
 {
+    using Umbraco.Core;
+
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class GatewayProviderEditorAttribute : Attribute
     {

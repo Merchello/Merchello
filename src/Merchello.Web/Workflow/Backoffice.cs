@@ -11,6 +11,8 @@ using Umbraco.Core.Logging;
 
 namespace Merchello.Web.Workflow
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// A Backoffice for the Backoffice
     /// </summary>

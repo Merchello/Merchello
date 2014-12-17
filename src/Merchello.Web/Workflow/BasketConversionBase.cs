@@ -2,6 +2,8 @@
 {
     using Merchello.Core;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The base basket conversion.
     /// </summary>

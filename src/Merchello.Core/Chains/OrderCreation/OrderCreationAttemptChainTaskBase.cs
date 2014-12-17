@@ -2,6 +2,8 @@
 {
     using Models;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The order creation attempt chain task base.
     /// </summary>

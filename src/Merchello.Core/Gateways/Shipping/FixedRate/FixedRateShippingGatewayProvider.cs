@@ -5,6 +5,8 @@
     using System.Linq;
     using Models;
     using Services;
+
+    using Umbraco.Core;
     using Umbraco.Core.Cache;
 
     /// <summary>
