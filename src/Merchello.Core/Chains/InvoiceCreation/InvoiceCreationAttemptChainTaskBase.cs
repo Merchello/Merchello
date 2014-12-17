@@ -3,6 +3,8 @@
     using Models;
     using Sales;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The invoice creation attempt chain task base.
     /// </summary>

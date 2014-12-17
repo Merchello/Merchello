@@ -11,6 +11,8 @@
 
     using umbraco;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The localization helper.
     /// </summary>

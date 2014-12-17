@@ -7,6 +7,8 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.TypeFields;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The applied payment.
     /// </summary>

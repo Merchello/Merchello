@@ -4,6 +4,8 @@
     using Formatters;
     using Models;
     using Services;
+
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
 
     /// <summary>

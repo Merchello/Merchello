@@ -10,7 +10,9 @@
     using Newtonsoft.Json;
 
     using Services;
-   
+
+    using Umbraco.Core;
+
     /// <summary>
     /// The customer extensions.
     /// </summary>

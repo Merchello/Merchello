@@ -206,7 +206,10 @@
                 lineItemCollection.Add(item);
             }
 
-            var shipment = new Shipment(shipmentStatus, origin, destination, lineItemCollection);
+            var shipment = new Shipment(shipmentStatus, origin, destination, lineItemCollection)
+                               {
+                                   VersionKey = Guid.NewGuid()
+                               };
 
             if (!raiseEvents)
             {

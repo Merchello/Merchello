@@ -6,6 +6,8 @@
     using EntityBase;
     using TypeFields;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a customer item register
     /// </summary>

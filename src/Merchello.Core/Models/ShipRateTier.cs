@@ -6,6 +6,8 @@ using Merchello.Core.Models.Interfaces;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a ShipRateTier - used in flat rate shipping rate tables
     /// </summary>

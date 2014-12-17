@@ -7,6 +7,8 @@
     using System.Runtime.Serialization;
     using EntityBase;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents an abstract class for base Product properties and methods
     /// </summary>

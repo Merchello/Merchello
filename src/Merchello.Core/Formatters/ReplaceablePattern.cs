@@ -3,6 +3,8 @@
     using Configuration;
     using Configuration.Outline;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a replaceable pattern
     /// </summary>

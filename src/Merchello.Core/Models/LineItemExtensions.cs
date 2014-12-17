@@ -376,6 +376,17 @@
                 patterns.Add(totalPrice);
             }
 
+            //var shippingLineItems = container.ShippingLineItems().ToArray();
+
+            //// TODO - needs work once we expose multiple shipments to do an array if multiple destinations are detected
+            //if (shippingLineItems.Any())
+            //{
+            //    var shipment = shippingLineItems.First().ExtendedData.GetShipment<InvoiceLineItem>();
+            //    patterns.Add(ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToName", shipment.ToName));
+
+            //}
+
+
             return patterns;
         }
 

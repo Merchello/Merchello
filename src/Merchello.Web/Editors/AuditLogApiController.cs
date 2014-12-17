@@ -11,6 +11,7 @@
     using Merchello.Web.Models.SaleHistory;
     using Merchello.Web.WebApi;
 
+    using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>
