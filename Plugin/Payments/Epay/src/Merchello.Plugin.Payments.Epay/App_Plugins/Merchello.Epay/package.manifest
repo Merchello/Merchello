@@ -1,0 +1,6 @@
+﻿{
+	javascript : [
+		'~/App_Plugins/Merchello.Epay/merchello.epay.controller.js',
+		'~/App_Plugins/Merchello.Epay/merchello.epay.paymentmethod.controller.js'
+	]
+}
