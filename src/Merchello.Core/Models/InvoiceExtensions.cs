@@ -755,6 +755,7 @@
                     writer.WriteAttributeString("billToEmail", invoice.BillToEmail);
                     writer.WriteAttributeString("billtoPhone", invoice.BillToPhone);
                     writer.WriteAttributeString("billtoCompany", invoice.BillToCompany);
+                    writer.WriteAttributeString("poNumber", invoice.PoNumber);
                     writer.WriteAttributeString("exported", invoice.Exported.ToString());
                     writer.WriteAttributeString("archived", invoice.Archived.ToString());
                     writer.WriteAttributeString("total", invoice.Total.ToString(CultureInfo.InvariantCulture));

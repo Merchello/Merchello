@@ -61,9 +61,10 @@
         /// The route name.
         /// </param>
         /// <typeparam name="T">
+        /// The controller type
         /// </typeparam>
         /// <returns>
-        /// The <see cref="KeyValuePair"/>.
+        /// The key value pair
         /// </returns>
         protected static KeyValuePair<string, object> GetBaseUrl<T>(string routeName) where T : ReportController
         {
