@@ -8,7 +8,9 @@
 
     using global::Examine;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Examine;
     using Merchello.Web.Search;
 
@@ -124,6 +126,17 @@
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
                     Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
                 };
+
+            // TODO - this is sort of hacky and should be revisited.
+            foreach (var item in invoice.Items)
+            {
+                var tf = EnumTypeFieldConverter.LineItemType.GetTypeField(item.LineItemTfKey);
+                var lineTfKey = item.LineItemTfKey;
+                item.LineItemTypeField = tf == LineItemType.Custom ?
+                    (TypeField)EnumTypeFieldConverter.LineItemType.CustomTypeFields.FirstOrDefault(x => x.TypeKey == lineTfKey) :
+                    (TypeField)EnumTypeFieldConverter.LineItemType.GetTypeField(tf);
+            }
+
 
             invoice.Orders = getOrders(invoice.Key);
 

@@ -3,6 +3,9 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core;
+    using Merchello.Core.Models.TypeFields;
+
     /// <summary>
     /// The line item display base.
     /// </summary>
@@ -47,6 +50,16 @@
         /// Gets or sets a value indicating whether exported.
         /// </summary>
         public bool Exported { get; set; }
+
+        /// <summary>
+        /// Gets or sets the line item type.
+        /// </summary>
+        public LineItemType LineItemType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the line item type field.
+        /// </summary>
+        public TypeField LineItemTypeField { get; set; }
 
         /// <summary>
         /// Gets or sets the extended data.
