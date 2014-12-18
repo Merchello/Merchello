@@ -88,8 +88,8 @@
                     query = new merchello.Models.ListQuery({
                         currentPage: 0,
                         itemsPerPage: 25,
-                        sortBy: '',
-                        sortDirection: ''
+                        sortBy: 'invoiceNumber',
+                        sortDirection: 'Descending'
                     });
                 }
                 listQuery = new merchello.Models.ListQuery(query);
@@ -109,8 +109,8 @@
                     query = new merchello.Models.ListQuery({
                         currentPage: 0,
                         itemsPerPage: 100,
-                        sortBy: '',
-                        sortDirection: ''
+                        sortBy: 'invoiceNumber',
+                        sortDirection: 'Descending'
                     });
                 }
                 listQuery = new merchello.Models.ListQuery(query);
