@@ -25,7 +25,7 @@
         private readonly InvoiceService _invoiceService;
 
         /// <summary>
-        /// The method to retreive orders for an invoice
+        /// The method to retrieve orders for an invoice
         /// </summary>
         private readonly Func<Guid, IEnumerable<OrderDisplay>> _getOrders;
  
