@@ -46,7 +46,10 @@
             AutoMapper.Mapper.CreateMap<ICustomer, CustomerDisplay>()
                 .ForMember(
                     dest => dest.ExtendedData,
-                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()));
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(
+                    dest => dest.Invoices,
+                    opt => opt.ResolveUsing<CustomerInvoicesResolver>().ConstructedBy(() => new CustomerInvoicesResolver()));
 
             AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
 

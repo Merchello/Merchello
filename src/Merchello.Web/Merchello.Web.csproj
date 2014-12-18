@@ -226,6 +226,7 @@
     <Compile Include="Models\ContentEditing\LineItemDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
+    <Compile Include="Models\MapperResolvers\CustomerInvoicesResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityTypeResolver.cs" />
     <Compile Include="Models\Payments\PaymentResultDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryAuditingExtensions.cs" />

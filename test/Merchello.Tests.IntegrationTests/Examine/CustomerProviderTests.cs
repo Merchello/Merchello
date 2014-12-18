@@ -15,6 +15,7 @@ using Umbraco.Core.Events;
 namespace Merchello.Tests.IntegrationTests.Examine
 {
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Search;
 
     [TestFixture]
     public class CustomerProviderTests : DatabaseIntegrationTestBase
@@ -94,7 +95,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             criteria.Field("loginName", "rusty");
             var results = _searcher.Search(criteria);
 
-            var customerDisplay = results.FirstOrDefault().ToCustomerDisplay();
+            var customerDisplay = results.FirstOrDefault().ToCustomerDisplay(new CachedInvoiceQuery(PreTestDataWorker.InvoiceService).GetByCustomerKey);
 
             //// Assert
             Assert.NotNull(customerDisplay);

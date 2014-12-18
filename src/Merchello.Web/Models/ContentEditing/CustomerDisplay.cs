@@ -63,6 +63,11 @@ namespace Merchello.Web.Models.ContentEditing
         /// Gets or sets the collection of customer addresses.
         /// </summary>
         public IEnumerable<CustomerAddressDisplay> Addresses { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoices.
+        /// </summary>
+        public IEnumerable<InvoiceDisplay> Invoices { get; set; } 
     }
 
     #region Mapping Utility Extensions
