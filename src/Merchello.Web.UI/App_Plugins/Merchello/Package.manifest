@@ -74,6 +74,7 @@
 		'~/App_Plugins/Merchello/Modules/Order/order.view.controller.js',
 		'~/App_Plugins/Merchello/Modules/Order/Dialogs/capture.payment.controller.js',
 		'~/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.controller.js',  
+		'~/App_Plugins/Merchello/Modules/Order/Dialogs/shipment.edit.shipment.controller.js',
 		'~/App_Plugins/Merchello/Modules/Order/Directives/ordercreate.directives.js',
 		'~/App_Plugins/Merchello/Modules/Order/Directives/shipping-history-directives.js',
 		'~/App_Plugins/Merchello/Modules/Report/reports.list.controller.js',

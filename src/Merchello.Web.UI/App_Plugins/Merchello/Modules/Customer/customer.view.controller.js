@@ -124,16 +124,20 @@
          * Load the invoices for the customer.
          */
         $scope.loadInvoices = function() {
-            var promiseInvoices = merchelloInvoiceService.getByCustomerKey($scope.customer.key);
-            promiseInvoices.then(function(invoicesResponse) {
-                $scope.invoices = _.map(invoicesResponse.items, function (invoice) {
-                    return new merchello.Models.Invoice(invoice);
-                });
-                for (var i = 0; i < invoicesResponse.length; i++) {
-                    $scope.invoiceTotal += (invoicesResponse[i].total * 1);
-                }
+            //var promiseInvoices = merchelloInvoiceService.getByCustomerKey($scope.customer.key);
+            //promiseInvoices.then(function(invoicesResponse) {
+            //    $scope.invoices = _.map(invoicesResponse.items, function (invoice) {
+            //        return new merchello.Models.Invoice(invoice);
+            //    });
+            //    for (var i = 0; i < invoicesResponse.length; i++) {
+            //        $scope.invoiceTotal += (invoicesResponse[i].total * 1);
+            //    }
 
-            });
+            //});
+            $scope.invoices = $scope.customer.invoices;
+            for (var i = 0; i < $scope.invoices.length; i++) {
+                $scope.invoiceTotal += $scope.invoices[i].total * 1;
+            }
         };
 
         /**

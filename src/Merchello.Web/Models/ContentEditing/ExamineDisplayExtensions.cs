@@ -8,7 +8,9 @@
 
     using global::Examine;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Examine;
     using Merchello.Web.Search;
 
@@ -25,6 +27,9 @@
         /// </summary>
         /// <param name="result">
         /// The result.
+        /// </param>
+        /// <param name="getProductVariants">
+        /// The get Product Variants.
         /// </param>
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
@@ -122,6 +127,17 @@
                     Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
                 };
 
+            // TODO - this is sort of hacky and should be revisited.
+            foreach (var item in invoice.Items)
+            {
+                var tf = EnumTypeFieldConverter.LineItemType.GetTypeField(item.LineItemTfKey);
+                var lineTfKey = item.LineItemTfKey;
+                item.LineItemTypeField = tf == LineItemType.Custom ?
+                    (TypeField)EnumTypeFieldConverter.LineItemType.CustomTypeFields.FirstOrDefault(x => x.TypeKey == lineTfKey) :
+                    (TypeField)EnumTypeFieldConverter.LineItemType.GetTypeField(tf);
+            }
+
+
             invoice.Orders = getOrders(invoice.Key);
 
             return invoice;
@@ -159,12 +175,15 @@
         /// <param name="result">
         /// The result.
         /// </param>
+        /// <param name="getInvoices">
+        /// A function to get the invoice for a customer
+        /// </param>
         /// <returns>
         /// The <see cref="CustomerDisplay"/>.
         /// </returns>
-        internal static CustomerDisplay ToCustomerDisplay(this SearchResult result)
+        internal static CustomerDisplay ToCustomerDisplay(this SearchResult result, Func<Guid, IEnumerable<InvoiceDisplay>> getInvoices)
         {
-            return new CustomerDisplay()
+            var customer = new CustomerDisplay()
             {
                 Key = FieldAsGuid(result, "customerKey"),
                 LoginName = FieldAsString(result, "loginName"),
@@ -179,6 +198,10 @@
                 Addresses = RawJsonFieldAsCollection<CustomerAddress>(result, "addresses").Select(x => x.ToCustomerAddressDisplay()),
                 LastActivityDate = FieldAsDateTime(result, "lastActivityDate")
             };
+
+            customer.Invoices = getInvoices.Invoke(customer.Key);
+
+            return customer;
         }
 
 

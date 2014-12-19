@@ -2,12 +2,18 @@
 
 namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Defines a TypeFieldMapper
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface ITypeFieldMapper<T> : ICustomTypeField
     {
+        /// <summary>
+        /// Gets the collection of custom type fields.
+        /// </summary>
+        IEnumerable<ITypeField> CustomTypeFields { get; }
 
         /// <summary>
         /// Returns the enumerated value from the TypeKey
