@@ -54,7 +54,7 @@ namespace Merchello.Core.Models.TypeFields
             get { return GetTypeField(LineItemType.Discount); }
         }
 
-        private static TypeFieldCollection LineItems
+        public static TypeFieldCollection LineItems
         {
             get { return Fields.LineItem; }
         }

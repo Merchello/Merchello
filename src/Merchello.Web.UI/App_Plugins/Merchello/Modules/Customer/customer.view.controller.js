@@ -135,6 +135,9 @@
 
             //});
             $scope.invoices = $scope.customer.invoices;
+            for (var i = 0; i < $scope.invoices.length; i++) {
+                $scope.invoiceTotal += $scope.invoices[i].total * 1;
+            }
         };
 
         /**

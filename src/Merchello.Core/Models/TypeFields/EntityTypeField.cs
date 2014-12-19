@@ -116,6 +116,11 @@ namespace Merchello.Core.Models.TypeFields
             get { return GetTypeField(EntityType.WarehouseCatalog); }
         }
 
+        internal static TypeFieldCollection Entities
+        {
+            get { return Fields.Entities; }
+        }
+
         /// <summary>
         /// Returns a custom address or NullTypeField TypeKey (Guid)
         /// </summary>
@@ -126,9 +131,6 @@ namespace Merchello.Core.Models.TypeFields
             return GetTypeField(Entities[alias]);
         }
 
-        private static TypeFieldCollection Entities
-        {
-            get { return Fields.Entities; }
-        }
+
     }
 }

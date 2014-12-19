@@ -41,16 +41,16 @@
                                         <th>Items</th>
                                         <th>Street</th>
                                         <th>Tracking #</th>
-                                        <!--th>Actions</th-->
+                                        <th>Actions</th>
                                     </tr>
-                                    <tr data-ng-repeat="shipment in invoice.shipments">
+                                    <tr data-ng-repeat="shipment in shipments">
                                         <td>{{formatDate(shipment.shippedDate)}}</td>
                                         <!--<td>{{shipment.carrier}}</td>-->
                                         <td>{{shipment.shipmentStatus.name}}</td>
                                         <td>{{shipment.items.length}}</td>
                                         <td>{{shipment.toAddress1}}</td>
                                         <td>{{shipment.trackingCode}}</td>
-                                        <!--td><a href="#">Edit</a></td-->
+                                        <td><a class="btn btn-default btn-action" data-ng-click="editShipment(shipment.key)"><i class="icon-edit"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>
