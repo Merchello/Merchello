@@ -62,12 +62,15 @@
             var dialogData = {};
             dialogData.shipmentStatuses = $scope.shipmentStatuses;
 
+            // find the shipment that was selected
             var i = 0;
             var found = false;
             while (i < $scope.shipments.length && !found) {
                 if ($scope.shipments[i].key == shipmentKey) {
                     dialogData.shipment = $scope.shipments[i];
                     found = true;
+                } else {
+                    i++;
                 }
             }
 

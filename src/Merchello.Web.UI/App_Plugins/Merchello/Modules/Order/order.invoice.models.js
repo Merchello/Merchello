@@ -350,7 +350,9 @@
 		var self = this;
 
 		if (data == undefined) {
-			self.key = "";
+		    self.key = "";
+		    self.shipmentNumber = "";
+		    self.shipmentNumberPrefix = "";
 			self.versionKey = "";
 			self.fromOrganization = "";
 			self.fromName = "";
@@ -379,7 +381,9 @@
 			self.items = [];
 			self.shipmentStatus = new merchello.Models.ShipmentStatus();
 		} else {
-			self.key = data.key;
+		    self.key = data.key;
+		    self.shipmentNumber = data.shipmentNumber;
+		    self.shipmentNumberPrefix = data.shipmentNumberPrefix;
 			self.versionKey = data.versionKey;
 			self.fromOrganization = data.fromOrganization;
 			self.fromName = data.fromName;
