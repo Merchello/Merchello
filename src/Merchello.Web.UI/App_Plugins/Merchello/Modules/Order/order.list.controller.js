@@ -67,7 +67,7 @@
 
 
         assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
-            var filesToLoad = ["lib/datetimepicker/bootstrap-datetimepicker.min.js"];
+            var filesToLoad = ["lib/datetimepicker/bootstrap-datetimepicker.js"];
             assetsService.load(filesToLoad).then(
                 function () {
                     //The Datepicker js and css files are available and all components are ready to use.

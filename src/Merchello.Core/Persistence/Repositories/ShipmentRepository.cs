@@ -79,7 +79,7 @@
             var factory = new ShipmentFactory();
 
             var shipment = factory.BuildEntity(dto);
-
+            ((Shipment)shipment).Items = this.GetLineItems(dto.Key);
             return shipment;
         }
 
@@ -107,7 +107,7 @@
                 var dtos = Database.Fetch<ShipmentDto, ShipmentStatusDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
-                    yield return factory.BuildEntity(dto);
+                    yield return this.Get(dto.Key);
                 }
             }
         }
@@ -237,6 +237,14 @@
             var dtos = Database.Fetch<ShipmentDto, ShipmentStatusDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
+        }
+
+        private LineItemCollection GetLineItems(Guid shipmentKey)
+        {
+            var query = Querying.Query<IOrderLineItem>.Builder.Where(x => x.ShipmentKey == shipmentKey);
+            var items = _orderLineItemRepository.GetByQuery(query);
+
+            return new LineItemCollection { items };
         }
     }
 }

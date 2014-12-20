@@ -132,7 +132,7 @@ namespace Merchello.Web.Editors
 		        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 		    }
 
-		    return shipments.Select(s => s.ToShipmentDisplay());
+		    return shipments.Select(s => s.ToShipmentDisplay()).OrderByDescending(x => x.ShipmentNumber);
 		}
 
         /// <summary>
