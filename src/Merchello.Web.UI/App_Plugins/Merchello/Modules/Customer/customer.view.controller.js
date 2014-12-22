@@ -8,7 +8,10 @@
      * @description
      * The controller for the Customer view page
      */
-    controllers.CustomerViewController = function($scope, $routeParams, dialogService, merchelloCustomerService, merchelloGravatarService, merchelloInvoiceService, merchelloSettingsService, notificationsService) {
+    controllers.CustomerViewController = function ($scope, $routeParams, dialogService, assetsService, merchelloCustomerService, merchelloGravatarService, merchelloInvoiceService, merchelloSettingsService, notificationsService) {
+
+        assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
+
 
         /**
          * @ngdoc method
@@ -381,6 +384,6 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'dialogService', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloInvoiceService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerViewController]);
+    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'dialogService', 'assetsService', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloInvoiceService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerViewController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
