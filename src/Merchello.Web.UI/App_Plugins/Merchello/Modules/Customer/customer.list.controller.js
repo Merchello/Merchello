@@ -8,7 +8,9 @@
      * @description
      * The controller for the customers list page
      */
-    controllers.CustomerListController = function ($scope, dialogService, merchelloCustomerService, merchelloInvoiceService, notificationsService) {
+    controllers.CustomerListController = function ($scope, dialogService, assetsService, merchelloCustomerService, merchelloInvoiceService, notificationsService) {
+
+        assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
         /**
          * @ngdoc method
@@ -113,8 +115,8 @@
                         return new merchello.Models.Customer(customer);
                     });
                     $scope.maxPages = queryResult.totalPages;
-                    // TODO: comment out line below once the merchelloInvoiceService.getByCustomerKey API endpoint returns valid results.
-                    // $scope.loadMostRecentOrders();
+
+                    $scope.loadMostRecentOrders();
                 }
             });
         };
@@ -131,7 +133,21 @@
             _.each($scope.customers, function (customer) {
                 var promiseOrder = merchelloInvoiceService.getByCustomerKey(customer.key);
                 promiseOrder.then(function (response) {
-                    // TODO: Finish function acquiring the most recent order total for each customer once the merchelloInvoiceService.getByCustomerKey API endpoint returns valid results.
+
+                    // Each customer has all invoices passed back
+                    // calculate total of paid invoices 
+                    var invoiceTotal = 0;
+
+                    // TODO: Deal with partial payments
+                    for (i = 0; i < response.items.length; i++) {
+
+                        var invoiceStatus = response.items[i].invoiceStatus;
+
+                        if ((invoiceStatus != "Cancelled") && (invoiceStatus != "Fraud")) {
+                            invoiceTotal += response.items[i].total;
+                        }
+                    }
+                    customer.invoiceTotal = invoiceTotal;
                 });
             });
         };
@@ -239,6 +255,6 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Customer.ListController", ['$scope',  'dialogService', 'merchelloCustomerService', 'merchelloInvoiceService', 'notificationsService', merchello.Controllers.CustomerListController]);
+    angular.module("umbraco").controller("Merchello.Dashboards.Customer.ListController", ['$scope', 'dialogService', 'assetsService', 'merchelloCustomerService', 'merchelloInvoiceService', 'notificationsService', merchello.Controllers.CustomerListController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
