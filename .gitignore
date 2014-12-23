@@ -165,3 +165,4 @@ test/Merchello.Tests.IntegrationTests.Examine/App_Data/
 Plugin/Taxation/Avalara/src/Merchello.Plugin.Taxation.Avalara/Properties/VersionInfo.cs
 *.list
 src/Merchello.Web.UI.Client/build/
+src/Merchello.Web.UI/App_Plugins/Merchello2/
