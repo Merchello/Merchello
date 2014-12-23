@@ -1,15 +1,12 @@
 ﻿module.exports = function(grunt) {
 
     // Default task.
-    //grunt.registerTask('default', ['jshint:dev', 'build', 'karma:unit']);
-    grunt.registerTask('default', ['jshint:dev', 'build']);
+    grunt.registerTask('default', ['jshint:dev', 'build', 'karma:unit']);
+    //grunt.registerTask('dev', ['jshint:dev', 'build-dev', 'webserver', 'open:dev', 'watch']);
+    grunt.registerTask('vs', ['jshint:dev', 'build-dev', 'watch']);
 
     //triggered from grunt dev or grunt
-    grunt.registerTask('build', ['clean', 'concat', 'recess:min', 'recess:installer', 'recess:canvasdesigner', 'bower', 'copy']);
-
-    //build-dev doesn't min - we are trying to speed this up and we don't want minified stuff when we are in dev mode
-    grunt.registerTask('build-dev', ['clean', 'concat', 'copy']);
-
+    grunt.registerTask('build', ['clean', 'concat', 'recess:min', 'copy']);
 
     // Custom task to run the bower dependency installer
     // tried, a few other things but this seems to work the best.
@@ -35,17 +32,12 @@
 
     // Project configuration.
     grunt.initConfig({
+
         buildVersion: grunt.option('buildversion') || '1',
         distdir: 'build/merchello',
         bowerfiles: 'bower_components',
         vsdir: '../Merchello.Web.UI/App_Plugins/Merchello2',
         pkg: grunt.file.readJSON('package.json'),
-
-        banner:
-            '/*! <%= pkg.title || pkg.name %>\n' +
-                '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-                ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;\n' +
-                ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
 
         src: {
             js: ['src/**/*.js', 'src/*.js'],
@@ -53,7 +45,7 @@
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
             samples: ['sample files/*.js'],
-            html: ['src/index.html', 'src/install.html'], // unused at this point
+            html: ['src/index.html', 'src/install.html'],  // unused at this point
             everything: ['src/**/*.*', 'test/**/*.*'],
             tpl: {
                 app: ['src/views/**/*.html'],
@@ -79,16 +71,11 @@
             mocks: {
                 files: [{ dest: '<%= distdir %>/js', src: '*.js', expand: true, cwd: 'src/common/mocks/' }]
             },
-            
-            manifest: {
-                files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: false, cwd: 'src/' }]  
-            },
 
             vs: {
                 files: [
                     //everything except the index.html root file!
                     //then we need to figure out how to not copy all the test stuff either!?
-                    { dest: '<%= vsdir %>', src: '*.manfiest', expad: false, cwd: '<%= distdir %>'},
                     { dest: '<%= vsdir %>/assets', src: '**', expand: true, cwd: '<%= distdir %>/assets' },
                     { dest: '<%= vsdir %>/js', src: '**', expand: true, cwd: '<%= distdir %>/js' },
                     { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
@@ -97,75 +84,17 @@
             }
         },
 
-        concat: {
-            models: {
-                src: ['src/common/**/*.model.js', 'src/modules/**/*.model.js'],
-                dest: '<%= distdir %>/js/merchello.models.js',
-                options: {
-                    banner: '<%= banner %>\n(function(models, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Models = merchello.Models || {}));'
-                }
-            },
-            controllers: {
-                src: ['src/controllers/**/*.controller.js', 'src/views/**/*.controller.js'],
-                dest: '<%= distdir %>/js/merchello.controllers.js',
-                options: {
-                    banner: '<%= banner %>\n(function(controllers, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Controllers = merchello.Controllers || {}));'
-                }
-            },
-            services: {
-                src: ['src/common/services/*.js'],
-                dest: '<%= distdir %>/js/merchello.services.js',
-                options: {
-                    banner: '<%= banner %>\n(function(services, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Services = merchello.Services || {}));'
-                }
-            },
-            resources: {
-                src: ['src/common/resources/*.js'],
-                dest: '<%= distdir %>/js/merchello.resources.js',
-                options: {
-                    banner: '<%= banner %>\n(function(resources, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Resources = merchello.Resources || {}));'
-                }
-            },
-            testing: {
-                src: ['src/common/mocks/*/*.js'],
-                dest: '<%= distdir %>/js/merchello.testing.js',
-                options: {
-                    banner: "<%= banner %>\n(function() { \n\n",
-                    footer: "\n\n})();"
-                }
-            },
-            directives: {
-                src: ['src/common/directives/**/*.js'],
-                dest: '<%= distdir %>/js/merchello.directives.js',
-                options: {
-                    banner: '<%= banner %>\n(function(directives, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Directives = merchello.Directives || {}));'
-                }
-            },
-            filters: {
-                src: ['src/common/filters/*.js'],
-                dest: '<%= distdir %>/js/merchello.filters.js',
-                options: {
-                    banner: '<%= banner %>\n(function(filters, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Filters = merchello.Filters || {}));'
-                }
-            }
+        karma: {
+                unit: { configFile: 'test/config/karma.conf.js', keepalive: true },
+                e2e: { configFile: 'test/config/e2e.js', keepalive: true },
+                watch: { configFile: 'test/config/unit.js', singleRun: false, autoWatch: true, keepalive: true }
         },
 
-        //karma: {
-        //        unit: { configFile: 'test/config/karma.conf.js', keepalive: true },
-        //        e2e: { configFile: 'test/config/e2e.js', keepalive: true },
-        //        watch: { configFile: 'test/config/unit.js', singleRun: false, autoWatch: true, keepalive: true }
-        //},
-
         jshint: {
+            // the developemnt version ... probably don't need this one until we start copying to a starter kit
             dev: {
                 files: {
-                    src: ['<%= src.common %>', '<%= src.specs %>', '<%= src.scenarios %>']
+                    src: ['<%= src.common %>', '<%= src.specs %>', '<%= src.scenarios %>', '<%= src.samples %>']
                 },
                 options: {
                     curly: true,
@@ -226,9 +155,13 @@
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-   // grunt.loadNpmTasks('grunt-contrib-watch');
-   // grunt.loadNpmTasks('grunt-recess');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-recess');
 
     grunt.loadNpmTasks('grunt-karma');
 
+    grunt.loadNpmTasks('grunt-open');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+
+    grunt.loadNpmTasks('grunt-ngdocs');
 }

@@ -1,0 +1,37 @@
+﻿{     
+	propertyEditors: [      
+		{ 
+			alias: "Merchello.ProductSelector",
+			name: "Merchello Product Selector",
+			editor: {
+				view: "~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Views/merchelloproductselector.html"
+			}
+		},{ 
+			alias: "Merchello.ProductEditor",
+			name: "Merchello Product Editor",
+			editor: {
+				view: "~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Views/merchelloproducteditor.html",
+				hideLabel: true
+			}
+		}
+	],
+	javascript: [                 
+		'~/App_Plugins/Merchello/lib/JsonTree/jsontree.js',    
+		'~/App_Plugins/Merchello2/js/merchello.namespaces.js',
+		'~/App_Plugins/Merchello2/js/merchello.models.js',
+		'~/App_Plugins/Merchello2/js/merchello.filters.js',
+		'~/App_Plugins/Merchello2/js/merchello.resources.js',
+		'~/App_Plugins/Merchello2/js/merchello.services.js',
+		'~/App_Plugins/Merchello2/js/merchello.directives.js',
+		'~/App_Plugins/Merchello2/js/merchello.controllers.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductdialog.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Js/merchelloproductselector.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.productedit.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.productcreate.controller.js',
+		'~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Js/merchelloproducteditor.producteditwithoptions.controller.js'
+	],
+	css: [
+		'~/App_Plugins/Merchello/Common/Css/merchello.css'
+	]
+}

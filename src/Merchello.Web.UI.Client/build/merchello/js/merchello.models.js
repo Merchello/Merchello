@@ -1,4 +1,12 @@
-﻿    // Represents a JS version of Merchello's AddressDetails object
+/*! merchello
+ * https://github.com/meritage/Merchello
+ * Copyright (c) 2014 Merchello;
+ * Licensed MIT
+ */
+
+(function(models, undefined) { 
+
+    // Represents a JS version of Merchello's AddressDetails object
     models.Address = function () {
         this.address1 = '';
         this.address2 = '';
@@ -44,3 +52,6 @@
             populate: populate
         };
     }
+
+
+}(merchello.Models = merchello.Models || {}));
