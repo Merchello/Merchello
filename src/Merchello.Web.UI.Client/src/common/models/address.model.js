@@ -7,7 +7,7 @@
     * @description
     * Represents a JS version of Merchello's AddressDetails object
     */
-    merchello.models.Address = function () {
+    merchello.models.Address = function() {
         this.name = '';
         this.address1 = '';
         this.address2 = '';
@@ -20,5 +20,5 @@
         this.phone = '';
         this.email = '';
         this.isCommercial = false;
-    }
+    };
 

@@ -99,35 +99,35 @@
 
         concat: {
             models: {
-                src: ['src/common/**/*.model.js', 'src/modules/**/*.model.js'],
+                src: ['src/common/models/*.js', 'src/**/*.model.js'],
                 dest: '<%= distdir %>/js/merchello.models.js',
                 options: {
-                    banner: '<%= banner %>\n(function(models, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Models = merchello.Models || {}));'
+                    banner: '<%= banner %>\n(function() { \n\n',
+                    footer: '\n\n})();'
                 }
             },
             controllers: {
                 src: ['src/controllers/**/*.controller.js', 'src/views/**/*.controller.js'],
                 dest: '<%= distdir %>/js/merchello.controllers.js',
                 options: {
-                    banner: '<%= banner %>\n(function(controllers, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Controllers = merchello.Controllers || {}));'
+                    banner: '<%= banner %>\n(function() { \n\n',
+                    footer: '\n\n})();'
                 }
             },
             services: {
                 src: ['src/common/services/*.js'],
                 dest: '<%= distdir %>/js/merchello.services.js',
                 options: {
-                    banner: '<%= banner %>\n(function(services, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Services = merchello.Services || {}));'
+                    banner: '<%= banner %>\n(function() { \n\n',
+                    footer: '\n\n})();'
                 }
             },
             resources: {
                 src: ['src/common/resources/*.js'],
                 dest: '<%= distdir %>/js/merchello.resources.js',
                 options: {
-                    banner: '<%= banner %>\n(function(resources, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Resources = merchello.Resources || {}));'
+                    banner: '<%= banner %>\n(function() { \n\n',
+                    footer: '\n\n})();'
                 }
             },
             testing: {
@@ -142,16 +142,16 @@
                 src: ['src/common/directives/**/*.js'],
                 dest: '<%= distdir %>/js/merchello.directives.js',
                 options: {
-                    banner: '<%= banner %>\n(function(directives, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Directives = merchello.Directives || {}));'
+                    banner: '<%= banner %>\n(function() { \n\n',
+                    footer: '\n\n})();'
                 }
             },
             filters: {
                 src: ['src/common/filters/*.js'],
                 dest: '<%= distdir %>/js/merchello.filters.js',
                 options: {
-                    banner: '<%= banner %>\n(function(filters, undefined) { \n\n',
-                    footer: '\n\n}(merchello.Filters = merchello.Filters || {}));'
+                    banner: '<%= banner %>\n(function() { \n\n',
+                    footer: '\n\n})();'
                 }
             }
         },
@@ -162,61 +162,61 @@
         //        watch: { configFile: 'test/config/unit.js', singleRun: false, autoWatch: true, keepalive: true }
         //},
 
-        //jshint: {
-        //    dev: {
-        //        files: {
-        //            src: ['<%= src.common %>', '<%= src.specs %>', '<%= src.scenarios %>']
-        //        },
-        //        options: {
-        //            curly: true,
-        //            eqeqeq: true,
-        //            immed: true,
-        //            latedef: true,
-        //            newcap: true,
-        //            noarg: true,
-        //            sub: true,
-        //            boss: true,
-        //            //NOTE: This is required so it doesn't barf on reserved words like delete when doing $http.delete
-        //            es5: true,
-        //            eqnull: true,
-        //            //NOTE: we need to use eval sometimes so ignore it
-        //            evil: true,
-        //            //NOTE: we need to check for strings such as "javascript:" so don't throw errors regarding those
-        //            scripturl: true,
-        //            //NOTE: we ignore tabs vs spaces because enforcing that causes lots of errors depending on the text editor being used
-        //            smarttabs: true,
-        //            globals: {}
-        //        }
-        //    },
+        jshint: {
+            dev: {
+                files: {
+                    src: ['<%= src.common %>', '<%= src.specs %>', '<%= src.scenarios %>']
+                },
+                options: {
+                    curly: true,
+                    eqeqeq: true,
+                    immed: true,
+                    latedef: true,
+                    newcap: true,
+                    noarg: true,
+                    sub: true,
+                    boss: true,
+                    //NOTE: This is required so it doesn't barf on reserved words like delete when doing $http.delete
+                    es5: true,
+                    eqnull: true,
+                    //NOTE: we need to use eval sometimes so ignore it
+                    evil: true,
+                    //NOTE: we need to check for strings such as "javascript:" so don't throw errors regarding those
+                    scripturl: true,
+                    //NOTE: we ignore tabs vs spaces because enforcing that causes lots of errors depending on the text editor being used
+                    smarttabs: true,
+                    globals: {}
+                }
+            },
 
-        //    // merchello plugins
-        //    build: {
-        //        files: {
-        //            src: ['<%= src.prod %>']
-        //        },
-        //        options: {
-        //            curly: true,
-        //            eqeqeq: true,
-        //            immed: true,
-        //            latedef: true,
-        //            newcap: true,
-        //            noarg: true,
-        //            sub: true,
-        //            boss: true,
-        //            //NOTE: This is required so it doesn't barf on reserved words like delete when doing $http.delete
-        //            es5: true,
-        //            eqnull: true,
-        //            //NOTE: we need to use eval sometimes so ignore it
-        //            evil: true,
-        //            //NOTE: we need to check for strings such as "javascript:" so don't throw errors regarding those
-        //            scripturl: true,
-        //            //NOTE: we ignore tabs vs spaces because enforcing that causes lots of errors depending on the text editor being used
-        //            smarttabs: true,
-        //            globalstrict: true,
-        //            globals: { $: false, jQuery: false, define: false, require: false, window: false }
-        //        }
-        //    }
-        //}
+            // merchello plugins
+            build: {
+                files: {
+                    src: ['<%= src.prod %>']
+                },
+                options: {
+                    curly: true,
+                    eqeqeq: true,
+                    immed: true,
+                    latedef: true,
+                    newcap: true,
+                    noarg: true,
+                    sub: true,
+                    boss: true,
+                    //NOTE: This is required so it doesn't barf on reserved words like delete when doing $http.delete
+                    es5: true,
+                    eqnull: true,
+                    //NOTE: we need to use eval sometimes so ignore it
+                    evil: true,
+                    //NOTE: we need to check for strings such as "javascript:" so don't throw errors regarding those
+                    scripturl: true,
+                    //NOTE: we ignore tabs vs spaces because enforcing that causes lots of errors depending on the text editor being used
+                    smarttabs: true,
+                    globalstrict: true,
+                    globals: { $: false, jQuery: false, define: false, require: false, window: false }
+                }
+            }
+        }
     });
 
 
