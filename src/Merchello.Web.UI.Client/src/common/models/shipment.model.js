@@ -6,47 +6,51 @@
     * @description
     * Represents a JS version of Merchello's ShipmentDetails object
     */
-    merchello.models.Shipment = function () {
-            this.key = '';
-            this.shipmentNumber = '';
-            this.shipmentNumberPrefix = '';
-            this.versionKey = '';
-            this.fromOrganization = '';
-            this.fromName = '';
-            this.fromAddress1 = '';
-            this.fromAddress2 = '';
-            this.fromLocality = '';
-            this.fromRegion = '';
-            this.fromPostalCode = '';
-            this.fromCountryCode = '';
-            this.fromIsCommercial = '';
-            this.toOrganization = '';
-            this.toName = '';
-            this.toAddress1 = '';
-            this.toAddress2 = '';
-            this.toLocality = '';
-            this.toRegion = '';
-            this.toPostalCode = '';
-            this.toCountryCode = '';
-            this.toIsCommercial = '';
-            this.shipMethodKey = '';
-            this.phone = '';
-            this.email = '';
-            this.carrier = '';
-            this.trackingCode = '';
-            this.shippedDate = '';
-            this.items = [];
-            this.shipmentStatus = new merchello.models.ShipmentStatus();
+    Merchello.Models.Shipment = function () {
+
+        var self = this;
+
+        self.key = '';
+        self.shipmentNumber = '';
+        self.shipmentNumberPrefix = '';
+        self.versionKey = '';
+        self.fromOrganization = '';
+        self.fromName = '';
+        self.fromAddress1 = '';
+        self.fromAddress2 = '';
+        self.fromLocality = '';
+        self.fromRegion = '';
+        self.fromPostalCode = '';
+        self.fromCountryCode = '';
+        self.fromIsCommercial = '';
+        self.toOrganization = '';
+        self.toName = '';
+        self.toAddress1 = '';
+        self.toAddress2 = '';
+        self.toLocality = '';
+        self.toRegion = '';
+        self.toPostalCode = '';
+        self.toCountryCode = '';
+        self.toIsCommercial = '';
+        self.shipMethodKey = '';
+        self.phone = '';
+        self.email = '';
+        self.carrier = '';
+        self.trackingCode = '';
+        self.shippedDate = '';
+        self.items = [];
+        self.shipmentStatus = new Merchello.Models.ShipmentStatus();
     };
 
-
-    merchello.models.Shipment.prototype = function() {
+    // Shipment Prototype
+    // ------------------------------------------------
+    Merchello.Models.Shipment.prototype = (function () {
 
         //// Private members
 
             // returns the shipment destination as an Address
         var getDestinationAddress = function() {
-            return buildAddress(this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion, this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, '', '', 'shipping');
+                return buildAddress(this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion, this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, '', '', 'shipping');
             },
 
             // returns the shipment origin as an Address
@@ -54,9 +58,9 @@
                 return buildAddress(this.fromName, this.fromAddress1, this.fromAddress2, this.fromLocality, this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromOrganization, this.fromIsCommercial, '', '', 'shipping');
             },
 
-            // utility to build an address
-            buildAddress = function() {
-                var adr = new merchello.models.Address();  
+            // Utility to build an address
+            buildAddress = function(name, address1, address2, locality, region, postalCode, countryCode, organization, isCommercial, phone, email, addressType) {
+                var adr = new Merchello.Models.Address();
                 adr.name = name;
                 adr.address1 = address1;
                 adr.address2 = address2;
@@ -70,12 +74,30 @@
                 adr.email = email;
                 adr.addressType = addressType;
                 return adr;
-            }
+            };
 
         // public members
         return {
+            /**
+            * @ngdoc prototype
+            * @name merchello.models.Shipment.getDestinationAddress
+            * @function
+            * 
+            * @description
+            * Returns a merchello.models.Address representing the shipment destination
+            */
             getDestinationAddress: getDestinationAddress,
+
+            /**
+            * @ngdoc prototype
+            * @name merchello.models.Shipment.getOriginAddress
+            * @function
+            * 
+            * @description
+            * Returns a merchello.models.Address representing the shipment origin
+            */
             getOriginAddress: getOriginAddress
         };
 
-    }();
+    }());
+
