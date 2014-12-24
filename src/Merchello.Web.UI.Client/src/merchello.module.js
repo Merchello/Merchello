@@ -1,6 +1,6 @@
-﻿// defines the Merchello models namespace
-var merchello = merchello || {};
-merchello.models = merchello || {};
+﻿// defines the Merchello Models namespace
+if (typeof Merchello == 'undefined') var Merchello = {};
+if (!Merchello.Models) Merchello.Models = {};
 
 // the Merchello angular module
 var merch = angular.module('merchello', [

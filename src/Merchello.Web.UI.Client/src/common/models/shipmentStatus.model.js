@@ -6,11 +6,12 @@
     * @description
     * Represents a JS version of Merchello's ShipmentStatusDetails object
     */
-    merchello.models.ShipmentStatus = function () {
-            this.key = '';
-            this.name = '';
-            this.alias = '';
-            this.reportable = '';
-            this.active = '';
-            this.sortOrder = '';
+    Merchello.Models.ShipmentStatus = function () {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.alias = '';
+        self.reportable = '';
+        self.active = '';
+        self.sortOrder = '';
     };

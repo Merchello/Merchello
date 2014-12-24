@@ -13,8 +13,8 @@
         // private
 
         // transforms json object into a local model
-        function transformObject(jsonResult, constructor) {
-            var model = new constructor();
+        function transformObject(jsonResult, Constructor) {
+            var model = new Constructor();
             angular.extend(model, jsonResult);
             return model;
         }
@@ -40,15 +40,15 @@
             * @returns a model or array of models.
             *
             */
-            transform: function(jsonResult, constructor) {
+            transform: function(jsonResult, Constructor) {
                 if (angular.isArray(jsonResult)) {
                     var models = [];
                     angular.forEach(jsonResult, function (object) {
-                        models.push(transformObject(object, constructor));
+                        models.push(transformObject(object, Constructor));
                     });
                     return models;
                 } else {
-                    return transformObject(jsonResult, constructor);
+                    return transformObject(jsonResult, Constructor);
                 }
             }
         };

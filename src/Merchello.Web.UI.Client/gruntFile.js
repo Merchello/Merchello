@@ -4,34 +4,19 @@
     // Default task.
     //grunt.registerTask('default', ['jshint:dev', 'build', 'karma:unit']);
     grunt.registerTask('default', ['jshint:dev', 'build']);
+    grunt.registerTask('dev', ['jshint:dev', 'build-dev']);
 
     //triggered from grunt dev or grunt
-    grunt.registerTask('build', ['clean', 'concat', 'recess:min', 'recess:installer', 'recess:canvasdesigner', 'bower', 'copy']);
+    grunt.registerTask('build', ['clean', 'concat', 'sass:build', 'copy']);
 
     //build-dev doesn't min - we are trying to speed this up and we don't want minified stuff when we are in dev mode
-    grunt.registerTask('build-dev', ['clean', 'concat', 'copy']);
+    grunt.registerTask('build-dev', ['clean', 'concat', 'sass:dev', 'copy', 'karma:unit', 'watch']);
 
-
-    // Custom task to run the bower dependency installer
-    // tried, a few other things but this seems to work the best.
-    // https://coderwall.com/p/xnkdqw
-    grunt.registerTask('bower', 'Get js packages listed in bower.json',
-        function() {
-            var bower = require('bower');
-            var done = this.async();
-
-            bower.commands.install(undefined, {}, { interactive: false })
-                .on('log', function(data) {
-                    grunt.log.write(data.message + "\n");
-                })
-                .on('error', function(data) {
-                    grunt.log.write(data.message + "\n");
-                    done(false);
-                })
-                .on('end', function(data) {
-                    done();
-                });
-        });
+    // watches
+    grunt.registerTask('watch-css', ['sass:dev', 'copy:assets', 'copy:assets', 'copy:vs']);
+    grunt.registerTask('watch-js', ['jshint:dev', 'concat', 'copy:app', 'copy:mocks', 'copy:vs', 'karma:unit']);
+    grunt.registerTask('watch-test', ['jshint:dev', 'karma:unit']);
+    grunt.registerTask('watch-html', ['copy:views', 'copy:vs']);
 
     // Project configuration.
     grunt.initConfig({
@@ -59,7 +44,7 @@
                 app: ['src/views/**/*.html'],
                 common: ['src/common/**/*.tpl.html']
             },
-            scss: ['src/scss/merchello.scss'], // recess:build doesn't accept ** in its file patterns
+            scss: ['src/scss/merchello.scss'], 
             prod: ['<%= distdir %>/js/*.js']
         },
 
@@ -84,6 +69,11 @@
             //    files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: false, cwd: 'src/' }]
             //},
 
+            assets: {
+                // this requires that the scss as been compiled.
+                files: [{ dest: '<%= distdir %>/assets/css', src: '*.css', expand: true, cwd: 'src/scss/' }]
+            },
+
             vs: {
                 files: [
                     //everything except the index.html root file!
@@ -102,7 +92,7 @@
                 src: ['src/common/models/*.js', 'src/**/*.model.js'],
                 dest: '<%= distdir %>/js/merchello.models.js',
                 options: {
-                    banner: '<%= banner %>\n(function() { \n\n',
+                    banner: '<%= banner %>\n\n(function() { \n\n',
                     footer: '\n\n})();'
                 }
             },
@@ -156,11 +146,59 @@
             }
         },
 
-        //karma: {
-        //        unit: { configFile: 'test/config/karma.conf.js', keepalive: true },
-        //        e2e: { configFile: 'test/config/e2e.js', keepalive: true },
-        //        watch: { configFile: 'test/config/unit.js', singleRun: false, autoWatch: true, keepalive: true }
-        //},
+        sass: {
+            dev: {
+                files: {
+                    '<%= distdir %>/assets/css/<%= pkg.name %>.css':
+                    '<%= src.scss %>'
+                }
+            },
+            build: {
+                files: {
+                    '<%= distdir %>/assets/css/<%= pkg.name %>.css':
+                    '<%= src.scss %>'
+                },
+                options: {
+                    style: 'compressed'
+                }
+            }
+        },
+
+        watch: {
+            css: {
+                files: '**/*.scss',
+                tasks: ['watch-css']
+            },
+            js: {
+                files: ['src/**/*.js', 'src/*.js'],
+                tasks: ['watch-js', 'timestamp'],
+            },
+            test: {
+                files: ['test/**/*.js'],
+                tasks: ['watch-test', 'timestamp'],
+            },
+            html: {
+                files: ['src/views/**/*.html', 'src/*.html'],
+                tasks: ['watch-html', 'timestamp']
+            }
+        },
+
+        uglify: {
+            options: {
+                mangle: true
+            },
+            combine: {
+                files: {
+                    '<%= distdir %>/js/merchello.min.js': ['<%= distdir %>/js/merchello.*.js']
+                }
+            }
+        },
+
+        karma: {
+                unit: { configFile: 'tests/config/karma.config.js', keepalive: true }
+                //e2e: { configFile: 'test/config/e2e.js', keepalive: true },
+                //watch: { configFile: 'test/config/app.unit.js', singleRun: false, autoWatch: true, keepalive: true }
+        },
 
         jshint: {
             dev: {
@@ -169,7 +207,7 @@
                 },
                 options: {
                     curly: true,
-                    eqeqeq: true,
+                    eqeqeq: true, 
                     immed: true,
                     latedef: true,
                     newcap: true,
@@ -226,9 +264,10 @@
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-sass');
-    // grunt.loadNpmTasks('grunt-contrib-watch');
-    // grunt.loadNpmTasks('grunt-recess');
-
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-open');
+    grunt.loadNpmTasks('grunt-contrib-connect');
 
+    grunt.loadNpmTasks('grunt-ngdocs');
 }

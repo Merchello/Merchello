@@ -505,27 +505,4 @@
   padding: 2px 8px;
   margin-bottom: 2px; }
 
-.merchello-product-picker .selector {
-  margin-bottom: 5px; }
-.merchello-product-picker table {
-  margin: 15px; }
-  .merchello-product-picker table tr.sku th {
-    border-top: 1px solid #E3E3E3; }
-  .merchello-product-picker table th {
-    border-right: 1px solid #E3E3E3;
-    padding: 8px;
-    text-align: right; }
-  .merchello-product-picker table td {
-    padding: 5px; }
-
-.merchello-product-editor .merchello-panel-body {
-  position: static; }
-.merchello-product-editor label {
-  display: block;
-  padding: 0; }
-.merchello-product-editor input, .merchello-product-editor select, .merchello-product-editor textarea {
-  margin-bottom: 10px; }
-.merchello-product-editor input[type="radio"], .merchello-product-editor input[type="checkbox"] {
-  margin-top: 4px; }
-
 /*# sourceMappingURL=merchello.css.map */
