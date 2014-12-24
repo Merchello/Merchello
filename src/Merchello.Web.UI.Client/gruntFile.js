@@ -4,12 +4,13 @@
     // Default task.
     //grunt.registerTask('default', ['jshint:dev', 'build', 'karma:unit']);
     grunt.registerTask('default', ['jshint:dev', 'build']);
+    grunt.registerTask('dev', ['jshint:dev', 'build-dev']);
 
     //triggered from grunt dev or grunt
-    grunt.registerTask('build', ['clean', 'concat', 'recess:min', 'recess:installer', 'recess:canvasdesigner', 'bower', 'copy']);
+    grunt.registerTask('build', ['clean', 'concat', 'recess:min', 'bower', 'copy']);
 
     //build-dev doesn't min - we are trying to speed this up and we don't want minified stuff when we are in dev mode
-    grunt.registerTask('build-dev', ['clean', 'concat', 'copy']);
+    grunt.registerTask('build-dev', ['clean', 'concat', 'recess:build', 'copy']);
 
 
     // Custom task to run the bower dependency installer
@@ -152,6 +153,26 @@
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
+                }
+            }
+        },
+
+        recess: {
+            build: {
+                files: {
+                    '<%= distdir %>/assets/css/<%= pkg.name %>.css':
+                    ['<%= src.scss %>'] },
+                options: {
+                    compile: true
+                }
+            },
+            min: {
+                files: {
+                    '<%= distdir %>/assets/css/<%= pkg.name %>.css': ['<%= src.scss %>']
+                },
+                options: {
+                    compile: true,
+                    compress: true
                 }
             }
         },
