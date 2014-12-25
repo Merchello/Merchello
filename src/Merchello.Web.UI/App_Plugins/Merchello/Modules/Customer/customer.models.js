@@ -16,6 +16,7 @@
             self.notes = '';
             self.taxExempt = false;
             self.invoices = [];
+            self.invoiceTotal = 0;
         } else {
             self.addresses = _.map(customerSource.addresses, function(address) {
                 return new merchello.Models.CustomerAddress(address);
@@ -34,6 +35,7 @@
             self.invoices = _.map(customerSource.invoices, function(invoice) {
                 return new merchello.Models.Invoice(invoice);
             });
+            self.invoiceTotal = 0;
         }
 
         self.primaryLocation = function () {
