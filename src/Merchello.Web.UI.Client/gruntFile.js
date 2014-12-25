@@ -65,9 +65,13 @@
                 files: [{ dest: '<%= distdir %>/js', src: '*.js', expand: true, cwd: 'src/common/mocks/' }]
             },
 
-            //manifest: {
-            //    files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: false, cwd: 'src/' }]
-            //},
+            manifest: {
+                files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: true, cwd: 'src/' }]
+            },
+
+            config: {
+              files: [{ dest: '<%= distdir %>/config', src: '**/*.*', expand: true, cwd: 'src/config/'}]  
+            },
 
             assets: {
                 // this requires that the scss as been compiled.
