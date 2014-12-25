@@ -168,7 +168,7 @@ $active: lighten($green, 50%);
     }
 
     // DFB: restyle tax table
-	.tax-table{
+	.tax-table .settings-table{
 		td.last-of-type{width:10%;}
 
         //  DFB: give more visual space to input box so tax can include more digits like 8.765
