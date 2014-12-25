@@ -66,8 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Plugins\Merchello\Backoffice\Settings\" />
-    <Folder Include="App_Plugins\Merchello\lib\bower_components\angular-ui-tinymce\src\" />
-    <Folder Include="App_Plugins\Merchello\lib\bower_components\tinymce\" />
     <Folder Include="App_Plugins\Merchello\Modules\Customer\Directives\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Css\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Css\" />
