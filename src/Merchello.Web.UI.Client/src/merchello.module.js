@@ -10,10 +10,6 @@ var merch = angular.module('merchello', [
 	'umbraco.services',
 	'umbraco.packages',
     'ngCookies',
-    'ngSanitize',
-    'ngMobile',
-    'blueimp.fileupload',
-    'tmh.dynamicLocale',
     'merchello.filters',
     'merchello.directives',
     'merchello.resources',
@@ -21,6 +17,9 @@ var merch = angular.module('merchello', [
 ]);
 
 // this is defined in the Umbraco app.js
-var packages = packages || {};
-packages.requires = packages.requires || [];
-packages.requires.push(merch);
+// TODO it looks like we should be using the 'umbraco.packages' to store the Merchello module
+// have requested clarification as to how this works
+//var packages = packages || {};
+//packages.requires = packages.requires || [];
+
+angular.module('umbraco').requires.push(merch);
