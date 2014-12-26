@@ -14,13 +14,27 @@
             'lib/angular/1.1.5/angular-cookies.min.js',
             'lib/angular/1.1.5/angular-mocks.js',
             'lib/angular/angular-ui-sortable.js',
+
             'lib/underscore/underscore.js',
             'lib/umbraco/Extensions.js',
             'lib/lazyload/lazyload.min.js',
             'lib/select2/select2.js',
             'lib/select2/ui-select2.js',
 
-            'src/merchello.module.js',
+            // umbraco
+            'tests/config/app.unit.js',
+            'tests/lib/umbraco/mocks/umbraco.servervariables.js',
+
+            'tests/lib/umbraco/directives/*.js',
+            'tests/lib/umbraco/filters/*.js',
+            'tests/lib/umbraco/services/*.js',
+            'tests/lib/umbraco/security/*.js',
+            'tests/lib/umbraco/resources/*.js',
+            'tests/lib/umbraco/mocks/**/*.js',
+            'tests/lib/umbraco/views/**/*.controller.js',
+
+            // merchello
+            'tests/config/merchello.module.unit.js',
             'src/common/**/*.js',
             'src/views/**/*.js',
             'tests/unit/**/*.spec.js',

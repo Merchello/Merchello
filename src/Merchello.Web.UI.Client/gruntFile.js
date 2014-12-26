@@ -26,12 +26,14 @@
         vsdir: '../Merchello.Web.UI/App_Plugins/Merchello2',
         pkg: grunt.file.readJSON('package.json'),
 
+        // The comment block that is inserted at the top of files during build
         banner:
             '/*! <%= pkg.title || pkg.name %>\n' +
             '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
             ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;\n' +
             ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
-
+        
+        // file locations
         src: {
             js: ['src/**/*.js', 'src/*.js'],
             common: ['src/common/**/*.js'],
@@ -187,6 +189,7 @@
             }
         },
 
+        // not in use ATM
         uglify: {
             options: {
                 mangle: true
@@ -231,7 +234,7 @@
                 }
             },
 
-            // merchello plugins
+            // /App_Plugins/Merchello
             build: {
                 files: {
                     src: ['<%= src.prod %>']
