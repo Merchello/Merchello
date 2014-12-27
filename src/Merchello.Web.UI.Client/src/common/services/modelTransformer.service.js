@@ -1,5 +1,4 @@
-﻿
-    /**
+﻿    /**
    * @ngdoc model
    * @name merchello.services.modelTransformer
    * @function
@@ -8,13 +7,27 @@
    * A utility service that builds local models for API query results
    *  http://odetocode.com/blogs/scott/archive/2014/03/17/building-better-models-for-angularjs.aspx
    */
-    var modelTransformer = function() {
+    angular.module('merchello.services')
+        .factory('modelTransformer', [
+            function() {
         
         // private
 
         // transforms json object into a local model
         function transformObject(jsonResult, Constructor) {
             var model = new Constructor();
+
+            // we only want to map properties with expected keys
+            // TODO this should probably only be done during dev
+            var keys = Object.keys(jsonResult);
+            for (var i = 0; i < keys.length; i++)
+            {
+                if(!(keys[i] in model))
+                {
+                    delete jsonResult[keys[i]];
+                }
+            }
+
             angular.extend(model, jsonResult);
             return model;
         }
@@ -52,7 +65,4 @@
                 }
             }
         };
-
-    };
-
-    angular.module('merchello.services').factory('modelTransformer', [], modelTransformer);
+    }]);
