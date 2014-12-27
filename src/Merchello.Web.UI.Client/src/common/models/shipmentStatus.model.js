@@ -4,7 +4,7 @@
     * @function
     * 
     * @description
-    * Represents a JS version of Merchello's ShipmentStatusDetails object
+    * Represents a JS version of Merchello's ShipmentStatusDisplay object
     */
     Merchello.Models.ShipmentStatus = function () {
         var self = this;

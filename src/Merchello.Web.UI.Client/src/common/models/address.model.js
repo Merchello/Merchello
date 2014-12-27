@@ -1,10 +1,10 @@
 ﻿    /**
     * @ngdoc model
-    * @name merchello.models.address
+    * @name Merchello.Models.Address
     * @function
     * 
     * @description
-    * Represents a JS version of Merchello's AddressDetails object
+    * Represents a JS version of Merchello's AddressDisplay object
     */
     Merchello.Models.Address = function () {
 

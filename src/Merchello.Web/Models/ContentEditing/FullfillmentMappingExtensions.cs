@@ -15,19 +15,6 @@ namespace Merchello.Web.Models.ContentEditing
 	internal static class FullfillmentMappingExtensions
 	{
 
-		#region Address
-
-		internal static AddressDisplay ToAddressDisplay(this IAddress address)
-		{
-			return AutoMapper.Mapper.Map<AddressDisplay>(address);
-		}
-
-		internal static IAddress ToAddress(this AddressDisplay addressDisplay)
-		{
-			return AutoMapper.Mapper.Map<Address>(addressDisplay);
-		}
-
-		#endregion
 
 		#region AppliedPayment
 
