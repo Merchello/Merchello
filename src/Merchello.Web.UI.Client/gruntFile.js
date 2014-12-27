@@ -18,6 +18,11 @@
     grunt.registerTask('watch-test', ['jshint:dev', 'karma:unit']);
     grunt.registerTask('watch-html', ['copy:views', 'copy:vs']);
 
+    // Print a timestamp (useful for when watching)
+    grunt.registerTask('timestamp', function() {
+        grunt.log.subhead(Date());
+    });
+
     // Project configuration.
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',

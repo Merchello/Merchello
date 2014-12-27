@@ -166,3 +166,5 @@ Plugin/Taxation/Avalara/src/Merchello.Plugin.Taxation.Avalara/Properties/Version
 *.list
 src/Merchello.Web.UI.Client/build/
 src/Merchello.Web.UI/App_Plugins/Merchello2/
+src/Merchello.Web.UI.Client/.idea/workspace.xml
+src/Merchello.Web.UI.Client/.idea/
