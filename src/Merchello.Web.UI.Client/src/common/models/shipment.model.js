@@ -50,16 +50,47 @@
 
             // returns the shipment destination as an Address
         var getDestinationAddress = function() {
-                return buildAddress(this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion, this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, '', '', 'shipping');
+                return buildAddress.call(this, this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion,
+                    this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, '', '', 'shipping');
             },
 
             // returns the shipment origin as an Address
             getOriginAddress = function() {
-                return buildAddress(this.fromName, this.fromAddress1, this.fromAddress2, this.fromLocality, this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromOrganization, this.fromIsCommercial, '', '', 'shipping');
+                return buildAddress.call(this, this.fromName, this.fromAddress1, this.fromAddress2, this.fromLocality,
+                    this.fromRegion, this.fromPostalCode, this.fromCountryCode, this.fromOrganization,
+                    this.fromIsCommercial, '', '', 'shipping');
+            },
+
+            setDestinationAddress = function(address)
+            {
+                this.toName = address.name;
+                this.toAddress1 = address.address1;
+                this.toAddress2 = address.address2;
+                this.toLocality = address.locality;
+                this.toRegion = address.region;
+                this.toPostalCode = address.postalCode;
+                this.toCountryCode = address.countryCode;
+                this.toOrganization = address.organization;
+                this.toIsCommercial = address.isCommercial;
+                this.phone = address.phone;
+                this.email = address.email;
+            },
+
+            setOriginAddress = function(address) {
+                this.fromName = address.name;
+                this.fromAddress1 = address.address1;
+                this.fromAddress2 = address.address2;
+                this.fromLocality = address.locality;
+                this.fromRegion = address.region;
+                this.fromPostalCode = address.postalCode;
+                this.fromCountryCode = address.countryCode;
+                this.fromOrganization = address.organization;
+                this.fromIsCommercial = address.isCommercial;
             },
 
             // Utility to build an address
-            buildAddress = function(name, address1, address2, locality, region, postalCode, countryCode, organization, isCommercial, phone, email, addressType) {
+            buildAddress = function(name, address1, address2, locality, region, postalCode, countryCode, organization,
+                                    isCommercial, phone, email, addressType) {
                 var adr = new Merchello.Models.Address();
                 adr.name = name;
                 adr.address1 = address1;
@@ -79,25 +110,44 @@
         // public members
         return {
             /**
-            * @ngdoc prototype
+            * @ngdoc method
             * @name merchello.models.Shipment.getDestinationAddress
             * @function
-            * 
+            *
             * @description
             * Returns a merchello.models.Address representing the shipment destination
             */
             getDestinationAddress: getDestinationAddress,
 
             /**
-            * @ngdoc prototype
+            * @ngdoc method
             * @name merchello.models.Shipment.getOriginAddress
             * @function
-            * 
+            *
             * @description
             * Returns a merchello.models.Address representing the shipment origin
             */
-            getOriginAddress: getOriginAddress
-        };
+            getOriginAddress: getOriginAddress,
 
+            /**
+             * @ngdoc method
+             * @name merchello.models.Shipment.setDestinationAddress
+             * @function
+             *
+             * @description
+             * Sets the destination address for a shipment
+             */
+            setDestinationAddress: setDestinationAddress,
+
+            /**
+             * @ngdoc method
+             * @name merchello.models.Shipment.setOriginAddress
+             * @function
+             *
+             * @description
+             * Sets the origin address for a shipment
+             */
+            setOriginAddress: setOriginAddress
+        };
     }());
 

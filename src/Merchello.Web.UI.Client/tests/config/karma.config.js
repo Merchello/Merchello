@@ -106,7 +106,7 @@
         plugins: [
           'karma-jasmine',
           'karma-phantomjs-launcher'
-        ],
+        ]
 
         //ngHtml2JsPreprocessor: {
         //    // strip this from the file path
