@@ -42,12 +42,12 @@
                                     <td>{{invoice.invoiceDate}}</td>
                                     <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
                                     <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
-                                    <td><localize key="merchelloGeneral_moneySymbol" />{{invoice.total}}</td>
+                                    <td>{{invoice.total | currency : currencySymbol}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="4"></td>
                                     <td>Total Spent:</td>
-                                    <td><localize key="merchelloGeneral_moneySymbol" />{{invoiceTotal}}</td>
+                                    <td>{{invoiceTotal | currency : currencySymbol}}</td>
                                 </tr>
                             </tbody>
                         </table>

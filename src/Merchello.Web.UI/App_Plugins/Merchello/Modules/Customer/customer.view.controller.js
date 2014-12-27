@@ -64,6 +64,26 @@
             $scope.setVariables();
             $scope.loadCountries();
             $scope.loadCustomer();
+            $scope.loadSettings();
+        };
+
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         * 
+         * @description
+         * Load the settings from the settings service to get the currency symbol
+         */
+        $scope.loadSettings = function () {
+
+            var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+            currencySymbolPromise.then(function (currencySymbol) {
+                $scope.currencySymbol = currencySymbol;
+
+            }, function (reason) {
+                notificationsService.error("Settings Load Failed", reason.message);
+            });
         };
 
         /**
