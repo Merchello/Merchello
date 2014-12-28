@@ -14,7 +14,7 @@
 
     // watches
     grunt.registerTask('watch-css', ['sass:dev', 'copy:assets', 'copy:assets', 'copy:vs']);
-    grunt.registerTask('watch-js', ['jshint:dev', 'concat', 'copy:app', 'copy:mocks', 'copy:vs', 'karma:unit']);
+    grunt.registerTask('watch-js', ['jshint:dev', 'concat', 'copy:app', 'copy:vs', 'karma:unit']);
     grunt.registerTask('watch-test', ['jshint:dev', 'karma:unit']);
     grunt.registerTask('watch-html', ['copy:views', 'copy:vs']);
 
@@ -68,9 +68,9 @@
                 ]
             },
 
-            /*mocks: {
+           /* mocks: {
                 files: [{ dest: '<%= distdir %>/js', src: '*.js', expand: true, cwd: 'src/common/mocks/' }]
-            },*/
+            }, */
 
             manifest: {
                 files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: true, cwd: 'src/' }]
@@ -116,7 +116,7 @@
                 }
             },
             services: {
-                src: ['src/common/services/*.js'],
+                src: ['src/common/services/*.js', 'src/common/models/services/*.service.js'],
                 dest: '<%= distdir %>/js/merchello.services.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
@@ -185,8 +185,8 @@
                 tasks: ['watch-js', 'timestamp'],
             },
             test: {
-                files: ['test/**/*.js'],
-                tasks: ['watch-test', 'timestamp'],
+                files: ['tests/**/*.js'],
+                tasks: ['watch-test', 'timestamp']
             },
             html: {
                 files: ['src/views/**/*.html', 'src/*.html'],
@@ -207,9 +207,9 @@
         },
 
         karma: {
-                unit: { configFile: 'tests/config/karma.config.js', keepalive: true }
+                unit: { configFile: 'tests/config/karma.config.js', keepalive: true },
                 //e2e: { configFile: 'test/config/e2e.js', keepalive: true },
-                //watch: { configFile: 'test/config/app.unit.js', singleRun: false, autoWatch: true, keepalive: true }
+                watch: { configFile: 'test/config/*.unit.js', singleRun: false, autoWatch: true, keepalive: true }
         },
 
         jshint: {

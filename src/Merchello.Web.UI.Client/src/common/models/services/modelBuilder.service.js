@@ -7,7 +7,7 @@
      * A utility service that builds local models for API query results
      *  http://odetocode.com/blogs/scott/archive/2014/03/17/building-better-models-for-angularjs.aspx
      */
-    angular.module('merchello.services')
+    angular.module('merchello.models')
         .factory('modelBuilder', ['modelTransformer',
             function(modelTransformer) {
                 var transformer = modelTransformer,
