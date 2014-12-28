@@ -1,11 +1,11 @@
 'use strict';
 
 describe("Merchello.Models.Shipment", function () {
-    var constructor = Merchello.Models.Shipment;
 
     beforeEach(module('umbraco'));
 
     describe("Shipment Prototype Methods", function() {
+        var constructor = Merchello.Models.Shipment;
 
         it ("should be possible to set the 'to' address", inject(function(modelTransformer, addressMocks) {
 
@@ -51,6 +51,7 @@ describe("Merchello.Models.Shipment", function () {
         }));
 
         it ('should be possible to set the origin address', inject(function(modelTransformer, addressMocks){
+
             //// Arrange
             var shipment = new constructor;
             var address = addressMocks.getRandomAddress(modelTransformer);
@@ -70,6 +71,7 @@ describe("Merchello.Models.Shipment", function () {
 
         it ('should be possible to get the origin address from a shipment',
             inject(function(modelTransformer, addressMocks) {
+
             //// Arrange
             var shipment = new constructor;
             var address = addressMocks.getRandomAddress(modelTransformer);

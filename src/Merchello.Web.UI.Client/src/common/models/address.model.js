@@ -6,7 +6,6 @@
     * @description
     * Represents a JS version of Merchello's AddressDisplay object
     */
-
     Merchello.Models.Address = function () {
 
         var self = this;
