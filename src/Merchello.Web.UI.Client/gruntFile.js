@@ -68,9 +68,9 @@
                 ]
             },
 
-            mocks: {
+            /*mocks: {
                 files: [{ dest: '<%= distdir %>/js', src: '*.js', expand: true, cwd: 'src/common/mocks/' }]
-            },
+            },*/
 
             manifest: {
                 files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: true, cwd: 'src/' }]
@@ -132,7 +132,7 @@
                 }
             },
             testing: {
-                src: ['src/common/mocks/*/*.js'],
+                src: ['src/common/mocks/*.js'],
                 dest: '<%= distdir %>/js/merchello.testing.js',
                 options: {
                     banner: "<%= banner %>\n(function() { \n\n",
