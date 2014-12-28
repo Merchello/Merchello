@@ -2,7 +2,7 @@
 
 describe("modelTransformer.service", function () {
 
-    beforeEach(module('merchello'));
+    beforeEach(module('umbraco'));
 
     describe('address transformation tests', function() {
 

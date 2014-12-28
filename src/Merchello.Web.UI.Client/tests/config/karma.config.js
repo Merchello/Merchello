@@ -50,12 +50,12 @@
         reporters: ['progress'],
 
         // web server port
-        // CLI --port 9876
-        port: 9876,
+        // CLI --port 9111
+        port: 9111,
 
         // cli runner port
         // CLI --runner-port 9100
-        runnerPort: 9100,
+        runnerPort: 9110,
 
         // enable / disable colors in the output (reporters and logs)
         // CLI --colors --no-colors

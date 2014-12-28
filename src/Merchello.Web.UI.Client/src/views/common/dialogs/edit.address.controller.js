@@ -6,8 +6,8 @@
      * @description
      * The controller for adding a country
      */
-    angular.module("merchello")
-        .controller("Merchello.Common.Dialogs.EditAddressController",
+    angular.module('merchello')
+        .controller('Merchello.Common.Dialogs.EditAddressController',
         function ($scope) {
 
         $scope.init = function() {

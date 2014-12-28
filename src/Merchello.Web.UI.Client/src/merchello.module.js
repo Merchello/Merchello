@@ -1,20 +1,23 @@
-﻿// defines the Merchello Models namespace
-if (typeof Merchello == 'undefined') var Merchello = {};
-if (!Merchello.Models) Merchello.Models = {};
-
-// the Merchello angular module
-var merch = angular.module('merchello', [
-    'umbraco.filters',
-	'umbraco.directives',
-	'umbraco.resources',
-	'umbraco.services',
-	'umbraco.packages',
-    'ngCookies',
-    'merchello.filters',
-    'merchello.directives',
-    'merchello.resources',
-    'merchello.services'
-]);
+﻿// the Merchello angular module
+(function() {
+    var merch = angular.module('merchello', [
+        'umbraco.filters',
+        'umbraco.directives',
+        'umbraco.resources',
+        'umbraco.services',
+        'umbraco.packages',
+        'ngCookies',
+        'merchello.filters',
+        'merchello.directives',
+        'merchello.resources',
+        'merchello.services',
+        'merchello.mocks'
+    ]);
+    angular.module('merchello.filters', []);
+    angular.module('merchello.directives', []);
+    angular.module('merchello.models', []);
+    angular.module('merchello.resources', []);
+    angular.module('merchello.services', ['merchello.models', 'merchello.resources']);
 
 // this is defined in the Umbraco app.js
 // TODO it looks like we should be using the 'umbraco.packages' to store the Merchello module
@@ -22,4 +25,6 @@ var merch = angular.module('merchello', [
 //var packages = packages || {};
 //packages.requires = packages.requires || [];
 
-angular.module('umbraco').requires.push(merch);
+    angular.module('umbraco').requires.push('merchello');
+}());
+

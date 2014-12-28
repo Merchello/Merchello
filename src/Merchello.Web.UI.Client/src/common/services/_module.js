@@ -1,1 +1,0 @@
-﻿angular.module('merchello.services', ['merchello.resources']);

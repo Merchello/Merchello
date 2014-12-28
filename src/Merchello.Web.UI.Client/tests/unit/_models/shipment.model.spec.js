@@ -3,7 +3,7 @@
 describe("Merchello.Models.Shipment", function () {
     var constructor = Merchello.Models.Shipment;
 
-    beforeEach(module('merchello'));
+    beforeEach(module('umbraco'));
 
     describe("Shipment Prototype Methods", function() {
 

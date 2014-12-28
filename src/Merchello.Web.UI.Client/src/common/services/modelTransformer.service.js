@@ -1,5 +1,5 @@
 ﻿    /**
-   * @ngdoc model
+   * @ngdoc service
    * @name merchello.services.modelTransformer
    * @function
    * 

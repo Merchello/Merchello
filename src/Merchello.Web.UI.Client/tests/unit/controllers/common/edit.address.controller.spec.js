@@ -4,7 +4,7 @@ describe("Merchello.Common.Dialogs.EditAddressController", function () {
 
     var scope, $controllerConstructor;
 
-    beforeEach(module('merchello'));
+    beforeEach(module('umbraco'));
 
     beforeEach(inject(function ($rootScope, $controller, dialogDataMocks, addressMocks) {
 
@@ -16,7 +16,6 @@ describe("Merchello.Common.Dialogs.EditAddressController", function () {
     }));
 
     it ('should set $scope.address to the dialogData address', function() {
-
         //// Arrange
         var ctl = $controllerConstructor("Merchello.Common.Dialogs.EditAddressController", { $scope: scope });
 
