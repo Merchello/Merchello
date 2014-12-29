@@ -1,127 +1,112 @@
 ﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
-
-<div 
-    ng-controller="Merchello.Dashboards.Customer.ListController"
-    ng-show="loaded">
-
+<div ng-controller="Merchello.Dashboards.Customer.ListController" ng-show="loaded">
     <umb-panel>
-
         <umb-header>
-
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                     <h1 class="umb-headline">Customers</h1>
+                    <h1 class="umb-headline">Customers</h1>
                 </div>
-
                 <!-- Tabs for All Customers, Accepts Marketing, and Repeat Customers -->
                 <ul class="nav nav-tabs umb-nav-tabs span12">
                     <li class="ng-scope active">
-    	                <a href="#tab6" data-toggle="tab" class="ng-binding">All Customers</a>
+                        <a href="#tab6" data-toggle="tab" class="ng-binding">All Customers</a>
                     </li>
-                    <li class="ng-scope">
-                        <a href="#tab0" data-toggle="tab" class="ng-binding">Accepts Marketing</a>
-                    </li>
-                    <li class="ng-scope">
-                        <a href="#tab0" data-toggle="tab" class="ng-binding">Repeat Customers</a>
-                    </li>
-    	        </ul>
+                </ul>
             </div>
-
-
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    
                     <!-- New Order Button -->
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">New Customer</button>
+                        <!-- ACTION: New Customer -->
+                        <a class="btn btn-success" data-ng-click="openNewCustomerDialog()">New Customer</a>
                     </div>
-
                 </div>
             </div>
-
         </umb-header>
-        
         <merchello-panel>
-
-            <!-- Order Filters -->
             <div class="merchello-pane">
-                <form class="form-horizontal">
-                    <div class="form-group control-group row-fluid">
+                <form class="form-horizontal row-fluid">
+                    <!-- Number of Customer Per Page -->
+                    <div class="controls pull-right" data-ng-show="customers.length > 0">
+                        <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
+                        <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <!-- Customer Filters -->
+                    <div class="form-group control-group">
                         <label for="customerFilter" class="col-xs-2 control-label">Filter Customers:</label>
                         <div class="col-xs-10 controls">
-                            <input id="customerFilter" class="form-control span6" name="customerFilter" data-ng-model="filtertext" placeholder="Start typing a customer's name or e-mail..." />
+                            <input id="customerFilter" class="form-control span6" name="customerFilter" data-ng-model="filterText" placeholder="Type a customer's name or email." />
+                            <!-- ACTION: Customer Filter -->
+                            <button type="submit" class="btn" data-ng-click="loadCustomers(filterText)">Filter</button>
                         </div>
                     </div>
                 </form>
-
+            </div>
+            <div class="merchello-pane">
+                <!-- Pagination -->
+                <div class="pager" data-ng-show="maxPages > 1">
+                    <!-- ACTION: Previous Page -->
+                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)"><localize key="general_previous" /></button>
+                    {{currentPage+1}}/{{maxPages}}
+                    <!-- ACTION: Next Page -->
+                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)"><localize key="general_next" /></button>
+                </div>
+                <!-- Table of Customers -->
                 <table class="table table-hover merchello-selectable-table">
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
-                            <th>Name</th>
+                            <th data-ng-click="changeSortOrder('loginName')" data-ng-class="{'sorted': sortProperty == 'loginName' ||  sortProperty == '-loginName'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'loginName', 'icon-navigation-down': sortProperty == '-loginName'}"></i>
+                                Login
+                            </th>
+                            <th data-ng-click="changeSortOrder('firstName')" data-ng-class="{'sorted': sortProperty == 'firstName' ||  sortProperty == '-firstName'}">
+                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'firstName', 'icon-navigation-down': sortProperty == '-firstName'}"></i>
+                                Name
+                            </th>
                             <th>Location</th>
-                            <th>Orders</th>
-                            <th>Payment Last Order</th>
-                            <th>Total Spent</th>
+                            <th>Last Order Total</th>
                         </tr>
                         <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
-                        <!--<tr>
-                            <th><input type="checkbox" /></th>
-                            <th colspan="5">
+                        <tr data-ng-show="visible.bulkActionButton">
+                            <th></th>
+                            <th colspan="4">
                                 <div class="btn-group">
-                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
-                                    <ul class="dropdown-menu">
+                                    <!-- ACTION: Show Dropdown Menu -->
+                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" data-ng-click="visible.bulkActionDropdown = !visible.bulkActionDropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
+                                    <ul class="dropdown-menu" data-ng-class="{'show': visible.bulkActionDropdown }">
+                                        <!-- ACTION: Export Customers -->
                                         <li><a href="#">Export Customers</a></li>
                                     </ul>
                                 </div>
                             </th>
-                        </tr>-->
+                        </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr data-ng-repeat="customer in customers">
                             <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Heather Alvis</a></td>
-                            <td>Bellingham, WA</td>
-                            <td>4</td>
-                            <td>10/11/2013, 6:49pm EDT</td>
-                            <td>$301.48</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Jane Doe</a></td>
-                            <td>Bellingham, WA</td>
-                            <td>1</td>
-                            <td>10/02/2013, 5:22pm EDT</td>
-                            <td>$25.60</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Kristen Miller</a></td>
-                            <td>Folsom, CA</td>
-                            <td>2</td>
-                            <td>10/10/2013, 2:32am EDT</td>
-                            <td>$40.02</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Buck Watson</a></td>
-                            <td>Marion, NC</td>
-                            <td>1</td>
-                            <td>9/01/2013, 1:17pm EDT</td>
-                            <td>$47.80</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><a href="#/merchello/merchello/CustomerView/keygoeshere">Fritz Williams</a></td>
-                            <td>Chicag, IL</td>
-                            <td>21</td>
-                            <td>10/22/2013, 4:33pm EDT</td>
-                            <td>$1152.57</td>
+                            <!-- ACTION: Go To Customer View Page -->
+                            <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.loginName}}</a></td>
+                            <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
+                            <td>{{customer.primaryLocation()}}</td>
+                            <td><localize key="merchelloGeneral_moneySymbol" />{{customer.lastOrderTotal}}</td>
                         </tr>
                     </tbody>
                 </table>
+                <!-- Pagination -->
+                <div class="pager" data-ng-show="maxPages > 1">
+                    <!-- ACTION: Previous Page -->
+                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)"><localize key="general_previous" /></button>
+                    {{currentPage+1}}/{{maxPages}}
+                    <!-- ACTION: Next Page -->
+                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)"><localize key="general_next" /></button>
+                </div>
             </div>
         </merchello-panel>
-            
     </umb-panel>
 </div>

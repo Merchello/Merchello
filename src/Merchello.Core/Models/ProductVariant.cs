@@ -4,10 +4,11 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a product variant
     /// </summary>

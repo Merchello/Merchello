@@ -1,18 +1,28 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models;
-
-namespace Merchello.Core.Gateways.Taxation
+﻿namespace Merchello.Core.Gateways.Taxation
 {
+    using System.Collections.Generic;
+    using Models;
+
     /// <summary>
     /// Defines a taxation gateway provider
     /// </summary>
     public interface ITaxationGatewayProvider : IProvider
     {
         /// <summary>
+        /// Gets a collection of all available <see cref="ITaxMethod"/>s assoicated with this provider
+        /// </summary>
+        IEnumerable<ITaxMethod> TaxMethods { get; } 
+
+        /// <summary>
         /// Attempts to create a <see cref="ITaxationGatewayMethod"/> for a given provider and country.  If the provider already 
         /// defines a tax rate for the country, the creation fails.
         /// </summary>
-        /// <param name="countryCode">The two character ISO country code</param>
+        /// <param name="countryCode">
+        /// The two character ISO country code
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxationGatewayMethod"/>.
+        /// </returns>
         ITaxationGatewayMethod CreateTaxMethod(string countryCode);
 
         /// <summary>
@@ -47,10 +57,5 @@ namespace Merchello.Core.Gateways.Taxation
         /// </summary>
         /// <returns>A collection of <see cref="ITaxationGatewayMethod"/> </returns>
         IEnumerable<ITaxationGatewayMethod> GetAllGatewayTaxMethods();
-
-        /// <summary>
-        /// Returns a collection of all available <see cref="ITaxMethod"/>s assoicated with this provider
-        /// </summary>
-        IEnumerable<ITaxMethod> TaxMethods { get; } 
     }
 }

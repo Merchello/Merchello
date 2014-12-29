@@ -12,6 +12,10 @@ using Umbraco.Tests.PublishedCache;
 
 namespace Merchello.Tests.UnitTests.Serialization
 {
+    using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Services;
+    using Merchello.Tests.Base.Mocks;
+
     [TestFixture]
     public class EntitySerializationTests
     {
@@ -44,7 +48,7 @@ namespace Merchello.Tests.UnitTests.Serialization
                 {new ItemCacheLineItem(LineItemType.Product, "Product3", "Sku3", 3, 14, extendedData)},
             };
 
-            _shipment = new Shipment(_address, _address, lineItemCollection);
+            _shipment = new Shipment(new ShipmentStatusMock(), _address, _address, lineItemCollection);
         }
 
         /// <summary>
@@ -229,5 +233,6 @@ namespace Merchello.Tests.UnitTests.Serialization
             Assert.NotNull(address);
             Assert.AreEqual(typeof(Address), address.GetType());
         }
+
     }
 }

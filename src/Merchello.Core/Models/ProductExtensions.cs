@@ -1,30 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Newtonsoft.Json;
-using Formatting = Newtonsoft.Json.Formatting;
+﻿using Umbraco.Core;
 
 namespace Merchello.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using Models;
+    using Models.Interfaces;
+    using Newtonsoft.Json;
+    using Formatting = Newtonsoft.Json.Formatting;
+
+    /// <summary>
+    /// The product extensions.
+    /// </summary>
     public static class ProductExtensions
     {
 
-        #region IProduct Collections
 
         /// <summary>
         /// Returns a collection of ProductOption given as list of attributes (choices)
         /// </summary>
-        /// <param name="product"></param>
-        /// <param name="attributes">A collection of <see cref="IProductAttribute"/></param>
+        /// <param name="product">
+        /// The product
+        /// </param>
+        /// <param name="attributes">
+        /// A collection of <see cref="IProductAttribute"/>
+        /// </param>
         /// <remarks>
         /// This is mainly used for suggesting sku defaults for ProductVariantes
         /// </remarks>
+        /// <returns>
+        /// The collection of <see cref="IProductOption"/>.
+        /// </returns>
         public static IEnumerable<IProductOption> ProductOptionsForAttributes(this IProduct product, IEnumerable<IProductAttribute> attributes)
         {
             var options = new List<IProductOption>();
@@ -37,21 +48,32 @@ namespace Merchello.Core
 
 
         /// <summary>
-        /// Returns the "master" <see cref="IProductVariant"/> that defines this <see cref="IProduct" /> or null if this <see cref="IProduct" /> has options
+        /// Returns the "master" <see cref="IProductVariant"/> that defines this <see cref="IProduct"/> or null if this <see cref="IProduct"/> has options
         /// </summary>
-        /// <returns><see cref="IProductVariant"/> or null if this <see cref="IProduct" /> has options</returns>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// <see cref="IProductVariant"/> or null if this <see cref="IProduct"/> has options
+        /// </returns>
         public static IProductVariant GetProductVariantForPurchase(this IProduct product)
         {
             return product.ProductOptions.Any() ? null : ((Product)product).MasterVariant;
         }
 
         /// <summary>
-        /// Returns the <see cref="IProductVariant"/> of this <see cref="IProduct"/> that contains a matching collection of <see cref="IProductAttribute" />. 
+        /// Returns the <see cref="IProductVariant"/> of this <see cref="IProduct"/> that contains a matching collection of <see cref="IProductAttribute"/>. 
         /// If not match is found, returns null.
         /// </summary>
-        /// <param name="product"></param>
-        /// <param name="selectedChoices">A collection of <see cref="IProductAttribute"/> which define the specific <see cref="IProductVariant"/> of the <see cref="IProduct"/></param>
-        /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="selectedChoices">
+        /// A collection of <see cref="IProductAttribute"/> which define the specific <see cref="IProductVariant"/> of the <see cref="IProduct"/>
+        /// </param>
+        /// <returns>
+        /// <see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/>
+        /// </returns>
         public static IProductVariant GetProductVariantForPurchase(this IProduct product, IEnumerable<IProductAttribute> selectedChoices)
         {
             return
@@ -66,12 +88,18 @@ namespace Merchello.Core
         }
 
         /// <summary>
-        /// Returns the <see cref="IProductVariant"/> of this <see cref="IProduct"/> that contains a matching collection of <see cref="IProductAttribute" />. 
+        /// Returns the <see cref="IProductVariant"/> of this <see cref="IProduct"/> that contains a matching collection of <see cref="IProductAttribute"/>. 
         /// If not match is found, returns null.
         /// </summary>
-        /// <param name="product"></param>
-        /// <param name="selectedChoiceKeys"></param>
-        /// <returns><see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/></returns>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="selectedChoiceKeys">
+        /// The selected Choice Keys.
+        /// </param>
+        /// <returns>
+        /// <see cref="IProductVariant"/> or null if no <see cref="IProductVariant"/> is found with a matching collection of <see cref="IProductAttribute"/>
+        /// </returns>
         public static IProductVariant GetProductVariantForPurchase(this IProduct product, Guid[] selectedChoiceKeys)
         {
             return
@@ -80,35 +108,103 @@ namespace Merchello.Core
                                selectedChoiceKeys.All(key => ((ProductAttributeCollection)variant.Attributes).Contains(key)));
         }
 
-        #endregion
-
-
-        #region IProductVariant Collections
-
         /// <summary>
         /// Associates a product with a warehouse catalog
         /// </summary>
-        /// <param name="product"></param>
-        /// <param name="catalog"><see cref="IWarehouseCatalog"/></param>
-        internal static void AddToCatalogInventory(this IProduct product, IWarehouseCatalog catalog)
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <param name="catalog">The <see cref="IWarehouseCatalog"/></param>
+        public static void AddToCatalogInventory(this IProduct product, IWarehouseCatalog catalog)
         {
             ((Product)product).MasterVariant.AddToCatalogInventory(catalog);
         }
 
-       
+        /// <summary>
+        /// Associates a product variant with a warehouse
+        /// </summary>
+        /// <param name="productVariant">The <see cref="IProductVariant"/></param>
+        /// <param name="catalog">The <see cref="IWarehouseCatalog"/></param>
+        public static void AddToCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
+        {
+            productVariant.AddToCatalogInventory(catalog.Key);
+        }
 
         /// <summary>
         /// Associates a product variant with a warehouse
         /// </summary>
-        /// <param name="productVariant"></param>
-        /// <param name="catalog"><see cref="IWarehouseCatalog"/></param>
-        internal static void AddToCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
+        /// <param name="productVariant">
+        /// The <see cref="IProductVariant"/>
+        /// </param>
+        /// <param name="catalogKey">
+        /// The catalog Key.
+        /// </param>
+        public static void AddToCatalogInventory(this IProductVariant productVariant, Guid catalogKey)
         {
-            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalog.Key, productVariant.Key));
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalogKey, productVariant.Key));
         }
 
 
+        /// <summary>
+        /// Removes a product varaint from a catalog inventory.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <param name="catalog">
+        /// The catalog.
+        /// </param>
+        public static void RemoveFromCatalogInventory(this IProductVariant productVariant, IWarehouseCatalog catalog)
+        {
+            if (productVariant.CatalogInventories.All(inv => inv.CatalogKey != catalog.Key)) return;
+
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).RemoveAt(productVariant.CatalogInventories.FindIndex(x => x.CatalogKey == catalog.Key));
+        }
+
+        /// <summary>
+        /// The get possible product attribute combinations.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The collection of product attribute collections.
+        /// </returns>
+        internal static IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(this IProduct product)
+        {
+            if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
+
+            var optionChoices = product.ProductOptions.Select(option => option.Choices.ToList()).ToList();
+
+            return optionChoices.CartesianProduct();
+        }
+
+
+
+        #region ProductAttributeCollection
+
+        /// <summary>
+        /// Converts an enumeration of ProductAttributes to a ProductAttributecollection
+        /// </summary>
+        /// <param name="attributes">
+        /// The attributes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </returns>
+        internal static ProductAttributeCollection ToProductAttributeCollection(this IEnumerable<IProductAttribute> attributes)
+        {
+            var collection = new ProductAttributeCollection();
+            foreach (var att in attributes)
+            {
+                collection.Add(att);
+            }
+
+            return collection;
+        }
+
         #endregion
+
+
+       
 
         #region Examine Serialization
 
@@ -189,7 +285,7 @@ namespace Merchello.Core
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
 
                     writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
-
+                    writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
                     writer.WriteAttributeString("allDocs", "1");

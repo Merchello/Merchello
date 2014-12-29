@@ -101,6 +101,9 @@ publish/
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
 #packages/
 
+# NPM Package install directory
+src/Merchello.Web.UI.Client/node_modules/
+
 # Windows Azure Build Output
 csx
 *.build.csdef
@@ -109,7 +112,6 @@ csx
 AppPackages/
 
 # Others
-sql/
 *.Cache
 ClientBin/
 [Ss]tyle[Cc]op.*
@@ -134,6 +136,11 @@ UpgradeLog*.htm
 App_Data/*.mdf
 App_Data/*.ldf
 
+# Dependency directory
+# Commenting this out is preferred by some people, see
+# https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
+node_modules
+
 # =========================
 # Windows detritus
 # =========================
@@ -155,3 +162,5 @@ test/Merchello.Tests.UnitTests/App_Data/TEMP/
 src/Merchello.Web.UI/App_Plugins/Merchello/Common/Css/.sass-cache/
 test/Merchello.Tests.IntegrationTests/App_Data/
 test/Merchello.Tests.IntegrationTests.Examine/App_Data/
+Plugin/Taxation/Avalara/src/Merchello.Plugin.Taxation.Avalara/Properties/VersionInfo.cs
+*.list

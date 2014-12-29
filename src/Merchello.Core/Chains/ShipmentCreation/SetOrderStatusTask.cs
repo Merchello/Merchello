@@ -1,30 +1,73 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Merchello.Core.Chains.ShipmentCreation
 {
+    using System;
+    using System.Linq;
+    using Models;
+    using Services;
+    using Umbraco.Core;
+
+    /// <summary>
+    /// The set order status task.
+    /// </summary>
     internal class SetOrderStatusTask : OrderAttemptChainTaskBase
     {
+   
+        /// <summary>
+        /// The _order service.
+        /// </summary>
         private readonly IOrderService _orderService;
 
-        public SetOrderStatusTask(IMerchelloContext merchelloContext, IOrder order) 
-            : base(merchelloContext, order)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SetOrderStatusTask"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <param name="keysToShip">
+        /// The keys To Ship.
+        /// </param>
+        public SetOrderStatusTask(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip) 
+            : base(merchelloContext, order, keysToShip)
         {
             _orderService = MerchelloContext.Services.OrderService;
         }
 
+        /// <summary>
+        /// The perform task.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         public override Attempt<IShipment> PerformTask(IShipment value)
         {
-            return Order.ShippableItems().All(x => ((OrderLineItem)x).ShipmentKey == null) 
-                ? SaveOrderStatus(value, Constants.DefaultKeys.OrderStatus.NotFulfilled) 
-                : SaveOrderStatus(value, Order.ShippableItems().All(x => ((OrderLineItem) x).ShipmentKey != null) 
-                    ? Constants.DefaultKeys.OrderStatus.Fulfilled 
-                    : Constants.DefaultKeys.OrderStatus.BackOrder);
+            return SaveOrderStatus(
+                value,
+                Order.ShippableItems().Any(x => ((OrderLineItem) x).ShipmentKey == null)
+                    ? Core.Constants.DefaultKeys.OrderStatus.BackOrder
+                    : Core.Constants.DefaultKeys.OrderStatus.Fulfilled);
         }
 
+        /// <summary>
+        /// The save order status.
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         private Attempt<IShipment> SaveOrderStatus(IShipment shipment, Guid orderStatusKey)
         {
             var orderStatus = _orderService.GetOrderStatusByKey(orderStatusKey);

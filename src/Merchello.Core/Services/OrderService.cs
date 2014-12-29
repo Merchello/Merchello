@@ -1,39 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Events;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
+﻿using Merchello.Core.Persistence.Repositories;
 
 namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using Events;
+    using Models;
+    using Persistence.Querying;
+    using Persistence.UnitOfWork;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+    using RepositoryFactory = Persistence.RepositoryFactory;
+
     /// <summary>
     /// Represents the OrderService
     /// </summary>
-    public class OrderService : IOrderService
+    public class OrderService : PageCachedServiceBase<IOrder>, IOrderService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-        private readonly IStoreSettingService _storeSettingService;
-        private readonly IShipmentService _shipmentService;
-
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
+        /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "orderdate", "ordernumber" };
+
+        /// <summary>
+        /// The uow provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
+
+        /// <summary>
+        /// The repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
+        private readonly IStoreSettingService _storeSettingService;
+
+        /// <summary>
+        /// The shipment service.
+        /// </summary>
+        private readonly IShipmentService _shipmentService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderService"/> class.
+        /// </summary>
         public OrderService()
             : this(new RepositoryFactory(), new StoreSettingService(), new ShipmentService())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        /// <param name="shipmentService">
+        /// The shipment service.
+        /// </param>
         public OrderService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService, IShipmentService shipmentService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService, shipmentService)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        /// <param name="shipmentService">
+        /// The shipment service.
+        /// </param>
         public OrderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService, IShipmentService shipmentService)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -48,25 +105,96 @@ namespace Merchello.Core.Services
 
         }
 
+        #region Event Handlers
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IOrderService, Events.NewEventArgs<IOrder>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IOrderService, Events.NewEventArgs<IOrder>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IOrderService, SaveEventArgs<IOrder>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IOrderService, SaveEventArgs<IOrder>> Saved;
+
+        /// <summary>
+        /// Occurs before an invoice status has changed
+        /// </summary>
+        public static event TypedEventHandler<IOrderService, StatusChangeEventArgs<IOrder>> StatusChanging;
+
+        /// <summary>
+        /// Occurs after an invoice status has changed
+        /// </summary>
+        public static event TypedEventHandler<IOrderService, StatusChangeEventArgs<IOrder>> StatusChanged;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IOrderService, DeleteEventArgs<IOrder>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IOrderService, DeleteEventArgs<IOrder>> Deleted;
+
+        #endregion
         /// <summary>
         /// Creates a <see cref="IOrder"/> without saving it to the database
         /// </summary>
         /// <param name="orderStatusKey">The <see cref="IOrderStatus"/> key</param>
-        /// <param name="invoiceKey"></param>
+        /// <param name="invoiceKey">The invoice key</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        /// <returns><see cref="IOrder"/></returns>
+        /// <returns>The <see cref="IOrder"/></returns>
         public IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, bool raiseEvents = true)
+        {
+            return CreateOrder(orderStatusKey, invoiceKey, 0, raiseEvents);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IOrder"/> without saving it to the database
+        /// </summary>
+        /// <param name="orderStatusKey">
+        /// The <see cref="IOrderStatus"/> key
+        /// </param>
+        /// <param name="invoiceKey">
+        /// The invoice key
+        /// </param>
+        /// <param name="orderNumber">
+        /// The order Number.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOrder"/>.
+        /// </returns>
+        /// <remarks>
+        /// Order number must be a positive integer value or zero
+        /// </remarks>
+        public IOrder CreateOrder(Guid orderStatusKey, Guid invoiceKey, int orderNumber, bool raiseEvents = true)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(orderStatusKey), "orderStatusKey");
             Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
+            Mandate.ParameterCondition(orderNumber >= 0, "orderNumber must be greater than or equal to 0");
 
             var status = GetOrderStatusByKey(orderStatusKey);
 
             var order = new Order(status, invoiceKey)
-                {
-                    VersionKey = Guid.NewGuid(),
-                    OrderDate = DateTime.Now
-                };
+            {
+                VersionKey = Guid.NewGuid(),
+                OrderNumber = orderNumber,
+                OrderDate = DateTime.Now
+            };
 
             if (raiseEvents)
                 if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IOrder>(order), this))
@@ -281,34 +409,50 @@ namespace Merchello.Core.Services
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IOrder>(ordersArray), this);
         }
 
-        /// <summary>
-        /// Deletes <see cref="IShipment"/>s associated with the order
-        /// </summary>
-        /// <param name="order">The <see cref="IOrder"/></param>
-        private void DeleteShipments(IOrder order)
-        {
-            // Delete any shipment records associated with this order
-            var shipmentKeys = order.Items.Select(x => ((IOrderLineItem)x).ShipmentKey).Where(x => x != null).Distinct().Select(x => x.Value).ToArray();
 
-            if (!shipmentKeys.Any()) return;
-
-            var shipments = _shipmentService.GetByKeys(shipmentKeys).ToArray();
-            if(shipments.Any()) _shipmentService.Delete(shipments);
-        }
 
 
         /// <summary>
-        /// Gets a <see cref="IOrder"/> given it's unique 'key' (Guid)
+        /// Gets a <see cref="IOrder"/> given it's unique 'key' (GUID)
         /// </summary>
-        /// <param name="key">The <see cref="IOrder"/>'s unique 'key' (Guid)</param>
-        /// <returns><see cref="IOrder"/></returns>
-        public IOrder GetByKey(Guid key)
+        /// <param name="key">The <see cref="IOrder"/>'s unique 'key' (GUID)</param>
+        /// <returns>The <see cref="IOrder"/></returns>
+        public override IOrder GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
         }
+
+        /// <summary>
+        /// Gets a <see cref="Page{IOrder}"/>
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IOrder}"/>.
+        /// </returns>
+        public override Page<IOrder> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.GetPage(page, itemsPerPage, query, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
 
         /// <summary>
         /// Gets a <see cref="IOrder"/> given it's unique 'OrderNumber'
@@ -319,7 +463,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IOrder>.Builder.Where(x => x.OrderNumber == orderNumber);
+                var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.OrderNumber == orderNumber);
 
                 return repository.GetByQuery(query).FirstOrDefault();
             }
@@ -334,7 +478,7 @@ namespace Merchello.Core.Services
         {
             using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
+                var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
 
                 return repository.GetByQuery(query);
             }
@@ -353,16 +497,7 @@ namespace Merchello.Core.Services
             }
         }
 
-        /// <summary>
-        /// Gets all of the orders
-        /// </summary>
-        internal IEnumerable<IOrder> GetAll()
-        {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.GetAll();
-            }
-        }
+
 
         /// <summary>
         /// Gets an <see cref="IOrderStatus"/> by it's key
@@ -388,50 +523,132 @@ namespace Merchello.Core.Services
             }
         }
 
-        #region Event Handlers
 
         /// <summary>
-        /// Occurs after Create
+        /// Gets all of the orders
         /// </summary>
-        public static event TypedEventHandler<IOrderService, Events.NewEventArgs<IOrder>> Creating;
+        /// <returns>
+        /// The <see cref="IEnumerable{IOrder}"/>.
+        /// </returns>
+        internal IEnumerable<IOrder> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
 
         /// <summary>
-        /// Occurs after Create
+        /// The count of items returned by the query
         /// </summary>
-        public static event TypedEventHandler<IOrderService, Events.NewEventArgs<IOrder>> Created;
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal override int Count(IQuery<IOrder> query)
+        {
+            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
 
         /// <summary>
-        /// Occurs before Save
+        /// Gets a page of keys
         /// </summary>
-        public static event TypedEventHandler<IOrderService, SaveEventArgs<IOrder>> Saving;
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>        
+        internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = (OrderRepository)_repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.GetPagedKeys(page, itemsPerPage, query, sortBy, sortDirection);
+            }
+        }
 
         /// <summary>
-        /// Occurs after Save
+        /// Gets a page by query.
         /// </summary>
-        public static event TypedEventHandler<IOrderService, SaveEventArgs<IOrder>> Saved;
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetPage(
+            IQuery<IOrder> query,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetPagedKeys(
+                _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()),
+                query,
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection);
+        }
 
         /// <summary>
-        /// Occurs before an invoice status has changed
+        /// The validate sort by field.
         /// </summary>
-        public static event TypedEventHandler<IOrderService, StatusChangeEventArgs<IOrder>> StatusChanging;
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected override string ValidateSortByField(string sortBy)
+        {
+            return ValidSortFields
+                .Contains(sortBy.ToLowerInvariant()) ? sortBy : "orderNumber";
+        }
 
         /// <summary>
-        /// Occurs after an invoice status has changed
+        /// Deletes <see cref="IShipment"/>s associated with the order
         /// </summary>
-        public static event TypedEventHandler<IOrderService, StatusChangeEventArgs<IOrder>> StatusChanged;
+        /// <param name="order">The <see cref="IOrder"/></param>
+        private void DeleteShipments(IOrder order)
+        {
+            // Delete any shipment records associated with this order
+            var shipmentKeys = order.Items.Select(x => ((IOrderLineItem)x).ShipmentKey).Where(x => x != null).Distinct().Select(x => x.Value).ToArray();
 
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IOrderService, DeleteEventArgs<IOrder>> Deleting;
+            if (!shipmentKeys.Any()) return;
 
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IOrderService, DeleteEventArgs<IOrder>> Deleted;
-
-        #endregion
-
+            var shipments = _shipmentService.GetByKeys(shipmentKeys).ToArray();
+            if (shipments.Any()) _shipmentService.Delete(shipments);
+        }
 
     }
 }

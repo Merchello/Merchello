@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Plugin.Taxation.Avalara", "Merchello.Plugin.Taxation.Avalara\Merchello.Plugin.Taxation.Avalara.csproj", "{D2F80B5B-DF00-4F39-9430-BD37CE64D7FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E98D49B5-5193-4268-98F4-06BF7D739C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Avalara.Integration", "..\Tests\Merchello.Tests.Avalara.Integration\Merchello.Tests.Avalara.Integration.csproj", "{547ABB98-0091-4B61-A0E2-984A8C6A4150}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{BE2005A0-C77F-40C5-B464-274A32C6A057}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\..\..\Users\rusty\Downloads\AvaTaxSystemTaxCodesinExcelFormat.xls = ..\..\..\..\..\..\..\Users\rusty\Downloads\AvaTaxSystemTaxCodesinExcelFormat.xls
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{EF056954-24AA-4EC3-9869-076854EA2BA7}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\AvaTax.build = ..\build\AvaTax.build
+		..\build\build.bat = ..\build\build.bat
+		..\build\package.xml = ..\build\package.xml
+		..\build\readme.txt = ..\build\readme.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2F80B5B-DF00-4F39-9430-BD37CE64D7FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2F80B5B-DF00-4F39-9430-BD37CE64D7FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2F80B5B-DF00-4F39-9430-BD37CE64D7FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2F80B5B-DF00-4F39-9430-BD37CE64D7FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{547ABB98-0091-4B61-A0E2-984A8C6A4150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{547ABB98-0091-4B61-A0E2-984A8C6A4150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{547ABB98-0091-4B61-A0E2-984A8C6A4150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{547ABB98-0091-4B61-A0E2-984A8C6A4150}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{547ABB98-0091-4B61-A0E2-984A8C6A4150} = {E98D49B5-5193-4268-98F4-06BF7D739C5E}
+	EndGlobalSection
+EndGlobal

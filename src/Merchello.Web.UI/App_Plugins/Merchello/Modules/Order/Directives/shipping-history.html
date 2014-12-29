@@ -1,0 +1,36 @@
+﻿<div class="control-group umb-control-group" data-ng-show="shipments.length">
+
+	<div class="merchello-section-label">
+	    Shipping Information
+        <small>Information regarding the shipment of this order</small>
+	</div>
+
+	<div class="merchello-controls">
+		<div class="row-fluid" data-ng-repeat="shipment in shipments">
+			<div class="row-fluid">
+				<div class="merchello-section-label">
+					<localize key="merchelloShippingHistory_shipment" /> - {{shipment.shippedDate  | date : 'M/d/yyyy'}}
+					<small><localize key="merchelloShippingHistory_trackingNumber " />: <a href="javascript:;">{{shipment.trackingCode}}</a></small>
+				</div>
+			</div>
+
+			<table class="table table-striped merchello-striped-table invoice-payments">
+				<tbody>
+				<thead>
+					<tr>
+						<th><localize key="general_name" /></th>
+						<th><localize key="merchelloGeneral_sku" /></th>
+						<th><localize key="merchelloGeneral_quantity" /></th>
+					</tr>
+				</thead>
+				<tr data-ng-repeat="lineitem in shipment.items">
+					<td class="text-left">{{lineitem.name}}</td>
+					<td class="text-left">{{lineitem.sku}}</td>
+					<td class="text-left">{{lineitem.quantity}}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>

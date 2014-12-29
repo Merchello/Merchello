@@ -1,17 +1,37 @@
-﻿using Merchello.Core.Configuration.Outline;
-
-namespace Merchello.Core.Models.TypeFields
+﻿namespace Merchello.Core.Models.TypeFields
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Configuration.Outline;
+
     /// <summary>
     /// Product Types
     /// </summary>
-    internal  sealed class ProductTypeField: TypeFieldMapper<ProductType>, IProductTypeField
+    internal sealed class ProductTypeField : TypeFieldMapper<ProductType>, IProductTypeField
     {
-        internal ProductTypeField()
+        /// <summary>
+        /// Gets the custom type fields.
+        /// </summary>
+        public override IEnumerable<ITypeField> CustomTypeFields
         {
-            //if(CachedTypeFields.IsEmpty) BuildCache();
+            get
+            {
+                return Products.GetTypeFields().Select(GetTypeField);
+            }
         }
 
+        /// <summary>
+        /// Gets the products.
+        /// </summary>
+        private static TypeFieldCollection Products
+        {
+            get { return Fields.Product; }
+        }
+
+        /// <summary>
+        /// The build cache.
+        /// </summary>
         internal override void BuildCache()
         {
         }
@@ -25,14 +45,5 @@ namespace Merchello.Core.Models.TypeFields
         {
             return GetTypeField(Products[alias]);
         }
-
-
-
-        private static TypeFieldCollection Products
-        {
-            get { return Fields.Product; }
-        }
-
     }
-
 }

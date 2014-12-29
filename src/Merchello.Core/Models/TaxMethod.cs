@@ -8,6 +8,8 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a province from a taxation context
     /// </summary>

@@ -1,0 +1,87 @@
+﻿<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Plugin.GatewayProviders.Taxation.Dialogs.AvaTaxGatewayProviderController">
+
+    <div class="umb-modalcolumn-header">
+        <h4><strong>Avalara AvaTax Provider Configuration</strong></h4>
+    </div>
+    <form name="editProviderForm" id="editProviderForm">
+        <div class="umb-panel-body with-header with-footer">
+
+            <div class="control-group row-fluid">
+                <p>Account Number<br /></p>
+                <div class="col-xs-12 span12">
+                    <input class="col-xs-12 span12" type="text" data-ng-model="avataxSettings.AccountNumber">
+                </div>
+            </div>
+            <div class="control-group row-fluid">
+                <p>License Key<br /></p>
+                <div class="col-xs-12 span12">
+                    <input class="col-xs-12 span12" type="text" data-ng-model="avataxSettings.LicenseKey">
+                </div>
+            </div>
+
+            <div>
+                <h5><strong>Default Store Address</strong></h5>
+            </div>
+            <div class="form-group row-fluid">
+                <label for="org">Company:</label>
+                <input name="org" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.Company" />
+                <label for="address1">*Address:</label>
+                <input name="address1" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.Address1" required />
+                <label for="address2">Address Line 2:</label>
+                <input name="address2" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.Address2" />
+                <label for="locality">*City:</label>
+                <div class="error" data-ng-show="editProviderForm.locality.$invalid && wasFormSubmitted">City is a required field.</div>
+                <input name="locality" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.Locality" required />
+                <label for="country">*Country:</label>
+                <div class="error" data-ng-show="$scope.filters.country.id == -1 && wasFormSubmitted">Country is a required field.</div>
+                <select name="country" class="span12" data-ng-model="filters.country" data-ng-change="updateCountry(filters.country)" data-ng-options="option.name for option in countries"></select>
+                <label for="region">State/Province:</label>
+                <input name="region" type="text" class="span12" data-ng-show="!doesCountryHaveProvinces(filters.country)" data-ng-model="avataxSettings.DefaultStoreAddress.region" />
+                <select name="regionSelect" class="span12" data-ng-show="doesCountryHaveProvinces(filters.country)" data-ng-model="filters.province" data-ng-change="updateProvince(filters.province)" data-ng-options="option.name for option in provinces"></select>
+                <label for="postalCode">*Zip/Postal Code:</label>
+                <div class="error" data-ng-show="editProviderForm.postalCode.$invalid && wasFormSubmitted">Zip/Postal Code is a required field.</div>
+                <input name="postalCode" type="text" class="span12" data-ng-model="avataxSettings.DefaultStoreAddress.PostalCode" required />
+            </div>
+
+            <div class="control-group row-fluid">
+                <p>Company Code (from AvaTax admin console)<br /></p>
+                <div class="col-xs-12 span12">
+                    <input class="col-xs-12 span12" type="text" data-ng-model="avataxSettings.CompanyCode">
+                </div>
+            </div>
+            <div class="control-group row-fluid">
+                <label class="checkbox col-xs-12 span12">
+                    <input type="checkbox" data-ng-model="avataxSettings.UseSandBox"> Use Sandbox
+                </label>
+                <label class="checkbox col-xs-12 span12">
+                    <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration
+                </label>
+            </div>
+            <ul>
+                <li>API Version: {{avataxSettings.ApiVersion}}</li>
+            </ul>
+
+        </div>
+
+        <div class="umb-panel-footer">
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                    <a href data-ng-click="close()" class="btn btn-link">
+                        <localize key="general_cancel">Cancel</localize>
+                    </a>
+
+                    <a href
+                       class="btn btn-primary"
+                       data-ng-click="saveSettings()">
+                        <localize key="buttons_save">Save</localize>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+

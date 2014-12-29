@@ -25,7 +25,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchItemCache]")
-                .Where("[merchItemCache].[pk] = '" + key.ToString() + "'");
+                .Where("[merchItemCache].[pk] = @0", new { key });
                 //.Where("[merchCustomerItemCache].[itemCacheTfKey] = '" +  + "'")
 
             //// Act
@@ -50,7 +50,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchItemCacheItem]")
-                .Where("[merchItemCacheItem].[pk] = '" + key.ToString() + "'");
+                .Where("[merchItemCacheItem].[pk] = @0", new { key });
 
             //// Act
             var sql = new Sql();
@@ -74,7 +74,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                 .From("[merchItemCache]")
-                .Where("[merchItemCache].[entityKey] = '" + key.ToString() + "'");
+                .Where("[merchItemCache].[entityKey] = @0", new { key });
 
             //// Act
             var sql = new Sql();
@@ -99,7 +99,7 @@ namespace Merchello.Tests.UnitTests.Querying
             var expected = new Sql();
             expected.Select("*")
                .From("[merchItemCache]")
-               .Where("[merchItemCache].[entityKey] = '" + key.ToString() + "' AND [merchItemCache].[itemCacheTfKey] = '" + basketTypeKey.ToString() + "'");
+               .Where("[merchItemCache].[entityKey] = @0 AND [merchItemCache].[itemCacheTfKey] = @1", new object[] { key, basketTypeKey });
 
             //// Act
             var sql = new Sql();

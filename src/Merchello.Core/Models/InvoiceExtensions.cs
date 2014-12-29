@@ -1,25 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using Merchello.Core.Builders;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Services;
-using Newtonsoft.Json;
-using Umbraco.Core.Logging;
-using Formatting = Newtonsoft.Json.Formatting;
-
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using Builders;
+    using Formatters;
+    using Gateways.Payment;
+    using Gateways.Taxation;    
+    using Newtonsoft.Json;
+    using Services;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Logging;
+
+    using Constants = Merchello.Core.Constants;
+    using Formatting = Newtonsoft.Json.Formatting;    
 
     /// <summary>
     /// Extension methods for <see cref="IInvoice"/>
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class InvoiceExtensions
     {
         /// <summary>
@@ -37,8 +42,8 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Returns the currency code associated with the invoice
         /// </summary>
-        /// <param name="invoice"></param>
-        /// <returns></returns>
+        /// <param name="invoice">The invoice</param>
+        /// <returns>The currency code associated with the invoice</returns>
         public static string CurrencyCode(this IInvoice invoice)
         {
             var allCurrencyCodes =
@@ -71,8 +76,10 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Utility extension to extract the billing <see cref="IAddress"/> from an <see cref="IInvoice"/>
         /// </summary>
-        /// <param name="invoice"></param>
-        /// <returns></returns>
+        /// <param name="invoice">The invoice</param>
+        /// <returns>
+        /// The billing address saved in the invoice
+        /// </returns>
         public static IAddress GetBillingAddress(this IInvoice invoice)
         {
             return new Address()
@@ -88,7 +95,79 @@ namespace Merchello.Core.Models
                 Phone = invoice.BillToPhone,
                 Email = invoice.BillToEmail
             };
-        }         
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IReplaceablePattern"/> for the invoice
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The collection of replaceable patterns
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice)
+        {
+            // TODO localization needed on pricing and datetime
+            var patterns = new List<IReplaceablePattern>
+            {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceNumber", invoice.PrefixedInvoiceNumber()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceDate", invoice.InvoiceDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToName", invoice.BillToName),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToAddress1", invoice.BillToAddress1),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToAddress2", invoice.BillToAddress2),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToLocality", invoice.BillToLocality),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToRegion", invoice.BillToRegion),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPostalCode", invoice.BillToPostalCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCountryCode", invoice.BillToCountryCode),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToEmail", invoice.BillToEmail),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPhone", invoice.BillToPhone),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCompany", invoice.BillToCompany),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.ToString("C")),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceStatus", invoice.InvoiceStatus.Name)                
+            };
+
+            patterns.AddRange(invoice.LineItemReplaceablePatterns());
+           
+            return patterns;
+        }
+       
+        #endregion
+
+        #region Customer
+
+        /// <summary>
+        /// Gets the customer from an invoice (if applicable)
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomer"/>.
+        /// </returns>
+        public static ICustomer Customer(this IInvoice invoice)
+        {
+            return invoice.Customer(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomer"/>.
+        /// </returns>
+        public static ICustomer Customer(this IInvoice invoice, IMerchelloContext merchelloContext)
+        {
+            if (invoice.CustomerKey == null) return null;
+
+            return merchelloContext.Services.CustomerService.GetByKey(invoice.CustomerKey.Value);
+        }
 
         #endregion
 
@@ -98,7 +177,7 @@ namespace Merchello.Core.Models
         /// Prepares an <see cref="IOrder"/> without saving it to the database.  
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/> to base the order on</param>
-        /// <returns>The <see cref="IOrder"/></returns>
+        /// <returns>The <see cref="IOrder"/></returns>        
         public static IOrder PrepareOrder(this IInvoice invoice)
         {
             return invoice.PrepareOrder(MerchelloContext.Current);
@@ -131,7 +210,9 @@ namespace Merchello.Core.Models
         /// This method will save the invoice in the event it has not previously been saved
         /// 
         /// </remarks>
-        public static IOrder PrepareOrder(this IInvoice invoice, IMerchelloContext merchelloContext,
+        public static IOrder PrepareOrder(
+            this IInvoice invoice,
+            IMerchelloContext merchelloContext,
             IBuilderChain<IOrder> orderBuilder)
         {
             if (!invoice.HasIdentity) merchelloContext.Services.InvoiceService.Save(invoice);
@@ -163,7 +244,8 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
-        internal static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice,
+        internal static IEnumerable<IAppliedPayment> AppliedPayments(
+            this IInvoice invoice,
             IMerchelloContext merchelloContext)
         {
             return invoice.AppliedPayments(merchelloContext.Services.GatewayProviderService);
@@ -175,7 +257,8 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
         /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
-        public static IEnumerable<IAppliedPayment> AppliedPayments(this IInvoice invoice,
+        public static IEnumerable<IAppliedPayment> AppliedPayments(
+            this IInvoice invoice,
             IGatewayProviderService gatewayProviderService)
         {
             return gatewayProviderService.GetAppliedPaymentsByInvoiceKey(invoice.Key);
@@ -545,11 +628,18 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Calculates taxes for the invoice
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/></param>
-        /// <returns>The <see cref="ITaxCalculationResult"/> from the calculation</returns>
-        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice)
+        /// <param name="invoice">
+        /// The <see cref="IInvoice"/>
+        /// </param>
+        /// <param name="quoteOnly">
+        /// A value indicating whether or not the taxes should be calculated as a quote
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxCalculationResult"/> from the calculation
+        /// </returns>
+        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, bool quoteOnly = true)
         {
-            return invoice.CalculateTaxes(invoice.GetBillingAddress());
+            return invoice.CalculateTaxes(invoice.GetBillingAddress(), quoteOnly);
         }
 
         /// <summary>
@@ -557,10 +647,11 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="taxAddress">The address (generally country code and region) to be used to determine the taxation rates</param>
+        /// <param name="quoteOnly">A value indicating whether or not the taxes should be calculated as a quote</param>
         /// <returns>The <see cref="ITaxCalculationResult"/> from the calculation</returns>
-        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IAddress taxAddress)
+        public static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IAddress taxAddress, bool quoteOnly = true)
         {
-            return invoice.CalculateTaxes(MerchelloContext.Current, taxAddress);
+            return invoice.CalculateTaxes(MerchelloContext.Current, taxAddress, quoteOnly);
         }
 
         /// <summary>
@@ -569,12 +660,12 @@ namespace Merchello.Core.Models
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         /// <param name="taxAddress">The address (generally country code and region) to be used to determine the taxation rates</param>
+        /// <param name="quoteOnly">A value indicating whether or not the taxes should be calculated as a quote</param>
         /// <returns>The <see cref="ITaxCalculationResult"/> from the calculation</returns>
-        internal static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IMerchelloContext merchelloContext,
-            IAddress taxAddress)
+        internal static ITaxCalculationResult CalculateTaxes(this IInvoice invoice, IMerchelloContext merchelloContext, IAddress taxAddress, bool quoteOnly = true)
         {
             // remove any other tax lines
-            return merchelloContext.Gateways.Taxation.CalculateTaxesForInvoice(invoice, taxAddress);
+            return merchelloContext.Gateways.Taxation.CalculateTaxesForInvoice(invoice, taxAddress, quoteOnly);
         }
 
         #endregion
@@ -587,7 +678,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         public static decimal TotalItemPrice(this IInvoice invoice)
-        {
+        {                                                                 
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice);
         }
 
@@ -609,6 +700,20 @@ namespace Merchello.Core.Models
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice);
         }
 
+        /// <summary>
+        /// The total discounts.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal TotalDiscounts(this IInvoice invoice)
+        {
+            return invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
+        }
+
     #endregion
 
 
@@ -617,9 +722,15 @@ namespace Merchello.Core.Models
         /// <summary>
         /// Serializes <see cref="IInvoice"/> object
         /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
         /// <remarks>
         /// Intended to be used by the Merchello.Examine.Providers.MerchelloInvoiceIndexer
         /// </remarks>
+        /// <returns>
+        /// The <see cref="XDocument"/>.
+        /// </returns>
         internal static XDocument SerializeToXml(this IInvoice invoice)
         {
             string xml;
@@ -648,6 +759,7 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("billToEmail", invoice.BillToEmail);
                     writer.WriteAttributeString("billtoPhone", invoice.BillToPhone);
                     writer.WriteAttributeString("billtoCompany", invoice.BillToCompany);
+                    writer.WriteAttributeString("poNumber", invoice.PoNumber);
                     writer.WriteAttributeString("exported", invoice.Exported.ToString());
                     writer.WriteAttributeString("archived", invoice.Archived.ToString());
                     writer.WriteAttributeString("total", invoice.Total.ToString(CultureInfo.InvariantCulture));
@@ -666,6 +778,15 @@ namespace Merchello.Core.Models
             
         }
 
+        /// <summary>
+        /// The get invoice status JSON.
+        /// </summary>
+        /// <param name="invoiceStatus">
+        /// The invoice status.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         private static string GetInvoiceStatusJson(IInvoiceStatus invoiceStatus)
         {
             return JsonConvert.SerializeObject(
@@ -677,61 +798,20 @@ namespace Merchello.Core.Models
                             reportable = invoiceStatus.Reportable,
                             active = invoiceStatus.Active,
                             sortOrder = invoiceStatus.SortOrder
-                        }, Formatting.None);
+                        }, 
+                        Formatting.None);
         }
+        
 
-
-
-        private static string GetOrdersJason(IEnumerable<IOrder> orders)
-        {
-            var json = "[{0}]";
-            var ojson = "";
-
-            foreach (var order in orders)
-            {
-                if (ojson.Length > 0) ojson += ",";
-                ojson += JsonConvert.SerializeObject(
-                new {
-                    key = order.Key,
-                    invoiceKey = order.InvoiceKey,
-                    orderNumberPrefix = order.OrderNumberPrefix,
-                    orderNumber = order.OrderNumber,
-                    prefixedOrderNumber = order.PrefixedOrderNumber(),
-                    orderDate = order.OrderDate.ToString("s"),
-                    orderStatusKey = order.OrderStatusKey,
-                    orderStatus = new
-                        {
-                            key = order.OrderStatus.Key,
-                            name = order.OrderStatus.Name,
-                            alias = order.OrderStatus.Alias,
-                            reportable = order.OrderStatus.Reportable,
-                            active = order.OrderStatus.Active,
-                            sortOrder = order.OrderStatus.SortOrder
-                        },
-                   versionKey = order.VersionKey,
-                   exported = order.Exported,
-                   Items = order.Items.Select(x => 
-                    new
-                        {
-                            key = x.Key,
-                            name = x.Name,
-                            lineItemTfKey = x.LineItemTfKey,
-                            shipmentKey = ((IOrderLineItem)x).ShipmentKey,
-                            lineItemType = x.LineItemType.ToString(),
-                            sku = x.Sku,
-                            price = x.Price,
-                            quantity = x.Quantity,
-                            backOrder = ((IOrderLineItem)x).BackOrder,
-                            exported = x.Exported                            
-                        }
-                  )
-
-                }, Formatting.None);
-            }
-            json = string.Format(json, ojson);
-            return json;
-        }
-
+        /// <summary>
+        /// The get generic items collection.
+        /// </summary>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         private static string GetGenericItemsCollection(IEnumerable<ILineItem> items)
         {
             return JsonConvert.SerializeObject(
@@ -739,15 +819,17 @@ namespace Merchello.Core.Models
                     new
                         {
                             key = x.Key,
+                            containerKey = x.ContainerKey,
                             name = x.Name,
                             lineItemTfKey = x.LineItemTfKey,
                             lineItemType = x.LineItemType.ToString(),
                             sku = x.Sku,
                             price = x.Price,
                             quantity = x.Quantity,
-                            exported = x.Exported
-                        }
-                ), Formatting.None);
+                            exported = x.Exported,
+                            extendedData = x.ExtendedData.AsEnumerable()
+                        }), 
+                Formatting.None);
         }
 
         #endregion

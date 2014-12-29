@@ -1,70 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Xml.Linq;
-using Examine;
-using Examine.LuceneEngine;
-using Examine.LuceneEngine.Config;
-using Merchello.Core;
-using Merchello.Core.Models;
-
-namespace Merchello.Examine.Providers
+﻿namespace Merchello.Examine.Providers
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Xml.Linq;
+    using Core.Models;
+    using global::Examine;
+    using global::Examine.LuceneEngine;
+    using global::Examine.LuceneEngine.Config;
+
+    /// <summary>
+    /// The order indexer.
+    /// </summary>
     public class OrderIndexer : BaseMerchelloIndexer
     {
-        protected override void PerformIndexAll(string type)
-        {
-            if (!SupportedTypes.Contains(type)) return;
-
-            var orders = DataService.OrderDataService.GetAll();
-            var ordersArray = orders as IOrder[] ?? orders.ToArray();
-
-            if (!ordersArray.Any()) return;
-            var nodes = ordersArray.Select(o => o.SerializeToXml().Root).ToList();
-
-            AddNodesToIndex(nodes, IndexTypes.Order);
-        }
-
-        public override void RebuildIndex()
-        {
-            DataService.LogService.AddVerboseLog(-1, "Rebuilding index");
-
-            EnsureIndex(true);
-
-            PerformIndexAll(IndexTypes.Order);
-            //base.RebuildIndex();
-        }
-
         /// <summary>
-        /// Adds the order to the index
+        /// The index field policies.
         /// </summary>
-        /// <param name="order"></param>
-        /// <remarks>For testing</remarks>
-        internal void AddOrderToIndex(IOrder order)
-        {
-            var nodes = new List<XElement> {order.SerializeToXml().Root};
-            AddNodesToIndex(nodes, IndexTypes.Order);
-        }
-
-        /// <summary>
-        /// Removes the order from the index
-        /// </summary>
-        /// <param name="order"></param>
-        /// <remarks>For testing</remarks>
-        internal void DeleteOrderFromIndex(IOrder order)
-        {            
-            DeleteFromIndex(((Order)order).ExamineId.ToString(CultureInfo.InvariantCulture));
-        }
-
-
-
-        protected override IEnumerable<string> SupportedTypes
-        {
-            get { return new[] { IndexTypes.Order }; }
-        }
-
-        internal static readonly List<StaticField> IndexFieldPolicies
-            = new List<StaticField>()
+        internal static readonly List<StaticField> IndexFieldPolicies = new List<StaticField>()
             {
                 new StaticField("orderKey", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("invoiceKey", FieldIndexTypes.ANALYZED, false, string.Empty),
@@ -82,15 +35,68 @@ namespace Merchello.Examine.Providers
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
             };
 
+        /// <summary>
+        /// Gets the supported types.
+        /// </summary>
+        protected override IEnumerable<string> SupportedTypes
+        {
+            get { return new[] { IndexTypes.Order }; }
+        }
+
+
+        /// <summary>
+        /// The rebuild index.
+        /// </summary>
+        public override void RebuildIndex()
+        {
+            DataService.LogService.AddVerboseLog(-1, "Rebuilding the order index");
+
+            EnsureIndex(true);
+
+            PerformIndexAll(IndexTypes.Order);
+        }
+
+        /// <summary>
+        /// Adds the order to the index
+        /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <remarks>
+        /// For testing
+        /// </remarks>
+        internal void AddOrderToIndex(IOrder order)
+        {
+            var nodes = new List<XElement> {order.SerializeToXml().Root};
+            AddNodesToIndex(nodes, IndexTypes.Order);
+        }
+
+        /// <summary>
+        /// Removes the order from the index
+        /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <remarks>
+        /// For testing
+        /// </remarks>
+        internal void DeleteOrderFromIndex(IOrder order)
+        {            
+            DeleteFromIndex(((Order)order).ExamineId.ToString(CultureInfo.InvariantCulture));
+        }
 
         /// <summary>
         /// Creates an IIndexCriteria object based on the indexSet passed in and our DataService
         /// </summary>
-        /// <param name="indexSet"></param>
-        /// <returns></returns>
+        /// <param name="indexSet">
+        /// The index Set.
+        /// </param>
         /// <remarks>
         /// If we cannot initialize we will pass back empty indexer data since we cannot read from the database
         /// </remarks>
+        /// <returns>
+        /// The <see cref="IIndexCriteria"/>.
+        /// </returns>
         protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
         {
             return indexSet.ToIndexCriteria(DataService.OrderDataService.GetIndexFieldNames(), IndexFieldPolicies);
@@ -99,13 +105,35 @@ namespace Merchello.Examine.Providers
         /// <summary>
         /// return the index policy for the field name passed in, if not found, return normal
         /// </summary>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
+        /// <param name="fieldName">
+        /// The field Name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="FieldIndexTypes"/>.
+        /// </returns>
         protected override FieldIndexTypes GetPolicy(string fieldName)
         {
             var def = IndexFieldPolicies.Where(x => x.Name == fieldName).ToArray();
-            return (def.Any() == false ? FieldIndexTypes.ANALYZED : def.Single().IndexType);
+            return def.Any() == false ? FieldIndexTypes.ANALYZED : def.Single().IndexType;
         }
 
+        /// <summary>
+        /// The perform index all.
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        protected override void PerformIndexAll(string type)
+        {
+            if (!SupportedTypes.Contains(type)) return;
+
+            var orders = DataService.OrderDataService.GetAll();
+            var ordersArray = orders as IOrder[] ?? orders.ToArray();
+
+            if (!ordersArray.Any()) return;
+            var nodes = ordersArray.Select(o => o.SerializeToXml().Root).ToList();
+
+            AddNodesToIndex(nodes, IndexTypes.Order);
+        }
     }
 }

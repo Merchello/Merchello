@@ -1,0 +1,6 @@
+﻿{
+	javascript : [
+		'~/App_Plugins/Merchello.Chase/merchello.chase.controller.js',
+		'~/App_Plugins/Merchello.Chase/merchello.chase.paymentmethod.controller.js'
+	]
+}

@@ -82,16 +82,24 @@ namespace Merchello.Web.PackageActions
             return false;
         }
 
-
+        /// <summary>
+        /// Installs Merchello default data.
+        /// </summary>
+        /// <param name="baseDataCreation">
+        /// The base data creation.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private bool CreateInitialMerchelloData(BaseDataCreation baseDataCreation)
         {
-            baseDataCreation.InitializeBaseData("merchDBTypeField");
+            baseDataCreation.InitializeBaseData("merchTypeField");
             baseDataCreation.InitializeBaseData("merchInvoiceStatus");
             baseDataCreation.InitializeBaseData("merchOrderStatus");
             baseDataCreation.InitializeBaseData("merchWarehouse");
             baseDataCreation.InitializeBaseData("merchGatewayProviderSettings");
             baseDataCreation.InitializeBaseData("merchStoreSetting");
-            
+            baseDataCreation.InitializeBaseData("merchShipmentStatus");
             return true;
         }
     }

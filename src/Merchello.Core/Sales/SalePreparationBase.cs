@@ -1,30 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Builders;
-using Merchello.Core.Events;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Services;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Events;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Sales
+﻿namespace Merchello.Core.Sales
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Builders;
+    using Merchello.Core.Events;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Services;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+
     /// <summary>
-    /// Represents an abstract SalesPreparation class resposible for temporarily persisting invoice and order information
+    /// Represents an abstract SalesPreparation class responsible for temporarily persisting invoice and order information
     /// while it's being collected
     /// </summary>
     public abstract class SalePreparationBase : ISalePreparationBase
     {
+        /// <summary>
+        /// The item cache.
+        /// </summary>
         private readonly IItemCache _itemCache;
+
+        /// <summary>
+        /// The customer.
+        /// </summary>
         private readonly ICustomerBase _customer;
+
+        /// <summary>
+        /// The merchello context.
+        /// </summary>
         private readonly IMerchelloContext _merchelloContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SalePreparationBase"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="itemCache">
+        /// The item cache.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
         internal SalePreparationBase(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
         {                       
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
@@ -39,33 +64,57 @@ namespace Merchello.Core.Sales
         }
 
         /// <summary>
+        /// Occurs after a sale has been finalized.
+        /// </summary>
+        public static event TypedEventHandler<SalePreparationBase, SalesPreparationEventArgs<IPaymentResult>> Finalizing;
+
+
+
+        /// <summary>
+        /// Gets the <see cref="ICustomerBase"/>
+        /// </summary>
+        public ICustomerBase Customer
+        {
+            get { return _customer; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IMerchelloContext"/>
+        /// </summary>
+        public IMerchelloContext MerchelloContext
+        {
+            get { return _merchelloContext; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IItemCache"/>
+        /// </summary>
+        public IItemCache ItemCache
+        {
+            get { return _itemCache; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to apply taxes to invoice.
+        /// </summary>
+        internal bool ApplyTaxesToInvoice { get; set; }
+
+
+        /// <summary>
+        /// Gets the <see cref="IRuntimeCacheProvider"/>
+        /// </summary>
+        protected IRuntimeCacheProvider RuntimeCache
+        {
+            get { return _merchelloContext.Cache.RuntimeCache; }
+        }
+
+        /// <summary>
         /// Purges sales manager information
         /// </summary>
         public virtual void Reset()
         {
             Reset(_merchelloContext, _customer);
-        }
-
-        /// <summary>
-        /// Purges sales manager information
-        /// </summary>
-        internal static void Reset(IMerchelloContext merchelloContext, Guid entityKey)
-        {
-            var customer = merchelloContext.Services.CustomerService.GetAnyByKey(entityKey);
-            if(customer == null) return;
-
-            Reset(merchelloContext, customer);
-        }
-
-        /// <summary>
-        /// Purges persisted checkout information
-        /// </summary>
-        private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer)
-        {
-            customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.ShippingDestinationAddress);
-            customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.BillingAddress);
-            SaveCustomer(merchelloContext, customer);
-        }
+        }        
 
         /// <summary>
         /// Saves the bill to address
@@ -108,10 +157,11 @@ namespace Merchello.Core.Sales
         /// <summary>
         /// Saves a <see cref="IShipmentRateQuote"/> as a shipment line item
         /// </summary>
-        /// <param name="approvedShipmentRateQuote"></param>
+        /// <param name="approvedShipmentRateQuote">
+        /// The <see cref="IShipmentRateQuote"/> to be saved
+        /// </param>
         public virtual void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote)
         {
-
             AddShipmentRateQuoteLineItem(approvedShipmentRateQuote);         
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
@@ -122,7 +172,9 @@ namespace Merchello.Core.Sales
         /// <summary>
         /// Saves a collection of <see cref="IShipmentRateQuote"/>s as shipment line items
         /// </summary>
-        /// <param name="approvedShipmentRateQuotes"></param>
+        /// <param name="approvedShipmentRateQuotes">
+        /// The collection of <see cref="IShipmentRateQuote"/>s to be saved
+        /// </param>
         public virtual void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes)
         {
             var shipmentRateQuotes = approvedShipmentRateQuotes as IShipmentRateQuote[] ?? approvedShipmentRateQuotes.ToArray();
@@ -137,28 +189,96 @@ namespace Merchello.Core.Sales
         }
 
         /// <summary>
-        /// Maps the <see cref="IShipmentRateQuote"/> to a <see cref="ILineItem"/> 
+        /// Clears all <see cref="IShipmentRateQuote"/>s previously saved
         /// </summary>
-        /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> to be added as a <see cref="ILineItem"/></param>
-        private void AddShipmentRateQuoteLineItem(IShipmentRateQuote shipmentRateQuote)
+        public void ClearShipmentRateQuotes()
         {
-            _itemCache.AddItem(shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>());
+            var items = _itemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).ToArray();
+
+            foreach (var item in items)
+            {
+                _itemCache.Items.RemoveItem(item.Sku);
+            }
+
+            _merchelloContext.Services.ItemCacheService.Save(_itemCache);
+        }
+
+        /// <summary>
+        /// Saves a <see cref="IPaymentMethod"/> to <see cref="ICustomerBase"/> extended data
+        /// </summary>
+        /// <param name="paymentMethod">
+        /// The payment Method.
+        /// </param>
+        public void SavePaymentMethod(IPaymentMethod paymentMethod)
+        {
+            _customer.ExtendedData.AddPaymentMethod(paymentMethod);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IPaymentMethod"/> from <see cref="ICustomerBase"/> extended data
+        /// </summary>
+        /// <returns>
+        /// The previously saved <see cref="IPaymentMethod"/>.
+        /// </returns>
+        public IPaymentMethod GetPaymentMethod()
+        {
+            var paymentMethodKey = _customer.ExtendedData.GetPaymentMethodKey();
+            return paymentMethodKey.Equals(Guid.Empty) ? null : _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey).PaymentMethod;
         }
 
         /// <summary>
         /// True/false indicating whether or not the <see cref="ISalePreparationBase"/> is ready to prepare an <see cref="IInvoice"/>
         /// </summary>
-        /// <remarks>
-        /// 
-        /// This ommits checking that 
-        /// 
-        /// </remarks>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public virtual bool IsReadyToInvoice()
         {
-            return (_customer.ExtendedData.GetAddress(AddressType.Billing) != null) &&
-                   (_customer.ExtendedData.GetAddress(AddressType.Shipping) != null);
+            return _customer.ExtendedData.GetAddress(AddressType.Billing) != null;
         }
 
+        /// <summary>
+        /// Adds a <see cref="ILineItem"/> to the collection of items
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <remarks>
+        /// Intended for custom line item types
+        /// http://issues.merchello.com/youtrack/issue/M-381
+        /// </remarks>
+        public void AddItem(ILineItem lineItem)
+        {
+            Mandate.ParameterNotNullOrEmpty(lineItem.Sku, "The line item must have a sku");
+            Mandate.ParameterNotNullOrEmpty(lineItem.Name, "The line item must have a name");
+
+            if (lineItem.Quantity <= 0) lineItem.Quantity = 1;
+            if (lineItem.Price < 0) lineItem.Price = 0;
+
+            if (lineItem.LineItemType == LineItemType.Custom)
+            {
+                if (!new LineItemTypeField().CustomTypeFields.Select(x => x.TypeKey).Contains(lineItem.LineItemTfKey))
+                {
+                    var argError = new ArgumentException("The LineItemTfKey was not found in merchello.config custom type fields");
+                    LogHelper.Error<SalePreparationBase>("The LineItemTfKey was not found in merchello.config custom type fields", argError);
+
+                    throw argError;
+                }
+            }
+
+            _itemCache.AddItem(lineItem);
+        }
+
+        /// <summary>
+        /// Removes a line item for the collection of items
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        public void RemoveItem(ILineItem lineItem)
+        {
+            _itemCache.Items.Remove(lineItem.Sku);
+        }
 
         /// <summary>
         /// Generates an <see cref="IInvoice"/>
@@ -179,13 +299,12 @@ namespace Merchello.Core.Sales
             if (!IsReadyToInvoice()) return null;
 
             var attempt = invoiceBuilder.Build();
-            if (!attempt.Success)
-            {
-                LogHelper.Error<SalePreparationBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
-                throw attempt.Exception;
-            }
+            
+            if (attempt.Success) return attempt.Result;
 
-            return attempt.Result;
+            LogHelper.Error<SalePreparationBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
+            
+            throw attempt.Exception;
         }
 
         /// <summary>
@@ -201,13 +320,13 @@ namespace Merchello.Core.Sales
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
-            if(!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
+            if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
             // invoice
             var invoice = PrepareInvoice(new InvoiceBuilderChain(this));
@@ -216,12 +335,7 @@ namespace Merchello.Core.Sales
 
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
 
-            if (!result.ApproveOrderCreation) return result;
-
-            // order
-            var order = result.Invoice.PrepareOrder(MerchelloContext);
-
-            MerchelloContext.Services.OrderService.Save(order);
+            Finalizing.RaiseEvent(new SalesPreparationEventArgs<IPaymentResult>(result), this);
 
             return result;
         }
@@ -236,19 +350,17 @@ namespace Merchello.Core.Sales
             return AuthorizePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
         }
 
-
         /// <summary>
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
             var paymentMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
 
             return AuthorizePayment(paymentMethod, args);
-
         }
 
         /// <summary>
@@ -265,7 +377,7 @@ namespace Merchello.Core.Sales
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
         {
@@ -280,13 +392,7 @@ namespace Merchello.Core.Sales
 
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            
-            if (!result.ApproveOrderCreation) return result;
-
-            // order
-            var order = result.Invoice.PrepareOrder(MerchelloContext);
-
-            MerchelloContext.Services.OrderService.Save(order);
+            Finalizing.RaiseEvent(new SalesPreparationEventArgs<IPaymentResult>(result), this);
 
             return result;
         }
@@ -305,7 +411,7 @@ namespace Merchello.Core.Sales
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public virtual IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
@@ -324,30 +430,39 @@ namespace Merchello.Core.Sales
             return AuthorizeCapturePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }
 
-
-
         /// <summary>
-        /// Saves the current customer
+        /// Purges sales manager information
         /// </summary>
-        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer)
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="entityKey">
+        /// The entity Key.
+        /// </param>
+        internal static void Reset(IMerchelloContext merchelloContext, Guid entityKey)
         {
-            if (typeof(AnonymousCustomer) == customer.GetType())
-            {
-                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer);
-            }
-            else
-            {
-                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer);
-            }
-        }
+            var customer = merchelloContext.Services.CustomerService.GetAnyByKey(entityKey);
 
+            if (customer == null) return;
+
+            Reset(merchelloContext, customer);
+        }
+        
         /// <summary>
         /// Gets the checkout <see cref="IItemCache"/> for the <see cref="ICustomerBase"/>
         /// </summary>
-        /// <param name="customer">The customer associated with the checkout</param>
-        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <param name="versionKey">The version key for this <see cref="SalePreparationBase"/></param>
-        /// <returns>The <see cref="IItemCache"/> associated with the customer checkout</returns>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>
+        /// </param>
+        /// <param name="customer">
+        /// The customer associated with the checkout
+        /// </param>
+        /// <param name="versionKey">
+        /// The version key for this <see cref="SalePreparationBase"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="IItemCache"/> associated with the customer checkout
+        /// </returns>
         protected static IItemCache GetItemCache(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey)
         {
             var runtimeCache = merchelloContext.Cache.RuntimeCache;
@@ -355,8 +470,7 @@ namespace Merchello.Core.Sales
             var cacheKey = MakeCacheKey(customer, versionKey);
             var itemCache = runtimeCache.GetCacheItem(cacheKey) as IItemCache;
             if (itemCache != null) return itemCache;
-            
-            
+                        
             itemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(customer, ItemCacheType.Checkout, versionKey);
 
             // this is probably an invalid version of the checkout
@@ -372,21 +486,62 @@ namespace Merchello.Core.Sales
             }
 
             runtimeCache.InsertCacheItem(cacheKey, () => itemCache);
+
             return itemCache;
         }
 
         /// <summary>
         /// Makes the 'unique' RuntimeCache Key for the RuntimeCache
         /// </summary>
+        /// <returns>
+        /// The <see cref="string"/> cache key
+        /// </returns>
         protected string MakeCacheKey()
         {
             return MakeCacheKey(_customer, _itemCache.VersionKey);
         }
 
         /// <summary>
+        /// Saves the current customer
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer)
+        {
+            if (typeof(AnonymousCustomer) == customer.GetType())
+            {
+                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer);
+            }
+            else
+            {
+                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer);
+            }
+        }
+
+        /// <summary>
+        /// Purges persisted checkout information
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer)
+        {
+            customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.ShippingDestinationAddress);
+            customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.BillingAddress);
+            SaveCustomer(merchelloContext, customer);
+        }
+
+        /// <summary>
         /// Generates a unique cache key for runtime caching of the <see cref="SalePreparationBase"/>
         /// </summary>
-        /// <param name="customer"><see cref="ICustomerBase"/></param>
+        /// <param name="customer">The <see cref="ICustomerBase"/> for which to generate the cache key</param>
         /// <param name="versionKey">The version key</param>
         /// <returns>The unique CacheKey string</returns>
         /// <remarks>
@@ -398,42 +553,16 @@ namespace Merchello.Core.Sales
         private static string MakeCacheKey(ICustomerBase customer, Guid versionKey)
         {
             var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
-            return Cache.CacheKeys.ItemCacheCacheKey(customer.EntityKey, itemCacheTfKey, versionKey);
+            return Cache.CacheKeys.ItemCacheCacheKey(customer.Key, itemCacheTfKey, versionKey);
         }
 
         /// <summary>
-        /// The <see cref="ICustomerBase"/>
+        /// Maps the <see cref="IShipmentRateQuote"/> to a <see cref="ILineItem"/> 
         /// </summary>
-        public ICustomerBase Customer
+        /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> to be added as a <see cref="ILineItem"/></param>
+        private void AddShipmentRateQuoteLineItem(IShipmentRateQuote shipmentRateQuote)
         {
-            get { return _customer; }
+            _itemCache.AddItem(shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>());
         }
-
-        /// <summary>
-        /// The <see cref="IMerchelloContext"/>
-        /// </summary>
-        public IMerchelloContext MerchelloContext
-        {
-            get { return _merchelloContext; }
-        }
-
-        /// <summary>
-        /// Shortcut to configured <see cref="IRuntimeCacheProvider"/>
-        /// </summary>
-        protected IRuntimeCacheProvider RuntimeCache
-        {
-            get { return _merchelloContext.Cache.RuntimeCache; }
-        }
-
-        /// <summary>
-        /// The <see cref="IItemCache"/>
-        /// </summary>
-        public IItemCache ItemCache
-        {
-            get { return _itemCache; }
-        }
-
-        internal bool ApplyTaxesToInvoice { get; set; }
-
     }
 }

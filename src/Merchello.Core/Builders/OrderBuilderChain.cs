@@ -1,19 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Umbraco.Core;
-
-namespace Merchello.Core.Builders
+﻿namespace Merchello.Core.Builders
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Models;
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents the OrderBuilderChain
     /// </summary>
     internal sealed class OrderBuilderChain : BuildChainBase<IOrder>
     {
+        #region Fields
+
+        /// <summary>
+        /// The invoice.
+        /// </summary>
         private readonly IInvoice _invoice;
+
+        /// <summary>
+        /// The order status.
+        /// </summary>
         private readonly IOrderStatus _orderStatus;
 
+        /// <summary>
+        /// Constructor parameters for the base class activator
+        /// </summary>
+        private IEnumerable<object> _constructorParameters; 
+
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderBuilderChain"/> class.
+        /// </summary>
+        /// <param name="orderStatus">
+        /// The order status.
+        /// </param>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
         public OrderBuilderChain(IOrderStatus orderStatus, IInvoice invoice)
         {
             Mandate.ParameterNotNull(orderStatus, "orderStatus");
@@ -22,31 +47,21 @@ namespace Merchello.Core.Builders
             _orderStatus = orderStatus;
             _invoice = invoice;
             
-            ResolveChain(Constants.TaskChainAlias.OrderPreparationOrderCreate);
+            ResolveChain(Core.Constants.TaskChainAlias.OrderPreparationOrderCreate);
         }
 
         /// <summary>
-        /// Builds the order
+        /// Gets the task count. Used for testing
         /// </summary>
-        /// <returns>Attempt{IOrder}</returns>
-        public override Attempt<IOrder> Build()
+        internal int TaskCount
         {
-
-            var attempt = (TaskHandlers.Any()) 
-                ? TaskHandlers.First().Execute(new Order(_orderStatus, _invoice.Key) 
-                { 
-                    OrderNumberPrefix = _invoice.InvoiceNumberPrefix,
-                    VersionKey = _invoice.VersionKey 
-                }) :
-                Attempt<IOrder>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated."));
-
-            return attempt;
+            get { return TaskHandlers.Count(); }
         }
 
+
         /// <summary>
-        /// Constructor parameters for the base class activator
+        /// Gets the constructor argument values.
         /// </summary>
-        private IEnumerable<object> _constructorParameters; 
         protected override IEnumerable<object> ConstructorArgumentValues
         {
             get
@@ -56,11 +71,20 @@ namespace Merchello.Core.Builders
         }
 
         /// <summary>
-        /// Used for testing
+        /// Builds the order
         /// </summary>
-        internal int TaskCount
+        /// <returns>The Attempt{IOrder}</returns>
+        public override Attempt<IOrder> Build()
         {
-            get { return TaskHandlers.Count(); }
+            var attempt = TaskHandlers.Any()
+                ? TaskHandlers.First().Execute(new Order(_orderStatus, _invoice.Key) 
+                { 
+                    OrderNumberPrefix = _invoice.InvoiceNumberPrefix,
+                    VersionKey = _invoice.VersionKey 
+                }) :
+                Attempt<IOrder>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated."));
+
+            return attempt;
         }
     }
 }

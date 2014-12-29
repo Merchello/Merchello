@@ -1,10 +1,12 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+    using EntityBase;
+
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents an Order
     /// </summary>
@@ -12,19 +14,106 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class Order : VersionTaggedEntity, IOrder
     {
+        #region Fields
+
+        /// <summary>
+        /// The invoice key selector.
+        /// </summary>
+        private static readonly PropertyInfo InvoiceKeySelector = ExpressionHelper.GetPropertyInfo<Order, Guid>(x => x.InvoiceKey);
+
+        /// <summary>
+        /// The order number prefix selector.
+        /// </summary>
+        private static readonly PropertyInfo OrderNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Order, string>(x => x.OrderNumberPrefix);
+
+        /// <summary>
+        /// The order number selector.
+        /// </summary>
+        private static readonly PropertyInfo OrderNumberSelector = ExpressionHelper.GetPropertyInfo<Order, int>(x => x.OrderNumber);
+
+        /// <summary>
+        /// The order date selector.
+        /// </summary>
+        private static readonly PropertyInfo OrderDateSelector = ExpressionHelper.GetPropertyInfo<Order, DateTime>(x => x.OrderDate);
+
+        /// <summary>
+        /// The order status selector.
+        /// </summary>
+        private static readonly PropertyInfo OrderStatusSelector = ExpressionHelper.GetPropertyInfo<Order, IOrderStatus>(x => x.OrderStatus);
+
+        /// <summary>
+        /// The exported selector.
+        /// </summary>
+        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Order, bool>(x => x.Exported);
+
+        /// <summary>
+        /// The invoice key.
+        /// </summary>
         private Guid _invoiceKey;
+
+        /// <summary>
+        /// The order number prefix.
+        /// </summary>
         private string _orderNumberPrefix;
+
+        /// <summary>
+        /// The order number.
+        /// </summary>
         private int _orderNumber;
+
+        /// <summary>
+        /// The order date.
+        /// </summary>
         private DateTime _orderDate;
+
+        /// <summary>
+        /// The order status.
+        /// </summary>
         private IOrderStatus _orderStatus;
+
+        /// <summary>
+        /// True or false indicating whether or not this order has been exported.
+        /// </summary>
         private bool _exported;
+
+        /// <summary>
+        /// The examine id.
+        /// </summary>
         private int _examineId = 1;
+
+        /// <summary>
+        /// The items.
+        /// </summary>
         private LineItemCollection _items;
 
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Order"/> class.
+        /// </summary>
+        /// <param name="orderStatus">
+        /// The order status.
+        /// </param>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
         internal Order(IOrderStatus orderStatus, Guid invoiceKey)
             : this(orderStatus, invoiceKey, new LineItemCollection())
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Order"/> class.
+        /// </summary>
+        /// <param name="orderStatus">
+        /// The order status.
+        /// </param>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="lineItemCollection">
+        /// The line item collection.
+        /// </param>
         internal Order(IOrderStatus orderStatus, Guid invoiceKey, LineItemCollection lineItemCollection)
         {
             Mandate.ParameterNotNull(orderStatus, "orderStatus");
@@ -38,135 +127,162 @@ namespace Merchello.Core.Models
             _orderDate = DateTime.Now;
         }
 
-        private static readonly PropertyInfo InvoiceKeySelector = ExpressionHelper.GetPropertyInfo<Order, Guid>(x => x.InvoiceKey);
-        private static readonly PropertyInfo OrderNumberPrefixSelector = ExpressionHelper.GetPropertyInfo<Order, string>(x => x.OrderNumberPrefix);
-        private static readonly PropertyInfo OrderNumberSelector = ExpressionHelper.GetPropertyInfo<Order, int>(x => x.OrderNumber);
-        private static readonly PropertyInfo OrderDateSelector = ExpressionHelper.GetPropertyInfo<Order, DateTime>(x => x.OrderDate);
-        private static readonly PropertyInfo OrderStatusSelector = ExpressionHelper.GetPropertyInfo<Order, IOrderStatus>(x => x.OrderStatus);
-        private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Order, bool>(x => x.Exported);
 
         /// <summary>
-        /// The invoice 'key'
+        /// Gets the invoice 'key'
         /// </summary>
         [DataMember]
         public Guid InvoiceKey 
         {
-            get { return _invoiceKey; }
+            get
+            {
+                return _invoiceKey;
+            }
+
             internal set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _invoiceKey = value;
                     return _invoiceKey;
-                }, _invoiceKey, InvoiceKeySelector);
+                }, 
+                _invoiceKey,
+                InvoiceKeySelector);
             }
-        }
-
-        [IgnoreDataMember]
-        internal int ExamineId
-        {
-            get { return _examineId; }
-            set { _examineId = value; }
-        }
-
+        }        
 
         /// <summary>
-        /// The order number prefix
+        /// Gets or sets The order number prefix
         /// </summary>
         [DataMember]
         public string OrderNumberPrefix 
         {
-            get { return _orderNumberPrefix; }
+            get
+            {
+                return _orderNumberPrefix;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
                     _orderNumberPrefix = value;
                     return _orderNumberPrefix;
-                }, _orderNumberPrefix, OrderNumberPrefixSelector);
+                }, 
+                _orderNumberPrefix,
+                OrderNumberPrefixSelector);
             }
         }
 
         /// <summary>
-        /// The unique OrderNumber
+        /// Gets or sets the unique OrderNumber
         /// </summary>
         [DataMember]
         public int OrderNumber
         {
-            get { return _orderNumber; }
-            internal set
+            get
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                return _orderNumber;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
                     _orderNumber = value;
                     return _orderNumber;
-                }, _orderNumber, OrderNumberSelector);
+                }, 
+                _orderNumber,
+                OrderNumberSelector);
             }
         }
 
         /// <summary>
-        /// The date of the order
+        /// Gets or sets the date of the order
         /// </summary>
         [DataMember]
         public DateTime OrderDate
         {
-            get { return _orderDate; }
+            get
+            {
+                return _orderDate;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
                     _orderDate = value;
                     return _orderDate;
-                }, _orderDate, OrderDateSelector);
+                }, 
+                _orderDate, 
+                OrderDateSelector);
             }
         }
 
         /// <summary>
-        /// The order status key
+        /// Gets the order status key
         /// </summary>
         [DataMember]
         public Guid OrderStatusKey 
         {
-            get { return _orderStatus.Key; }
-            
+            get { return _orderStatus.Key; }            
         }
 
         /// <summary>
-        /// Gets or sets the 
+        /// Gets or sets the order status
         /// </summary>
         [DataMember]
         public IOrderStatus OrderStatus
         {
-            get { return _orderStatus; }
+            get
+            {
+                return _orderStatus;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
                     _orderStatus = value;
                     return _orderStatus;
-                }, _orderStatus, OrderStatusSelector);
+                }, 
+                _orderStatus, 
+                OrderStatusSelector);
             }
         }
 
         /// <summary>
-        /// Indicates whether or not this order has been exported to an external system
+        /// Gets or sets a value indicating whether or not this order has been exported to an external system
         /// </summary>
         [DataMember]
         public bool Exported
         {
-            get { return _exported; }
+            get
+            {
+                return _exported;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
                     _exported = value;
                     return _exported;
-                }, _exported, ExportedSelector);
+                }, 
+                _exported, 
+                ExportedSelector);
             }
         }
 
                 /// <summary>
-        /// The <see cref="ILineItem"/>s in the invoice
+        /// Gets the <see cref="ILineItem"/>s in the order
         /// </summary>
         [DataMember]
         public LineItemCollection Items
@@ -175,10 +291,21 @@ namespace Merchello.Core.Models
             {
                 return _items;
             }
+
             internal set
             {
                 _items = value;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the examine id.
+        /// </summary>
+        [IgnoreDataMember]
+        internal int ExamineId
+        {
+            get { return _examineId; }
+            set { _examineId = value; }
         }
     }
 }

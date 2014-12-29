@@ -4,7 +4,7 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Tests.Base.DataMakers
 {
-    internal class AddressMock
+    internal class AddressMock : IAddress
     {
         public string Name { get; set; }
         public string Address1 { get; set; }
@@ -14,32 +14,49 @@ namespace Merchello.Tests.Base.DataMakers
         public string PostalCode { get; set; }
         public string CountryCode { get; set; }
 
-        public ICustomerAddress MakeAddress(ICustomer customer, string label)
+        public string Phone { get; set; }
+
+        public string Email { get; set; }
+
+        public string Organization { get; set; }
+
+        public bool IsCommercial { get; set; }
+
+        
+    }
+
+    internal static class AddressTestHelperExtensions
+    {
+
+        public static ICustomerAddress MakeCustomerAddress(this IAddress address, ICustomer customer, string label)
         {
-            return new CustomerAddress(customer.Key, label)
+            return new CustomerAddress(customer.Key)
             {
+                Label = label,
                 FullName = string.Format("{0} {1}", customer.FirstName, customer.LastName).Trim(),
-                Address1 = this.Address1,
-                Address2 = this.Address2,
-                Locality = this.Locality,
-                Region = this.Region,
-                PostalCode = this.PostalCode,
-                CountryCode = this.CountryCode,
+                Address1 = address.Address1,
+                Address2 = address.Address2,
+                Locality = address.Locality,
+                Region = address.Region,
+                PostalCode = address.PostalCode,
+                CountryCode = address.CountryCode,
                 AddressTypeFieldKey = EnumTypeFieldConverter.Address.GetTypeField(AddressType.Shipping).TypeKey
             };
         }
 
-        public IWarehouse MakeWarehouse()
+        public static IWarehouse MakeWarehouse(this IAddress address)
         {
             return new Warehouse()
             {
-                Name = Name,
-                Address1 = Address1,
-                Address2 = Address2,
-                Locality = Locality,
-                Region = Region,
-                PostalCode = PostalCode
+                Name = address.Name,
+                Address1 = address.Address1,
+                Address2 = address.Address2,
+                Locality = address.Locality,
+                Region = address.Region,
+                PostalCode = address.PostalCode,
+                CountryCode = address.CountryCode
             };
-        }
+        }    
     }
+
 }

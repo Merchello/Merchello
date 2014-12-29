@@ -52,8 +52,60 @@
                         params: { id: invoiceKey }
                     }),
                     'Failed to get orders by invoice: ' + invoiceKey);
-            }
+            },
 
+            processesProductsToBackofficeOrder: function (customerKey, products, shippingAddress, billingAddress) {
+                var model = {};
+                model.CustomerKey = customerKey;
+                model.ProductKeys = products;
+                model.ShippingAddress = shippingAddress;
+                model.BillingAddress = billingAddress;
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'ProcessesProductsToBackofficeOrder'),
+                        model
+                    ),
+                    'Failed to add products to invoice');
+            },
+
+            getShippingMethods: function (customerKey, products, shippingAddress, billingAddress) {
+                var model = {};
+                model.CustomerKey = customerKey;
+                model.ProductKeys = products;
+                model.ShippingAddress = shippingAddress;
+                model.BillingAddress = billingAddress;
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingMethods'),
+                        model
+                    ),
+                    'Failed to get shipping methods');
+            },
+
+            getPaymentMethods: function () {             
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetPaymentMethods'),
+                        method: "GET"
+                    }),
+                    'Failed to get payment methods');
+            },
+
+            finalizeBackofficeOrder: function (customerKey, products, shippingAddress, billingAddress, paymentKey, paymentProviderKey, shipmentKey) {
+                var model = {};
+                model.CustomerKey = customerKey;
+                model.ProductKeys = products;
+                model.ShippingAddress = shippingAddress;
+                model.BillingAddress = billingAddress;
+                model.PaymentKey = paymentKey;
+                model.PaymentProviderKey = paymentProviderKey;
+                model.ShipmentKey = shipmentKey;
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'FinalizeBackofficeOrder'),
+                        model
+                    ),
+                    'Failed to finalize backoffice order');
+                }
         };
     };
 

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plugins>
+  <baseType type="Merchello.Core.Gateways.GatewayProviderBase" resolutionType="FindTypesWithAttribute">
+    <add type="Merchello.Tests.IntegrationTests.ObjectResolution.TestingPaymentGatewayProvider, Merchello.Tests.IntegrationTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Tests.IntegrationTests.ObjectResolution.TestingShippingGatewayProvider, Merchello.Tests.IntegrationTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Tests.IntegrationTests.ObjectResolution.TestingTaxationGatewayProvider, Merchello.Tests.IntegrationTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayProvider, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Core.Gateways.Shipping.FixedRate.FixedRateShippingGatewayProvider, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Core.Gateways.Taxation.FixedRate.FixedRateTaxationGatewayProvider, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Plugin.Taxation.Avalara.Provider.AvaTaxTaxationGatewayProvider, Merchello.Plugin.Taxation.Avalara, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+  </baseType>
+  <baseType type="Merchello.Core.Observation.ITrigger" resolutionType="FindTypesWithAttribute">
+    <add type="Merchello.Core.Gateways.Notification.Triggering.OrderShippedTrigger, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Core.Gateways.Notification.Triggering.PartialOrderShippedTrigger, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Core.Gateways.Notification.Triggering.OrderConfirmationTrigger, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+  </baseType>
+  <baseType type="Merchello.Core.Observation.IMonitor" resolutionType="FindTypesWithAttribute">
+    <add type="Merchello.Core.Gateways.Notification.Monitors.OrderShippedMonitor, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Core.Gateways.Notification.Monitors.PartialOrderShippedMonitor, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Core.Gateways.Notification.Monitors.OrderConfirmationMonitor, Merchello.Core, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+  </baseType>
+  <baseType type="Merchello.Web.Reporting.ReportController" resolutionType="FindTypesWithAttribute">
+    <add type="Merchello.Web.Reporting.Sales.SalesByItemReportApiController, Merchello.Web, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+    <add type="Merchello.Web.Reporting.Sales.SalesOverTimeReportApiController, Merchello.Web, Version=1.3.24.0, Culture=neutral, PublicKeyToken=null" />
+  </baseType>
+</plugins>

@@ -1,32 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
     /// </summary>
-    public interface IProductService : IService
+    public interface IProductService : IPageCachedService<IProduct>
     {
-
         /// <summary>
         /// Creates a Product without saving it to the database
         /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         IProduct CreateProduct(string name, string sku, decimal price);
 
         /// <summary>
         /// Creates a Product and saves it to the database
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="sku"></param>
-        /// <param name="price"></param>
-        /// <returns></returns>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         IProduct CreateProductWithKey(string name, string sku, decimal price);
 
         /// <summary>
@@ -58,13 +73,6 @@ namespace Merchello.Core.Services
         void Delete(IEnumerable<IProduct> productList, bool raiseEvents = true);
 
         /// <summary>
-        /// Gets an <see cref="IProduct"/> object by its 'UniqueId'
-        /// </summary>
-        /// <param name="key">Guid key of the Product to retrieve</param>
-        /// <returns><see cref="IProduct"/></returns>
-        IProduct GetByKey(Guid key);
-
-        /// <summary>
         /// Gets list of <see cref="IProduct"/> objects given a list of Unique keys
         /// </summary>
         /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
@@ -72,15 +80,48 @@ namespace Merchello.Core.Services
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
+        /// Gets a collection of all <see cref="IProduct"/>.
+        /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="IProduct"/>.
+        /// </returns>
+        IEnumerable<IProduct> GetAll();
+
+        /// <summary>
+        /// The get product variants by product key.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariant}"/>.
+        /// </returns>
+        IEnumerable<IProductVariant> GetProductVariantsByProductKey(Guid productKey);
+
+        /// <summary>
+        /// The get product variant by key.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        IProductVariant GetProductVariantByKey(Guid productVariantKey);
+
+        /// <summary>
         /// Returns the count of all products
         /// </summary>
+        /// <returns>
+        /// The count as an <see cref="int"/>.
+        /// </returns>
         int ProductsCount();
 
         /// <summary>
         /// True/false indicating whether or not a sku is already exists in the database
         /// </summary>
         /// <param name="sku">The sku to be tested</param>
-        /// <returns></returns>
+        /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
     }
 }

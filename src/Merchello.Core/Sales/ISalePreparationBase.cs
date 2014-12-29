@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Builders;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Core.Models;
-
-namespace Merchello.Core.Sales
+﻿namespace Merchello.Core.Sales
 {
+    using System;
+    using System.Collections.Generic;
+    using Builders;
+    using Gateways.Payment;
+    using Gateways.Shipping;
+    using Models;
+
     /// <summary>
     /// Defines a sales preparation base class
     /// </summary>
     public interface ISalePreparationBase
     {
+        
         /// <summary>
         /// Restarts the checkout process, deleting all persisted data
         /// </summary>
@@ -39,7 +40,7 @@ namespace Merchello.Core.Sales
         /// Gets the ship to address
         /// </summary>
         /// <remarks>Returns the shipping <see cref="IAddress"/></remarks>
-        /// <returns></returns>
+        /// <returns>A shipping <see cref="IAddress"/></returns>
         IAddress GetShipToAddress();
 
         /// <summary>
@@ -51,13 +52,34 @@ namespace Merchello.Core.Sales
         /// <summary>
         /// Saves a collection <see cref="IShipmentRateQuote"/>
         /// </summary>
-        /// <param name="approvedShipmentRateQuotes"></param>
+        /// <param name="approvedShipmentRateQuotes">
+        /// A collection of <see cref="IShipmentRateQuote"/> to be saved
+        /// </param>
         /// <remarks>
         /// 
         /// This will be useful when multiple shipments are exposed
         /// 
         /// </remarks>
         void SaveShipmentRateQuote(IEnumerable<IShipmentRateQuote> approvedShipmentRateQuotes);
+
+        /// <summary>
+        /// Clears all <see cref="IShipmentRateQuote"/>s previously saved
+        /// </summary>
+        void ClearShipmentRateQuotes();
+
+        /// <summary>
+        /// Saves a <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <param name="paymentMethod">The <see cref="IPaymentMethod"/> to be saved</param>
+        void SavePaymentMethod(IPaymentMethod paymentMethod);
+
+        /// <summary>
+        /// Gets the previously saved <see cref="IPaymentMethod"/>
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IPaymentMethod"/>.
+        /// </returns>
+        IPaymentMethod GetPaymentMethod();
 
         /// <summary>
         /// Prepares an <see cref="IInvoice"/> representing the bill for the current "sale"
@@ -112,7 +134,7 @@ namespace Merchello.Core.Sales
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
         IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
 
@@ -138,10 +160,32 @@ namespace Merchello.Core.Sales
         /// <returns>A <see cref="IPaymentResult"/></returns>
         IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey);
 
-
         /// <summary>
         /// True/false indicating whether or not the <see cref="ISalePreparationBase"/> is ready to prepare an <see cref="IInvoice"/>
         /// </summary>
+        /// <returns>
+        /// True or false indicating whether or not an invoice can be created
+        /// </returns>
         bool IsReadyToInvoice();
+
+        /// <summary>
+        /// Adds a <see cref="ILineItem"/> to the collection of items
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <remarks>
+        /// Intended for custom line item types
+        /// http://issues.merchello.com/youtrack/issue/M-381
+        /// </remarks>
+        void AddItem(ILineItem lineItem);
+
+        /// <summary>
+        /// Removes a line item for the collection of items
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        void RemoveItem(ILineItem lineItem);
     }
 }

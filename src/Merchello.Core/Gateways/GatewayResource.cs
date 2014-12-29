@@ -3,6 +3,8 @@ using System.Runtime.Serialization;
 
 namespace Merchello.Core.Gateways
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a GatewayMethod 
     /// </summary>

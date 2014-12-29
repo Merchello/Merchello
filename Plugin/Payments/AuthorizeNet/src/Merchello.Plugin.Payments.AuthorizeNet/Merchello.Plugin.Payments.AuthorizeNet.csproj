@@ -37,15 +37,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\UmbracoCms.Core.7.1.2\lib\interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Merchello.Core.1.1.0\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core">
+      <HintPath>packages\Merchello.Core.1.4.0\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>packages\Merchello.Core.1.1.0\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>packages\Merchello.Core.1.4.0\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web">
-      <HintPath>packages\Merchello.Core.1.1.0\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>packages\Merchello.Core.1.4.0\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -66,9 +65,11 @@
       <Private>True</Private>
       <HintPath>packages\UmbracoCms.Core.7.1.2\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -106,7 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorizeNetApplicationEventListener.cs" />
+    <Compile Include="AuthorizeNetEvents.cs" />
     <Compile Include="AuthorizeNetPaymentProcessor.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ExtendedDataExtensions.cs" />

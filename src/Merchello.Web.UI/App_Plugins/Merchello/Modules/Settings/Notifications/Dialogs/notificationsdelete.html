@@ -1,0 +1,28 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Notifications.Dialogs.NotificationsDeleteController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloNotificationsDelete_deleteNotification"/></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <form name="addManualDeleteMethodForm">
+            <h4><localize key="merchelloMethodDelete_deleteConfirmation" /> '{{dialogData.name}}'?</h4>
+        </form>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save"></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

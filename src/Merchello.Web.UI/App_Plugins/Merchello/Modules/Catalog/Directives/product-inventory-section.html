@@ -1,0 +1,32 @@
+﻿<div>   
+	<label class="merchello-control-label">
+		<localize key="merchelloInventory_tracking"/>
+		<small><localize key="merchelloVariant_setInventoryPreferences"/></small>
+	</label>
+
+	<div class="merchello-controls row-fluid">
+
+		<div class="well span10">
+			<p>How do you want to handle out of stock inventory?</p>
+
+			<div class="radio-group">
+				<label class="label-radio"><input name="onsale" type="radio" value="" data-ng-model="productVariant.outOfStockPurchase" checked="checked"> <span>Stop selling</span></label>
+                <label class="label-radio"><input name="onsale" type="radio" value="true" data-ng-model="productVariant.outOfStockPurchase"> <span>Continue selling</span></label>
+                <!--<label class="label-radio"><input name="onsale" type="radio" value="true" data-ng-model="productVariant.outOfStockPurchase"> <span>Continue selling and...</span></label>-->
+			</div>
+
+			<!--<div class="form-group row-fluid" data-ng-class="{ 'open': productVariant.outOfStockPurchase, 'closed': (!productVariant.outOfStockPurchase) }">
+				<div class="span12 col-xs-12">
+					<label for="outOfStockMessage">Post the following message:</label>
+					<textarea id="outOfStockMessage" rows="3" name="outOfStockMessage" class="col-xs-5 span5" ></textarea>
+				</div>
+				<div class="span12 col-xs-12">
+					<label for="stopSellingAmount">Stop selling at negative...</label>
+					<div class="input-append col-xs-12 span12"><input id="stopSellingAmount" name="stopSellingAmount" class="col-xs-2 span2" type="text" /><span class="add-on">items</span></div>
+				</div>
+			</div>-->
+		</div>
+
+	</div>
+</div>
+

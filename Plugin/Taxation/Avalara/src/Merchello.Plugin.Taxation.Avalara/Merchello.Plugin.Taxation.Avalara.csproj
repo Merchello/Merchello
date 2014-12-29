@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D2F80B5B-DF00-4F39-9430-BD37CE64D7FC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Merchello.Plugin.Taxation.Avalara</RootNamespace>
+    <AssemblyName>Merchello.Plugin.Taxation.Avalara</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="interfaces, Version=1.0.5261.28126, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Core">
+      <HintPath>..\packages\Merchello.Core.1.3.24\lib\net40\Merchello.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Examine">
+      <HintPath>..\packages\Merchello.Core.1.3.24\lib\net40\Merchello.Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Web">
+      <HintPath>..\packages\Merchello.Core.1.3.24\lib\net40\Merchello.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Umbraco.Core">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\Umbraco.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="umbraco.MacroEngines">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\umbraco.MacroEngines.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="umbraco.providers">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\umbraco.providers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Umbraco.Web.UI">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\Umbraco.Web.UI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="umbraco.XmlSerializers">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\umbraco.XmlSerializers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UmbracoExamine">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\UmbracoExamine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UrlRewritingNet.UrlRewriter">
+      <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MappingExtensions.cs" />
+    <Compile Include="Models\Address\AddressValidationResult.cs" />
+    <Compile Include="Models\Address\ITaxAddress.cs" />
+    <Compile Include="Models\Address\TaxAddress.cs" />
+    <Compile Include="Models\ApiResponseMessage.cs" />
+    <Compile Include="Models\Address\AvaTaxAddressType.cs" />
+    <Compile Include="Models\AvalaraAvaTaxEnums.cs" />
+    <Compile Include="Models\AvaTaxApiException.cs" />
+    <Compile Include="Models\AvaTaxProviderSettings.cs" />
+    <Compile Include="Models\IApiResponseMessage.cs" />
+    <Compile Include="Models\Address\IValidatableAddress.cs" />
+    <Compile Include="Models\Address\IAddressValidationResult.cs" />
+    <Compile Include="Models\Address\IValidatedAddress.cs" />
+    <Compile Include="Models\RequestMethod.cs" />
+    <Compile Include="Models\SeverityLevel.cs" />
+    <Compile Include="Models\Address\ValidatableAddress.cs" />
+    <Compile Include="Models\Address\ValidatedAddress.cs" />
+    <Compile Include="Models\Tax\StatementLineItem.cs" />
+    <Compile Include="Models\Tax\TaxDetail.cs" />
+    <Compile Include="Models\Tax\TaxOverride.cs" />
+    <Compile Include="Models\Tax\TaxRequest.cs" />
+    <Compile Include="Models\Tax\TaxRequestBase.cs" />
+    <Compile Include="Models\Tax\GeoTaxResult.cs" />
+    <Compile Include="Models\Tax\TaxResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyVisibility.cs" />
+    <Compile Include="Provider\AvaTaxTaxationGatewayMethod.cs" />
+    <Compile Include="Provider\AvaTaxTaxationGatewayProvider.cs" />
+    <Compile Include="Provider\IAvaTaxTaxationGatewayMethod.cs" />
+    <Compile Include="Provider\IAvaTaxTaxationGatewayProvider.cs" />
+    <Compile Include="Services\AvaTaxService.cs" />
+    <Compile Include="Services\IAvaTaxService.cs" />
+    <Compile Include="UmbracoApplicationEvents.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="App_Plugins\Merchello.Avalara\package.manifest" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Merchello.Avalara\Dialogs\avatax.provider.configuration.controller.js" />
+    <Content Include="App_Plugins\Merchello.Avalara\Dialogs\avatax.provider.configuration.html" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

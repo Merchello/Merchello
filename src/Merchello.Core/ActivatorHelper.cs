@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Umbraco.Core;
-
-namespace Merchello.Core
+﻿namespace Merchello.Core
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using Umbraco.Core;
+
     /// <summary>
     /// Helper methods for Activation
     /// </summary>
@@ -13,8 +13,8 @@ namespace Merchello.Core
 		/// <summary>
 		/// Creates an instance of a type using that type's default constructor.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
+		/// <typeparam name="T">The type of instance to create</typeparam>
+		/// <returns>An instantiation of T</returns>
 		public static T CreateInstance<T>() where T : class, new()
 		{
 			return Activator.CreateInstance(typeof(T)) as T;
@@ -39,7 +39,6 @@ namespace Merchello.Core
             return (T)constructor.Invoke(ctrValues);
         }
 
-
         /// <summary>
         /// Creates an instance of a type using a constructor with specific arguments
         /// </summary>
@@ -47,7 +46,6 @@ namespace Merchello.Core
         /// <param name="typeName">The TypeName information of the object to be instantiated</param>
         /// <param name="constructorArgumentValues">Object array containing constructor arguments</param>
         /// <returns>The result of the <see cref="Attempt{T}"/> to instantiate the object</returns>
-        [Obsolete("Use CreateInstance<T>(Type type, object[] constructoryArgumentValues)")]
         public static Attempt<T> CreateInstance<T>(string typeName, object[] constructorArgumentValues) where T : class
         {
             Mandate.ParameterNotNullOrEmpty(typeName, "typName");

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core;
-
-namespace Merchello.Core.Chains.ShipmentCreation
+﻿namespace Merchello.Core.Chains.ShipmentCreation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Models;
+    using Services;
+    using Umbraco.Core;
+
     /// <summary>
     /// Removes order items from inventory
     /// </summary>
@@ -16,22 +17,53 @@ namespace Merchello.Core.Chains.ShipmentCreation
     /// </remarks>
     internal class RemoveShipmentOrderItemsFromInventoryAndPersistShipmentTask : OrderAttemptChainTaskBase
     {
-
+        /// <summary>
+        /// The shipment service.
+        /// </summary>
         private readonly IShipmentService _shipmentService;
+
+        /// <summary>
+        /// The order service.
+        /// </summary>
         private readonly IOrderService _orderService;
+
+        /// <summary>
+        /// The product variant service.
+        /// </summary>
         private readonly IProductVariantService _productVariantService;
 
-        public RemoveShipmentOrderItemsFromInventoryAndPersistShipmentTask(IMerchelloContext merchelloContext, IOrder order) 
-            : base(merchelloContext, order)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoveShipmentOrderItemsFromInventoryAndPersistShipmentTask"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <param name="keysToShip">
+        /// The keys to ship.
+        /// </param>
+        public RemoveShipmentOrderItemsFromInventoryAndPersistShipmentTask(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip) 
+            : base(merchelloContext, order, keysToShip)
         {
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _shipmentService = MerchelloContext.Services.ShipmentService;
             _orderService = MerchelloContext.Services.OrderService;
         }
 
+        /// <summary>
+        /// The perform task.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         public override Attempt<IShipment> PerformTask(IShipment value)
         {
-            var trackableItems = Order.InventoryTrackedItems().ToArray();
+            var trackableItems = Order.InventoryTrackedItems().Where(x => KeysToShip.Contains(x.Key)).ToArray();
 
             var variants = _productVariantService.GetByKeys(trackableItems.Select(x => x.ExtendedData.GetProductVariantKey())).ToArray();
 
@@ -54,14 +86,7 @@ namespace Merchello.Core.Chains.ShipmentCreation
 
             // persist the shipment and update the line items
             if (value.ShipMethodKey == Guid.Empty) value.ShipMethodKey = null;
-            _shipmentService.Save(value);
-
-            foreach (var shipItem in value.Items)
-            {
-                ((OrderLineItem) Order.Items.First(x => x.Key == shipItem.Key)).ShipmentKey = value.Key;
-            }
-
-            _orderService.Save(Order);
+            _shipmentService.Save(value);            
 
             return Attempt<IShipment>.Succeed(value);
         }

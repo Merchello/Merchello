@@ -44,6 +44,7 @@ namespace Merchello.Core.Persistence.Factories
                 ExamineId = dto.ProductVariantIndexDto.Id,   
                 CatalogInventoryCollection = _catalogInventories,
                 ProductAttributes = _productAttributeCollection,
+                VersionKey = dto.VersionKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -86,6 +87,7 @@ namespace Merchello.Core.Persistence.Factories
                       UpdateDate = entity.UpdateDate,
                       CreateDate = entity.CreateDate
                     },
+                VersionKey = entity.VersionKey,
                 UpdateDate = entity.UpdateDate,
                 CreateDate = entity.CreateDate
             };

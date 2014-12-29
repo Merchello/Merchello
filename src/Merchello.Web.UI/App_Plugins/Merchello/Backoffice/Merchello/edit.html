@@ -1,0 +1,241 @@
+﻿<<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<form novalidate name="orderForm"
+      data-ng-controller="Merchello.Editors.Order.CreateController"
+      data-ng-show="loaded"
+      data-ng-submit="save()">
+    <umb-panel val-show-validation>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline"><localize key="merchelloOrder_createNewOrder" /></h1>
+                </div>
+            </div>
+
+
+            <div class="span8" data-ng-show="!createCustomer">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+
+                    <div class="btn-group">
+
+                        <button type="submit" class="btn btn-success"><localize key="buttons_save" /></button>
+
+                    </div>
+                </div>
+            </div>
+
+        </umb-header>
+
+        <merchello-panel>
+
+            <!-- Main content area -->
+            <div class="merchello-pane row-fluid" data-ng-show="!createCustomer">
+
+                <div class="control-group umb-control-group">
+
+                    <div class="merchello-section-label">
+                        <localize key="merchelloOrderView_customerInformation" />
+                        <small><localize key="merchelloOrderView_billingAndShippingAddressHelper" /></small>
+                    </div>
+
+                    <div class="merchello-controls">
+                        <div class="row-fluid">
+                            <div class="btn-toolbar pull-right umb-btn-toolbar">
+                                <a class="btn btn-primary" data-ng-click="editCustomerInformation()"><!--<localize key="merchelloOrderView_editCustomerInformation" />-->Select Existing Customer</a>
+                                <a class="btn btn-primary" data-ng-click="toggleCreateCustomer()"><!--<localize key="merchelloOrderView_editCustomerInformation" />-->Create New Customer</a>
+                            </div>
+                        </div>
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="vcard span5" data-ng-show="customerSelected">
+                                <h3><localize key="merchelloOrderView_shippingAddress" /></h3>
+                                <select name="shippingAddress" data-ng-show="existingCustomer" data-ng-change="shippingAddressSelected()" data-ng-model="shippingAddress" data-ng-options="a.label for a in customer.addresses"></select>
+                                <div data-ng-show="isShippingAddressSelected">
+
+                                    <h4 class="fn">{{shippingAddress.name}}</h4>
+                                    <span class="org">{{shippingAddress.organization}}</span>
+                                    <span class="adr">
+                                        <span class="street-address">{{shippingAddress.address1}}</span>
+                                        <span class="extended-address">{{shippingAddress.address2}}</span>
+                                        <span class="locality">{{shippingAddress.locality}}</span>, <span class="region">{{shippingAddress.region}}</span>, <span class="postal-code">{{shippingAddress.postalCode}}</span>
+                                        <span class="country-name">{{shippingAddress.countryCode}}</span>
+                                    </span>
+                                    <span class="tel">{{shippingAddress.phone}}</span>
+                                </div>
+                            </div>
+
+                            <div class="vcard span5 pull-right" data-ng-show="customerSelected">
+                                <h3><localize key="merchelloOrderView_billingAddress" /></h3>
+                                <select name="billingAddress" data-ng-show="existingCustomer" data-ng-change="billingAddressSelected()" data-ng-model="billingAddress" data-ng-options="a.label for a in customer.addresses"></select>
+                                <div data-ng-show="isBillingAddressSelected">
+
+                                    <h4 class="fn">{{billingAddress.name}}</h4>
+                                    <span class="org">{{billingAddress.organization}}</span>
+                                    <span class="adr">
+                                        <span class="street-address">{{billingAddress.address1}}</span>
+                                        <span class="extended-address">{{billingAddress.address2}}</span>
+                                        <span class="locality">{{billingAddress.locality}}</span>, <span class="region">{{billingAddress.region}}</span>, <span class="postal-code">{{billingAddress.postalCode}}</span>
+                                        <span class="country-name">{{billingAddress.countryCode}}</span>
+                                    </span>
+                                    <span class="tel">{{billingAddress.phone}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group umb-control-group" data-ng-show="isShippingAddressSelected && isBillingAddressSelected">
+
+                    <div class="merchello-section-label">
+                        <localize key="merchelloOrderView_orderInformation" />
+                        <small><localize key="merchelloOrderView_orderInformationHelper" /></small>
+                    </div>
+
+                    <div class="merchello-controls">
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="row-fluid" data-ng-show="!orderSummary.orderPrepComplete">
+                                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                                    <a class="btn btn-primary" data-ng-click="selectProduct()"><!--<localize key="merchelloOrderView_addNewProduct" />--> Add New Product</a>
+                                </div>
+                            </div>
+
+                            <table class="table table-striped merchello-striped-table order-items">
+                                <tbody>
+                                    <tr data-ng-repeat="lineitem in invoice.items">
+                                        <td colspan="2">
+                                            <h4>{{lineitem.name}}</h4>
+                                            <span><localize key="merchelloGeneral_sku" />: {{lineitem.sku}}</span>
+                                        </td>
+                                        <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency : currencySymbol}}</strong></td>
+                                        <td class="text-right">{{lineitem.quantity * lineitem.price | currency : currencySymbol}}</td>
+                                    </tr>
+                                    <tr data-ng-show="orderSummary.orderPrepComplete">
+                                        <td colspan="3" class="text-right"><localize key="merchelloOrder_lineItems" /> <localize key="merchelloGeneral_total" /></td>
+                                        <td class="text-right">{{orderSummary.itemTotal | currency : currencySymbol}}</td>
+                                    </tr>
+                                    <tr data-ng-show="orderSummary.orderPrepComplete">
+                                        <td colspan="3" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
+                                        <td class="text-right">{{orderSummary.taxTotal | currency : currencySymbol}}</td>
+                                    </tr>
+                                    <tr data-ng-show="orderSummary.orderPrepComplete">
+                                        <td colspan="3" class="text-right"><localize key="merchelloShipping_shipping" /></td>
+                                        <td class="text-right">{{orderSummary.shippingTotal | currency : currencySymbol}}</td>
+                                    </tr>
+                                    <tr data-ng-show="orderSummary.orderPrepComplete">
+                                        <td colspan="3" class="text-right"><localize key="merchelloOrder_order" /> <localize key="merchelloGeneral_total" /></td>
+                                        <td class="text-right">{{orderSummary.invoiceTotal | currency : currencySymbol}}</td>
+                                    </tr>
+                                    <tr data-ng-repeat="payment in invoice.payments" data-ng-hide="invoice.payments.length == 0">
+                                        <td><i class="icon-credit-card" data-ng-class="{ 'icon-credit-card': payment.paymentType.alias == 'CreditCard', 'icon-credit-card': payment.paymentType.alias == 'Cash' }"></i></td>
+                                        <td>
+                                            <span data-ng-show="payment.paymentType.alias == 'CreditCard'" class="card-no">xxxx-xxxx-xxxx-xxxx</span>
+                                            <span class="payment-method"><localize key="merchelloOrderView_paymentProcessedBy" /> {{payment.paymentMethodName}}</span>
+                                        </td>
+                                        <td class="text-right"><localize key="merchelloOrderView_authorized" />:</td>
+                                        <td class="text-right">{{payment.amount | currency : currencySymbol}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row-fluid" data-ng-show="invoice.items.length > 0">
+                                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                                    <a class="btn btn-primary" data-ng-click="processesProductsToBackofficeOrder(shippingAddress, billingAddress)"><!--<localize key="merchelloOrderView_addNewProduct" />--> Finalize Customer Orders</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="control-group umb-control-group" data-ng-show="shipMethods != null">
+                    <div class="merchello-controls">
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="row-fluid">
+                                <div class="merchello-section-label">
+                                    <localize key="merchelloShipping_shipping" />
+                                    <select name="shippingMethods" data-ng-model="selectedShippingMethod" data-ng-change="shipMethodChanged(selectedShippingMethod)">
+                                        <option data-ng-repeat="shipMethod in shipMethods" value="{{shipMethod.shipMethod.key}}">{{shipMethod.shipMethod.name}} {{shipMethod.rate | currency:symbol}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group umb-control-group" data-ng-show="paymentMethods != null">
+                    <div class="merchello-controls">
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="row-fluid">
+                                <div class="merchello-section-label">
+                                    <localize key="merchelloPayment_payment" />
+                                    <select name="paymentMethods" data-ng-model="selectedPaymentMethod" data-ng-change="paymentMethodChanged(selectedPaymentMethod)" data-ng-options="method.paymentMethod.name for method in paymentMethods"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group umb-control-group pull-right" data-ng-show="paymentMethods != null && shipMethods != null">
+                    <div class="merchello-controls">
+                        <div class="row-fluid span10 col-xs-10">
+                            <div class="row-fluid">
+                                <a class="btn btn-primary" data-ng-click="finalizeBackofficeOrder()"><!--<localize key="merchelloOrderView_addNewProduct" />--> Process Orders</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="control-group umb-control-group" data-ng-show="invoice.payments.length != 0 && invoice.payments[0].amount > 0" data-ng-show="invoice.billToAddress1 != undefined">
+
+                <div class="merchello-section-label">
+                    <localize key="merchelloOrderView_paymentHistory" />
+                    <small><localize key="merchelloOrderView_paymentHistoryHelper" /></small>
+                </div>
+
+                <div class="merchello-controls">
+                    <div class="row-fluid span10 col-xs-10" data-ng-repeat="(paymentMethodName, appliedPaymentList) in invoice.groupedAppliedPayments">
+                        <div class="row-fluid">
+                            <div class="merchello-section-label">
+                                <localize key="merchelloPayment_payment" /> - {{paymentMethodName}}
+                            </div>
+                        </div>
+
+                        <table class="table table-striped merchello-striped-table invoice-payments">
+                            <tbody>
+                            <thead>
+                                <tr>
+                                    <th><localize key="general_date" /></th>
+                                    <th><localize key="merchelloOrder_paymentStatus" /></th>
+                                    <th><localize key="general_type" /></th>
+                                    <th><localize key="merchelloGeneral_amount" /></th>
+                                </tr>
+                            </thead>
+                            <tr data-ng-repeat="appliedPayment in appliedPaymentList | greaterthan: 'amount': 0">
+                                <td class="text-left">{{appliedPayment.createDate | date : 'M/d/yyyy H:m a'}}</td>
+                                <td class="text-left">{{appliedPayment.payment.getStatus()}}</td>
+                                <td class="text-left">{{appliedPayment.appliedPaymentType.alias}}</td>
+                                <td class="text-left">{{appliedPayment.amount | currency : currencySymbol}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <merchello-shipping-history data-shipments="invoice.shipments"></merchello-shipping-history>
+
+            <merchello-debug-section data-props-to-debug="invoice"></merchello-debug-section>
+
+            </div>
+            <div data-ng-show="createCustomer">
+                <order-create-customer customer="customer"
+                                       shipping-address="shippingAddress"
+                                       billing-address="billingAddress"
+                                       create-customer="createCustomerDirective(customer, shipping, billing)"
+                                       cancel-create-customer="toggleCreateCustomer()"
+                                       edit-customer-information="createCustomerInformationFromDialog()"
+                                       edit-customer-address-information="createCustomerAddressFromDialog(type)">
+                </order-create-customer>
+            </div>
+        </merchello-panel>
+
+    </umb-panel>
+</form>

@@ -5,6 +5,7 @@ using Merchello.Core.Gateways.Shipping;
 using Merchello.Core.Gateways.Shipping.FixedRate;
 using Merchello.Core.Models;
 using Merchello.Core.Services;
+using Merchello.Tests.Base.TestHelpers;
 using Merchello.Tests.IntegrationTests.TestHelpers;
 using Merchello.Web;
 using NUnit.Framework;
@@ -45,7 +46,8 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
             #region WarehouseCatalog
 
-            var defaultCatalog = DbPreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
+            var defaultWarehouse = DbPreTestDataWorker.WarehouseService.GetDefaultWarehouse();
+            var defaultCatalog = defaultWarehouse.WarehouseCatalogs.FirstOrDefault();
             if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");
 
             #endregion // WarehouseCatalog
@@ -68,7 +70,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             #region Add a GatewayProvider (RateTableShippingGatewayProvider)
 
             var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
-            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.CreateInstance(key);
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.GetProviderByKey(key);
 
             #region Add and configure 3 rate table shipmethods
 
@@ -343,7 +345,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             Assert.IsTrue(CurrentCustomer.Basket().IsEmpty);
 
             #endregion // completed checkout preparation
-
+ 
             // capture the payment
             invoice.CapturePayment(paymentResult.Payment.Result, paymentMethods.FirstOrDefault(), invoice.Total);
 
@@ -361,6 +363,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
 
         }
+
 
         private void WriteBasketInfoToConsole()
         {
@@ -389,7 +392,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
         private void WriteShipRateQuote(IShipmentRateQuote srq)
         {
             Console.WriteLine("---------- Shipment Rate Quote ---------------------");
-            Console.WriteLine("Name: {0}", srq.ShimpentLineItemName());
+            Console.WriteLine("Name: {0}", srq.ShipmentLineItemName());
             Console.WriteLine("Rate Quote: {0}", srq.Rate);            
         }
     }

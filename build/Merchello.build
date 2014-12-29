@@ -77,8 +77,15 @@
 			<Exec WorkingDirectory="$(PackageDir)" Command="..\..\..\src\.nuget\NuGet.exe pack ..\..\..\build\nuspec\Merchello.Core.nuspec" />
 
 		<Message Text="Finished NuGet Pack Merchello.Core.$(AssemblyInformationVersion).nupkg" Importance="high" />
-		
-	</Target>
+
+
+    <Message Text="Beginning NuGet Pack Merchello.TestBase.$(AssemblyInformationVersion).nupkg" Importance="high" />
+
+    <Exec WorkingDirectory="$(PackageDir)" Command="..\..\..\src\.nuget\NuGet.exe pack ..\..\..\build\nuspec\Merchello.TestsBase.nuspec" />
+
+    <Message Text="Finished NuGet Pack Merchello.TestBase.$(AssemblyInformationVersion).nupkg" Importance="high" />
+    
+  </Target>
 	
 	
 	
@@ -152,7 +159,6 @@
 
 		<Message Text="Compiling web project to build\$(BuildDir)" Importance="high" />
 
-		<!-- TODO: RSS had to add the Platform Any CPU -->
 		<MSBuild Projects="..\src\Merchello.sln" Properties="WarningLevel=0;Configuration=$(BuildConfiguration);Platform=Any CPU;PipelineDependsOnBuild=False;OutDir=$(SolutionBinFolderAbsolutePath);" Targets="Clean;Build;" BuildInParallel="False" ToolsVersion="4.0" UnloadProjectsOnCompletion="False">
 		</MSBuild>
 

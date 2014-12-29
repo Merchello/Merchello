@@ -7,6 +7,11 @@
     public interface IServiceContext
     {
         /// <summary>
+        /// Gets the <see cref="IAuditLogService"/>
+        /// </summary>
+        IAuditLogService AuditLogService { get; }
+
+        /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
         ICustomerService CustomerService { get; }
@@ -65,6 +70,7 @@
         /// Gets the <see cref="IWarehouseService"/>
         /// </summary>
         IWarehouseService WarehouseService { get; }
+
     }
     
 }

@@ -56,7 +56,7 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="order">The <see cref="IOrder"/></param>
         /// <param name="items">A collection of <see cref="IOrderLineItem"/></param>
-        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        /// <returns>The collection of <see cref="IOrderLineItem"/></returns>
         public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order, IEnumerable<IOrderLineItem> items)
         {
             return order.UnfulfilledItems(MerchelloContext.Current, items);
@@ -68,7 +68,7 @@ namespace Merchello.Core.Models
         /// <param name="order">The <see cref="IOrder"/></param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         /// <param name="items">A collection of <see cref="IOrderLineItem"/></param>
-        /// <returns>A collection of <see cref="IOrderLineItem"/></returns>
+        /// <returns>The collection of <see cref="IOrderLineItem"/></returns>
         public static IEnumerable<IOrderLineItem> UnfulfilledItems(this IOrder order, IMerchelloContext merchelloContext, IEnumerable<IOrderLineItem> items)
         {
 
@@ -85,10 +85,12 @@ namespace Merchello.Core.Models
             {
                 var variant = variants.FirstOrDefault(x => x.Key == item.ExtendedData.GetProductVariantKey());
                 if (variant == null) continue;
-                // check inventory
-                var inventory = variant.CatalogInventories.FirstOrDefault(x => x.CatalogKey == item.ExtendedData.GetWarehouseCatalogKey());
-                if (inventory != null)
-                    item.BackOrder = inventory.Count < item.Quantity;
+
+                // TODO refactor back ordering.
+                //// check inventory
+                //var inventory = variant.CatalogInventories.FirstOrDefault(x => x.CatalogKey == item.ExtendedData.GetWarehouseCatalogKey());
+                //if (inventory != null)
+                //    item.BackOrder = inventory.Count < item.Quantity;
             }
 
             return shippableItems;
@@ -136,7 +138,7 @@ namespace Merchello.Core.Models
                     writer.WriteAttributeString("versionKey", order.VersionKey.ToString());
                     writer.WriteAttributeString("exported", order.Exported.ToString());
                     writer.WriteAttributeString("orderStatus", GetOrderStatusJson(order.OrderStatus));
-                    writer.WriteAttributeString("orderItems", GetGenericItemsCollection(order.Items));
+                    writer.WriteAttributeString("orderItems", GetGenericItemsCollection(order.Items.Select(x => (OrderLineItem)x)));
                     writer.WriteAttributeString("createDate", order.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", order.UpdateDate.ToString("s"));
                     writer.WriteAttributeString("allDocs", "1");
@@ -150,22 +152,24 @@ namespace Merchello.Core.Models
             
         }
 
-        private static string GetGenericItemsCollection(IEnumerable<ILineItem> items)
+        private static string GetGenericItemsCollection(IEnumerable<IOrderLineItem> items)
         {
             return JsonConvert.SerializeObject(
                 items.Select(x =>
                     new
                     {
                         key = x.Key,
+                        containerKey = x.ContainerKey,
                         name = x.Name,
-                        shipmentKey = ((OrderLineItem)x).ShipmentKey,
+                        shipmentKey = x.ShipmentKey,
                         lineItemTfKey = x.LineItemTfKey,
                         lineItemType = x.LineItemType.ToString(),
                         sku = x.Sku,
                         price = x.Price,
                         quantity = x.Quantity,
                         exported = x.Exported,
-                        backOrder = ((OrderLineItem)x).BackOrder
+                        backOrder = x.BackOrder,
+                        extendedData = x.ExtendedData.AsEnumerable()
                     }
                 ), Newtonsoft.Json.Formatting.None);
         }

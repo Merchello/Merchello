@@ -1,28 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.Factories;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    /// <summary>
+    /// The product variant repository.
+    /// </summary>
     internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
         public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
-        { }
+        {            
+        }
 
-        #region Overrides MerchelloPetaPocoRepositoryBase
 
         protected override IProductVariant PerformGet(Guid key)
         {
@@ -113,6 +125,8 @@ namespace Merchello.Core.Persistence.Repositories
 
             ((Entity)entity).AddingEntity();
 
+            ((ProductVariant)entity).VersionKey = Guid.NewGuid();
+
             var factory = new ProductVariantFactory(((ProductVariant)entity).ProductAttributes, ((ProductVariant)entity).CatalogInventoryCollection);
             var dto = factory.BuildDto(entity);
 
@@ -151,6 +165,7 @@ namespace Merchello.Core.Persistence.Repositories
             Mandate.ParameterCondition(!SkuExists(entity.Sku, entity.Key), "Entity cannot be updated.  The sku already exists.");
 
             ((Entity)entity).UpdatingEntity();
+            ((ProductVariant)entity).VersionKey = Guid.NewGuid();
 
             var factory = new ProductVariantFactory(((ProductVariant)entity).ProductAttributes, ((ProductVariant)entity).CatalogInventoryCollection);
             var dto = factory.BuildDto(entity);
@@ -175,8 +190,6 @@ namespace Merchello.Core.Persistence.Repositories
 
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
         }
-
-        #endregion
 
         private static bool MandateProductVariantRules(IProductVariant entity)
         {
@@ -209,7 +222,7 @@ namespace Merchello.Core.Persistence.Repositories
             return collection;
         }
 
-        #region CatalogInventory
+
 
         // this merely asserts that an assoicate between the warehouse and the variant has been made
         internal void SaveCatalogInventory(IProductVariant productVariant)
@@ -223,7 +236,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             foreach (var inv in productVariant.CatalogInventories.Where((inv => !existing.Contains(inv.CatalogKey))))
             {
-                AddCatalogInventory(inv);
+                AddCatalogInventory(productVariant, inv);
             }
 
             foreach (var inv in productVariant.CatalogInventories.Where((x => existing.Contains(x.CatalogKey))))
@@ -232,7 +245,7 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
-        private void AddCatalogInventory(ICatalogInventory inv)
+        private void AddCatalogInventory(IProductVariant productVariant, ICatalogInventory inv)
         {
             inv.CreateDate = DateTime.Now;
             inv.UpdateDate = DateTime.Now;
@@ -240,9 +253,10 @@ namespace Merchello.Core.Persistence.Repositories
             var dto = new CatalogInventoryDto()
             {
                 CatalogKey = inv.CatalogKey,
-                ProductVariantKey = inv.ProductVariantKey,
+                ProductVariantKey = productVariant.Key,
                 Count = inv.Count,
                 LowCount = inv.LowCount,
+                Location = inv.Location,
                 CreateDate = inv.CreateDate,
                 UpdateDate = inv.UpdateDate
             };
@@ -253,24 +267,15 @@ namespace Merchello.Core.Persistence.Repositories
         private void UpdateCatalogInventory(ICatalogInventory inv)
         {
             inv.UpdateDate = DateTime.Now;
-            var dto = new CatalogInventoryDto()
-            {
-                CatalogKey = inv.CatalogKey,
-                ProductVariantKey = inv.ProductVariantKey,
-                Count = inv.Count,
-                LowCount = inv.LowCount,
-                CreateDate = inv.CreateDate,
-                UpdateDate = inv.UpdateDate
-            };
 
-            //Database.Update(dto);
 
             Database.Execute(
-                "UPDATE merchCatalogInventory SET Count = @invCount, LowCount = @invLowCount, UpdateDate = @invUpdateDate WHERE catalogKey = @catalogKey AND productVariantKey = @productVariantKey",
+                "UPDATE merchCatalogInventory SET Count = @invCount, LowCount = @invLowCount, Location = @invLocation, UpdateDate = @invUpdateDate WHERE catalogKey = @catalogKey AND productVariantKey = @productVariantKey",
                 new
                 {
                     invCount = inv.Count,
                     invLowCount = inv.LowCount,
+                    invLocation = inv.Location,
                     invUpdateDate = inv.UpdateDate,
                     catalogKey = inv.CatalogKey,
                     productVariantKey = inv.ProductVariantKey                    
@@ -334,8 +339,6 @@ namespace Merchello.Core.Persistence.Repositories
             return variants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
         }
 
-        #endregion
-
 
         /// <summary>
         /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
@@ -392,6 +395,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
+
 
     }
 }

@@ -1,20 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-
-namespace Merchello.Core.Configuration.Outline
+﻿namespace Merchello.Core.Configuration.Outline
 {
+    using System.Collections.Generic;
+    using System.Configuration;
+
+    /// <summary>
+    /// The tasks configuration collection.
+    /// </summary>
     public class TasksConfigurationCollection : ConfigurationElementCollection
     {
-        protected override ConfigurationElement CreateNewElement()
+        /// <summary>
+        /// Default. Returns the ProvinceElement with the index of index from the collection
+        /// </summary>
+        public TaskElement this[object index]
         {
-            return new TaskElement();
+            get { return (TaskElement)this.BaseGet(index); }
         }
 
-        protected override object GetElementKey(ConfigurationElement element)
-        {
-            return ((TaskElement) element).Type;
-        }
-
+        /// <summary>
+        /// The get all types.
+        /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="TaskElement"/>.
+        /// </returns>
         public IEnumerable<TaskElement> GetAllTypes()
         {
             foreach (ConfigurationElement type in this)
@@ -24,11 +31,28 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Default. Returns the ProvinceElement with the index of index from the collection
+        /// The create new element.
         /// </summary>
-        public TaskElement this[object index]
+        /// <returns>
+        /// The <see cref="ConfigurationElement"/>.
+        /// </returns>
+        protected override ConfigurationElement CreateNewElement()
         {
-            get { return (TaskElement)this.BaseGet(index); }
+            return new TaskElement();
+        }
+
+        /// <summary>
+        /// The get element key.
+        /// </summary>
+        /// <param name="element">
+        /// The element.
+        /// </param>
+        /// <returns>
+        /// The <see cref="object"/>.
+        /// </returns>
+        protected override object GetElementKey(ConfigurationElement element)
+        {
+            return ((TaskElement) element).Type;
         }
     }
 }

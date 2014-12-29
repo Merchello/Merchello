@@ -1,40 +1,77 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using Merchello.Core.Configuration;
-using Merchello.Core.Configuration.Outline;
-using Merchello.Core.Models;
-using Merchello.Core.Models.TypeFields;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading;
+    using Configuration;
+    using Configuration.Outline;
+    using Models;
+    using Models.TypeFields;
+    using Persistence;
+    using Persistence.UnitOfWork;
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents the Store Settings Service
     /// </summary>
     public class StoreSettingService : IStoreSettingService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-        private readonly static ConcurrentDictionary<string, IEnumerable<IProvince>> RegionProvinceCache = new ConcurrentDictionary<string, IEnumerable<IProvince>>();
+        #region Fields
+
+        /// <summary>
+        /// The region province cache.
+        /// </summary>
+        private static readonly ConcurrentDictionary<string, IEnumerable<IProvince>> RegionProvinceCache = new ConcurrentDictionary<string, IEnumerable<IProvince>>();
+
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
+        /// <summary>
+        /// The uow provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
+
+        /// <summary>
+        /// The repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+        
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreSettingService"/> class.
+        /// </summary>
         public StoreSettingService()
             : this(new RepositoryFactory())
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreSettingService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
         public StoreSettingService(RepositoryFactory repositoryFactory)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
+        {            
+        }
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreSettingService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
         public StoreSettingService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -47,15 +84,81 @@ namespace Merchello.Core.Services
 
             foreach (RegionElement region in MerchelloConfiguration.Current.Section.RegionalProvinces)
             {
-                CacheRegion(region.Code, (from ProvinceElement pe in region.ProvincesConfiguration
-                                          select new Province(pe.Code, pe.Name)).Cast<IProvince>().ToArray());
+                CacheRegion(
+                    region.Code, 
+                    (from ProvinceElement pe in region.ProvincesConfiguration select new Province(pe.Code, pe.Name)).Cast<IProvince>().ToArray());
             } 
         }
 
+        #region Events
 
-        private static void CacheRegion(string code, IProvince[] provinces)
+        /// <summary>
+        /// Occurs before Create
+        /// </summary>
+        public static event TypedEventHandler<IStoreSettingService, Events.NewEventArgs<IStoreSetting>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IStoreSettingService, Events.NewEventArgs<IStoreSetting>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IStoreSettingService, SaveEventArgs<IStoreSetting>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IStoreSettingService, SaveEventArgs<IStoreSetting>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IStoreSettingService, DeleteEventArgs<IStoreSetting>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IStoreSettingService, DeleteEventArgs<IStoreSetting>> Deleted;
+
+        #endregion
+
+        /// <summary>
+        /// True/false indicating whether or not the region has provinces configured in the Merchello.config file
+        /// </summary>
+        /// <param name="countryCode">
+        /// The two letter ISO Region code (country code)
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not the country has provinces.
+        /// </returns>
+        public static bool CountryHasProvinces(string countryCode)
         {
-            RegionProvinceCache.AddOrUpdate(code, provinces, (x, y) => provinces);
+            return RegionProvinceCache.ContainsKey(countryCode);
+        }
+
+        /// <summary>
+        /// Returns the province label from the configuration file
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Region code</param>
+        public static string GetProvinceLabelForCountry(string countryCode)
+        {
+            return CountryHasProvinces(countryCode)
+                ? MerchelloConfiguration.Current.Section.RegionalProvinces[countryCode].ProvinceLabel
+                : string.Empty;
+        }
+
+        /// <summary>
+        /// Returns a collection of <see cref="IProvince"/> given a region code
+        /// </summary>
+        /// <param name="countryCode">The two letter ISO Region code (country code)</param>
+        /// <returns>A collection of <see cref="IProvince"/></returns>
+        public static IEnumerable<IProvince> GetProvincesByCountryCode(string countryCode)
+        {
+            return CountryHasProvinces(countryCode) ?
+                RegionProvinceCache[countryCode] :
+                new List<IProvince>();
         }
 
         /// <summary>
@@ -133,8 +236,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Deletes a <see cref="IStoreSetting"/>
         /// </summary>
-        /// <param name="storeSetting"></param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <param name="storeSetting">
+        /// The store Setting.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         public void Delete(IStoreSetting storeSetting, bool raiseEvents = true)
         {
             if (raiseEvents)
@@ -161,8 +268,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a <see cref="IStoreSetting"/> by it's unique 'Key' (Guid)
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IStoreSetting"/>.
+        /// </returns>
         public IStoreSetting GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateStoreSettingRepository(_uowProvider.GetUnitOfWork()))
@@ -174,7 +285,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a collection of all <see cref="IStoreSetting"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The collection of all <see cref="IStoreSetting"/>.
+        /// </returns>
         public IEnumerable<IStoreSetting> GetAll()
         {
             using (var repository = _repositoryFactory.CreateStoreSettingRepository(_uowProvider.GetUnitOfWork()))
@@ -186,7 +299,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets the next usable InvoiceNumber
         /// </summary>
-        /// <returns></returns>
+        /// <param name="invoicesCount">
+        /// The invoices Count.
+        /// </param>
+        /// <returns>
+        /// The next invoice number.
+        /// </returns>
         public virtual int GetNextInvoiceNumber(int invoicesCount = 1)
         {
             var invoiceNumber = 0;
@@ -195,7 +313,11 @@ namespace Merchello.Core.Services
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
                 {
-                    invoiceNumber = repository.GetNextInvoiceNumber(Constants.StoreSettingKeys.NextInvoiceNumberKey, invoicesCount);
+                    using (var validationRepository = _repositoryFactory.CreateInvoiceRepository(uow))
+                    { 
+                        invoiceNumber = repository.GetNextInvoiceNumber(Core.Constants.StoreSettingKeys.NextInvoiceNumberKey, validationRepository.GetMaxDocumentNumber, invoicesCount);
+                    }
+
                     uow.Commit();
                 }
             }
@@ -206,8 +328,12 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets the next usable OrderNumber
         /// </summary>
-        /// <param name="ordersCount"></param>
-        /// <returns></returns>
+        /// <param name="ordersCount">
+        /// The orders Count.
+        /// </param>
+        /// <returns>
+        /// The next order number.
+        /// </returns>
         public virtual int GetNextOrderNumber(int ordersCount = 1)
         {
             var orderNumber = 0;
@@ -216,7 +342,11 @@ namespace Merchello.Core.Services
                 var uow = _uowProvider.GetUnitOfWork();
                 using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
                 {
-                    orderNumber = repository.GetNextOrderNumber(Constants.StoreSettingKeys.NextOrderNumberKey, ordersCount);
+                    using (var validationRepository = _repositoryFactory.CreateOrderRepository(uow))
+                    {
+                        orderNumber = repository.GetNextOrderNumber(Core.Constants.StoreSettingKeys.NextOrderNumberKey, validationRepository.GetMaxDocumentNumber, ordersCount);
+                    }
+
                     uow.Commit();
                 }
             }
@@ -225,9 +355,40 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
+        /// Gets the next usable ShipmentNumber.
+        /// </summary>
+        /// <param name="shipmentsCount">
+        /// The shipments count.
+        /// </param>
+        /// <returns>
+        /// The next shipment number.
+        /// </returns>
+        public int GetNextShipmentNumber(int shipmentsCount = 1)
+        {
+            var shipmentNumber = 0;
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                {
+                    using (var validationRepository = _repositoryFactory.CreateShipmentRepository(uow))
+                    {
+                        shipmentNumber = repository.GetNextShipmentNumber(Core.Constants.StoreSettingKeys.NextShipmentNumberKey, validationRepository.GetMaxDocumentNumber, shipmentsCount);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            return shipmentNumber;
+        }
+
+        /// <summary>
         /// Gets the complete collection of registered typefields
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// Gets the collection of all type fields.
+        /// </returns>
         public IEnumerable<ITypeField> GetTypeFields()
         {
             using (var repository = _repositoryFactory.CreateStoreSettingRepository(_uowProvider.GetUnitOfWork()))
@@ -252,6 +413,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a collection of all  <see cref="ICountry"/>
         /// </summary>
+        /// <returns>
+        /// The collection of all countries.
+        /// </returns>
         public IEnumerable<ICountry> GetAllCountries()
         {
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
@@ -262,6 +426,9 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Gets a collection of all <see cref="ICurrency"/>
         /// </summary>
+        /// <returns>
+        /// The collection of all currencies.
+        /// </returns>
         public IEnumerable<ICurrency> GetAllCurrencies()
         {
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
@@ -292,72 +459,17 @@ namespace Merchello.Core.Services
         }
 
         /// <summary>
-        /// True/false indicating whether or not the region has provinces configured in the Merchello.config file
+        /// The cache region.
         /// </summary>
-        /// <param name="countryCode">The two letter ISO Region code (country code)</param>
-        /// <returns></returns>
-        private bool CountryHasProvinces(string countryCode)
+        /// <param name="code">
+        /// The code.
+        /// </param>
+        /// <param name="provinces">
+        /// The provinces.
+        /// </param>
+        private static void CacheRegion(string code, IProvince[] provinces)
         {
-            return RegionProvinceCache.ContainsKey(countryCode);
+            RegionProvinceCache.AddOrUpdate(code, provinces, (x, y) => provinces);
         }
-
-        /// <summary>
-        /// Returns the province label from the configuration file
-        /// </summary>
-        /// <param name="countryCode">The two letter ISO Region code</param>
-        /// <returns></returns>
-        private string GetProvinceLabelForCountry(string countryCode)
-        {
-            return CountryHasProvinces(countryCode)
-                ? MerchelloConfiguration.Current.Section.RegionalProvinces[countryCode].ProvinceLabel
-                : string.Empty;
-        }
-
-        /// <summary>
-        /// Returns a collection of <see cref="IProvince"/> given a region code
-        /// </summary>
-        /// <param name="countryCode">The two letter ISO Region code (country code)</param>
-        /// <returns>A collection of <see cref="IProvince"/></returns>
-        private IEnumerable<IProvince> GetProvincesByCountryCode(string countryCode)
-        {
-            return CountryHasProvinces(countryCode) ?
-                RegionProvinceCache[countryCode] :
-                new List<IProvince>();
-        }
-
-
-        #region Events
-
-        /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<IStoreSettingService, Events.NewEventArgs<IStoreSetting>> Creating;
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IStoreSettingService, Events.NewEventArgs<IStoreSetting>> Created;
-
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IStoreSettingService, SaveEventArgs<IStoreSetting>> Saving;
-
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IStoreSettingService, SaveEventArgs<IStoreSetting>> Saved;
-
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IStoreSettingService, DeleteEventArgs<IStoreSetting>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IStoreSettingService, DeleteEventArgs<IStoreSetting>> Deleted;
-
-        #endregion
     }
 }

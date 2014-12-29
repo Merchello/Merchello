@@ -5,6 +5,8 @@ using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a payment method
     /// </summary>
@@ -34,7 +36,7 @@ namespace Merchello.Core.Models
         [DataMember]
         public Guid ProviderKey
         {
-            get { return _providerKey; }
+            get { return _providerKey; }         
         }
 
         /// <summary>

@@ -1,0 +1,69 @@
+﻿<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Plugin.GatewayProviders.Payments.Dialogs.ChaseGatewayProviderController">
+
+    <div class="umb-modalcolumn-header">
+        <h4><strong>Chase Provider Configuration</strong></h4>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="control-group row-fluid">
+            <p>Merchant ID<br /></p>
+            <div class="col-xs-12 span12">
+                <input class="col-xs-12 span12" type="text" data-ng-model="chaseSettings.MerchantId">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>BIN<br /></p>
+            <div class="col-xs-12 span12">
+                <input class="col-xs-12 span12" type="text" data-ng-model="chaseSettings.Bin">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>Username<br /></p>
+            <div class="col-xs-12 span12">
+                <input class="col-xs-12 span12" type="text" data-ng-model="chaseSettings.Username">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>Password<br /></p>
+            <div class="col-xs-12 span12">
+                <input class="col-xs-12 span12" type="password" data-ng-model="chaseSettings.Password">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="chaseSettings.UseSandbox"> Use Sandbox
+            </label>
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration
+            </label>
+        </div>
+        <ul>
+            <li>Delimited Data: {{chaseSettings.DelimitedData}}</li>
+            <li>Delimited Char: {{chaseSettings.DelimitedChar}}</li>
+            <li>Relay Response: {{chaseSettings.RelayResponse}}</li>
+            <li>API Version: {{chaseSettings.ApiVersion}}</li>
+        </ul>
+
+    </div>
+
+</div>
+
+
+<div class="umb-panel-footer">
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+            <a href data-ng-click="close()" class="btn btn-link">
+                <localize key="general_cancel">Cancel</localize>
+            </a>
+
+            <a href
+               class="btn btn-primary"
+               data-ng-click="submit(dialogData)">
+                <localize key="buttons_save">Save</localize>
+            </a>
+
+        </div>
+    </div>
+</div>

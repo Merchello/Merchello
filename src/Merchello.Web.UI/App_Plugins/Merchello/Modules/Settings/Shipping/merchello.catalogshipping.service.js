@@ -6,40 +6,17 @@
         * @name umbraco.resources.MerchelloCatalogShippingService
         * @description Loads in data for shipping providers and store shipping settings
         **/
-    merchelloServices.MerchelloCatalogShippingService = function($http, umbRequestHelper) {
+    merchelloServices.MerchelloCatalogShippingService = function ($http, umbRequestHelper) {
 
         return {
-            getWarehouseCatalogShippingCountries: function(id) {
+
+            addShipMethod: function (shipMethod) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipCountries'),
-                        method: "GET",
-                        params: { id: id }
-                    }),
-                    'Failed to retreive shipping country data for warehouse catalog');
-            },
-
-            getShippingCountry: function(id) {
-
-                return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetShipCountry'),
-                        method: "GET",
-                        params: { id: id }
-                    }),
-                    'Failed to retreive data for shipping country: ' + id);
-            },
-
-            newWarehouseCatalogShippingCountry: function(catalogKey, countryCode) {
-
-                return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'NewShipCountry'),
-                        method: "GET",
-                        params: { catalogKey: catalogKey, countryCode: countryCode }
-                    }),
-                    'Failed to create ship country: ' + countryCode);
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'AddShipMethod'),
+                        shipMethod
+                    ),
+                    'Failed to create ship method');
             },
 
             deleteShipCountry: function (shipCountryKey) {
@@ -53,14 +30,12 @@
                     'Failed to delete ship country');
             },
 
-            getAllShipGatewayProviders: function() {
-
+            deleteShipMethod: function (shipMethod) {
                 return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayProviders'),
-                        method: "GET"
-                    }),
-                    'Failed to retreive shipping gateway providers');
+                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipMethod'),
+                        shipMethod
+                    ),
+                    'Failed to delete ship method');
             },
 
             getAllShipCountryProviders: function (shipCountry) {
@@ -74,15 +49,14 @@
                     'Failed to retreive shipping gateway providers');
             },
 
-            getAllShipGatewayResourcesForProvider: function (shipProvider) {
+            getAllShipGatewayProviders: function () {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayResourcesForProvider'),
-                        method: "GET",
-                        params: { id: shipProvider.key }
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayProviders'),
+                        method: "GET"
                     }),
-                    'Failed to retreive shipping gateway provider resources');
+                    'Failed to retreive shipping gateway providers');
             },
 
             getShippingProviderShipMethods: function (shipProvider) {
@@ -107,17 +81,53 @@
                     'Failed to retreive shipping methods');
             },
 
-
-            addShipMethod: function (shipMethod) {
+            getAllShipGatewayResourcesForProvider: function (shipProvider) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'AddShipMethod'),
-                        shipMethod
-                    ),
-                    'Failed to create ship method');
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipGatewayResourcesForProvider'),
+                        method: "GET",
+                        params: { id: shipProvider.key }
+                    }),
+                    'Failed to retreive shipping gateway provider resources');
+            },
+
+            getShippingCountry: function (id) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetShipCountry'),
+                        method: "GET",
+                        params: { id: id }
+                    }),
+                    'Failed to retreive data for shipping country: ' + id);
+            },
+
+            getWarehouseCatalogShippingCountries: function (id) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'GetAllShipCountries'),
+                        method: "GET",
+                        params: { id: id }
+                    }),
+                    'Failed to retreive shipping country data for warehouse catalog');
+            },
+
+            newWarehouseCatalogShippingCountry: function (catalogKey, countryCode) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'NewShipCountry'),
+                        method: "GET",
+                        params: { catalogKey: catalogKey, countryCode: countryCode }
+                    }),
+                    'Failed to create ship country: ' + countryCode);
             },
 
             saveShipMethod: function (shipMethod) {
+
+                if (shipMethod.key === '') return this.addShipMethod(shipMethod);
 
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'PutShipMethod'),
@@ -125,16 +135,6 @@
                     ),
                     'Failed to save ship method');
             },
-
-            deleteShipMethod: function (shipMethod) {
-
-                return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloCatalogShippingApiBaseUrl', 'DeleteShipMethod'),
-                        shipMethod
-                    ),
-                    'Failed to delete ship method');
-            },
-
 
         };
     };

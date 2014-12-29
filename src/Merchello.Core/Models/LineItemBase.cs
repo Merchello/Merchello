@@ -10,6 +10,10 @@ using Merchello.Core.Models.TypeFields;
 
 namespace Merchello.Core.Models
 {
+    using Umbraco.Core;
+
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// Represents a line item
     /// </summary>
@@ -275,6 +279,7 @@ namespace Merchello.Core.Models
                 }
                 xml = sw.ToString();
             }
+
             return xml;
         }
         

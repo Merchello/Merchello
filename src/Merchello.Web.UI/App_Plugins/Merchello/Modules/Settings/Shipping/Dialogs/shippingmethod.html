@@ -1,40 +1,41 @@
 ﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingMethodController">
 	<div class="umb-modalcolumn-header">
-        <h4>Add/Edit a Shipping Method & Rate for <strong>{{dialogData.method.shipMethod.name}}</strong></h4>
+	    <h4><localize key="merchelloShippingMethod_addEditShippingMethod" /> <strong>{{dialogData.method.shipMethod.name}}</strong></h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
-        <!-- Add a Shipping Method Flyout -->
+        <!-- Add/Edit Shipping Method Flyout -->
         <div class="form-group row-fluid">
-            <label for="method-name">Name</label>
-            <input name="method-name" data-ng-model="dialogData.method.shipMethod.name" class="col-xs-12 span12" type="text" />
+            <label for="method-name"><localize key="general_name" /></label>
+            <input name="method-name" data-ng-model="dialogData.method.name" class="col-xs-12 span12" type="text" />
         </div>
 
         <div class="form-group row-fluid">
-            <label for="method-type">Method</label>
+            <label for="method-type"><localize key="merchelloShippingMethod_method" /></label>
             <div class="col-xs-6 span6 row-fluid">
-                <select name="method-type" class="col-xs-12 span12" data-ng-model="dialogData.method.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
+                <select name="method-type" class="col-xs-12 span12" data-ng-model="filters.gatewayResource" data-ng-options="r.name for r in dialogData.gatewayResources track by r.serviceCode" data-ng-disabled="dialogData.method.shipMethod.key.length > 0">
                 </select>
             </div>
         </div>
-
+        <!-- Rate Table -->
         <table class="table settings-table col-xs-6 span6">
             <thead>
                 <tr>
-                    <th colspan="3">Set Range</th>
+                    <th colspan="3"><localize key="merchelloShippingMethod_setRange" /></th>
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="tier in dialogData.method.rateTable.rows">
+                <tr data-ng-repeat="tier in rateTable.rows">
                     <td class="col-xs-4 span4">
                         <span>{{tier.rangeLow}} - {{tier.rangeHigh}}</span>
                     </td>
                     <td>
                         <div class="input-prepend">
-                            <span class="add-on">$</span>
+                            <span class="add-on"><localize key="merchelloGeneral_moneySymbol" /></span>
                             <input type="number" data-ng-model="tier.rate" class="span2 col-xs-2" />
                         </div>
                     </td>
                     <td>
+                        <!-- ACTION: Remove Rate Tier -->
                         <a data-ng-click="removeRateTier(tier)" class="btn btn-default btn-xs btn-mini btn-warning">X</a>
                     </td>
                 </tr>
@@ -46,68 +47,32 @@
                     </td>
                     <td>
                         <div class="input-prepend">
-                            <span class="add-on">$</span>
+                            <span class="add-on"><localize key="merchelloGeneral_moneySymbol" /></span>
                             <input type="number" data-ng-model="newTier.rate" class="span1 col-xs-1" />
                         </div>
                     </td>
                     <td>
-                        <a data-ng-click="addRateTier()" class="btn btn-default btn-xs btn-mini btn-warning">Add</a>
+                        <!-- ACTION: Add (Save) Rate Tier -->
+                        <a data-ng-click="addRateTier()" class="btn btn-default btn-xs btn-mini btn-warning"><localize key="general_add" /></a>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <a data-ng-click="insertRateTier()" class="btn btn-default btn-primary">Add New Range</a>
-
-        <div data-ng-hide="dialogData.method.shipMethod.provinces.length == 0">
-            <h5>Adjust for Individual Regions</h5>
-
-            <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
-                <thead>
-                    <tr>
-                        <th class="span1 col-xs-1"><input type="checkbox" data-ng-model="allProvinces" data-ng-change="toggleAllProvinces()" /></th>
-                        <th>Region</th>
-                        <th>Adjust Rate</th>
-                        <th>Adjust By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr data-ng-repeat="province in dialogData.method.shipMethod.provinces">
-                        <td class="span1 col-xs-1">
-                            <input type="checkbox" data-ng-model="province.allowShipping"/>
-                        </td>
-                        <td class="col-xs-5 span5">
-                            {{province.name}}
-                        </td>
-                        <td class="col-xs-4 span4 row-fluid">
-                            <div data-ng-class="{'input-prepend': province.rateAdjustmentType == 1, 'input-append': province.rateAdjustmentType == 2 }">
-                                <span class="add-on" data-ng-show="province.rateAdjustmentType == 1">$</span>
-                                <input type="number" data-ng-model="province.rateAdjustment" class="span8 col-xs-8" />
-                                <span class="add-on" data-ng-show="province.rateAdjustmentType == 2">%</span>
-                            </div>
-                        </td>
-                        <td class="col-xs-2 span2 row-fluid">
-                            <label class="col-xs-6 span6"><input type="radio" data-ng-model="province.rateAdjustmentType" value="1" /> $</label>
-                            <label class="col-xs-6 span6"><input type="radio" data-ng-model="province.rateAdjustmentType" value="2" /> %</label>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <!-- ACTION: Insert Rate Tier -->
+        <a data-ng-click="insertRateTier()" class="btn btn-default btn-primary"><localize key="merchelloShippingMethod_addNewRange" /></a>
 	</div>
 
 	<div class="umb-panel-footer" >
 		<div class="umb-el-wrap umb-panel-buttons">
 	        <div class="btn-toolbar umb-btn-toolbar pull-right">
-
+                <!-- ACTION: Cancel/Close Flyout -->
 	        	<a href data-ng-click="close()" class="btn btn-link">
-	        		<localize key="general_cancel">Cancel</localize>
+	        		<localize key="general_cancel"></localize>
 				</a>
-
-				<button
-					class="btn btn-primary"
-					data-ng-click="submit(dialogData)">
-					<localize key="buttons_save">Save</localize>
-				</button>
+                <!-- ACTION: Save Flyout -->
+                <button class="btn btn-primary" data-ng-click="addOrUpdateShippingMethod()">
+                    <localize key="buttons_save"></localize>
+                </button>
 
 	        </div>
 		</div>

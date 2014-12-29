@@ -1,8 +1,8 @@
-﻿using Merchello.Core.Models;
-using Umbraco.Core;
-
-namespace Merchello.Core.Gateways.Payment
+﻿namespace Merchello.Core.Gateways.Payment
 {
+    using Models;
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a PaymentResult
     /// </summary>
@@ -19,7 +19,7 @@ namespace Merchello.Core.Gateways.Payment
         IInvoice Invoice { get; }
         
         /// <summary>
-        /// True/false indicating whether or not the <see cref="ISalesManager"/> should generate the <see cref="IOrder"/> and <see cref="IShipment"/>(s)
+        /// Gets a value indicating whether or not the sales preparation should generate the <see cref="IOrder"/> and <see cref="IShipment"/>(s)
         /// </summary>
         bool ApproveOrderCreation { get;  }
     }

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
-using Merchello.Core.Models;
-
-namespace Merchello.Web.Models.MapperResolvers
+﻿namespace Merchello.Web.Models.MapperResolvers
 {
+    using System.Collections.Generic;
+    using AutoMapper;
+    using Core.Models;
+
     /// <summary>
     /// Custom AutoMapper Resolver - Maps <see cref="ExtendedDataCollection"/> to an Enumerable
     /// </summary>
@@ -14,6 +14,15 @@ namespace Merchello.Web.Models.MapperResolvers
     /// </remarks>
     public class ExtendedDataResolver : ValueResolver<IHasExtendedData, IEnumerable<KeyValuePair<string, string>>>
     {
+        /// <summary>
+        /// The resolve core.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <returns>
+        /// A collection of key value pairs that represent an <see cref="ExtendedDataCollection"/>
+        /// </returns>
         protected override IEnumerable<KeyValuePair<string, string>> ResolveCore(IHasExtendedData source)
         {
             return source.ExtendedData.AsEnumerable();

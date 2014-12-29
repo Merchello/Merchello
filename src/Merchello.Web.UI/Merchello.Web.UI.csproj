@@ -65,17 +65,29 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Plugins\Merchello\Backoffice\Settings\" />
+    <Folder Include="App_Plugins\Merchello\lib\bower_components\angular-ui-tinymce\src\" />
+    <Folder Include="App_Plugins\Merchello\lib\bower_components\tinymce\" />
+    <Folder Include="App_Plugins\Merchello\Modules\Customer\Directives\" />
+    <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Css\" />
     <Folder Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Css\" />
     <Folder Include="App_Plugins\Merchello\System\" />
     <Folder Include="App_Plugins\Merchello\Trees\" />
     <Folder Include="App_Plugins\Merchello\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderCustomer.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderFulfillment.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderPaymentInfo.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderShipmentInfo.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreateActionMenu.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\GatewayProviders.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\NotificationsEdit.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\TaxesByDestination.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesByItem.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\SalesOverTime.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductCreate.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantCreate.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ViewReport.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Notifications.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Vendors.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Taxation.html" />
@@ -94,12 +106,28 @@
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.helpers.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.models.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\merchello.namespaces.js" />
+    <Content Include="App_Plugins\Merchello\Common\Js\greaterthan.filter.js" />
+    <Content Include="App_Plugins\Merchello\Config\Lang\da.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Plugins\Merchello\Config\Lang\en.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Plugins\Merchello\Config\Lang\es.xml" />
+    <Content Include="App_Plugins\Merchello\Config\Lang\en_us.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Plugins\Merchello\Config\Lang\it.xml" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello-pager.html" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello-slide-open-panel.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.debug.section.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\dropdownlist.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-debug-section.html" />
     <Content Include="App_Plugins\Merchello\Directives\merchello-panel.html" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello.pager.directive.js" />
     <Content Include="App_Plugins\Merchello\Directives\merchello.panel.directive.js" />
     <Content Include="App_Plugins\Merchello\Common\Js\startfrom.filter.js" />
+    <Content Include="App_Plugins\Merchello\Directives\merchello.slide.open.panel.directive.js" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Css\umbracoCustom.css" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Lib\codemirror.css" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Lib\codemirror.js" />
@@ -258,6 +286,21 @@
     <Content Include="App_Plugins\Merchello\lib\JsonTree\jsontree.js" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.css" />
     <Content Include="App_Plugins\Merchello\lib\ngJsonExplorer\gd-ui-jsonexplorer.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-main-simple-create.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-option-attributes-selection.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variants-view-table.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product-variants-view-table.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\productwithoptions.directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-options-reorder.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.create.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-options-manage.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variants-create-table.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-variant-bulk-inventory.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-inventory-section.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-shipping-section.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-digital-download-section.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.duplicatevariants.html" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.duplicatevariants.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.deletevariants.html" />
@@ -268,12 +311,45 @@
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.updateinventory.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.changeprices.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\Dialogs\product.changeprices.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.productvariant.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\product-main-edit.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\Directives\productvariant.directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\merchello.product.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\productvariant.edit.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Customer\customer.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\customer.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.view.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editaddress.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editaddress.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editinfo.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.editinfo.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\Dialogs\customer.selectaddress.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\order.editcustomeraddress.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.customer.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Customer\merchello.gravatar.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\order.editcustomerinfo.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\selectcustomer.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\order-create-customer.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\ordercreate.directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\merchello.audit.service.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\order.payment.info.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\order.shipment.info.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Report\report.bootstrap.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmessage.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsdelete.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Dialogs\notificationsmethod.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notification-methods.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\Directives\notifications-helper-directives.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.addeditcatalog.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.fixedratemethod.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shipping.selectcatalog.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingregions.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\shipping-history.html" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\Directives\shipping-history-directives.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.shipment.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.payment.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\Dialogs\capture.payment.controller.js" />
@@ -283,15 +359,12 @@
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.invoice.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\merchello.order.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.view.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Order\order.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Order\order.create.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Customer\customer.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.list.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.edit.controller.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Catalog\product.editwithoptions.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Catalog\product.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Order\order.invoice.models.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesByItem.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.taxesByDestination.controller.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Report\reports.salesOverTime.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Report\reports.list.controller.js" />
     <Content Include="App_Plugins\Merchello\Directives\tag.manager.directive.js" />
     <Content Include="App_Plugins\Merchello\lib\bootstrap\css\bootstrap-theme.min.css" />
@@ -325,15 +398,14 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingprovider.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Dialogs\shippingmethod.html" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-warehouse.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-helper-directives.js" />
-    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\Directives\shipping-country.html" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\merchello.catalogfixedrateshipping.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\merchello.catalogshipping.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.settings.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Notifications\notifications.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Payment\payment.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.models.js" />
+    <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\merchello.fixedrateshipping.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Shipping\shipping.models.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\merchello.warehouse.service.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Taxation\Dialogs\taxationmethod.controller.js" />
@@ -349,6 +421,12 @@
     <Content Include="App_Plugins\Merchello\Modules\Settings\settings.controller.js" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\Vendors\vendors.models.js" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.productcreate.controller.js" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.productedit.controller.js" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.controller.js" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Js\merchelloproducteditor.producteditwithoptions.controller.js" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.html" />
+    <Content Include="App_Plugins\Merchello\PropertyEditors\ProductEditor\Views\merchelloproducteditor.productedit.html" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloproductdialog.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Js\merchelloproductselector.controller.js" />
     <Content Include="App_Plugins\Merchello\PropertyEditors\ProductPicker\Views\merchelloproductdialog.html" />
@@ -369,7 +447,6 @@
     <Content Include="Scripts\typings\knockout\knockout.d.ts" />
     <Content Include="Scripts\typings\underscore\underscore.d.ts" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.png" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerView.html" />
     <Content Include="Umbraco\images\tray\Merchello-Icon.gif" />
   </ItemGroup>
@@ -379,12 +456,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\edit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\CustomerList.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderList.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEdit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductEditWithOptions.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductList.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ProductVariantEdit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\Reports.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\OrderView.html" />
     <Content Include="web.config" />
@@ -396,6 +472,9 @@
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Mode\Razor\LICENSE" />
     <Content Include="App_Plugins\Merchello\lib\codemirror\Js\Mode\Sieve\LICENSE" />
     <Content Include="App_Plugins\Merchello\Modules\Settings\GatewayProviders\Dialogs\smtp.notifications.providersettings.controller.js" />
+    <Content Include="App_Plugins\Merchello\Common\Css\merchello.css.map">
+      <DependentUpon>merchello.css</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

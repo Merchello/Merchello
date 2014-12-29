@@ -1,0 +1,62 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<div ng-controller="Merchello.Dashboards.Customer.ListController"
+     ng-show="loaded">
+
+    <umb-panel>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline">Customers</h1>
+                </div>
+
+                <!-- Tabs for All Customers, Accepts Marketing, and Repeat Customers -->
+                <ul class="nav nav-tabs umb-nav-tabs span12">
+                    <li class="ng-scope active">
+                        <a href="#tab6" data-toggle="tab" class="ng-binding">All Customers</a>
+                    </li>
+                </ul>
+            </div>
+
+        </umb-header>
+
+        <merchello-panel>
+
+            <!-- Order Filters -->
+            <div class="merchello-pane">
+                <form class="form-horizontal">
+                    <div class="form-group control-group row-fluid">
+                        <label for="customerFilter" class="col-xs-2 control-label">Filter Customers:</label>
+                        <div class="col-xs-10 controls">
+                            <input id="customerFilter" class="form-control span6" name="customerFilter" data-ng-model="filtertext" placeholder="Type a customer's name or e-mail..." />
+                            <!-- ACTION: Customer Filter -->
+                            <button type="submit" class="btn">Filter</button>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="table table-hover merchello-selectable-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email Address</th>
+                            <th></th>
+                        </tr>
+                        <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="customer in customers">
+                            <!-- ACTION: Go To Customer View Page -->
+                            <td>{{customer.firstName}} {{customer.lastName}}</td>
+                            <td>{{customer.email}}</td>
+                            <td><button class="btn btn-primary" data-ng-click="submit(customer)"> <localize key="buttons_select"></localize> </button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </merchello-panel>
+
+    </umb-panel>
+</div>

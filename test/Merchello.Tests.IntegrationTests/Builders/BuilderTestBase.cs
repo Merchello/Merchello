@@ -106,7 +106,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
 
 
             Customer.ExtendedData.AddAddress(BillingAddress, AddressType.Billing);
-            ItemCache = new Core.Models.ItemCache(Customer.EntityKey, ItemCacheType.Checkout);
+            ItemCache = new Core.Models.ItemCache(Customer.Key, ItemCacheType.Checkout);
 
             PreTestDataWorker.ItemCacheService.Save(ItemCache);
 

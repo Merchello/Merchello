@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
-    public class OrderLineItemDisplay
+    using System;
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// The order line item display.
+    /// </summary>
+    public class OrderLineItemDisplay : LineItemDisplayBase
     {
-        public Guid Key { get; set; }
-        public Guid ContainerKey { get; set; }
+        /// <summary>
+        /// Gets or sets the shipment key.
+        /// </summary>
         public Guid? ShipmentKey { get; set; }
-        public Guid LineItemTfKey { get; set; }
-        public string Sku { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
-        public bool Exported { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the line item represents a back ordered line item.
+        /// </summary>
         public bool BackOrder { get; set; }
-        public IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }
     }
 }

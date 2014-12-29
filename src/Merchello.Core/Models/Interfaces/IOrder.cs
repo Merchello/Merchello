@@ -1,38 +1,38 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// Defines an Order
     /// </summary>
     public interface IOrder : ILineItemContainer
     {
         /// <summary>
-        /// The invoice 'key'
+        /// Gets the invoice 'key'
         /// </summary>
         [DataMember]
         Guid InvoiceKey { get; }
 
         /// <summary>
-        /// The order number prefix
+        /// Gets or sets the order number prefix
         /// </summary>
         [DataMember]
         string OrderNumberPrefix { get; set; }
 
         /// <summary>
-        /// The order number
+        /// Gets or sets the order number
         /// </summary>
         [DataMember]
-        int OrderNumber { get; }
+        int OrderNumber { get; set; }
 
         /// <summary>
-        /// The date of the order
+        /// Gets or sets the date of the order
         /// </summary>
         DateTime OrderDate { get; set; }
 
         /// <summary>
-        /// The order status key
+        /// Gets the order status key
         /// </summary>
         Guid OrderStatusKey { get; }
 
@@ -42,10 +42,9 @@ namespace Merchello.Core.Models
         IOrderStatus OrderStatus { get; set; }
 
         /// <summary>
-        /// Indicates whether or not this order has been exported to an external system
+        /// Gets or sets a value indicating whether or not this order has been exported to an external system
         /// </summary>
         [DataMember]
         bool Exported { get; set; }
-
     }
 }

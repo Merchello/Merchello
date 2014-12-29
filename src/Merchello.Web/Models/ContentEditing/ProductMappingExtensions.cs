@@ -18,6 +18,10 @@ namespace Merchello.Web.Models.ContentEditing
             {
                 destination.Key = productDisplay.Key;
             }
+
+            productDisplay.CatalogInventories = productDisplay.CatalogInventories ?? Enumerable.Empty<CatalogInventoryDisplay>();
+            productDisplay.ProductOptions = productDisplay.ProductOptions ?? Enumerable.Empty<ProductOptionDisplay>();
+
             destination.Name = productDisplay.Name;
             destination.Sku = productDisplay.Sku;
             destination.Price = productDisplay.Price;
@@ -41,20 +45,24 @@ namespace Merchello.Web.Models.ContentEditing
 
             foreach (var catalogInventory in productDisplay.CatalogInventories)
             {
-                ICatalogInventory destinationCatalogInventory;
+                var catInv = destination.CatalogInventories.FirstOrDefault(x => x.CatalogKey == catalogInventory.CatalogKey);
 
-                var catInv = destination.CatalogInventories.First(x => x.CatalogKey == catalogInventory.CatalogKey);
                 if (catInv != null)
                 {
-                    destinationCatalogInventory = catInv;
+                    var destinationCatalogInventory = catInv;
 
                     destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+                }
+                else if (!Guid.Empty.Equals(catalogInventory.CatalogKey) && destination.HasIdentity)
+                {
+                    //// Add to a new catalog
+                    ((Product)destination).MasterVariant.AddToCatalogInventory(catalogInventory.CatalogKey);
                 }
             }
 
             // Fix option deletion here #M-161
             // remove any product options that exist in destination and do not exist in productDisplay
-            var removers = destination.ProductOptions.Where(x => !productDisplay.ProductOptions.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key);
+            var removers = destination.ProductOptions.Where(x => !productDisplay.ProductOptions.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key).ToList();
             foreach (var remove in removers)
             {
                 destination.ProductOptions.RemoveItem(remove);
@@ -230,25 +238,26 @@ namespace Merchello.Web.Models.ContentEditing
 
             foreach (var catalogInventory in productVariantDisplay.CatalogInventories)
             {
-                ICatalogInventory destinationCatalogInventory;
-
-                if (destination.CatalogInventories.Count() > 0)
-                {
-                    var catInv = destination.CatalogInventories.Where(x => x.CatalogKey == catalogInventory.CatalogKey).First();
-                    if (catInv != null)
-                    {
-                        destinationCatalogInventory = catInv;
-
-                        destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
-                    }
-                }
+				var catInv = destination.CatalogInventories.FirstOrDefault(x => x.CatalogKey == catalogInventory.CatalogKey);
+				
+				if (catInv != null)
+				{
+					var destinationCatalogInventory = catInv;
+				
+					destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
+				}
+				else if (!Guid.Empty.Equals(catalogInventory.CatalogKey) && destination.HasIdentity)
+				{
+					//// Add to a new catalog
+					destination.AddToCatalogInventory(catalogInventory.CatalogKey);
+				}
             }
 
             foreach (var attribute in productVariantDisplay.Attributes)
             {
                 IProductAttribute destinationProductAttribute;
 
-                var attr = destination.Attributes.First(x => x.Key == attribute.Key);
+                var attr = destination.Attributes.FirstOrDefault(x => x.Key == attribute.Key);
                 if (attr != null)
                 {
                     destinationProductAttribute = attr;

@@ -1,47 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using Merchello.Core.Models.TypeFields;
-using Umbraco.Web;
-using Umbraco.Web.Mvc;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Web.WebApi;
-using Merchello.Web.Models.ContentEditing;
-using System.Net;
-using System.Net.Http;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Web.Http;
+    using Core;
+    using Core.Models;
+    using Core.Models.TypeFields;
+    using Core.Services;
+    using Models.ContentEditing;    
+    using Umbraco.Web;
+    using Umbraco.Web.Mvc;
+    using WebApi;
+
+    /// <summary>
+    /// The settings api controller.
+    /// </summary>
     [PluginController("Merchello")]
     public class SettingsApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
         private readonly StoreSettingService _storeSettingService;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsApiController"/> class. 
         /// Constructor
         /// </summary>
         public SettingsApiController()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsApiController"/> class. 
         /// Constructor
         /// </summary>
-        /// <param name="merchelloContext"></param>
-        public SettingsApiController(MerchelloContext merchelloContext)
+        /// <param name="merchelloContext">
+        /// The merchello context
+        /// </param>
+        public SettingsApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsApiController"/> class. 
         /// This is a helper contructor for unit testing
         /// </summary>
-        internal SettingsApiController(MerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="umbracoContext">
+        /// The umbraco Context.
+        /// </param>
+        internal SettingsApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext, umbracoContext)
         {
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
@@ -52,7 +69,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/SettingsApi/GetCountry/{countryCode}
         /// </summary>
-        /// <param name="id">Country code to get</param>
+        /// <param name="id">
+        /// Country code to get
+        /// </param>
+        /// <returns>
+        /// The <see cref="CountryDisplay"/>.
+        /// </returns>
         public CountryDisplay GetCountry(string id)
         {
             ICountry country = _storeSettingService.GetCountryByCode(id);
@@ -69,9 +91,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/SettingsApi/GetAllCountries
         /// </summary>
+        /// <returns>
+        /// A collection of all <see cref="CountryDisplay"/>.
+        /// </returns>
         public IEnumerable<CountryDisplay> GetAllCountries()
         {
-            var countries = _storeSettingService.GetAllCountries();
+            var countries = _storeSettingService.GetAllCountries().OrderBy(x => x.Name);
             if (countries == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -82,13 +107,15 @@ namespace Merchello.Web.Editors
         }
 
 
+        /// <summary>
+        /// The get type fields.
+        /// </summary>
+        /// <returns>
+        /// The collection of all <see cref="TypeField"/>.
+        /// </returns>
         public IEnumerable<TypeField> GetTypeFields()
         {
             var typeFields = _storeSettingService.GetTypeFields();
-            if (typeFields == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
 
             return typeFields.Select(x => x as TypeField);
         }
@@ -153,8 +180,8 @@ namespace Merchello.Web.Editors
         {
             var settingDisplay = new SettingDisplay
             {
-                nextInvoiceNumber = _storeSettingService.GetNextInvoiceNumber(),
-                nextOrderNumber = _storeSettingService.GetNextOrderNumber()
+                NextInvoiceNumber = _storeSettingService.GetNextInvoiceNumber(),
+                NextOrderNumber = _storeSettingService.GetNextOrderNumber()
             };
             
             return settingDisplay;

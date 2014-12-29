@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Umbraco.Core;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+    using Umbraco.Core;
+    using Umbraco.Core.Services;
+
+    /// <summary>
+    /// Defines a NotificationMethodService
+    /// </summary>
     internal interface INotificationMethodService : IService
     {
         /// <summary>

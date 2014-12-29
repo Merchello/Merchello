@@ -14,16 +14,20 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.IntegrationTests.Examine
 {
+    using Merchello.Web.Search;
+
     [TestFixture]
     public class InvoiceAndOrderProviderTests : DatabaseIntegrationTestBase
     {
         private const int InvoiceCount = 2;
         private IAddress _address;
-
+        
         [TestFixtureSetUp]
         public override void FixtureSetup()
         {
             base.FixtureSetup();
+
+            PreTestDataWorker.DeleteAllCustomers();
 
             var bootManager = new WebBootManager();
             bootManager.Initialize();
@@ -51,6 +55,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         public void TestFixtureTearDown()
         {
             InvoiceService.Saved -= InvoiceServiceSaved;
+            OrderService.Saved -= OrderServiceSaved;
         }
 
         private void InvoiceServiceSaved(IInvoiceService sender, SaveEventArgs<IInvoice> e)
@@ -166,10 +171,49 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             //// Assert
             Assert.AreEqual(1, results.Count());
-
-
         }
 
+        /// <summary>
+        /// Test verifies that a collection of invoices can be retrieved from the index by customer
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_Invoices_By_Customer_From_The_Index()
+        {
+            //// Arrange
+
+            var customer = PreTestDataWorker.CustomerService.CreateCustomerWithKey(
+                "rusty",
+                "firstName",
+                "lastName",
+                "test@test.com");
+
+            var invoice1 = MockInvoiceDataMaker.InvoiceForInserting(_address, 300);
+            invoice1.Items.Add(new InvoiceLineItem(LineItemType.Product, "test", "test", 1, 100));
+            invoice1.Items.Add(new InvoiceLineItem(LineItemType.Product, "test2", "test2", 2, 100));
+            ((Invoice)invoice1).CustomerKey = customer.Key;
+
+            var invoice2 = MockInvoiceDataMaker.InvoiceForInserting(_address, 100);
+            invoice2.Items.Add(new InvoiceLineItem(LineItemType.Product, "test", "test", 1, 100));
+            ((Invoice)invoice2).CustomerKey = customer.Key;
+
+            var invoice3 = MockInvoiceDataMaker.InvoiceForInserting(_address, 300);
+            invoice3.Items.Add(new InvoiceLineItem(LineItemType.Product, "test2", "test2", 3, 100));
+            ((Invoice)invoice3).CustomerKey = customer.Key;
+
+            PreTestDataWorker.InvoiceService.Save(invoice1);
+            PreTestDataWorker.InvoiceService.Save(invoice2);
+            PreTestDataWorker.InvoiceService.Save(invoice3);
+
+            //// Act
+            var merchello = new MerchelloHelper();
+
+            var invoices = merchello.InvoicesByCustomer(customer.Key);
+
+            //// Assert
+            Assert.NotNull(invoices, "invoices was null");
+            Assert.IsTrue(invoices.Any());
+            Assert.AreEqual(3, invoices.Count());
+        }
 
         /// <summary>
         /// Test verifies that an event updates the index
@@ -267,6 +311,5 @@ namespace Merchello.Tests.IntegrationTests.Examine
             Assert.AreEqual(Constants.DefaultKeys.OrderStatus.NotFulfilled, orderDisplay.OrderStatus.Key);
             Assert.AreEqual(order.Items.Count, orderDisplay.Items.Count());
         }
-
     }
 }

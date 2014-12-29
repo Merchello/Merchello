@@ -1,55 +1,114 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
-	/// <summary>
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+
+    /// <summary>
 	/// Represent an abstract Repository for PetaPoco based repositories
 	/// </summary>
-	/// <typeparam name="TEntity"></typeparam>
-	internal abstract class MerchelloPetaPocoRepositoryBase<TEntity> : MerchelloRepositoryBase<TEntity>
-		where TEntity : IEntity
+	/// <typeparam name="TEntity">The type of entity</typeparam>
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+    internal abstract class MerchelloPetaPocoRepositoryBase<TEntity> : MerchelloRepositoryBase<TEntity>
+		where TEntity : class, IEntity
 	{
-		//protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work)
-		//    : base(work)
-		//{
-		//}
-
-		protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+	
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloPetaPocoRepositoryBase{TEntity}"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
 			: base(work, cache)
 		{
 		}
 
-		/// <summary>
-		/// Returns the database Unit of Work added to the repository
+
+        /// <summary>
+		/// Gets the database Unit of Work added to the repository
 		/// </summary>
 		protected internal new IDatabaseUnitOfWork UnitOfWork
 		{
 			get { return (IDatabaseUnitOfWork)base.UnitOfWork; }
 		}
 
-		protected UmbracoDatabase Database
+        /// <summary>
+        /// Gets the database.
+        /// </summary>
+        protected UmbracoDatabase Database
 		{
 			get { return UnitOfWork.Database; }			
 		}
 
 		#region Abstract Methods
-		
-		protected abstract Sql GetBaseQuery(bool isCount);
-		protected abstract string GetBaseWhereClause();
-		protected abstract IEnumerable<string> GetDeleteClauses();
-		protected abstract override void PersistNewItem(TEntity entity);
-		protected abstract override void PersistUpdatedItem(TEntity entity);
+
+        /// <summary>
+        /// The get base query.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        protected abstract Sql GetBaseQuery(bool isCount);
+
+        /// <summary>
+        /// The get base where clause.
+        /// </summary>
+        /// <returns>
+        /// The base "where" string.
+        /// </returns>
+        protected abstract string GetBaseWhereClause();
+
+        /// <summary>
+        /// The get delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The collection of delete clauses
+        /// </returns>
+        protected abstract IEnumerable<string> GetDeleteClauses();
+
+        /// <summary>
+        /// The persist new item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity to be deleted
+        /// </param>
+        protected abstract override void PersistNewItem(TEntity entity);
+
+        /// <summary>
+        /// The persist updated item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity to be updated
+        /// </param>
+        protected abstract override void PersistUpdatedItem(TEntity entity);
 
 		#endregion
 
-		protected override bool PerformExists(Guid key)
+        /// <summary>
+        /// The perform exists.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected override bool PerformExists(Guid key)
 		{
 			var sql = GetBaseQuery(true);
 			sql.Where(GetBaseWhereClause(), new { Key = key});
@@ -57,7 +116,16 @@ namespace Merchello.Core.Persistence.Repositories
 			return count == 1;
 		}
 
-		protected override int PerformCount(IQuery<TEntity> query)
+        /// <summary>
+        /// The perform count.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> count.
+        /// </returns>
+        protected override int PerformCount(IQuery<TEntity> query)
 		{
 			var sqlClause = GetBaseQuery(true);
 			var translator = new SqlTranslator<TEntity>(sqlClause, query);
@@ -66,7 +134,13 @@ namespace Merchello.Core.Persistence.Repositories
 			return Database.ExecuteScalar<int>(sql);
 		}
 
-		protected override void PersistDeletedItem(TEntity entity)
+        /// <summary>
+        /// The persist deleted item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity to be deleted.
+        /// </param>
+        protected override void PersistDeletedItem(TEntity entity)
 		{
 			var deletes = GetDeleteClauses();
 			foreach (var delete in deletes)

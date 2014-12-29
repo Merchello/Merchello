@@ -17,8 +17,9 @@ namespace Merchello.Tests.Base.DataMakers
         {
             // this won't work for integration tests because of the database constraint.
 
-            var address = new CustomerAddress(customerKey, "Home")
+            var address = new CustomerAddress(customerKey)
                 {
+                    Label = "Home",
                     Address1 = "111 Somewhere",
                     AddressTypeFieldKey = new AddressTypeField().Shipping.TypeKey,
                     Company = "Demo Co.",
@@ -36,10 +37,11 @@ namespace Merchello.Tests.Base.DataMakers
 
         public static ICustomerAddress MindflyAddressForInserting(Guid customerKey)
         {
-            var address = new CustomerAddress(customerKey, "Mindfly")
+            var address = new CustomerAddress(customerKey)
                 {
+                    Label = "Mindfly",
                     Address1 = "114 W. Magnolia St.",
-                    Address2 = "Suite 504",
+                    Address2 = "Suite 300",
                     Locality = "Bellingham",
                     Region = "WA",
                     CountryCode = "US",
@@ -55,9 +57,9 @@ namespace Merchello.Tests.Base.DataMakers
 
         public static ICustomerAddress RandomAddress(ICustomer customer, string label)
         {
-            var addresses = AddressMocks().ToArray();
+            var addresses = FakeAddresses().ToArray();
             var index = NoWhammyStop.Next(addresses.Count());
-            return addresses[index].MakeAddress(customer, label);
+            return addresses[index].MakeCustomerAddress(customer, label);
         }
 
 

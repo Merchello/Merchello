@@ -16,6 +16,8 @@ $active: lighten($green, 50%);
     .active, .active:hover { background-color: $active; }
     .btn { line-height: 21px; color: #000; }
     .btn-primary { color: #fff; }
+    .btn-trash:hover { color: #fff; background: #bd362f; box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05); }
+    .btn-action:hover { color: #fff; background: #53a93f; box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05); }
  
     .label { font-size: 1em; line-height: 20px; text-shadow: none; }
     .label-success { background: lighten($green, 20%); }
@@ -24,7 +26,7 @@ $active: lighten($green, 50%);
     .icon-loading:before { font-size: 1.15em; vertical-align: top; padding-top: 1px; }
     .clear { clear: both; }
 
-    .well {
+    .well { position: relative;
         h3 { margin: 0; }
         h4 { margin-bottom: 5px; }
         .add { margin-bottom: 20px; } //spacing below add buttons inslide .well
@@ -95,7 +97,7 @@ $active: lighten($green, 50%);
             td { cursor: pointer; }
         }
     }
-    td input[type="checkbox"] { margin: 0 auto; display: block; }
+    td input[type="checkbox"], th input[type="checkbox"] { margin: 0 auto; display: block; }
 
     .merchello-striped-table {
         i { font-size: 1em; }
@@ -107,6 +109,7 @@ $active: lighten($green, 50%);
 
     .table {
         .text-right { text-align: right; }
+        .text-center { text-align: center; }
         th { border-top: none; }
     }
 
@@ -158,6 +161,14 @@ $active: lighten($green, 50%);
             &:nth-child(4) { width: 10%; }
         }
     }
+
+    // DFB: restyle tax table
+	.tax-table{
+		td.last-of-type{width:10%;}
+
+        //  DFB: give more visual space to input box so tax can include more digits like 8.765
+		.percent{width:70%;}
+	}
 
     td.edit { text-align: left;
         .btn { display: inline-block; margin: 0 auto; }
@@ -255,11 +266,30 @@ $active: lighten($green, 50%);
         ul { margin: 0; padding: 0; list-style-type: none; }
     }
 
-    .gravatar { margin-bottom: 10px; color: $green;
-        *[class*="span"] { float: none; display: inline-block; vertical-align: middle; }
-        .span3 { width: 23%; }
-        .span7 { padding-left: 2%; }
-        img { border: solid 3px $green; }
+    .edit-customer {
+        .error { color: #fff; background: #9d261d; display: inline-block; padding: 2px 8px; margin-bottom: 2px; }
+        .gravatar {
+            img { max-height: 32px; max-width: 32px; display: inline-block; border-radius: 60px; }
+            div { display: inline-block; height: 32px; line-height: 32px; color: $green; }    
+        }
+    }
+
+    .customer-info {
+        .customer-avatar { max-height: 32px; max-width: 32px; border-radius: 60px; float: left; margin-right: 10px; }
+        h4 { margin: 0; height: 32px; line-height: 32px; } 
+        div { margin-left: 42px; }
+    }
+
+    .billing-address-info, .shipping-address-info {
+        .vcard { margin-top: 1em; }
+    }
+
+    // Shipping Page
+    .merchello-shipping-country {
+        clear: both;
+        border-bottom: 1px solid #f8f8f8;
+        position: relative;
+        overflow: hidden;
     }
 
     //Graphs and Charts
@@ -304,4 +334,52 @@ $active: lighten($green, 50%);
     h4 { white-space: normal; }
     strong { display: block; }
     input[type="radio"] { margin-top: 0; }
+    .active, .active:hover { background-color: $active; }
+	.active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
+    .error { color: #fff; background: #9d261d; display: inline-block; padding: 2px 8px; margin-bottom: 2px; }
+}
+
+.merchello-product-picker {
+	.selector {
+		margin-bottom: 5px;
+	}
+
+	table {
+		margin: 15px;
+		tr.sku {
+			th {
+				border-top: 1px solid #E3E3E3;
+			}
+		}
+
+		th {
+			border-right: 1px solid #E3E3E3;
+			padding: 8px;
+			text-align: right;
+		}
+		td {
+			padding: 5px;
+		}
+	}
+}
+
+.merchello-product-editor{
+    .merchello-panel-body {
+        position: static;
+    }
+
+    label{
+        display: block;
+        padding: 0;
+    }
+
+    input, select, textarea{
+        margin-bottom: 10px;
+    }
+
+    input[type="radio"], input[type="checkbox"]
+    {
+        margin-top: 4px;
+    }
+
 }

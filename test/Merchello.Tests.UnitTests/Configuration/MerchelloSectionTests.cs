@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Configuration;
 using ClientDependency.Core;
+using Merchello.Core.Configuration;
 using Merchello.Core.Configuration.Outline;
 using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Configuration
 {
+    using System.Linq;
+
     [TestFixture]
     [Category("Configuration")]
     public class MerchelloSectionTests
@@ -22,14 +25,6 @@ namespace Merchello.Tests.UnitTests.Configuration
         }
 
 
-        /// <summary>
-        /// Verifies the enableLogging attribute is accessible
-        /// </summary>
-        [Test]
-        public void EnableLogging_Is_False()
-        {
-            Assert.IsFalse(_config.EnableLogging);
-        }
 
         /// <summary>
         /// Verifies the defaultCountryCode attribute is accessible
@@ -98,6 +93,50 @@ namespace Merchello.Tests.UnitTests.Configuration
             Assert.NotNull(taskChain);
             Assert.AreEqual(typeof(TaskChainElement), taskChain.GetType());
 
+        }
+
+        /// <summary>
+        /// Test confirms that teh pattern replacements can be retrieved from the configuration file
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_Collection_Of_PatternReplacements()
+        {
+            //// Arrange
+            
+            //// Act
+            var replacementCollection = _config.PatternFormatter;
+
+            //// Assert
+            Assert.NotNull(replacementCollection);
+        }
+
+        [Test]
+        public void Can_Retrieve_AnonymousCustomerMaxDays()
+        {
+            //// Arrange
+            const string expected = "7";
+
+            //// Act
+            var value = MerchelloConfiguration.Current.GetSetting("AnonymousCustomersMaxDays");
+
+            //// Assert
+            Assert.AreEqual(expected, value);
+        }
+
+        [Test]
+        public void Can_Retrieve_CustomerMemberTypes()
+        {
+            //// Arrange
+            const string expected = "Customer";
+
+            //// Act
+            var values = MerchelloConfiguration.Current.CustomerMemberTypes;
+
+            //// Assert
+            Assert.NotNull(values);
+            Assert.IsTrue(values.Any());
+            Assert.AreEqual(1, values.Count());
+            Assert.AreEqual(expected, values.First());
         }
     }
 

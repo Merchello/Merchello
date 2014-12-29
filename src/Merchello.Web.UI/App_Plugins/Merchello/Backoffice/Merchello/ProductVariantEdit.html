@@ -4,336 +4,77 @@
       data-ng-submit="save()">
     <umb-panel val-show-validation>
 
-        <umb-header>
+	    <umb-header>
 
-            <div class="span4" data-ng-show="!creatingVariant">
-                <umb-content-name 
-                    ng-model="productVariant.name" 
-                    placeholder="Enter a product name">
-                </umb-content-name>
-            </div>
-            <div class="span4" data-ng-show="creatingVariant">
-                <div class="umb-headline-editor-wrapper">
-                    <h1 class="umb-headline">New Variant for {{product.name}}</h1>
-                </div>
-            </div>
+		    <div class="span4">
+			    <umb-content-name ng-model="productVariant.name"
+			                      localize="placeholder" placeholder="@merchelloPlaceholders_enterProduct">
+			    </umb-content-name>
+		    </div>
 
-            <div class="col-xs-8 span8">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group">
-                        <a data-ng-click="deleteProduct()" data-ng-show="!creatingVariant && !editingVariant && !creatingProduct" class="btn">Delete Product</a>
-                        <a data-ng-click="deleteVariant()" data-ng-show="editingVariant" class="btn">Delete Variant</a>
-                        <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success">Save</a>
-                    </div>
-                </div>
-            </div>
+		    <div class="col-xs-8 span8">
+			    <div class="btn-toolbar pull-right umb-btn-toolbar">
+				    <div class="btn-group">
+                        <!--<a data-ng-click="deleteVariantDialog()" class="btn"><localize key="merchelloVariant_deleteVariant" /></a>-->
+					    <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></a>
+				    </div>
+			    </div>
+		    </div>
 
-        </umb-header>
-        
-        <merchello-panel>
-            <div class="tab-content row-fluid">
-                <div class="merchello-pane">
+	    </umb-header>
+
+	    <merchello-panel>
+		    <div class="tab-content row-fluid">
+			    <div class="merchello-pane">
                     
-                    <!-- Property classes from Umbraco styles -->
-                    <div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
-                            Variant Information
-                            <small>Configure this variant</small>
-                        </label>
+				    <!-- Property classes from Umbraco styles -->
+				    <div class="control-group umb-control-group">
+					    <label class="merchello-control-label">
+						    <localize key="merchelloVariant_variantInfo"/>
+						    <small><localize key="merchelloVariant_configVariant" /></small>
+					    </label>
 
-                        <div class="merchello-controls">
+				        <div class="merchello-controls">
+				            
+				            <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
+				            <product-variant-main-properties product="product" product-variant="productVariant" creating-variant="creatingVariant" editing-variant="editingVariant"></product-variant-main-properties>                            
 
-                            <div data-ng-show="creatingProduct">
-                                <h3>Create a Product</h3>
-                                <p>The Name field (above), Price, and SKU are required.  Everything else is optional.</p>
-                            </div>
+				        </div>
+				    </div>
 
-                            <div data-ng-show="creatingVariant">
+                    <!-- Digital Downloads Picker -->
+			        <merchello-slide-open-panel is-open="productVariant.download">
+			            <product-digital-download-section product="product" product-variant="productVariant" ></product-digital-download-section>
+			        </merchello-slide-open-panel>
 
-                                <h3>Add a Variant</h3>
-                                <p>This will be a new variant on the {{product.name}} product.</p>
+                    <!-- Shipping settings for a product. -->
+                    <merchello-slide-open-panel is-open="productVariant.shippable">
+                        <product-shipping-section product="product" product-variant="productVariant" default-warehouse="defaultWarehouse" warehouses="warehouses"></product-shipping-section>
+                    </merchello-slide-open-panel>
 
-                                <div class="well row-fluid col-xs-10 span10">
-                                    <h3>Variant Options</h3>
-                                    <p>Select the variant/options that you would like to create.</p>
+                    <!-- Inventory for a single variant -->
+			        <merchello-slide-open-panel is-open="(productVariant.trackInventory && !productVariant.hasOptions)">
+			            <product-inventory-section product="product" product-variant="productVariant" default-warehouse="defaultWarehouse" warehouses="warehouses" ></product-inventory-section>
+			        </merchello-slide-open-panel>
 
-                                    <div class="row-fluid">
-                                        <div class="form-group col-xs-6 span6">
-                                            <select data-ng-model="productVariant" data-ng-options="pv.name for pv in possibleVariants track by pv.sku" class="form-control col-xs-8 span8"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                                                       
-
-                            <div class="row-fluid">
-                                <div class="form-group col-xs-6 span6">
-                                    <label for="price">Price</label>
-                                    <input id="price" name="price" required data-ng-pattern="/^\d+(\.\d+)?$/" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.price" />
-                                </div>
-
-                                <div class="form-group col-xs-6 span6">
-                                    <label for="saleprice">Sale Price</label>
-                                    <input id="saleprice" name="saleprice" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.salePrice" />
-                                </div>
-                            </div>
-
-                            <div class="row-fluid">
-                                <div class="form-group col-xs-6 span6">
-                                    <label for="sku">Base Sku <small>Must have a unique SKU</small></label>
-                                    <input id="sku" data-ng-required="!creatingVariant" data-ng-disabled="creatingVariant" name="sku" required type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.sku" />
-                                </div>
-
-                                <div class="form-group col-xs-6 span6">
-                                    <label for="barcode">Barcode <small>e.g. UPC, ISBN</small></label>
-                                    <input id="barcode" name="barcode" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.barcode" />
-                                </div>
-                            </div>
-                                    
-                            <div class="row-fluid">
-                                <div class="form-group col-xs-6 span6">
-                                    <label for="manufacturer">Manufacturer</label>
-                                    <input id="manufacturer" name="manufacturer" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.manufacturer"  />
-                                </div>
-
-                                <div class="form-group col-xs-6 span6">
-                                    <label for="manufacturermodelnumber">Manufacturer's Model No.</label>
-                                    <input id="manufacturermodelnumber" name="manufacturermodelnumber" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.manufacturerModelNumber"  />
-                                </div>
-                            </div>
-
-                            <div class="row-fluid">
-                                <div class="form-group col-xs-6 span6">
-                                    <label class="label-checkbox"><input name="digital" type="checkbox" data-ng-model="productVariant.hasDigitalDownload"> <span>This variant has digital goods</span></label>
-                                    <label class="label-checkbox" data-ng-show="!creatingVariant && !editingVariant"><input name="hasoptions" type="checkbox" data-ng-model="product.hasOptions" data-ng-click="ensureInitialOption()"> <span>This variant has options (like size or color)</span></label>
-                                    <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="productVariant.taxable"> <span>This variant is taxable</span></label>
-                                </div>
-                                <div class="form-group col-xs-6 span6">
-                                    <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="product.hasOptions || productVariant.hasDigitalDownload" data-ng-click="ensureCatalogInventory()"> <span>Track inventory for this variant</span></label>
-                                    <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> <span>This variant is shippable</span></label>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="control-group umb-control-group" data-ng-class="{ 'open': productVariant.hasDigitalDownload, 'closed': (!productVariant.hasDigitalDownload) }" >
-                        <label class="merchello-control-label">
-                            Digital Downloads
-                            <small>Add a file to your product variant</small>
-                        </label>
-
-                        <div class="merchello-controls">
-
-                            <div><a data-ng-click="chooseMedia()" class="btn btn-primary">Choose Media</a></div>
-
-                        </div>
-                    </div>
-              
-                    <div class="control-group umb-control-group" data-ng-show="!creatingVariant && !editingVariant" data-ng-class="{ 'open': product.hasOptions, 'closed': (!product.hasOptions) }" >
-                        <label class="merchello-control-label">
-                            Multiple Options
-                            <small>Add options to this variant and auto-populate additional variants for each option</small>
-                        </label>
-
-                        <div class="merchello-controls row-fluid">
-
-                            <div class="well col-xs-10 span10">
-                                <table class="table product-options">
-                                    <tr>
-                                        <th>
-                                            Option Name
-                                            <small>(e.g. Size, Style, Color)</small>
-                                        </th>
-                                        <th>
-                                            Option Values
-                                            <small>(e.g. red, green, blue)</small>
-                                        </th>
-                                    </tr>
-                                    <tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
-                                        <td>
-                                            <a data-ng-click="removeOption(option)" class="btn btn-small btn-warning"><i class="icon-trash"></i></a>                                        
-                                            <input class="form-control col-xs-8 span8" type="text" placeholder="Add a style..." data-ng-model="option.name" />
-                                        </td>
-                                        <td>
-                                            <tag-manager option="option"></tag-manager>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <div>
-                                    <a data-ng-click="addOption()" class="btn add">Add Another Option</a>
-                                    <a data-ng-click="updateVariants(productVariantForm)" class="btn btn-primary add">Update</a>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-10 span10">
-                                <table class="table">
-                                    <tr>
-                                        <th>
-                                            Variant
-                                        </th>
-                                        <th>
-                                            Price
-                                        </th>
-                                        <!--<th>
-                                            SKU <small>(optional)</small>
-                                        </th>-->
-                                        <th>
-                                            Barcode <small>(optional)</small>
-                                        </th>
-                                        <th>
-                                            Inventory
-                                        </th>
-                                    </tr>
-                                    <tr data-ng-repeat="variant in product.productVariants">
-                                        <td>
-                                            <input type="checkbox" data-ng-model="variant.selected"/>
-                                            <span data-ng-repeat="attribute in variant.attributes">
-                                                <span>{{attribute.name}}</span>
-                                                <span data-ng-show="!$last"> / </span>
-                                            </span>                                                    
-                                        </td>
-                                        <td>
-                                            <input class="form-control input-mini" data-ng-model="variant.price" />
-                                        </td>
-                                        <!--<td>
-                                            <input class="form-control input-mini" data-ng-model="variant.sku" />
-                                        </td>-->
-                                        <td>
-                                            <input class="form-control input-mini" data-ng-model="variant.barcode" />
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" data-ng-model="variant.trackInventory" />
-                                            <input class="form-control input-mini" data-ng-show="variant.trackInventory" data-ng-model="variant.totalInventoryCount" data-ng-change="variant.globalInventoryChanged(variant.totalInventoryCount)" />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <div class="row-fluid">
-
-                                <div class="warning col-xs-10 span10">
-                                    <i class="icon-alert large"></i>
-                                    <p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>
-                                </div>
-
-                                <div class="form-group col-xs-6 span6">
-                                    <label for="base-inventory">Base Inventory
-                                        <small>(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)</small>
-                                    </label>
-                                    <input id="base-inventory" type="text" name="base-inventory" data-ng-model="allVariantInventories" class="form-control col-xs-8 span8"  />
-                                    <a data-ng-click="applyAllVariantInventories(allVariantInventories)" class="btn btn-primary">Apply</a>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
+                    <merchello-debug-section data-props-to-debug="product,productVariant"></merchello-debug-section>
 
 
-                    <div class="control-group umb-control-group" data-ng-class="{ 'open': (productVariant.trackInventory && !productVariant.hasOptions), 'closed': (!productVariant.trackInventory || productVariant.hasOptions) }">
-                        <label class="merchello-control-label">
-                            Inventory Tracking
-                            <small>Set preferences for handling out of stock and adjust inventory for this variant</small>
-                        </label>
+			    </div>
+			    <!-- /merchello-pane -->
 
-                        <div class="merchello-controls row-fluid">
-
-                            <!--<div class="well span10">
-                                <p>How do you want to handle out of stock inventory?</p>
-
-                                <div class="radio-group">
-                                    <label class="label-radio"><input name="onsale" type="radio" value="" data-ng-model="productVariant.outOfStockPurchase" checked="checked"> <span>Stop selling</span></label>
-                                    <label class="label-radio"><input name="onsale" type="radio" value="true" data-ng-model="productVariant.outOfStockPurchase"> <span>Continue selling and...</span></label>
-                                </div>
-
-                                <div class="form-group row-fluid" data-ng-class="{ 'open': productVariant.outOfStockPurchase, 'closed': (!productVariant.outOfStockPurchase) }">
-                                    <div class="span12 col-xs-12">
-                                        <label for="outOfStockMessage">Post the following message:</label>
-                                        <textarea id="outOfStockMessage" rows="3" name="outOfStockMessage" class="col-xs-5 span5" ></textarea>
-                                    </div>
-                                    <div class="span12 col-xs-12">
-                                        <label for="stopSellingAmount">Stop selling at negative...</label>
-                                        <div class="input-append col-xs-12 span12"><input id="stopSellingAmount" name="stopSellingAmount" class="col-xs-2 span2" type="text" /><span class="add-on">items</span></div>
-                                    </div>
-                                </div>
-                            </div>-->
-
-                            <div class="span10">
-                                <table class="table">
-                                    <tr>
-                                        <th></th>
-                                        <th class="name">Warehouses</th>
-                                        <th>Stock</th>
-                                        <th>Low Count</th>
-                                    </tr>
-                                    <tr data-ng-repeat="catalogInv in productVariant.catalogInventories">
-                                        <td class="span1"><input name="incatalog" type="checkbox" disabled="disabled" checked="checked"></td>
-                                        <td class="name">{{defaultWarehouse.name}} - {{defaultWarehouse.warehouseCatalogs[0].name}}</td>
-                                        <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.count" /></td>
-                                        <td><input type="text" class="col-xs-8 span8" data-ng-model="catalogInv.lowCount" /></td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="control-group umb-control-group" data-ng-class="{ 'open': productVariant.shippable, 'closed': (!productVariant.shippable) }">
-                        <label class="merchello-control-label">
-                            Shipping Information
-                            <small>Set shipping variables: Weight, and dimensions</small>
-                        </label>
-
-                        <div class="merchello-controls">
-
-                            <div class="row-fluid">
-                                <div class="form-group span6 col-xs-6">
-                                    <label for="weight">Weight <small>(in pounds)</small></label>
-                                    <input type="text" id="weight" name="weight" class="form-control col-xs-8 span8" data-ng-model="productVariant.weight" />
-                                </div>
-                                <!--<div class="form-group span6 col-xs-6">
-                                    <label for="vendor">Vendor<small>(ie Microsoft, American Apparel)</small></label>
-                                    <select id="vendor" name="vendor" disabled="disabled" class="form-control col-xs-8 span8">
-                                        <option>Your Vendor</option>
-                                    </select>
-                                </div>-->
-                                <div class="form-group span6 col-xs-6">
-                                    <label for="length">Dimensions <small>(inches)</small></label>
-                                    <div class="form-inline">
-                                        <div class="input-append col-xs-3 span3"><input type="text" id="length" name="length" class="form-control col-xs-8 span8" data-ng-model="productVariant.length" /><span class="add-on">L</span></div>
-                                        <div class="input-append  col-xs-3 span3"><input type="text" id="width" name="width" class="form-control col-xs-8 span8" data-ng-model="productVariant.width" /><span class="add-on">W</span></div>
-                                        <div class="input-append  col-xs-3 span3"><input type="text" id="height" name="height" class="form-control col-xs-8 span8" data-ng-model="productVariant.height" /><span class="add-on">H</span></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-<!--                    <div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
-                            <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
-                            <small>Check to show debugging info</small>
-                        </label>
-
-                        <div class="merchello-controls">
-
-                            <div data-ng-show="debugging">
-                                <h3>Product</h3>
-                                <div>{{product | json}}</div>
-                                <h3>Product Variant (this could be the master)</h3>
-                                <div>{{productVariant | json}}</div>
-                           </div>
-
-                        </div>
-                    </div>-->
-
-                </div>
-                <!-- /merchello-pane -->
-
-            </div>
-        </merchello-panel>
+		    </div>
+	    </merchello-panel>
+                
+        <ul class="umb-panel-footer-nav nav nav-pills">
+            <li>
+                <a href="#/merchello/merchello/ProductList/manage"><localize key="merchelloHeadline_catalog" /></a>
+            </li>
+            <li>
+                <a href="#/merchello/merchello/ProductEditWithOptions/{{productVariant.productKey}}"><localize key="merchelloVariant_product" /></a>
+            </li>
+            <li></li>
+        </ul>
 
     </umb-panel>
 </form>

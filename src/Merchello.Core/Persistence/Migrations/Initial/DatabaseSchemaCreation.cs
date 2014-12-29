@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Configuration;
-using Merchello.Core.Events;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.DatabaseModelDefinitions;
-using Umbraco.Core;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.SqlSyntax;
-
-
-
-namespace Merchello.Core.Persistence.Migrations.Initial
+﻿namespace Merchello.Core.Persistence.Migrations.Initial
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Configuration;
+    using DatabaseModelDefinitions;
+    using Events;
+    using Models.Rdbms;
+    using Umbraco.Core;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     // TODO Generate SQL SCRIPT and follow the order of table creation
 
     /// <summary>
@@ -22,47 +20,56 @@ namespace Merchello.Core.Persistence.Migrations.Initial
     {
         #region Private Members
 
-        private readonly Database _database;
-
+        /// <summary>
+        /// The ordered tables.
+        /// </summary>
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
-            {0, typeof(TypeFieldDto)},
-            {1, typeof(AnonymousCustomerDto)},
-            {2, typeof(CustomerDto)},
-            {3, typeof(CustomerAddressDto)},             
-            {4, typeof(ItemCacheDto)},
-            {5, typeof(ItemCacheItemDto)},
-            {6, typeof(GatewayProviderSettingsDto)},
-            {7, typeof(WarehouseDto)},
-            {8, typeof(WarehouseCatalogDto)},                
-            {9, typeof(ShipCountryDto)},
-            {10, typeof(ShipMethodDto)},
-            {11, typeof(ShipRateTierDto)},                
-            {12, typeof(InvoiceStatusDto)},  
-            {13, typeof(InvoiceDto)},                   
-            {14, typeof(InvoiceItemDto)},
-            {15, typeof(InvoiceIndexDto)},
-            {16, typeof(OrderStatusDto)},
-            {17, typeof(OrderDto)},                                              
-            {18, typeof(ShipmentDto)},                 
-            {19, typeof(OrderItemDto)},
-            {20, typeof(PaymentMethodDto)}, 
-            {21, typeof(PaymentDto)},                
-            {22, typeof(ProductDto)},
-            {23, typeof(ProductVariantDto)},
-            {24, typeof(ProductOptionDto)},
-            {25, typeof(ProductAttributeDto)},
-            {26, typeof(Product2ProductOptionDto)},
-            {27, typeof(CatalogInventoryDto)},
-            {28, typeof(TaxMethodDto)},
-            {29, typeof(ProductVariant2ProductAttributeDto)},           
-            {30, typeof(AppliedPaymentDto)},
-            {31, typeof(ProductVariantIndexDto)},
-            {32, typeof(StoreSettingDto)},
-            {33, typeof(OrderIndexDto)},
-            {34, typeof(NotificationMethodDto)},
-            {35, typeof(NotificationMessageDto)}
+            { 0, typeof(TypeFieldDto) },
+            { 1, typeof(AnonymousCustomerDto) },
+            { 2, typeof(CustomerDto) },
+            { 3, typeof(CustomerIndexDto) },             
+            { 4, typeof(CustomerAddressDto) },
+            { 5, typeof(ItemCacheDto) },
+            { 6, typeof(ItemCacheItemDto) },
+            { 7, typeof(GatewayProviderSettingsDto) },
+            { 8, typeof(WarehouseDto) },
+            { 9, typeof(WarehouseCatalogDto) },                
+            { 10, typeof(ShipCountryDto) },
+            { 11, typeof(ShipMethodDto) },
+            { 12, typeof(ShipRateTierDto) },                
+            { 13, typeof(InvoiceStatusDto) },  
+            { 14, typeof(InvoiceDto) },                   
+            { 15, typeof(InvoiceItemDto) },
+            { 16, typeof(InvoiceIndexDto) },
+            { 17, typeof(OrderStatusDto) },
+            { 18, typeof(OrderDto) },    
+            { 19, typeof(ShipmentStatusDto) },                              
+            { 20, typeof(ShipmentDto) },                 
+            { 21, typeof(OrderItemDto) },
+            { 22, typeof(PaymentMethodDto) }, 
+            { 23, typeof(PaymentDto) },                
+            { 24, typeof(ProductDto) },
+            { 25, typeof(ProductVariantDto) },
+            { 26, typeof(ProductOptionDto) },
+            { 27, typeof(ProductAttributeDto) },
+            { 28, typeof(Product2ProductOptionDto) },
+            { 29, typeof(CatalogInventoryDto) },
+            { 30, typeof(TaxMethodDto) },
+            { 31, typeof(ProductVariant2ProductAttributeDto) },           
+            { 32, typeof(AppliedPaymentDto) },
+            { 33, typeof(ProductVariantIndexDto) },
+            { 34, typeof(StoreSettingDto) },
+            { 35, typeof(OrderIndexDto) },
+            { 36, typeof(NotificationMethodDto) },
+            { 37, typeof(NotificationMessageDto) },
+            { 38, typeof(AuditLogDto) }
         };
+
+        /// <summary>
+        /// The database.
+        /// </summary>
+        private readonly Database _database;        
 
         #endregion
 
