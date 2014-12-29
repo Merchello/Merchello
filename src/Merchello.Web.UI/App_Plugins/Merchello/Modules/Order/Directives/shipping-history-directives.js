@@ -19,9 +19,6 @@
             },
             link: function($scope, $element) {
 
-                //$scope.createCustomerAddressFromDialog = function(type) {
-                //    $scope.editAddressInfo({ type: type });
-                //}
                 $scope.dialogData = {};
 
                 $scope.editToAddress = function () {
