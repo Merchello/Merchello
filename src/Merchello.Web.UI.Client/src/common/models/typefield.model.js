@@ -6,10 +6,11 @@
      * @description
      * Represents a JS version of Merchello's TypeFieldDisplay object
      */
-    Merchello.Models.TypeField = function()
-    {
+    var TypeFieldDisplay = function() {
         var self = this;
-        self.alias = '';
-        self.name = '';
+        self.alias = 'test';
+        self.name = 'test';
         self.typeKey = '';
     };
+
+    angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);

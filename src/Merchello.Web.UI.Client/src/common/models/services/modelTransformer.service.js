@@ -7,7 +7,7 @@
    * A utility service that builds local models for API query results
    *  http://odetocode.com/blogs/scott/archive/2014/03/17/building-better-models-for-angularjs.aspx
    */
-    angular.module('merchello.services')
+    angular.module('merchello.models')
         .factory('modelTransformer', [
             function() {
         
@@ -17,8 +17,14 @@
         function transformObject(jsonResult, Constructor) {
             var model = new Constructor();
 
+            // if there is not result data just return the model
+            if (!jsonResult) {
+                return model;
+            }
+
             // we only want to map properties with expected keys
             // TODO this should probably only be done during dev
+            // maybe a value in a module scope?
             var keys = Object.keys(jsonResult);
             for (var i = 0; i < keys.length; i++)
             {

@@ -4,11 +4,10 @@ describe('modelBuilder.service', function() {
 
     beforeEach(module('umbraco'));
 
-    it ('should be able to build a Merchello.Model.Address populated with a jsonResult', inject(function(modelBuilder, addressMocks){
-        var result = addressMocks.getRandomAddress();
-        var address = modelBuilder.buildAddress(result);
+    it ('should be possible to build a TypeField from the prototype definition', inject(function(TypeFieldDisplay) {
+        var tf = new TypeFieldDisplay();
 
-        expect (address).toBeDefined();
-        expect (address.name != '').toBe(true);
+        expect (tf.alias).toBe('test');
+
     }));
 });
