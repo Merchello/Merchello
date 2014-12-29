@@ -1,29 +1,27 @@
-﻿namespace Merchello.Plugin.Payments.PayPal
+﻿using System;
+
+namespace Merchello.Plugin.Payments.PayPal
 {
+    /// <summary>
+    /// The constants.
+    /// </summary>
 	public class Constants
 	{
+        /// <summary>
+        /// Gets the gateway provider settings key.
+        /// </summary>
+        public static Guid GatewayProviderSettingsKey
+        {
+            get { return new Guid("4E9D52B5-65A2-4F23-89D6-8E83500D4137"); }
+        }
+
 		public static class ExtendedDataKeys
 		{
 			public static string ProcessorSettings = "paypalProcessorSettings";
-
-			/*
-			public static string LoginId = "paypalLoginId";
-			public static string TransactionKey = "paypalTranKey";
-
-			public static string CcLastFour = "paypalCCLastFour";
-
-			public static string AuthorizeDeclinedResult = "paypalAuthorizeDeclined";
-			public static string AuthorizationTransactionCode = "paypalAuthorizeTransactionCode";
-			public static string AuthorizationTransactionResult = "paypalAuthorizeTransactionResult";
-			public static string AvsResult = "paypalAvsResult";
-
-			public static string CaptureDeclinedResult = "paypalCaptureDeclined";
-			public static string CaputureTransactionCode = "paypalCaptureTransactionCode";
-			public static string CaptureTransactionResult = "paypalCaptureTransactionResult";
-
-			public static string RefundDeclinedResult = "paypalRefundDeclined";
-			public static string VoidDeclinedResult = "paypalVoidDeclined";
-			*/
+            public static string OrderConfirmUrl = "OrderConfirmUrl";
+            public static string AuthorizationId = "AuthorizationID";
+            public static string AmountCurrencyId = "AmountCurrencyID";
+            public static string TransactionId = "TransactionID";
 		}
 	}
 }
