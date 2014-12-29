@@ -32,7 +32,7 @@ Merchello.Models = {};
     if (!('umbraco.services' in angular.module('umbraco.packages').requires)) {
         angular.module('umbraco.packages').requires.push('umbraco.services');
     }
-    
+
     angular.module('umbraco.packages').requires.push('merchello');
 }());
 
