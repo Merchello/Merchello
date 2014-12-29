@@ -65,6 +65,8 @@
                 Price = FieldAsDecimal(result, "price"),
                 OnSale = FieldAsBoolean(result.Fields["onSale"]),
                 SalePrice = FieldAsDecimal(result, "salePrice"),
+                Manufacturer = FieldAsString(result, "manufacturer"),
+                ManufacturerModelNumber = FieldAsString(result, "modelNumber"),
                 CostOfGoods = FieldAsDecimal(result, "costOfGoods"),
                 Weight = FieldAsDecimal(result, "weight"),
                 Length = FieldAsDecimal(result, "length"),
