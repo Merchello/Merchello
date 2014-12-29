@@ -1,4 +1,5 @@
-﻿// the Merchello angular module
+﻿// The Merchello namespace is only used to store our models at this point.
+// TODO Move models into the merchello module.
 var Merchello = {};
 Merchello.Models = {};
 
