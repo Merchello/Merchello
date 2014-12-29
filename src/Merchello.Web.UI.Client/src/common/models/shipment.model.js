@@ -1,12 +1,12 @@
 ﻿    /**
     * @ngdoc model
-    * @name merchello.models.shipment
+    * @name ShipmentDisplay
     * @function
     * 
     * @description
     * Represents a JS version of Merchello's ShipmentDisplay object
     */
-    Merchello.Models.Shipment = function () {
+    var ShipmentDisplay = function () {
 
         var self = this;
 
@@ -39,12 +39,12 @@
         self.trackingCode = '';
         self.shippedDate = '';
         self.items = [];
-        self.shipmentStatus = new Merchello.Models.ShipmentStatus();
+        self.shipmentStatus = new ShipmentStatus();
     };
 
     // Shipment Prototype
     // ------------------------------------------------
-    Merchello.Models.Shipment.prototype = (function () {
+    ShipmentDisplay.prototype = (function () {
 
         //// Private members
 
@@ -91,7 +91,7 @@
             // Utility to build an address
             buildAddress = function(name, address1, address2, locality, region, postalCode, countryCode, organization,
                                     isCommercial, phone, email, addressType) {
-                var adr = new Merchello.Models.Address();
+                var adr = new Address();
                 adr.name = name;
                 adr.address1 = address1;
                 adr.address2 = address2;
@@ -151,3 +151,4 @@
         };
     }());
 
+    angular.module('merchello.models').constant('ShipmentDisplay', ShipmentDisplay);

@@ -7,11 +7,16 @@
 (function() { 
 
 angular.module('merchello.mocks').
-    factory('addressMocks', [
+    factory('addressMocks', ['AddressDisplay',
         function () {
             'use strict';
 
-            var Constructor = Merchello.Models.Address;
+            var Constructor = AddressDisplay;
+
+            function getConstructor()
+            {
+                return Constructor;
+            }
 
             function getSingleAddress() {
                 var address = new Constructor();
@@ -41,18 +46,18 @@ angular.module('merchello.mocks').
                 };
             }
 
-            function getRandomAddress(modelTransformer)
+            function getRandomAddress(genericModelBuilder)
             {
                 var addresses = getAddressArray();
                 var index = Math.floor(Math.random() * addresses.length);
 
-                if (modelTransformer === undefined) {
+                if (genericModelBuilder === undefined) {
                     return addresses[index];
                 }
-                return modelTransformer.transform(addresses[index], Merchello.Models.Address);
+                return genericModelBuilder.transform(addresses[index], Constructor);
             }
 
-            function getAddressArray(modelTransformer) {
+            function getAddressArray(genericModelBuilder) {
 
                 var addresses = [
                     {
@@ -102,14 +107,15 @@ angular.module('merchello.mocks').
                     }
                 ];
 
-                if (modelTransformer === undefined) {
+                if (genericModelBuilder === undefined) {
                     return addresses;
                 }
 
-                return modelTransformer.transform(addresses, Merchello.Models.Address);
+                return genericModelBuilder.transform(addresses, Constructor);
             }
 
             return {
+                getConstructor: getConstructor,
                 getSingleAddress : getSingleAddress,
                 getBadAddressResult: getBadAddressResult,
                 getAddressArray: getAddressArray,
@@ -125,7 +131,8 @@ angular.module('merchello.mocks').
             // Private
             function getAddressDialogData(addressMocks) {
                 var dialogData = {};
-                dialogData.address = addressMocks.getSingleAddress();
+                var address = addressMocks.getSingleAddress();
+                dialogData.address = address;
                 return dialogData;
             }
 

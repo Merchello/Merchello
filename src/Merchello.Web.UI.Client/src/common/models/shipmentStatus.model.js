@@ -6,7 +6,7 @@
     * @description
     * Represents a JS version of Merchello's ShipmentStatusDisplay object
     */
-    Merchello.Models.ShipmentStatus = function () {
+    var ShipmentStatusDisplay = function () {
         var self = this;
         self.key = '';
         self.name = '';
@@ -15,3 +15,5 @@
         self.active = '';
         self.sortOrder = '';
     };
+
+    angular.module('merchello.models').constant('ShipmentStatusDisplay', ShipmentStatusDisplay);

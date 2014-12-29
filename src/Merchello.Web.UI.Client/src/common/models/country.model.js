@@ -6,7 +6,7 @@
      * @description
      * Represents a JS version of Merchello's CountryDisplay object
      */
-    Merchello.Models.Country = function() {
+    var CountryDisplay = function() {
         var self = this;
 
         self.key = '';
@@ -15,3 +15,5 @@
         self.provinceLabel = '';
         self.provinces = [];
     };
+
+    angular.module('merchello.models').constant('CountryDisplay', CountryDisplay);

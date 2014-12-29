@@ -6,7 +6,8 @@ angular.module('merchello.mocks').
             // Private
             function getAddressDialogData(addressMocks) {
                 var dialogData = {};
-                dialogData.address = addressMocks.getSingleAddress();
+                var address = addressMocks.getSingleAddress();
+                dialogData.address = address;
                 return dialogData;
             }
 

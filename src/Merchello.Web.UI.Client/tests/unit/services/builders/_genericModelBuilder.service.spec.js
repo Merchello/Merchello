@@ -1,20 +1,26 @@
 'use strict';
 
-describe("modelTransformer.service", function () {
+describe("genericModelBuilder.service", function () {
+
+    var Constructor;
 
     beforeEach(module('umbraco'));
+
+    beforeEach(inject(function(addressMocks) {
+        Constructor = addressMocks.getConstructor();
+    }));
 
     describe('address transformation tests', function() {
 
         it ('should transform an array of json addresses to an array of Merchello.Models.Address',
-            inject(function(modelTransformer, addressMocks) {
+            inject(function(genericModelBuilder, addressMocks) {
 
                 // Arrange
-                var constructor = Merchello.Models.Address;
+                var constructor = Constructor;
                 var addressArray = addressMocks.getAddressArray();
 
                 //// Act
-                var addresses = modelTransformer.transform(addressArray, constructor);
+                var addresses = genericModelBuilder.transform(addressArray, constructor);
 
                 //// Assert
                 expect (typeof(addresses)).toBe('object');
@@ -22,9 +28,9 @@ describe("modelTransformer.service", function () {
         }));
 
         it ('address should not contain invalid properties',
-            inject(function(modelTransformer) {
+            inject(function(genericModelBuilder) {
                 // Arrange
-                var constructor = Merchello.Models.Address;
+                var constructor = Constructor;
                 var badAddress = {
                     name : 'Mindfly',
                     address1: '114 W. Magnolia St.',
@@ -40,7 +46,7 @@ describe("modelTransformer.service", function () {
                 };
 
                 //// Act
-                var address = modelTransformer.transform(badAddress, constructor);
+                var address = genericModelBuilder.transform(badAddress, constructor);
 
                 //// Assert
                 expect (typeof(address)).toBe('object');
@@ -55,5 +61,13 @@ describe("modelTransformer.service", function () {
                 expect (address.property1).toBeUndefined();
                 expect (address.property2).toBeUndefined();
             }));
+
+        it ('should be able to check module constants', function() {
+            var module = angular.module('merchello.models');
+          for (var i = 0; i < module.constant.length; i++)
+          {
+              console.info(module.constant[i].key());
+          }
+        });
     });
 });

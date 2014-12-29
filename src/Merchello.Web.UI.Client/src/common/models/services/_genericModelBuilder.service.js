@@ -8,19 +8,13 @@
    *  http://odetocode.com/blogs/scott/archive/2014/03/17/building-better-models-for-angularjs.aspx
    */
     angular.module('merchello.models')
-        .factory('modelTransformer', [
+        .factory('genericModelBuilder', [
             function() {
         
         // private
-
         // transforms json object into a local model
         function transformObject(jsonResult, Constructor) {
             var model = new Constructor();
-
-            // if there is not result data just return the model
-            if (!jsonResult) {
-                return model;
-            }
 
             // we only want to map properties with expected keys
             // TODO this should probably only be done during dev

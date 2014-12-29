@@ -1,9 +1,14 @@
 ﻿angular.module('merchello.mocks').
-    factory('addressMocks', [
+    factory('addressMocks', ['AddressDisplay',
         function () {
             'use strict';
 
-            var Constructor = Merchello.Models.Address;
+            var Constructor = AddressDisplay;
+
+            function getConstructor()
+            {
+                return Constructor;
+            }
 
             function getSingleAddress() {
                 var address = new Constructor();
@@ -33,18 +38,18 @@
                 };
             }
 
-            function getRandomAddress(modelTransformer)
+            function getRandomAddress(genericModelBuilder)
             {
                 var addresses = getAddressArray();
                 var index = Math.floor(Math.random() * addresses.length);
 
-                if (modelTransformer === undefined) {
+                if (genericModelBuilder === undefined) {
                     return addresses[index];
                 }
-                return modelTransformer.transform(addresses[index], Merchello.Models.Address);
+                return genericModelBuilder.transform(addresses[index], Constructor);
             }
 
-            function getAddressArray(modelTransformer) {
+            function getAddressArray(genericModelBuilder) {
 
                 var addresses = [
                     {
@@ -94,14 +99,15 @@
                     }
                 ];
 
-                if (modelTransformer === undefined) {
+                if (genericModelBuilder === undefined) {
                     return addresses;
                 }
 
-                return modelTransformer.transform(addresses, Merchello.Models.Address);
+                return genericModelBuilder.transform(addresses, Constructor);
             }
 
             return {
+                getConstructor: getConstructor,
                 getSingleAddress : getSingleAddress,
                 getBadAddressResult: getBadAddressResult,
                 getAddressArray: getAddressArray,

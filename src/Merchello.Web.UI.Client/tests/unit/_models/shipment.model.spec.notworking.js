@@ -4,14 +4,14 @@ describe("Merchello.Models.Shipment", function () {
 
     beforeEach(module('umbraco'));
 
-    describe("Shipment Prototype Methods", function() {
-        var constructor = Merchello.Models.Shipment;
+    describe("Shipment Prototype Methods", function(Shipment) {
+        var constructor = Shipment;
 
-        it ("should be possible to set the 'to' address", inject(function(modelTransformer, addressMocks) {
+        it ("should be possible to set the 'to' address", inject(function(genericModelBuilder, addressMocks) {
 
             //// Arrange
             var shipment = new constructor;
-            var address = addressMocks.getRandomAddress(modelTransformer);
+            var address = addressMocks.getRandomAddress(genericModelBuilder);
 
             //// Act
             shipment.setDestinationAddress(address);
@@ -28,11 +28,11 @@ describe("Merchello.Models.Shipment", function () {
             expect (shipment.email).toBe(address.email);
         }));
 
-        it ('should be possible to get the destination as an address', inject(function(modelTransformer, addressMocks) {
+        it ('should be possible to get the destination as an address', inject(function(genericModelBuilder, addressMocks) {
 
             //// Arrange
             var shipment = new constructor;
-            var address = addressMocks.getRandomAddress(modelTransformer);
+            var address = addressMocks.getRandomAddress(genericModelBuilder);
             shipment.setDestinationAddress(address);
 
             //// Act
@@ -50,11 +50,11 @@ describe("Merchello.Models.Shipment", function () {
             expect (destination.email).toBe(address.email);
         }));
 
-        it ('should be possible to set the origin address', inject(function(modelTransformer, addressMocks){
+        it ('should be possible to set the origin address', inject(function(genericModelBuilder, addressMocks){
 
             //// Arrange
             var shipment = new constructor;
-            var address = addressMocks.getRandomAddress(modelTransformer);
+            var address = addressMocks.getRandomAddress(genericModelBuilder);
 
             //// Act
             shipment.setOriginAddress(address);
@@ -70,11 +70,11 @@ describe("Merchello.Models.Shipment", function () {
         }));
 
         it ('should be possible to get the origin address from a shipment',
-            inject(function(modelTransformer, addressMocks) {
+            inject(function(genericModelBuilder, addressMocks) {
 
             //// Arrange
             var shipment = new constructor;
-            var address = addressMocks.getRandomAddress(modelTransformer);
+            var address = addressMocks.getRandomAddress(genericModelBuilder);
             shipment.setOriginAddress(address);
 
             //// Act
@@ -93,12 +93,12 @@ describe("Merchello.Models.Shipment", function () {
         }));
 
         //// this is really only to test the shipmentMocks
-        it ('shipment.mocks should be able to create an empty shipment', inject(function(modelTransformer, shipmentMocks, addressMocks) {
+        it ('shipment.mocks should be able to create an empty shipment', inject(function(genericModelBuilder, shipmentMocks, addressMocks) {
             ////  Arrange
             // nothing to do
 
             //// Act
-            var shipment = shipmentMocks.getEmptyShipment(modelTransformer, addressMocks);
+            var shipment = shipmentMocks.getEmptyShipment(genericModelBuilder, addressMocks);
 
             //// Assert
             expect (shipment).toBeDefined();

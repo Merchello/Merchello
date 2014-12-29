@@ -6,7 +6,7 @@
     * @description
     * Represents a JS version of Merchello's AddressDisplay object
     */
-    Merchello.Models.Address = function () {
+    var AddressDisplay = function () {
 
         var self = this;
 
@@ -23,3 +23,5 @@
         self.email = '';
         self.isCommercial = false;
     };
+
+    angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);
