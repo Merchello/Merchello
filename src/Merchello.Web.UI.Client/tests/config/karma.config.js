@@ -35,7 +35,8 @@
 
             // merchello
             'tests/config/merchello.module.unit.js',
-            'build/App_Plugins/Merchello/js/merchello.models.js',
+            //'build/App_Plugins/Merchello/js/merchello.models.js',
+            'src/common/models/**/*.model.js',
             'build/App_Plugins/Merchello/js/merchello.filters.js',
             'build/App_Plugins/Merchello/js/merchello.directives.js',
             'build/App_Plugins/Merchello/js/merchello.resources.js',
