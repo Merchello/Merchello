@@ -116,7 +116,7 @@
                 }
             },
             services: {
-                src: ['src/common/services/*.js', 'src/common/models/factories/*.factory.js'],
+                src: ['src/common/services/*.js', 'src/common/models/factories/**/*.factory.js'],
                 dest: '<%= distdir %>/js/merchello.services.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',

@@ -18,4 +18,16 @@
         self.sortDirection = 'Ascending'; // valid options are 'Ascending' and 'Descending'
     };
 
+    QueryDisplay.prototype = (function() {
+        // private
+        function AddParameter(queryParameter) {
+            this.parameters.push(queryParameter);
+        }
+
+        // public
+        return {
+            AddParameter: AddParameter
+        };
+    }());
+
     angular.module('merchello.models').constant('QueryDisplay', QueryDisplay);
