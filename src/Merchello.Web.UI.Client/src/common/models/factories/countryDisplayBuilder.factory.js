@@ -19,9 +19,7 @@
                     transform: function(jsonResult) {
                         var countries = genericModelBuilder.transform(jsonResult, Constructor);
                         for(var i = 0; i < countries.length; i++) {
-                            for(var j = 0; j < countries[ i ].provinces.length; j++) {
-                                countries[ i ].provinces.push(provinceDisplayBuilder.transform(countries[ i ].provinces[ j ], ProvinceDisplay));
-                            }
+                            country.provinces = provinceDisplayBuilder.transform(jsonResult[ i ].provinces);
                         }
                         return countries;
                     }

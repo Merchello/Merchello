@@ -17,12 +17,12 @@
     };
 
     QueryResultDisplay.prototype = (function() {
-        function AddItem(item) {
+        function addItem(item) {
             this.items.push(item);
         }
 
         return {
-            AddItem: AddItem
+            addItem: addItem
         };
     }());
 
