@@ -17,11 +17,13 @@
                         return new Constructor();
                     },
                     transform: function(jsonResult) {
-                        var country = genericModelBuilder.transform(jsonResult, Constructor);
-                        country.provinces = _.map(jsonResult.provinces, function(province) {
-                            return provinceDisplayBuilder.transform(province);
-                        });
-                        return country;
+                        var countries = genericModelBuilder.transform(jsonResult, Constructor);
+                        for(var i = 0; i < countries.length; i++) {
+                            for(var j = 0; j < countries[ i ].provinces.length; j++) {
+                                countries[ i ].provinces.push(provinceDisplayBuilder.transform(countries[ i ].provinces[ j ], ProvinceDisplay));
+                            }
+                        }
+                        return countries;
                     }
                 };
 

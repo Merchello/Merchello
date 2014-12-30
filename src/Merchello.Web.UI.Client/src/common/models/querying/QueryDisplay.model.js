@@ -5,6 +5,10 @@
      *
      * @description
      * Represents a JS version of Merchello's QueryDisplay object
+     *
+     * @remark
+     * PetaPoco Page<T> uses a 1 based page rather than a 0 based to represent the first page.
+     * We do the conversion in the WebApiController - so the JS QueryDisplay should assume this is 0 based.
      */
     var QueryDisplay = function() {
         self.currentPage = 0;
