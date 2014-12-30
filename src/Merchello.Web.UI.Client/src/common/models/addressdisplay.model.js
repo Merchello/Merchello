@@ -23,5 +23,5 @@
         self.email = '';
         self.isCommercial = false;
     };
-
+    
     angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);

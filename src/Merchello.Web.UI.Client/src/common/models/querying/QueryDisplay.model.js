@@ -13,7 +13,7 @@
     var QueryDisplay = function() {
         var self = this;
         self.currentPage = 0;
-        self.itemsPerPage = 0;
+        self.itemsPerPage = 25;
         self.parameters = [];
         self.sortBy = '';
         self.sortDirection = 'Ascending'; // valid options are 'Ascending' and 'Descending'
@@ -25,9 +25,30 @@
             this.parameters.push(queryParameter);
         }
 
+        function addCustomerKeyParam(customerKey) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'customerKey';
+            param.value = customerKey;
+            addParameter(param);
+        }
+
+        function addInvoiceDateParam(dateString, startOrEnd) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = startOrEnd == 'start' ? 'invoiceDateStart' : 'invoiceEndDate';
+            param.value = dateString;
+            addParameter(param);
+        }
+
+        function applyInvoiceQueryDefaults() {
+            this.sortBy = 'invoiceNumber';
+            this.sortDirection = 'Descending';
+        }
+
         // public
         return {
-            addParameter: addParameter
+            addParameter: addParameter,
+            addCustomerKeyParam: addCustomerKeyParam,
+            applyInvoiceQueryDefaults: applyInvoiceQueryDefaults
         };
     }());
 
