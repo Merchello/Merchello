@@ -16,4 +16,19 @@
             expect (shipment).toBeDefined();
             expect (_.isEqual(expected, shipment)).toBe(true);
         }));
+
+        it('should be able to transform results from ShipmentApiService into an array of ShipmentDisplay', inject(function(shipmentDisplayBuilder, shipmentMocks) {
+           //// Arrange
+            var results = shipmentMocks.shipmentsArray();
+
+            //// Act
+            var shipments = shipmentDisplayBuilder.transform(results);
+
+            ///// Assert
+            expect(results.length).toBe(shipments.length);
+            console.info(shipments[0].items[0].extendedData);
+
+
+
+        }));
     });

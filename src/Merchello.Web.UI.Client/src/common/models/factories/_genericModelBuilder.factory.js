@@ -14,19 +14,6 @@
         // transforms json object into a local model
         function transformObject(jsonResult, Constructor) {
             var model = new Constructor();
-
-            // we only want to map properties with expected keys
-            // TODO this should probably only be done during dev
-            // maybe a value in a module scope?
-            var keys = Object.keys(jsonResult);
-            for (var i = 0; i < keys.length; i++)
-            {
-                if(!(keys[i] in model))
-                {
-                    delete jsonResult[keys[i]];
-                }
-            }
-
             angular.extend(model, jsonResult);
             return model;
         }

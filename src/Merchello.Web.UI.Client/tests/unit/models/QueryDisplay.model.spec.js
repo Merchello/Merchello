@@ -16,6 +16,6 @@ describe('QueryDisplay', function() {
 
         //// Assert
         expect(query.parameters.length).toBe(1);
+        expect(_.isEqual(query.parameters[0], parameter));
     });
-
 });

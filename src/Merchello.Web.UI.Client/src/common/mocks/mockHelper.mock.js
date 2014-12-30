@@ -1,11 +1,3 @@
-/*! merchello
- * https://github.com/meritage/Merchello
- * Copyright (c) 2014 Merchello;
- * Licensed MIT
- */
-
-(function() { 
-
 angular.module('merchello.mocks')
     .factory('mockHelper', [function() {
 
@@ -38,5 +30,3 @@ angular.module('merchello.mocks')
             downCasePropertiesInObjectArray: downCasePropertiesInObjectArray
         };
     }]);
-
-})();

@@ -80,6 +80,7 @@
         /// <returns>
         /// The <see cref="InvoiceDisplay"/>.
         /// </returns>
+        /// TODO rename to GetByKey
         public InvoiceDisplay GetInvoice(Guid id)
         {
             return _merchello.Query.Invoice.GetByKey(id);

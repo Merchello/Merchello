@@ -27,11 +27,7 @@
                             // each shipment has a ShipmentStatusDisplay
                             shipments[ i ].shipmentStatus = shipmentStatusBuilder.transform(jsonResult[ i ].shipmentStatus, ShipmentStatusDisplay);
                             // add the OrderLineItemDisplay(s) associated with the shipment
-                            for(var j = 0; j < jsonResult[ i ].items.length; j++)
-                            {
-                                // did this manually so that we did not create functions within a loop
-                                shipments[ i ].items.push(orderLineItemBuilder.transform(jsonResult[ i ].items[ j ], OrderLineItemDisplay));
-                            }
+                            shipments[ i ].items = orderLineItemBuilder.transform(jsonResult[ i ].items);
                         }
                         return shipments;
                     }

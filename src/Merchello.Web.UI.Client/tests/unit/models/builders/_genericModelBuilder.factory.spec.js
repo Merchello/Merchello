@@ -35,8 +35,8 @@ describe("genericModelBuilder.service", function () {
                     countryCode: 'US',
 
                     // bad data
-                    property1: 'should not be here',
-                    property2: 'should not be here'
+                    //property1: 'should not be here',
+                    //property2: 'should not be here'
                 };
 
                 //// Act
