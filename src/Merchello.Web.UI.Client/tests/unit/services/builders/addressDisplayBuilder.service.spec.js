@@ -27,5 +27,14 @@
             //expect (address.isCommercial).toBeDefined();
         }));
 
+        it ('should populate an addresses with a transform from a json result', inject(function(addressDisplayBuilder, addressMocks) {
+            //// Arrange
+            var jsonResult = addressMocks.getAddressArray();
 
+            //// Act
+            var addresses = addressDisplayBuilder.transform(jsonResult);
+
+            //// Assert
+            expect (addresses.length).toBe(jsonResult.length);
+        }));
     });
