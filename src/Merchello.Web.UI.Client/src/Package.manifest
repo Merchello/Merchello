@@ -25,6 +25,6 @@
 		'~/App_Plugins/Merchello2/js/merchello.controllers.js'
 	],
 	css: [
-		'~/App_Plugins/Merchello/Common/Css/merchello.css'
+		'~/App_Plugins/Merchello/Common/Css/merchello.min.css'
 	]
 }

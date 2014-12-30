@@ -3,6 +3,8 @@
         function (addressDisplayBuilder) {
             'use strict';
 
+            // TODO this technically is no longer a mock ... these should be straight json objects
+            // and not inject the addressDisplayBuilder
 
             function getSingleAddress() {
                 var address = addressDisplayBuilder.createDefault();
