@@ -20,14 +20,16 @@ angular.module('merchello.services', ['merchello.models', 'merchello.resources']
 angular.module('merchello.mocks', ['merchello.models']);
 
 //// Assert our dependencies
-if (!('umbraco.filters' in angular.module('umbraco.packages').requires)) {
+var requires = angular.module('umbraco.packages').requires;
+if ($.inArray('umbraco.filter', requires) < 0) {
     angular.module('umbraco.packages').requires.push('umbraco.filters');
 }
-if (!('umbraco.directives' in angular.module('umbraco.packages').requires)) {
+if ($.inArray('umbraco.directives', requires) < 0) {
     angular.module('umbraco.packages').requires.push('umbraco.directives');
 }
-if (!('umbraco.services' in angular.module('umbraco.packages').requires)) {
+if ($.inArray('umbraco.services', requires) < 0) {
     angular.module('umbraco.packages').requires.push('umbraco.services');
 }
+    
 angular.module('umbraco.packages').requires.push('merchello');
 }());
