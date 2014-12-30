@@ -1,15 +1,17 @@
     /**
      * @ngdoc model
-     * @name Merchello.Models.ListQuery
+     * @name QueryDisplay
      * @function
      *
      * @description
-     * Represents a JS version of Merchello's ListQueryDisplay object
+     * Represents a JS version of Merchello's QueryDisplay object
      */
-    Merchello.Models.ListQuery = function(sortBy) {
+    var QueryDisplay = function() {
         self.currentPage = 0;
         self.itemsPerPage = 0;
         self.parameters = [];
-        self.sortBy = sortBy !== undefined ? sortBy : '';
+        self.sortBy = '';
         self.sortDirection = 'Ascending'; // valid options are 'Ascending' and 'Descending'
     };
+
+    angular.module('merchello.models').constant('QueryDisplay', QueryDisplay);

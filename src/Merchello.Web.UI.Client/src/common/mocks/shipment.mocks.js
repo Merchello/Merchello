@@ -1,13 +1,13 @@
 angular.module('merchello.mocks').
-    factory('shipmentMocks', [
-        function () {
+    factory('shipmentMocks', ['shipmentDisplayBuilder',
+        function (shipmentDisplayBuilder) {
             'use strict';
 
-            var Constructor = Merchello.Models.Shipment;
+            var builder = shipmentDisplayBuilder;
 
             // Private
             function getEmptyShipment(modelTransformer, addressMocks) {
-                var shipment = new Constructor();
+                var shipment = bulder.createDefault();
                 shipment.setDestinationAddress(addressMocks.getRandomAddress(modelTransformer));
                 shipment.setOriginAddress(addressMocks.getRandomAddress(modelTransformer));
                 return shipment;

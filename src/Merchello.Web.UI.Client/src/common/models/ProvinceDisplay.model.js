@@ -1,14 +1,16 @@
     /**
      * @ngdoc model
-     * @name Merchello.Models.Province
+     * @name ProvinceDisplay
      * @function
      *
      * @description
      * Represents a JS version of Merchello's ProvinceDisplay object
      */
-     Merchello.Models.Province = function()
+     var ProvinceDisplay = function()
      {
          var self = this;
          self.name = '';
          self.code = '';
      };
+
+    angular.module('merchello.models').constant('ProvinceDisplay', ProvinceDisplay);

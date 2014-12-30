@@ -7,19 +7,13 @@
 (function() { 
 
 angular.module('merchello.mocks').
-    factory('addressMocks', ['AddressDisplay',
-        function () {
+    factory('addressMocks', ['addressDisplayBuilder',
+        function (addressDisplayBuilder) {
             'use strict';
 
-            var Constructor = AddressDisplay;
-
-            function getConstructor()
-            {
-                return Constructor;
-            }
 
             function getSingleAddress() {
-                var address = new Constructor();
+                var address = addressDisplayBuilder.createDefault();
                 address.name = 'Disney World';
                 address.address1 = 'Walt Disney World Resort';
                 address.locality = 'Lake Buena Vista';
@@ -54,7 +48,7 @@ angular.module('merchello.mocks').
                 if (genericModelBuilder === undefined) {
                     return addresses[index];
                 }
-                return genericModelBuilder.transform(addresses[index], Constructor);
+                return addressDisplayBuilder.transform(addresses[index]);
             }
 
             function getAddressArray(genericModelBuilder) {
@@ -111,11 +105,10 @@ angular.module('merchello.mocks').
                     return addresses;
                 }
 
-                return genericModelBuilder.transform(addresses, Constructor);
+                return addressDisplayBuilder.transform(addresses);
             }
 
             return {
-                getConstructor: getConstructor,
                 getSingleAddress : getSingleAddress,
                 getBadAddressResult: getBadAddressResult,
                 getAddressArray: getAddressArray,
@@ -143,15 +136,15 @@ angular.module('merchello.mocks').
         }]);
 
 angular.module('merchello.mocks').
-    factory('shipmentMocks', [
-        function () {
+    factory('shipmentMocks', ['shipmentDisplayBuilder',
+        function (shipmentDisplayBuilder) {
             'use strict';
 
-            var Constructor = Merchello.Models.Shipment;
+            var builder = shipmentDisplayBuilder;
 
             // Private
             function getEmptyShipment(modelTransformer, addressMocks) {
-                var shipment = new Constructor();
+                var shipment = bulder.createDefault();
                 shipment.setDestinationAddress(addressMocks.getRandomAddress(modelTransformer));
                 shipment.setOriginAddress(addressMocks.getRandomAddress(modelTransformer));
                 return shipment;

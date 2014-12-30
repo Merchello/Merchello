@@ -1,21 +1,18 @@
     /**
      * @ngdoc service
-     * @name merchello.services.addressDisplayBuilder
+     * @name merchello.services.currencyDisplayBuilder
      *
      * @description
-     * A utility service that builds AddressDisplay models
+     * A utility service that builds CurrencyDisplay models
      */
     angular.module('merchello.models')
-        .factory('addressDisplayBuilder',
-            ['genericModelBuilder',
-                function(genericModelBuilder) {
+        .factory('currencyDisplayBuilder',
+        ['genericModelBuilder',
+            function(genericModelBuilder) {
 
-                var Constructor = AddressDisplay;
+                var Constructor = CurrencyDisplay;
 
                 return {
-                    getConstructor: function () {
-                        return Constructor;
-                    },
                     createDefault: function() {
                         return new Constructor();
                     },
@@ -23,4 +20,4 @@
                         return genericModelBuilder.transform(jsonResult, Constructor);
                     }
                 };
-        }]);
+            }]);

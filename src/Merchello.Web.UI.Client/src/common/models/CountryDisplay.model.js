@@ -1,6 +1,6 @@
     /**
      * @ngdoc model
-     * @name Merchello.Models.Country
+     * @name CountryDisplay
      * @function
      *
      * @description

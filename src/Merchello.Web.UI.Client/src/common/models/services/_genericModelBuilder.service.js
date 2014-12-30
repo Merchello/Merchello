@@ -1,7 +1,6 @@
 ﻿    /**
    * @ngdoc service
-   * @name merchello.services.modelTransformer
-   * @function
+   * @name merchello.services.genericModelBuilder
    * 
    * @description
    * A utility service that builds local models for API query results
@@ -32,37 +31,20 @@
             return model;
         }
 
+        function transform(jsonResult, Constructor) {
+            if (angular.isArray(jsonResult)) {
+                var models = [];
+                angular.forEach(jsonResult, function (object) {
+                    models.push(transformObject(object, Constructor));
+                });
+                return models;
+            } else {
+                return transformObject(jsonResult, Constructor);
+            }
+        }
+
         // public
         return {
-
-            /**
-            * @ngdoc method
-            * @name merchello.services.modelTransformer#hasPermission
-            * @methodOf merchello.services.modelTransformer
-            *
-            * @description
-            * A utility service that builds local models for API query results
-            *
-            * ##usage
-            * <pre>
-            * var models = modelTransfomer.transform(jsonArray, [Model]);
-            * </pre> 
-            *
-            * @param {jsonResult} json array (or object) typically returned by a resouce
-            * @param {constructor} the model to instantiate        
-            * @returns a model or array of models.
-            *
-            */
-            transform: function(jsonResult, Constructor) {
-                if (angular.isArray(jsonResult)) {
-                    var models = [];
-                    angular.forEach(jsonResult, function (object) {
-                        models.push(transformObject(object, Constructor));
-                    });
-                    return models;
-                } else {
-                    return transformObject(jsonResult, Constructor);
-                }
-            }
+            transform : transform
         };
     }]);

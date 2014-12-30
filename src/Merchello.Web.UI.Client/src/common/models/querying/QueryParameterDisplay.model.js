@@ -1,14 +1,16 @@
     /**
      * @ngdoc model
-     * @name Merchello.Models.ListQueryParameter
+     * @name QueryParameterDisplay
      * @function
      *
      * @description
      * Represents a JS version of Merchello's ListQueryParameterDisplay object
      */
-    Merchello.Models.ListQueryParameter = function()
+    var QueryParameterDisplay = function()
     {
         var self = this;
         self.fieldName = '';
         self.value = '';
     };
+
+    angular.module('merchello.models').constant('QueryParameterDisplay', QueryParameterDisplay);

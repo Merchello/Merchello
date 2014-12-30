@@ -1,6 +1,6 @@
 ﻿    /**
     * @ngdoc model
-    * @name Merchello.Models.Address
+    * @name AddressDisplay
     * @function
     * 
     * @description

@@ -39,7 +39,7 @@
         self.trackingCode = '';
         self.shippedDate = '';
         self.items = [];
-        self.shipmentStatus = new ShipmentStatus();
+        self.shipmentStatus = {};
     };
 
     // Shipment Prototype
@@ -91,7 +91,7 @@
             // Utility to build an address
             buildAddress = function(name, address1, address2, locality, region, postalCode, countryCode, organization,
                                     isCommercial, phone, email, addressType) {
-                var adr = new Address();
+                var adr = new AddressDisplay();
                 adr.name = name;
                 adr.address1 = address1;
                 adr.address2 = address2;

@@ -2,13 +2,7 @@
 
 describe("genericModelBuilder.service", function () {
 
-    var Constructor;
-
     beforeEach(module('umbraco'));
-
-    beforeEach(inject(function(addressMocks) {
-        Constructor = addressMocks.getConstructor();
-    }));
 
     describe('address transformation tests', function() {
 
@@ -16,11 +10,11 @@ describe("genericModelBuilder.service", function () {
             inject(function(genericModelBuilder, addressMocks) {
 
                 // Arrange
-                var constructor = Constructor;
+                var constructor = AddressDisplay;
                 var addressArray = addressMocks.getAddressArray();
 
                 //// Act
-                var addresses = genericModelBuilder.transform(addressArray, constructor);
+                var addresses = genericModelBuilder.transform(addressArray, AddressDisplay);
 
                 //// Assert
                 expect (typeof(addresses)).toBe('object');
@@ -30,7 +24,7 @@ describe("genericModelBuilder.service", function () {
         it ('address should not contain invalid properties',
             inject(function(genericModelBuilder) {
                 // Arrange
-                var constructor = Constructor;
+                var constructor = AddressDisplay;
                 var badAddress = {
                     name : 'Mindfly',
                     address1: '114 W. Magnolia St.',
