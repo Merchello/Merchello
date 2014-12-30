@@ -30,6 +30,6 @@ if ($.inArray('umbraco.directives', requires) < 0) {
 if ($.inArray('umbraco.services', requires) < 0) {
     angular.module('umbraco.packages').requires.push('umbraco.services');
 }
-    
+
 angular.module('umbraco.packages').requires.push('merchello');
 }());

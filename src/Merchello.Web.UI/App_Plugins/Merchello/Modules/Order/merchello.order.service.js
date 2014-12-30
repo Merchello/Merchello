@@ -54,6 +54,7 @@
                     'Failed to get orders by invoice: ' + invoiceKey);
             },
 
+            // TODO this needs to be renamed
             processesProductsToBackofficeOrder: function (customerKey, products, shippingAddress, billingAddress) {
                 var model = {};
                 model.CustomerKey = customerKey;

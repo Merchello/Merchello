@@ -13,9 +13,6 @@
                 var Constructor = AddressDisplay;
 
                 return {
-                    getConstructor: function () {
-                        return Constructor;
-                    },
                     createDefault: function() {
                         return new Constructor();
                     },
