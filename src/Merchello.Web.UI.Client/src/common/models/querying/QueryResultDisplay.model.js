@@ -16,4 +16,14 @@
         self.totalPages = 0;
     };
 
+    QueryResultDisplay.prototype = (function() {
+        function AddItem(item) {
+            this.items.push(item);
+        }
+
+        return {
+            AddItem: AddItem
+        };
+    }());
+
     angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
