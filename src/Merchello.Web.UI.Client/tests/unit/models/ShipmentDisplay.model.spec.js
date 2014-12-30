@@ -38,15 +38,7 @@ describe("ShipmentDisplay", function () {
         var destination = shipment.getDestinationAddress();
 
         //// Assert
-        expect (destination.name).toBe(address.name);
-        expect (destination.address1).toBe(address.address1);
-        expect (destination.address2).toBe(address.address2)
-        expect (destination.locality).toBe(address.locality);
-        expect (destination.region).toBe(address.region);
-        expect (destination.postalCode).toBe(address.postalCode);
-        expect (destination.countryCode).toBe(address.countryCode);
-        expect (destination.phone).toBe(address.phone);
-        expect (destination.email).toBe(address.email);
+        expect (_.isEqual(address, destination));
     }));
 
     it ('should be possible to set the origin address', inject(function(shipmentDisplayBuilder, genericModelBuilder, addressMocks) {
@@ -77,16 +69,9 @@ describe("ShipmentDisplay", function () {
 
         //// Act
         var origin = shipment.getOriginAddress();
+        address.addressType = 'shipping'; // this is set in the prototype method
 
         //// Assert
-        expect (origin.name).toBe(address.name);
-        expect (origin.address1).toBe(address.address1);
-        expect (origin.address2).toBe(address.address2)
-        expect (origin.locality).toBe(address.locality);
-        expect (origin.region).toBe(address.region);
-        expect (origin.postalCode).toBe(address.postalCode);
-        expect (origin.countryCode).toBe(address.countryCode);
-        expect (origin.phone).toBe(address.phone);
-        expect (origin.email).toBe(address.email);
+        expect (_.isEqual(origin, address)).toBe(true);
     }));
 });

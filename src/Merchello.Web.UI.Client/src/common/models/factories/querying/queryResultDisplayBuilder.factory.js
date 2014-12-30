@@ -22,7 +22,7 @@
                       if (itemBuilder !== undefined) {
                           item = itemBuilder.transform(item);
                       }
-                      result.items.push(item);
+                      result.addItem(item);
                     });
                     return result;
                 }

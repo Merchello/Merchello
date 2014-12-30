@@ -55,13 +55,5 @@ describe("genericModelBuilder.service", function () {
                 expect (address.property1).toBeUndefined();
                 expect (address.property2).toBeUndefined();
             }));
-
-        it ('should be able to check module constants', function() {
-            var module = angular.module('merchello.models');
-          for (var i = 0; i < module.constant.length; i++)
-          {
-              console.info(module.constant[i].key());
-          }
-        });
     });
 });

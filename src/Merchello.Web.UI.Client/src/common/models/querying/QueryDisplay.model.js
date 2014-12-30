@@ -11,6 +11,7 @@
      * We do the conversion in the WebApiController - so the JS QueryDisplay should assume this is 0 based.
      */
     var QueryDisplay = function() {
+        var self = this;
         self.currentPage = 0;
         self.itemsPerPage = 0;
         self.parameters = [];
@@ -20,13 +21,13 @@
 
     QueryDisplay.prototype = (function() {
         // private
-        function AddParameter(queryParameter) {
+        function addParameter(queryParameter) {
             this.parameters.push(queryParameter);
         }
 
         // public
         return {
-            AddParameter: AddParameter
+            addParameter: addParameter
         };
     }());
 

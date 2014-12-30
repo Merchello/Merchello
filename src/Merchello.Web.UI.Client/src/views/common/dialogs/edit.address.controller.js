@@ -11,7 +11,7 @@
         function ($scope) {
 
         $scope.init = function() {
-            console.info($scope.dialogData);
+            //console.info($scope.dialogData);
             $scope.setVariables();
         };
 
