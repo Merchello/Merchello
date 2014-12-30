@@ -1,12 +1,14 @@
     /**
      * @ngdoc model
-     * @name Merchello.Models.Address
+     * @name GatewayResourceDisplay
      * @function
      *
      * @description
      * Represents a JS version of Merchello's GatewayResourceDisplay object
      */
-    Merchello.Models.GatewayResource = function() {
+    var GatewayResourceDisplay = function() {
         self.name = '';
         self.serviceCode = '';
     };
+
+    angular.module('merchello.models').constant('GatewayResourceDisplay', GatewayResourceDisplay);

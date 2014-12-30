@@ -1,15 +1,16 @@
     /**
      * @ngdoc model
-     * @name Merchello.Models.Country
+     * @name CurrencyDisplay
      * @function
      *
      * @description
      * Represents a JS version of Merchello's CurrencyDisplay object
      */
-    Merchello.Models.Currency = function() {
+    var CurrencyDisplay = function() {
         var self = this;
         self.name = "";
         self.currencyCode = "";
         self.symbol = "";
     };
 
+    angular.module('merchello.models').constant('CurrencyDisplay', CurrencyDisplay);

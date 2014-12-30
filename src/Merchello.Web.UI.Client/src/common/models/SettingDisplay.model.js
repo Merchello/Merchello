@@ -6,8 +6,7 @@
      * @description
      * Represents a JS version of Merchello's SettingDisplay object
      */
-    // TODO this should be renamed in the Core and updated here
-    Merchello.Models.Setting = function() {
+    var SettingDisplay = function() {
         self.currencyCode = '';
         self.nextOrderNumber = 0;
         self.nextInvoiceNumber = 0;
@@ -20,3 +19,5 @@
         self.globalTrackInventory = false;
         self.globalShippingIsTaxable = false;
     };
+
+    angular.module('merchello.models').constant('SettingDisplay', SettingDisplay);

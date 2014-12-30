@@ -37,14 +37,16 @@
             'tests/config/merchello.module.unit.js',
             //'build/App_Plugins/Merchello/js/merchello.models.js',
             'src/common/models/**/*.model.js',
+            /*
             'build/App_Plugins/Merchello/js/merchello.filters.js',
             'build/App_Plugins/Merchello/js/merchello.directives.js',
             'build/App_Plugins/Merchello/js/merchello.resources.js',
             'build/App_Plugins/Merchello/js/merchello.services.js',
             'build/App_Plugins/Merchello/js/merchello.controllers.js',
             'build/App_Plugins/Merchello/js/merchello.testing.js',
-            //'src/common/**/*.js',
-            //'src/views/**/*.js',
+            */
+            'src/common/**/*.js',
+            'src/views/**/*.js',
             'tests/unit/**/*.spec.js',
             { pattern: 'lib/**/*.js', watched: true, served: true, included: false }
         ],

@@ -1,12 +1,13 @@
+
     /**
      * @ngdoc model
-     * @name Merchello.Models.QueryResult
+     * @name QueryResultDisplay
      * @function
      *
      * @description
      * Represents a JS version of Merchello's QueryResultDisplay object
      */
-    Merchello.Models.QueryResult = function() {
+    var QueryResultDisplay = function() {
         var self = this;
         self.currentPage = 0;
         self.items = [];
@@ -14,3 +15,5 @@
         self.totalItems = 0;
         self.totalPages = 0;
     };
+
+    angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);

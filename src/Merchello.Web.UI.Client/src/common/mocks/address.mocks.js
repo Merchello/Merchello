@@ -1,12 +1,11 @@
 ﻿angular.module('merchello.mocks').
-    factory('addressMocks', [
-        function () {
+    factory('addressMocks', ['addressDisplayBuilder',
+        function (addressDisplayBuilder) {
             'use strict';
 
-            var Constructor = Merchello.Models.Address;
 
             function getSingleAddress() {
-                var address = new Constructor();
+                var address = addressDisplayBuilder.createDefault();
                 address.name = 'Disney World';
                 address.address1 = 'Walt Disney World Resort';
                 address.locality = 'Lake Buena Vista';
@@ -33,18 +32,18 @@
                 };
             }
 
-            function getRandomAddress(modelTransformer)
+            function getRandomAddress(genericModelBuilder)
             {
                 var addresses = getAddressArray();
                 var index = Math.floor(Math.random() * addresses.length);
 
-                if (modelTransformer === undefined) {
+                if (genericModelBuilder === undefined) {
                     return addresses[index];
                 }
-                return modelTransformer.transform(addresses[index], Merchello.Models.Address);
+                return addressDisplayBuilder.transform(addresses[index]);
             }
 
-            function getAddressArray(modelTransformer) {
+            function getAddressArray(genericModelBuilder) {
 
                 var addresses = [
                     {
@@ -94,11 +93,11 @@
                     }
                 ];
 
-                if (modelTransformer === undefined) {
+                if (genericModelBuilder === undefined) {
                     return addresses;
                 }
 
-                return modelTransformer.transform(addresses, Merchello.Models.Address);
+                return addressDisplayBuilder.transform(addresses);
             }
 
             return {

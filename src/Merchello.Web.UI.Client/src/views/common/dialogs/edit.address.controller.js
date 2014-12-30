@@ -20,7 +20,6 @@
         };
 
         $scope.save = function() {
-            $scope.dialogData.address = $scope.address;
             $scope.submit();
         };
 

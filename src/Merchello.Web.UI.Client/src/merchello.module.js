@@ -1,9 +1,4 @@
-﻿// The Merchello.Models namespace
-// TODO this should be able to be isolated to 'merchello.models' and purposely injected where
-var Merchello = {};
-Merchello.Models = {};
-
-// Bootstrap the Merchello angular module
+﻿// Bootstrap the Merchello angular module
 (function() {
     angular.module('merchello', [
         'umbraco.filters',

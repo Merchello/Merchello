@@ -279,6 +279,7 @@
          * @description - Open the fufill shipment dialog.
          */
         $scope.openFulfillShipmentDialog = function () {
+            // TODO make all of the service calls here and load up the dialog data.
             console.info($scope.invoice);
             dialogService.open({
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
