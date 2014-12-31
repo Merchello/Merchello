@@ -228,11 +228,21 @@
          * @description - Open the capture shipment dialog.
          */
         $scope.capturePayment = function () {
+
+            /// TODO: DFB - m-548 pass global settings into both dialogs
+            /// in order to get rid of dependency on merchelloGeneral_moneySymbol 
+            /// merchelloSettingsService is already passed in
+
+            var dialogData = {
+                invoice: $scope.invoice,
+                currencySymbol: $scope.currencySymbol
+            };
+
             dialogService.open({
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/capture.payment.html',
                 show: true,
                 callback: $scope.capturePaymentDialogConfirm,
-                dialogData: $scope.invoice
+                dialogData: dialogData
             });
         };
 

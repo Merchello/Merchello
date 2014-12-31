@@ -55,11 +55,21 @@
          * Open the capture shipment dialog.
          */
         $scope.capturePayment = function () {
+
+            var dialogData = {
+                invoice: $scope.invoice,
+                currencySymbol: $scope.currencySymbol
+            };
+
             dialogService.open({
+
+                /// TODO: DFB - m-548 pass global settings into both dialogs
+                /// in order to get rid of dependency on merchelloGeneral_moneySymbol 
+
                 template: '/App_Plugins/Merchello/Modules/Order/Dialogs/capture.payment.html',
                 show: true,
                 callback: $scope.capturePaymentDialogConfirm,
-                dialogData: $scope.invoice
+                dialogData: dialogData
             });
         };
 
@@ -160,7 +170,7 @@
                     invoice.payments = _.uniq(_.map(invoice.appliedPayments, function (appliedPayment) {
                         return appliedPayment.payment;
                     }));
-                }
+                }http://localhost:58400/Dialogs
                 _.each(invoice.appliedPayments, function (appliedPayment) {
                     if (appliedPayment.appliedPaymentTfKey) {
                         var matchedTypeField = _.find($scope.typeFields, function (type) {
