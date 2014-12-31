@@ -6,9 +6,9 @@
      * A utility service that builds GatewayResourceDisplay models
      */
     angular.module('merchello.models')
-        .factory('orderDisplayBuilder', 'orderStatusDisplayBuilder', 'orderLineItemDisplayBuilder',
+        .factory('orderDisplayBuilder', 'orderStatusDisplayBuilder', 'orderLineItemDisplayBuilder', 'OrderDisplay',
         ['genericModelBuilder',
-            function(genericModelBuilder, orderStatusDisplayBuilder, orderLineItemDisplayBuilder) {
+            function(genericModelBuilder, orderStatusDisplayBuilder, orderLineItemDisplayBuilder, OrderDisplay) {
                 var Constructor = OrderDisplay;
 
                 return {

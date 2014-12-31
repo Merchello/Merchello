@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
         .factory('addressDisplayBuilder',
-            ['genericModelBuilder',
-                function(genericModelBuilder) {
+            ['genericModelBuilder', 'AddressDisplay',
+                function(genericModelBuilder, AddressDisplay) {
 
                 var Constructor = AddressDisplay;
 

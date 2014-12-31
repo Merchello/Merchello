@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
         .factory('orderStatusDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'OrderStatusDisplay',
+            function(genericModelBuilder, OrderStatusDisplay) {
 
                 var Constructor = OrderStatusDisplay;
 

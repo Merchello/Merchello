@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
         .factory('settingDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'SettingDisplay',
+            function(genericModelBuilder, SettingDisplay) {
 
                 var Constructor = SettingDisplay;
 

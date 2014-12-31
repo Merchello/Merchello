@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
         .factory('currencyDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'CurrencyDisplay',
+            function(genericModelBuilder, CurrencyDisplay) {
 
                 var Constructor = CurrencyDisplay;
 

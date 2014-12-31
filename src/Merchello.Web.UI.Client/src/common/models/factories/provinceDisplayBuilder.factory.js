@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
         .factory('provinceDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'ProvinceDisplay',
+            function(genericModelBuilder, ProvinceDisplay) {
                 var Constructor = ProvinceDisplay;
                 return {
                     createDefault: function() {

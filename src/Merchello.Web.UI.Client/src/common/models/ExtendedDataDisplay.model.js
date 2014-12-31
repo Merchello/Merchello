@@ -37,3 +37,5 @@
             setValue: setValue
         };
     }());
+
+    angular.module('merchello.models').constant('ExtendedDataDisplay', ExtendedDataDisplay);

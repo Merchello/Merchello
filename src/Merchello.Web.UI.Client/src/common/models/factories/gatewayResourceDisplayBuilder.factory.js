@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
         .factory('gatewayResourceDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'GatewayResourceDisplay',
+            function(genericModelBuilder, GatewayResourceDisplay) {
                 var Constructor = GatewayResourceDisplay;
                 return {
                     createDefault: function() {

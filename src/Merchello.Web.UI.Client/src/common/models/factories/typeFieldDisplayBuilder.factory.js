@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
     .factory('typeFieldDisplayBuilder',
-    ['genericModelBuilder',
-        function(genericModelBuilder) {
+    ['genericModelBuilder', 'TypeFieldDisplay',
+        function(genericModelBuilder, TypeFieldDisplay) {
 
             var Constructor = TypeFieldDisplay;
 

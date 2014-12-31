@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
         .factory('queryResultDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'QueryResultDisplay',
+            function(genericModelBuilder, QueryResultDisplay) {
             var Constructor = QueryResultDisplay;
             return {
                 createDefault: function() {

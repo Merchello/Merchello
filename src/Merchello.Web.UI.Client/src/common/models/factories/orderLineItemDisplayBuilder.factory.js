@@ -7,8 +7,8 @@
      */
     angular.module('merchello.models')
         .factory('orderLineItemDisplayBuilder',
-        ['genericModelBuilder', 'extendedDataDisplayBuilder',
-            function(genericModelBuilder, extendedDataDisplayBuilder) {
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'OrderLineItemDisplay',
+            function(genericModelBuilder, extendedDataDisplayBuilder, OrderLineItemDisplay) {
                 var Constructor = OrderLineItemDisplay;
                 return {
                     createDefault: function() {

@@ -3,7 +3,7 @@
     describe("shipmentDisplayBuilder", function () {
         beforeEach(module('umbraco'));
 
-        it ('should be able to create a default ShipmentDisplay (an empty AddressDisplay)', inject(function(shipmentDisplayBuilder) {
+        it ('should be able to create a default ShipmentDisplay (an empty AddressDisplay)', inject(function(shipmentDisplayBuilder, ShipmentDisplay, ShipmentStatusDisplay) {
 
             //// Arrange
             var expected = new ShipmentDisplay();

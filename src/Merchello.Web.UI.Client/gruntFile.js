@@ -132,7 +132,7 @@
                 }
             },
             testing: {
-                src: ['src/common/mocks/*.js'],
+                src: ['src/common/mocks/**/*.js'],
                 dest: '<%= distdir %>/js/merchello.testing.js',
                 options: {
                     banner: "<%= banner %>\n(function() { \n\n",

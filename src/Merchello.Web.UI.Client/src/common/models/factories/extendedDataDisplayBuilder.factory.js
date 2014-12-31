@@ -7,14 +7,15 @@
      */
     angular.module('merchello.models')
         .factory('extendedDataDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'ExtendedDataDisplay',
+            function(genericModelBuilder, ExtendedDataDisplay) {
 
                 var Constructor = ExtendedDataDisplay;
                 var extendedDataItem = new function() {
                     this.key = '';
                     this.value = '';
                 };
+
                 return {
                     createDefault: function() {
                         return new Constructor();
