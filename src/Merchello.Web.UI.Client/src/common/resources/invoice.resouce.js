@@ -46,6 +46,7 @@
                      * @description
                      **/
                     searchInvoices: function (query) {
+
                         if (query === undefined) {
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();

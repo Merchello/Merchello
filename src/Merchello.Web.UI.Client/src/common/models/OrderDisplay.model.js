@@ -47,3 +47,5 @@
         };
 
     }());
+
+    angular.module('merchello.models').constant('OrderDisplay', OrderDisplay);

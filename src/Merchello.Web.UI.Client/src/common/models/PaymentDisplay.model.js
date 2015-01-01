@@ -24,25 +24,27 @@
 
     PaymentDisplay.prototype = (function() {
 
-        function getStatus() {
-            var statusArr = [];
-            if (this.authorized) {
-                statusArr.push("Authorized");
-            }
-            if (this.collected) {
-                statusArr.push("Captured");
-            }
-            if (this.exported) {
-                statusArr.push("Exported");
+        // private
+        var getStatus = function() {
+                var statusArr = [];
+                if (this.authorized) {
+                    statusArr.push("Authorized");
+                }
+                if (this.collected) {
+                    statusArr.push("Captured");
+                }
+                if (this.exported) {
+                    statusArr.push("Exported");
+                }
+
+                return statusArr.join("/");
+            },
+
+            hasAmount = function() {
+                return this.amount > 0;
             }
 
-            return statusArr.join("/");
-        }
-
-        function hasAmount() {
-            return this.amount > 0;
-        }
-
+        // public
         return {
             getStatus: getStatus,
             hasAmount: hasAmount

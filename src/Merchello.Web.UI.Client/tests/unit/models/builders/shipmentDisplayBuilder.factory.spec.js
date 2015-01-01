@@ -26,9 +26,6 @@
 
             ///// Assert
             expect(results.length).toBe(shipments.length);
-            console.info(shipments[0].items[0].extendedData);
-
-
 
         }));
     });
