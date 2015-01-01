@@ -6,6 +6,7 @@ angular.module('merchello', [
     'umbraco.filters',
 	'umbraco.directives',
     'umbraco.services',
+    'umbraco.mocks',
     'merchello.filters',
     'merchello.directives',
     'merchello.resources',
