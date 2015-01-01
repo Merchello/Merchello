@@ -128,7 +128,7 @@
          */
         $scope.prepareProvinceDropdown = function () {
             for (var i = 0; i < $scope.provinces.length; i++) {
-                if ($scope.provinces[i].name == $scope.currentAddress.region) {
+                if ($scope.provinces[i].code == $scope.currentAddress.region) {
                     $scope.filters.province = $scope.provinces[i];
                 }
             }
