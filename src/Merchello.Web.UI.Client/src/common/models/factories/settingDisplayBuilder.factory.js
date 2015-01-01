@@ -1,14 +1,14 @@
     /**
      * @ngdoc service
-     * @name merchello.services.settingDisplayBuilder
+     * @name merchello.models.settingDisplayBuilder
      *
      * @description
      * A utility service that builds SettingDisplay models
      */
     angular.module('merchello.models')
         .factory('settingDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'SettingDisplay',
+            function(genericModelBuilder, SettingDisplay) {
 
                 var Constructor = SettingDisplay;
 

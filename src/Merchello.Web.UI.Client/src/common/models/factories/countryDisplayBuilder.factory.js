@@ -1,14 +1,14 @@
     /**
      * @ngdoc service
-     * @name merchello.services.countryDisplayBuilder
+     * @name merchello.models.countryDisplayBuilder
      *
      * @description
      * A utility service that builds CountryDisplay models
      */
     angular.module('merchello.models')
         .factory('countryDisplayBuilder',
-        ['genericModelBuilder', 'provinceDisplayBuilder',
-            function(genericModelBuilder, provinceDisplayBuilder) {
+        ['genericModelBuilder', 'provinceDisplayBuilder', 'CountryDisplay',
+            function(genericModelBuilder, provinceDisplayBuilder, CountryDisplay) {
 
                 var Constructor = CountryDisplay;
 
@@ -19,7 +19,7 @@
                     transform: function(jsonResult) {
                         var countries = genericModelBuilder.transform(jsonResult, Constructor);
                         for(var i = 0; i < countries.length; i++) {
-                            country.provinces = provinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                            countries[i].provinces = provinceDisplayBuilder.transform(jsonResult[ i ].provinces);
                         }
                         return countries;
                     }

@@ -1,14 +1,14 @@
     /**
      * @ngdoc service
-     * @name merchello.services.provinceDisplayBuilder
+     * @name merchello.models.provinceDisplayBuilder
      *
      * @description
      * A utility service that builds ProvinceDisplay models
      */
     angular.module('merchello.models')
         .factory('provinceDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'ProvinceDisplay',
+            function(genericModelBuilder, ProvinceDisplay) {
                 var Constructor = ProvinceDisplay;
                 return {
                     createDefault: function() {

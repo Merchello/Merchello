@@ -44,7 +44,7 @@
             Console.WriteLine(JsonConvert.SerializeObject(invoices));
         }
 
-        [Test]
+        //[Test]
         public void ShipmentJsonResults()
         {
             var shipmentService = MerchelloContext.Current.Services.ShipmentService;
@@ -53,6 +53,16 @@
 
             Console.WriteLine(JsonConvert.SerializeObject(shipments));
 
+        }
+
+        [Test]
+        public void PaymentJsonResults()
+        {
+            var paymentService = MerchelloContext.Current.Services.PaymentService;
+
+            var payments = ((PaymentService)paymentService).GetAll().Select(x => x.ToPaymentDisplay());
+
+            Console.WriteLine(JsonConvert.SerializeObject(payments));
         }
     }
 }

@@ -69,8 +69,35 @@
                         return umbRequestHelper.resourcePromise(
                             $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchByDateRange'), query),
                             'Failed to retreive invoices');
-                    }
+                    },
 
+                    /**
+                     * @ngdoc method
+                     * @name saveInvoice
+                     * @description
+                     **/
+                    saveInvoice: function (invoice) {
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoice'),
+                                invoice
+                            ),
+                            'Failed to save invoice');
+                    },
+
+                    /**
+                     * @ngdoc method
+                     * @name deleteInvoice
+                     * @description
+                     **/
+                    deleteInvoice: function (invoiceKey) {
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'DeleteInvoice'),
+                                method: "GET",
+                                params: { id: invoiceKey }
+                            }),
+                            'Failed to delete invoice');
+                    }
 
                 };
 

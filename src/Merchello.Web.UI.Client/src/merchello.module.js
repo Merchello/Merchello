@@ -4,7 +4,6 @@
         'umbraco.filters',
         'umbraco.directives',
         'umbraco.services',
-        'merchello.models',
         'merchello.filters',
         'merchello.directives',
         'merchello.resources',

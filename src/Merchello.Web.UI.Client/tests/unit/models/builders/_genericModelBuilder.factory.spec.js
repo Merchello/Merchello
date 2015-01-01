@@ -7,7 +7,7 @@ describe("genericModelBuilder.service", function () {
     describe('address transformation tests', function() {
 
         it ('should transform an array of json addresses to an array of Merchello.Models.Address',
-            inject(function(genericModelBuilder, addressMocks) {
+            inject(function(genericModelBuilder, addressMocks, AddressDisplay) {
 
                 // Arrange
                 var constructor = AddressDisplay;
@@ -22,7 +22,7 @@ describe("genericModelBuilder.service", function () {
         }));
 
         it ('address should not contain invalid properties',
-            inject(function(genericModelBuilder) {
+            inject(function(genericModelBuilder, AddressDisplay) {
                 // Arrange
                 var constructor = AddressDisplay;
                 var badAddress = {

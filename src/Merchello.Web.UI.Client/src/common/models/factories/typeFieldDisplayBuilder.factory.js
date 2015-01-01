@@ -1,14 +1,14 @@
     /**
      * @ngdoc service
-     * @name merchello.services.typeFieldDisplayBuilder
+     * @name merchello.models.typeFieldDisplayBuilder
      *
      * @description
      * A utility service that builds TypeFieldDisplay models
      */
     angular.module('merchello.models')
     .factory('typeFieldDisplayBuilder',
-    ['genericModelBuilder',
-        function(genericModelBuilder) {
+    ['genericModelBuilder', 'TypeFieldDisplay',
+        function(genericModelBuilder, TypeFieldDisplay) {
 
             var Constructor = TypeFieldDisplay;
 

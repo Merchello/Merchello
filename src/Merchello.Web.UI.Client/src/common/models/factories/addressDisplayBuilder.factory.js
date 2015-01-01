@@ -1,14 +1,14 @@
     /**
      * @ngdoc service
-     * @name merchello.services.addressDisplayBuilder
+     * @name merchello.models.addressDisplayBuilder
      *
      * @description
      * A utility service that builds AddressDisplay models
      */
     angular.module('merchello.models')
         .factory('addressDisplayBuilder',
-            ['genericModelBuilder',
-                function(genericModelBuilder) {
+            ['genericModelBuilder', 'AddressDisplay',
+                function(genericModelBuilder, AddressDisplay) {
 
                 var Constructor = AddressDisplay;
 

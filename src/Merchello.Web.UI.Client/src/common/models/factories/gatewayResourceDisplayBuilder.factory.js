@@ -1,14 +1,14 @@
     /**
      * @ngdoc service
-     * @name merchello.services.gatewayResourceDisplayBuilder
+     * @name merchello.models.gatewayResourceDisplayBuilder
      *
      * @description
      * A utility service that builds GatewayResourceDisplay models
      */
     angular.module('merchello.models')
         .factory('gatewayResourceDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'GatewayResourceDisplay',
+            function(genericModelBuilder, GatewayResourceDisplay) {
                 var Constructor = GatewayResourceDisplay;
                 return {
                     createDefault: function() {

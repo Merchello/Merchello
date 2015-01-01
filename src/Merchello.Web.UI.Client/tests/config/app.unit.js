@@ -6,6 +6,7 @@
     'umbraco.packages',
 	'umbraco.mocks',
 	'umbraco.security',
-    'ngCookies'
+    'ngCookies',
+	'tmh.dynamicLocale'
 ]);
 var packages = angular.module("umbraco.packages", []);

@@ -14,6 +14,7 @@
             'lib/angular/1.1.5/angular-cookies.min.js',
             'lib/angular/1.1.5/angular-mocks.js',
             'lib/angular/angular-ui-sortable.js',
+            'lib/angular/tmhDynamicLocale.js',
 
             'lib/underscore/underscore.js',
             'lib/umbraco/Extensions.js',
@@ -25,20 +26,20 @@
             'tests/config/app.unit.js',
             'tests/lib/umbraco/mocks/umbraco.servervariables.js',
 
-            'tests/lib/umbraco/directives/*.js',
-            'tests/lib/umbraco/filters/*.js',
-            'tests/lib/umbraco/services/*.js',
-            'tests/lib/umbraco/security/*.js',
-            'tests/lib/umbraco/resources/*.js',
-            'tests/lib/umbraco/mocks/**/*.js',
-            'tests/lib/umbraco/views/**/*.controller.js',
+            'tests/lib/umbraco/umbraco.directives.js',
+            'tests/lib/umbraco/umbraco.filters.js',
+            'tests/lib/umbraco/umbraco.services.js',
+            'tests/lib/umbraco/umbraco.security.js',
+            'tests/lib/umbraco/umbraco.resources.js',
+            'tests/lib/umbraco/umbraco.testing.js',
+            'tests/lib/umbraco/umbraco.controllers.js',
 
             // merchello
             'tests/config/merchello.module.unit.js',
-            //'build/App_Plugins/Merchello/js/merchello.models.js',
-            'src/common/models/**/*.model.js',
-            /*
+
             //// this is to test the actual build files
+            /*
+            'build/App_Plugins/Merchello/js/merchello.models.js',
             'build/App_Plugins/Merchello/js/merchello.filters.js',
             'build/App_Plugins/Merchello/js/merchello.directives.js',
             'build/App_Plugins/Merchello/js/merchello.resources.js',
@@ -46,7 +47,9 @@
             'build/App_Plugins/Merchello/js/merchello.controllers.js',
             'build/App_Plugins/Merchello/js/merchello.testing.js',
             */
+
             //// this is for development - easier to find line numbers of stuff that is breaking.
+            'src/common/models/**/*.model.js',
             'src/common/**/*.js',
             'src/views/**/*.js',
             'tests/unit/**/*.spec.js',

@@ -1,14 +1,14 @@
     /**
      * @ngdoc service
-     * @name merchello.services.currencyDisplayBuilder
+     * @name merchello.models.currencyDisplayBuilder
      *
      * @description
      * A utility service that builds CurrencyDisplay models
      */
     angular.module('merchello.models')
         .factory('currencyDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'CurrencyDisplay',
+            function(genericModelBuilder, CurrencyDisplay) {
 
                 var Constructor = CurrencyDisplay;
 

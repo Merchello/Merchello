@@ -1,14 +1,14 @@
     /**
      * @ngdoc service
-     * @name merchello.services.shipmentStatusDisplayBuilder
+     * @name merchello.models.shipmentStatusDisplayBuilder
      *
      * @description
      * A utility service that builds ShipmentStatusDisplay models
      */
     angular.module('merchello.models')
     .factory('shipmentStatusDisplayBuilder',
-    ['genericModelBuilder',
-        function(genericModelBuilder) {
+    ['genericModelBuilder', 'ShipmentStatusDisplay',
+        function(genericModelBuilder, ShipmentStatusDisplay) {
 
             var Constructor = ShipmentStatusDisplay;
 

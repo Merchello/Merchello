@@ -1,20 +1,21 @@
     /**
      * @ngdoc service
-     * @name merchello.services.extendedDataDisplayBuilder
+     * @name merchello.models.extendedDataDisplayBuilder
      *
      * @description
      * A utility service that builds ExtendedDataBuilder models
      */
     angular.module('merchello.models')
         .factory('extendedDataDisplayBuilder',
-        ['genericModelBuilder',
-            function(genericModelBuilder) {
+        ['genericModelBuilder', 'ExtendedDataDisplay',
+            function(genericModelBuilder, ExtendedDataDisplay) {
 
                 var Constructor = ExtendedDataDisplay;
-                var extendedDataItem = new function() {
+                var extendedDataItem = function() {
                     this.key = '';
                     this.value = '';
                 };
+
                 return {
                     createDefault: function() {
                         return new Constructor();

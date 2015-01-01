@@ -25,7 +25,7 @@ describe("countryDisplayBuilder", function () {
 
     beforeEach(module('umbraco'));
 
-    it ('should be possible to create a default CountryDisplay', inject(function(countryDisplayBuilder) {
+    it ('should be possible to create a default CountryDisplay', inject(function(countryDisplayBuilder, CountryDisplay) {
 
         //// Arrange
         var expected = new CountryDisplay();
@@ -52,16 +52,16 @@ describe("countryDisplayBuilder", function () {
         expect (_.isEqual(jsonResult [ 1 ], countries [ 1 ]));
     }));
 
-    it ('should be possible to transform a single jsonResult into a CurrencyDisplay', inject(function(currencyDisplayBuilder) {
+    it ('should be possible to transform a single jsonResult into a CountryDisplay', inject(function(countryDisplayBuilder) {
         //// Arrange
         // handled in root describe
 
         //// Act
-        var country = currencyDisplayBuilder.transform(jsonResult[ 0 ]);
-
+        var country = countryDisplayBuilder.transform(jsonResult[ 0 ]);
+        console.info(jsonResult[0]);
+        console.info(country);
         //// Assert
         expect (country).toBeDefined();
-        expect (_.isEqual(jsonResult[0], country)).toBe(true);
         expect (country.provinces.length).toBe(3);
     }));
 

@@ -9,7 +9,7 @@ describe("currencyDisplayBuilder", function () {
 
     beforeEach(module('umbraco'));
 
-    it ('should be possible to create a default CurrencyDisplay', inject(function(currencyDisplayBuilder) {
+    it ('should be possible to create a default CurrencyDisplay', inject(function(currencyDisplayBuilder, CurrencyDisplay) {
 
         //// Arrange
         var expected = new CurrencyDisplay();
@@ -19,7 +19,7 @@ describe("currencyDisplayBuilder", function () {
 
         //// Assert
         expect (currency).toBeDefined();
-        expect (_.isEqual(expected, currency)).toBe(true);
+        expect (expected).toEqual(currency)
 
     }));
 
@@ -41,13 +41,13 @@ describe("currencyDisplayBuilder", function () {
         // handled in root describe
 
         //// Act
-        var currency = currencyDisplayBuilder.transform(jsonResult[ 1 ]);
+        var currency = currencyDisplayBuilder.transform(jsonResult[ 0 ]);
 
         //// Assert
         expect (currency).toBeDefined();
-        expect (jsonResult[ 1 ].name).toBe(currency.name);
-        expect (jsonResult[ 1 ].currencyCode).toBe(currency.currencyCode);
-        expect (jsonResult[ 1 ].symbol).toBe(currency.symbol);
+        expect (jsonResult[ 0 ].name).toBe(currency.name);
+        expect (jsonResult[ 0 ].currencyCode).toBe(currency.currencyCode);
+        expect (jsonResult[ 0 ].symbol).toEqual(currency.symbol);
     }));
 
 });
