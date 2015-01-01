@@ -14,7 +14,7 @@
                 return {
                     createDefault: function() {
                         var order = new Constructor();
-                        order.orderStatus = orderLineItemDisplayBuilder.createDefault();
+                        order.orderStatus = orderStatusDisplayBuilder.createDefault();
                         return order;
                     },
                     transform: function(jsonResult) {

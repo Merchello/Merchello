@@ -58,8 +58,7 @@ describe("countryDisplayBuilder", function () {
 
         //// Act
         var country = countryDisplayBuilder.transform(jsonResult[ 0 ]);
-        console.info(jsonResult[0]);
-        console.info(country);
+
         //// Assert
         expect (country).toBeDefined();
         expect (country.provinces.length).toBe(3);

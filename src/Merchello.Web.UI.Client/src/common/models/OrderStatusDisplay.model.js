@@ -15,3 +15,5 @@
         self.active = '';
         self.sortOrder = '';
     };
+
+    angular.module('merchello.models').constant('OrderStatusDisplay', OrderStatusDisplay);

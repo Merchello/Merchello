@@ -21,7 +21,6 @@ describe('paymentDisplayBuilder', function() {
 
             //// Act
             var payments = paymentDisplayBuilder.transform(jsonResult);
-            console.info(payments[0]);
 
             //// Assert
             expect (payments).toBeDefined();
