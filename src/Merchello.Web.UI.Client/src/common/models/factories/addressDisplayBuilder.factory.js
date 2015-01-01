@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.services.addressDisplayBuilder
+     * @name merchello.models.addressDisplayBuilder
      *
      * @description
      * A utility service that builds AddressDisplay models

@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.services.shipmentDisplayBuilder
+     * @name merchello.models.shipmentDisplayBuilder
      *
      * @description
      * A utility service that builds ShipmentDisplay models

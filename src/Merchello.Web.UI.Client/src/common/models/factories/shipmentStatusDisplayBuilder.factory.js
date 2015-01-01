@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.services.shipmentStatusDisplayBuilder
+     * @name merchello.models.shipmentStatusDisplayBuilder
      *
      * @description
      * A utility service that builds ShipmentStatusDisplay models

@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.services.currencyDisplayBuilder
+     * @name merchello.models.currencyDisplayBuilder
      *
      * @description
      * A utility service that builds CurrencyDisplay models

@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.services.provinceDisplayBuilder
+     * @name merchello.models.provinceDisplayBuilder
      *
      * @description
      * A utility service that builds ProvinceDisplay models

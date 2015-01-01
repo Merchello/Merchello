@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.services.typeFieldDisplayBuilder
+     * @name merchello.models.typeFieldDisplayBuilder
      *
      * @description
      * A utility service that builds TypeFieldDisplay models

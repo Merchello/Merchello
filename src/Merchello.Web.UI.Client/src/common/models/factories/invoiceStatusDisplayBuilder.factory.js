@@ -1,17 +1,15 @@
     /**
      * @ngdoc service
-     * @name merchello.models.settingDisplayBuilder
+     * @name merchello.models.invoiceStatusDisplayBuilder
      *
      * @description
-     * A utility service that builds SettingDisplay models
+     * A utility service that builds InvoiceStatusDisplay models
      */
     angular.module('merchello.models')
-        .factory('settingDisplayBuilder',
-        ['genericModelBuilder', 'SettingDisplay',
-            function(genericModelBuilder, SettingDisplay) {
-
-                var Constructor = SettingDisplay;
-
+        .factory('invoiceStatusDisplayBuilder',
+        ['genericModelBuilder', 'InvoiceStatusDisplay',
+            function(genericModelBuilder, InvoiceStatusDisplay) {
+                var Constructor = InvoiceStatusDisplay;
                 return {
                     createDefault: function() {
                         return new Constructor();

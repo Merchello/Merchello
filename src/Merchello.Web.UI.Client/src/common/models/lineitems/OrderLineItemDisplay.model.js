@@ -12,6 +12,7 @@
         self.key = '';
         self.containerKey = '';
         self.lineItemTfKey = '';
+        self.lineItemTypeField = {};
         self.sku = '';
         self.name = '';
         self.quantity = 0;
@@ -22,5 +23,22 @@
         self.backOrder = false;
         self.extendedData = [];
     };
+
+    OrderLineItemDisplay.prototype = (function() {
+
+        function getProductVariantKey() {
+            var variantKey = '';
+            if (this.extendedData.length > 0) {
+                variantKey = _.find(self.extendedData, function(extDataItem) {
+                    return extDataItem['key'] === "merchProductVariantKey";
+                });
+            }
+            if (variantKey === undefined) {
+                variantKey = '';
+            }
+            return variantKey;
+        }
+
+    }());
 
     angular.module('merchello.models').constant('OrderLineItemDisplay', OrderLineItemDisplay);

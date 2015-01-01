@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.services.gatewayResourceDisplayBuilder
+     * @name merchello.models.gatewayResourceDisplayBuilder
      *
      * @description
      * A utility service that builds GatewayResourceDisplay models

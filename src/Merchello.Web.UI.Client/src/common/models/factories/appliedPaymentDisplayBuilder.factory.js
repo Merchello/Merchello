@@ -1,16 +1,17 @@
     /**
-     * @ngdoc service
-     * @name merchello.models.settingDisplayBuilder
+     * @ngdoc model
+     * @name AppliedPaymentDisplay
+     * @function
      *
      * @description
-     * A utility service that builds SettingDisplay models
+     * Represents a JS version of Merchello's AppliedPaymentDisplay object
      */
     angular.module('merchello.models')
-        .factory('settingDisplayBuilder',
-        ['genericModelBuilder', 'SettingDisplay',
-            function(genericModelBuilder, SettingDisplay) {
+        .factory('appliedPaymentDisplayBuilder',
+        ['genericModelBuilder', 'AppliedPaymentDisplay',
+            function(genericModelBuilder, AppliedPaymentDisplay) {
 
-                var Constructor = SettingDisplay;
+                var Constructor = AppliedPaymentDisplay;
 
                 return {
                     createDefault: function() {

@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.services.countryDisplayBuilder
+     * @name merchello.models.countryDisplayBuilder
      *
      * @description
      * A utility service that builds CountryDisplay models

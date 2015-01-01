@@ -1,6 +1,6 @@
 ﻿    /**
    * @ngdoc service
-   * @name merchello.services.genericModelBuilder
+   * @name merchello.models.genericModelBuilder
    * 
    * @description
    * A utility service that builds local models for API query results

@@ -12,6 +12,10 @@
 
     ExtendedDataDisplay.prototype = (function() {
 
+        function isEmpty() {
+            return items.length === 0;
+        }
+
         function getValue(key) {
             return _.where(this.items, { key: key });
         }
@@ -20,7 +24,7 @@
             var found = false;
             var i = 0;
             while(i < this.items.length && !found) {
-                if (this.items[0].key == key) {
+                if (this.items[0].key === key) {
                     found = true;
                     this.items[ i ].value = value;
                 }
@@ -33,6 +37,7 @@
         }
 
         return {
+            isEmpty: isEmpty,
             getValue: getValue,
             setValue: setValue
         };
