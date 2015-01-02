@@ -10,8 +10,8 @@
     /// <summary>
     /// The smtp notification gateway provider.
     /// </summary>
-    [GatewayProviderActivation("5F2E88D1-6D07-4809-B9AB-D4D6036473E9", "SMTP Notification Provider", "SMTP Notification Provider")]
     [GatewayProviderEditor("SMTP Notification Configuration", "~/App_Plugins/Merchello/Modules/Settings/GatewayProviders/Dialogs/smtp.notifications.providersettings.html")]
+    [GatewayProviderActivation("5F2E88D1-6D07-4809-B9AB-D4D6036473E9", "SMTP Notification Provider", "SMTP Notification Provider")]
     public class SmtpNotificationGatewayProvider : NotificationGatewayProviderBase, ISmtpNotificationGatewayProvider
     {
         #region Resources
