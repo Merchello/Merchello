@@ -1,0 +1,40 @@
+﻿<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductEditor.ProductEditWithOptions">
+
+    <div class="control-group umb-control-group">
+        <label class="merchello-control-label">
+            <localize key="merchelloProductEdit_variantInformation" />
+            <small><localize key="merchelloProductEdit_variantInformationHelper" /></small>
+            <a data-ng-click="reorderVariants=!reorderVariants"><i class="icon-ordered-list"></i> <localize key="merchelloProductEdit_reorderVariants" /></a>
+        </label>
+
+
+
+        <div class="merchello-controls row-fluid">
+
+            <!---------------------------------------------------------------------------------------
+                Reorder Variants
+            ----------------------------------------------------------------------------------------->
+            <!-- Appears when Reorder Variants is clicked -->
+            <merchello-slide-open-panel is-open="reorderVariants" classes="'well row-fluid col-xs-10 span10'">
+
+                <product-options-reorder is-open="reorderVariants" product="product"></product-options-reorder>
+
+            </merchello-slide-open-panel>
+
+            <!---------------------------------------------------------------------------------------
+                Variants selection and table
+            ----------------------------------------------------------------------------------------->
+
+            <product-option-attributes-select product="product" on-select-variants="selectVariants(attributeToSelect)"></product-option-attributes-select>
+
+            <product-variants-view-table product="product" all-variants="allVariants" on-check-bulk-variants-selected="checkBulkVariantsSelected()" selected-variants="selectedVariants()"></product-variants-view-table>
+
+        </div>
+
+        <merchello-debug-section data-props-to-debug="product"></merchello-debug-section>
+
+    </div>
+
+
+
+</div>
