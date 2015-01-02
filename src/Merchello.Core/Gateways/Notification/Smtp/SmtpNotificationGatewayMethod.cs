@@ -92,6 +92,7 @@
                 {
                     if (_settings.HasCredentials) smtpClient.Credentials = _settings.Credentials;
                     if (_settings.EnableSsl) smtpClient.EnableSsl = true;
+                    smtpClient.Port = _settings.Port;
                     smtpClient.Send(msg);
                 }
 
@@ -129,6 +130,7 @@
                 {
                     if (_settings.HasCredentials) smtpClient.Credentials = _settings.Credentials;
                     if (_settings.EnableSsl) smtpClient.EnableSsl = true;
+                    smtpClient.Port = _settings.Port;
                     await smtpClient.SendMailAsync(msg);
                 }
 
