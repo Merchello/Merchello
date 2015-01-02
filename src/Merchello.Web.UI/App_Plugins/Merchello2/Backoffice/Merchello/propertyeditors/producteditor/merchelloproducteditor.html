@@ -1,0 +1,25 @@
+﻿<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductEditor" class="merchello-product-editor">
+    
+	<merchello-panel>
+    
+        <div class="merchello-pane">
+        
+            <div data-ng-show="creatingProduct">
+                <div>
+                    <a data-ng-click="selectProduct()" class="btn btn-primary"><localize key="merchelloProductEdit_selectProduct" /></a>
+                </div>
+            </div>
+            <div data-ng-show="!creatingProduct">
+                <div>
+                    <a data-ng-click="removeProduct()" class="btn btn-primary"><localize key="merchelloProductEdit_removeProduct" /></a>
+                </div>
+            </div>
+                           
+            <div data-ng-include="templatePath"></div>
+
+        </div>
+	    <!-- /merchello-pane -->
+
+	</merchello-panel>
+
+</div>
