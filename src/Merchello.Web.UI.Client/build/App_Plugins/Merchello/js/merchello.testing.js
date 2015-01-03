@@ -278,11 +278,11 @@ angular.module('merchello.mocks')
                     currentPage: 1,
                     itemsPerPage: 25,
                     items: invoices,
-                    totalItems: 16,
+                    totalItems: invoices.length,
                     totalPages: 1
                 };
 
-                return [200, mockResults, null];
+                return mockResults;
             }
 
             return {
