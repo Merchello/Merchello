@@ -8,34 +8,6 @@
 (function() { 
 
     /**
-    * @ngdoc model
-    * @name AddressDisplay
-    * @function
-    * 
-    * @description
-    * Represents a JS version of Merchello's AddressDisplay object
-    */
-    var AddressDisplay = function () {
-
-        var self = this;
-
-        self.name = '';
-        self.address1 = '';
-        self.address2 = '';
-        self.locality = '';
-        self.region = '';
-        self.postalCode = '';
-        self.countryCode = '';
-        self.addressType = '';
-        self.organization = '';
-        self.phone = '';
-        self.email = '';
-        self.isCommercial = false;
-    };
-    
-    angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);
-
-    /**
      * @ngdoc model
      * @name AppliedPaymentDisplay
      * @function
@@ -344,7 +316,7 @@
 
             hasAmount = function() {
                 return this.amount > 0;
-            }
+            };
 
         // public
         return {
@@ -585,6 +557,34 @@
     angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);
 
     /**
+    * @ngdoc model
+    * @name AddressDisplay
+    * @function
+    * 
+    * @description
+    * Represents a JS version of Merchello's AddressDisplay object
+    */
+    var AddressDisplay = function () {
+
+        var self = this;
+
+        self.name = '';
+        self.address1 = '';
+        self.address2 = '';
+        self.locality = '';
+        self.region = '';
+        self.postalCode = '';
+        self.countryCode = '';
+        self.addressType = '';
+        self.organization = '';
+        self.phone = '';
+        self.email = '';
+        self.isCommercial = false;
+    };
+    
+    angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);
+
+    /**
      * @ngdoc model
      * @name GatewayResourceDisplay
      * @function
@@ -708,6 +708,17 @@
             addParameter(param);
         }
 
+
+        function addFilterTermParam(term) {
+            if(term.length <= 0) {
+                return;
+            }
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'term';
+            param.value = term;
+            addParameter(param);
+        }
+
         function applyInvoiceQueryDefaults() {
             this.sortBy = 'invoiceNumber';
             this.sortDirection = 'Descending';
@@ -717,7 +728,8 @@
         return {
             addParameter: addParameter,
             addCustomerKeyParam: addCustomerKeyParam,
-            applyInvoiceQueryDefaults: applyInvoiceQueryDefaults
+            applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
+            addFilterTermParam: addFilterTermParam
         };
     }());
 

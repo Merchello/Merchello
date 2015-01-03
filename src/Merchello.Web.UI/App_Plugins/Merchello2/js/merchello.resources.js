@@ -13,7 +13,7 @@
      **/
     angular.module('merchello.resources')
         .factory('invoiceResource', [
-            '$http', 'umbRequestHelper', 'queryDisplayBuilder', 'invoiceDisplayBuilder', 'queryResultBuilder',
+            '$http', 'umbRequestHelper',
             function($http, umbRequestHelper) {
 
                 return {
@@ -54,12 +54,10 @@
                      * @description
                      **/
                     searchInvoices: function (query) {
-
                         if (query === undefined) {
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();
                         }
-
                         return umbRequestHelper.resourcePromise(
                             $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), query),
                             'Failed to retreive invoices');

@@ -24,8 +24,7 @@
 
             // umbraco
             'tests/config/app.unit.js',
-            'tests/lib/umbraco/mocks/umbraco.servervariables.js',
-
+            'tests/lib/merchello/umbraco.servervariables.js',
             'tests/lib/umbraco/umbraco.directives.js',
             'tests/lib/umbraco/umbraco.filters.js',
             'tests/lib/umbraco/umbraco.services.js',

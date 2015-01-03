@@ -20,7 +20,10 @@ Umbraco.Sys.ServerVariables = {
         "entityApiBaseUrl": "/umbraco/UmbracoApi/Entity/",
         "dashboardApiBaseUrl": "/umbraco/UmbracoApi/Dashboard/",
         "updateCheckApiBaseUrl": "/umbraco/Api/UpdateCheck/",
-        "rteApiBaseUrl": "/umbraco/UmbracoApi/RichTextPreValue/"
+        "rteApiBaseUrl": "/umbraco/UmbracoApi/RichTextPreValue/",
+
+        // merchello
+        "merchelloInvoiceApiBaseUrl": "/umbraco/backoffice/Merchello/InvoiceApi/"
     },
     umbracoSettings: {
         "umbracoPath": "/umbraco",
@@ -30,7 +33,8 @@ Umbraco.Sys.ServerVariables = {
     },
     umbracoPlugins: {
         trees: [
-            { alias: "myTree", packageFolder: "MyPackage" }
+            { alias: "myTree", packageFolder: "MyPackage" },
+            { alias: "Merchello", packageFolder: "Merchello" }
         ]
     },
     isDebuggingEnabled: true,

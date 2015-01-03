@@ -267,12 +267,22 @@ angular.module('merchello.mocks').
 
 
 angular.module('merchello.mocks')
-    .factory('invoiceResouceMock', ['$httpBackend', 'invoiceMocks',
+    .factory('invoiceResourceMock', ['$httpBackend', 'invoiceMocks', 'queryResultDisplayBuilder',
         function($httpBackend, invoiceMocks) {
 
-            function searchInvoices (query)
+            function searchInvoices ()
             {
-                return invoiceMocks.invoicesArray();
+                var invoices = invoiceMocks.invoicesArray();
+
+                var mockResults = {
+                    currentPage: 1,
+                    itemsPerPage: 25,
+                    items: invoices,
+                    totalItems: 16,
+                    totalPages: 1
+                };
+
+                return [200, mockResults, null];
             }
 
             return {

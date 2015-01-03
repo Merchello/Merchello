@@ -39,6 +39,17 @@
             addParameter(param);
         }
 
+
+        function addFilterTermParam(term) {
+            if(term.length <= 0) {
+                return;
+            }
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'term';
+            param.value = term;
+            addParameter(param);
+        }
+
         function applyInvoiceQueryDefaults() {
             this.sortBy = 'invoiceNumber';
             this.sortDirection = 'Descending';
@@ -48,7 +59,8 @@
         return {
             addParameter: addParameter,
             addCustomerKeyParam: addCustomerKeyParam,
-            applyInvoiceQueryDefaults: applyInvoiceQueryDefaults
+            applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
+            addFilterTermParam: addFilterTermParam
         };
     }());
 
