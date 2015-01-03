@@ -166,9 +166,8 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                     sortDirection: sortDirection
                 }
             };
-
+            
             // PRIVATE
-
             function init() {
                 $scope.currencySymbol = '$';
                 loadInvoices(buildQuery());
@@ -180,17 +179,13 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 $scope.salesLoaded = false;
                 var promiseInvoices = invoiceResource.searchInvoices(query);
                 promiseInvoices.then(function (response) {
-                    console.info(response);
-                    // TODO figure out how to handle mock request ... we should be able
-                    // to simply say response here.  This may be what the mockUtils is all about.
-                    var queryResult = queryResultDisplayBuilder.transform(response[1], invoiceDisplayBuilder);
-                    console.info(queryResult);
+                    var queryResult = queryResultDisplayBuilder.transform(response, invoiceDisplayBuilder);
                     $scope.invoices = queryResult.items;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                     $scope.salesLoaded = true;
                     $scope.maxPages = queryResult.totalPages;
-                    $scope.itemCount = queryResult.itemCount;
+                    $scope.itemCount = queryResult.totalItems;
                 }, function (reason) {
                     notificationsService.error("Failed To Load Invoices", reason.message);
                 });
@@ -232,9 +227,8 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 return query;
             };
 
-            //// initialize
+            //// Initialize
             init();
-
         }]);
 
 
