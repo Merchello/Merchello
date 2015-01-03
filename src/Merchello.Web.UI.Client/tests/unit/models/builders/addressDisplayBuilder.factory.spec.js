@@ -31,7 +31,6 @@
         it ('should populate an addresses with a transform from a json result', inject(function(addressDisplayBuilder, addressMocks) {
             //// Arrange
             var jsonResult = addressMocks.getAddressArray();
-            console.info(jsonResult.length);
             var length = jsonResult.length;
 
             //// Act

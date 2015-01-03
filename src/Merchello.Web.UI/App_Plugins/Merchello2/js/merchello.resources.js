@@ -1,3 +1,11 @@
+/*! merchello
+ * https://github.com/meritage/Merchello
+ * Copyright (c) 2015 Merchello;
+ * Licensed MIT
+ */
+
+(function() { 
+
     /**
      * @ngdoc service
      * @name merchello.resources.invoiceResource
@@ -5,7 +13,7 @@
      **/
     angular.module('merchello.resources')
         .factory('invoiceResource', [
-            '$http', 'umbRequestHelper', 'queryDisplayBuilder', 'invoiceDisplayBuilder', 'queryResultBuilder',
+            '$http', 'umbRequestHelper',
             function($http, umbRequestHelper) {
 
                 return {
@@ -46,12 +54,10 @@
                      * @description
                      **/
                     searchInvoices: function (query) {
-
                         if (query === undefined) {
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();
                         }
-
                         return umbRequestHelper.resourcePromise(
                             $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), query),
                             'Failed to retreive invoices');
@@ -104,3 +110,6 @@
 
 
             }]);
+
+
+})();

@@ -18,12 +18,11 @@
                     // this is slightly different than other builders in that there can only ever be a single
                     // QueryResult returned from the WebApiController, so we iterate through the items
                     var result = genericModelBuilder.transform(jsonResult, Constructor);
-                    angular.forEach(jsonResult.items, function(item) {
-                      if (itemBuilder !== undefined) {
-                          item = itemBuilder.transform(item);
-                      }
-                      result.addItem(item);
-                    });
+                    if (itemBuilder !== undefined)
+                    {
+                        result.items = [];
+                        result.items = itemBuilder.transform(jsonResult.items);
+                    }
                     return result;
                 }
             };

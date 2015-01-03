@@ -42,7 +42,7 @@
 
             hasAmount = function() {
                 return this.amount > 0;
-            }
+            };
 
         // public
         return {

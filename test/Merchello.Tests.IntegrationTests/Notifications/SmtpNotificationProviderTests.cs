@@ -11,6 +11,9 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.IntegrationTests.Notifications
 {
+    using System.Net;
+    using System.Net.Mail;
+
     [TestFixture]
     public class SmtpNotificationProviderTests : DatabaseIntegrationTestBase
     {
@@ -170,9 +173,18 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             // check configuration to see if we want to do this
             if (!bool.Parse(ConfigurationManager.AppSettings["sendTestEmail"])) Assert.Ignore("Skipping test");
 
+            const string user = "[username]";
+            const string password = "[password]";
+            var recipients = "dina@mindfly.com,rusty@mindfly.com";
+
+
             //// Arrange
             var settings = _provider.ExtendedData.GetSmtpProviderSettings();
-            settings.Host = "moria";
+            settings.Host = "smtp.gmail.com";
+            settings.Port = 587;
+            settings.EnableSsl = true;
+            settings.UserName = user;
+            settings.Password = password;
             _provider.ExtendedData.SaveSmtpProviderSettings(settings);
 
             var resource = _provider.ListResourcesOffered().FirstOrDefault();
@@ -183,13 +195,13 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             //// Act
             var message = new NotificationMessage(method.NotificationMethod.Key, "Test email", "Can_Send_A_Test_Email@merchello.com")
             {
-                Recipients = "rusty@mindfly.com",
+                Recipients = "dina@mindfly.com,rusty@mindfly.com",
                 BodyText = "Successful test?"
             };
 
             method.Send(message);
 
-            Thread.Sleep(2000);
+            //Thread.Sleep(2000);
         }
 
 //        [Test]

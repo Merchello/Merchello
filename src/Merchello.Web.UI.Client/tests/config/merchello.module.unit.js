@@ -22,5 +22,4 @@ angular.module('merchello.mocks', ['merchello.models']);
 
 //// Assert our dependencies
 angular.module('umbraco.packages').requires.push('merchello');
-
 }());
