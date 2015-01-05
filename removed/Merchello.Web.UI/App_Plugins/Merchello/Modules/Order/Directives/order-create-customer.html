@@ -1,0 +1,119 @@
+﻿<div class="merchello-pane row-fluid edit-customer">
+    <div class="control-group umb-control-group">
+        <div class="merchello-controls row-fluid">
+            <div class="form-group span12">
+                <div class="well customer-info">
+                    <h3>
+                        Customer Overview
+                        <!-- ACTION: Edit Info -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="editCustomerInformation()">
+                            <i class="icon icon-edit"></i>
+                        </a>
+                    </h3>
+                    <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
+                    <h4>
+                        {{customer.firstName}} {{customer.lastName}}
+                    </h4>
+                    <div><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="control-group umb-control-group">
+        <!-- Shipping Address -->
+        <label class="merchello-section-label" for="customer-note">Shipping Address</label>
+        <div class="merchello-controls row-fluid">
+            <div class="form-group span12">
+                <!-- Billing Address -->
+                <div class="well billing-address-info">
+                    <h3>
+                        Billing Address
+                        <!-- ACTION: Add or Edit Address -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="createCustomerAddressFromDialog('billing')"><i class="icon icon-edit"></i></a>
+                    </h3>
+                    <div class="vcard" data-ng-show="billingAddress != false">
+                        <span class="fn" data-ng-show="billingAddress.fullName != ''">{{billingAddress.fullName}}</span>
+                        <span class="org" data-ng-show="billingAddress.company != ''">{{billingAddress.company}}</span>
+                        <span class="adr">
+                            <span class="street-address">{{billingAddress.address1}}</span>
+                            <span class="extended-address" data-ng-show="billingAddress.address2 != ''">{{billingAddress.address2}}</span>
+                            <span class="locality">{{billingAddress.locality}}</span>, <span class="region">{{billingAddress.region}}</span>, <span class="postal-code">{{billingAddress.postalCode}}</span>
+                            <span class="country-name">{{billingAddress.countryCode}}</span>
+                            <span class="tel" data-ng-show="billingAddress.phone != ''">Phone: {{billingAddress.phone}}</span>
+                        </span>
+                    </div>
+                    <div data-ng-show="billingAddress == false">
+                        <h5>No Billing Address</h5>
+                    </div>
+                </div>
+                <!-- Shipping Address -->
+                <div class="well shipping-address-info">
+                    <h3>
+                        Shipping Address
+                        <!-- ACTION: Add or Edit Address -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="createCustomerAddressFromDialog('shipping')"><i class="icon icon-edit"></i></a>
+                    </h3>
+                    <div class="vcard" data-ng-show="shippingAddress != false">
+                        <span class="fn" data-ng-show="shippingAddress.fullName != ''">{{shippingAddress.fullName}}</span>
+                        <span class="org" data-ng-show="shippingAddress.company != ''">{{shippingAddress.company}}</span>
+                        <span class="adr">
+                            <span class="street-address">{{shippingAddress.address1}}</span>
+                            <span class="extended-address" data-ng-show="shippingAddress.address2 != ''">{{shippingAddress.address2}}</span>
+                            <span class="locality">{{shippingAddress.locality}}</span>, <span class="region">{{shippingAddress.region}}</span>, <span class="postal-code">{{shippingAddress.postalCode}}</span>
+                            <span class="tel" data-ng-show="shippingAddress.phone != ''">Phone: {{shippingAddress.phone}}</span>
+                            <span class="country-name">{{shippingAddress.countryCode}}</span>
+                        </span>
+                    </div>
+                    <div data-ng-show="shippingAddress == false">
+                        <h5>No Shipping Address</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="control-group umb-control-group" data-ng-show="!BillingSameAsShipping">
+        <!-- Billing Address -->
+        <label class="merchello-section-label" for="customer-note">Billing Address</label>
+        <div class="merchello-controls row-fluid">
+            <div class="form-group span12">
+                <!-- Shipping Address -->
+                <div class="well shipping-address-info">
+                    <h3>
+                        Shipping Address
+                        <!-- ACTION: Add or Edit Address -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressEditDialog('shipping')"><i class="icon icon-edit"></i></a>
+                    </h3>
+                    <div class="vcard" data-ng-show="shippingAddress != false">
+                        <span class="fn" data-ng-show="shippingAddress.fullName != ''">{{shippingAddress.fullName}}</span>
+                        <span class="org" data-ng-show="shippingAddress.company != ''">{{shippingAddress.company}}</span>
+                        <span class="adr">
+                            <span class="street-address">{{shippingAddress.address1}}</span>
+                            <span class="extended-address" data-ng-show="shippingAddress.address2 != ''">{{shippingAddress.address2}}</span>
+                            <span class="locality">{{shippingAddress.locality}}</span>, <span class="region">{{shippingAddress.region}}</span>, <span class="postal-code">{{shippingAddress.postalCode}}</span>
+                            <span class="tel" data-ng-show="shippingAddress.phone != ''">Phone: {{shippingAddress.phone}}</span>
+                            <span class="country-name">{{shippingAddress.countryCode}}</span>
+                        </span>
+                    </div>
+                    <div data-ng-show="shippingAddress == false">
+                        <h5>No Shipping Address</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="control-group umb-control-group">
+        <div class="btn-toolbar pull-right umb-btn-toolbar">
+            <div class="btn-group">
+                      <!-- ACTION: Save Customer -->
+                      <a data-ng-click="cancelCreateCustomer()" class="btn"><localize key="general_cancel" /></a>
+                  </div>
+            <div class="btn-group">
+                <!-- ACTION: Save Customer -->
+                <a data-ng-click="saveCustomer(true)" class="btn btn-primary"><localize key="merchelloOrder_saveAnonymousCustomer" /></a>
+            </div>
+            <div class="btn-group">
+                <a data-ng-click="saveCustomer(false)" class="btn btn-primary"><localize key="merchelloOrder_createCustomer" /></a>
+            </div>
+        </div>
+    </div>
+</div>

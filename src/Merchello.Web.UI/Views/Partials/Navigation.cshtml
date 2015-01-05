@@ -1,0 +1,60 @@
+@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.Web
+
+@{  
+    var home = CurrentPage.AncestorOrSelf(1);
+}
+
+<!-- we're using CSS from twitter bootstrap -->
+<nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">        
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- start with a link to the home page -->
+                <a  class="navbar-brand" href="@home.Url">@home.Name</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div>
+                <ul class="nav navbar-nav">
+                    
+                <!-- in the razor code here, we iterate through each child of the home page that is set to "visible" -->
+                <!-- we also access a helper function which we called LinkLooker, see below for details -->
+                @{
+                    foreach(var page in home.Children.Where("Visible"))
+                    {
+                        @LinkLooker(home, page)
+                    }
+                }
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        
+        </div>
+    <!-- /.container -->
+
+    </nav>
+
+<!-- The helper function "LinkLooker" below takes the home page and current page as parameters, and returns a hyperlinked bullet <li> item. -->
+<!-- If the returned page is your shopping cart page, the <li> also includes the current number of items in the basket (using another helper function below) -->
+<!-- This works because we gave our Home Page's document type a special property called "cartPage" (content picker), -->
+    <!-- and on the home page we set it to equal our store's basket page -->
+
+@helper LinkLooker(IPublishedContent home, IPublishedContent page)
+{
+    if(page.Id == home.GetPropertyValue<int>("cartPage")) //this accesses our home page's custom property for "cartPage", see explanation above
+    {
+       
+         <li><a href="@page.Url">@page.Name (@CurrentCustomer.Basket().Items.Count)</a></li>
+    }
+    else
+    {
+         <li><a href="@page.Url">@page.Name</a></li>
+    }
+}
+

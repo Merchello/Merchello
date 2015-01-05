@@ -1,0 +1,65 @@
+﻿<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductEditor.ProductEdit">
+    
+    <!-- Property classes from Umbraco styles -->
+    <div class="control-group umb-control-group">
+        <label class="merchello-control-label">
+            <localize key="merchelloVariant_variantInfo"/>
+            <small><localize key="merchelloVariant_configVariant" /></small>
+        </label>
+
+        <div class="merchello-controls">
+                
+            <!-- Edit the product name -->
+            <div class="row-fluid">
+                <div class="form-group col-xs-6 span6">
+                    <label for="name"><localize key="general_name"/></label>
+                    <input id="name" name="name" required type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.name" />
+                </div>
+            </div>
+
+            <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
+            <product-variant-main-properties product="product" product-variant="productVariant" creating-variant="creatingVariant" editing-variant="editingVariant"></product-variant-main-properties>                            
+
+        </div>
+    </div>
+
+    <!-- Digital Downloads Picker -->
+    <merchello-slide-open-panel is-open="productVariant.download" classes="'control-group umb-control-group'">
+        <product-digital-download-section product="product" product-variant="productVariant" ></product-digital-download-section>
+    </merchello-slide-open-panel>
+              
+    <!-- Product Options and Variants -->
+    <merchello-slide-open-panel is-open="product.hasOptions" classes="'control-group umb-control-group'">
+        <label class="merchello-control-label">
+            <localize key="merchelloGeneral_multipleOptions"/>
+            <small><localize key="merchelloVariant_addOptions"/></small>
+        </label>
+
+        <div class="merchello-controls row-fluid">
+
+            <!-- Allows adding/removing/editing of options / attributes -->
+            <product-options-manage product="product" parent-form="contentForm" on-update="updateVariants(form)" classes="'well col-xs-10 span10'"></product-options-manage>
+
+            <!-- Table of variants that the options create for editing -->
+            <product-variant-create-table product="product" ></product-variant-create-table>
+
+            <!-- Allows bulk set of inventory for variants -->
+            <product-variant-bulk-inventory product="product" ></product-variant-bulk-inventory>
+					    
+        </div>
+    </merchello-slide-open-panel>
+
+    <!-- Inventory for a single product without options -->
+    <merchello-slide-open-panel is-open="(productVariant.trackInventory && !productVariant.hasOptions)" classes="'control-group umb-control-group'">
+        <product-inventory-section product="product" product-variant="productVariant" default-warehouse="defaultWarehouse" warehouses="warehouses" ></product-inventory-section>
+    </merchello-slide-open-panel>
+
+    <!-- Shipping settings for a product. -->
+    <merchello-slide-open-panel is-open="productVariant.shippable" classes="'control-group umb-control-group'">
+        <product-shipping-section product="product" product-variant="productVariant" ></product-shipping-section>
+    </merchello-slide-open-panel>
+
+    <merchello-debug-section data-props-to-debug="product,productVariant"></merchello-debug-section>
+
+
+</div>

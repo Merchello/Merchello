@@ -1,0 +1,455 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<div data-ng-controller="Merchello.Dashboards.Report.SalesOverTimeController" 
+      data-ng-show="loaded">
+
+    <umb-panel>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                     <h1 class="umb-headline">Reports - Sales Over Time</h1>
+                </div>
+
+                <!-- Tabs for timeframes: Today, Yesterday, Last 7 Days, Last Month, Last 90 Days -->
+                <ul class="nav nav-tabs umb-nav-tabs span12">
+                    <li class="ng-scope active">
+    	                <a href="#tab0" data-toggle="tab" class="ng-binding">Today</a>
+                    </li>
+                    <li class="ng-scope">
+                        <a href="#tab1" data-toggle="tab" class="ng-binding">Yesterday</a>
+                    </li>
+                    <li class="ng-scope">
+                        <a href="#tab2" data-toggle="tab" class="ng-binding">Last 7 Days</a>
+                    </li>
+                    <li class="ng-scope">
+                        <a href="#tab3" data-toggle="tab" class="ng-binding">Last 30 Days</a> 
+                    </li>
+                    <li class="ng-scope">
+                        <a href="#tab4" data-toggle="tab" class="ng-binding">Last 90 Days</a> 
+                    </li>
+    	        </ul>
+            </div>
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-primary">Export</a>
+                    </div>
+                </div>
+            </div>
+
+        </umb-header>
+        
+        <merchello-panel>
+
+            <div class="merchello-pane row-fluid">
+
+                <div class="bar-graph day">
+
+                    <ol class="graph">
+                        <li>589.52</li>
+                        <li>270.08</li>
+                        <li>0</li>
+                        <li>666.27</li>
+                        <li>135.99</li>
+                        <li>956.11</li>
+                        <li>3870.08</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                    </ol>
+
+                    <ol class="key">
+                        <li>12</li>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>7</li>
+                        <li>8</li>
+                        <li>9</li>
+                        <li>10</li>
+                        <li>11</li>
+                        <li>12</li>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>7</li>
+                        <li>8</li>
+                        <li>9</li>
+                        <li>10</li>
+                        <li>11</li>
+                    </ol>
+                </div>
+
+                <!--<div class="bar-graph week">
+
+                    <ol class="graph">
+                        <li>589.52</li>
+                        <li>270.08</li>
+                        <li>0</li>
+                        <li>666.27</li>
+                        <li>135.99</li>
+                        <li>956.11</li>
+                        <li>3870.08</li>
+                    </ol>
+
+                    <ol class="key">
+                        <li>Sunday</li>
+                        <li>Monday</li>
+                        <li>Tuesday</li>
+                        <li>Wednesday</li>
+                        <li>Thursday</li>
+                        <li>Friday</li>
+                        <li>Saturday</li>
+                    </ol>
+                </div>-->
+
+                <!--<div class="bar-graph month">
+
+                    <ol class="graph">
+                        <li>589.52</li>
+                        <li>270.08</li>
+                        <li>0</li>
+                        <li>666.27</li>
+                        <li>135.99</li>
+                        <li>956.11</li>
+                        <li>3870.08</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                    </ol>
+
+                    <ol class="key">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>7</li>
+                        <li>8</li>
+                        <li>9</li>
+                        <li>10</li>
+                        <li>11</li>
+                        <li>12</li>
+                        <li>13</li>
+                        <li>14</li>
+                        <li>15</li>
+                        <li>16</li>
+                        <li>17</li>
+                        <li>18</li>
+                        <li>19</li>
+                        <li>20</li>
+                        <li>21</li>
+                        <li>22</li>
+                        <li>23</li>
+                        <li>24</li>
+                        <li>25</li>
+                        <li>26</li>
+                        <li>27</li>
+                        <li>28</li>
+                        <li>29</li>
+                        <li>30</li>
+                    </ol>
+                </div>-->
+
+               <!-- <div class="bar-graph ninety">
+
+                    <ol class="graph">
+                        <li>589.52</li>
+                        <li>270.08</li>
+                        <li>0</li>
+                        <li>666.27</li>
+                        <li>135.99</li>
+                        <li>956.11</li>
+                        <li>3870.08</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                        <li>0</li>
+                    </ol>
+
+                    <ol class="key">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>7</li>
+                        <li>8</li>
+                        <li>9</li>
+                        <li>10</li>
+                        <li>11</li>
+                        <li>12</li>
+                        <li>13</li>
+                        <li>14</li>
+                        <li>15</li>
+                        <li>16</li>
+                        <li>17</li>
+                        <li>18</li>
+                        <li>19</li>
+                        <li>20</li>
+                        <li>21</li>
+                        <li>22</li>
+                        <li>23</li>
+                        <li>24</li>
+                        <li>25</li>
+                        <li>26</li>
+                        <li>27</li>
+                        <li>28</li>
+                        <li>29</li>
+                        <li>30</li>
+                        <li>31</li>
+                        <li>32</li>
+                        <li>33</li>
+                        <li>34</li>
+                        <li>35</li>
+                        <li>36</li>
+                        <li>37</li>
+                        <li>38</li>
+                        <li>39</li>
+                        <li>40</li>
+                        <li>41</li>
+                        <li>42</li>
+                        <li>43</li>
+                        <li>44</li>
+                        <li>45</li>
+                        <li>46</li>
+                        <li>47</li>
+                        <li>48</li>
+                        <li>49</li>
+                        <li>50</li>
+                        <li>51</li>
+                        <li>52</li>
+                        <li>53</li>
+                        <li>54</li>
+                        <li>55</li>
+                        <li>56</li>
+                        <li>57</li>
+                        <li>58</li>
+                        <li>59</li>
+                        <li>60</li>
+                        <li>61</li>
+                        <li>62</li>
+                        <li>63</li>
+                        <li>64</li>
+                        <li>65</li>
+                        <li>66</li>
+                        <li>67</li>
+                        <li>68</li>
+                        <li>69</li>
+                        <li>70</li>
+                        <li>71</li>
+                        <li>72</li>
+                        <li>73</li>
+                        <li>74</li>
+                        <li>75</li>
+                        <li>76</li>
+                        <li>77</li>
+                        <li>78</li>
+                        <li>79</li>
+                        <li>80</li>
+                        <li>81</li>
+                        <li>82</li>
+                        <li>83</li>
+                        <li>84</li>
+                        <li>85</li>
+                        <li>86</li>
+                        <li>87</li>
+                        <li>88</li>
+                        <li>89</li>
+                        <li>90</li>
+                    </ol>
+                </div>-->
+
+                <table class="table table-hover merchello-selectable-table sortable reports-table">
+                    <thead>
+                        <tr>
+                            <td><i class="icon-navigation-down"></i> Time</td>
+                            <td><i class="icon-navigation-down"></i> Taxes</td>
+                            <td><i class="icon-navigation-down"></i> Total Canceled</td>
+                            <td><i class="icon-navigation-down"></i> Order Count</td>
+                            <td><i class="icon-navigation-down"></i> Total Sales</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>12:00am</td>
+                            <td>$28.68</td>
+                            <td>$53.00</td>
+                            <td>5</td>
+                            <td>$589.52</td>
+                        </tr>
+                        <tr>
+                            <td>1:00am</td>
+                            <td>$10.22</td>
+                            <td>$0.00</td>
+                            <td>3</td>
+                            <td>$270.08</td>
+                        </tr>
+                        <tr>
+                            <td>2:00am</td>
+                            <td>$0.0</td>
+                            <td>$0.00</td>
+                            <td>0</td>
+                            <td>$0.00</td>
+                        </tr>
+                        <tr><td>3:00am</td>
+                            <td>$35.49</td>
+                            <td>$0.00</td>
+                            <td>8</td>
+                            <td>$666.27</td>
+                        </tr>
+                        <tr>
+                            <td>4:00am</td>
+                            <td>$4.12</td>
+                            <td>$10.90</td>
+                            <td>2</td>
+                            <td>$135.99</td>
+                        </tr>
+                        <tr>
+                            <td>5:00am</td>
+                            <td>$35.61</td>
+                            <td>$0.00</td>
+                            <td>12</td>
+                            <td>$956.11</td>
+                        </tr>
+                        <tr>
+                            <td>6:00am</td>
+                            <td>$28.68</td>
+                            <td>$0.00</td>
+                            <td>37</td>
+                            <td>$3870.08</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </merchello-panel>
+            
+    </umb-panel>
+</div>

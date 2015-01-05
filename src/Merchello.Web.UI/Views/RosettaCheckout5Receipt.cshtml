@@ -1,0 +1,17 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "RosettaBasePage.cshtml";
+    
+    
+}
+
+<div class="bs-docs-example">
+    
+    
+        <h2>Thank You!  Come back Soon!</h2>
+    
+    <div class="hero-spacer">
+
+        @Html.Action("RenderReceipt", "Checkout", new { area = "RosettaStone", invoiceKey = Request.QueryString["inv"].DecryptWithMachineKey() })
+    </div>
+</div>

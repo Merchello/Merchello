@@ -1,0 +1,35 @@
+@inherits Merchello.Web.Mvc.MerchelloViewPage<IShipment>
+@using Merchello.Core.Models
+
+
+<div class="row">
+    <div class="col-lg-6">
+        @RosettaSnippets.RenderAddress(Model.GetDestinationAddress(), "Shipping Destination")
+    </div>
+    <div class="col-lg-6">
+        @RosettaSnippets.RenderAddress(Model.GetOriginAddress(), "Origin (The warehouse)")
+    </div>
+</div>
+
+<h4>Items in the shipment</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Sku</th>
+            <th>Quantity</th>
+            <th>Unit Weight</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Sku</td>
+                <td>@item.Quantity</td>
+                <td>@item.ExtendedData.GetWeightValue()</td>
+            </tr>
+        }
+    </tbody>
+</table>

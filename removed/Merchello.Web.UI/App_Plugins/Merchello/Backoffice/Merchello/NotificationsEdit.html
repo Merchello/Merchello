@@ -1,0 +1,101 @@
+﻿<div data-ng-controller="Merchello.Dashboards.Settings.NotificationsEditController"
+     data-ng-show="loaded"
+     data-ng-init="init()">
+
+    <!-- This is the umb-panel directive. We removed it because the ui-codemirror directive doesn't work nested under another directive.-->
+    <div>
+        <umb-header>
+            <div class="span8">
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline">{{notificationMessage.name}} <localize key="merchelloNotifications_notifications" /></h1>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <a href="#/merchello/merchello/Notifications/manage" class="btn"><localize key="general_cancel" /></a>
+                        <a data-ng-disabled="emailTemplate.$invalid" data-ng-click="saveNotificationMessage(notificationMessage)" class="btn btn-success"><localize key="buttons_save" /></a>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav nav-tabs umb-nav-tabs span12">
+                <li class="ng-scope" data-ng-class="{active: currentTab == 'Template'}">
+                    <a data-ng-click="selectTab('Template')" data-toggle="tab" class="ng-binding"><localize key="template_template" /></a>
+                </li>
+                <li class="ng-scope" data-ng-class="{active: currentTab == 'Settings'}">
+                    <a data-ng-click="selectTab('Settings')" data-toggle="tab" class="ng-binding"><localize key="sections_settings" /></a>
+                </li>
+            </ul>
+        </umb-header>
+        <!-- This is the merchello-panel directive. We removed it because the ui-codemirror directive doesn't work nested under another directive.-->
+        <div class="merchello merchello-panel-body">
+            <div class="merchello-pane row-fluid">
+                <!-- Template pane -->
+                <input type="hidden" data-ng-bind=""/>
+                <div class="control-group umb-control-group" data-ng-show="currentTab == 'Template'">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloNotificationsEdit_emailTemplate" />
+                        <small><localize key="merchelloNotificationsEdit_emailTemplateHelper" /></small>
+                    </label>
+                    <div class="merchello-controls">
+                        <div class="row-fluid">
+                            <label for="template"><localize key="merchelloNotificationsEdit_emailTemplateEditBody" /></label>
+                            <ng-form>
+                                <umb-editor model="rteProperties"></umb-editor>
+                            </ng-form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Settings pane -->
+                <div class="control-group umb-control-group" data-ng-show="currentTab == 'Settings'">
+
+                    <label class="merchello-control-label">
+                        <localize key="merchelloNotificationsEdit_notificationSettings" /> 
+                        <small><localize key="merchelloNotificationsEdit_notificationSettingsHelper" /></small>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div class="row-fluid">
+                            <div class="col-xs-8 span8">
+                                <label for="description"><localize key="merchelloNotificationsEdit_description" /> </label>
+                                <textarea name="description" class="col-xs-8 span8" data-ng-model="notificationMessage.description" />
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="col-xs-8 span8">
+                                <label for="event"><localize key="merchelloNotificationsEdit_attachedEvent" /> </label>
+                                <select name="event" class="col-xs-8 span8" data-ng-model="notificationMessage.monitorKey" data-ng-options="n.monitorKey as n.name for n in notificationTriggers"></select>
+                                <label for="eventTriggerAlias" data-ng-repeat="trigger in notificationTriggers | filter: {monitorKey: notificationMessage.monitorKey}">
+                                    <small data-ng-show="notificationMessage.monitorKey.Length > 0"><localize key="merchelloNotificationsEdit_eventAlias " /> {{trigger.alias}}</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="col-xs-8 span8">
+                                <label for="send"><localize key="merchelloNotificationsEdit_sendTo" /> </label>
+                                <input name="send" type="text" class="col-xs-8 span8" data-ng-model="notificationMessage.recipients" />
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="col-xs-8 span8">
+                                <label><localize key="merchelloNotificationsEdit_replyTo" /></label>
+                                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.replyTo" />
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <label>
+                                <input type="checkbox" data-ng-model="notificationMessage.sendToCustomer" /><localize key="merchelloNotificationsEdit_emailCustomer" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

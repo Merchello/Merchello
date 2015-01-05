@@ -1,0 +1,115 @@
+﻿<form novalidate name="productForm" 
+    data-ng-controller="Merchello.Editors.Product.EditWithOptionsController"
+    data-ng-show="loaded"
+    data-ng-submit="save()">
+
+
+    <umb-panel val-show-validation>
+
+        <umb-header>
+
+            <div class="span4">
+                <umb-content-name 
+                    ng-model="product.name" 
+                                  localize="placeholder"
+                    placeholder="@merchelloProductEdit_enterProductName">
+                </umb-content-name>
+            </div>
+
+            <div class="col-xs-8 span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <!--<a data-ng-href="#/merchello/merchello/ProductVariantCreate/{{product.key}}?createvariant" data-ng-hide="product.hasAvailableVariantPermutiations() == 0" class="btn"><localize key="merchelloVariant_addVariant" /></a>-->
+                        <a data-ng-click="deleteProductDialog()" class="btn"><localize key="merchelloVariant_deleteProduct" /></a>
+                        <a data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success"><localize key="buttons_save" /></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs for Variants & Options -->
+            <ul class="nav nav-tabs umb-nav-tabs span12">
+                <li class="ng-scope" data-ng-class="{active: currentTab == 'Variants'}" >
+                    <a data-ng-click="selectTab('Variants')"  data-toggle="tab" class="ng-binding"><localize key="merchelloVariant_variant"/></a>
+                </li>
+                <li class="ng-scope" data-ng-class="{active: currentTab == 'Options'}">
+                    <a data-ng-click="selectTab('Options')" data-toggle="tab" class="ng-binding"><localize key="merchelloGeneral_options" /></a>
+                </li>
+    	    </ul>
+
+        </umb-header>
+        
+        <merchello-panel>
+            <div class="merchello-pane">
+                <!---------------------------------------------------------------------------------------
+                    Variants tab
+                ----------------------------------------------------------------------------------------->
+                <div class="control-group umb-control-group" data-ng-show="currentTab == 'Variants'">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloProductEdit_variantInformation" />
+                        <small><localize key="merchelloProductEdit_variantInformationHelper" /></small>
+                        <a data-ng-click="reorderVariants=!reorderVariants"><i class="icon-ordered-list"></i> <localize key="merchelloProductEdit_reorderVariants" /></a>
+                    </label>
+                    
+
+
+                    <div class="merchello-controls row-fluid">
+
+                        <!---------------------------------------------------------------------------------------
+                            Reorder Variants
+                        ----------------------------------------------------------------------------------------->
+                        
+                        <!-- Appears when Reorder Variants is clicked -->
+                        <merchello-slide-open-panel is-open="reorderVariants" classes="'well row-fluid col-xs-10 span10'">
+                            
+                            <product-options-reorder is-open="reorderVariants" product="product"></product-options-reorder>
+
+                        </merchello-slide-open-panel>
+
+                        <!---------------------------------------------------------------------------------------
+                            Variants selection and table
+                        ----------------------------------------------------------------------------------------->
+                        
+                        <product-option-attributes-select product="product" on-select-variants="selectVariants(attributeToSelect)"></product-option-attributes-select>
+
+                        <product-variants-view-table product="product" all-variants="allVariants" on-check-bulk-variants-selected="checkBulkVariantsSelected()" selected-variants="selectedVariants()"></product-variants-view-table>
+
+                    </div>
+
+                    <merchello-debug-section data-props-to-debug="product"></merchello-debug-section>
+                    
+                </div>
+
+                <!---------------------------------------------------------------------------------------
+                    Edit Options tab
+                ----------------------------------------------------------------------------------------->
+                <div class="control-group umb-control-group" data-ng-show="currentTab == 'Options'">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloProductEdit_editOptions" />
+                        <small><localize key="merchelloProductEdit_editOptionsHelper" /></small>
+                    </label>
+
+                    <div class="merchello-controls row-fluid">
+                        
+                        {{rebuildVariants | json}}
+
+                        <!-- Allows adding/removing/editing of options / attributes -->
+					    <product-options-manage product="product" parent-form="productForm" classes="'col-xs-10 span10'" on-update="save(form, rebuild)" rebuild-variants="rebuildVariants"></product-options-manage>
+
+                    </div>
+
+                    <merchello-debug-section data-props-to-debug="product"></merchello-debug-section>
+
+                </div>
+
+            </div>
+        </merchello-panel>
+        
+        <ul class="umb-panel-footer-nav nav nav-pills">
+            <li>
+                <a href="#/merchello/merchello/ProductList/manage"><localize key="merchelloHeadline_catalog" /></a>
+            </li>
+            <li></li>
+        </ul>
+
+    </umb-panel>
+</form>
