@@ -107,15 +107,19 @@ Umbraco.Sys.registerNamespace("Umbraco.Application");
                     }
                 }
                 else {
-                    //if the path doesn't start with "/" or with the root path then 
-                    //prepend the root path
-                    if (strLocation.substr(0, 1) != "/") {
-                        strLocation = this._rootPath + "/" + strLocation;
-                    }
-                    else if (strLocation.length >= this._rootPath.length
-                        && strLocation.substr(0, this._rootPath.length) != this._rootPath) {
-                        strLocation = this._rootPath + "/" + strLocation;
-                    }
+                    
+                    //its a hash change so process that like angular
+                    if (strLocation.substr(0, 1) !== "#") {                        
+                        if (strLocation.substr(0, 1) != "/") {
+                            //if the path doesn't start with "/" or with the root path then 
+                            //prepend the root path
+                            strLocation = this._rootPath + "/" + strLocation;
+                        }
+                        else if (strLocation.length >= this._rootPath.length
+                            && strLocation.substr(0, this._rootPath.length) != this._rootPath) {
+                            strLocation = this._rootPath + "/" + strLocation;
+                        }
+                    }                    
 
                     this._debug("contentFrame: parsed location: " + strLocation);
 
@@ -153,6 +157,18 @@ Umbraco.Sys.registerNamespace("Umbraco.Application");
                 }
                 else {
                     this.mainWindow().UmbClientMgr.openAngularModalWindow.apply(this.mainWindow().UmbClientMgr, [options]);
+                }
+
+            },
+
+            /** This is used to launch an angular based modal window instead of the legacy window */
+            rootScope: function () {
+
+                if (!this.mainWindow().UmbClientMgr) {
+                    throw "An angular modal window can only be launched when the modal is running within the main Umbraco application";
+                }
+                else {
+                    return this.mainWindow().UmbClientMgr.rootScope();
                 }
 
             },

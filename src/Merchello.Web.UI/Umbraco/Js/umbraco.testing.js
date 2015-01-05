@@ -1,4 +1,4 @@
-/*! umbraco - v7.1.8 - 2014-10-08
+/*! umbraco
  * https://github.com/umbraco/umbraco-cms/
  * Copyright (c) 2014 Umbraco HQ;
  * Licensed MIT
@@ -17,15 +17,75 @@ angular.module('umbraco.mocks').
               return [401, null, null];
           }
           else {
-              return [200, { "plugins": [{ "name": "code", "useOnFrontend": true }, { "name": "paste", "useOnFrontend": true }, { "name": "umbracolink", "useOnFrontend": true }], "commands": [{ "icon": "images/editor/code.gif", "command": "code", "alias": "code", "userInterface": "false", "frontEndCommand": "code", "value": "", "priority": 1, "isStylePicker": false }, { "icon": "images/editor/removeformat.gif", "command": "removeformat", "alias": "removeformat", "userInterface": "false", "frontEndCommand": "removeformat", "value": "", "priority": 2, "isStylePicker": false }, { "icon": "images/editor/undo.gif", "command": "undo", "alias": "undo", "userInterface": "false", "frontEndCommand": "undo", "value": "", "priority": 11, "isStylePicker": false }, { "icon": "images/editor/redo.gif", "command": "redo", "alias": "redo", "userInterface": "false", "frontEndCommand": "redo", "value": "", "priority": 12, "isStylePicker": false }, { "icon": "images/editor/cut.gif", "command": "cut", "alias": "cut", "userInterface": "false", "frontEndCommand": "cut", "value": "", "priority": 13, "isStylePicker": false }, { "icon": "images/editor/copy.gif", "command": "copy", "alias": "copy", "userInterface": "false", "frontEndCommand": "copy", "value": "", "priority": 14, "isStylePicker": false }, { "icon": "images/editor/showStyles.png", "command": "styleselect", "alias": "styleselect", "userInterface": "false", "frontEndCommand": "styleselect", "value": "", "priority": 20, "isStylePicker": false }, { "icon": "images/editor/bold.gif", "command": "bold", "alias": "bold", "userInterface": "false", "frontEndCommand": "bold", "value": "", "priority": 21, "isStylePicker": false }, { "icon": "images/editor/italic.gif", "command": "italic", "alias": "italic", "userInterface": "false", "frontEndCommand": "italic", "value": "", "priority": 22, "isStylePicker": false }, { "icon": "images/editor/underline.gif", "command": "underline", "alias": "underline", "userInterface": "false", "frontEndCommand": "underline", "value": "", "priority": 23, "isStylePicker": false }, { "icon": "images/editor/strikethrough.gif", "command": "strikethrough", "alias": "strikethrough", "userInterface": "false", "frontEndCommand": "strikethrough", "value": "", "priority": 24, "isStylePicker": false }, { "icon": "images/editor/justifyleft.gif", "command": "justifyleft", "alias": "justifyleft", "userInterface": "false", "frontEndCommand": "alignleft", "value": "", "priority": 31, "isStylePicker": false }, { "icon": "images/editor/justifycenter.gif", "command": "justifycenter", "alias": "justifycenter", "userInterface": "false", "frontEndCommand": "aligncenter", "value": "", "priority": 32, "isStylePicker": false }, { "icon": "images/editor/justifyright.gif", "command": "justifyright", "alias": "justifyright", "userInterface": "false", "frontEndCommand": "alignright", "value": "", "priority": 33, "isStylePicker": false }, { "icon": "images/editor/justifyfull.gif", "command": "justifyfull", "alias": "justifyfull", "userInterface": "false", "frontEndCommand": "alignfull", "value": "", "priority": 34, "isStylePicker": false }, { "icon": "images/editor/bullist.gif", "command": "bullist", "alias": "bullist", "userInterface": "false", "frontEndCommand": "bullist", "value": "", "priority": 41, "isStylePicker": false }, { "icon": "images/editor/numlist.gif", "command": "numlist", "alias": "numlist", "userInterface": "false", "frontEndCommand": "numlist", "value": "", "priority": 42, "isStylePicker": false }, { "icon": "images/editor/outdent.gif", "command": "outdent", "alias": "outdent", "userInterface": "false", "frontEndCommand": "outdent", "value": "", "priority": 43, "isStylePicker": false }, { "icon": "images/editor/indent.gif", "command": "indent", "alias": "indent", "userInterface": "false", "frontEndCommand": "indent", "value": "", "priority": 44, "isStylePicker": false }, { "icon": "images/editor/link.gif", "command": "link", "alias": "mcelink", "userInterface": "true", "frontEndCommand": "link", "value": "", "priority": 51, "isStylePicker": false }, { "icon": "images/editor/unLink.gif", "command": "unlink", "alias": "unlink", "userInterface": "false", "frontEndCommand": "unlink", "value": "", "priority": 52, "isStylePicker": false }, { "icon": "images/editor/anchor.gif", "command": "anchor", "alias": "mceinsertanchor", "userInterface": "false", "frontEndCommand": "anchor", "value": "", "priority": 53, "isStylePicker": false }, { "icon": "images/editor/image.gif", "command": "image", "alias": "mceimage", "userInterface": "true", "frontEndCommand": "umbmediapicker", "value": "", "priority": 61, "isStylePicker": false }, { "icon": "images/editor/insMacro.gif", "command": "umbracomacro", "alias": "umbracomacro", "userInterface": "true", "frontEndCommand": "umbmacro", "value": "", "priority": 62, "isStylePicker": false }, { "icon": "images/editor/table.gif", "command": "table", "alias": "mceinserttable", "userInterface": "true", "frontEndCommand": "table", "value": "", "priority": 63, "isStylePicker": false }, { "icon": "images/editor/media.gif", "command": "umbracoembed", "alias": "umbracoembed", "userInterface": "true", "frontEndCommand": "umbembeddialog", "value": "", "priority": 66, "isStylePicker": false }, { "icon": "images/editor/hr.gif", "command": "hr", "alias": "inserthorizontalrule", "userInterface": "false", "frontEndCommand": "hr", "value": "", "priority": 71, "isStylePicker": false }, { "icon": "images/editor/sub.gif", "command": "sub", "alias": "subscript", "userInterface": "false", "frontEndCommand": "sub", "value": "", "priority": 72, "isStylePicker": false }, { "icon": "images/editor/sup.gif", "command": "sup", "alias": "superscript", "userInterface": "false", "frontEndCommand": "sup", "value": "", "priority": 73, "isStylePicker": false }, { "icon": "images/editor/charmap.gif", "command": "charmap", "alias": "mcecharmap", "userInterface": "false", "frontEndCommand": "charmap", "value": "", "priority": 74, "isStylePicker": false }], "validElements": "+a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex|accesskey|type|name|href|target|title|class|onfocus|onblur|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup],-strong/-b[class|style],-em/-i[class|style],-strike[class|style],-u[class|style],#p[id|style|dir|class|align],-ol[class|reversed|start|style|type],-ul[class|style],-li[class|style],br[class],img[id|dir|lang|longdesc|usemap|style|class|src|onmouseover|onmouseout|border|alt=|title|hspace|vspace|width|height|align|umbracoorgwidth|umbracoorgheight|onresize|onresizestart|onresizeend|rel],-sub[style|class],-sup[style|class],-blockquote[dir|style|class],-table[border=0|cellspacing|cellpadding|width|height|class|align|summary|style|dir|id|lang|bgcolor|background|bordercolor],-tr[id|lang|dir|class|rowspan|width|height|align|valign|style|bgcolor|background|bordercolor],tbody[id|class],thead[id|class],tfoot[id|class],#td[id|lang|dir|class|colspan|rowspan|width|height|align|valign|style|bgcolor|background|bordercolor|scope],-th[id|lang|dir|class|colspan|rowspan|width|height|align|valign|style|scope],caption[id|lang|dir|class|style],-div[id|dir|class|align|style],-span[class|align|style],-pre[class|align|style],address[class|align|style],-h1[id|dir|class|align],-h2[id|dir|class|align],-h3[id|dir|class|align],-h4[id|dir|class|align],-h5[id|dir|class|align],-h6[id|style|dir|class|align],hr[class|style],dd[id|class|title|style|dir|lang],dl[id|class|title|style|dir|lang],dt[id|class|title|style|dir|lang],object[class|id|width|height|codebase|*],param[name|value|_value|class],embed[type|width|height|src|class|*],map[name|class],area[shape|coords|href|alt|target|class],bdo[class],button[class],iframe[*]", "inValidElements": "font", "customConfig": { "entity_encoding": "raw", "spellchecker_rpc_url": "GoogleSpellChecker.ashx" } }, null];
+              return [200, { "plugins": [{ "name": "code", "useOnFrontend": true }, { "name": "paste", "useOnFrontend": true }, { "name": "umbracolink", "useOnFrontend": true }], "commands": [{ "icon": "images/editor/code.gif", "command": "code", "alias": "code", "userInterface": "false", "frontEndCommand": "code", "value": "", "priority": 1, "isStylePicker": false }, { "icon": "images/editor/removeformat.gif", "command": "removeformat", "alias": "removeformat", "userInterface": "false", "frontEndCommand": "removeformat", "value": "", "priority": 2, "isStylePicker": false }, { "icon": "images/editor/undo.gif", "command": "undo", "alias": "undo", "userInterface": "false", "frontEndCommand": "undo", "value": "", "priority": 11, "isStylePicker": false }, { "icon": "images/editor/redo.gif", "command": "redo", "alias": "redo", "userInterface": "false", "frontEndCommand": "redo", "value": "", "priority": 12, "isStylePicker": false }, { "icon": "images/editor/cut.gif", "command": "cut", "alias": "cut", "userInterface": "false", "frontEndCommand": "cut", "value": "", "priority": 13, "isStylePicker": false }, { "icon": "images/editor/copy.gif", "command": "copy", "alias": "copy", "userInterface": "false", "frontEndCommand": "copy", "value": "", "priority": 14, "isStylePicker": false }, { "icon": "images/editor/showStyles.png", "command": "styleselect", "alias": "styleselect", "userInterface": "false", "frontEndCommand": "styleselect", "value": "", "priority": 20, "isStylePicker": false }, { "icon": "images/editor/bold.gif", "command": "bold", "alias": "bold", "userInterface": "false", "frontEndCommand": "bold", "value": "", "priority": 21, "isStylePicker": false }, { "icon": "images/editor/italic.gif", "command": "italic", "alias": "italic", "userInterface": "false", "frontEndCommand": "italic", "value": "", "priority": 22, "isStylePicker": false }, { "icon": "images/editor/underline.gif", "command": "underline", "alias": "underline", "userInterface": "false", "frontEndCommand": "underline", "value": "", "priority": 23, "isStylePicker": false }, { "icon": "images/editor/strikethrough.gif", "command": "strikethrough", "alias": "strikethrough", "userInterface": "false", "frontEndCommand": "strikethrough", "value": "", "priority": 24, "isStylePicker": false }, { "icon": "images/editor/justifyleft.gif", "command": "justifyleft", "alias": "justifyleft", "userInterface": "false", "frontEndCommand": "alignleft", "value": "", "priority": 31, "isStylePicker": false }, { "icon": "images/editor/justifycenter.gif", "command": "justifycenter", "alias": "justifycenter", "userInterface": "false", "frontEndCommand": "aligncenter", "value": "", "priority": 32, "isStylePicker": false }, { "icon": "images/editor/justifyright.gif", "command": "justifyright", "alias": "justifyright", "userInterface": "false", "frontEndCommand": "alignright", "value": "", "priority": 33, "isStylePicker": false }, { "icon": "images/editor/justifyfull.gif", "command": "justifyfull", "alias": "justifyfull", "userInterface": "false", "frontEndCommand": "alignfull", "value": "", "priority": 34, "isStylePicker": false }, { "icon": "images/editor/bullist.gif", "command": "bullist", "alias": "bullist", "userInterface": "false", "frontEndCommand": "bullist", "value": "", "priority": 41, "isStylePicker": false }, { "icon": "images/editor/numlist.gif", "command": "numlist", "alias": "numlist", "userInterface": "false", "frontEndCommand": "numlist", "value": "", "priority": 42, "isStylePicker": false }, { "icon": "images/editor/outdent.gif", "command": "outdent", "alias": "outdent", "userInterface": "false", "frontEndCommand": "outdent", "value": "", "priority": 43, "isStylePicker": false }, { "icon": "images/editor/indent.gif", "command": "indent", "alias": "indent", "userInterface": "false", "frontEndCommand": "indent", "value": "", "priority": 44, "isStylePicker": false }, { "icon": "images/editor/link.gif", "command": "link", "alias": "mcelink", "userInterface": "true", "frontEndCommand": "link", "value": "", "priority": 51, "isStylePicker": false }, { "icon": "images/editor/unLink.gif", "command": "unlink", "alias": "unlink", "userInterface": "false", "frontEndCommand": "unlink", "value": "", "priority": 52, "isStylePicker": false }, { "icon": "images/editor/anchor.gif", "command": "anchor", "alias": "mceinsertanchor", "userInterface": "false", "frontEndCommand": "anchor", "value": "", "priority": 53, "isStylePicker": false }, { "icon": "images/editor/image.gif", "command": "image", "alias": "mceimage", "userInterface": "true", "frontEndCommand": "umbmediapicker", "value": "", "priority": 61, "isStylePicker": false }, { "icon": "images/editor/insMacro.gif", "command": "umbracomacro", "alias": "umbracomacro", "userInterface": "true", "frontEndCommand": "umbmacro", "value": "", "priority": 62, "isStylePicker": false }, { "icon": "images/editor/table.gif", "command": "table", "alias": "mceinserttable", "userInterface": "true", "frontEndCommand": "table", "value": "", "priority": 63, "isStylePicker": false }, { "icon": "images/editor/media.gif", "command": "umbracoembed", "alias": "umbracoembed", "userInterface": "true", "frontEndCommand": "umbembeddialog", "value": "", "priority": 66, "isStylePicker": false }, { "icon": "images/editor/hr.gif", "command": "hr", "alias": "inserthorizontalrule", "userInterface": "false", "frontEndCommand": "hr", "value": "", "priority": 71, "isStylePicker": false }, { "icon": "images/editor/sub.gif", "command": "sub", "alias": "subscript", "userInterface": "false", "frontEndCommand": "sub", "value": "", "priority": 72, "isStylePicker": false }, { "icon": "images/editor/sup.gif", "command": "sup", "alias": "superscript", "userInterface": "false", "frontEndCommand": "sup", "value": "", "priority": 73, "isStylePicker": false }, { "icon": "images/editor/charmap.gif", "command": "charmap", "alias": "mcecharmap", "userInterface": "false", "frontEndCommand": "charmap", "value": "", "priority": 74, "isStylePicker": false }], "validElements": "+a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex|accesskey|type|name|href|target|title|class|onfocus|onblur|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup],-strong/-b[class|style],-em/-i[class|style],-strike[class|style],-u[class|style],#p[id|style|dir|class|align],-ol[class|reversed|start|style|type],-ul[class|style],-li[class|style],br[class],img[id|dir|lang|longdesc|usemap|style|class|src|onmouseover|onmouseout|border|alt=|title|hspace|vspace|width|height|align|umbracoorgwidth|umbracoorgheight|onresize|onresizestart|onresizeend|rel],-sub[style|class],-sup[style|class],-blockquote[dir|style|class],-table[border=0|cellspacing|cellpadding|width|height|class|align|summary|style|dir|id|lang|bgcolor|background|bordercolor],-tr[id|lang|dir|class|rowspan|width|height|align|valign|style|bgcolor|background|bordercolor],tbody[id|class],thead[id|class],tfoot[id|class],#td[id|lang|dir|class|colspan|rowspan|width|height|align|valign|style|bgcolor|background|bordercolor|scope],-th[id|lang|dir|class|colspan|rowspan|width|height|align|valign|style|scope],caption[id|lang|dir|class|style],-div[id|dir|class|align|style],-span[class|align|style],-pre[class|align|style],address[class|align|style],-h1[id|dir|class|align],-h2[id|dir|class|align],-h3[id|dir|class|align],-h4[id|dir|class|align],-h5[id|dir|class|align],-h6[id|style|dir|class|align],hr[class|style],dd[id|class|title|style|dir|lang],dl[id|class|title|style|dir|lang],dt[id|class|title|style|dir|lang],object[class|id|width|height|codebase|*],param[name|value|_value|class],embed[type|width|height|src|class|*],map[name|class],area[shape|coords|href|alt|target|class],bdo[class],button[class],iframe[*]", "inValidElements": "font", "customConfig": { "entity_encoding": "raw" } }, null];
           }
       }
 
+	  function getCanvasEditorConfiguration(status, data, headers){
+		if (!mocksUtils.checkAuth()) {
+              return [401, null, null];
+          }
+          else {
+              return [200, 
+			  [
+					{
+						"name": "Rich text editor",
+						"alias": "rte",
+						"view": "rte",
+						"icon": "icon-article"
+					},
+					{
+						"name": "Image",
+						"alias": "media",
+						"view": "media",
+						"icon": "icon-picture"
+					},
+					{
+						"name": "Macro",
+						"alias": "macro",
+						"view": "macro",
+						"icon": "icon-settings-alt"
+					},
+					{
+						"name": "Embed",
+						"alias": "embed",
+						"view": "embed",
+						"icon": "icon-movie-alt"
+					},
+					{
+						"name": "Headline",
+						"alias": "headline",
+						"view": "textstring",
+						"icon": "icon-coin",
+						"config": {
+							"style": "font-size: 36px; line-height: 45px; font-weight: bold",
+							"markup": "<h1>#value#</h1>"
+						}
+					},
+					{
+						"name": "Quote",
+						"alias": "quote",
+						"view": "textstring",
+						"icon": "icon-quote",
+						"config": {
+							"style": "border-left: 3px solid #ccc; padding: 10px; color: #ccc; font-family: serif; font-variant: italic; font-size: 18px",
+							"markup": "<blockquote>#value#</blockquote>"
+						}
+					}
+				], null];
+			}
+			  
+	  }
+	  
+	  
       return {
           register: function() {
               $httpBackend
                   .whenGET(mocksUtils.urlRegex('/umbraco/UmbracoApi/RichTextPreValue/GetConfiguration'))
                   .respond(getRichTextConfiguration);
+			  $httpBackend
+                  .whenGET(mocksUtils.urlRegex('../config/canvas.editors.config.js'))
+                  .respond(getCanvasEditorConfiguration);	  
           }
       };
   }]);
@@ -86,11 +146,91 @@ angular.module('umbraco.mocks').
                     allowedActions: ["U", "H", "A"],
                     tabs: [
                     {
-                        label: "Child documents",
+                        label: "Grid",
                         id: 1, 
                         active: true,
                         properties: [                            
-                            { alias: "list", label: "List", view: "listview", value: "", hideLabel: true, config:{entityType: "content"} },
+                            { alias: "grid", 
+                            label: "Grid", 
+                            view: "grid", 
+                            value: "", 
+                            hideLabel: true, 
+                            config: {
+                                items:{
+
+                                    styles:[
+                                        {
+                                            label: "Set a background image",
+                                            description: "Set a row background",
+                                            key: "background-image",
+                                            view: "imagepicker",
+                                            modifier: "url({0})"
+                                        }
+                                    ],
+                                    config:[
+                                        {
+                                            label: "Class",
+                                            description: "Set a css class",
+                                            key: "class",
+                                            view: "textstring"
+                                        }
+                                    ],
+                                    columns: 12,
+                                    templates:[
+                                        {
+                                            name: "1 column layout",
+                                            sections: [
+                                                {
+                                                    grid: 12,
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            name: "2 column layout",
+                                            sections: [
+                                                {
+                                                    grid: 4,
+                                                },
+                                                {
+                                                    grid: 8
+                                                }
+                                            ]
+                                        }
+                                    ],
+
+
+                                    layouts:[
+                                        {
+                                            name: "Headline",
+                                            areas: [
+                                                {
+                                                    grid: 12,
+                                                    editors: ["headline"]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            name: "Article",
+                                            areas: [
+                                                {
+                                                    grid: 12
+                                                },
+                                                {
+                                                    grid: 4
+                                                },
+                                                {
+                                                    grid: 8
+                                                },
+                                                {
+                                                    grid: 12
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                    }
+
+                                }
+                            },
                         ]
                     },
                     {
@@ -142,22 +282,6 @@ angular.module('umbraco.mocks').
                         ]
                     },
                     {
-                        label: "Tab # 7",
-                        id: 7,
-                        properties: [
-                            { alias: "valTest7", label: "Validation test", view: "validationtest", value: "asdfasdf" },
-                            { alias: "bodyText7", label: "Body Text", description: "Here you enter the primary article contents", view: "rte", value: "<p>askjdkasj lasjd</p>", config: {} },
-                            { alias: "textarea7", label: "textarea", view: "textarea", value: "ajsdka sdjkds", config: { rows: 4 } },
-                            { alias: "content7", label: "Content picker", view: "contentpicker", value: "1234,23242,23232,23231" }
-                        ]
-                    },
-                    {
-                        label: "Grid",
-                        id: 8,
-                        properties: [
-                        { alias: "grid", label: "Grid", view: "grid", value: "test", hideLabel: true }
-                        ]
-                    }, {
                         label: "Generic Properties",
                         id: 0,
                         properties: [
@@ -747,7 +871,7 @@ angular.module('umbraco.mocks').
       'use strict';
       
       function returnNodeCollection(status, data, headers){
-        var nodes = [{"properties":[{"id":348,"value":"/media/1045/windows95.jpg","alias":"umbracoFile"},{"id":349,"value":"640","alias":"umbracoWidth"},{"id":350,"value":"472","alias":"umbracoHeight"},{"id":351,"value":"53472","alias":"umbracoBytes"},{"id":352,"value":"jpg","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:08","createDate":"2013-08-27 15:50:08","owner":{"id":0,"name":"admin"},"updator":null,"contentTypeAlias":"Image","sortOrder":0,"name":"windows95.jpg","id":1128,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":353,"value":"/media/1046/pete.png","alias":"umbracoFile"},{"id":354,"value":"240","alias":"umbracoWidth"},{"id":355,"value":"240","alias":"umbracoHeight"},{"id":356,"value":"87408","alias":"umbracoBytes"},{"id":357,"value":"png","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:08","createDate":"2013-08-27 15:50:08","owner":{"id":0,"name":"admin"},"updator":null,"contentTypeAlias":"Image","sortOrder":1,"name":"pete.png","id":1129,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":358,"value":"/media/1047/unicorn.jpg","alias":"umbracoFile"},{"id":359,"value":"640","alias":"umbracoWidth"},{"id":360,"value":"640","alias":"umbracoHeight"},{"id":361,"value":"577380","alias":"umbracoBytes"},{"id":362,"value":"jpg","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:09","createDate":"2013-08-27 15:50:09","owner":{"id":0,"name":"admin"},"updator":null,"contentTypeAlias":"Image","sortOrder":2,"name":"unicorn.jpg","id":1130,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":363,"value":"/media/1049/exploding-head.gif","alias":"umbracoFile"},{"id":364,"value":"500","alias":"umbracoWidth"},{"id":365,"value":"279","alias":"umbracoHeight"},{"id":366,"value":"451237","alias":"umbracoBytes"},{"id":367,"value":"gif","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:09","createDate":"2013-08-27 15:50:09","owner":{"id":0,"name":"admin"},"updator":null,"contentTypeAlias":"Image","sortOrder":3,"name":"exploding head.gif","id":1131,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":368,"value":"/media/1048/bighead.jpg","alias":"umbracoFile"},{"id":369,"value":"1240","alias":"umbracoWidth"},{"id":370,"value":"1655","alias":"umbracoHeight"},{"id":371,"value":"836261","alias":"umbracoBytes"},{"id":372,"value":"jpg","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:09","createDate":"2013-08-27 15:50:09","owner":{"id":0,"name":"admin"},"updator":null,"contentTypeAlias":"Image","sortOrder":4,"name":"bighead.jpg","id":1132,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":373,"value":"/media/1050/powerlines.jpg","alias":"umbracoFile"},{"id":374,"value":"636","alias":"umbracoWidth"},{"id":375,"value":"423","alias":"umbracoHeight"},{"id":376,"value":"79874","alias":"umbracoBytes"},{"id":377,"value":"jpg","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:09","createDate":"2013-08-27 15:50:09","owner":{"id":0,"name":"admin"},"updator":null,"contentTypeAlias":"Image","sortOrder":5,"name":"powerlines.jpg","id":1133,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":430,"value":"","alias":"contents"}],"updateDate":"2013-08-30 08:53:22","createDate":"2013-08-30 08:53:22","owner":{"id":0,"name":"admin"},"updator":null,"contentTypeAlias":"Folder","sortOrder":6,"name":"new folder","id":1146,"icon":"folder.gif","parentId":1127}];
+        var nodes = [{"properties":[{"id":348,"value":"/media/1045/windows95.jpg","alias":"umbracoFile"},{"id":349,"value":"640","alias":"umbracoWidth"},{"id":350,"value":"472","alias":"umbracoHeight"},{"id":351,"value":"53472","alias":"umbracoBytes"},{"id":352,"value":"jpg","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:08","createDate":"2013-08-27 15:50:08","owner":{"id":0,"name":"admin"},"updater":null,"contentTypeAlias":"Image","sortOrder":0,"name":"windows95.jpg","id":1128,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":353,"value":"/media/1046/pete.png","alias":"umbracoFile"},{"id":354,"value":"240","alias":"umbracoWidth"},{"id":355,"value":"240","alias":"umbracoHeight"},{"id":356,"value":"87408","alias":"umbracoBytes"},{"id":357,"value":"png","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:08","createDate":"2013-08-27 15:50:08","owner":{"id":0,"name":"admin"},"updater":null,"contentTypeAlias":"Image","sortOrder":1,"name":"pete.png","id":1129,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":358,"value":"/media/1047/unicorn.jpg","alias":"umbracoFile"},{"id":359,"value":"640","alias":"umbracoWidth"},{"id":360,"value":"640","alias":"umbracoHeight"},{"id":361,"value":"577380","alias":"umbracoBytes"},{"id":362,"value":"jpg","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:09","createDate":"2013-08-27 15:50:09","owner":{"id":0,"name":"admin"},"updater":null,"contentTypeAlias":"Image","sortOrder":2,"name":"unicorn.jpg","id":1130,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":363,"value":"/media/1049/exploding-head.gif","alias":"umbracoFile"},{"id":364,"value":"500","alias":"umbracoWidth"},{"id":365,"value":"279","alias":"umbracoHeight"},{"id":366,"value":"451237","alias":"umbracoBytes"},{"id":367,"value":"gif","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:09","createDate":"2013-08-27 15:50:09","owner":{"id":0,"name":"admin"},"updater":null,"contentTypeAlias":"Image","sortOrder":3,"name":"exploding head.gif","id":1131,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":368,"value":"/media/1048/bighead.jpg","alias":"umbracoFile"},{"id":369,"value":"1240","alias":"umbracoWidth"},{"id":370,"value":"1655","alias":"umbracoHeight"},{"id":371,"value":"836261","alias":"umbracoBytes"},{"id":372,"value":"jpg","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:09","createDate":"2013-08-27 15:50:09","owner":{"id":0,"name":"admin"},"updater":null,"contentTypeAlias":"Image","sortOrder":4,"name":"bighead.jpg","id":1132,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":373,"value":"/media/1050/powerlines.jpg","alias":"umbracoFile"},{"id":374,"value":"636","alias":"umbracoWidth"},{"id":375,"value":"423","alias":"umbracoHeight"},{"id":376,"value":"79874","alias":"umbracoBytes"},{"id":377,"value":"jpg","alias":"umbracoExtension"}],"updateDate":"2013-08-27 15:50:09","createDate":"2013-08-27 15:50:09","owner":{"id":0,"name":"admin"},"updater":null,"contentTypeAlias":"Image","sortOrder":5,"name":"powerlines.jpg","id":1133,"icon":"mediaPhoto.gif","parentId":1127},{"properties":[{"id":430,"value":"","alias":"contents"}],"updateDate":"2013-08-30 08:53:22","createDate":"2013-08-30 08:53:22","owner":{"id":0,"name":"admin"},"updater":null,"contentTypeAlias":"Folder","sortOrder":6,"name":"new folder","id":1146,"icon":"folder.gif","parentId":1127}];
         return [200, nodes, null];
       }
 
@@ -943,7 +1067,7 @@ angular.module('umbraco.mocks').
               { name: "Multiple textstring", childNodesUrl: null, id: 11, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null },
               { name: "Yes/No", childNodesUrl: null, id: 12, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null },
               { name: "Rich Text Editor", childNodesUrl: null, id: 13, icon: "icon-document", children: [], expanded: false, hasChildren: false, level: 1,  menuUrl: null }
-          ];
+          ];  
           
           return [200, children, null];
       }
@@ -1118,7 +1242,8 @@ angular.module('umbraco.mocks').
               emailHash: "f9879d71855b5ff21e4963273a886bfc",
               id: 0,
               locale: 'da-DK',
-              remainingAuthSeconds: 600
+              remainingAuthSeconds: 600,
+			  allowedSections: ["content", "media"]
           };
       }
 
@@ -1378,7 +1503,7 @@ angular.module('umbraco.mocks').
                   "create_noMediaTypes": "There are no allowed media types available. You must enable these in the settings section under <strong>'media types'</strong>.",
                   "dashboard_browser": "Browse your website",
                   "dashboard_dontShowAgain": "- Hide",
-                  "dashboard_nothinghappens": "If umbraco isn't opening, you might need to allow popups from this site",
+                  "dashboard_nothinghappens": "If Umbraco isn't opening, you might need to allow popups from this site",
                   "dashboard_openinnew": "has opened in a new window",
                   "dashboard_restart": "Restart",
                   "dashboard_visit": "Visit",
@@ -1588,35 +1713,35 @@ angular.module('umbraco.mocks').
                   "installer_databaseHeader": "Database configuration",
                   "installer_databaseInstall": "      Press the <strong>install</strong> button to install the Umbraco %0% database    ",
                   "installer_databaseInstallDone": "Umbraco %0% has now been copied to your database. Press <strong>Next</strong> to proceed.",
-                  "installer_databaseNotFound": "<p>Database not found! Please check that the information in the 'connection string' of the \"web.config\" file is correct.</p>              <p>To proceed, please edit the 'web.config' file (using Visual Studio or your favourite text editor), scroll to the bottom, add the connection string for your database in the key named 'umbracoDbDSN' and save the file. </p>              <p>              Click the <strong>retry</strong> button when               done.<br /><a href='http://umbraco.org/redir/installWebConfig' target='_blank'>              More information on editing web.config here.</a></p>",
+                  "installer_databaseNotFound": "<p>Database not found! Please check that the information in the 'connection string' of the \"web.config\" file is correct.</p>              <p>To proceed, please edit the 'web.config' file (using Visual Studio or your favourite text editor), scroll to the bottom, add the connection string for your database in the key named 'UmbracoDbDSN' and save the file. </p>              <p>              Click the <strong>retry</strong> button when               done.<br /><a href='http://Umbraco.org/redir/installWebConfig' target='_blank'>              More information on editing web.config here.</a></p>",
                   "installer_databaseText": "To complete this step, you must know some information regarding your database server ('connection string').<br />        Please contact your ISP if necessary.        If you're installing on a local machine or server you might need information from your system administrator.",
                   "installer_databaseUpgrade": "      <p>      Press the <strong>upgrade</strong> button to upgrade your database to Umbraco %0%</p>      <p>      Don't worry - no content will be deleted and everything will continue working afterwards!      </p>          ",
                   "installer_databaseUpgradeDone": "Your database has been upgraded to the final version %0%.<br />Press <strong>Next</strong> to       proceed. ",
                   "installer_databaseUpToDate": "Your current database is up-to-date!. Click <strong>next</strong> to continue the configuration wizard",
                   "installer_defaultUserChangePass": "<strong>The Default users' password needs to be changed!</strong>",
-                  "installer_defaultUserDisabled": "<strong>The Default user has been disabled or has no access to umbraco!</strong></p><p>No further actions needs to be taken. Click <b>Next</b> to proceed.",
+                  "installer_defaultUserDisabled": "<strong>The Default user has been disabled or has no access to Umbraco!</strong></p><p>No further actions needs to be taken. Click <b>Next</b> to proceed.",
                   "installer_defaultUserPassChanged": "<strong>The Default user's password has been successfully changed since the installation!</strong></p><p>No further actions needs to be taken. Click <strong>Next</strong> to proceed.",
                   "installer_defaultUserPasswordChanged": "The password is changed!",
-                  "installer_defaultUserText": "        <p>          umbraco creates a default user with a login <strong>('admin')</strong> and password <strong>('default')</strong>. It's <strong>important</strong> that the password is           changed to something unique.        </p>        <p>          This step will check the default user's password and suggest if it needs to be changed.        </p>      ",
+                  "installer_defaultUserText": "        <p>          Umbraco creates a default user with a login <strong>('admin')</strong> and password <strong>('default')</strong>. It's <strong>important</strong> that the password is           changed to something unique.        </p>        <p>          This step will check the default user's password and suggest if it needs to be changed.        </p>      ",
                   "installer_greatStart": "Get a great start, watch our introduction videos",
-                  "installer_licenseText": "By clicking the next button (or modifying the umbracoConfigurationStatus in web.config), you accept the license for this software as specified in the box below. Notice that this umbraco distribution consists of two different licenses, the open source MIT license for the framework and the umbraco freeware license that covers the UI.",
+                  "installer_licenseText": "By clicking the next button (or modifying the UmbracoConfigurationStatus in web.config), you accept the license for this software as specified in the box below. Notice that this Umbraco distribution consists of two different licenses, the open source MIT license for the framework and the Umbraco freeware license that covers the UI.",
                   "installer_None": "Not installed yet.",
                   "installer_permissionsAffectedFolders": "Affected files and folders",
-                  "installer_permissionsAffectedFoldersMoreInfo": "More information on setting up permissions for umbraco here",
+                  "installer_permissionsAffectedFoldersMoreInfo": "More information on setting up permissions for Umbraco here",
                   "installer_permissionsAffectedFoldersText": "You need to grant ASP.NET modify permissions to the following files/folders",
-                  "installer_permissionsAlmostPerfect": "<strong>Your permission settings are almost perfect!</strong><br /><br />        You can run umbraco without problems, but you will not be able to install packages which are recommended to take full advantage of umbraco.",
+                  "installer_permissionsAlmostPerfect": "<strong>Your permission settings are almost perfect!</strong><br /><br />        You can run Umbraco without problems, but you will not be able to install packages which are recommended to take full advantage of Umbraco.",
                   "installer_permissionsHowtoResolve": "How to Resolve",
                   "installer_permissionsHowtoResolveLink": "Click here to read the text version",
-                  "installer_permissionsHowtoResolveText": "Watch our <strong>video tutorial</strong> on setting up folder permissions for umbraco or read the text version.",
-                  "installer_permissionsMaybeAnIssue": "<strong>Your permission settings might be an issue!</strong>      <br/><br />      You can run umbraco without problems, but you will not be able to create folders or install packages which are recommended to take full advantage of umbraco.",
-                  "installer_permissionsNotReady": "<strong>Your permission settings are not ready for umbraco!</strong>          <br /><br />          In order to run umbraco, you'll need to update your permission settings.",
-                  "installer_permissionsPerfect": "<strong>Your permission settings are perfect!</strong><br /><br />              You are ready to run umbraco and install packages!",
+                  "installer_permissionsHowtoResolveText": "Watch our <strong>video tutorial</strong> on setting up folder permissions for Umbraco or read the text version.",
+                  "installer_permissionsMaybeAnIssue": "<strong>Your permission settings might be an issue!</strong>      <br/><br />      You can run Umbraco without problems, but you will not be able to create folders or install packages which are recommended to take full advantage of Umbraco.",
+                  "installer_permissionsNotReady": "<strong>Your permission settings are not ready for Umbraco!</strong>          <br /><br />          In order to run Umbraco, you'll need to update your permission settings.",
+                  "installer_permissionsPerfect": "<strong>Your permission settings are perfect!</strong><br /><br />              You are ready to run Umbraco and install packages!",
                   "installer_permissionsResolveFolderIssues": "Resolving folder issue",
                   "installer_permissionsResolveFolderIssuesLink": "Follow this link for more information on problems with ASP.NET and creating folders",
                   "installer_permissionsSettingUpPermissions": "Setting up folder permissions",
-                  "installer_permissionsText": "      umbraco needs write/modify access to certain directories in order to store files like pictures and PDF's.      It also stores temporary data (aka: cache) for enhancing the performance of your website.    ",
+                  "installer_permissionsText": "      Umbraco needs write/modify access to certain directories in order to store files like pictures and PDF's.      It also stores temporary data (aka: cache) for enhancing the performance of your website.    ",
                   "installer_runwayFromScratch": "I want to start from scratch",
-                  "installer_runwayFromScratchText": "        Your website is completely empty at the moment, so that's perfect if you want to start from scratch and create your own document types and templates.         (<a href='http://umbraco.tv/documentation/videos/for-site-builders/foundation/document-types'>learn how</a>)        You can still choose to install Runway later on. Please go to the Developer section and choose Packages.      ",
+                  "installer_runwayFromScratchText": "        Your website is completely empty at the moment, so that's perfect if you want to start from scratch and create your own document types and templates.         (<a href='http://Umbraco.tv/documentation/videos/for-site-builders/foundation/document-types'>learn how</a>)        You can still choose to install Runway later on. Please go to the Developer section and choose Packages.      ",
                   "installer_runwayHeader": "You've just set up a clean Umbraco platform. What do you want to do next?",
                   "installer_runwayInstalled": "Runway is installed",
                   "installer_runwayInstalledText": "      You have the foundation in place. Select what modules you wish to install on top of it.<br />      This is our list of recommended modules, check off the ones you would like to install, or view the <a href='#' onclick='toggleModules(); return false;' id='toggleModuleList'>full list of modules</a>      ",
@@ -1627,20 +1752,20 @@ angular.module('umbraco.mocks').
                   "installer_step1": "Step 1/5 Accept license",
                   "installer_step2": "Step 2/5: Database configuration",
                   "installer_step3": "Step 3/5: Validating File Permissions",
-                  "installer_step4": "Step 4/5: Check umbraco security",
+                  "installer_step4": "Step 4/5: Check Umbraco security",
                   "installer_step5": "Step 5/5: Umbraco is ready to get you started",
-                  "installer_thankYou": "Thank you for choosing umbraco",
+                  "installer_thankYou": "Thank you for choosing Umbraco",
                   "installer_theEndBrowseSite": "<h3>Browse your new site</h3>You installed Runway, so why not see how your new website looks.",
-                  "installer_theEndFurtherHelp": "<h3>Further help and information</h3>Get help from our award winning community, browse the documentation or watch some free videos on how to build a simple site, how to use packages and a quick guide to the umbraco terminology",
+                  "installer_theEndFurtherHelp": "<h3>Further help and information</h3>Get help from our award winning community, browse the documentation or watch some free videos on how to build a simple site, how to use packages and a quick guide to the Umbraco terminology",
                   "installer_theEndHeader": "Umbraco %0% is installed and ready for use",
-                  "installer_theEndInstallFailed": "To finish the installation, you'll need to         manually edit the <strong>/web.config file</strong> and update the AppSetting key <strong>umbracoConfigurationStatus</strong> in the bottom to the value of <strong>'%0%'</strong>.",
-                  "installer_theEndInstallSuccess": "You can get <strong>started instantly</strong> by clicking the 'Launch Umbraco' button below. <br />If you are <strong>new to umbraco</strong>, you can find plenty of resources on our getting started pages.",
-                  "installer_theEndOpenUmbraco": "<h3>Launch Umbraco</h3>To manage your website, simply open the umbraco back office and start adding content, updating the templates and stylesheets or add new functionality",
+                  "installer_theEndInstallFailed": "To finish the installation, you'll need to         manually edit the <strong>/web.config file</strong> and update the AppSetting key <strong>UmbracoConfigurationStatus</strong> in the bottom to the value of <strong>'%0%'</strong>.",
+                  "installer_theEndInstallSuccess": "You can get <strong>started instantly</strong> by clicking the 'Launch Umbraco' button below. <br />If you are <strong>new to Umbraco</strong>, you can find plenty of resources on our getting started pages.",
+                  "installer_theEndOpenUmbraco": "<h3>Launch Umbraco</h3>To manage your website, simply open the Umbraco back office and start adding content, updating the templates and stylesheets or add new functionality",
                   "installer_Unavailable": "Connection to database failed.",
                   "installer_Version3": "Umbraco Version 3",
                   "installer_Version4": "Umbraco Version 4",
                   "installer_watch": "Watch",
-                  "installer_welcomeIntro": "This wizard will guide you through the process of configuring <strong>umbraco %0%</strong> for a fresh install or upgrading from version 3.0.                                <br /><br />                                Press <strong>'next'</strong> to start the wizard.",
+                  "installer_welcomeIntro": "This wizard will guide you through the process of configuring <strong>Umbraco %0%</strong> for a fresh install or upgrading from version 3.0.                                <br /><br />                                Press <strong>'next'</strong> to start the wizard.",
                   "language_cultureCode": "Culture Code",
                   "language_displayName": "Culture Name",
                   "lockout_lockoutWillOccur": "You've been idle and logout will automatically occur in",
@@ -1653,7 +1778,7 @@ angular.module('umbraco.mocks').
                   "login_greeting6": "Happy friendly Friday",
                   "login_greeting7": "Happy shiny Saturday",
                   "login_instruction": "Log in below:",
-                  "login_bottomText": "<p style='text-align:right;'>&copy; 2001 - %0% <br /><a href='http://umbraco.org' style='text-decoration: none' target='_blank'>umbraco.org</a></p> ",
+                  "login_bottomText": "<p style='text-align:right;'>&copy; 2001 - %0% <br /><a href='http://Umbraco.org' style='text-decoration: none' target='_blank'>Umbraco.org</a></p> ",
                   "main_dashboard": "Dashboard",
                   "main_sections": "Sections",
                   "main_tree": "Content",
@@ -1670,11 +1795,11 @@ angular.module('umbraco.mocks').
                   "moveOrCopy_notValid": "The action isn't allowed since you have insufficient permissions on 1 or more child documents.",
                   "moveOrCopy_relateToOriginal": "Relate copied items to original",
                   "notifications_editNotifications": "Edit your notification for %0%",
-                  "notifications_mailBody": "      Hi %0%      This is an automated mail to inform you that the task '%1%'      has been performed on the page '%2%'      by the user '%3%'      Go to http://%4%/actions/editContent.aspx?id=%5% to edit.      Have a nice day!      Cheers from the umbraco robot    ",
-                  "notifications_mailBodyHtml": "<p>Hi %0%</p>  <p>This is an automated mail to inform you that the task <strong>'%1%'</strong>   has been performed on the page <a href='http://%4%/actions/preview.aspx?id=%5%'><strong>'%2%'</strong></a>  by the user <strong>'%3%'</strong>  </p>  <div style='margin: 8px 0; padding: 8px; display: block;'><br /><a style='color: white; font-weight: bold; background-color: #66cc66; text-decoration : none; margin-right: 20px; border: 8px solid #66cc66; width: 150px;' href='http://%4%/actions/publish.aspx?id=%5%'>&nbsp;&nbsp;PUBLISH&nbsp;&nbsp;</a> &nbsp; <a style='color: white; font-weight: bold; background-color: #5372c3; text-decoration : none; margin-right: 20px; border: 8px solid #5372c3; width: 150px;' href='http://%4%/actions/editContent.aspx?id=%5%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> &nbsp; <a style='color: white; font-weight: bold; background-color: #ca4a4a; text-decoration : none; margin-right: 20px; border: 8px solid #ca4a4a; width: 150px;' href='http://%4%/actions/delete.aspx?id=%5%'>&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;&nbsp;&nbsp;&nbsp;</a><br />  </div>  <p>  <h3>Update summary:</h3>  <table style='width: 100%;'>   %6%</table> </p>  <div style='margin: 8px 0; padding: 8px; display: block;'><br /><a style='color: white; font-weight: bold; background-color: #66cc66; text-decoration : none; margin-right: 20px; border: 8px solid #66cc66; width: 150px;' href='http://%4%/actions/publish.aspx?id=%5%'>&nbsp;&nbsp;PUBLISH&nbsp;&nbsp;</a> &nbsp; <a style='color: white; font-weight: bold; background-color: #5372c3; text-decoration : none; margin-right: 20px; border: 8px solid #5372c3; width: 150px;' href='http://%4%/actions/editContent.aspx?id=%5%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> &nbsp; <a style='color: white; font-weight: bold; background-color: #ca4a4a; text-decoration : none; margin-right: 20px; border: 8px solid #ca4a4a; width: 150px;' href='http://%4%/actions/delete.aspx?id=%5%'>&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;&nbsp;&nbsp;&nbsp;</a><br />  </div>  <p>Have a nice day!<br /><br />  Cheers from the umbraco robot  </p>",
+                  "notifications_mailBody": "      Hi %0%      This is an automated mail to inform you that the task '%1%'      has been performed on the page '%2%'      by the user '%3%'      Go to http://%4%/actions/editContent.aspx?id=%5% to edit.      Have a nice day!      Cheers from the Umbraco robot    ",
+                  "notifications_mailBodyHtml": "<p>Hi %0%</p>  <p>This is an automated mail to inform you that the task <strong>'%1%'</strong>   has been performed on the page <a href='http://%4%/actions/preview.aspx?id=%5%'><strong>'%2%'</strong></a>  by the user <strong>'%3%'</strong>  </p>  <div style='margin: 8px 0; padding: 8px; display: block;'><br /><a style='color: white; font-weight: bold; background-color: #66cc66; text-decoration : none; margin-right: 20px; border: 8px solid #66cc66; width: 150px;' href='http://%4%/actions/publish.aspx?id=%5%'>&nbsp;&nbsp;PUBLISH&nbsp;&nbsp;</a> &nbsp; <a style='color: white; font-weight: bold; background-color: #5372c3; text-decoration : none; margin-right: 20px; border: 8px solid #5372c3; width: 150px;' href='http://%4%/actions/editContent.aspx?id=%5%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> &nbsp; <a style='color: white; font-weight: bold; background-color: #ca4a4a; text-decoration : none; margin-right: 20px; border: 8px solid #ca4a4a; width: 150px;' href='http://%4%/actions/delete.aspx?id=%5%'>&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;&nbsp;&nbsp;&nbsp;</a><br />  </div>  <p>  <h3>Update summary:</h3>  <table style='width: 100%;'>   %6%</table> </p>  <div style='margin: 8px 0; padding: 8px; display: block;'><br /><a style='color: white; font-weight: bold; background-color: #66cc66; text-decoration : none; margin-right: 20px; border: 8px solid #66cc66; width: 150px;' href='http://%4%/actions/publish.aspx?id=%5%'>&nbsp;&nbsp;PUBLISH&nbsp;&nbsp;</a> &nbsp; <a style='color: white; font-weight: bold; background-color: #5372c3; text-decoration : none; margin-right: 20px; border: 8px solid #5372c3; width: 150px;' href='http://%4%/actions/editContent.aspx?id=%5%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> &nbsp; <a style='color: white; font-weight: bold; background-color: #ca4a4a; text-decoration : none; margin-right: 20px; border: 8px solid #ca4a4a; width: 150px;' href='http://%4%/actions/delete.aspx?id=%5%'>&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;&nbsp;&nbsp;&nbsp;</a><br />  </div>  <p>Have a nice day!<br /><br />  Cheers from the Umbraco robot  </p>",
                   "notifications_mailSubject": "[%0%] Notification about %1% performed on %2%",
                   "notifications_notifications": "Notifications",
-                  "packager_chooseLocalPackageText": "      Choose Package from your machine, by clicking the Browse<br />         button and locating the package. umbraco packages usually have a '.umb' or '.zip' extension.      ",
+                  "packager_chooseLocalPackageText": "      Choose Package from your machine, by clicking the Browse<br />         button and locating the package. Umbraco packages usually have a '.umb' or '.zip' extension.      ",
                   "packager_packageAuthor": "Author",
                   "packager_packageDemonstration": "Demonstration",
                   "packager_packageDocumentation": "Documentation",
@@ -1694,16 +1819,16 @@ angular.module('umbraco.mocks').
                   "packager_packageUpgradeDownload": "Download update from the repository",
                   "packager_packageUpgradeHeader": "Upgrade package",
                   "packager_packageUpgradeInstructions": "Upgrade instructions",
-                  "packager_packageUpgradeText": " There's an upgrade available for this package. You can download it directly from the umbraco package repository.",
+                  "packager_packageUpgradeText": " There's an upgrade available for this package. You can download it directly from the Umbraco package repository.",
                   "packager_packageVersion": "Package version",
                   "packager_packageVersionHistory": "Package version history",
                   "packager_viewPackageWebsite": "View package website",
                   "paste_doNothing": "Paste with full formatting (Not recommended)",
-                  "paste_errorMessage": "The text you're trying to paste contains special characters or formatting. This could be caused by copying text from Microsoft Word. umbraco can remove special characters or formatting automatically, so the pasted content will be more suitable for the web.",
+                  "paste_errorMessage": "The text you're trying to paste contains special characters or formatting. This could be caused by copying text from Microsoft Word. Umbraco can remove special characters or formatting automatically, so the pasted content will be more suitable for the web.",
                   "paste_removeAll": "Paste as raw text without any formatting at all",
                   "paste_removeSpecialFormattering": "Paste, but remove formatting (Recommended)",
                   "publicAccess_paAdvanced": "Role based protection",
-                  "publicAccess_paAdvancedHelp": "If you wish to control access to the page using role-based authentication,<br /> using umbraco's member groups.",
+                  "publicAccess_paAdvancedHelp": "If you wish to control access to the page using role-based authentication,<br /> using Umbraco's member groups.",
                   "publicAccess_paAdvancedNoGroups": "You need to create a membergroup before you can use <br />role-based authentication.",
                   "publicAccess_paErrorPage": "Error Page",
                   "publicAccess_paErrorPageHelp": "Used when people are logged on, but do not have access",
@@ -1842,9 +1967,9 @@ angular.module('umbraco.mocks').
                   "template_insertContentAreaPlaceHolder": "Insert content area placeholder",
                   "template_insertDictionaryItem": "Insert dictionary item",
                   "template_insertMacro": "Insert Macro",
-                  "template_insertPageField": "Insert umbraco page field",
+                  "template_insertPageField": "Insert Umbraco page field",
                   "template_mastertemplate": "Master template",
-                  "template_quickGuide": "Quick Guide to umbraco template tags",
+                  "template_quickGuide": "Quick Guide to Umbraco template tags",
                   "template_template": "Template",
                   "templateEditor_alternativeField": "Alternative field",
                   "templateEditor_alternativeText": "Alternative Text",
@@ -1883,7 +2008,7 @@ angular.module('umbraco.mocks').
                   "translation_DownloadXmlDTD": "Download xml DTD",
                   "translation_fields": "Fields",
                   "translation_includeSubpages": "Include subpages",
-                  "translation_mailBody": "      Hi %0%      This is an automated mail to inform you that the document '%1%'      has been requested for translation into '%5%' by %2%.      Go to http://%3%/translation/details.aspx?id=%4% to edit.      Or log into umbraco to get an overview of your translation tasks      http://%3%      Have a nice day!      Cheers from the umbraco robot    ",
+                  "translation_mailBody": "      Hi %0%      This is an automated mail to inform you that the document '%1%'      has been requested for translation into '%5%' by %2%.      Go to http://%3%/translation/details.aspx?id=%4% to edit.      Or log into Umbraco to get an overview of your translation tasks      http://%3%      Have a nice day!      Cheers from the Umbraco robot    ",
                   "translation_mailSubject": "[%0%] Translation task for %1%",
                   "translation_noTranslators": "No translator users found. Please create a translator user before you start sending content to translation",
                   "translation_ownedTasks": "Tasks created by you",

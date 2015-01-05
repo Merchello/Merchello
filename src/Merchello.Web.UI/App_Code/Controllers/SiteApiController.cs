@@ -6,7 +6,6 @@ using Merchello.Core;
 using Merchello.Core.Models;
 using Merchello.Web;
 using Merchello.Web.Models.ContentEditing;
-using Merchello.Web.WebApi;
 using Models;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
