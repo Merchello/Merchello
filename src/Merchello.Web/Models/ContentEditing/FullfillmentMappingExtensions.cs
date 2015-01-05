@@ -288,6 +288,7 @@ namespace Merchello.Web.Models.ContentEditing
 			destination.Recipients = notificationMessageDisplay.Recipients;
 			destination.SendToCustomer = notificationMessageDisplay.SendToCustomer;
 			destination.Disabled = notificationMessageDisplay.Disabled;
+		    destination.ReplyTo = notificationMessageDisplay.ReplyTo;
 
 			return destination;
 		}
