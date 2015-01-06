@@ -183,18 +183,9 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
             function loadInvoices(query) {
                 $scope.salesLoaded = false;
                 $scope.salesLoaded = false;
-                /*var queryResult = invoiceResource.searchInvoices(query);
-                $scope.invoices = queryResult.items;
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-                $scope.salesLoaded = true;
-                $scope.maxPages = queryResult.totalPages;
-                $scope.itemCount = queryResult.totalItems
-                */
 
-
-                var promiseInvoices = invoiceResource.searchInvoices(query);
-                promiseInvoices.then(function (response) {
+                var promise = invoiceResource.searchInvoices(query);
+                promise.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, invoiceDisplayBuilder);
                     $scope.invoices = queryResult.items;
                     $scope.loaded = true;

@@ -37,8 +37,8 @@
      **/
     angular.module('merchello.resources')
         .factory('invoiceResource', [
-            '$q', '$http', 'umbRequestHelper', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
-            function($q, $http, umbRequestHelper, queryResultDisplayBuilder, invoiceDisplayBuilder) {
+            '$q', '$http', 'umbRequestHelper',
+            function($q, $http, umbRequestHelper) {
 
                 return {
 
