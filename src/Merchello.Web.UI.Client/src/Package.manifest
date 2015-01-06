@@ -16,15 +16,15 @@
 		}
 	],
 	javascript: [
-		'~/App_Plugins/Merchello2/js/merchello.module.js',
-		'~/App_Plugins/Merchello2/js/merchello.models.js',
-		'~/App_Plugins/Merchello2/js/merchello.filters.js',
-		'~/App_Plugins/Merchello2/js/merchello.resources.js',
-		'~/App_Plugins/Merchello2/js/merchello.services.js',
-		'~/App_Plugins/Merchello2/js/merchello.directives.js',
-		'~/App_Plugins/Merchello2/js/merchello.controllers.js'
+		'~/App_Plugins/Merchello/js/merchello.module.js',
+		'~/App_Plugins/Merchello/js/merchello.models.js',
+		'~/App_Plugins/Merchello/js/merchello.filters.js',
+		'~/App_Plugins/Merchello/js/merchello.resources.js',
+		'~/App_Plugins/Merchello/js/merchello.services.js',
+		'~/App_Plugins/Merchello/js/merchello.directives.js',
+		'~/App_Plugins/Merchello/js/merchello.controllers.js'
 	],
 	css: [
-		'~/App_Plugins/Merchello/Common/Css/merchello.min.css'
+		'~/App_Plugins/Merchello/assets/Css/merchello.css'
 	]
 }

@@ -1,0 +1,27 @@
+﻿<div ng-class="classes">
+	<table class="table product-options">
+		<tr>
+			<th>
+				<localize key="merchelloVariant_optionName"/>
+				<small><localize key="merchelloVariant_optionNameExamples"/></small>
+			</th>
+			<th>
+				<localize key="merchelloVariant_optionValues" />
+				<small><localize key="merchelloVariant_optionValueExamples"/></small>
+			</th>
+		</tr>
+		<tr data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
+			<td>
+				<a data-ng-click="removeOption(option)" class="btn btn-small btn-warning"><i class="icon-trash"></i></a>                                        
+				<input class="form-control col-xs-8 span8" type="text" localize="placeholder" placeholder="@merchelloPlaceholders_addStyle" data-ng-model="option.name" />
+			</td>
+			<td>
+				<tag-manager option="option"></tag-manager>
+			</td>
+		</tr>
+	</table>
+
+    <div>
+        <a data-ng-click="addOption()" class="btn add"><localize key="merchelloVariant_addOption"/></a><br/><br/>
+    </div>
+</div>

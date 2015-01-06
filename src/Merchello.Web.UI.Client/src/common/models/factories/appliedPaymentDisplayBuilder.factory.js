@@ -1,10 +1,9 @@
     /**
-     * @ngdoc model
-     * @name AppliedPaymentDisplay
-     * @function
+     * @ngdoc service
+     * @name merchello.models.appliedPaymentDisplayBuilder
      *
      * @description
-     * Represents a JS version of Merchello's AppliedPaymentDisplay object
+     * A utility service that builds applieddPaymentDisplaybuilder
      */
     angular.module('merchello.models')
         .factory('appliedPaymentDisplayBuilder',

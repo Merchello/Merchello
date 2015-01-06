@@ -1,0 +1,75 @@
+.gd-ui-json-explorer .prop {
+  font-weight: bold;
+}
+
+.gd-ui-json-explorer .null {
+  color: red;
+}
+
+.gd-ui-json-explorer .bool {
+  color: blue;
+}
+
+.gd-ui-json-explorer .num {
+  color: blue;
+}
+
+.gd-ui-json-explorer .string {
+  color: green;
+  white-space: pre-wrap;
+}
+
+.gd-ui-json-explorer .collapser {
+  position: absolute;
+  left: -1em;
+  cursor: pointer;
+  -moz-user-select: none;
+  color: rgb(249, 39, 83);
+}
+
+.gd-ui-json-explorer .q {
+  display: inline-block;
+  width: 0px;
+  color: transparent;
+}
+
+.gd-ui-json-explorer li {
+  position: relative;
+}
+
+.gd-ui-json-explorer .error {
+  -moz-border-radius: 8px;
+  border: 1px solid #970000;
+  background-color: #F7E8E8;
+  margin: .5em;
+  padding: .5em;
+}
+
+.gd-ui-json-explorer .errormessage {
+  font-family: monospace;
+}
+
+.gd-ui-json-explorer {
+  font-family: monospace;
+  font-size: 1.1em;
+  white-space: pre-wrap;
+}
+
+.gd-ui-json-explorer ul {
+  list-style: none;
+  margin: 0 0 0 2em;
+  padding: 0;
+}
+
+.gd-ui-json-explorer h1 {
+  font-size: 1.2em;
+}
+
+.gd-ui-json-explorer .callback + #json {
+  padding-left: 1em;
+}
+
+.gd-ui-json-explorer .callback {
+  font-family: monospace;
+  color: #A52A2A;
+}

@@ -29,14 +29,14 @@
             var param = new QueryParameterDisplay();
             param.fieldName = 'customerKey';
             param.value = customerKey;
-            addParameter(param);
+            addParameter.call(this, param);
         }
 
         function addInvoiceDateParam(dateString, startOrEnd) {
             var param = new QueryParameterDisplay();
             param.fieldName = startOrEnd === 'start' ? 'invoiceDateStart' : 'invoiceEndDate';
             param.value = dateString;
-            addParameter(param);
+            addParameter.call(this, param);
         }
 
 
@@ -47,7 +47,7 @@
             var param = new QueryParameterDisplay();
             param.fieldName = 'term';
             param.value = term;
-            addParameter(param);
+            addParameter.call(this, param);
         }
 
         function applyInvoiceQueryDefaults() {
@@ -60,6 +60,7 @@
             addParameter: addParameter,
             addCustomerKeyParam: addCustomerKeyParam,
             applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
+            addInvoiceDateParam: addInvoiceDateParam,
             addFilterTermParam: addFilterTermParam
         };
     }());

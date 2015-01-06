@@ -1,0 +1,49 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Settings.Shipping.Dialogs.ShippingDeleteWarehouseController">
+	<div class="umb-modalcolumn-header">
+		<h4><localize key="merchelloShippingWarehouse_deleteComfirm" /> '{{dialogData.name}}'?</h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+
+		<!-- Flyout when edit is clicked -->
+
+		<form class="form-group row-fluid">
+			<div class="form-group row-fluid">
+			    <label for="name"><localize key="general_name"/></label>
+				<input class="span6" name="name" type="text" data-ng-model="dialogData.name" disabled="disabled"/>
+			</div>
+			<div class="form-group row-fluid">
+			    <label for="address"><localize key="merchelloShippingWarehouse_address"/></label>
+				<input class="span6" name="address" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_streetAddress" data-ng-model="dialogData.address1" disabled="disabled" />
+                <input class="span6" name="extended-address" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_extendedAddress" data-ng-model="dialogData.address2" disabled="disabled" />
+                <input class="span6" name="city" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_city" data-ng-model="dialogData.locality" disabled="disabled" />
+			</div>
+			<div class="form-group row-fluid">
+                <input class="span3" name="state-province" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_stateProvince" data-ng-model="dialogData.region" disabled="disabled" />
+                <input class="span3" name="postal-code" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_zip" data-ng-model="dialogData.postalCode" disabled="disabled" />
+			</div>
+			<div class="form-group row-fluid">
+                <input class="span6" name="country" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_country" data-ng-model="dialogData.countryCode" disabled="disabled" />
+				<span data-ng-show="dialogData.isDefault"><localize key="merchelloShippingWarehouse_primaryWarehouse" /></span>
+			</div>
+		</form>
+
+	</div>
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_cancel"></localize>
+				</a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="general_delete"></localize>
+                </button>
+
+			</div>
+		</div>
+	</div>
+</div>
+

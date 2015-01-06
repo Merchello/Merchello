@@ -1,0 +1,133 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+
+<merchello-panel 
+    data-ng-controller="Merchello.Dashboards.Settings.VendorsController"
+    data-ng-show="loaded">
+
+    <umb-panel>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                     <h1 class="umb-headline">Vendors</h1>
+                </div>
+            </div>
+
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+
+                    </div>
+                </div>
+            </div>
+
+        </umb-header>
+        
+        <merchello-panel>
+            
+            <div class="merchello-pane row-fluid">
+
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        Vendors
+                        <small>Add or edit vendors</small>
+
+                        <a data-ng-click="addVendorFlyout.open()"><i class="icon-handshake"></i> Add a Vendor</a>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div class="row-fluid span10 col-xs-10">
+
+                            <!-- Add/Edit a Vendr Flyout -->
+                            <form name="newVendorForm" class="well" data-ng-class="{ 'open': flyouts.addVendor, 'closed': !flyouts.addVendor }">
+                                <button class="btn close" data-ng-click="addVendorFlyout.close()"><i class="icon-delete"></i></button>
+                                <h4>Add/Edit a Vendor</h4>
+                                
+                                <div class="col-xs-6 span6">
+                                    <div class="form-group row-fluid">
+                                        <label for="name">Name</label>
+                                        <input data-ng-model="addVendorFlyout.model.name" class="span8" name="name" type="text" />
+                                    </div>
+                                    <div class="form-group row-fluid">
+                                        <label for="contact">Contact</label>
+                                        <input data-ng-model="addVendorFlyout.model.contact" class="span8" name="contact" type="text" />
+                                    </div>
+                                    <div class="form-group row-fluid">
+                                        <label for="phone">Phone</label>
+                                        <input data-ng-model="addVendorFlyout.model.phone" class="span8" name="phone" type="text" />
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6 span6">
+                                    <div class="form-group row-fluid">
+                                        <label for="address">Address</label>
+                                        <input data-ng-model="addVendorFlyout.model.address1" class="span8" name="address" type="text" placeholder="Street Address" />
+                                        <input data-ng-model="addVendorFlyout.model.address2" class="span8" name="extended-address" type="text" placeholder="Extended Address" />
+                                        <input data-ng-model="addVendorFlyout.model.locality" class="span8" name="city" type="text" placeholder="City" />
+                                    </div>
+                                    <div class="form-group row-fluid">
+                                        <input data-ng-model="addVendorFlyout.model.region" class="span4" name="state-province" type="text" placeholder="State/Province" />
+                                        <input data-ng-model="addVendorFlyout.model.postalCode" class="span4" name="postal-code" type="text" placeholder="Zip/Postal Code" />
+                                    </div>
+                                    <div class="form-group row-fluid">
+                                        <input data-ng-model="addVendorFlyout.model.country" class="span8" name="country" type="text" placeholder="Country" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" class="btn" value="Cancel" data-ng-click="addVendorFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" data-ng-click="addVendorFlyout.confirm()" value="Save" />
+                                </div>
+                            </form>
+
+                            <form name="deleteVendorForm" class="well" data-ng-class="{ 'open': flyouts.deleteVendor, 'closed': !flyouts.deleteVendor }">
+                                <h4>Are you sure you want to remove the vendor '{{deleteVendorFlyout.model.name}}'?</h4>
+                                <div>
+                                    <input type="submit" class="btn" value="No" data-ng-click="deleteVendorFlyout.close()" />
+                                    <input type="submit" class="btn btn-primary" value="Yes" data-ng-click="deleteVendorFlyout.confirm()" />
+                                </div>
+                            </form>
+
+                            <table class="table table-striped merchello-striped-table settings-table warehouse-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Contact</th>
+                                        <th>Phone</th>
+                                        <th>Address</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="vcard" data-ng-repeat="vendor in vendors | orderBy:sortProperty">
+                                        <td class="org">{{vendor.name}}</td>
+                                        <td class="n">{{vendor.contact}}</td>
+                                        <td class="tel">{{vendor.phone}}</td>
+                                        <td class="adr">
+                                            <span class="street-address">{{vendor.address1}}</span>
+                                            <span class="extended-address" data-ng-show="vendor.address2">{{vendor.address2}}</span>
+                                            <span class="locality">{{vendor.locality}}</span>, <span class="region">{{vendor.region}}</span> <span class="postal-code">{{vendor.postalCode}}</span>
+                                        </td>
+                                        <td class="edit">
+                                            <div class="btn-toolbar umb-btn-toolbar">
+                                                <a class="btn btn-default btn-xs btn-mini" data-ng-click="addVendorFlyout.open(vendor)"><i class="icon-edit"></i></a> <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deleteVendorFlyout.open(vendor);">x</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+            </div>
+            </div>
+        </merchello-panel>
+            
+    </umb-panel>
+</div>

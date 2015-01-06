@@ -7,8 +7,7 @@
         'merchello.filters',
         'merchello.directives',
         'merchello.resources',
-        'merchello.services',
-        'merchello.mocks'
+        'merchello.services'
     ]);
     angular.module('merchello.models', []);
     angular.module('merchello.filters', []);
