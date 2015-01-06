@@ -1,10 +1,19 @@
 'use strict';
+/**
+ * @ngdoc controller
+ * @name Merchello.Dashboards.Sales.ListController
+ * @function
+ *
+ * @description
+ * The controller for the orders list page
+ */
 angular.module('merchello').controller('Merchello.Dashboards.Sales.ListController',
-    ['$scope', 'angularHelper', 'assetsService', 'notificationsService',
-        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'InvoiceDisplay',
-        function($scope, angularHelper, assetsService, notificationService, invoiceResource,
+    ['$scope', '$element', 'angularHelper', 'assetsService', 'notificationsService',
+        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
+        function($scope, $element, angularHelper, assetsService, notificationService, invoiceResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
         {
+
             // expose on scope
             $scope.loaded = true;
             $scope.currentPage = 0;
@@ -43,7 +52,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
             $scope.changePage = function (page) {
                 $scope.currentPage = page;
                 var query = $scope.buildQuery($scope.filterText);
-                $scope.loadInvoices(query);
+                loadInvoices(query);
             };
 
             /**
@@ -68,8 +77,8 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                     $scope.sortProperty = propertyToSort;
                     $scope.sortOrder = "asc";
                 }
-                var query = $scope.buildQuery($scope.filterText);
-                $scope.loadInvoices(query);
+                var query = buildQuery($scope.filterText);
+                loadInvoices(query);
             };
 
             /**
@@ -83,8 +92,8 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
             $scope.limitChanged = function (newVal) {
                 $scope.limitAmount = newVal;
                 $scope.currentPage = 0;
-                var query = $scope.buildQuery($scope.filterText);
-                $scope.loadInvoices(query);
+                var query = buildQuery($scope.filterText);
+                loadInvoices(query);
             };
 
             /**
@@ -99,6 +108,27 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 var query = $scope.buildQuery(filterText);
                 loadInvoices(query);
             };
+
+            /**
+             * @ngdoc method
+             * @name resetFilters
+             * @function
+             *
+             * @description
+             * Fired when the reset filter button is clicked.
+             */
+            $scope.resetFilters = function () {
+                var query = buildQuery();
+                $scope.currentFilters = [];
+                $scope.filterText = "";
+                $scope.filterStartDate = "";
+                $scope.filterEndDate = "";
+                loadInvoices(query);
+                $scope.filterAction = false;
+            };
+
+            $scope.buildQuery = buildQuery;
+            $scope.buildQueryDates = buildQueryDates;
 
             //--------------------------------------------------------------------------------------
             // Helper Methods
@@ -130,6 +160,19 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 }
             };
 
+            /**
+             * @ngdoc method
+             * @name numberOfPages
+             * @function
+             *
+             * @description
+             * Helper function to get the amount of items to show per page for the paging
+             */
+            $scope.numberOfPages = function () {
+                return $scope.maxPages;
+                //return Math.ceil($scope.products.length / $scope.limitAmount);
+            };
+
             // PRIVATE
             function init() {
                 $scope.currencySymbol = '$';
@@ -140,6 +183,16 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
             function loadInvoices(query) {
                 $scope.salesLoaded = false;
                 $scope.salesLoaded = false;
+                /*var queryResult = invoiceResource.searchInvoices(query);
+                $scope.invoices = queryResult.items;
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+                $scope.salesLoaded = true;
+                $scope.maxPages = queryResult.totalPages;
+                $scope.itemCount = queryResult.totalItems
+                */
+
+
                 var promiseInvoices = invoiceResource.searchInvoices(query);
                 promiseInvoices.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, invoiceDisplayBuilder);
@@ -152,6 +205,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 }, function (reason) {
                     notificationsService.error("Failed To Load Invoices", reason.message);
                 });
+
             }
 
             /**
@@ -190,6 +244,79 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 return query;
             };
 
+            /**
+             * @ngdoc method
+             * @name buildQueryDates
+             * @function
+             *
+             * @description
+             * Perpares a new query object for passing to the ApiController
+             */
+             function buildQueryDates(startDate, endDate) {
+                var page = $scope.currentPage;
+                var perPage = $scope.limitAmount;
+                var sortBy = $scope.sortInfo().sortBy;
+                var sortDirection = $scope.sortInfo().sortDirection;
+                if (startDate === undefined && endDate === undefined) {
+                    $scope.currentFilters = [];
+                } else {
+                    $scope.currentFilters = [{
+                        fieldName: 'invoiceDateStart',
+                        value: startDate
+                    }, {
+                        fieldName: 'invoiceDateEnd',
+                        value: endDate
+                    }];
+                }
+                if (startDate !== $scope.filterStartDate) {
+                    page = 0;
+                    $scope.currentPage = 0;
+                }
+                $scope.filterStartDate = startDate;
+                var query = buildQuery();
+                query.addInvoiceDateParam(startDate, 'start');
+                query.addInvoiceDateParam(endDate, 'end');
+
+                return query;
+            };
+
+            /**
+             * @ngdoc method
+             * @name setupDatePicker
+             * @function
+             *
+             * @description
+             * Sets up the datepickers
+             */
+            function setupDatePicker(pickerId) {
+
+                // Open the datepicker and add a changeDate eventlistener
+                $element.find(pickerId).datetimepicker({
+                    pickTime: false
+                });
+
+                //Ensure to remove the event handler when this instance is destroyted
+                $scope.$on('$destroy', function () {
+                    $element.find(pickerId).datetimepicker("destroy");
+                });
+            };
+
             //// Initialize
+            assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
+                var filesToLoad = [
+                    'lib/moment/moment-with-locales.js',
+                    'lib/datetimepicker/bootstrap-datetimepicker.js'];
+                assetsService.load(filesToLoad).then(
+                    function () {
+                        //The Datepicker js and css files are available and all components are ready to use.
+
+                        setupDatePicker("#filterStartDate");
+                        $element.find("#filterStartDate").datetimepicker().on("changeDate", $scope.applyDateStart);
+
+                        setupDatePicker("#filterEndDate");
+                        $element.find("#filterEndDate").datetimepicker().on("changeDate", $scope.applyDateEnd);
+                    });
+            });
+
             init();
         }]);

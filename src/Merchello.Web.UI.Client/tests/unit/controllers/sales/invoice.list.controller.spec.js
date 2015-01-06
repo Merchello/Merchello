@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Merchello.Dashboards.Sales.ListController', function () {
-    var scope, $controllerConstructor, controller, httpBackend;
+    var scope, element, $controllerConstructor, controller, httpBackend;
 
     beforeEach(module('umbraco'));
 
@@ -11,10 +11,11 @@ describe('Merchello.Dashboards.Sales.ListController', function () {
 
         $controllerConstructor = $controller;
         scope = $rootScope.$new();
+        element = function() { };
         invoiceResourceMock.register();
 
         controller = $controller('Merchello.Dashboards.Sales.ListController',
-            { $scope: scope, angularHelper: angularHelper, assetsService: assetsService, notificationsService: notificationsService,
+            { $scope: scope, $element: element, angularHelper: angularHelper, assetsService: assetsService, notificationsService: notificationsService,
                 invoiceResource: invoiceResource, queryDisplayBuilder: queryDisplayBuilder, queryResultDisplayBuilder: queryResultDisplayBuilder,
                 invoiceDisplayBuilder: invoiceDisplayBuilder});
 
@@ -26,12 +27,12 @@ describe('Merchello.Dashboards.Sales.ListController', function () {
 
     }));
 
-    it ('Init should load default invoices', inject(function(invoiceMocks) {
+    it ('Init should load default invoices', function() {
         //// Assert
         expect (scope.currentPage = 1);
         expect (scope.itemCount).toBe(10);
         expect (scope.invoices[0].getPaymentStatus()).toBe('Paid');
-    }));
+    });
 
 });
 

@@ -1,0 +1,47 @@
+﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.Web
+@{
+    Layout = "RosettaBasePage.cshtml";
+}
+
+
+@if (CurrentPage.HasValue("instructionHeading"))
+{
+    <h2>@CurrentPage.instructionHeading<br /><small>@CurrentPage.instructionTagLine</small></h2>
+}
+
+
+<div class="bs-docs-example">
+    
+    <h2>Confirm you want to place this order</h2>
+    
+    <div class="hero-spacer">
+        
+        <p><b>Payment Option Selected:</b> @CurrentCustomer.Basket().SalePreparation().GetPaymentMethod().Name</p>
+        
+        <p class="info">If the payment processor requires an extra step, you may be redirected.</p>
+        
+        @Html.ActionLink("I confirm. I want these beans!", "CustomerPurchaseAndProcessPayment", "Checkout", new { area = "RosettaStone"}, new { @class="btn btn-primary"})
+        
+    </div>
+
+    <div class="hero-spacer">
+        
+        <h3>Invoice Summary</h3>
+        
+        @Html.Action("RenderInvoiceSummary", "Checkout", new { area = "RosettaStone"})
+    
+    </div>
+
+</div>
+
+
+<div class="hero-spacer">
+    @CurrentPage.instruction
+</div>
+
+@section ViewList
+{
+    @RosettaHelper.GetViewBoxHtml("Partials/InvoiceSummary.cshtml","Displays the entire invoice. In our case, the FROM is hard coded for example purposes.", new string[] { RosettaHelper.InheritsMerchelloViewPage, RosettaHelper.UsingMerchelloCore, RosettaHelper.UsingModels })
+    @RosettaHelper.GetViewBoxHtml("RosettaCheckout4Confirmation.cshtml", "Renders the customer's invoice in a partial view, and displays the chosen payment option.", new string[] { RosettaHelper.InheritsMerchelloTemplatePage, RosettaHelper.UsingMerchelloWeb }) 
+}

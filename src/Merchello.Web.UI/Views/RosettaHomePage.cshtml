@@ -1,0 +1,53 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "RosettaBasePage.cshtml";
+}
+
+<div class="jumbotron">
+    <h1>Merchello<br /><small>@Umbraco.Field("tagLine")</small></h1>
+    @CurrentPage.brief         
+</div>
+
+@CurrentPage.bodyText   
+<hr />
+
+<div class="row">
+    <div class="col-lg-12">
+        <h3>Merchello Resources</h3>
+    </div>
+</div>
+
+
+<div class="row text-center">
+    
+    @foreach (var resource in ((string)CurrentPage.resources).Split(',').Select(id => Umbraco.Content(id)))
+    {
+        
+        if (resource.HasValue("thumbnail"))
+        { 
+            var thumbnail = Umbraco.Media(resource.thumbnail);
+        
+            <div class="col-lg-4 col-md-6 hero-feature resource">
+                <div class="thumbnail">
+                    <img src="@thumbnail.Url" class="img-responsive" alt="">
+                    <div class="caption">
+                        <h3>@resource.Name</h3>
+                        <p>@resource.brief</p>
+                        
+                        <button class="btn btn-default" onclick="window.open('@resource.linkUrl','_blank')">@resource.buttonLabel</button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+</div>
+<!-- /.row -->
+
+
+<hr />
+
+@section ViewList
+{
+    @RosettaHelper.GetViewBoxHtml("RosettaHomePage.cshtml", "UmbracoTemplatePage view to render the <i>Rosetta Home Page</i> document type content.")
+}

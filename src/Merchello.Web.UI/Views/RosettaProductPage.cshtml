@@ -1,0 +1,59 @@
+﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+
+@{
+    Layout = "RosettaBasePage.cshtml";
+    var product = Merchello.Query.Product.GetByKey(new Guid(CurrentPage.merchelloProduct));
+    
+}
+
+<div class="container hero-spacer">
+
+
+    
+    @if (CurrentPage.HasProperty("merchelloProduct") && CurrentPage.HasValue("merchelloProduct"))
+    {
+    
+        <div class="row">
+        
+            <div class="col-lg-8">
+                <h2>@product.Name</h2>
+                <div class="text-center">
+                <!-- Product image is one of the Umbraco content-picker properties we created and assigned to the Product content's document type -->
+                @if (CurrentPage.HasProperty("productImage") && CurrentPage.HasValue("productImage"))
+                {
+                    IPublishedContent image = Umbraco.Media(CurrentPage.GetPropertyValue("productImage"));
+                    <img src="@image.Url" alt="@HttpUtility.HtmlEncode(image.Name)" />
+                }
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+            <!-- Note this important distinction: Sometimes we are accessing the Umbraco page content ("CurrentPage") -->
+        <!--   and sometimes we are accessing the linked Merchello variable "product" which is Merchello.Product(CurrentPage.merchelloProduct) -->
+        <h3>@product.Name</h3>
+        <p>@CurrentPage.productDescription</p>
+        <p id="productPrice" style="font-size: 2.5em">@product.Price.ToString("C")</p>
+      
+        
+        <!-- We're calling the RenderAddToCart action that can be found in BasketController.cs code. -->
+        <!--    This action will take care of displaying options if needed and the 'Add To Cart' button (it recursively calls the "RosettaAddToCart.cshtml" partial view) -->
+        @Html.Action("RenderAddToCart", "Basket", new { area = "RosettaStone", product = product })
+            
+                </div>
+            </div>
+    }
+    
+    <hr/>
+   
+    <div class="content" style="clear:both;margin-bottom:20px;">
+        @CurrentPage.instruction
+    </div>
+     
+</div>
+<hr/>
+
+@section ViewList
+{
+    @RosettaHelper.GetViewBoxHtml("Partials/RosettaAddToCart.cshtml","Displays the form to add a given product to your basket, including drop-downs for options and variants if applicable. View is called from the BasketController.", new string[] { RosettaHelper.InheritsMerchelloViewPage, RosettaHelper.UsingControllers })
+    @RosettaHelper.GetViewBoxHtml("RosettaProductPage.cshtml", "View responsible for rendering a detailed view of a Merchello Product.", new string[] { RosettaHelper.InheritsMerchelloTemplatePage + " - specifically used to expose the MerchelloHelper object.  Referenced as <b>Merchello</b> in the razor", "Html.Action call to the BasketController (SurfaceController) to render the RosettaAddToCart Partial View" })
+}

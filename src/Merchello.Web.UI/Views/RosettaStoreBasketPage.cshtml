@@ -1,0 +1,28 @@
+﻿@inherits UmbracoTemplatePage
+@{
+    Layout = "RosettaBasePage.cshtml";
+}
+
+<h1>@CurrentPage.Name</h1>
+
+<div class="bs-docs-example">
+
+@* We put the controllers in their own Mvc Area using Umbraco's native [PluginController([AreaName])] attribute *@
+@Html.Action("RenderBasket", "Basket", new { area = "RosettaStone"})
+    
+    
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        @CurrentPage.instruction
+    </div>
+</div>
+
+
+@section ViewList
+{
+    @RosettaHelper.GetViewBoxHtml("Partial/RosettaBasket.cshtml", "The actual \"Basket\" view which includes the HTML form to do various basket functions", new string[] { string.Format(RosettaHelper.InheritsMerchelloViewPage,"BasketViewModel") + " - Lot's of tidbits in this view.  Check it out!" })
+    @RosettaHelper.GetViewBoxHtml("RosettaStoreBasketPage.cshtml", "The Basket template view", new string[] { "Html.Action call to the BasketController (SurfaceController) to render the RosettaBasket Partial View" })
+}

@@ -1,0 +1,35 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Catalog.Dialogs.ProductChangePricesController">
+	<div class="umb-modalcolumn-header">
+		<h4>Change Prices For All Selected Items</h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+
+		<!-- Flyout when Change Prices is clicked -->
+		<form class="form-group row-fluid">
+			<div class="input-prepend col-xs-3 span3">
+				<label for="new-price">New Price</label>
+				<span class="add-on">$</span>
+				<input name="new-price" data-ng-model="dialogData.newPrice" class="col-xs-10 span10" type="text" />
+			</div>
+		</form>
+
+	</div>
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button class="btn btn-primary"
+						data-ng-click="submit(dialogData)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+

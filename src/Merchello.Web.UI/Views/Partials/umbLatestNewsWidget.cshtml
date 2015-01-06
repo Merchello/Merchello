@@ -1,0 +1,49 @@
+﻿@inherits UmbracoTemplatePage
+@{
+    // Model.Content is the current page that we're on
+    // AncestorsOrSelf is all of the ancestors this page has in the tree
+    // (1) means: go up to level 1 and stop looking for more ancestors when you get there
+    // First() gets the first ancestor found (the home page, on level 1)
+    var homePage = CurrentPage.AncestorsOrSelf(1).First();
+    
+    // Find all pages with document type alias umbNewsOverview
+    // We do that using the plural, umbNewsOverviews (note the extra "s" in the end)
+    // Then take the first one, as we know there will only be on news overview page
+    var newsOverview = homePage.umbNewsOverviews.First();
+    
+    // Similar to above: find all pages with document type umbNewsItem under the news overview page
+    // Then order them, first by publishDate (a property the editor can explicitly set on the news item)
+    // and then by createDate, which is set by Umbraco automatically when a page gets created.
+    // Finally, take the first 5 items to show in the news overview
+    var newsItems = newsOverview.umbNewsItems.OrderBy("publishDate desc, createDate desc").Take(5);
+}
+
+<h2 class="major"><span>Recent Posts</span></h2>
+
+<!-- Archives -->
+<ul class="style2">
+    @foreach (var newsItem in newsItems)
+    {
+        // If the editor has not explicitly provided the "Page title" property page 
+        // then just show the name of the page otherwise show the provided title
+        var title = string.IsNullOrWhiteSpace(newsItem.Title) 
+            ? newsItem.Name
+            : newsItem.Title;
+
+        // If the editor has not explicitly set the publishDate property then show the create date
+        var dateTime = newsItem.PublishDate == default(DateTime) 
+            ? newsItem.CreateDate
+            : newsItem.PublishDate;
+
+        <li>
+            <article class="is-post-summary">
+                <h3><a href="@newsItem.Url">@title</a></h3>
+                <ul class="meta">
+                    <li class="timestamp">@dateTime.ToString("f")</li>
+                </ul>
+            </article>
+        </li>
+    }
+</ul>
+<a href="@newsOverview.Url" class="button button-alt">Browse Archives</a>
+<!-- /Archives -->

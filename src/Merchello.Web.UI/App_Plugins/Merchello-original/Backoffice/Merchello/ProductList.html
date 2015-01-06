@@ -1,0 +1,112 @@
+﻿<div 
+    ng-controller="Merchello.Dashboards.Product.ListController"
+    ng-show="loaded">
+
+    <umb-panel>
+
+        <umb-header>
+
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+	                <h1 class="umb-headline"><localize key="merchelloHeadline_catalog" /></h1>
+                </div>
+            </div>
+
+
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    
+                    <div class="btn-group">
+	                    <a href="#/merchello/merchello/ProductCreate/do?create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
+                    </div>
+
+                </div>
+            </div>
+
+        </umb-header>
+        
+        <merchello-panel>
+            <div class="merchello-pane">
+                <form class="form-horizontal">
+                    <div class="form-group control-group row-fluid">
+
+                        <div class="col-xs-7 span7 controls">
+	                        <label for="productFilter"><localize key="merchelloGeneral_filterBy"/></label>
+                            <input id="productFilter" class="form-control span8" name="productFilter" data-ng-model="filtertext" localize="placeholder" placeholder="@placeholders_filter" />
+	                        <button id="productFilterGo" class="btn" data-ng-click="getFilteredProducts(filtertext)"><localize key="merchelloGeneral_filter">Filter</localize></button>
+                        </div>
+
+                        <div class="col-xs-2 span2" data-ng-show="products.length > 0">
+	                        <label for="limitSelect"><localize key="merchelloVariant_limitSelect"/></label>
+                            <select name="limitSelect" class="col-xs-12 span12" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
+                                <option selected value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="merchello-pane">
+                
+                <merchello-pager></merchello-pager>
+                    
+                <table class="table table-hover merchello-selectable-table sortable">
+                    <thead>
+                        <tr>
+                            <!--<th></th>-->
+                            <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name' ||  sortProperty == '-name'}">
+	                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty == '-name'}"></i> <localize key="merchelloVariant_product"/>
+                            </th>
+                            <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku' ||  sortProperty == '-sku'}">
+	                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i> <localize key="merchelloVariant_sku"/>
+                            </th>
+                            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price' ||  sortProperty == '-price'}">
+	                            <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty == '-price'}"></i> <localize key="merchelloGeneral_price"/>
+                            </th>
+                            <th>
+                                <localize key="merchelloVariant_productOnSale" />
+                            </th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>  <!--data-ng-show="([product] | filter:filtertext).length > 0"-->
+                        <!--<tr data-ng-repeat="product in products | orderBy:sortProperty | startfrom:currentPage * limitAmount | limitTo:limitAmount"-->
+                        <tr data-ng-repeat="product in products"
+                            data-ng-class="{active: product.selected}" data-ng-click="product.selected = !product.selected">
+                            <!--<td><input type="checkbox" data-ng-model="product.selected"/></td>-->
+                            <td>{{product.name}}</td>
+                            <td>{{product.sku}}</td>
+                            <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
+                            <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
+
+                            <td data-ng-show="!product.hasVariants && !product.onSale"><localize key="general_no" /></td>
+                            <td data-ng-show="!product.hasVariants && product.onSale"><localize key="general_yes" /></td>
+                            <td data-ng-show="product.hasVariants">&nbsp;</td>
+
+                            <td>
+                                <a data-ng-hide="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEdit/{{product.key}}"><i class="icon-edit"></i></a>
+                                <a data-ng-show="product.hasVariants" class="btn btn-default btn-xs btn-mini" data-ng-href="#/merchello/merchello/ProductEditWithOptions/{{product.key}}"><i class="icon-edit"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+   
+                <merchello-pager></merchello-pager>
+                                
+                <!-- Prompt to create products if no products in the catalog -->
+                <div class="pager well" data-ng-show="products.length == 0">
+	                <h5><localize key="merchelloVariant_noProduct"/></h5>
+	                <p><localize key="merchelloVariant_newProductPrompt"/></p>
+                    <a href="#/merchello/merchello/ProductCreate/do?create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
+                </div>
+                             
+                
+                <merchello-debug-section data-props-to-debug="products,filtertext"></merchello-debug-section>
+    
+            </div>
+        </merchello-panel>
+
+    </umb-panel>
+</div>

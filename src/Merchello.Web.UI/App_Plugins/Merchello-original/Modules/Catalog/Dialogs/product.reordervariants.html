@@ -1,0 +1,42 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Dashboards.Catalog.Dialogs.ProductReorderVariantsController">
+	<div class="umb-modalcolumn-header">
+		<h4>Drag to Reorder Options and Variants</h4>
+	</div>
+	<div class="umb-panel-body with-header with-footer">
+
+		<!-- Flyout when Reorder variants is clicked -->
+		<form class="form-group row-fluid">
+			<ul class="reorder" ui-sortable="sortableOptions" ng-model="dialogData">
+				<li data-ng-repeat="option in dialogData">
+					<span class="col-xs-3 span3">
+						<a class="btn btn-link variant"><i class="icon-thumbnail-list"></i> {{option.name}}</a>
+					</span>
+					<span class="options col-xs-9 span9" ui-sortable="sortableChoices" ng-model="option.choices">
+						<a class="btn btn-link option" data-ng-repeat="attribute in option.choices"><i class="icon-thumbnail-list"></i> {{attribute.name}}</a>
+					</span>
+				</li>
+			</ul>
+		</form>
+
+		<p>If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</p>
+
+	</div>
+
+	<div class="umb-panel-footer">
+		<div class="umb-el-wrap umb-panel-buttons">
+			<div class="btn-toolbar umb-btn-toolbar pull-right">
+
+				<a href data-ng-click="close()" class="btn btn-link">
+					<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button class="btn btn-primary"
+						data-ng-click="submit(dialogData)">
+					<localize key="buttons_save">Save</localize>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+

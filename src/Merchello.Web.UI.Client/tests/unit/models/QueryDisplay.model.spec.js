@@ -18,4 +18,18 @@ describe('QueryDisplay', function() {
         expect(query.parameters.length).toBe(1);
         expect(_.isEqual(query.parameters[0], parameter));
     }));
+
+    it('should be able to add a filter parameter', inject(function(QueryDisplay) {
+
+        //// Arrange
+        var query = new QueryDisplay();
+
+        //// Act
+        query.addFilterTermParam('test');
+
+        //// Assert
+        expect (query.parameters.length).toBe(1);
+        expect (query.parameters[0].fieldName = 'term');
+        expect (query.parameters[0].value = 'test');
+    }));
 });

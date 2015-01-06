@@ -1,0 +1,63 @@
+﻿@inherits UmbracoTemplatePage
+@using Controllers
+@using Merchello.Core
+@using Models
+
+@{
+    Layout = "RosettaBasePage.cshtml";
+
+    // Get a list of all payment methods defined in the back office
+    var paymentMethods = MerchelloContext.Current.Gateways.Payment.GetPaymentGatewayMethods().Select(x => new SelectListItem()
+    {
+        Value = x.PaymentMethod.Key.ToString(),
+        Text = x.PaymentMethod.Name
+    });
+
+}
+
+@if (CurrentPage.HasValue("instructionHeading"))
+{
+    <h2>@CurrentPage.instructionHeading<br /><small>@CurrentPage.instructionTagLine</small></h2>
+}
+
+@using (Html.BeginUmbracoForm<CheckoutController>("SavePaymentInformation", new { @class = "form form-horizontal", role = "form" }))
+{
+  
+                
+ <div class="bs-docs-example">
+    <div class="row">
+        <div class="col-lg-6">
+            
+                
+                <div class="control-group">
+                    @Html.Label("Select your Payment Method", new { @class = "control-label"})
+                    <div class="controls">
+                        @Html.DropDownList("paymentMethodKey", paymentMethods, new { @class="form-control"})
+                    </div>
+                </div>
+
+        </div>
+
+        <div class="col-lg-6">
+            @Html.Action("RenderAddressForm", "Checkout", new { area = "RosettaStone", addressType = AddressType.Billing })
+        </div>
+        
+        
+        <div class="text-center">
+            <input type="submit" class="btn btn-primary" value="Proceed to Step 4 (Order Confirmation)"/>
+        </div>
+
+    </div>
+</div>
+                
+}
+
+<div class="hero-spacer">
+    @CurrentPage.instruction
+</div>
+
+@section ViewList
+{
+    @RosettaHelper.GetViewBoxHtml("RosettaCheckout3Payment.cshtml", "Redirects to home if basket is empty, or displays partial view for address form. Also displays payment method options for customer to choose from.", new string[] { RosettaHelper.InheritsMerchelloTemplatePage, RosettaHelper.UsingControllers, RosettaHelper.UsingMerchelloCore, RosettaHelper.UsingModels }) 
+    @RosettaHelper.GetViewBoxHtml("Partials/AddressForm.cshtml","Partial view for the address form. Abstracted into partial view to allow for reuse. Here we're passing in a parameter to specify billing address.", new string[] { RosettaHelper.InheritsMerchelloTemplatePage, RosettaHelper.UsingModels, RosettaHelper.UsingMerchelloCore })
+}

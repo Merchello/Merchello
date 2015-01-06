@@ -1,0 +1,111 @@
+﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
+<div data-ng-controller="Merchello.Dashboards.Settings.ShippingController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span4">
+                <div class="umb-headline-editor-wrapper">
+                    <h1 class="umb-headline">{{selectedCatalog.name}}: Shipping Providers & Methods</h1>
+                </div>
+            </div>
+            <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <a class="btn-primary btn" data-ng-click="selectCatalogDialogOpen()">Select Catalog</a>
+                    </div>
+                </div>
+            </div>
+        </umb-header>
+        <merchello-panel class="row-fluid">
+            <div class="merchello-pane span9">
+                <!-- Shipping Providers & Methods -->
+                <div class="control-group umb-control-group">
+                    <div class="merchello-section-label">
+                        Shipping Countries
+                        <small>A list of the catalog's shipping providers and methods, sorted by country.</small>
+                        <!-- ACTION: Add Country -->
+                        <a class="" data-ng-click="addCountry()"><i class="icon icon-add"></i> Add Country</a>
+                    </div>
+                    <div class="merchello-controls">
+                        <div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group umb-control-group">
+                    <!-- Shipping Countries -->
+                    <div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
+                        <div class="merchello-section-label">
+                            <h4>
+                                {{country.name}}
+                                <!-- ACTION: Delete Country -->
+                                <a data-ng-click="deleteCountryDialog(country)" class="btn btn-default btn-trash btn-xs btn-mini pull-right"><i class="icon-trash"></i></a>
+                            </h4>
+                            <!-- ACTION: Add Shipping Provider to Country -->
+                            <a data-ng-click="addEditShippingProviderDialogOpen(country)"><i class="icon-add"></i> Add Provider</a><br /><br />
+                        </div>
+                        <!-- Shipping Provider -->
+                        <div class="merchello-controls" data-ng-repeat="shippingGatewayProvider in country.shippingGatewayProviders" class="merchello-shipping-gateway-provider">
+                            <h5 class="row-fluid col-xs-12 span12">
+                                {{shippingGatewayProvider.name}}
+                                <!-- ACTION: Add Shipping Method to Provider -->
+                                <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider)" class="pull-right"><i class="icon-add"></i> Add Method</a>
+                            </h5>
+                            <!-- Shipping Methods -->
+                            <table class="table table-striped merchello-striped-table settings-table shipping-table">
+                                <tbody>
+                                    <tr data-ng-repeat="shipMethod in shippingGatewayProvider.shipMethods">
+                                        <td>{{shipMethod.name}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="edit">
+                                            <div class="btn-group">
+                                                <!-- ACTION: Edit Method's Province Rates -->
+                                                <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="countryHasProvinces(country)" data-ng-click="editRegionalShippingRatesDialogOpen(country, shippingGatewayProvider, shipMethod)"><i class="icon-globe-alt"></i></a>
+                                                <!-- ACTION: Edit Shipping Method -->
+                                                <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider, shipMethod)"><i class="icon-edit"></i></a>
+                                                <!-- ACTION: Remove Shipping Method -->
+                                                <a data-ng-click="removeMethodFromProviderDialog(country, shippingGatewayProvider, shipMethod)" class="btn btn-default btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="merchello-pane secondary span3">
+                <!-- Warehouse(s) -->
+                <div class="well warehouse-info" data-ng-show="visible.warehouseListPanel">
+                    <h3>
+                        Warehouse
+                        <!-- ACTION: Edit Warehouse -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-edit"></i></a>
+                    </h3>
+                    <h4>{{primaryWarehouse.name}}</h4>
+                    <div class="adr" data-ng-show="doesWarehouseHaveAddress()">
+                        <div class="street-address">{{primaryWarehouse.address1}}</div>
+                        <div class="extended-address">{{primaryWarehouse.address2}}</div>
+                        <span class="locality">{{primaryWarehouse.locality}}</span>, <span class="region">{{primaryWarehouse.region}}</span> <span class="postal-code">{{primaryWarehouse.postalCode}}</span>
+                        <div class="country">{{primaryWarehouse.countryCode}}</div>
+                    </div>
+                </div>
+                <!-- Catalogs -->
+                <div class="well catalog-info" data-ng-show="visible.catalogPanel">
+                    <h3>
+                        Current Catalog
+                        <!-- ACTION: Delete Catalog -->
+                        <a class="btn btn-default btn-trash pull-right" data-ng-show="!selectedCatalog.isDefault" data-ng-click="deleteCatalog()"><i class="icon-trash"></i></a>
+                        <!-- ACTION: Edit Catalog -->
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="addEditWarehouseCatalogDialogOpen(primaryWarehouse, selectedCatalog)"><i class="icon icon-edit"></i></a>
+                    </h3>
+                    <h4>{{selectedCatalog.name}}</h4>
+                    <div>{{selectedCatalog.description}}</div><br />
+                    <!-- ACTION: Add Catalog -->
+                    <a class="" data-ng-click="addEditWarehouseCatalogDialogOpen(primaryWarehouse)"><i class="icon icon-add"></i> Add Catalog</a>
+                </div>
+            </div>
+            <merchello-debug-section data-props-to-debug="warehouses,providers,countries"></merchello-debug-section>
+        </merchello-panel>
+    </umb-panel>
+</div>
