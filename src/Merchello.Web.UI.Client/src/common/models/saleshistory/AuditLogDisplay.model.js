@@ -18,6 +18,6 @@
         self.message = {};
         self.recordDate = '';
         self.verbosity = '';
-    }
+    };
 
     angular.module('merchello.models').constant('AuditLogDisplay', AuditLogDisplay);

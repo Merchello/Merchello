@@ -51,7 +51,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              */
             $scope.changePage = function (page) {
                 $scope.currentPage = page;
-                var query = $scope.buildQuery($scope.filterText);
+                var query = buildQuery($scope.filterText);
                 loadInvoices(query);
             };
 
@@ -105,7 +105,20 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * Fired when the filter button next to the filter text box at the top of the page is clicked.
              */
             $scope.filterWithWildcard = function (filterText) {
-                var query = $scope.buildQuery(filterText);
+                var query = buildQuery(filterText);
+                loadInvoices(query);
+            };
+
+            /**
+             * @ngdoc method
+             * @name filterWithDates
+             * @function
+             *
+             * @description
+             * Fired when the filter button next to the filter text box at the top of the page is clicked.
+             */
+            $scope.filterWithDates = function(filterStartDate, filterEndDate) {
+                var query = buildQueryDates(filterStartDate, filterEndDate);
                 loadInvoices(query);
             };
 
@@ -127,8 +140,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 $scope.filterAction = false;
             };
 
-            $scope.buildQuery = buildQuery;
-            $scope.buildQueryDates = buildQueryDates;
+
 
             //--------------------------------------------------------------------------------------
             // Helper Methods
@@ -183,18 +195,9 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
             function loadInvoices(query) {
                 $scope.salesLoaded = false;
                 $scope.salesLoaded = false;
-                /*var queryResult = invoiceResource.searchInvoices(query);
-                $scope.invoices = queryResult.items;
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-                $scope.salesLoaded = true;
-                $scope.maxPages = queryResult.totalPages;
-                $scope.itemCount = queryResult.totalItems
-                */
 
-
-                var promiseInvoices = invoiceResource.searchInvoices(query);
-                promiseInvoices.then(function (response) {
+                var promise = invoiceResource.searchInvoices(query);
+                promise.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, invoiceDisplayBuilder);
                     $scope.invoices = queryResult.items;
                     $scope.loaded = true;

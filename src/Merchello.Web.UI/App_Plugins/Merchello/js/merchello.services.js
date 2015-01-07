@@ -93,29 +93,6 @@
 
     /**
      * @ngdoc service
-     * @name merchello.models.auditLogDisplayBuilder
-     *
-     * @description
-     * A utility service that builds auditLogDisplayBuilder models
-     */
-    angular.module('merchello.models')
-        .factory('auditLogDisplayBuilder',
-            ['genericModelBuilder', 'AuditLogDisplay',
-            function(genericModelBuilder, AuditLogDisplay) {
-
-                var Constructor = AuditLogDisplay;
-
-                return {
-                    createDefault: function() {
-                        return new Constructor();
-                    },
-                    transform: function(jsonResult) {
-                        return genericModelBuilder.transform(jsonResult, Constructor);
-                    }
-                };
-        }]);
-    /**
-     * @ngdoc service
      * @name merchello.models.countryDisplayBuilder
      *
      * @description
@@ -515,6 +492,81 @@
             };
         }]);
 
+    /**
+     * @ngdoc service
+     * @name merchello.models.auditLogDisplayBuilder
+     *
+     * @description
+     * A utility service that builds auditLogDisplayBuilder models
+     */
+    angular.module('merchello.models')
+        .factory('auditLogDisplayBuilder',
+            ['genericModelBuilder', 'AuditLogDisplay',
+            function(genericModelBuilder, AuditLogDisplay) {
+
+                var Constructor = AuditLogDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+        }]);
+    /**
+     * @ngdoc service
+     * @name merchello.models.auditLogDisplayBuilder
+     *
+     * @description
+     * A utility service that builds auditLogDisplayBuilder models
+     */
+    angular.module('merchello.models')
+        .factory('dailyAuditLogDisplayBuilder',
+            ['genericModelBuilder', 'auditLogDisplayBuilder', 'DailyAuditLogDisplay',
+            function(genericModelBuilder, auditLogDisplayBuilder, DailyAuditLogDisplay) {
+
+                var Constructor = DailyAuditLogDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        var dailyLog = genericModelBuilder.transform(jsonResult, Constructor);
+                        dailyLog.logs = auditLogDisplayBuilder.transform(jsonResult.logs);
+                        return dailyLog;
+                    }
+                };
+        }]);
+    /**
+     * @ngdoc service
+     * @name merchello.models.salesHistoryDisplayBuilder
+     *
+     * @description
+     * A utility service that builds salesHistoryDisplayBuilder models
+     */
+    angular.module('merchello.models')
+        .factory('salesHistoryDisplayBuilder',
+            ['genericModelBuilder', 'dailyAuditLogDisplayBuilder', 'SalesHistoryDisplay',
+            function(genericModelBuilder, dailyAuditLogDisplayBuilder, SalesHistoryDisplay) {
+
+                var Constructor = SalesHistoryDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        var history = new SalesHistoryDisplay();
+                        angular.forEach(jsonResult[0], function(result) {
+                            history.addDailyLog(dailyAuditLogDisplayBuilder.transform(result));
+                        });
+                        return history;
+                    }
+                };
+        }]);
     /**
      * @ngdoc service
      * @name merchello.models.settingDisplayBuilder

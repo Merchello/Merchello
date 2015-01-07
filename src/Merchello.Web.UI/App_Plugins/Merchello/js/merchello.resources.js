@@ -6,7 +6,7 @@
 
 (function() { 
 
-    angular.module('merchello.resources').factory('auditlogResource', [
+    angular.module('merchello.resources').factory('auditLogResource', [
         '$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
         return {
@@ -37,8 +37,8 @@
      **/
     angular.module('merchello.resources')
         .factory('invoiceResource', [
-            '$q', '$http', 'umbRequestHelper', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
-            function($q, $http, umbRequestHelper, queryResultDisplayBuilder, invoiceDisplayBuilder) {
+            '$q', '$http', 'umbRequestHelper',
+            function($q, $http, umbRequestHelper) {
 
                 return {
 
@@ -141,7 +141,111 @@
                 };
             }]);
 
-    angular.module('merchello.resources').factory('settingsResource', [function() {
+    /**
+     * @ngdoc service
+     * @name merchello.resources.paymentResource
+     * @description Loads in data and allows modification for payments
+     **/
+    angular.module('merchello.resources').factory('paymentResource',
+        ['$q', '$http', 'umbRequestHelper',
+        function($q, $http, umbRequestHelper) {
+
+        return {
+
+            getPayment: function (key) {
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPayment'),
+                        method: "GET",
+                        params: { id: key }
+                    }),
+                    'Failed to get payment: ' + key);
+            },
+
+            getPaymentsByInvoice: function (invoiceKey) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPaymentsByInvoice'),
+                        method: "GET",
+                        params: { id: invoiceKey }
+                    }),
+                    'Failed to get payments by invoice: ' + invoiceKey);
+            },
+
+            getAppliedPaymentsByInvoice: function (invoiceKey) {
+                var deferred = $q.defer();
+                var appliedPayments = [];
+
+                var promise = paymentService.getPaymentsByInvoice(invoiceKey);
+                promise.then(function (data) {
+                    var payments = _.map(data, function (payment) {
+                        return new merchello.Models.Payment(payment);
+                    });
+
+                    angular.forEach(payments, function (payment) {
+                        angular.forEach(payment.appliedPayments, function (appliedPayment) {
+                            var tempAppliedPayment = appliedPayment;
+                            payment.appliedPayments = [];
+                            tempAppliedPayment.payment = payment;
+                            appliedPayments.push(tempAppliedPayment);
+                        });
+                    });
+
+                    deferred.resolve(appliedPayments);
+                }, function (reason) {
+                    deferred.reject(reason);
+                });
+
+                return deferred.promise;
+            },
+
+            authorizePayment: function (paymentRequest) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'AuthorizePayment'),
+                        paymentRequest
+                    ),
+                    'Failed to authorize payment');
+            },
+
+            capturePayment: function (paymentRequest) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'CapturePayment'),
+                        paymentRequest
+                    ),
+                    'Failed to capture payment');
+            },
+
+            authorizeCapturePayment: function (paymentRequest) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'AuthorizeCapturePayment'),
+                        paymentRequest
+                    ),
+                    'Failed to authorize capture payment');
+            },
+
+            refundPayment: function (paymentRequest) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'RefundPayment'),
+                        paymentRequest
+                    ),
+                    'Failed to refund payment');
+            }
+        };
+    }]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.resources.settingsResource
+     * @description Loads in data and allows modification for invoices
+     **/
+    angular.module('merchello.resources').factory('settingsResource',
+        ['$q', '$http', '$cacheFactory', 'umbRequestHelper',
+            function($q, $http, $cacheFactory, umbRequestHelper) {
 
         /* cacheFactory instance for cached items in the merchelloSettingsService */
         var _settingsCache = $cacheFactory('merchelloSettings');
@@ -191,9 +295,7 @@
              * @returns {object} an angularjs promise object
              */
             getAllCountries: function () {
-
                 return getCachedOrApi("SettingsCountries", "GetAllCountries", "countries");
-
             },
 
             /**
@@ -233,9 +335,7 @@
              * @returns {object} an angularjs promise object
              */
             getAllSettings: function () {
-
                 return getCachedOrApi("AllSettings", "GetAllSettings", "settings");
-
             },
 
             getCurrentSettings: function() {
@@ -247,7 +347,7 @@
 
                 var promise = $q.all(promiseArray);
                 promise.then(function (data) {
-                    deferred.resolve(new merchello.Models.StoreSettings(data[0]));
+                    deferred.resolve(data[0]);
                 }, function(reason) {
                     deferred.reject(reason);
                 });
@@ -267,9 +367,7 @@
              * @returns {object} an angularjs promise object
              */
             getAllCurrencies: function () {
-
                 return getCachedOrApi("AllCurrency", "GetAllCurrencies", "settings");
-
             },
 
             getCurrencySymbol: function () {
@@ -282,15 +380,13 @@
 
                 var promise = $q.all(promiseArray);
                 promise.then(function (data) {
-                    var settingsFromServer = new merchello.Models.StoreSettings(data[0]);
+                    var settingsFromServer = data[0];
                     var currenciesFromServer = data[1];
 
-                    var currencyList = _.map(currenciesFromServer, function (currencyAttrs) {
-                        return new merchello.Models.Currency(currencyAttrs);
-                    });
+                    var currencyList =  data[1];
 
                     var selectedCurrency = _.find(currencyList, function (currency) {
-                        return currency.currencyCode == settingsFromServer.currencyCode;
+                        return currency.currencyCode === settingsFromServer.currencyCode;
                     });
 
                     deferred.resolve(selectedCurrency.symbol);
@@ -300,7 +396,6 @@
 
                 return deferred.promise;
             },
-
 
             /**
              * @ngdoc method
@@ -314,15 +409,7 @@
              * @returns {object} an angularjs promise object
              */
             getTypeFields: function () {
-
                 return getCachedOrApi("AllTypeFields", "GetTypeFields", "settings");
-
-                //return umbRequestHelper.resourcePromise(
-                //   $http.get(
-                //        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'GetTypeFields')
-                //    ),
-                //    'Failed to get all settings');
-
             }
 
         };
@@ -331,5 +418,90 @@
 
     }]);
 
+    /**
+     * @ngdoc service
+     * @name merchello.resources.shipmentResource
+     * @description Loads in data and allows modification for shipments
+     **/
+    angular.module('merchello.resources').factory('shipmentResource',
+        ['$http', 'umbRequestHelper', function($http, umbRequestHelper) {
+        return {
+
+            getAllShipmentStatuses: function() {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetAllShipmentStatuses'),
+                        method: 'GET'}),
+                    'Failed to get shipment statuses');
+
+            },
+
+            getShipment: function (key) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipment'),
+                        method: "GET",
+                        params: { id: key }
+                    }),
+                    'Failed to get shipment: ' + key);
+            },
+
+           getShipmentsByInvoice: function (invoice) {
+                var shipmentKeys = [];
+
+                angular.forEach(invoice.orders, function(order) {
+                    var newShipmentKeys = _.map(order.items, function(orderLineItem) {
+                        return orderLineItem.shipmentKey;
+                    });
+                    shipmentKeys = _.union(shipmentKeys, newShipmentKeys);
+                });
+
+
+                var shipmentKeysStr = shipmentKeys.join("&ids=");
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipments', shipmentKeysStr),
+                        method: "GET",
+                        params: { ids: shipmentKeys }
+                    }),
+                    'Failed to get shipments: ' + shipmentKeys);
+            },
+
+
+            getShipMethod: function (order) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethod'),
+                        order
+                    ),
+                    'Failed to get shipment method');
+            },
+
+            newShipment: function (order) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'NewShipment'),
+                        order
+                    ),
+                    'Failed to create shipment');
+            },
+
+            putShipment: function (shipment, order) {
+                var shipmentOrder = {}
+                shipmentOrder.ShipmentDisplay = shipment;
+                shipmentOrder.OrderDisplay = order;
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'PutShipment'),
+                        shipmentOrder
+                    ),
+                    'Failed to save shipment');
+            }
+
+        };
+    }]);
 
 })();
