@@ -1,4 +1,4 @@
-    angular.module('merchello.resources').factory('auditlogResource', [
+    angular.module('merchello.resources').factory('auditLogResource', [
         '$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
         return {

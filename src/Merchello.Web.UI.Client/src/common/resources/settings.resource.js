@@ -1,4 +1,11 @@
-    angular.module('merchello.resources').factory('settingsResource', [function() {
+    /**
+     * @ngdoc service
+     * @name merchello.resources.settingsResource
+     * @description Loads in data and allows modification for invoices
+     **/
+    angular.module('merchello.resources').factory('settingsResource',
+        ['$q', '$http', '$cacheFactory', 'umbRequestHelper',
+            function($q, $http, $cacheFactory, umbRequestHelper) {
 
         /* cacheFactory instance for cached items in the merchelloSettingsService */
         var _settingsCache = $cacheFactory('merchelloSettings');
@@ -48,9 +55,7 @@
              * @returns {object} an angularjs promise object
              */
             getAllCountries: function () {
-
                 return getCachedOrApi("SettingsCountries", "GetAllCountries", "countries");
-
             },
 
             /**
@@ -90,9 +95,7 @@
              * @returns {object} an angularjs promise object
              */
             getAllSettings: function () {
-
                 return getCachedOrApi("AllSettings", "GetAllSettings", "settings");
-
             },
 
             getCurrentSettings: function() {
@@ -104,7 +107,7 @@
 
                 var promise = $q.all(promiseArray);
                 promise.then(function (data) {
-                    deferred.resolve(new merchello.Models.StoreSettings(data[0]));
+                    deferred.resolve(data[0]);
                 }, function(reason) {
                     deferred.reject(reason);
                 });
@@ -124,9 +127,7 @@
              * @returns {object} an angularjs promise object
              */
             getAllCurrencies: function () {
-
                 return getCachedOrApi("AllCurrency", "GetAllCurrencies", "settings");
-
             },
 
             getCurrencySymbol: function () {
@@ -139,15 +140,13 @@
 
                 var promise = $q.all(promiseArray);
                 promise.then(function (data) {
-                    var settingsFromServer = new merchello.Models.StoreSettings(data[0]);
+                    var settingsFromServer = data[0];
                     var currenciesFromServer = data[1];
 
-                    var currencyList = _.map(currenciesFromServer, function (currencyAttrs) {
-                        return new merchello.Models.Currency(currencyAttrs);
-                    });
+                    var currencyList =  data[1];
 
                     var selectedCurrency = _.find(currencyList, function (currency) {
-                        return currency.currencyCode == settingsFromServer.currencyCode;
+                        return currency.currencyCode === settingsFromServer.currencyCode;
                     });
 
                     deferred.resolve(selectedCurrency.symbol);
@@ -157,7 +156,6 @@
 
                 return deferred.promise;
             },
-
 
             /**
              * @ngdoc method
@@ -171,15 +169,7 @@
              * @returns {object} an angularjs promise object
              */
             getTypeFields: function () {
-
                 return getCachedOrApi("AllTypeFields", "GetTypeFields", "settings");
-
-                //return umbRequestHelper.resourcePromise(
-                //   $http.get(
-                //        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'GetTypeFields')
-                //    ),
-                //    'Failed to get all settings');
-
             }
 
         };

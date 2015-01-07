@@ -88,7 +88,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              */
             $scope.changePage = function (page) {
                 $scope.currentPage = page;
-                var query = $scope.buildQuery($scope.filterText);
+                var query = buildQuery($scope.filterText);
                 loadInvoices(query);
             };
 
@@ -142,7 +142,20 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * Fired when the filter button next to the filter text box at the top of the page is clicked.
              */
             $scope.filterWithWildcard = function (filterText) {
-                var query = $scope.buildQuery(filterText);
+                var query = buildQuery(filterText);
+                loadInvoices(query);
+            };
+
+            /**
+             * @ngdoc method
+             * @name filterWithDates
+             * @function
+             *
+             * @description
+             * Fired when the filter button next to the filter text box at the top of the page is clicked.
+             */
+            $scope.filterWithDates = function(filterStartDate, filterEndDate) {
+                var query = buildQueryDates(filterStartDate, filterEndDate);
                 loadInvoices(query);
             };
 
@@ -164,8 +177,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 $scope.filterAction = false;
             };
 
-            $scope.buildQuery = buildQuery;
-            $scope.buildQueryDates = buildQueryDates;
+
 
             //--------------------------------------------------------------------------------------
             // Helper Methods
@@ -358,13 +370,21 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
      * The controller for the sales overview page
      */
     angular.module('merchello').controller('Merchello.Dashboards.SalesOverviewController',
-        ['$scope', '$routeParams', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
-            'invoiceResource', 'invoiceDisplayBuilder',
-        function($scope, $routeParams, assetsService, dialogService, localizationService, notificationsService, invoiceResource, invoiceDisplayBuilder) {
+        ['$scope', '$routeParams', '$q', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
+            'auditLogResource', 'invoiceResource', 'paymentResource', 'shipmentResource', 'settingsResource', 'salesHistoryDisplayBuilder',
+            'paymentDisplayBuilder', 'invoiceDisplayBuilder',
+        function($scope, $routeParams, $q, assetsService, dialogService, localizationService, notificationsService,
+                 auditLogResource, invoiceResource, paymentResource, shipmentResource, settingsResource, salesHistoryDisplayBuilder,
+                 paymentDisplayBuilder, invoiceDisplayBuilder) {
 
-            /*-------------------------------------------------------------------
-             * Initialization Methods
-             * ------------------------------------------------------------------*/
+            $scope.historyLoaded = false;
+            $scope.invoice = {};
+            $scope.shipments = [];
+
+            $scope.salesHistory = salesHistoryDisplayBuilder.createDefault();
+
+
+            var typeFields = [];
 
             /**
              * @ngdoc method
@@ -373,10 +393,9 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Method called on intial page load.  Loads in data from server and sets up scope.
              */
-            $scope.init = function () {
-                $scope.setVariables();
-                $scope.loadTypeFields(function () { $scope.loadInvoice($routeParams.id); });
-                $scope.loadSettings();
+            function init () {
+                loadInvoice($routeParams.id);
+                loadSettings();
                 $scope.loaded = true;
             };
 
@@ -388,18 +407,12 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * @description
              * Load the Audit Log for the invoice via API.
              */
-            $scope.loadAuditLog = function (key) {
+            function loadAuditLog(key) {
                 if (key !== undefined) {
-                    var promise = merchelloAuditService.getSalesHistoryByInvoiceKey(key);
+                    var promise = auditLogResource.getSalesHistoryByInvoiceKey(key);
                     promise.then(function (response) {
-                        if (response.dailyLogs) {
-                            if (response.dailyLogs.length > 0) {
-                                var dailyLogs = _.map(response.dailyLogs, function (log) {
-                                    return new merchello.Models.DailyLog(log);
-                                });
-                                $scope.buildLocalizedShippingHistory(dailyLogs);
-                            }
-                        }
+                        var dailyLogs = salesHistoryDisplayBuilder.transform(response);
+                        buildLocalizedShippingHistory(dailyLogs);
                     });
                 }
             };
@@ -411,24 +424,16 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Load an invoice with the associated id.
              */
-            $scope.loadInvoice = function (id) {
-                var promise = merchelloInvoiceService.getByKey(id);
+            function loadInvoice(id) {
+                var promise = invoiceResource.getByKey(id);
                 promise.then(function (invoice) {
-                    console.info(invoice);
-                    $scope.invoice = new merchello.Models.Invoice(invoice);
-                    console.info($scope.invoice);
-                    _.each($scope.invoice.items, function (lineItem) {
-                        if (lineItem.lineItemTfKey) {
-                            var matchedTypeField = _.find($scope.typeFields, function (type) {
-                                return type.typeKey == lineItem.lineItemTfKey;
-                            });
-                            lineItem.lineItemType = matchedTypeField;
-                        }
-                    });
+
+                    $scope.invoice = invoiceDisplayBuilder.transform(invoice);
+
                     //$scope.loadShippingAddress($scope.invoice);
-                    $scope.loadPayments($scope.invoice);
-                    $scope.loadShipments($scope.invoice);
-                    $scope.loadAuditLog($scope.invoice.key);
+                    loadPayments($scope.invoice);
+                    loadShipments($scope.invoice);
+                    loadAuditLog($scope.invoice.key);
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -441,28 +446,10 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Load the payments for the provided invoice.
              */
-            $scope.loadPayments = function (invoice) {
-                var promise = merchelloPaymentService.getAppliedPaymentsByInvoice(invoice.key);
-                promise.then(function (appliedPayments) {
-                    invoice.appliedPayments = appliedPayments;
-                    invoice.payments = [];
-                    if (invoice.appliedPayments.length > 0) {
-                        invoice.payments = _.uniq(_.map(invoice.appliedPayments, function (appliedPayment) {
-                            return appliedPayment.payment;
-                        }));
-                    }
-                    _.each(invoice.appliedPayments, function (appliedPayment) {
-                        if (appliedPayment.appliedPaymentTfKey) {
-                            var matchedTypeField = _.find($scope.typeFields, function (type) {
-                                return type.typeKey == appliedPayment.appliedPaymentTfKey;
-                            });
-                            appliedPayment.appliedPaymentType = matchedTypeField;
-                        }
-                    });
-                    // used for rendering the payment history
-                    invoice.groupedAppliedPayments = _.groupBy(invoice.appliedPayments, function (appliedPayment) {
-                        return appliedPayment.payment.paymentMethodName;
-                    });
+            function loadPayments(invoice) {
+                var promise = paymentResource.getPaymentsByInvoice(invoice.key);
+                promise.then(function (payments) {
+                    invoice.payments = paymentDisplayBuilder.transform(payments);
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -477,11 +464,10 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Load the Merchello settings.
              */
-            $scope.loadSettings = function () {
-                var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
                     $scope.currencySymbol = currencySymbol;
-
                 }, function (reason) {
                     alert('Failed: ' + reason.message);
                 });
@@ -494,13 +480,11 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Load the shipments associated with the provided invoice.
              */
-            $scope.loadShipments = function (invoice) {
-                if ($scope.hasOrder()) {
+            function loadShipments(invoice) {
+                if (invoice.hasOrder()) {
                     var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
                     promise.then(function (shipments) {
-                        invoice.shipments = _.map(shipments, function (shipment) {
-                            return new merchello.Models.Shipment(shipment);
-                        });
+                        $scope.shipments = shipmentDisplayBuilder.transform(shipments);
                         $scope.loaded = true;
                         $scope.preValuesLoaded = true;
                     }, function (reason) {
@@ -509,43 +493,6 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 }
             };
 
-            /**
-             * @ngdoc method
-             * @name loadTypeFields
-             * @function
-             *
-             * @description - Load in the type fields.
-             */
-            $scope.loadTypeFields = function (nextMethodCall) {
-                var promise = merchelloSettingsService.getTypeFields();
-                promise.then(function (typeFields) {
-                    $scope.typeFields = _.map(typeFields, function (type) {
-                        return new merchello.Models.TypeField(type);
-                    });
-                    if (nextMethodCall != undefined) {
-                        nextMethodCall();
-                    }
-                }, function (reason) {
-                    notificationsService.error("TypeFields Load Failed", reason.message);
-                });
-            };
-
-            /**
-             * @ngdoc method
-             * @name setVariables
-             * @function
-             *
-             * @description - Sets the $scope variables.
-             */
-            $scope.setVariables = function () {
-                $scope.historyLoaded = false;
-                $scope.invoice = {};
-                $scope.typeFields = [];
-                // $scope.shippingAddress = {};
-                $scope.salesHistory = {
-                    days: []
-                };
-            };
 
             /*-------------------------------------------------------------------
              * Event Handler Methods
@@ -558,7 +505,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Open the capture shipment dialog.
              */
-            $scope.capturePayment = function () {
+            function capturePayment() {
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Modules/Order/Dialogs/capture.payment.html',
                     show: true,
@@ -574,8 +521,8 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Capture the payment after the confirmation dialog was passed through.
              */
-            $scope.capturePaymentDialogConfirm = function (paymentRequest) {
-                var promiseSave = merchelloPaymentService.capturePayment(paymentRequest);
+            function capturePaymentDialogConfirm(paymentRequest) {
+                var promiseSave = paymentRequest.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
                     notificationsService.success("Payment Captured");
                     $scope.loadInvoice(paymentRequest.invoiceKey);
@@ -591,7 +538,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Open the delete payment dialog.
              */
-            $scope.openDeleteInvoiceDialog = function () {
+            function openDeleteInvoiceDialog() {
                 var dialogData = {};
                 dialogData.name = 'Invoice #' + $scope.invoice.invoiceNumber;
                 dialogService.open({
@@ -609,7 +556,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Open the fufill shipment dialog.
              */
-            $scope.openFulfillShipmentDialog = function () {
+            function openFulfillShipmentDialog() {
                 console.info($scope.invoice);
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
@@ -626,8 +573,8 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Delete the invoice.
              */
-            $scope.processDeleteInvoiceDialog = function () {
-                var promiseDeleteInvoice = merchelloInvoiceService.deleteInvoice($scope.invoice.key);
+            function processDeleteInvoiceDialog() {
+                var promiseDeleteInvoice = invoiceResource.deleteInvoice($scope.invoice.key);
                 promiseDeleteInvoice.then(function (response) {
                     notificationsService.success('Invoice Deleted');
                     window.location.href = '#/merchello/merchello/OrderList/manage';
@@ -643,13 +590,13 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Process the fulfill shipment functionality on callback from the dialog service.
              */
-            $scope.processFulfillShipmentDialog = function (data) {
-                var promiseNewShipment = merchelloShipmentService.newShipment(data);
+            function processFulfillShipmentDialog(data) {
+                var promiseNewShipment = shipmentResource.newShipment(data);
                 promiseNewShipment.then(function (shipment) {
                     // TODO this is a total hack.  A new model should be defined.
                     shipment.trackingCode = data.trackingNumber;
                     shipment.shipmentStatus = data.shipmentStatus;
-                    var promiseSave = merchelloShipmentService.putShipment(shipment, data);
+                    var promiseSave = shipmentResource.putShipment(shipment, data);
                     promiseSave.then(function () {
                         notificationsService.success("Shipment Created");
                         $scope.loadInvoice(data.invoiceKey);
@@ -672,7 +619,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Build a list of the shipping history.
              */
-            $scope.buildLocalizedShippingHistory = function (dailyLogs) {
+            function buildLocalizedShippingHistory(dailyLogs) {
                 $scope.salesHistory.days = [];
                 _.each(dailyLogs, function (day) {
                     var newDay = {
@@ -694,7 +641,9 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                         localizationService.localize(key).then(function (value) {
                             logItem.message = $scope.formatLogMessage(value, logItem.messageObject);
                         });
+
                     });
+
                     $scope.salesHistory.days.push(newDay);
                 });
                 $scope.historyLoaded = true;
@@ -707,7 +656,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Format the provided textstring with the appropriate log item values from the message object.
              */
-            $scope.formatLogMessage = function (textString, message) {
+            function formatLogMessage(textString, message) {
                 switch (message.key) {
                     case 'invoiceCreated':
                     case 'invoiceDeleted':
@@ -742,7 +691,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Returns false if the invoice has no applied payments.
              */
-            $scope.hasAppliedPayments = function () {
+            function hasAppliedPayments() {
                 var result = false;
                 if ($scope.invoice.appliedPayments) {
                     if ($scope.invoice.appliedPayments.length > 0) {
@@ -759,7 +708,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Returns false if the invoice has no orders.
              */
-            $scope.hasOrder = function () {
+            function hasOrder() {
                 var result = false;
                 if ($scope.invoice.orders !== undefined) {
                     if ($scope.invoice.orders.length > 0) {
@@ -776,38 +725,19 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              *
              * @description - Returns false if the invoice has no shipments.
              */
-            $scope.hasShipments = function() {
+            function hasShipments() {
                 var result = false;
-                if ($scope.invoice.shipments) {
-                    if ($scope.invoice.shipments.length > 0) {
-                        result = true;
-                    }
+
+                if ($scope.shipments.length > 0) {
+                    result = true;
                 }
+
                 return result;
             };
-
-            /**
-             * @ngdoc method
-             * @name isPaid
-             * @function
-             *
-             * @description - Returns true if the invoice has been paid. Otherwise it returns false.
-             */
-            $scope.isPaid = function () {
-                var result = false;
-                if (typeof $scope.invoice.getPaymentStatus === "function") {
-                    var status = $scope.invoice.getPaymentStatus();
-                    if (status === "Paid") {
-                        result = true;
-                    }
-                }
-                return result;
-            };
-
 
             /*-------------------------------------------------------------------*/
 
-            $scope.init();
+            init();
     }]);
 
 

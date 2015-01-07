@@ -23,7 +23,10 @@ Umbraco.Sys.ServerVariables = {
         "rteApiBaseUrl": "/umbraco/UmbracoApi/RichTextPreValue/",
 
         // merchello
-        "merchelloInvoiceApiBaseUrl": "/umbraco/backoffice/Merchello/InvoiceApi/"
+        "merchelloInvoiceApiBaseUrl": "/umbraco/backoffice/Merchello/InvoiceApi/",
+        "merchelloSettingsApiBaseUrl": "/umbraco/backoffice/Merchello/SettingApi/",
+        "merchelloPaymentApiBaseUrl": "/umbraco/backoffice/Merchello/PaymentApi/",
+        "merchelloAuditLogApiBaseUrl": "/umbraco/backoffice/Merchello/AuditLogApi/"
     },
     umbracoSettings: {
         "umbracoPath": "/umbraco",

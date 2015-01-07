@@ -31,29 +31,6 @@
 
     /**
      * @ngdoc model
-     * @name AuditLogDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's AuditLogDisplay object
-     */
-    var AuditLogDisplay = function() {
-        var self = this;
-
-        self.entityKey = '';
-        self.entityTfKey = '';
-        self.entityType = '';
-        self.extendedData = [];
-        self.isError = false;
-        self.key = '';
-        self.message = {};
-        self.recordDate = '';
-        self.verbosity = '';
-    };
-
-    angular.module('merchello.models').constant('AuditLogDisplay', AuditLogDisplay);
-    /**
-     * @ngdoc model
      * @name CountryDisplay
      * @function
      *
@@ -171,10 +148,12 @@
 
     InvoiceDisplay.prototype = (function() {
 
+        // gets the invoice status name
+        // TODO this is incorrectly namedd
         function getPaymentStatus() {
             return this.invoiceStatus.name;
         }
-        // TODO this may need to be refactored in Umbraco 8 when '_' becomes a module
+
         function getFulfillmentStatus () {
             if (!_.isEmpty(self.orders)) {
                 return self.orders[0].orderStatus.name;
@@ -182,16 +161,30 @@
             return '';
         }
 
+        // gets the product line items
         function getProductLineItems() {
             return _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; });
         }
 
+        // gets the tax line items
         function getTaxLineItem() {
             return _.find(this.items, function (item) { return item.lineItemTypeField.alias === 'Tax'; });
         }
 
+        // gets the shipping line items
         function getShippingLineItems() {
             return _.find(this.items, function (item) { return item.lineItemTypeField.alias === 'Shipping'; });
+        }
+
+        // gets a value indicating whether or not this invoice has an order
+        function hasOrder() {
+            return this.orders.length > 0;
+        }
+
+        // gets a value indicating whether or not this invoice has been paid
+        function isPaid() {
+            var status = this.getPaymentStatus.call(this);
+            return status === 'Paid';
         }
 
         return {
@@ -199,9 +192,10 @@
             getFulfillmentStatus: getFulfillmentStatus,
             getProductLineItems: getProductLineItems,
             getTaxLineItem: getTaxLineItem,
-            getShippingLineItem: getShippingLineItems
+            getShippingLineItem: getShippingLineItems,
+            hasOrder: hasOrder,
+            isPaid: isPaid
         };
-
     }());
 
     angular.module('merchello.models').constant('InvoiceDisplay', InvoiceDisplay);
@@ -803,5 +797,70 @@
     }());
 
     angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
+    /**
+     * @ngdoc model
+     * @name AuditLogDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's AuditLogDisplay object
+     */
+    var AuditLogDisplay = function() {
+        var self = this;
+
+        self.entityKey = '';
+        self.entityTfKey = '';
+        self.entityType = '';
+        self.extendedData = [];
+        self.isError = false;
+        self.key = '';
+        self.message = {};
+        self.recordDate = '';
+        self.verbosity = '';
+    };
+
+    angular.module('merchello.models').constant('AuditLogDisplay', AuditLogDisplay);
+    /**
+     * @ngdoc model
+     * @name DailyAuditLogDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's DailyAuditLogDisplay object
+     */
+    var DailyAuditLogDisplay = function() {
+        var self = this;
+        this.day = '';
+        this.logs = [];
+    };
+
+    angular.module('merchello.models').constant('DailyAuditLogDisplay', DailyAuditLogDisplay);
+    /**
+     * @ngdoc model
+     * @name SalesHistoryDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's SalesHistoryDisplay object
+     */
+    var SalesHistoryDisplay = function() {
+        var self = this;
+        self.dailyLogs = [];
+    };
+
+    SalesHistoryDisplay.prototype = (function() {
+
+        // utility method to push a daily log
+        function addDailyLog(dailyLog) {
+            this.dailyLogs.push(dailyLog);
+        }
+
+        return {
+            addDailyLog: addDailyLog
+        };
+
+    }());
+
+    angular.module('merchello.models').constant('SalesHistoryDisplay', SalesHistoryDisplay);
 
 })();

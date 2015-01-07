@@ -35,10 +35,12 @@
 
     InvoiceDisplay.prototype = (function() {
 
+        // gets the invoice status name
+        // TODO this is incorrectly namedd
         function getPaymentStatus() {
             return this.invoiceStatus.name;
         }
-        // TODO this may need to be refactored in Umbraco 8 when '_' becomes a module
+
         function getFulfillmentStatus () {
             if (!_.isEmpty(self.orders)) {
                 return self.orders[0].orderStatus.name;
@@ -46,16 +48,30 @@
             return '';
         }
 
+        // gets the product line items
         function getProductLineItems() {
             return _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; });
         }
 
+        // gets the tax line items
         function getTaxLineItem() {
             return _.find(this.items, function (item) { return item.lineItemTypeField.alias === 'Tax'; });
         }
 
+        // gets the shipping line items
         function getShippingLineItems() {
             return _.find(this.items, function (item) { return item.lineItemTypeField.alias === 'Shipping'; });
+        }
+
+        // gets a value indicating whether or not this invoice has an order
+        function hasOrder() {
+            return this.orders.length > 0;
+        }
+
+        // gets a value indicating whether or not this invoice has been paid
+        function isPaid() {
+            var status = this.getPaymentStatus.call(this);
+            return status === 'Paid';
         }
 
         return {
@@ -63,9 +79,10 @@
             getFulfillmentStatus: getFulfillmentStatus,
             getProductLineItems: getProductLineItems,
             getTaxLineItem: getTaxLineItem,
-            getShippingLineItem: getShippingLineItems
+            getShippingLineItem: getShippingLineItems,
+            hasOrder: hasOrder,
+            isPaid: isPaid
         };
-
     }());
 
     angular.module('merchello.models').constant('InvoiceDisplay', InvoiceDisplay);

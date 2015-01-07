@@ -160,7 +160,8 @@
 		/// GET /umbraco/Merchello/SettingsApi/GetAllSettings
 		/// </summary>
 		public SettingDisplay GetAllSettings()
-		{																								   
+		{									
+			// TODO - why is this done this way?												   
 			var settings = _storeSettingService.GetAll();
 			var settingDisplay = new SettingDisplay();
 
