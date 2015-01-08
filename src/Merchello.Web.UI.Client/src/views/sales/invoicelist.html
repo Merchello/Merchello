@@ -23,7 +23,6 @@
                     <div class="controls pull-right" data-ng-show="invoices.length > 0">
                         <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
                         <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                            <option value="2">2</option>
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -134,7 +133,7 @@
                         <!-- Invoices -->
                         <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="updateBulkActionDropdownStatus(false, invoice.key)">
                             <!--<td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>-->
-                            <td>#<a data-ng-href="#/merchello/merchello/salesoverview/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
+                            <td>#<a data-ng-href="#/merchello/merchello/saleoverview/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
                             <td>{{invoice.invoiceDate | date : settings.dateFormat}}</td>
                             <td>{{invoice.billToName}}</td>
                             <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>

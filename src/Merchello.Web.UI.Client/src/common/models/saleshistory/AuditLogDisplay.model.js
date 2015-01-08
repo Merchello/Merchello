@@ -12,7 +12,7 @@
         self.entityKey = '';
         self.entityTfKey = '';
         self.entityType = '';
-        self.extendedData = [];
+        self.extendedData = {};
         self.isError = false;
         self.key = '';
         self.message = {};

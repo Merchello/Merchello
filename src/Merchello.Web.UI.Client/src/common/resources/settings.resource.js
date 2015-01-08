@@ -103,7 +103,7 @@
 
                 var promiseArray = [];
 
-                promiseArray.push(settingsServices.getAllSettings());
+                promiseArray.push(this.getAllSettings());
 
                 var promise = $q.all(promiseArray);
                 promise.then(function (data) {
@@ -135,16 +135,13 @@
 
                 var promiseArray = [];
 
-                promiseArray.push(settingsServices.getAllSettings());
-                promiseArray.push(settingsServices.getAllCurrencies());
+                promiseArray.push(this.getAllSettings());
+                promiseArray.push(this.getAllCurrencies());
 
                 var promise = $q.all(promiseArray);
                 promise.then(function (data) {
                     var settingsFromServer = data[0];
-                    var currenciesFromServer = data[1];
-
                     var currencyList =  data[1];
-
                     var selectedCurrency = _.find(currencyList, function (currency) {
                         return currency.currencyCode === settingsFromServer.currencyCode;
                     });

@@ -8,26 +8,32 @@
 (function() { 
 
     /**
-     * @ngdoc model
-     * @name AppliedPaymentDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's AppliedPaymentDisplay object
-     */
-    var AppliedPaymentDisplay = function() {
-        var self = this;
-        self.key = '';
-        self.paymentKey = '';
-        self.invoiceKey = '';
-        self.appliedPaymentTfKey = '';
-        self.description = '';
-        self.amount = 0.0;
-        self.exported = false;
-        self.createDate = '';
-    };
+    * @ngdoc model
+    * @name AddressDisplay
+    * @function
+    * 
+    * @description
+    * Represents a JS version of Merchello's AddressDisplay object
+    */
+    var AddressDisplay = function () {
 
-    angular.module('merchello.models').constant('AppliedPaymentDisplay', AppliedPaymentDisplay);
+        var self = this;
+
+        self.name = '';
+        self.address1 = '';
+        self.address2 = '';
+        self.locality = '';
+        self.region = '';
+        self.postalCode = '';
+        self.countryCode = '';
+        self.addressType = '';
+        self.organization = '';
+        self.phone = '';
+        self.email = '';
+        self.isCommercial = false;
+    };
+    
+    angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);
 
     /**
      * @ngdoc model
@@ -113,6 +119,356 @@
     angular.module('merchello.models').constant('ExtendedDataDisplay', ExtendedDataDisplay);
     /**
      * @ngdoc model
+     * @name ProvinceDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProvinceDisplay object
+     */
+     var ProvinceDisplay = function()
+     {
+         var self = this;
+         self.name = '';
+         self.code = '';
+     };
+
+    angular.module('merchello.models').constant('ProvinceDisplay', ProvinceDisplay);
+    /**
+     * @ngdoc model
+     * @name Merchello.Models.Province
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's SettingDisplay object
+     */
+    var SettingDisplay = function() {
+        self.currencyCode = '';
+        self.nextOrderNumber = 0;
+        self.nextInvoiceNumber = 0;
+        self.nextShipmentNumber = 0;
+        self.dateFormat = '';
+        self.timeFormat = '';
+        self.unitSystem = '';
+        self.globalShippable = false;
+        self.globalTaxable = false;
+        self.globalTrackInventory = false;
+        self.globalShippingIsTaxable = false;
+    };
+
+    angular.module('merchello.models').constant('SettingDisplay', SettingDisplay);
+    /**
+     * @ngdoc model
+     * @name Merchello.Models.TypeField
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's TypeFieldDisplay object
+     */
+    var TypeFieldDisplay = function() {
+        var self = this;
+        self.alias = 'test';
+        self.name = 'test';
+        self.typeKey = '';
+    };
+
+    angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);
+
+    /**
+     * @ngdoc model
+     * @name GatewayResourceDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's GatewayResourceDisplay object
+     */
+    var GatewayResourceDisplay = function() {
+        self.name = '';
+        self.serviceCode = '';
+    };
+
+    angular.module('merchello.models').constant('GatewayResourceDisplay', GatewayResourceDisplay);
+    /**
+     * @ngdoc model
+     * @name InvoiceLineItemDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's InvoiceLIneItemDisplay object
+     */
+    var InvoiceLineItemDisplay = function() {
+        var self = this;
+
+        self.key = '';
+        self.containerKey = '';
+        self.lineItemTfKey = '';
+        self.lineItemType = '';
+        self.lineItemTypeField = {};  // TODO why is this here
+        self.sku = '';
+        self.name = '';
+        self.quantity = '';
+        self.price = '';
+        self.exported = false;
+        self.extendedData = {};
+    };
+
+    angular.module('merchello.models').constant('InvoiceLineItemDisplay', InvoiceLineItemDisplay);
+    /**
+     * @ngdoc model
+     * @name OrderLineItemDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's OrderLIneItemDisplay object
+     */
+    var OrderLineItemDisplay = function() {
+        var self = this;
+
+        self.key = '';
+        self.containerKey = '';
+        self.lineItemTfKey = '';
+        self.lineItemTypeField = {};
+        self.sku = '';
+        self.name = '';
+        self.quantity = 0;
+        self.price = 0;
+        self.exported = false;
+        self.lineItemType = '';
+        self.shipmentKey = '';
+        self.backOrder = false;
+        self.extendedData = [];
+    };
+
+    OrderLineItemDisplay.prototype = (function() {
+
+        function getProductVariantKey() {
+            var variantKey = '';
+            if (this.extendedData.length > 0) {
+                variantKey = _.find(self.extendedData, function(extDataItem) {
+                    return extDataItem['key'] === "merchProductVariantKey";
+                });
+            }
+            if (variantKey === undefined) {
+                variantKey = '';
+            }
+            return variantKey;
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('OrderLineItemDisplay', OrderLineItemDisplay);
+    /**
+     * @ngdoc model
+     * @name AppliedPaymentDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's AppliedPaymentDisplay object
+     */
+    var AppliedPaymentDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.paymentKey = '';
+        self.invoiceKey = '';
+        self.appliedPaymentTfKey = '';
+        self.description = '';
+        self.amount = 0.0;
+        self.exported = false;
+        self.createDate = '';
+    };
+
+    angular.module('merchello.models').constant('AppliedPaymentDisplay', AppliedPaymentDisplay);
+
+    /**
+     * @ngdoc model
+     * @name PaymentDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's PaymentDisplay object
+     */
+    var PaymentDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.customerKey = '';
+        self.paymentMethodKey = '';
+        self.paymentTypeFieldKey = '';
+        self.paymentMethodName = '';
+        self.referenceNumber = '';
+        self.amount = 0.0;
+        self.authorized = false;
+        self.collected = false;
+        self.exported = false;
+        self.extendedData = {};
+        self.appliedPayments = [];
+    };
+
+    PaymentDisplay.prototype = (function() {
+
+        // private
+        var getStatus = function() {
+                var statusArr = [];
+                if (this.authorized) {
+                    statusArr.push("Authorized");
+                }
+                if (this.collected) {
+                    statusArr.push("Captured");
+                }
+                if (this.exported) {
+                    statusArr.push("Exported");
+                }
+
+                return statusArr.join("/");
+            },
+
+            hasAmount = function() {
+                return this.amount > 0;
+            };
+
+        // public
+        return {
+            getStatus: getStatus,
+            hasAmount: hasAmount
+        };
+    }());
+
+    angular.module('merchello.models').constant('PaymentDisplay', PaymentDisplay);
+    /**
+     * @ngdoc model
+     * @name PaymentRequest
+     * @function
+     *
+     * @description
+     * A back office model used for making payment requests to a payment provider
+     *
+     * @note
+     * Presently there is not a corresponding Merchello.Web model
+     */
+    var PaymentRequestDisplay = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentKey = '';
+        self.paymentMethodKey = '';
+        self.amount = 0.0;
+        self.processorArgs = [];
+    };
+
+    angular.module('merchello.models').constant('PaymentRequestDisplay', PaymentRequestDisplay);
+
+    /**
+     * @ngdoc model
+     * @name QueryDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's QueryDisplay object
+     *
+     * @remark
+     * PetaPoco Page<T> uses a 1 based page rather than a 0 based to represent the first page.
+     * We do the conversion in the WebApiController - so the JS QueryDisplay should assume this is 0 based.
+     */
+    var QueryDisplay = function() {
+        var self = this;
+        self.currentPage = 0;
+        self.itemsPerPage = 25;
+        self.parameters = [];
+        self.sortBy = '';
+        self.sortDirection = 'Ascending'; // valid options are 'Ascending' and 'Descending'
+    };
+
+    QueryDisplay.prototype = (function() {
+        // private
+        function addParameter(queryParameter) {
+            this.parameters.push(queryParameter);
+        }
+
+        function addCustomerKeyParam(customerKey) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'customerKey';
+            param.value = customerKey;
+            addParameter.call(this, param);
+        }
+
+        function addInvoiceDateParam(dateString, startOrEnd) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = startOrEnd === 'start' ? 'invoiceDateStart' : 'invoiceEndDate';
+            param.value = dateString;
+            addParameter.call(this, param);
+        }
+
+
+        function addFilterTermParam(term) {
+            if(term.length <= 0) {
+                return;
+            }
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'term';
+            param.value = term;
+            addParameter.call(this, param);
+        }
+
+        function applyInvoiceQueryDefaults() {
+            this.sortBy = 'invoiceNumber';
+            this.sortDirection = 'Descending';
+        }
+
+        // public
+        return {
+            addParameter: addParameter,
+            addCustomerKeyParam: addCustomerKeyParam,
+            applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
+            addInvoiceDateParam: addInvoiceDateParam,
+            addFilterTermParam: addFilterTermParam
+        };
+    }());
+
+    angular.module('merchello.models').constant('QueryDisplay', QueryDisplay);
+    /**
+     * @ngdoc model
+     * @name QueryParameterDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ListQueryParameterDisplay object
+     */
+    var QueryParameterDisplay = function()
+    {
+        var self = this;
+        self.fieldName = '';
+        self.value = '';
+    };
+
+    angular.module('merchello.models').constant('QueryParameterDisplay', QueryParameterDisplay);
+
+    /**
+     * @ngdoc model
+     * @name QueryResultDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's QueryResultDisplay object
+     */
+    var QueryResultDisplay = function() {
+        var self = this;
+        self.currentPage = 0;
+        self.items = [];
+        self.itemsPerPage = 0;
+        self.totalItems = 0;
+        self.totalPages = 0;
+    };
+
+    QueryResultDisplay.prototype = (function() {
+        function addItem(item) {
+            this.items.push(item);
+        }
+
+        return {
+            addItem: addItem
+        };
+    }());
+
+    angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
+    /**
+     * @ngdoc model
      * @name InvoiceDisplay
      * @function
      *
@@ -149,7 +505,7 @@
     InvoiceDisplay.prototype = (function() {
 
         // gets the invoice status name
-        // TODO this is incorrectly namedd
+        // TODO this is incorrectly named
         function getPaymentStatus() {
             return this.invoiceStatus.name;
         }
@@ -158,7 +514,8 @@
             if (!_.isEmpty(self.orders)) {
                 return self.orders[0].orderStatus.name;
             }
-            return '';
+            // TODO this should be localized
+            return 'Not Fulfilled';
         }
 
         // gets the product line items
@@ -289,99 +646,6 @@
     };
 
     angular.module('merchello.models').constant('OrderStatusDisplay', OrderStatusDisplay);
-    /**
-     * @ngdoc model
-     * @name PaymentDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's PaymentDisplay object
-     */
-    var PaymentDisplay = function() {
-        var self = this;
-        self.key = '';
-        self.customerKey = '';
-        self.paymentMethodKey = '';
-        self.paymentTypeFieldKey = '';
-        self.paymentMethodName = '';
-        self.referenceNumber = '';
-        self.amount = 0.0;
-        self.authorized = false;
-        self.collected = false;
-        self.exported = false;
-        self.extendedData = {};
-        self.appliedPayments = [];
-    };
-
-    PaymentDisplay.prototype = (function() {
-
-        // private
-        var getStatus = function() {
-                var statusArr = [];
-                if (this.authorized) {
-                    statusArr.push("Authorized");
-                }
-                if (this.collected) {
-                    statusArr.push("Captured");
-                }
-                if (this.exported) {
-                    statusArr.push("Exported");
-                }
-
-                return statusArr.join("/");
-            },
-
-            hasAmount = function() {
-                return this.amount > 0;
-            };
-
-        // public
-        return {
-            getStatus: getStatus,
-            hasAmount: hasAmount
-        };
-    }());
-
-    angular.module('merchello.models').constant('PaymentDisplay', PaymentDisplay);
-    /**
-     * @ngdoc model
-     * @name ProvinceDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's ProvinceDisplay object
-     */
-     var ProvinceDisplay = function()
-     {
-         var self = this;
-         self.name = '';
-         self.code = '';
-     };
-
-    angular.module('merchello.models').constant('ProvinceDisplay', ProvinceDisplay);
-    /**
-     * @ngdoc model
-     * @name Merchello.Models.Province
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's SettingDisplay object
-     */
-    var SettingDisplay = function() {
-        self.currencyCode = '';
-        self.nextOrderNumber = 0;
-        self.nextInvoiceNumber = 0;
-        self.nextShipmentNumber = 0;
-        self.dateFormat = '';
-        self.timeFormat = '';
-        self.unitSystem = '';
-        self.globalShippable = false;
-        self.globalTaxable = false;
-        self.globalTrackInventory = false;
-        self.globalShippingIsTaxable = false;
-    };
-
-    angular.module('merchello.models').constant('SettingDisplay', SettingDisplay);
     /**
     * @ngdoc model
     * @name ShipmentDisplay
@@ -558,247 +822,6 @@
     angular.module('merchello.models').constant('ShipmentStatusDisplay', ShipmentStatusDisplay);
     /**
      * @ngdoc model
-     * @name Merchello.Models.TypeField
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's TypeFieldDisplay object
-     */
-    var TypeFieldDisplay = function() {
-        var self = this;
-        self.alias = 'test';
-        self.name = 'test';
-        self.typeKey = '';
-    };
-
-    angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);
-
-    /**
-    * @ngdoc model
-    * @name AddressDisplay
-    * @function
-    * 
-    * @description
-    * Represents a JS version of Merchello's AddressDisplay object
-    */
-    var AddressDisplay = function () {
-
-        var self = this;
-
-        self.name = '';
-        self.address1 = '';
-        self.address2 = '';
-        self.locality = '';
-        self.region = '';
-        self.postalCode = '';
-        self.countryCode = '';
-        self.addressType = '';
-        self.organization = '';
-        self.phone = '';
-        self.email = '';
-        self.isCommercial = false;
-    };
-    
-    angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);
-
-    /**
-     * @ngdoc model
-     * @name GatewayResourceDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's GatewayResourceDisplay object
-     */
-    var GatewayResourceDisplay = function() {
-        self.name = '';
-        self.serviceCode = '';
-    };
-
-    angular.module('merchello.models').constant('GatewayResourceDisplay', GatewayResourceDisplay);
-    /**
-     * @ngdoc model
-     * @name InvoiceLineItemDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's InvoiceLIneItemDisplay object
-     */
-    var InvoiceLineItemDisplay = function() {
-        var self = this;
-
-        self.key = '';
-        self.containerKey = '';
-        self.lineItemTfKey = '';
-        self.lineItemType = '';
-        self.lineItemTypeField = {};  // TODO why is this here
-        self.sku = '';
-        self.name = '';
-        self.quantity = '';
-        self.price = '';
-        self.exported = false;
-        self.extendedData = {};
-    };
-
-    angular.module('merchello.models').constant('InvoiceLineItemDisplay', InvoiceLineItemDisplay);
-    /**
-     * @ngdoc model
-     * @name OrderLineItemDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's OrderLIneItemDisplay object
-     */
-    var OrderLineItemDisplay = function() {
-        var self = this;
-
-        self.key = '';
-        self.containerKey = '';
-        self.lineItemTfKey = '';
-        self.lineItemTypeField = {};
-        self.sku = '';
-        self.name = '';
-        self.quantity = 0;
-        self.price = 0;
-        self.exported = false;
-        self.lineItemType = '';
-        self.shipmentKey = '';
-        self.backOrder = false;
-        self.extendedData = [];
-    };
-
-    OrderLineItemDisplay.prototype = (function() {
-
-        function getProductVariantKey() {
-            var variantKey = '';
-            if (this.extendedData.length > 0) {
-                variantKey = _.find(self.extendedData, function(extDataItem) {
-                    return extDataItem['key'] === "merchProductVariantKey";
-                });
-            }
-            if (variantKey === undefined) {
-                variantKey = '';
-            }
-            return variantKey;
-        }
-
-    }());
-
-    angular.module('merchello.models').constant('OrderLineItemDisplay', OrderLineItemDisplay);
-    /**
-     * @ngdoc model
-     * @name QueryDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's QueryDisplay object
-     *
-     * @remark
-     * PetaPoco Page<T> uses a 1 based page rather than a 0 based to represent the first page.
-     * We do the conversion in the WebApiController - so the JS QueryDisplay should assume this is 0 based.
-     */
-    var QueryDisplay = function() {
-        var self = this;
-        self.currentPage = 0;
-        self.itemsPerPage = 25;
-        self.parameters = [];
-        self.sortBy = '';
-        self.sortDirection = 'Ascending'; // valid options are 'Ascending' and 'Descending'
-    };
-
-    QueryDisplay.prototype = (function() {
-        // private
-        function addParameter(queryParameter) {
-            this.parameters.push(queryParameter);
-        }
-
-        function addCustomerKeyParam(customerKey) {
-            var param = new QueryParameterDisplay();
-            param.fieldName = 'customerKey';
-            param.value = customerKey;
-            addParameter.call(this, param);
-        }
-
-        function addInvoiceDateParam(dateString, startOrEnd) {
-            var param = new QueryParameterDisplay();
-            param.fieldName = startOrEnd === 'start' ? 'invoiceDateStart' : 'invoiceEndDate';
-            param.value = dateString;
-            addParameter.call(this, param);
-        }
-
-
-        function addFilterTermParam(term) {
-            if(term.length <= 0) {
-                return;
-            }
-            var param = new QueryParameterDisplay();
-            param.fieldName = 'term';
-            param.value = term;
-            addParameter.call(this, param);
-        }
-
-        function applyInvoiceQueryDefaults() {
-            this.sortBy = 'invoiceNumber';
-            this.sortDirection = 'Descending';
-        }
-
-        // public
-        return {
-            addParameter: addParameter,
-            addCustomerKeyParam: addCustomerKeyParam,
-            applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
-            addInvoiceDateParam: addInvoiceDateParam,
-            addFilterTermParam: addFilterTermParam
-        };
-    }());
-
-    angular.module('merchello.models').constant('QueryDisplay', QueryDisplay);
-    /**
-     * @ngdoc model
-     * @name QueryParameterDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's ListQueryParameterDisplay object
-     */
-    var QueryParameterDisplay = function()
-    {
-        var self = this;
-        self.fieldName = '';
-        self.value = '';
-    };
-
-    angular.module('merchello.models').constant('QueryParameterDisplay', QueryParameterDisplay);
-
-    /**
-     * @ngdoc model
-     * @name QueryResultDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's QueryResultDisplay object
-     */
-    var QueryResultDisplay = function() {
-        var self = this;
-        self.currentPage = 0;
-        self.items = [];
-        self.itemsPerPage = 0;
-        self.totalItems = 0;
-        self.totalPages = 0;
-    };
-
-    QueryResultDisplay.prototype = (function() {
-        function addItem(item) {
-            this.items.push(item);
-        }
-
-        return {
-            addItem: addItem
-        };
-    }());
-
-    angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
-    /**
-     * @ngdoc model
      * @name AuditLogDisplay
      * @function
      *
@@ -811,7 +834,7 @@
         self.entityKey = '';
         self.entityTfKey = '';
         self.entityType = '';
-        self.extendedData = [];
+        self.extendedData = {};
         self.isError = false;
         self.key = '';
         self.message = {};
@@ -862,5 +885,47 @@
     }());
 
     angular.module('merchello.models').constant('SalesHistoryDisplay', SalesHistoryDisplay);
+    /**
+     * @ngdoc model
+     * @name SalesHistoryMessageDisplay
+     * @function
+     *
+     * @description
+     * Represents a sales history message object
+     */
+    var SalesHistoryMessageDisplay = function() {
+        var self = this;
+        self.area = '';
+        self.key = '';
+    };
+
+    SalesHistoryMessageDisplay.prototype = (function() {
+
+        // constructs a localization key
+        function localizationKey() {
+            return this.area + '_' + this.key;
+        }
+
+        // any extra properties on this object are assumed to be tokens used in the localized
+        // message
+        function localizationTokens() {
+            var allKeys = Object.keys(this);
+            var tokens = [];
+            for(var i = 0; i < allKeys.length; i++) {
+                if (allKeys[i] !== 'area' && allKeys[i] !== 'key')
+                {
+                    tokens.push(this[allKeys[i]]);
+                }
+            }
+            return tokens;
+        }
+
+        return {
+            localizationKey: localizationKey,
+            localizationToken: localizationTokens
+        };
+    }());
+
+    angular.module('merchello.models').constant('SalesHistoryMessageDisplay', SalesHistoryMessageDisplay);
 
 })();

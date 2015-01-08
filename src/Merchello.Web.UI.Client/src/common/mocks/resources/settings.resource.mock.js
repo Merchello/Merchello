@@ -1,7 +1,7 @@
 angular.module('merchello.mocks')
     .factory('settingResourceMock', [
-        '$httpBackend', 'settingMock',
-        function($httpBackend, settingMock) {
+        '$httpBackend', 'mocksUtils', 'settingMock',
+        function($httpBackend, mocksUtils, settingMock) {
 
             function getAllCountries() {
                 return settingMock.allCountries();
@@ -11,28 +11,24 @@ angular.module('merchello.mocks')
                 return settingMock.allCurrencies();
             }
 
-            function getCurrentSettings() {
+            function getAllSettings() {
                 return settingMock.setting();
-            }
-
-            function getCurrencySymbol() {
-                return settingMock.usdCurrency();
             }
 
             return {
                 register: function() {
 
                     $httpBackend
-                        .whenGET('/umbraco/backoffice/Merchello/SettingApi/GetAllCountries')
+                        .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/SettingApi/GetAllCountries'))
                         .respond(getAllCountries());
 
                     $httpBackend
-                        .whenGET('/umbraco/backoffice/Merchello/SettingApi/GetAllCurrencies')
+                        .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/SettingApi/GetAllCurrencies'))
                         .respond(getAllCurrencies());
 
                     $httpBackend
-                        .whenGET('/umbraco/backoffice/Merchello/SettingApi/GetAllSettings')
-                        .respond(getCurrentSettings());
+                        .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/SettingApi/GetAllSettings'))
+                        .respond(getAllSettings());
 
                     //$httpBackend
                     //    .whenGET('/umbraco/backoffice/Merchello/SettingApi/')

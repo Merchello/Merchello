@@ -70,7 +70,7 @@
             },
 
             putShipment: function (shipment, order) {
-                var shipmentOrder = {}
+                var shipmentOrder = {};
                 shipmentOrder.ShipmentDisplay = shipment;
                 shipmentOrder.OrderDisplay = order;
 

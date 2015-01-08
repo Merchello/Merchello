@@ -16,6 +16,7 @@ describe('SalesHistoryDisplayBuilder', function() {
         expect(salesHistory.dailyLogs[0].day).toBeDefined();
         expect(salesHistory.dailyLogs[0].day).not.toBe('');
         expect(salesHistory.dailyLogs[0].logs[0].entityKey).not.toBe('');
+
     }));
 
 });
