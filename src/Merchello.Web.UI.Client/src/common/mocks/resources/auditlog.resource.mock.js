@@ -1,16 +1,17 @@
 angular.module('merchello.mocks')
-    .factory('auditLogResourceMock', ['$httpBackend', 'dailyAuditLogMock', 'salesHistoryDisplayBuilder',
-        function($httpBackend, dailyAuditLogMock, salesHistoryDisplayBuilder) {
+    .factory('auditLogResourceMock', ['$httpBackend', 'dailyAuditLogMock', 'mocksUtils',
+        function($httpBackend, dailyAuditLogMock, mocksUtils) {
 
-            function getSalesHistoryByInvoiceKey(key) {
-                return dailyAuditLogMock.dailyAuditLog();
+            function getSalesHistoryByInvoiceKey() {
+                var dailyLog = dailyAuditLogMock.dailyAuditLog();
+                return dailyLog;
             }
 
             return {
                 register: function() {
                     $httpBackend
-                        .whenGET('/umbraco/backoffice/Merchello/AuditLogApi/GetSalesHistoryByInvoiceKey')
-                        .respond(getSalesHistoryByInvoiceKey());
+                        .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/AuditLogApi/GetSalesHistoryByInvoiceKey'))
+                        .respond(getSalesHistoryByInvoiceKey);
                 }
             };
 

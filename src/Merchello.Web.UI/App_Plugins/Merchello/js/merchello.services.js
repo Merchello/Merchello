@@ -393,6 +393,28 @@
                     }
                 };
             }]);
+/**
+ * @ngdoc service
+ * @name merchello.models.paymentRequestDisplayBuilder
+ *
+ * @description
+ * A utility service that builds PaymentRequestDisplay models
+ */
+angular.module('merchello.models')
+    .factory('paymentRequestDisplayBuilder',
+    ['genericModelBuilder', 'PaymentRequestDisplay',
+        function(genericModelBuilder, PaymentRequestDisplay) {
+            var Constructor = PaymentRequestDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
+
     /**
      * @ngdoc service
      * @name merchello.models.provinceDisplayBuilder
@@ -494,6 +516,30 @@
 
     /**
      * @ngdoc service
+     * @name merchello.models.salesHistoryMessageDisplayBuilder
+     *
+     * @description
+     * A utility service that builds salesHistoryMessageDisplayBuilder models
+     */
+    angular.module('merchello.models')
+        .factory('salesHistoryMessageDisplayBuilder',
+        ['genericModelBuilder', 'SalesHistoryMessageDisplay',
+            function(genericModelBuilder, SalesHistoryMessageDisplay) {
+
+                var Constructor = SalesHistoryMessageDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+            }]);
+
+    /**
+     * @ngdoc service
      * @name merchello.models.auditLogDisplayBuilder
      *
      * @description
@@ -501,8 +547,8 @@
      */
     angular.module('merchello.models')
         .factory('auditLogDisplayBuilder',
-            ['genericModelBuilder', 'AuditLogDisplay',
-            function(genericModelBuilder, AuditLogDisplay) {
+            ['genericModelBuilder', 'salesHistoryMessageDisplayBuilder', 'extendedDataDisplayBuilder', 'AuditLogDisplay',
+            function(genericModelBuilder, salesHistoryMessageDisplayBuilder, extendedDataDisplayBuilder, AuditLogDisplay) {
 
                 var Constructor = AuditLogDisplay;
 
@@ -511,7 +557,13 @@
                         return new Constructor();
                     },
                     transform: function(jsonResult) {
-                        return genericModelBuilder.transform(jsonResult, Constructor);
+                        var auditLogDisplay = genericModelBuilder.transform(jsonResult, Constructor);
+                        auditLogDisplay.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+
+                        // this is a bit brittle - and we should look at the construction of this in the ApiController
+                        var message = JSON.parse(jsonResult.message);
+                        auditLogDisplay.message = salesHistoryMessageDisplayBuilder.transform(message);
+                        return auditLogDisplay;
                     }
                 };
         }]);
@@ -535,7 +587,11 @@
                     },
                     transform: function(jsonResult) {
                         var dailyLog = genericModelBuilder.transform(jsonResult, Constructor);
-                        dailyLog.logs = auditLogDisplayBuilder.transform(jsonResult.logs);
+                        var logs = [];
+                        angular.forEach(dailyLog.logs, function(log) {
+                            logs.push(auditLogDisplayBuilder.transform(log));
+                        });
+                        dailyLog.logs = logs;
                         return dailyLog;
                     }
                 };
@@ -559,8 +615,8 @@
                         return new Constructor();
                     },
                     transform: function(jsonResult) {
-                        var history = new SalesHistoryDisplay();
-                        angular.forEach(jsonResult[0], function(result) {
+                        var history = this.createDefault();
+                        angular.forEach(jsonResult.dailyLogs, function(result) {
                             history.addDailyLog(dailyAuditLogDisplayBuilder.transform(result));
                         });
                         return history;

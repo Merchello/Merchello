@@ -1,7 +1,7 @@
 
 angular.module('merchello.mocks')
-    .factory('invoiceResourceMock', ['$httpBackend', 'invoiceMocks', 'queryResultDisplayBuilder',
-        function($httpBackend, invoiceMocks) {
+    .factory('invoiceResourceMock', ['$httpBackend', 'mocksUtils', 'invoiceMocks',
+        function($httpBackend, mocksUtils, invoiceMocks) {
 
             function getByKey(id) {
                 var invoices = invoiceMocks.invoicesArray();
@@ -26,11 +26,11 @@ angular.module('merchello.mocks')
             return {
                 register: function() {
                     $httpBackend
-                        .whenPOST('/umbraco/backoffice/Merchello/InvoiceApi/SearchInvoices')
+                        .whenPOST(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/InvoiceApi/SearchInvoices'))
                         .respond(searchInvoices());
 
                     $httpBackend
-                        .whenGET('/umbraco/backoffice/Merchello/InvoiceApi/GetInvoice?')
+                        .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/InvoiceApi/GetInvoice?'))
                         .respond(getByKey());
                 }
             };

@@ -17,8 +17,8 @@
                         return new Constructor();
                     },
                     transform: function(jsonResult) {
-                        var history = new SalesHistoryDisplay();
-                        angular.forEach(jsonResult[0], function(result) {
+                        var history = this.createDefault();
+                        angular.forEach(jsonResult.dailyLogs, function(result) {
                             history.addDailyLog(dailyAuditLogDisplayBuilder.transform(result));
                         });
                         return history;

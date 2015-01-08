@@ -17,7 +17,5 @@
                     }),
                     'Failed to retreive sales history log for invoice with following key: ' + key);
             }
-
         };
-
     }]);

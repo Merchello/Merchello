@@ -1,7 +1,7 @@
 angular.module('merchello.mocks')
     .factory('paymentResourceMock', ['$httpBackend', 'paymentMocks', function($httpBackend, paymentMocks) {
 
-        function getPaymentsByInvoice(invoiceKey) {
+        function getPaymentsByInvoice() {
             return paymentMocks.paymentsArray();
         }
 

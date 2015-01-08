@@ -2,10 +2,34 @@
 angular.module('merchello.mocks').factory('dailyAuditLogMock', ['mockHelper', function(mockHelper) {
 
     function dailyAuditLog() {
+        return { "dailyLogs": [
+                {   "day" : "2014-12-12T00:00:00",
+                    "logs": [
+                        {
+                            "key": "31cd00b8-c089-4d3f-8364-e2cf81a54e2d",
+                            "entityKey": "2f87b975-df08-4201-b576-d4da6757ffea",
+                            "entityTfKey": "6263d568-dee1-41bb-8100-2333ecb4cf08",
+                            "entityType": "Payment",
+                            "message": "{\"area\":\"merchelloAuditLogs\",\"key\":\"paymentAuthorize\",\"invoiceTotal\":568.200000,\"currencyCode\":\"USD\"}",
+                            "verbosity":0,
+                            "isError":false,
+                            "recordDate":"2014-12-12T10:53:28.01Z",
+                            "extendedData":[]
+                        },
+                        {
+                            "key": "988090a4-aef4-48eb-bfc9-db79381ef131",
+                            "entityKey": "349ea387-849e-4e91-9d7c-13620dd2ee45",
+                            "entityTfKey": "454539b9-d753-4c16-8ed5-5eb659e56665",
+                            "entityType": "Invoice",
+                            "message": "{\"area\":\"merchelloAuditLogs\",\"key\":\"invoiceCreated\",\"invoiceNumber\":\"9\"}",
+                            "verbosity": 0,
+                            "isError": false,
+                            "recordDate": "2014-12-12T10:53:27.987Z",
+                            "extendedData":[]
+                        }
+                    ]}
+            ]};
 
-        return mockHelper.downCasePropertiesInObjectArray(
-        {"DailyLogs":[{"Day":"2014-12-19T00:00:00","Logs":[{"Key":"fe63fd33-2c64-4da1-81fd-b93d741c2701","EntityKey":"e4a30ea3-b8a5-43f9-9b00-9b39fd1ef758","EntityTfKey":"6263d568-dee1-41bb-8100-2333ecb4cf08","EntityType":"Payment","Message":"{\"area\":\"merchelloAuditLogs\",\"key\":\"paymentCaptured\",\"invoiceTotal\":1104.0,\"currencyCode\":\"\"}","Verbosity":0,"IsError":false,"RecordDate":"2014-12-19T17:43:32.863Z","ExtendedData":[]}]}]}
-        );
     }
 
     return {

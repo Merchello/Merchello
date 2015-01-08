@@ -18,7 +18,11 @@
                     },
                     transform: function(jsonResult) {
                         var dailyLog = genericModelBuilder.transform(jsonResult, Constructor);
-                        dailyLog.logs = auditLogDisplayBuilder.transform(jsonResult.logs);
+                        var logs = [];
+                        angular.forEach(dailyLog.logs, function(log) {
+                            logs.push(auditLogDisplayBuilder.transform(log));
+                        });
+                        dailyLog.logs = logs;
                         return dailyLog;
                     }
                 };
