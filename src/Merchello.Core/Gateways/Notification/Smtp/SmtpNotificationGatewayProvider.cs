@@ -26,9 +26,15 @@
 
         #endregion
 
-        public SmtpNotificationGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+
+        public SmtpNotificationGatewayProvider(
+            IGatewayProviderService gatewayProviderService,
+            IGatewayProviderSettings gatewayProviderSettings,
+            IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
-        { }
+        {
+            
+        }
 
         /// <summary>
         /// Returns a collection of all possible gateway methods associated with this provider

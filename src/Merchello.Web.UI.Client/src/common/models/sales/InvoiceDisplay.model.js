@@ -35,6 +35,21 @@
 
     InvoiceDisplay.prototype = (function() {
 
+        function getBillingAddress() {
+            var adr = new AddressDisplay();
+            adr.address1 = this.billToAddress1;
+            adr.address2 = this.billToAddress2;
+            adr.locality = this.billToLocality;
+            adr.region = this.billToRegion;
+            adr.countryCode = this.billToCountryCode;
+            adr.postalCode = this.billToPostalCode;
+            adr.name = this.billToName;
+            adr.phone = this.billToPhone;
+            adr.email = this.billToEmail;
+            adr.organization = this.billToCompany;
+            return adr;
+        }
+
         // gets the invoice status name
         // TODO this is incorrectly named
         function getPaymentStatus() {
@@ -75,6 +90,14 @@
             return status === 'Paid';
         }
 
+        function remainingBalance(payments) {
+            var amountPaid = 0;
+            //angular.forEach(payments, function(payment) {
+            //  amountPaid += payment.amount;
+            //});
+            return this.total - amountPaid;
+        }
+
         return {
             getPaymentStatus: getPaymentStatus,
             getFulfillmentStatus: getFulfillmentStatus,
@@ -82,7 +105,9 @@
             getTaxLineItem: getTaxLineItem,
             getShippingLineItem: getShippingLineItems,
             hasOrder: hasOrder,
-            isPaid: isPaid
+            isPaid: isPaid,
+            getBillToAddress: getBillingAddress,
+            remainingBalance: remainingBalance
         };
     }());
 

@@ -28,23 +28,6 @@
 
     /**
      * @ngdoc directive
-     * @name MerchelloPagerDirective
-     * @function
-     *
-     * @description
-     * directive to display display a pager for orders, products, and others.
-     *
-     * TODO: Currently, makes assumptions using the parent scope.  In future, make this work as an isolate scope.
-     */
-    angular.module('merchello.directives').directive('merchelloPager', function() {
-        return {
-            restrict: 'E',
-            replace: true,
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellopager.tpl.html'
-        };
-    });
-    /**
-     * @ngdoc directive
      * @name merchello-panel
      * @function
      *
@@ -56,7 +39,7 @@
              restrict: 'E',
              replace: true,
              transclude: 'true',
-             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellopanel.tpl.html'
+             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchellopanel.tpl.html'
          };
      });
 
@@ -77,7 +60,7 @@
                 isOpen: '=',
                 classes: '=?'
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloslidepanelopen.tbl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tbl.html',
             link: function ($scope, $element, attrs) {
 
                 if ($scope.classes == undefined) {
@@ -87,5 +70,41 @@
         };
     });
 
+/**
+ * @ngdoc directive
+ * @name address directive
+ * @function
+ *
+ * @description
+ * Directive to maintain a consistent format for displaying addresses
+ */
+angular.module('merchello.directives').directive('merchelloAddress', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            address: '='
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloAddress.tpl.html'
+    };
+});
+
+    /**
+     * @ngdoc directive
+     * @name MerchelloPagerDirective
+     * @function
+     *
+     * @description
+     * directive to display display a pager for orders, products, and others.
+     *
+     * TODO: Currently, makes assumptions using the parent scope.  In future, make this work as an isolate scope.
+     */
+    angular.module('merchello.directives').directive('merchelloPager', function() {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellopager.tpl.html'
+        };
+    });
 
 })();

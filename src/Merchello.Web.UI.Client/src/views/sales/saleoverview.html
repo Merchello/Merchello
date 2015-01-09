@@ -27,6 +27,7 @@
                             <!-- ACTION: Cancel Sale -->
                             <button type="button" class="btn btn-default btn-trash pull-right" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled'" data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>
                             <!-- ACTION: Fulfill Shipment -->
+                            {{invoice.isPaid() }} {{invoice.getFulfillmentStatus()}} {{invoice.hasOrder()}}
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' || !invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                             <!-- ACTION: Capture Payment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid()" data-ng-click="capturePayment()">Capture Funds</button>
@@ -81,12 +82,13 @@
                                 <tbody>
                                 <thead>
                                 <tr>
-                                    <th colspan="2">{{item.day}}</th>
+                                    <th colspan="2">{{item.toDateString() | date : settings.dateFormat }}
+                                        <!-- {{ item.toDateString() | date : settings.dateFormat }} --></th>
                                 </tr>
                                 </thead>
                                 <tr data-ng-repeat="log in item.logs track by $index">
-                                    <td><localize key="{{log.message.localizationKey()}}" /></td>
-                                    <td>{{log.recordDate}}</td>
+                                    <td>{{ log.message.formattedMessage }}</td>
+                                    <td>{{log.toTimeString() | date : setting.timeFormat }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -99,31 +101,9 @@
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
                     <h3><localize key="merchelloOrderView_billingAddress" /></h3><br />
-                    <div class="vcard">
-                        <span class="fn" data-ng-show="invoice.billToName != ''">{{invoice.billToName}}</span>
-                        <span class="org" data-ng-show="invoice.billToCompany != ''">{{invoice.billToCompany}}</span>
-                        <span class="adr">
-                            <span class="street-address">{{invoice.billToAddress1}}</span>
-                            <span class="extended-address" data-ng-show="invoice.billToAddress2 != ''">{{invoice.billToAddress2}}</span>
-                            <span class="locality">{{invoice.billToLocality}}</span>, <span class="region">{{invoice.billToRegion}}</span> <span class="postal-code">{{invoice.billToPostalCode}}</span>
-                            <span class="country-name">{{invoice.billToCountryCode}}</span>
-                        </span>
-                        <span class="tel" data-ng-show="invoice.billToPhone != ''">Phone: {{invoice.billToPhone}}</span>
-                        <span data-ng-show="invoice.billToEmail != ''"><a data-ng-href="mailto:{{invoice.billToEmail}}" class="email">{{invoice.billToEmail}}</a></span>
-                    </div>
-                    <h3 data-ng-show="shippingAddress == '{}'"><localize key="merchelloOrderView_shippingAddress" /></h3><br data-ng-show="shippingAddress == '{}'" />
-                    <div class="vcard" data-ng-show="shippingAddress == '{}'">
-                        <span class="fn" data-ng-show="shippingAddress.name != null">{{shippingAddress.name}}</span>
-                        <span class="org" data-ng-show="shippingAddress.organization != null">{{shippingAddress.organization}}</span>
-                        <span class="adr">
-                            <span class="street-address">{{shippingAddress.address1}}</span>
-                            <span class="extended-address" data-ng-show="shippingAddress.address2 != null">{{shippingAddress.address2}}</span>
-                            <span class="locality">{{shippingAddress.locality}}</span>, <span class="region">{{shippingAddress.region}}</span> <span class="postal-code">{{shippingAddress.postalCode}}</span>
-                            <span class="country-name">{{shippingAddress.countryCode}}</span>
-                        </span>
-                        <span class="tel" data-ng-show="shippingAddress.phone != null">Phone: {{shippingAddress.phone}}</span>
-                    </div>
+                    <merchello-address address="billingAddress"></merchello-address>
                 </div>
+                {{payments}}
                 <!-- ACTION: Open Shipments Page -->
                 <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderShipmentInfo/{{invoice.key}}" data-ng-show="hasShipments()">Shipments</a>
                 <!-- ACTION: Open Payments Page -->

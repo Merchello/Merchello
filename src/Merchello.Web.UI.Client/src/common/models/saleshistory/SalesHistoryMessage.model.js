@@ -35,7 +35,7 @@
 
         return {
             localizationKey: localizationKey,
-            localizationToken: localizationTokens
+            localizationTokens: localizationTokens
         };
     }());
 
