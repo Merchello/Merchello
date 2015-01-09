@@ -9,7 +9,7 @@ describe('salesoverview.controller', function() {
                                 settingsResource,
                                 localizationMocks, auditLogResource, auditLogResourceMock, invoiceResource, invoiceResourceMock,
                                 paymentResource, paymentResourceMock, settingResourceMock, dialogDataFactory, salesHistoryDisplayBuilder,
-                                invoiceDisplayBuilder, paymentDisplayBuilder) {
+                                invoiceDisplayBuilder, paymentDisplayBuilder, appliedPaymentDisplayBuilder) {
 
         httpBackend = $httpBackend;
 
@@ -26,7 +26,8 @@ describe('salesoverview.controller', function() {
                 assetsService: assetsService, notificationsService: notificationsService, dialogService: dialogService, localizationService: localizationService,
                 auditLogResource: auditLogResource, invoiceResource: invoiceResource, settingsResource: settingsResource,
                 paymentResource: paymentResource, dialogDataFactory: dialogDataFactory, paymentDisplayBuilder: paymentDisplayBuilder,
-                salesHistoryDisplayBuilder: salesHistoryDisplayBuilder, invoiceDisplayBuilder: invoiceDisplayBuilder });
+                salesHistoryDisplayBuilder: salesHistoryDisplayBuilder, invoiceDisplayBuilder: invoiceDisplayBuilder,
+                appliedPaymentDisplayBuilder: appliedPaymentDisplayBuilder });
 
         //scope.$digest resolves the promise against the httpbackend
         scope.$digest();
@@ -34,7 +35,6 @@ describe('salesoverview.controller', function() {
         //httpbackend.flush() resolves all request against the httpbackend
         //to fake a async response, (which is what happens on a real setup)
         httpBackend.flush();
-
     }));
 
     afterEach(inject(function($httpBackend) {
@@ -52,7 +52,6 @@ describe('salesoverview.controller', function() {
     });
 
     it('should set the currencySymbol', function() {
-
         //// Assert
         expect(scope.currencySymbol).toBe('$');
     });
@@ -60,5 +59,7 @@ describe('salesoverview.controller', function() {
     it('billing address should be defined on the scope', function() {
         //// Assert
         expect(scope.billingAddress).toBeDefined();
+        console.info(scope.payments);
     });
+
 });

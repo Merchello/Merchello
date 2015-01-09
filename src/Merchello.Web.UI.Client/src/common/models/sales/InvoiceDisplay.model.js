@@ -50,6 +50,11 @@
             return adr;
         }
 
+        // gets the invoice date as a date string
+        function invoiceDateString() {
+            return this.invoiceDate.split('T')[0];
+        }
+
         // gets the invoice status name
         // TODO this is incorrectly named
         function getPaymentStatus() {
@@ -92,9 +97,11 @@
 
         function remainingBalance(payments) {
             var amountPaid = 0;
-            //angular.forEach(payments, function(payment) {
-            //  amountPaid += payment.amount;
-            //});
+            angular.forEach(payments, function(payment) {
+                angular.forEach(payment.appliedPayments, function(applied) {
+                    amountPaid += applied.amount;
+                });
+            });
             return this.total - amountPaid;
         }
 
@@ -107,7 +114,8 @@
             hasOrder: hasOrder,
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,
-            remainingBalance: remainingBalance
+            remainingBalance: remainingBalance,
+            invoiceDateString: invoiceDateString
         };
     }());
 

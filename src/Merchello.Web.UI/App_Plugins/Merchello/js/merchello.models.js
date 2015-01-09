@@ -197,13 +197,18 @@
 
     CapturePaymentDialogData.prototype = (function() {
 
-        function setup(payments, invoice, currencySymbol) {
-            if (payments.length > 0) {
-                var payment = payments[0];
-                this.paymentMethodKey = payment.paymentMethodKey;
-                this.paymentMethodName = payment.paymentMethodName;
-            }
+        // helper method to set required associated payment info
+        function setPaymentData(payment) {
+            this.paymentKey = payment.key;
+            this.paymentMethodKey = payment.paymentMethodKey;
+            this.paymentMethodName = payment.paymentMethodName;
+
+        }
+
+        //// helper method to set required associated invoice info
+        function setInvoiceData(payments, invoice, currencySymbol) {
             if (invoice !== undefined) {
+                this.invoiceKey = invoice.key;
                 this.invoiceBalance = invoice.remainingBalance(payments);
             }
             if (currencySymbol !== undefined) {
@@ -211,8 +216,14 @@
             }
         }
 
+        function isValid() {
+            return this.paymentKey !== '' && this.invoiceKey !== '' && this.invoiceBalance !==0;
+        }
+
         return {
-            setup: setup
+            setPaymentData: setPaymentData,
+            setInvoiceData: setInvoiceData,
+            isValid: isValid
         };
 
     }());
@@ -338,6 +349,7 @@
         self.customerKey = '';
         self.paymentMethodKey = '';
         self.paymentTypeFieldKey = '';
+        self.paymentMethodType = '';
         self.paymentMethodName = '';
         self.referenceNumber = '';
         self.amount = 0.0;
@@ -543,6 +555,11 @@
             return adr;
         }
 
+        // gets the invoice date as a date string
+        function invoiceDateString() {
+            return this.invoiceDate.split('T')[0];
+        }
+
         // gets the invoice status name
         // TODO this is incorrectly named
         function getPaymentStatus() {
@@ -585,9 +602,11 @@
 
         function remainingBalance(payments) {
             var amountPaid = 0;
-            //angular.forEach(payments, function(payment) {
-            //  amountPaid += payment.amount;
-            //});
+            angular.forEach(payments, function(payment) {
+                angular.forEach(payment.appliedPayments, function(applied) {
+                    amountPaid += applied.amount;
+                });
+            });
             return this.total - amountPaid;
         }
 
@@ -600,7 +619,8 @@
             hasOrder: hasOrder,
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,
-            remainingBalance: remainingBalance
+            remainingBalance: remainingBalance,
+            invoiceDateString: invoiceDateString
         };
     }());
 

@@ -15,4 +15,6 @@
                 return +(Math.round(num + "e+" + places) + "e-" + places);
             }
 
+            console.info($scope.dialogData);
+
     }]);

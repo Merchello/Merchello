@@ -22538,6 +22538,17 @@
             <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
             <returns>Returns <see cref="T:Merchello.Core.Models.IPayment"/></returns>
         </member>
+        <member name="M:Merchello.Core.Services.PaymentService.GetAll">
+            <summary>
+            Gets all payments.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+            <remarks>
+            Used for testing
+            </remarks>
+        </member>
         <member name="E:Merchello.Core.Services.PaymentService.Creating">
             <summary>
             Occurs after Create

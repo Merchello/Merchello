@@ -3778,6 +3778,7 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.InvoiceDisplay"/>.
             </returns>
+            TODO rename to GetByKey
         </member>
         <member name="M:Merchello.Web.Editors.InvoiceApiController.SearchInvoices(Merchello.Web.Models.Querying.QueryDisplay)">
             <summary>
@@ -6610,6 +6611,33 @@
             Gets or sets a value indicating whether the address is a commercial address.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.AddressDetailsMappingExtensions">
+            <summary>
+            Mapping extensions for <see cref="!:AddressDetails"/>
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.AddressDetailsMappingExtensions.ToAddressDisplay(Merchello.Core.Models.IAddress)">
+            <summary>
+            Maps <see cref="T:Merchello.Core.Models.IAddress"/> to <see cref="T:Merchello.Web.Models.ContentEditing.AddressDisplay"/>
+            </summary>
+            <param name="address">
+            The address.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.AddressDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.AddressDetailsMappingExtensions.ToAddress(Merchello.Web.Models.ContentEditing.AddressDisplay)">
+            <summary>
+            Maps <see cref="T:Merchello.Web.Models.ContentEditing.AddressDisplay"/> to <see cref="T:Merchello.Core.Models.IAddress"/>
+            </summary>
+            <param name="addressDisplay">
+            The address display.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IAddress"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.AppliedPaymentDisplay">
             <summary>
             The applied payment display.
@@ -7024,6 +7052,11 @@
         <member name="P:Merchello.Web.Models.Payments.PaymentDisplay.PaymentTypeFieldKey">
             <summary>
             Gets or sets the payment type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Payments.PaymentDisplay.PaymentMethodType">
+            <summary>
+            Gets or sets the sort direction.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.Payments.PaymentDisplay.PaymentMethodName">
@@ -7504,6 +7537,7 @@
             <summary>
             Gets or sets the key.
             </summary>
+            TODO is this required?
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.CountryDisplay.CountryCode">
             <summary>
