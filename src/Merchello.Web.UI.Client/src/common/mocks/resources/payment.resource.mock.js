@@ -1,5 +1,5 @@
 angular.module('merchello.mocks')
-    .factory('paymentResourceMock', ['$httpBackend', 'paymentMocks', function($httpBackend, paymentMocks) {
+    .factory('paymentResourceMock', ['$httpBackend', 'paymentMocks', 'mocksUtils', function($httpBackend, paymentMocks, mocksUtils) {
 
         function getPaymentsByInvoice() {
             return paymentMocks.paymentsArray();
@@ -9,7 +9,7 @@ angular.module('merchello.mocks')
             register: function() {
 
                 $httpBackend
-                    .whenGET('/umbraco/backoffice/Merchello/PaymentApi/GetPaymentsByInvoice?')
+                    .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/PaymentApi/GetPaymentsByInvoice?'))
                     .respond(getPaymentsByInvoice);
             }
         };
