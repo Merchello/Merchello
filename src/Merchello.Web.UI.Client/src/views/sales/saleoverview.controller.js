@@ -8,10 +8,10 @@
      */
     angular.module('merchello').controller('Merchello.Dashboards.SalesOverviewController',
         ['$scope', '$routeParams', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'salesHistoryDisplayBuilder',
+            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'dialogDataFactory', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder',
         function($scope, $routeParams, assetsService, dialogService, localizationService, notificationsService,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource,
+                 auditLogResource, invoiceResource, settingsResource, paymentResource, dialogDataFactory,
                  salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder) {
 
             $scope.historyLoaded = false;
@@ -155,16 +155,8 @@
              */
             function capturePayment() {
 
-                if ($scope.payments.length === 0) {
-                    return;
-                }
-                var payment = payments[0];
-                var data = {
-                    paymentMethodKey: payment.paymentMethodKey,
-                    paymentMethodName: payment.paymentMethodName,
-                    remainingBalance: $scope.invoice(payments),
-                    captureAmount: 0.0
-                };
+                var data = dialogDataFactory.getCapturePaymentDialogData();
+                data.setup($scope.payments, $scope.invoice, $scope.currencySymbol);
 
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/capture.payment.html',

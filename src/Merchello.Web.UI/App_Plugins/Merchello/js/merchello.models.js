@@ -175,6 +175,52 @@
 
     /**
      * @ngdoc model
+     * @name PaymentRequest
+     * @function
+     *
+     * @description
+     * A back office model used for making payment requests to a payment provider
+     *
+     * @note
+     * Presently there is not a corresponding Merchello.Web model
+     */
+    var CapturePaymentDialogData = function() {
+        var self = this;
+        self.currencySymbol = '';
+        self.invoiceKey = '';
+        self.paymentKey = '';
+        self.paymentMethodKey = '';
+        self.invoiceBalance = 0.0;
+        self.amount = 0.0;
+        self.processorArgs = [];
+    };
+
+    CapturePaymentDialogData.prototype = (function() {
+
+        function setup(payments, invoice, currencySymbol) {
+            if (payments.length > 0) {
+                var payment = payments[0];
+                this.paymentMethodKey = payment.paymentMethodKey;
+                this.paymentMethodName = payment.paymentMethodName;
+            }
+            if (invoice !== undefined) {
+                this.invoiceBalance = invoice.remainingBalance(payments);
+            }
+            if (currencySymbol !== undefined) {
+                this.currencySymbol = currencySymbol;
+            }
+        }
+
+        return {
+            setup: setup
+        };
+
+    }());
+
+    angular.module('merchello.models').constant('CapturePaymentDialogData', CapturePaymentDialogData);
+
+    /**
+     * @ngdoc model
      * @name GatewayResourceDisplay
      * @function
      *
@@ -332,28 +378,6 @@
     }());
 
     angular.module('merchello.models').constant('PaymentDisplay', PaymentDisplay);
-    /**
-     * @ngdoc model
-     * @name PaymentRequest
-     * @function
-     *
-     * @description
-     * A back office model used for making payment requests to a payment provider
-     *
-     * @note
-     * Presently there is not a corresponding Merchello.Web model
-     */
-    var PaymentRequestDisplay = function() {
-        var self = this;
-        self.invoiceKey = '';
-        self.paymentKey = '';
-        self.paymentMethodKey = '';
-        self.amount = 0.0;
-        self.processorArgs = [];
-    };
-
-    angular.module('merchello.models').constant('PaymentRequestDisplay', PaymentRequestDisplay);
-
     /**
      * @ngdoc model
      * @name QueryDisplay
@@ -561,9 +585,9 @@
 
         function remainingBalance(payments) {
             var amountPaid = 0;
-            angular.forEach(payments, function(payment) {
-              amountPaid += payment.amount;
-            });
+            //angular.forEach(payments, function(payment) {
+            //  amountPaid += payment.amount;
+            //});
             return this.total - amountPaid;
         }
 
@@ -1062,30 +1086,6 @@
 
     /**
      * @ngdoc service
-     * @name merchello.models.appliedPaymentDisplayBuilder
-     *
-     * @description
-     * A utility service that builds applieddPaymentDisplaybuilder
-     */
-    angular.module('merchello.models')
-        .factory('appliedPaymentDisplayBuilder',
-        ['genericModelBuilder', 'AppliedPaymentDisplay',
-            function(genericModelBuilder, AppliedPaymentDisplay) {
-
-                var Constructor = AppliedPaymentDisplay;
-
-                return {
-                    createDefault: function() {
-                        return new Constructor();
-                    },
-                    transform: function(jsonResult) {
-                        return genericModelBuilder.transform(jsonResult, Constructor);
-                    }
-                };
-            }]);
-
-    /**
-     * @ngdoc service
      * @name merchello.models.countryDisplayBuilder
      *
      * @description
@@ -1136,6 +1136,26 @@
                     }
                 };
             }]);
+
+/**
+ * @ngdoc service
+ * @name merchello.models.dialogDataFactory
+ *
+ * @description
+ * A utility service that builds dialogData models
+ */
+angular.module('merchello.models').factory('dialogDataFactory',
+    ['CapturePaymentDialogData',
+    function(CapturePaymentDialogData) {
+
+        function getCapturePaymentDialogData() {
+            return new CapturePaymentDialogData();
+        }
+
+        return {
+            getCapturePaymentDialogData: getCapturePaymentDialogData
+        };
+}]);
 
     /**
      * @ngdoc service
@@ -1189,6 +1209,157 @@
                 };
             }]);
 
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.appliedPaymentDisplayBuilder
+     *
+     * @description
+     * A utility service that builds applieddPaymentDisplaybuilder
+     */
+    angular.module('merchello.models')
+        .factory('appliedPaymentDisplayBuilder',
+        ['genericModelBuilder', 'AppliedPaymentDisplay',
+            function(genericModelBuilder, AppliedPaymentDisplay) {
+
+                var Constructor = AppliedPaymentDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+            }]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.paymentDisplayBuilder
+     *
+     * @description
+     * A utility service that builds PaymentDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('paymentDisplayBuilder',
+        ['genericModelBuilder', 'appliedPaymentDisplayBuilder', 'extendedDataDisplayBuilder', 'PaymentDisplay',
+            function(genericModelBuilder, appliedPaymentDisplayBuilder, extendedDataDisplayBuilder, PaymentDisplay) {
+
+                var Constructor = PaymentDisplay;
+
+                return {
+                    createDefault: function() {
+                        var payment = new Constructor();
+                        payment.extendedData = extendedDataDisplayBuilder.createDefault();
+                        return payment;
+                    },
+                    transform: function(jsonResult) {
+                        var payment = genericModelBuilder.transform(jsonResult, Constructor);
+                        payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
+                        payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        return payment;
+                    }
+                };
+            }]);
+    /**
+     * @ngdoc service
+     * @name merchello.models.provinceDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ProvinceDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('provinceDisplayBuilder',
+        ['genericModelBuilder', 'ProvinceDisplay',
+            function(genericModelBuilder, ProvinceDisplay) {
+                var Constructor = ProvinceDisplay;
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+            }]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.services.queryDisplayBuilder
+     *
+     * @description
+     * A utility service that builds QueryDisplayModels models
+     *
+     */
+    angular.module('merchello.models')
+        .factory('queryDisplayBuilder',
+        ['genericModelBuilder', 'QueryDisplay',
+            function(genericModelBuilder, QueryDisplay) {
+            var Constructor = QueryDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
+
+
+    /**
+     * @ngdoc service
+     * @name merchello.services.queryParameterDisplayBuilder
+     *
+     * @description
+     * A utility service that builds QueryParameterDisplayModels models
+     *
+     */
+    angular.module('merchello.models')
+        .factory('queryParameterDisplayBuilder',
+            ['genericModelBuilder', 'QueryParameterDisplay',
+            function(genericModelBuilder, QueryParameterDisplay) {
+            var Constructor = QueryParameterDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.services.queryResultDisplayBuilder
+     *
+     * @description
+     * A utility service that builds QueryResultDisplayModels models
+     */
+    angular.module('merchello.models')
+        .factory('queryResultDisplayBuilder',
+        ['genericModelBuilder', 'QueryResultDisplay',
+            function(genericModelBuilder, QueryResultDisplay) {
+            var Constructor = QueryResultDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function (jsonResult, itemBuilder) {
+                    // this is slightly different than other builders in that there can only ever be a single
+                    // QueryResult returned from the WebApiController, so we iterate through the items
+                    var result = genericModelBuilder.transform(jsonResult, Constructor);
+                    if (itemBuilder !== undefined)
+                    {
+                        result.items = [];
+                        result.items = itemBuilder.transform(jsonResult.items);
+                    }
+                    return result;
+                }
+            };
+        }]);
 
     /**
      * @ngdoc service
@@ -1357,155 +1528,6 @@
                     }
                 };
             }]);
-
-    /**
-     * @ngdoc service
-     * @name merchello.models.paymentDisplayBuilder
-     *
-     * @description
-     * A utility service that builds PaymentDisplay models
-     */
-    angular.module('merchello.models')
-        .factory('paymentDisplayBuilder',
-        ['genericModelBuilder', 'appliedPaymentDisplayBuilder', 'extendedDataDisplayBuilder', 'PaymentDisplay',
-            function(genericModelBuilder, appliedPaymentDisplayBuilder, extendedDataDisplayBuilder, PaymentDisplay) {
-
-                var Constructor = PaymentDisplay;
-
-                return {
-                    createDefault: function() {
-                        var payment = new Constructor();
-                        payment.extendedData = extendedDataDisplayBuilder.createDefault();
-                        return payment;
-                    },
-                    transform: function(jsonResult) {
-                        var payment = genericModelBuilder.transform(jsonResult, Constructor);
-                        payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
-                        payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
-                        return payment;
-                    }
-                };
-            }]);
-/**
- * @ngdoc service
- * @name merchello.models.paymentRequestDisplayBuilder
- *
- * @description
- * A utility service that builds PaymentRequestDisplay models
- */
-angular.module('merchello.models')
-    .factory('paymentRequestDisplayBuilder',
-    ['genericModelBuilder', 'PaymentRequestDisplay',
-        function(genericModelBuilder, PaymentRequestDisplay) {
-            var Constructor = PaymentRequestDisplay;
-            return {
-                createDefault: function() {
-                    return new Constructor();
-                },
-                transform: function(jsonResult) {
-                    return genericModelBuilder.transform(jsonResult, Constructor);
-                }
-            };
-        }]);
-
-    /**
-     * @ngdoc service
-     * @name merchello.models.provinceDisplayBuilder
-     *
-     * @description
-     * A utility service that builds ProvinceDisplay models
-     */
-    angular.module('merchello.models')
-        .factory('provinceDisplayBuilder',
-        ['genericModelBuilder', 'ProvinceDisplay',
-            function(genericModelBuilder, ProvinceDisplay) {
-                var Constructor = ProvinceDisplay;
-                return {
-                    createDefault: function() {
-                        return new Constructor();
-                    },
-                    transform: function(jsonResult) {
-                        return genericModelBuilder.transform(jsonResult, Constructor);
-                    }
-                };
-            }]);
-
-    /**
-     * @ngdoc service
-     * @name merchello.services.queryDisplayBuilder
-     *
-     * @description
-     * A utility service that builds QueryDisplayModels models
-     *
-     */
-    angular.module('merchello.models')
-        .factory('queryDisplayBuilder',
-        ['genericModelBuilder', 'QueryDisplay',
-            function(genericModelBuilder, QueryDisplay) {
-            var Constructor = QueryDisplay;
-            return {
-                createDefault: function() {
-                    return new Constructor();
-                },
-                transform: function(jsonResult) {
-                    return genericModelBuilder.transform(jsonResult, Constructor);
-                }
-            };
-        }]);
-
-
-    /**
-     * @ngdoc service
-     * @name merchello.services.queryParameterDisplayBuilder
-     *
-     * @description
-     * A utility service that builds QueryParameterDisplayModels models
-     *
-     */
-    angular.module('merchello.models')
-        .factory('queryParameterDisplayBuilder',
-            ['genericModelBuilder', 'QueryParameterDisplay',
-            function(genericModelBuilder, QueryParameterDisplay) {
-            var Constructor = QueryParameterDisplay;
-            return {
-                createDefault: function() {
-                    return new Constructor();
-                },
-                transform: function(jsonResult) {
-                    return genericModelBuilder.transform(jsonResult, Constructor);
-                }
-            };
-        }]);
-
-    /**
-     * @ngdoc service
-     * @name merchello.services.queryResultDisplayBuilder
-     *
-     * @description
-     * A utility service that builds QueryResultDisplayModels models
-     */
-    angular.module('merchello.models')
-        .factory('queryResultDisplayBuilder',
-        ['genericModelBuilder', 'QueryResultDisplay',
-            function(genericModelBuilder, QueryResultDisplay) {
-            var Constructor = QueryResultDisplay;
-            return {
-                createDefault: function() {
-                    return new Constructor();
-                },
-                transform: function (jsonResult, itemBuilder) {
-                    // this is slightly different than other builders in that there can only ever be a single
-                    // QueryResult returned from the WebApiController, so we iterate through the items
-                    var result = genericModelBuilder.transform(jsonResult, Constructor);
-                    if (itemBuilder !== undefined)
-                    {
-                        result.items = [];
-                        result.items = itemBuilder.transform(jsonResult.items);
-                    }
-                    return result;
-                }
-            };
-        }]);
 
     /**
      * @ngdoc service

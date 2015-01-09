@@ -1,19 +1,18 @@
 'use strict';
 
 describe('salesoverview.controller', function() {
-    var scope, $controllerConstructor, controller, httpBackend;
+    var scope, controller, httpBackend;
 
     beforeEach(module('umbraco'));
 
     beforeEach(inject(function ($rootScope, $controller, $httpBackend, assetsService, dialogService, localizationService, notificationsService,
                                 settingsResource,
                                 localizationMocks, auditLogResource, auditLogResourceMock, invoiceResource, invoiceResourceMock,
-                                paymentResource, paymentResourceMock, settingResourceMock, salesHistoryDisplayBuilder,
+                                paymentResource, paymentResourceMock, settingResourceMock, dialogDataFactory, salesHistoryDisplayBuilder,
                                 invoiceDisplayBuilder, paymentDisplayBuilder) {
 
         httpBackend = $httpBackend;
 
-        $controllerConstructor = $controller;
         scope = $rootScope.$new();
 
         invoiceResourceMock.register();
@@ -26,10 +25,8 @@ describe('salesoverview.controller', function() {
             { $scope: scope, $routeParams: { id: 'dd62d5a2-6a52-4de3-a740-193d2a25bbbb' },
                 assetsService: assetsService, notificationsService: notificationsService, dialogService: dialogService, localizationService: localizationService,
                 auditLogResource: auditLogResource, invoiceResource: invoiceResource, settingsResource: settingsResource,
-                paymentResource: paymentResource, paymentDisplayBuilder: paymentDisplayBuilder,
+                paymentResource: paymentResource, dialogDataFactory: dialogDataFactory, paymentDisplayBuilder: paymentDisplayBuilder,
                 salesHistoryDisplayBuilder: salesHistoryDisplayBuilder, invoiceDisplayBuilder: invoiceDisplayBuilder });
-
-
 
         //scope.$digest resolves the promise against the httpbackend
         scope.$digest();
@@ -52,12 +49,6 @@ describe('salesoverview.controller', function() {
         expect(scope.invoice.getPaymentStatus()).toBe('Paid');
         expect(scope.invoice.hasOrder()).toBeFalsy();
         expect(scope.invoice.isPaid()).toBeTruthy();
-    });
-
-    xit ('should have an instantiated sales history', function() {
-        //// Assert
-        expect(scope.salesHistory).toBeDefined();
-        expect(scope.salesHistory.dailyLogs.length).toBeGreaterThan(0);
     });
 
     it('should set the currencySymbol', function() {

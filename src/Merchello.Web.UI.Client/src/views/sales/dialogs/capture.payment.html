@@ -6,12 +6,12 @@
 
         <div class="control-group row-fluid">
             <p>
-                <localize key="merchelloOrder_processedBy" /> <strong>{{payments.paymentMethodName}}</strong><br />
+                <localize key="merchelloOrder_processedBy" /> <strong>{{dialogData.paymentMethodName}}</strong><br />
                 <!--<i class="icon-credit-card"></i> Credit Card: <span>XXXX-XXXX-XXXX-1234</span>-->
             </p>
             <div class="input-prepend col-xs-12 span12">
-                <span class="add-on"><localize key="merchelloGeneral_moneySymbol" /></span>
-                <input class="col-xs-4 span4" type="text" data-ng-model="paymentRequest.amount">
+                <span class="add-on">{{dialogData.currencySymbol}}</span>
+                <input class="col-xs-4 span4" type="text" data-ng-model="dialogData.invoiceBalance">
             </div>
         </div>
 

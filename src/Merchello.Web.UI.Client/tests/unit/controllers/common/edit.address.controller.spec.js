@@ -6,10 +6,10 @@ describe("Merchello.Common.Dialogs.EditAddressController", function () {
 
     beforeEach(module('umbraco'));
 
-    beforeEach(inject(function ($rootScope, $controller, dialogDataMocks, addressMocks) {
+    beforeEach(inject(function ($rootScope, $controller, dialogDataMocks) {
 
         $controllerConstructor = $controller;
-        var dialogData = dialogDataMocks.getAddressDialogData(addressMocks);
+        var dialogData = dialogDataMocks.getAddressDialogData();
 
         scope = $rootScope.$new();
         scope.dialogData = dialogData;

@@ -92,9 +92,9 @@
 
         function remainingBalance(payments) {
             var amountPaid = 0;
-            angular.forEach(payments, function(payment) {
-              amountPaid += payment.amount;
-            });
+            //angular.forEach(payments, function(payment) {
+            //  amountPaid += payment.amount;
+            //});
             return this.total - amountPaid;
         }
 
