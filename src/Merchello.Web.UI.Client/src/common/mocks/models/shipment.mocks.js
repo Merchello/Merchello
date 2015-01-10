@@ -21,9 +21,7 @@ angular.module('merchello.mocks').
             }
 
             function shipmentStatuses() {
-                return mockHelper.downCasePropertiesInObjectArray(
-                    [{"Key":"6fa425a9-7802-4da0-bd33-083c100e30f3","Name":"Quoted","Alias":"quoted","Reportable":true,"Active":true,"SortOrder":1},{"Key":"7342dcd6-8113-44b6-bfd0-4555b82f9503","Name":"Packaging","Alias":"packaging","Reportable":true,"Active":true,"SortOrder":2},{"Key":"cb24d43f-2774-4e56-85d8-653e49e3f542","Name":"Ready","Alias":"ready","Reportable":true,"Active":true,"SortOrder":3},{"Key":"b37be101-cec9-4608-9330-54e56fa0537a","Name":"Shipped","Alias":"shipped","Reportable":true,"Active":true,"SortOrder":4},{"Key":"3a279633-4919-485d-8c3b-479848a053d9","Name":"Delivered","Alias":"delivered","Reportable":true,"Active":true,"SortOrder":5}]
-                );
+                return mockHelper.downCasePropertiesInObjectArray([{"Key":"6fa425a9-7802-4da0-bd33-083c100e30f3","Name":"Quoted","Alias":"quoted","Reportable":true,"Active":true,"SortOrder":1},{"Key":"7342dcd6-8113-44b6-bfd0-4555b82f9503","Name":"Packaging","Alias":"packaging","Reportable":true,"Active":true,"SortOrder":2},{"Key":"cb24d43f-2774-4e56-85d8-653e49e3f542","Name":"Ready","Alias":"ready","Reportable":true,"Active":true,"SortOrder":3},{"Key":"b37be101-cec9-4608-9330-54e56fa0537a","Name":"Shipped","Alias":"shipped","Reportable":true,"Active":true,"SortOrder":4},{"Key":"3a279633-4919-485d-8c3b-479848a053d9","Name":"Delivered","Alias":"delivered","Reportable":true,"Active":true,"SortOrder":5}]);
             }
 
             // Public

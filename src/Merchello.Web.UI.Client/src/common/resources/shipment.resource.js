@@ -51,11 +51,11 @@
             },
 
 
-            getShipMethod: function (shipMethodKey) {
+            getShipMethodAndAlternatives: function (shipMethodKey) {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethodByKey'),
+                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethodAndAlternatives'),
                         method: "GET",
                         params: { key: shipMethodKey }
                     }),
@@ -82,6 +82,5 @@
                     ),
                     'Failed to save shipment');
             }
-
         };
     }]);

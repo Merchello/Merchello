@@ -14,6 +14,7 @@
         self.order = {};
         self.shipmentStatuses = [];
         self.shipment = {};
+        self.shipMethods = {};
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);

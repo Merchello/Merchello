@@ -16,6 +16,7 @@ namespace Merchello.Web.Editors
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
 
     using Umbraco.Web;
@@ -175,18 +176,40 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Gets a <see cref="ShipMethodDisplay"/> by it's key.
+        /// Gets the <see cref="ShipMethodDisplay"/> by it's key and alternative <see cref="ShipMethodDisplay"/> 
+        /// for the same shipCountry.
         /// </summary>
         /// <param name="key">
-        /// The shipmethod key.
+        /// The shipmethod key from the quoted shipment 
         /// </param>
         /// <returns>
-        /// The <see cref="ShipMethodDisplay"/>.
+        /// The <see cref="ShipMethodsQueryDisplay"/>.
         /// </returns>
         [HttpGet]
-        public ShipMethodDisplay GetShipMethodByKey(Guid key)
+        public ShipMethodsQueryDisplay GetShipMethodAndAlternatives(Guid key)
         {
-            return _shipMethodService.GetByKey(key).ToShipMethodDisplay();
+            // Get the ShipMethod by the key
+            var shipMethod = _shipMethodService.GetByKey(key);
+            if (shipMethod == null) throw new NullReferenceException("Reference to ShipMethod passed was null. It must have been deleted.");
+
+            // Get the ShipCountry
+            var shipCountry = ((ServiceContext)MerchelloContext.Services).ShipCountryService.GetByKey(shipMethod.ShipCountryKey);
+            if (shipCountry == null) throw new NullReferenceException("ShipCountry for ShipMethod passed was null. It must have been deleted.");
+
+            // Get all providers associated with the ShipCountry
+            var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
+            
+            var allowed = new List<IShipMethod>();
+            foreach (var shipMethods in providers.Select(provider => provider.GetAllShippingGatewayMethods(shipCountry)))
+            {
+                allowed.AddRange(shipMethods.Select(x => x.ShipMethod));
+            }
+
+            return new ShipMethodsQueryDisplay()
+                {
+                    Selected = shipMethod.ToShipMethodDisplay(),
+                    Alternatives = allowed.Select(x => x.ToShipMethodDisplay())
+                };
         }
 
         /// <summary>

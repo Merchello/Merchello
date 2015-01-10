@@ -279,6 +279,7 @@
         self.order = {};
         self.shipmentStatuses = [];
         self.shipment = {};
+        self.shipMethods = {};
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
@@ -557,6 +558,21 @@
     angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
     /**
      * @ngdoc model
+     * @name ShipMethodsQueryDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipMethodsQueryDisplay object
+     */
+    var ShipMethodsQueryDisplay = function() {
+        var self = this;
+        self.selected = {};
+        self.alternatives = [];
+    };
+
+    angular.module('merchello.models').constant('ShipMethodsQueryDisplay', ShipMethodsQueryDisplay);
+    /**
+     * @ngdoc model
      * @name InvoiceDisplay
      * @function
      *
@@ -787,6 +803,194 @@
 
     angular.module('merchello.models').constant('OrderStatusDisplay', OrderStatusDisplay);
     /**
+     * @ngdoc model
+     * @name AuditLogDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's AuditLogDisplay object
+     */
+    var AuditLogDisplay = function() {
+        var self = this;
+
+        self.entityKey = '';
+        self.entityTfKey = '';
+        self.entityType = '';
+        self.extendedData = {};
+        self.isError = false;
+        self.key = '';
+        self.message = {};
+        self.recordDate = '';
+        self.verbosity = '';
+    };
+
+    AuditLogDisplay.prototype = (function() {
+
+        function toDateString() {
+            return this.recordDate.split('T')[0];
+        }
+
+        function toTimeString() {
+            var time = this.recordDate.split('T')[1];
+            return time.split(':')[0] + ':' + time.split(':')[1];
+        }
+
+        return {
+            toDateString: toDateString,
+            toTimeString: toTimeString
+        };
+
+    }());
+
+    angular.module('merchello.models').constant('AuditLogDisplay', AuditLogDisplay);
+    /**
+     * @ngdoc model
+     * @name DailyAuditLogDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's DailyAuditLogDisplay object
+     */
+    var DailyAuditLogDisplay = function() {
+        var self = this;
+        this.day = '';
+        this.logs = [];
+    };
+
+    DailyAuditLogDisplay.prototype = (function() {
+
+        //// TODO this is not working as expected so we are keeping it internal
+        function dayToDate() {
+            //// 0: YYYY
+            //// 1: MM
+            //// 2: DD
+            var dateParts = toDateString.call(this).split('-');
+            var timeParts = toTimeString.call(this).split(':');
+            return Date.parse(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], 0, 0);
+        }
+
+        function toDateString() {
+            return this.day.split('T')[0];
+        }
+
+        function toTimeString() {
+            var time = this.day.split('T')[1];
+            return time.split(':')[0] + ':' + time.split(':')[1];
+        }
+
+        return {
+            toDateString: toDateString,
+            toTimeString: toTimeString
+        };
+
+    }());
+
+    angular.module('merchello.models').constant('DailyAuditLogDisplay', DailyAuditLogDisplay);
+    /**
+     * @ngdoc model
+     * @name SalesHistoryDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's SalesHistoryDisplay object
+     */
+    var SalesHistoryDisplay = function() {
+        var self = this;
+        self.dailyLogs = [];
+    };
+
+    SalesHistoryDisplay.prototype = (function() {
+
+        // utility method to push a daily log
+        function addDailyLog(dailyLog) {
+            this.dailyLogs.push(dailyLog);
+        }
+
+        return {
+            addDailyLog: addDailyLog
+        };
+
+    }());
+
+    angular.module('merchello.models').constant('SalesHistoryDisplay', SalesHistoryDisplay);
+    /**
+     * @ngdoc model
+     * @name SalesHistoryMessageDisplay
+     * @function
+     *
+     * @description
+     * Represents a sales history message object
+     */
+    var SalesHistoryMessageDisplay = function() {
+        var self = this;
+        self.area = '';
+        self.key = '';
+    };
+
+    SalesHistoryMessageDisplay.prototype = (function() {
+
+        // constructs a localization key
+        function localizationKey() {
+            return this.area + '_' + this.key;
+        }
+
+        // any extra properties on this object are assumed to be tokens used in the localized
+        // message
+        function localizationTokens() {
+            var allKeys = Object.keys(this);
+            var tokens = [];
+            for(var i = 0; i < allKeys.length; i++) {
+                if (allKeys[i] !== 'area' && allKeys[i] !== 'key')
+                {
+                    tokens.push(this[allKeys[i]]);
+                }
+            }
+            return tokens;
+        }
+
+        return {
+            localizationKey: localizationKey,
+            localizationTokens: localizationTokens
+        };
+    }());
+
+    angular.module('merchello.models').constant('SalesHistoryMessageDisplay', SalesHistoryMessageDisplay);
+    /**
+     * @ngdoc model
+     * @name ShipMethodDisplay
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipMethodDisplay object
+     */
+    var ShipMethodDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.providerKey = '';
+        self.shipCountryKey = '';
+        self.surchare = 0.0;
+        self.serviceCode = '';
+        self.taxable = false;
+        self.provinces = [];
+    };
+
+    angular.module('merchello.models').constant('ShipMethodDisplay', ShipMethodDisplay);
+    /**
+     * @ngdoc model
+     * @name ShipMethodDisplay
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipProvinceDisplay object
+     */
+    var ShipProvinceDisplay = function() {
+        var self = this;
+        self.allowShipping = false;
+        // TODO this should be converted to a string in the API for consistency
+        self.rateAdjustment = 1;  // possible values are 1 & 2
+    };
+
+    angular.module('merchello.models').constant('ShipProvinceDisplay', ShipProvinceDisplay);
+    /**
     * @ngdoc model
     * @name ShipmentDisplay
     * @function
@@ -960,159 +1164,6 @@
     };
 
     angular.module('merchello.models').constant('ShipmentStatusDisplay', ShipmentStatusDisplay);
-    /**
-     * @ngdoc model
-     * @name AuditLogDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's AuditLogDisplay object
-     */
-    var AuditLogDisplay = function() {
-        var self = this;
-
-        self.entityKey = '';
-        self.entityTfKey = '';
-        self.entityType = '';
-        self.extendedData = {};
-        self.isError = false;
-        self.key = '';
-        self.message = {};
-        self.recordDate = '';
-        self.verbosity = '';
-    };
-
-    AuditLogDisplay.prototype = (function() {
-
-        function toDateString() {
-            return this.recordDate.split('T')[0];
-        }
-
-        function toTimeString() {
-            var time = this.recordDate.split('T')[1];
-            return time.split(':')[0] + ':' + time.split(':')[1];
-        }
-
-        return {
-            toDateString: toDateString,
-            toTimeString: toTimeString
-        };
-
-    }());
-
-    angular.module('merchello.models').constant('AuditLogDisplay', AuditLogDisplay);
-    /**
-     * @ngdoc model
-     * @name DailyAuditLogDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's DailyAuditLogDisplay object
-     */
-    var DailyAuditLogDisplay = function() {
-        var self = this;
-        this.day = '';
-        this.logs = [];
-    };
-
-    DailyAuditLogDisplay.prototype = (function() {
-
-        //// TODO this is not working as expected so we are keeping it internal
-        function dayToDate() {
-            //// 0: YYYY
-            //// 1: MM
-            //// 2: DD
-            var dateParts = toDateString.call(this).split('-');
-            var timeParts = toTimeString.call(this).split(':');
-            return Date.parse(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], 0, 0);
-        }
-
-        function toDateString() {
-            return this.day.split('T')[0];
-        }
-
-        function toTimeString() {
-            var time = this.day.split('T')[1];
-            return time.split(':')[0] + ':' + time.split(':')[1];
-        }
-
-        return {
-            toDateString: toDateString,
-            toTimeString: toTimeString
-        };
-
-    }());
-
-    angular.module('merchello.models').constant('DailyAuditLogDisplay', DailyAuditLogDisplay);
-    /**
-     * @ngdoc model
-     * @name SalesHistoryDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's SalesHistoryDisplay object
-     */
-    var SalesHistoryDisplay = function() {
-        var self = this;
-        self.dailyLogs = [];
-    };
-
-    SalesHistoryDisplay.prototype = (function() {
-
-        // utility method to push a daily log
-        function addDailyLog(dailyLog) {
-            this.dailyLogs.push(dailyLog);
-        }
-
-        return {
-            addDailyLog: addDailyLog
-        };
-
-    }());
-
-    angular.module('merchello.models').constant('SalesHistoryDisplay', SalesHistoryDisplay);
-    /**
-     * @ngdoc model
-     * @name SalesHistoryMessageDisplay
-     * @function
-     *
-     * @description
-     * Represents a sales history message object
-     */
-    var SalesHistoryMessageDisplay = function() {
-        var self = this;
-        self.area = '';
-        self.key = '';
-    };
-
-    SalesHistoryMessageDisplay.prototype = (function() {
-
-        // constructs a localization key
-        function localizationKey() {
-            return this.area + '_' + this.key;
-        }
-
-        // any extra properties on this object are assumed to be tokens used in the localized
-        // message
-        function localizationTokens() {
-            var allKeys = Object.keys(this);
-            var tokens = [];
-            for(var i = 0; i < allKeys.length; i++) {
-                if (allKeys[i] !== 'area' && allKeys[i] !== 'key')
-                {
-                    tokens.push(this[allKeys[i]]);
-                }
-            }
-            return tokens;
-        }
-
-        return {
-            localizationKey: localizationKey,
-            localizationTokens: localizationTokens
-        };
-    }());
-
-    angular.module('merchello.models').constant('SalesHistoryMessageDisplay', SalesHistoryMessageDisplay);
     /**
    * @ngdoc service
    * @name merchello.models.genericModelBuilder
@@ -1461,6 +1512,34 @@ angular.module('merchello.models').factory('dialogDataFactory',
 
     /**
      * @ngdoc service
+     * @name merchello.services.shipMethodsQueryDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ShipMethodsQueryDisplay models
+     */
+    angular.module('merchello.services')
+        .factory('shipMethodsQueryDisplayBuilder',
+        ['genericModelBuilder', 'shipMethodDisplayBuilder', 'ShipMethodsQueryDisplay',
+        function(genericModelBuilder, shipMethodDisplayBuilder, ShipMethodsQueryDisplay) {
+
+            var Constructor = ShipMethodsQueryDisplay;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var query = new Constructor();
+                    if (jsonResult) {
+                        query.selected = shipMethodDisplayBuilder.transform(jsonResult.selected);
+                        query.alternatives = shipMethodDisplayBuilder.transform(jsonResult.alternatives);
+                    }
+                    return query;
+                }
+            };
+        }]);
+    /**
+     * @ngdoc service
      * @name merchello.models.invoiceDisplayBuilder
      *
      * @description
@@ -1786,6 +1865,55 @@ angular.module('merchello.models').factory('dialogDataFactory',
                 };
             }]);
 
+    /**
+     * @ngdoc service
+     * @name merchello.models.shipMethodDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ShipMethodDisplay models
+     */
+    angular.module('merchello.services')
+        .factory('shipMethodDisplayBuilder',
+            ['genericModelBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
+            function(genericModelBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
+
+                var Constructor = ShipMethodDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        var shipMethod = genericModelBuilder.transform(jsonResult, Constructor);
+                        if (jsonResult.provinces) {
+                            shipMethod.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                        }
+                        return shipMethod;
+                    }
+                };
+
+        }]);
+    /**
+     * @ngdoc service
+     * @name merchello.models.shipProvinceDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ShipProvinceDisplay models
+     */
+    angular.module('merchello.services').factory('shipProvinceDisplayBuilder',
+        ['genericModelBuilder', 'ShipProvinceDisplay', function(genericModelBuilder, ShipProvinceDisplay) {
+
+            var Constructor = ShipProvinceDisplay;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+    }]);
     /**
      * @ngdoc service
      * @name merchello.models.shipmentDisplayBuilder

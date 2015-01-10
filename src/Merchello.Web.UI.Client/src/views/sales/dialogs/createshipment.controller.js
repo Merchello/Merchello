@@ -11,4 +11,11 @@ angular.module('merchello')
     .controller('Merchello.Sales.Dialogs.CreateShipmentController',
     ['$scope', function($scope) {
 
+        $scope.save = save;
+
+
+        function save() {
+            $scope.submit($scope.dialogData);
+        }
+
     }]);
