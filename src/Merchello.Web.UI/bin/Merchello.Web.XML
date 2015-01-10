@@ -6232,6 +6232,17 @@
             <param name="order"></param>
             <returns></returns>
         </member>
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.GetShipMethodByKey(System.Guid)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/> by it's key.
+            </summary>
+            <param name="key">
+            The shipmethod key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.ShipmentApiController.NewShipment(Merchello.Web.Models.ContentEditing.OrderDisplay)">
              <summary>
              Adds a shipment

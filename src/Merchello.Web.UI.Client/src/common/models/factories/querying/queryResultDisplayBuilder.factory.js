@@ -20,7 +20,6 @@
                     var result = genericModelBuilder.transform(jsonResult, Constructor);
                     if (itemBuilder !== undefined)
                     {
-                        result.items = [];
                         result.items = itemBuilder.transform(jsonResult.items);
                     }
                     return result;

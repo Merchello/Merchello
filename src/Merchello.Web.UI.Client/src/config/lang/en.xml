@@ -94,7 +94,8 @@
     <key alias="orderInformationHelper"><![CDATA[Line items & costs]]></key>
     <key alias="captureUpTo">Capture Up To</key>
     <key alias="salesTax">Sales Tax</key>
-    <key alias="authorized"> Authorized</key>
+    <key alias="authorized">Authorized</key>
+    <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Payment History</key>
     <key alias="saleHistory">Sale History</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>
@@ -104,6 +105,7 @@
   <area alias="merchelloFulfillShipment">
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
+    <key alias="createShipment">Create Shipment</key>
   </area>
   <area alias="merchelloWarehouse">
     <!-- things -->

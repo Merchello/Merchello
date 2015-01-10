@@ -9,11 +9,18 @@ angular.module('merchello.models').factory('dialogDataFactory',
     ['CapturePaymentDialogData',
     function(CapturePaymentDialogData) {
 
-        function getCapturePaymentDialogData() {
+        // creates dialogData object for capturing a payment
+        function createCapturePaymentDialogData() {
             return new CapturePaymentDialogData();
         }
 
+        // creates dialogData for creating a shipment
+        function createCreateShipmentDialogData() {
+            return new CreateShipmentDialogData();
+        }
+
         return {
-            getCapturePaymentDialogData: getCapturePaymentDialogData
+            createCapturePaymentDialogData: createCapturePaymentDialogData,
+            createCreateShipmentDialogData: createCreateShipmentDialogData
         };
 }]);

@@ -221,6 +221,17 @@ angular.module('merchello.mocks').
             };
         }]);
 
+angular.module('merchello.mocks').factory('extendedDataMocks', ['mockHelper', function(mockHelper) {
+
+    function getExtendedData() {
+        return  [{"key":"merchShippingOriginAddress","value":"<Address xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" z:Id=\"i1\" xmlns:z=\"http://schemas.microsoft.com/2003/10/Serialization/\" xmlns=\"http://schemas.datacontract.org/2004/07/Merchello.Core.Models\"><Address1>411 W. Magnolia</Address1><Address2 i:nil=\"true\" /><AddressType>Shipping</AddressType><CountryCode>US</CountryCode><Email i:nil=\"true\" /><IsCommercial>false</IsCommercial><Locality>Bellingham</Locality><Name>Default Warehouse</Name><Organization i:nil=\"true\" /><Phone i:nil=\"true\" /><PostalCode>98225</PostalCode><Region>WA</Region></Address>"},{"key":"merchCurrencyCode","value":"USD"},{"key":"merchLineItemCollection","value":"<merchLineItemCollection><merchLineItem><merchContainerKey>00000000-0000-0000-0000-000000000000</merchContainerKey><merchLineItemTfKey>d462c051-07f4-45f5-aad2-d5c844159f04</merchLineItemTfKey><merchSku>awww-flower-bean</merchSku><merchName>Awww Flower Bean</merchName><merchQuantity>1</merchQuantity><merchPrice>24.330000</merchPrice><merchExtendedData><extendedData><merchWarehouseCatalogKey>b25c2b00-578e-49b9-bea2-bf3712053c63</merchWarehouseCatalogKey><merchBarcode /><merchWeight>0.000000</merchWeight><merchManufacturerModelNumber /><merchDownload>False</merchDownload><merchSalePrice>0.000000</merchSalePrice><merchLength>0.000000</merchLength><merchPrice>24.330000</merchPrice><merchCostOfGoods>0.000000</merchCostOfGoods><merchOnSale>False</merchOnSale><merchProductVariantKey>fcef819d-a6dc-48be-a662-0df6a5684d94</merchProductVariantKey><merchHeight>0.000000</merchHeight><merchOutOfStockPurchase>False</merchOutOfStockPurchase><merchWidth>0.000000</merchWidth><merchProductKey>b33a4530-9c66-432c-9ceb-426939f327fd</merchProductKey><umbracoContentId>1096</umbracoContentId><merchTaxable>True</merchTaxable><merchShippable>True</merchShippable><merchTrackInventory>True</merchTrackInventory><merchDownloadMediaId>-1</merchDownloadMediaId><merchManufacturer /></extendedData></merchExtendedData></merchLineItem><merchLineItem><merchContainerKey>00000000-0000-0000-0000-000000000000</merchContainerKey><merchLineItemTfKey>d462c051-07f4-45f5-aad2-d5c844159f04</merchLineItemTfKey><merchSku>bean-with-box</merchSku><merchName>Bean With Box</merchName><merchQuantity>1</merchQuantity><merchPrice>29.990000</merchPrice><merchExtendedData><extendedData><merchWarehouseCatalogKey>b25c2b00-578e-49b9-bea2-bf3712053c63</merchWarehouseCatalogKey><merchBarcode /><merchWeight>0.000000</merchWeight><merchManufacturerModelNumber /><merchDownload>False</merchDownload><merchSalePrice>0.000000</merchSalePrice><merchLength>0.000000</merchLength><merchPrice>29.990000</merchPrice><merchCostOfGoods>0.000000</merchCostOfGoods><merchOnSale>False</merchOnSale><merchProductVariantKey>8e57d657-bbf4-43ee-997c-6eca7b83c825</merchProductVariantKey><merchHeight>0.000000</merchHeight><merchOutOfStockPurchase>False</merchOutOfStockPurchase><merchWidth>0.000000</merchWidth><merchProductKey>4c8897c0-3e06-4490-8c59-a88cb0530070</merchProductKey><umbracoContentId>1057</umbracoContentId><merchTaxable>True</merchTaxable><merchShippable>True</merchShippable><merchTrackInventory>True</merchTrackInventory><merchDownloadMediaId>-1</merchDownloadMediaId><merchManufacturer /></extendedData></merchExtendedData></merchLineItem><merchLineItem><merchContainerKey>00000000-0000-0000-0000-000000000000</merchContainerKey><merchLineItemTfKey>d462c051-07f4-45f5-aad2-d5c844159f04</merchLineItemTfKey><merchSku>dancing-beans</merchSku><merchName>Dancing Beans</merchName><merchQuantity>1</merchQuantity><merchPrice>2.320000</merchPrice><merchExtendedData><extendedData><merchWarehouseCatalogKey>b25c2b00-578e-49b9-bea2-bf3712053c63</merchWarehouseCatalogKey><merchBarcode /><merchWeight>2.000000</merchWeight><merchManufacturerModelNumber /><merchDownload>False</merchDownload><merchSalePrice>0.000000</merchSalePrice><merchLength>9.000000</merchLength><merchPrice>2.320000</merchPrice><merchCostOfGoods>0.000000</merchCostOfGoods><merchOnSale>False</merchOnSale><merchProductVariantKey>88632c83-2ffd-4df1-9f4f-2126fb466606</merchProductVariantKey><merchHeight>23.000000</merchHeight><merchOutOfStockPurchase>False</merchOutOfStockPurchase><merchWidth>31.000000</merchWidth><merchProductKey>8ed6454d-ba64-46dd-8602-cd3ff81db6a4</merchProductKey><umbracoContentId>1106</umbracoContentId><merchTaxable>True</merchTaxable><merchShippable>True</merchShippable><merchTrackInventory>True</merchTrackInventory><merchDownloadMediaId>-1</merchDownloadMediaId><merchManufacturer /></extendedData></merchExtendedData></merchLineItem></merchLineItemCollection>"},{"key":"merchShippingDestinationAddress","value":"<Address xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" z:Id=\"i1\" xmlns:z=\"http://schemas.microsoft.com/2003/10/Serialization/\" xmlns=\"http://schemas.datacontract.org/2004/07/Merchello.Core.Models\"><Address1>114 W. Magnolia St</Address1><Address2>Suite 300</Address2><AddressType>Shipping</AddressType><CountryCode>US</CountryCode><Email>rusty@mindfly.com</Email><IsCommercial>false</IsCommercial><Locality>Bellingham</Locality><Name>Rusty Swayne</Name><Organization i:nil=\"true\" /><Phone i:nil=\"true\" /><PostalCode>98225</PostalCode><Region>WA</Region></Address>"},{"key":"merchShipMethodKey","value":"7f236971-4342-4515-96f2-d38045e6014b"}];
+    }
+
+    return {
+        getExtendedData: getExtendedData
+    };
+}]);
+
 angular.module('merchello.mocks').
     factory('invoiceMocks', ['mockHelper',
         function (mockHelper) {
@@ -340,10 +351,17 @@ angular.module('merchello.mocks').
                 );
             }
 
+            function shipmentStatuses() {
+                return mockHelper.downCasePropertiesInObjectArray(
+                    [{"Key":"6fa425a9-7802-4da0-bd33-083c100e30f3","Name":"Quoted","Alias":"quoted","Reportable":true,"Active":true,"SortOrder":1},{"Key":"7342dcd6-8113-44b6-bfd0-4555b82f9503","Name":"Packaging","Alias":"packaging","Reportable":true,"Active":true,"SortOrder":2},{"Key":"cb24d43f-2774-4e56-85d8-653e49e3f542","Name":"Ready","Alias":"ready","Reportable":true,"Active":true,"SortOrder":3},{"Key":"b37be101-cec9-4608-9330-54e56fa0537a","Name":"Shipped","Alias":"shipped","Reportable":true,"Active":true,"SortOrder":4},{"Key":"3a279633-4919-485d-8c3b-479848a053d9","Name":"Delivered","Alias":"delivered","Reportable":true,"Active":true,"SortOrder":5}]
+                );
+            }
+
             // Public
             return {
                 getEmptyShipment: getEmptyShipment,
-                shipmentsArray: shipmentsArray
+                shipmentsArray: shipmentsArray,
+                shipmentStatuses: shipmentStatuses
             };
         }]);
 
@@ -460,6 +478,35 @@ angular.module('merchello.mocks')
             };
 
     }]);
+
+angular.module('merchello.mocks')
+    .factory('shipmentResourceMock', [
+        '$httpBackend', 'mocksUtils', 'shipmentMocks',
+        function($httpBackend, mocksUtils, shipmentMocks) {
+
+            function getShipment()
+            {
+                return shipmentMocks.shipmentsArray()[0];
+            }
+
+
+            function shipmentStatues() {
+                return shipmentMocks.shipmentStatuses();
+            }
+
+            return {
+                register: function() {
+
+                    $httpBackend
+                        .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/ShipmentApi/GetShipment'))
+                        .respond(getShipment);
+
+                    $httpBackend
+                        .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/ShipmentApi/GetAllShipmentStatuses'))
+                        .respond(shipmentStatues);
+                }
+            };
+        }]);
 
 angular.module('merchello.mocks').
     factory('localizationMocks', ['$httpBackend', 'mocksUtils', function ($httpBackend, mocksUtils) {

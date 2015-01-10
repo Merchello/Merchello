@@ -95,6 +95,7 @@
             return status === 'Paid';
         }
 
+        // calculates the unpaid balance of the invoice
         function remainingBalance(payments) {
             var amountPaid = 0;
             angular.forEach(payments, function(payment) {
@@ -110,7 +111,7 @@
             getFulfillmentStatus: getFulfillmentStatus,
             getProductLineItems: getProductLineItems,
             getTaxLineItem: getTaxLineItem,
-            getShippingLineItem: getShippingLineItems,
+            getShippingLineItems: getShippingLineItems,
             hasOrder: hasOrder,
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,

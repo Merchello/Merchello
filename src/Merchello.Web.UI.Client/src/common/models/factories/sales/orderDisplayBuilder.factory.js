@@ -19,9 +19,18 @@
                     },
                     transform: function(jsonResult) {
                         var orders = genericModelBuilder.transform(jsonResult, Constructor);
-                        for(var i = 0; i < orders.length; i++) {
-                            orders[ i ].orderStatus = orderStatusDisplayBuilder.transform(jsonResult[ i ].orderStatus);
-                            orders[ i ].items = orderLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                        if (orders.length) {
+                            for(var i = 0; i < orders.length; i++) {
+                                orders[ i ].orderStatus = orderStatusDisplayBuilder.transform(jsonResult[ i ].orderStatus);
+                                orders[ i ].items = orderLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                            }
+                        } else {
+                            if (jsonResult.orderStatus) {
+                                orders.orderStatus = orderStatusDisplayBuilder.transform(jsonResult.orderStatus);
+                            }
+                            if (jsonResult.items) {
+                                orders.items = orderLineItemDisplayBuilder.transform(jsonResult.items);
+                            }
                         }
                         return orders;
                     }

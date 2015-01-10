@@ -116,12 +116,20 @@
             Console.WriteLine(JsonConvert.SerializeObject(currencies));
         }
 
-        [Test]
+        //[Test]
         public void AllCountries()
         {
             var settingService = MerchelloContext.Current.Services.StoreSettingService;
             var countries = settingService.GetAllCountries();
             Console.WriteLine(JsonConvert.SerializeObject(countries.Select(x => x.ToCountryDisplay())));
+        }
+
+        [Test]
+        public void ShipmentStatuses()
+        {
+            var shipmentService = MerchelloContext.Current.Services.ShipmentService;
+            var statuses = shipmentService.GetAllShipmentStatuses().OrderBy(x => x.SortOrder);
+            Console.WriteLine(JsonConvert.SerializeObject(statuses.Select(x => x.ToShipmentStatusDisplay())));
         }
     }
 }

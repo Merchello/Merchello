@@ -21,10 +21,22 @@
                     },
                     transform: function(jsonResult) {
                         var invoices = genericModelBuilder.transform(jsonResult, Constructor);
-                        for(var i = 0; i < invoices.length; i++) {
-                            invoices[ i ].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[ i ].invoiceStatus);
-                            invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
-                            invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
+                        if (invoices.length) {
+                            for(var i = 0; i < invoices.length; i++) {
+                                invoices[ i ].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[ i ].invoiceStatus);
+                                invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                                invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
+                            }
+                        } else {
+                            if (jsonResult.invoiceStatus) {
+                                invoices.invoiceStatus = invoiceLineItemDisplayBuilder.transform(jsonResult.invoiceStatus);
+                            }
+                            if (jsonResult.items) {
+                                invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
+                            }
+                            if (jsonResult.orders) {
+                                invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
+                            }
                         }
                         return invoices;
                     }

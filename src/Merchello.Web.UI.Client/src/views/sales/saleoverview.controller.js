@@ -7,12 +7,12 @@
      * The controller for the sales overview page
      */
     angular.module('merchello').controller('Merchello.Dashboards.SalesOverviewController',
-        ['$scope', '$routeParams', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'dialogDataFactory', 'salesHistoryDisplayBuilder',
-            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'appliedPaymentDisplayBuilder',
-        function($scope, $routeParams, assetsService, dialogService, localizationService, notificationsService,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource, dialogDataFactory,
-                 salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, appliedPaymentDisplayBuilder) {
+        ['$scope', '$routeParams', '$timeout', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
+            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'dialogDataFactory', 'salesHistoryDisplayBuilder',
+            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'orderLineItemDisplayBuilder',
+        function($scope, $routeParams, $timeout, assetsService, dialogService, localizationService, notificationsService,
+                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, dialogDataFactory,
+                 salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, orderLineItemDisplayBuilder) {
 
             // exposed properties
             $scope.historyLoaded = false;
@@ -23,13 +23,17 @@
             $scope.salesHistory = {};
             $scope.payments = [];
             $scope.billingAddress = {};
+            $scope.authorizedCapturedLabel = '';
 
             // exposed methods
             //  dialogs
             $scope.capturePayment = capturePayment;
             $scope.capturePaymentDialogConfirm = capturePaymentDialogConfirm,
             $scope.openDeleteInvoiceDialog = openDeleteInvoiceDialog;
+            $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
+            $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
+
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
 
@@ -43,7 +47,6 @@
             function init () {
                 loadInvoice($routeParams.id);
                 loadSettings();
-
                 $scope.loaded = true;
             };
 
@@ -96,7 +99,6 @@
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
                     loadPayments(id);
                     loadAuditLog(id);
-                    $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -141,14 +143,14 @@
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.payments = paymentDisplayBuilder.transform(payments);
+                    $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
+                    $scope.authorizedCapturedLabel  = $scope.remainingBalance === '0' ? 'merchelloOrderView_authorized' : 'merchelloOrderView_captured';
+
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
                 });
             }
 
-            /*-------------------------------------------------------------------
-             * Event Handler Methods
-             *-------------------------------------------------------------------*/
 
             /**
              * @ngdoc method
@@ -159,14 +161,12 @@
              */
             function capturePayment() {
 
-                var data = dialogDataFactory.getCapturePaymentDialogData();
+                var data = dialogDataFactory.createCapturePaymentDialogData();
                 data.setPaymentData($scope.payments[0]);
                 data.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
                 if (!data.isValid()) {
-                    console.info('Failed to construct required payment information')
                     return false;
                 }
-                console.info('got here');
                 // TODO inject the template for the capture payment dialog so that we can
                 // have different fields for other providers
                 dialogService.open({
@@ -185,10 +185,14 @@
              * @description - Capture the payment after the confirmation dialog was passed through.
              */
             function capturePaymentDialogConfirm(paymentRequest) {
+                $scope.preValuesLoaded = false;
                 var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
-                    notificationsService.success("Payment Captured");
-                    $scope.loadInvoice(paymentRequest.invoiceKey);
+                    // added a timeout here to give the examine index
+                    $timeout(function() {
+                        notificationsService.success("Payment Captured");
+                        loadInvoice(paymentRequest.invoiceKey);
+                    }, 400);
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
@@ -205,7 +209,7 @@
                 var dialogData = {};
                 dialogData.name = 'Invoice #' + $scope.invoice.invoiceNumber;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
                     callback: processDeleteInvoiceDialog,
                     dialogData: dialogData
@@ -220,12 +224,32 @@
              * @description - Open the fufill shipment dialog.
              */
             function openFulfillShipmentDialog() {
-                console.info($scope.invoice);
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
-                    show: true,
-                    callback: processFulfillShipmentDialog,
-                    dialogData: $scope.invoice.orders[0]    // todo: pull from current order when multiple orders is available
+
+                var promiseStatuses = shipmentResource.getAllShipmentStatuses();
+                promiseStatuses.then(function(statuses) {
+                    var data = dialogDataFactory.createCreateShipmentDialogData();
+                    data.order = $scope.invoice.orders[0]; // todo: pull from current order when multiple orders is available
+                    data.shipmentStatuses = statuses;
+                    data.shipmentStatus = statuses[0]; // default shipment status
+
+                    // TODO this could eventually turn into an array
+                    var shipmentLineItem = orderLineItemDisplayBuilder.transform($scope.invoice.getShippingLineItems());
+
+                    if (shipmentLineItem) {
+                        var shipMethodKey = shipmentLineItem.extendedData.getValue('merchShipMethodKey');
+                        var shipMethodPromise = shipmentResource.getShipMethod(shipMethodKey);
+                        shipMethodPromise.then(function(shipMethod) {
+                            data.shipMethod = shipMethod;
+
+                            dialogService.open({
+                                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/create.shipment.html',
+                                show: true,
+                                callback: $scope.processFulfillShipmentDialog,
+                                dialogData: data
+                            });
+
+                        });
+                    }
                 });
             };
 

@@ -439,12 +439,14 @@
             },
 
 
-            getShipMethod: function (order) {
+            getShipMethod: function (shipMethodKey) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethod'),
-                        order
-                    ),
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethodByKey'),
+                        method: "GET",
+                        params: { key: shipMethodKey }
+                    }),
                     'Failed to get shipment method');
             },
 

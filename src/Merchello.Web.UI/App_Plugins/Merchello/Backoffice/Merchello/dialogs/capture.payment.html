@@ -11,7 +11,7 @@
             </p>
             <div class="input-prepend col-xs-12 span12">
                 <span class="add-on">{{dialogData.currencySymbol}}</span>
-                <input class="col-xs-4 span4" type="text" data-ng-model="dialogData.invoiceBalance">
+                <input class="col-xs-4 span4" type="text" data-ng-model="dialogData.amount">
             </div>
         </div>
 
@@ -27,7 +27,7 @@
 
                 <button
                         class="btn btn-primary"
-                        data-ng-click="submit(paymentRequest)">
+                        data-ng-click="submit(dialogData)">
                     <localize key="merchelloOrder_processPayment" />
                 </button>
 
