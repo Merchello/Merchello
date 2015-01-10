@@ -28,15 +28,10 @@
                                 invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
                             }
                         } else {
-                            if (jsonResult.invoiceStatus) {
-                                invoices.invoiceStatus = invoiceLineItemDisplayBuilder.transform(jsonResult.invoiceStatus);
-                            }
-                            if (jsonResult.items) {
-                                invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
-                            }
-                            if (jsonResult.orders) {
-                                invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
-                            }
+                            //jsonResult = JSON.stringify(jsonResult);
+                            invoices.invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult.invoiceStatus);
+                            invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
+                            invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
                         }
                         return invoices;
                     }

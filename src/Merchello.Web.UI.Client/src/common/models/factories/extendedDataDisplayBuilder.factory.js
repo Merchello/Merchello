@@ -20,10 +20,9 @@
                     transform: function(jsonResult) {
                         var extendedData = new Constructor();
                         if (jsonResult !== undefined) {
-                            if(jsonResult.length) {
-                                angular.forEach(jsonResult, function(item) {
-                                    extendedData.items.push(genericModelBuilder.transform(item, ExtendedDataItemDisplay));
-                                });
+                            var items = genericModelBuilder.transform(jsonResult, ExtendedDataItemDisplay);
+                            if(items.length > 0) {
+                                extendedData.items = items;
                             }
                         }
                         return extendedData;
