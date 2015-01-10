@@ -9,10 +9,10 @@
     angular.module('merchello').controller('Merchello.Dashboards.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'dialogDataFactory', 'salesHistoryDisplayBuilder',
-            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'orderLineItemDisplayBuilder',
+            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, assetsService, dialogService, localizationService, notificationsService,
                  auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, dialogDataFactory,
-                 salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, orderLineItemDisplayBuilder) {
+                 salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
             $scope.historyLoaded = false;
@@ -242,9 +242,9 @@
                     var shipmentLineItem = $scope.invoice.getShippingLineItems();
                     if (shipmentLineItem) {
                         var shipMethodKey = shipmentLineItem.extendedData.getValue('merchShipMethodKey');
-                        var shipMethodPromise = shipmentResource.getShipMethod(shipMethodKey);
-                        shipMethodPromise.then(function(shipMethod) {
-                            data.shipMethod = shipMethod;
+                        var shipMethodPromise = shipmentResource.getShipMethodAndAlternatives(shipMethodKey);
+                        shipMethodPromise.then(function(result) {
+                            data.shipMethods = shipMethodsQueryDisplayBuilder.transform(result);
                             dialogService.open({
                                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/create.shipment.html',
                                 show: true,

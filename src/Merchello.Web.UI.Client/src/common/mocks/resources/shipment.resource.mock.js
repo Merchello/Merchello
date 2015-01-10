@@ -13,6 +13,13 @@ angular.module('merchello.mocks')
                 return shipmentMocks.shipmentStatuses();
             }
 
+            function getShipMethodAndAlternatives() {
+                return {
+                    selected: { },
+                    alternatives: []
+                };
+            }
+
             return {
                 register: function() {
 

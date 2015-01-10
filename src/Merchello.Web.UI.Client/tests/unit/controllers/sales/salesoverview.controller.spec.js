@@ -9,7 +9,7 @@ xdescribe('salesoverview.controller', function() {
                                 settingsResource, shipmentResourceMock,
                                 localizationMocks, auditLogResource, auditLogResourceMock, invoiceResource, invoiceResourceMock,
                                 paymentResource, paymentResourceMock, shipmentResource, settingResourceMock, dialogDataFactory, salesHistoryDisplayBuilder,
-                                invoiceDisplayBuilder, paymentDisplayBuilder, orderLineItemDisplayBuilder) {
+                                invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplay) {
 
         httpBackend = $httpBackend;
 
@@ -27,7 +27,7 @@ xdescribe('salesoverview.controller', function() {
                 assetsService: assetsService, notificationsService: notificationsService, dialogService: dialogService, localizationService: localizationService,
                 auditLogResource: auditLogResource, invoiceResource: invoiceResource, settingsResource: settingsResource,
                 paymentResource: paymentResource, shipmentResource: shipmentResource, dialogDataFactory: dialogDataFactory, paymentDisplayBuilder: paymentDisplayBuilder,
-                salesHistoryDisplayBuilder: salesHistoryDisplayBuilder, invoiceDisplayBuilder: invoiceDisplayBuilder, orderLineItemDisplayBuilder: orderLineItemDisplayBuilder
+                salesHistoryDisplayBuilder: salesHistoryDisplayBuilder, invoiceDisplayBuilder: invoiceDisplayBuilder, shipMethodsQueryDisplay: shipMethodsQueryDisplay
                  });
 
         //scope.$digest resolves the promise against the httpbackend
