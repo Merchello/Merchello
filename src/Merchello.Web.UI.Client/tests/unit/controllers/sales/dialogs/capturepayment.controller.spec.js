@@ -13,6 +13,4 @@ describe('capturepayment.controller', function() {
         controller = $controller('Merchello.Sales.Dialog.CapturePaymentController', { $scope: scope });
     }));
 
-
-
 });

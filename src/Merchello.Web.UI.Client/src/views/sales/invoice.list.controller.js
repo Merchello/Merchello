@@ -243,7 +243,6 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 if (query.parameters.length > 0) {
                     $scope.currentFilters = query.parameters;
                 }
-
                 return query;
             };
 

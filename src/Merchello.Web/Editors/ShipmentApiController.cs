@@ -175,6 +175,21 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
+        /// Gets a <see cref="ShipMethodDisplay"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The shipmethod key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipMethodDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public ShipMethodDisplay GetShipMethodByKey(Guid key)
+        {
+            return _shipMethodService.GetByKey(key).ToShipMethodDisplay();
+        }
+
+        /// <summary>
         /// Adds a shipment
         ///
         /// POST /umbraco/Merchello/ShipmentApi/CreateShipment

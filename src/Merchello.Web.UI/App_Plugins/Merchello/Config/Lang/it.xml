@@ -87,6 +87,7 @@
     <key alias="captureUpTo">Inserisci pagamento per</key>
     <key alias="salesTax">Tasse</key>
     <key alias="authorized"> Autorizzato</key>
+    <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Storico pagamenti</key>
     <key alias="paymentHistoryHelper">Storico degli stati di uno o più pagamenti</key>
   </area>

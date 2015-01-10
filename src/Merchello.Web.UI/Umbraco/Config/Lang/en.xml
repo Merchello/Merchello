@@ -1126,6 +1126,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="captureUpTo">Capture Up To</key>
     <key alias="salesTax">Sales Tax</key>
     <key alias="authorized"> Authorized</key>
+        <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Payment History</key>
     <key alias="saleHistory">Sale History</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>

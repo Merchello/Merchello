@@ -1137,6 +1137,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="captureUpTo">Capture Up To</key>
     <key alias="salesTax">Sales Tax</key>
     <key alias="authorized"> Authorized</key>
+    <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Payment History</key>
     <key alias="saleHistory">Sale History</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>
@@ -1173,7 +1174,12 @@ To manage your website, simply open the Umbraco back office and start adding con
 		<key alias="enterProduct">Enter a product name</key>
 		<key alias="enterOrder">Start typing an order number or name...</key>to
 		<key alias="addStyle">Add a style...</key>
-  </area><area alias="merchelloGeneral">
+  </area>
+  <area alias="merchelloDelete">
+    <key alias="deleteConfirmation">Delete Confirmation</key>
+    <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+  </area>
+  <area alias="merchelloGeneral">
 		<key alias="apply">Apply</key>
 		<key alias="price">Price</key>
 		<key alias="customer">Customer</key>

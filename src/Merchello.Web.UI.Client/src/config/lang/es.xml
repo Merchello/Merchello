@@ -87,6 +87,7 @@
     <key alias="captureUpTo">Capture Up To</key>
     <key alias="salesTax">Impuesto de venta</key>
     <key alias="authorized"> Autorizado</key>
+    <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Histórico de pagos</key>
     <key alias="paymentHistoryHelper">Registros de estado para uno o más pagos</key>
   </area>

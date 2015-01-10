@@ -21,7 +21,6 @@
             //// 2: DD
             var dateParts = toDateString.call(this).split('-');
             var timeParts = toTimeString.call(this).split(':');
-            console.info(dateParts);
             return Date.parse(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], 0, 0);
         }
 

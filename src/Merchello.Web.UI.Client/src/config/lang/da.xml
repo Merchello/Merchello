@@ -87,6 +87,7 @@
     <key alias="captureUpTo">Indløs op til</key>
     <key alias="salesTax">Moms</key>
     <key alias="authorized"> Autoriseret</key>
+    <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Betalingshistorik</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key> <!-- TODO: Figure out context - is it right? -->
     <key alias="paymentProcessedBy">Betaling gennemført af:</key>
@@ -94,6 +95,7 @@
   <area alias="merchelloFulfillShipment">
     <!-- phrases -->
     <key alias="fulfillManually">Udfyld manuelt</key>
+    <key alias="createShipment">Create Shipment</key>
   </area>
   <area alias="merchelloWarehouse">
     <!-- things -->

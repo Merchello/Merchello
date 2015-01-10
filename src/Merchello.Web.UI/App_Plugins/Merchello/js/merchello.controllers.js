@@ -8,6 +8,20 @@
 
     /**
      * @ngdoc controller
+     * @name Merchello.Common.Dialogs.DeleteConfirmationController
+     * @function
+     *
+     * @description
+     * The controller for the delete confirmations
+     */
+    angular.module('merchello')
+        .controller('Merchello.Common.Dialogs.DeleteConfirmationController',
+        ['$scope', function($scope) {
+
+        }]);
+
+    /**
+     * @ngdoc controller
      * @name Merchello.Common.Dialogs.EditAddressController
      * @function
      * 
@@ -52,7 +66,24 @@
                 return +(Math.round(num + "e+" + places) + "e-" + places);
             }
 
+            $scope.dialogData.amount = round($scope.dialogData.invoiceBalance, 2)
+
     }]);
+'use strict';
+/**
+ * @ngdoc controller
+ * @name Merchello.Sales.Dialog.CreateShipmentController
+ * @function
+ *
+ * @description
+ * The controller for the dialog used in creating a shipment
+ */
+angular.module('merchello')
+    .controller('Merchello.Sales.Dialogs.CreateShipmentController',
+    ['$scope', function($scope) {
+
+    }]);
+
 'use strict';
 /**
  * @ngdoc controller
@@ -298,7 +329,6 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 if (query.parameters.length > 0) {
                     $scope.currentFilters = query.parameters;
                 }
-
                 return query;
             };
 
@@ -388,26 +418,34 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
      * The controller for the sales overview page
      */
     angular.module('merchello').controller('Merchello.Dashboards.SalesOverviewController',
-        ['$scope', '$routeParams', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'dialogDataFactory', 'salesHistoryDisplayBuilder',
-            'invoiceDisplayBuilder', 'paymentDisplayBuilder',
-        function($scope, $routeParams, assetsService, dialogService, localizationService, notificationsService,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource, dialogDataFactory,
-                 salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder) {
+        ['$scope', '$routeParams', '$timeout', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
+            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'dialogDataFactory', 'salesHistoryDisplayBuilder',
+            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'orderLineItemDisplayBuilder',
+        function($scope, $routeParams, $timeout, assetsService, dialogService, localizationService, notificationsService,
+                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, dialogDataFactory,
+                 salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, orderLineItemDisplayBuilder) {
 
+            // exposed properties
             $scope.historyLoaded = false;
             $scope.invoice = {};
+            $scope.remainingBalance = 0.0;
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
             $scope.payments = [];
             $scope.billingAddress = {};
+            $scope.authorizedCapturedLabel = '';
 
             // exposed methods
+            //  dialogs
             $scope.capturePayment = capturePayment;
             $scope.capturePaymentDialogConfirm = capturePaymentDialogConfirm,
             $scope.openDeleteInvoiceDialog = openDeleteInvoiceDialog;
+            $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
+            $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
+
+            // localize the sales history message
             $scope.localizeMessage = localizeMessage;
 
             /**
@@ -472,7 +510,6 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
                     loadPayments(id);
                     loadAuditLog(id);
-
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -511,21 +548,20 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * @name loadPayments
              * @function
              *
-             * @description - Load the Merchello payments.
+             * @description - Load the Merchello payments for the invoice.
              */
             function loadPayments(key) {
                 var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                 paymentsPromise.then(function(payments) {
                     $scope.payments = paymentDisplayBuilder.transform(payments);
+                    $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
+                    $scope.authorizedCapturedLabel  = $scope.remainingBalance === '0' ? 'merchelloOrderView_authorized' : 'merchelloOrderView_captured';
+
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
                 });
-
             }
 
-            /*-------------------------------------------------------------------
-             * Event Handler Methods
-             *-------------------------------------------------------------------*/
 
             /**
              * @ngdoc method
@@ -536,9 +572,14 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              */
             function capturePayment() {
 
-                var data = dialogDataFactory.getCapturePaymentDialogData();
-                data.setup($scope.payments, $scope.invoice, $scope.currencySymbol);
-
+                var data = dialogDataFactory.createCapturePaymentDialogData();
+                data.setPaymentData($scope.payments[0]);
+                data.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
+                if (!data.isValid()) {
+                    return false;
+                }
+                // TODO inject the template for the capture payment dialog so that we can
+                // have different fields for other providers
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/capture.payment.html',
                     show: true,
@@ -555,10 +596,14 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * @description - Capture the payment after the confirmation dialog was passed through.
              */
             function capturePaymentDialogConfirm(paymentRequest) {
-                var promiseSave = paymentRequest.capturePayment(paymentRequest);
+                $scope.preValuesLoaded = false;
+                var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
-                    notificationsService.success("Payment Captured");
-                    $scope.loadInvoice(paymentRequest.invoiceKey);
+                    // added a timeout here to give the examine index
+                    $timeout(function() {
+                        notificationsService.success("Payment Captured");
+                        loadInvoice(paymentRequest.invoiceKey);
+                    }, 400);
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
@@ -575,7 +620,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 var dialogData = {};
                 dialogData.name = 'Invoice #' + $scope.invoice.invoiceNumber;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
                     callback: processDeleteInvoiceDialog,
                     dialogData: dialogData
@@ -590,12 +635,32 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * @description - Open the fufill shipment dialog.
              */
             function openFulfillShipmentDialog() {
-                console.info($scope.invoice);
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Order/Dialogs/fulfill.shipment.html',
-                    show: true,
-                    callback: processFulfillShipmentDialog,
-                    dialogData: $scope.invoice.orders[0]    // todo: pull from current order when multiple orders is available
+
+                var promiseStatuses = shipmentResource.getAllShipmentStatuses();
+                promiseStatuses.then(function(statuses) {
+                    var data = dialogDataFactory.createCreateShipmentDialogData();
+                    data.order = $scope.invoice.orders[0]; // todo: pull from current order when multiple orders is available
+                    data.shipmentStatuses = statuses;
+                    data.shipmentStatus = statuses[0]; // default shipment status
+
+                    // TODO this could eventually turn into an array
+                    var shipmentLineItem = orderLineItemDisplayBuilder.transform($scope.invoice.getShippingLineItems());
+
+                    if (shipmentLineItem) {
+                        var shipMethodKey = shipmentLineItem.extendedData.getValue('merchShipMethodKey');
+                        var shipMethodPromise = shipmentResource.getShipMethod(shipMethodKey);
+                        shipMethodPromise.then(function(shipMethod) {
+                            data.shipMethod = shipMethod;
+
+                            dialogService.open({
+                                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/create.shipment.html',
+                                show: true,
+                                callback: $scope.processFulfillShipmentDialog,
+                                dialogData: data
+                            });
+
+                        });
+                    }
                 });
             };
 
@@ -644,8 +709,7 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 });
             };
 
-            /*-------------------------------------------------------------------*/
-
+            // initialize the controller
             init();
     }]);
 

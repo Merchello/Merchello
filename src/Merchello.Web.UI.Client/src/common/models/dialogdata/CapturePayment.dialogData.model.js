@@ -22,13 +22,18 @@
 
     CapturePaymentDialogData.prototype = (function() {
 
-        function setup(payments, invoice, currencySymbol) {
-            if (payments.length > 0) {
-                var payment = payments[0];
-                this.paymentMethodKey = payment.paymentMethodKey;
-                this.paymentMethodName = payment.paymentMethodName;
-            }
+        // helper method to set required associated payment info
+        function setPaymentData(payment) {
+            this.paymentKey = payment.key;
+            this.paymentMethodKey = payment.paymentMethodKey;
+            this.paymentMethodName = payment.paymentMethodName;
+
+        }
+
+        //// helper method to set required associated invoice info
+        function setInvoiceData(payments, invoice, currencySymbol) {
             if (invoice !== undefined) {
+                this.invoiceKey = invoice.key;
                 this.invoiceBalance = invoice.remainingBalance(payments);
             }
             if (currencySymbol !== undefined) {
@@ -36,8 +41,14 @@
             }
         }
 
+        function isValid() {
+            return this.paymentKey !== '' && this.invoiceKey !== '' && this.invoiceBalance !==0;
+        }
+
         return {
-            setup: setup
+            setPaymentData: setPaymentData,
+            setInvoiceData: setInvoiceData,
+            isValid: isValid
         };
 
     }());

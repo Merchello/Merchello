@@ -80,43 +80,76 @@
      * Represents a JS version of Merchello's ExtendedDataDisplay object
      */
     var ExtendedDataDisplay = function() {
-        var items = [];
+        var self = this;
+        self.items = [];
     };
 
     ExtendedDataDisplay.prototype = (function() {
 
         function isEmpty() {
-            return items.length === 0;
+            return this.items.length === 0;
         }
 
         function getValue(key) {
-            return _.where(this.items, { key: key });
+            if (isEmpty.call(this)) {
+                return;
+            }
+            var found = false;
+            var i = 0;
+            var value = '';
+            while(i < this.items.length && !found) {
+                if (this.items[ i ].key === key) {
+                    found = true;
+
+                    value = this.items[ i ].value;
+                } else {
+                    i++;
+                }
+            }
+            return value;
         }
 
-        function setValue(key, value) {
+        /*function setValue(key, value) {
             var found = false;
             var i = 0;
             while(i < this.items.length && !found) {
-                if (this.items[0].key === key) {
+                if (this[ i ].key === key) {
                     found = true;
-                    this.items[ i ].value = value;
+                    this[ i ].value = value;
                 }
                 i++;
             }
             if (found) {
                 return;
             }
-            this.items.push({ key: key, value: value });
-        }
+            this.push({ key: key, value: value });
+        }*/
+
 
         return {
             isEmpty: isEmpty,
-            getValue: getValue,
-            setValue: setValue
+            getValue: getValue
+            //setValue: setValue
         };
     }());
 
     angular.module('merchello.models').constant('ExtendedDataDisplay', ExtendedDataDisplay);
+    /**
+     * @ngdoc model
+     * @name ExtendedDataItemDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of  ExtendedDataItemDisplay object
+     */
+    var ExtendedDataItemDisplay = function() {
+        this.key = '';
+        this.value = '';
+    };
+
+    angular.module('merchello.models').constant('ExtendedDataItemDisplay', ExtendedDataItemDisplay);
+
+
     /**
      * @ngdoc model
      * @name ProvinceDisplay
@@ -197,13 +230,18 @@
 
     CapturePaymentDialogData.prototype = (function() {
 
-        function setup(payments, invoice, currencySymbol) {
-            if (payments.length > 0) {
-                var payment = payments[0];
-                this.paymentMethodKey = payment.paymentMethodKey;
-                this.paymentMethodName = payment.paymentMethodName;
-            }
+        // helper method to set required associated payment info
+        function setPaymentData(payment) {
+            this.paymentKey = payment.key;
+            this.paymentMethodKey = payment.paymentMethodKey;
+            this.paymentMethodName = payment.paymentMethodName;
+
+        }
+
+        //// helper method to set required associated invoice info
+        function setInvoiceData(payments, invoice, currencySymbol) {
             if (invoice !== undefined) {
+                this.invoiceKey = invoice.key;
                 this.invoiceBalance = invoice.remainingBalance(payments);
             }
             if (currencySymbol !== undefined) {
@@ -211,14 +249,39 @@
             }
         }
 
+        function isValid() {
+            return this.paymentKey !== '' && this.invoiceKey !== '' && this.invoiceBalance !==0;
+        }
+
         return {
-            setup: setup
+            setPaymentData: setPaymentData,
+            setInvoiceData: setInvoiceData,
+            isValid: isValid
         };
 
     }());
 
     angular.module('merchello.models').constant('CapturePaymentDialogData', CapturePaymentDialogData);
 
+    /**
+     * @ngdoc model
+     * @name CreateShipmentDialogData
+     * @function
+     *
+     * @description
+     * A back office model used for passing shipment creation information to the dialogService
+     *
+     * @note
+     * Presently there is not a corresponding Merchello.Web model
+     */
+    var CreateShipmentDialogData = function() {
+        var self = this;
+        self.order = {};
+        self.shipmentStatuses = [];
+        self.shipment = {};
+    };
+
+    angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
     /**
      * @ngdoc model
      * @name GatewayResourceDisplay
@@ -338,6 +401,7 @@
         self.customerKey = '';
         self.paymentMethodKey = '';
         self.paymentTypeFieldKey = '';
+        self.paymentMethodType = '';
         self.paymentMethodName = '';
         self.referenceNumber = '';
         self.amount = 0.0;
@@ -543,6 +607,11 @@
             return adr;
         }
 
+        // gets the invoice date as a date string
+        function invoiceDateString() {
+            return this.invoiceDate.split('T')[0];
+        }
+
         // gets the invoice status name
         // TODO this is incorrectly named
         function getPaymentStatus() {
@@ -583,11 +652,14 @@
             return status === 'Paid';
         }
 
+        // calculates the unpaid balance of the invoice
         function remainingBalance(payments) {
             var amountPaid = 0;
-            //angular.forEach(payments, function(payment) {
-            //  amountPaid += payment.amount;
-            //});
+            angular.forEach(payments, function(payment) {
+                angular.forEach(payment.appliedPayments, function(applied) {
+                    amountPaid += applied.amount;
+                });
+            });
             return this.total - amountPaid;
         }
 
@@ -596,11 +668,12 @@
             getFulfillmentStatus: getFulfillmentStatus,
             getProductLineItems: getProductLineItems,
             getTaxLineItem: getTaxLineItem,
-            getShippingLineItem: getShippingLineItems,
+            getShippingLineItems: getShippingLineItems,
             hasOrder: hasOrder,
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,
-            remainingBalance: remainingBalance
+            remainingBalance: remainingBalance,
+            invoiceDateString: invoiceDateString
         };
     }());
 
@@ -933,7 +1006,6 @@
             //// 2: DD
             var dateParts = toDateString.call(this).split('-');
             var timeParts = toTimeString.call(this).split(':');
-            console.info(dateParts);
             return Date.parse(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], 0, 0);
         }
 
@@ -1148,12 +1220,19 @@ angular.module('merchello.models').factory('dialogDataFactory',
     ['CapturePaymentDialogData',
     function(CapturePaymentDialogData) {
 
-        function getCapturePaymentDialogData() {
+        // creates dialogData object for capturing a payment
+        function createCapturePaymentDialogData() {
             return new CapturePaymentDialogData();
         }
 
+        // creates dialogData for creating a shipment
+        function createCreateShipmentDialogData() {
+            return new CreateShipmentDialogData();
+        }
+
         return {
-            getCapturePaymentDialogData: getCapturePaymentDialogData
+            createCapturePaymentDialogData: createCapturePaymentDialogData,
+            createCreateShipmentDialogData: createCreateShipmentDialogData
         };
 }]);
 
@@ -1166,14 +1245,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
      */
     angular.module('merchello.models')
         .factory('extendedDataDisplayBuilder',
-        ['genericModelBuilder', 'ExtendedDataDisplay',
-            function(genericModelBuilder, ExtendedDataDisplay) {
+        ['genericModelBuilder', 'ExtendedDataDisplay', 'ExtendedDataItemDisplay',
+            function(genericModelBuilder, ExtendedDataDisplay, ExtendedDataItemDisplay) {
 
                 var Constructor = ExtendedDataDisplay;
-                var extendedDataItem = function() {
-                    this.key = '';
-                    this.value = '';
-                };
+
 
                 return {
                     createDefault: function() {
@@ -1181,7 +1257,13 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     },
                     transform: function(jsonResult) {
                         var extendedData = new Constructor();
-                        extendedData.items = genericModelBuilder.transform(jsonResult, extendedDataItem);
+                        if (jsonResult !== undefined) {
+                            if(jsonResult.length) {
+                                angular.forEach(jsonResult, function(item) {
+                                    extendedData.items.push(genericModelBuilder.transform(item, ExtendedDataItemDisplay));
+                                });
+                            }
+                        }
                         return extendedData;
                     }
                 };
@@ -1353,7 +1435,6 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     var result = genericModelBuilder.transform(jsonResult, Constructor);
                     if (itemBuilder !== undefined)
                     {
-                        result.items = [];
                         result.items = itemBuilder.transform(jsonResult.items);
                     }
                     return result;
@@ -1384,10 +1465,22 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     },
                     transform: function(jsonResult) {
                         var invoices = genericModelBuilder.transform(jsonResult, Constructor);
-                        for(var i = 0; i < invoices.length; i++) {
-                            invoices[ i ].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[ i ].invoiceStatus);
-                            invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
-                            invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
+                        if (invoices.length) {
+                            for(var i = 0; i < invoices.length; i++) {
+                                invoices[ i ].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[ i ].invoiceStatus);
+                                invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                                invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
+                            }
+                        } else {
+                            if (jsonResult.invoiceStatus) {
+                                invoices.invoiceStatus = invoiceLineItemDisplayBuilder.transform(jsonResult.invoiceStatus);
+                            }
+                            if (jsonResult.items) {
+                                invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
+                            }
+                            if (jsonResult.orders) {
+                                invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
+                            }
                         }
                         return invoices;
                     }
@@ -1466,9 +1559,18 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     },
                     transform: function(jsonResult) {
                         var orders = genericModelBuilder.transform(jsonResult, Constructor);
-                        for(var i = 0; i < orders.length; i++) {
-                            orders[ i ].orderStatus = orderStatusDisplayBuilder.transform(jsonResult[ i ].orderStatus);
-                            orders[ i ].items = orderLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                        if (orders.length) {
+                            for(var i = 0; i < orders.length; i++) {
+                                orders[ i ].orderStatus = orderStatusDisplayBuilder.transform(jsonResult[ i ].orderStatus);
+                                orders[ i ].items = orderLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                            }
+                        } else {
+                            if (jsonResult.orderStatus) {
+                                orders.orderStatus = orderStatusDisplayBuilder.transform(jsonResult.orderStatus);
+                            }
+                            if (jsonResult.items) {
+                                orders.items = orderLineItemDisplayBuilder.transform(jsonResult.items);
+                            }
                         }
                         return orders;
                     }
@@ -1496,9 +1598,14 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     },
                     transform: function(jsonResult) {
                         var orderLineItems = genericModelBuilder.transform(jsonResult, Constructor);
-                        for(var i = 0; i < orderLineItems.length; i++) {
-                            orderLineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                            orderLineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);
+                        if (orderLineItems.length) {
+                            for (var i = 0; i < orderLineItems.length; i++) {
+                                orderLineItems[i].extendedData = extendedDataDisplayBuilder.transform(jsonResult[i].extendedData);
+                                orderLineItems[i].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[i].lineItemTypeField);
+                            }
+                        } else {
+                            orderLineItems.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                            orderLineItems.lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult.lineItemTypeField);
                         }
                         return orderLineItems;
                     }

@@ -15,4 +15,6 @@
                 return +(Math.round(num + "e+" + places) + "e-" + places);
             }
 
+            $scope.dialogData.amount = round($scope.dialogData.invoiceBalance, 2)
+
     }]);

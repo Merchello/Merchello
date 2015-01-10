@@ -3,7 +3,9 @@
         <umb-header>
             <div class="span4">
                 <div class="umb-headline-editor-wrapper">
-                    <h1 class="umb-headline"><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
+                    <h1 class="umb-headline"><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}<br />
+                        {{invoice.invoiceDateString() | date : settings.dateFormat }}
+                    </h1>
                 </div>
             </div>
             <div class="span8">
@@ -14,6 +16,11 @@
             </div>
         </umb-header>
         <merchello-panel class="row-fluid">
+            <!-- Loader -->
+            <div class="pager" data-ng-show="!preValuesLoaded">
+                <img src="/umbraco/assets/img/loader.gif" />
+            </div>
+
             <!-- Main content area -->
             <div class="merchello-pane primary span9">
                 <!-- Order Information -->
@@ -23,11 +30,10 @@
                         <small><localize key="merchelloOrderView_orderInformationHelper" /></small>
                     </div>
                     <div class="merchello-controls">
-                        <div>
+                        <div class="button-bar">
                             <!-- ACTION: Cancel Sale -->
                             <button type="button" class="btn btn-default btn-trash pull-right" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled'" data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>
                             <!-- ACTION: Fulfill Shipment -->
-                            {{invoice.isPaid() }} {{invoice.getFulfillmentStatus()}} {{invoice.hasOrder()}}
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' || !invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                             <!-- ACTION: Capture Payment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid()" data-ng-click="capturePayment()">Capture Funds</button>
@@ -56,14 +62,18 @@
                                 <td colspan="4" class="text-right"><localize key="merchelloShipping_shipping" /></td>
                                 <td class="text-right">{{invoice.getShippingLineItem().price | currency : currencySymbol}}</td>
                             </tr>
-                            <tr data-ng-repeat="payment in invoice.payments" data-ng-hide="invoice.payments.length == 0">
-                                <td colspan="2"><i class="icon-credit-card" data-ng-class="{ 'icon-credit-card': payment.paymentType.alias == 'CreditCard', 'icon-credit-card': payment.paymentType.alias == 'Cash' }"></i></td>
+                            <tr data-ng-repeat="payment in payments" data-ng-hide="payments.length == 0">
+                                <td colspan="2"><i data-ng-class="{ 'icon-credit-card': payment.paymentMethodType === 'CreditCard', 'icon-receipt-dollar': payment.paymentMethodType === 'Cash' }"></i></td>
                                 <td>
-                                    <span data-ng-show="payment.paymentType.alias == 'CreditCard'" class="card-no">xxxx-xxxx-xxxx-xxxx</span>
+                                    <span data-ng-show="payment.paymentMethodType == 'CreditCard'" class="card-no">xxxx-xxxx-xxxx-xxxx</span>
                                     <span class="payment-method"><localize key="merchelloOrderView_paymentProcessedBy" /> {{payment.paymentMethodName}}</span>
                                 </td>
-                                <td class="text-right"><localize key="merchelloOrderView_authorized" />:</td>
-                                <td class="text-right">{{payment.amount | currency : currencySymbol}}</td>
+                                <td class="text-right"><localize key="{{authorizedCapturedLabel}}" />:</td>
+                                <td class="text-right">{{invoice.total | currency : currencySymbol}}</td>
+                            </tr>
+                            <tr ng-hide="remainingBalance == 0">
+                                <td colspan="4" class="text-right">Balance due:</td>
+                                <td class="text-right">{{remainingBalance | currency : currencySymbol }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -82,8 +92,7 @@
                                 <tbody>
                                 <thead>
                                 <tr>
-                                    <th colspan="2">{{item.toDateString() | date : settings.dateFormat }}
-                                        <!-- {{ item.toDateString() | date : settings.dateFormat }} --></th>
+                                    <th colspan="2">{{item.toDateString() | date : settings.dateFormat }}</th>
                                 </tr>
                                 </thead>
                                 <tr data-ng-repeat="log in item.logs track by $index">
@@ -103,11 +112,10 @@
                     <h3><localize key="merchelloOrderView_billingAddress" /></h3><br />
                     <merchello-address address="billingAddress"></merchello-address>
                 </div>
-                {{payments}}
                 <!-- ACTION: Open Shipments Page -->
                 <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderShipmentInfo/{{invoice.key}}" data-ng-show="hasShipments()">Shipments</a>
                 <!-- ACTION: Open Payments Page -->
-                <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderPaymentInfo/{{invoice.key}}" data-ng-show="hasAppliedPayments()">Payments</a>
+                <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderPaymentInfo/{{invoice.key}}" data-ng-show="payments.length > 0">Payments</a>
             </div>
             <!-- Debug -->
             <merchello-debug-section data-props-to-debug="invoice"></merchello-debug-section>

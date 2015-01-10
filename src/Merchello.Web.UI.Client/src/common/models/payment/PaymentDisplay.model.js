@@ -12,6 +12,7 @@
         self.customerKey = '';
         self.paymentMethodKey = '';
         self.paymentTypeFieldKey = '';
+        self.paymentMethodType = '';
         self.paymentMethodName = '';
         self.referenceNumber = '';
         self.amount = 0.0;

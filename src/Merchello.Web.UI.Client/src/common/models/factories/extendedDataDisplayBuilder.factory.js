@@ -7,14 +7,11 @@
      */
     angular.module('merchello.models')
         .factory('extendedDataDisplayBuilder',
-        ['genericModelBuilder', 'ExtendedDataDisplay',
-            function(genericModelBuilder, ExtendedDataDisplay) {
+        ['genericModelBuilder', 'ExtendedDataDisplay', 'ExtendedDataItemDisplay',
+            function(genericModelBuilder, ExtendedDataDisplay, ExtendedDataItemDisplay) {
 
                 var Constructor = ExtendedDataDisplay;
-                var extendedDataItem = function() {
-                    this.key = '';
-                    this.value = '';
-                };
+
 
                 return {
                     createDefault: function() {
@@ -22,7 +19,13 @@
                     },
                     transform: function(jsonResult) {
                         var extendedData = new Constructor();
-                        extendedData.items = genericModelBuilder.transform(jsonResult, extendedDataItem);
+                        if (jsonResult !== undefined) {
+                            if(jsonResult.length) {
+                                angular.forEach(jsonResult, function(item) {
+                                    extendedData.items.push(genericModelBuilder.transform(item, ExtendedDataItemDisplay));
+                                });
+                            }
+                        }
                         return extendedData;
                     }
                 };
