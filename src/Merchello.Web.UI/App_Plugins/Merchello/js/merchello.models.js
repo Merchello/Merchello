@@ -638,7 +638,24 @@
 
         // gets the shipping line items
         function getShippingLineItems() {
-            return _.find(this.items, function (item) { return item.lineItemTypeField.alias === 'Shipping'; });
+            return _.find(this.items, function (item) {
+                return item.lineItemTypeField.alias === 'Shipping';
+            });
+        }
+
+        function shippingTotal() {
+            var shippingLineItems = getShippingLineItems.call(this);
+            var total = 0;
+            if (shippingLineItems) {
+                if (shippingLineItems.length) {
+                    angular.forEach(shippingLineItems, function(lineItem) {
+                      total += lineItem.price;
+                    });
+                } else {
+                    total += shippingLineItems.price;
+                }
+            }
+            return total;
         }
 
         // gets a value indicating whether or not this invoice has an order
@@ -673,7 +690,8 @@
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,
             remainingBalance: remainingBalance,
-            invoiceDateString: invoiceDateString
+            invoiceDateString: invoiceDateString,
+            shippingTotal: shippingTotal
         };
     }());
 
@@ -1258,10 +1276,9 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     transform: function(jsonResult) {
                         var extendedData = new Constructor();
                         if (jsonResult !== undefined) {
-                            if(jsonResult.length) {
-                                angular.forEach(jsonResult, function(item) {
-                                    extendedData.items.push(genericModelBuilder.transform(item, ExtendedDataItemDisplay));
-                                });
+                            var items = genericModelBuilder.transform(jsonResult, ExtendedDataItemDisplay);
+                            if(items.length > 0) {
+                                extendedData.items = items;
                             }
                         }
                         return extendedData;
@@ -1472,15 +1489,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
                                 invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
                             }
                         } else {
-                            if (jsonResult.invoiceStatus) {
-                                invoices.invoiceStatus = invoiceLineItemDisplayBuilder.transform(jsonResult.invoiceStatus);
-                            }
-                            if (jsonResult.items) {
-                                invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
-                            }
-                            if (jsonResult.orders) {
-                                invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
-                            }
+                            //jsonResult = JSON.stringify(jsonResult);
+                            invoices.invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult.invoiceStatus);
+                            invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
+                            invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
                         }
                         return invoices;
                     }
@@ -1507,9 +1519,14 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     },
                     transform: function(jsonResult) {
                         var invoiceLineItems = genericModelBuilder.transform(jsonResult, Constructor);
-                        for(var i = 0; i < invoiceLineItems.length; i++) {
-                            invoiceLineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                            invoiceLineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);
+                        if(invoiceLineItems.length) {
+                            for(var i = 0; i < invoiceLineItems.length; i++) {
+                                invoiceLineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                                invoiceLineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);
+                            }
+                        } else {
+                            invoiceLineItems.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                            invoiceLineItems.lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult.lineItemTypeField);
                         }
                         return invoiceLineItems;
                     }

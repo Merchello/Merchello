@@ -19,9 +19,14 @@
                     },
                     transform: function(jsonResult) {
                         var invoiceLineItems = genericModelBuilder.transform(jsonResult, Constructor);
-                        for(var i = 0; i < invoiceLineItems.length; i++) {
-                            invoiceLineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                            invoiceLineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);
+                        if(invoiceLineItems.length) {
+                            for(var i = 0; i < invoiceLineItems.length; i++) {
+                                invoiceLineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                                invoiceLineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);
+                            }
+                        } else {
+                            invoiceLineItems.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                            invoiceLineItems.lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult.lineItemTypeField);
                         }
                         return invoiceLineItems;
                     }

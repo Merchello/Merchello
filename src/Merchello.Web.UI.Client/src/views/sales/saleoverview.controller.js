@@ -18,6 +18,8 @@
             $scope.historyLoaded = false;
             $scope.invoice = {};
             $scope.remainingBalance = 0.0;
+            $scope.shippingTotal = 0.0;
+            $scope.taxTotal = 0.0;
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
@@ -97,14 +99,18 @@
                 promise.then(function (invoice) {
                     $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
+                    $scope.taxTotal = $scope.invoice.getTaxLineItem().price;
+                    $scope.shippingTotal = $scope.invoice.shippingTotal();
+
                     loadPayments(id);
                     loadAuditLog(id);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                   //console.info($scope.invoice);
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
-
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
             };
 
 
@@ -144,7 +150,7 @@
                 paymentsPromise.then(function(payments) {
                     $scope.payments = paymentDisplayBuilder.transform(payments);
                     $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
-                    $scope.authorizedCapturedLabel  = $scope.remainingBalance === '0' ? 'merchelloOrderView_authorized' : 'merchelloOrderView_captured';
+                    $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
 
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
@@ -233,14 +239,12 @@
                     data.shipmentStatus = statuses[0]; // default shipment status
 
                     // TODO this could eventually turn into an array
-                    var shipmentLineItem = orderLineItemDisplayBuilder.transform($scope.invoice.getShippingLineItems());
-
+                    var shipmentLineItem = $scope.invoice.getShippingLineItems();
                     if (shipmentLineItem) {
                         var shipMethodKey = shipmentLineItem.extendedData.getValue('merchShipMethodKey');
                         var shipMethodPromise = shipmentResource.getShipMethod(shipMethodKey);
                         shipMethodPromise.then(function(shipMethod) {
                             data.shipMethod = shipMethod;
-
                             dialogService.open({
                                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/create.shipment.html',
                                 show: true,

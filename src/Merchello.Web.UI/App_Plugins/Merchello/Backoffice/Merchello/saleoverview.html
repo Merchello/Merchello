@@ -56,11 +56,11 @@
                             </tr>
                             <tr>
                                 <td colspan="4" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
-                                <td class="text-right">{{invoice.getTaxLineItem().price | currency : currencySymbol}}</td>
+                                <td class="text-right">{{taxTotal | currency : currencySymbol}}</td>
                             </tr>
                             <tr>
                                 <td colspan="4" class="text-right"><localize key="merchelloShipping_shipping" /></td>
-                                <td class="text-right">{{invoice.getShippingLineItem().price | currency : currencySymbol}}</td>
+                                <td class="text-right">{{shippingTotal | currency : currencySymbol}}</td>
                             </tr>
                             <tr data-ng-repeat="payment in payments" data-ng-hide="payments.length == 0">
                                 <td colspan="2"><i data-ng-class="{ 'icon-credit-card': payment.paymentMethodType === 'CreditCard', 'icon-receipt-dollar': payment.paymentMethodType === 'Cash' }"></i></td>
@@ -97,7 +97,7 @@
                                 </thead>
                                 <tr data-ng-repeat="log in item.logs track by $index">
                                     <td>{{ log.message.formattedMessage }}</td>
-                                    <td>{{log.toTimeString() | date : setting.timeFormat }}</td>
+                                    <td class="text-right">{{log.toTimeString() | date : setting.timeFormat }}</td>
                                 </tr>
                                 </tbody>
                             </table>

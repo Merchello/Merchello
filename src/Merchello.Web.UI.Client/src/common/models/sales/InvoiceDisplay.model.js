@@ -81,7 +81,24 @@
 
         // gets the shipping line items
         function getShippingLineItems() {
-            return _.find(this.items, function (item) { return item.lineItemTypeField.alias === 'Shipping'; });
+            return _.find(this.items, function (item) {
+                return item.lineItemTypeField.alias === 'Shipping';
+            });
+        }
+
+        function shippingTotal() {
+            var shippingLineItems = getShippingLineItems.call(this);
+            var total = 0;
+            if (shippingLineItems) {
+                if (shippingLineItems.length) {
+                    angular.forEach(shippingLineItems, function(lineItem) {
+                      total += lineItem.price;
+                    });
+                } else {
+                    total += shippingLineItems.price;
+                }
+            }
+            return total;
         }
 
         // gets a value indicating whether or not this invoice has an order
@@ -116,7 +133,8 @@
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,
             remainingBalance: remainingBalance,
-            invoiceDateString: invoiceDateString
+            invoiceDateString: invoiceDateString,
+            shippingTotal: shippingTotal
         };
     }());
 
