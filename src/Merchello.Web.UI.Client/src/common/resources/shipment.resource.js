@@ -62,11 +62,11 @@
                     'Failed to get shipment method');
             },
 
-            newShipment: function (order) {
+            newShipment: function (shipmentRequest) {
 
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'NewShipment'),
-                        order
+                        shipmentRequest
                     ),
                     'Failed to create shipment');
             },

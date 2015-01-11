@@ -27,6 +27,11 @@
         /// A collection of order line item keys to be included in the shipment
         /// </summary>
         private readonly IEnumerable<Guid> _keysToShip;
+
+        /// <summary>
+        /// The shipment tracking number.
+        /// </summary>
+        private readonly string _trackingNumber;
  
         /// <summary>
         /// The merchello context.
@@ -53,7 +58,10 @@
         /// <param name="shipmentStatusKey">
         /// The shipment Status Key.
         /// </param>
-        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip, Guid shipmentStatusKey)
+        /// <param name="trackingNumber">
+        /// The tracking Number.
+        /// </param>
+        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip, Guid shipmentStatusKey, string trackingNumber)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(order, "order");
@@ -64,6 +72,7 @@
             _order = order;
             _keysToShip = keysToShip;
             _shipmentStatusKey = shipmentStatusKey;
+            _trackingNumber = trackingNumber;
             ResolveChain(Core.Constants.TaskChainAlias.OrderPreparationShipmentCreate);
         }
 
@@ -113,7 +122,8 @@
                         new Shipment(status, quoted.GetOriginAddress(), quoted.GetDestinationAddress())
                             {
                                 ShipMethodKey = quoted.ShipMethodKey,
-                                VersionKey = quoted.VersionKey
+                                VersionKey = quoted.VersionKey,
+                                TrackingCode = _trackingNumber
                             })
                 : Attempt<IShipment>.Fail(new InvalidOperationException("The configuration Chain Task List could not be instantiated."));
 

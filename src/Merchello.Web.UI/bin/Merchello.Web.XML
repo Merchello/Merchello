@@ -173,17 +173,37 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ShipmentStatusDisplay"/>.
             </returns>
         </member>
-        <member name="T:Merchello.Web.Models.Querying.ShipMethodsQueryDisplay">
+        <member name="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay">
+            <summary>
+            API object for handling new shipment requests.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.ShipmentStatusKey">
+            <summary>
+            Gets or sets the shipment status key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.Order">
+            <summary>
+            Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.OrderDisplay"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.TrackingNumber">
+            <summary>
+            Gets or sets the tracking number.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.Shipping.ShipMethodsQueryDisplay">
             <summary>
             API wrapper to return a <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/> and alternative <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Querying.ShipMethodsQueryDisplay.Selected">
+        <member name="P:Merchello.Web.Models.Shipping.ShipMethodsQueryDisplay.Selected">
             <summary>
             Gets or sets the currently selected <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Querying.ShipMethodsQueryDisplay.Alternatives">
+        <member name="P:Merchello.Web.Models.Shipping.ShipMethodsQueryDisplay.Alternatives">
             <summary>
             Gets or sets the set of alternative <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>s.
             </summary>
@@ -6256,16 +6276,16 @@
             The shipmethod key from the quoted shipment 
             </param>
             <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.ShipMethodsQueryDisplay"/>.
+            The <see cref="T:Merchello.Web.Models.Shipping.ShipMethodsQueryDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Editors.ShipmentApiController.NewShipment(Merchello.Web.Models.ContentEditing.OrderDisplay)">
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.NewShipment(Merchello.Web.Models.Shipping.ShipmentRequestDisplay)">
              <summary>
              Adds a shipment
             
              POST /umbraco/Merchello/ShipmentApi/CreateShipment
              </summary>
-             <param name="order">POSTed <see cref="T:Merchello.Web.Models.ContentEditing.OrderDisplay"/> object</param>
+             <param name="shipmentRequest">POSTed <see cref="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay"/> object</param>
              <remarks>
              
              Note:  This is a modified order that very likely has not been persisted.  The UI 

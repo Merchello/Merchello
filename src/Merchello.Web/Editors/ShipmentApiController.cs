@@ -17,6 +17,7 @@ namespace Merchello.Web.Editors
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
+    using Merchello.Web.Models.Shipping;
     using Merchello.Web.WebApi;
 
     using Umbraco.Web;
@@ -217,7 +218,7 @@ namespace Merchello.Web.Editors
         ///
         /// POST /umbraco/Merchello/ShipmentApi/CreateShipment
         /// </summary>
-        /// <param name="order">POSTed <see cref="OrderDisplay"/> object</param>
+        /// <param name="shipmentRequest">POSTed <see cref="ShipmentRequestDisplay"/> object</param>
         /// <remarks>
         /// 
         /// Note:  This is a modified order that very likely has not been persisted.  The UI 
@@ -227,15 +228,15 @@ namespace Merchello.Web.Editors
         /// 
         /// </remarks>
         [HttpPost]
-        public ShipmentDisplay NewShipment(OrderDisplay order)
+        public ShipmentDisplay NewShipment(ShipmentRequestDisplay shipmentRequest)
         {
             try
             {
-                if (!order.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
+                if (!shipmentRequest.Order.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
                 
-                var merchOrder = _orderService.GetByKey(order.Key);
+                var merchOrder = _orderService.GetByKey(shipmentRequest.Order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key), Constants.DefaultKeys.ShipmentStatus.Quoted);
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, shipmentRequest.Order.Items.Select(x => x.Key), shipmentRequest.ShipmentStatusKey, shipmentRequest.TrackingNumber);
 
                 var attempt = builder.Build();
                 

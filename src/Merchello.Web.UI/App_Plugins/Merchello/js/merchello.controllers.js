@@ -80,14 +80,30 @@
  */
 angular.module('merchello')
     .controller('Merchello.Sales.Dialogs.CreateShipmentController',
-    ['$scope', function($scope) {
+    ['$scope', 'ShipmentRequestDisplay', 'OrderDisplay', function($scope, ShipmentRequestDisplay, OrderDisplay) {
 
         $scope.save = save;
+        $scope.loaded = false;
 
+        function init() {
+            _.each($scope.dialogData.order.items, function(item) {
+                item.selected = true;
+            });
+            $scope.dialogData.shipmentRequest = new ShipmentRequestDisplay();
+            $scope.dialogData.shipmentRequest.order = angular.extend($scope.dialogData.order, OrderDisplay);
+            $scope.loaded = true;
+        }
 
         function save() {
+            $scope.dialogData.shipmentRequest.shipmentStatusKey = $scope.dialogData.shipmentStatus.key;
+            $scope.dialogData.shipmentRequest.trackingNumber = $scope.dialogData.trackingNumber;
+            $scope.dialogData.shipmentRequest.order.items = _.filter($scope.dialogData.order.items, function (item) {
+                return item.selected === true;
+            });
             $scope.submit($scope.dialogData);
         }
+
+        init();
 
     }]);
 
@@ -416,6 +432,16 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
             init();
         }]);
 
+angular.module('merchello').controller('Merchello.Dashboards.InvoicePaymentsController',
+    ['$scope', '$routeParams', function($scope, $routeParams) {
+
+        $scope.invoice = {
+            key: $routeParams.id
+        };
+        $scope.loaded = true;
+
+}]);
+
     /**
      * @ngdoc controller
      * @name Merchello.Editors.Sales.OverviewController
@@ -426,11 +452,12 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
      */
     angular.module('merchello').controller('Merchello.Dashboards.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'dialogDataFactory', 'salesHistoryDisplayBuilder',
+            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
+            'orderResource', 'dialogDataFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, assetsService, dialogService, localizationService, notificationsService,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, dialogDataFactory,
-                 salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
+                 addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
             $scope.historyLoaded = false;
@@ -443,7 +470,10 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
             $scope.salesHistory = {};
             $scope.payments = [];
             $scope.billingAddress = {};
+            $scope.shippingAddress = {};
+            $scope.hasShippingAddress = false;
             $scope.authorizedCapturedLabel = '';
+            $scope.shipmentLineItems = [];
 
             // exposed methods
             //  dialogs
@@ -519,12 +549,15 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
                     $scope.taxTotal = $scope.invoice.getTaxLineItem().price;
                     $scope.shippingTotal = $scope.invoice.shippingTotal();
-
                     loadPayments(id);
                     loadAuditLog(id);
+                    loadShippingAddress(id);
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-
+                    var shipmentLineItem = $scope.invoice.getShippingLineItems();
+                    if (shipmentLineItem) {
+                        $scope.shipmentLineItems.push(shipmentLineItem);
+                    }
                    //console.info($scope.invoice);
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
@@ -575,6 +608,15 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
                 });
             }
 
+            function loadShippingAddress(key) {
+                var shippingAddressPromise = orderResource.getShippingAddress(key);
+                shippingAddressPromise.then(function(result) {
+                      $scope.shippingAddress = addressDisplayBuilder.transform(result);
+                      $scope.hasShippingAddress = true;
+                }, function(reason) {
+                    notificationsService.error('Failed to load shipping address', reason.message);
+                });
+            }
 
             /**
              * @ngdoc method
@@ -584,7 +626,6 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * @description - Open the capture shipment dialog.
              */
             function capturePayment() {
-
                 var data = dialogDataFactory.createCapturePaymentDialogData();
                 data.setPaymentData($scope.payments[0]);
                 data.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
@@ -648,18 +689,24 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * @description - Open the fufill shipment dialog.
              */
             function openFulfillShipmentDialog() {
-
                 var promiseStatuses = shipmentResource.getAllShipmentStatuses();
                 promiseStatuses.then(function(statuses) {
                     var data = dialogDataFactory.createCreateShipmentDialogData();
                     data.order = $scope.invoice.orders[0]; // todo: pull from current order when multiple orders is available
+                    data.order.items = data.order.getUnShippedItems();
                     data.shipmentStatuses = statuses;
-                    data.shipmentStatus = statuses[0]; // default shipment status
+
+                    // packaging
+                    var quotedKey = '7342dcd6-8113-44b6-bfd0-4555b82f9503';
+                    data.shipmentStatus = _.find(data.shipmentStatuses, function(status) {
+                        return status.key === quotedKey;
+                    });
+                    data.invoiceKey = $scope.invoice.key;
 
                     // TODO this could eventually turn into an array
                     var shipmentLineItem = $scope.invoice.getShippingLineItems();
-                    if (shipmentLineItem) {
-                        var shipMethodKey = shipmentLineItem.extendedData.getValue('merchShipMethodKey');
+                    if ($scope.shipmentLineItems[0]) {
+                        var shipMethodKey = $scope.shipmentLineItems[0].extendedData.getValue('merchShipMethodKey');
                         var shipMethodPromise = shipmentResource.getShipMethodAndAlternatives(shipMethodKey);
                         shipMethodPromise.then(function(result) {
                             data.shipMethods = shipMethodsQueryDisplayBuilder.transform(result);
@@ -700,24 +747,22 @@ angular.module('merchello').controller('Merchello.Dashboards.Sales.ListControlle
              * @description - Process the fulfill shipment functionality on callback from the dialog service.
              */
             function processFulfillShipmentDialog(data) {
-                var promiseNewShipment = shipmentResource.newShipment(data);
-                promiseNewShipment.then(function (shipment) {
-                    // TODO this is a total hack.  A new model should be defined.
-                    shipment.trackingCode = data.trackingNumber;
-                    shipment.shipmentStatus = data.shipmentStatus;
-                    var promiseSave = shipmentResource.putShipment(shipment, data);
-                    promiseSave.then(function () {
-                        notificationsService.success("Shipment Created");
-
-                        // todo - this needs to be done outside of the promise
-                        $scope.loadInvoice(data.invoiceKey);
+                $scope.preValuesLoaded = false;
+                if(data.shipmentRequest.order.items.length > 0) {
+                    var promiseNewShipment = shipmentResource.newShipment(data.shipmentRequest);
+                    promiseNewShipment.then(function (shipment) {
+                        $timeout(function() {
+                            notificationsService.success('Shipment #' + shipment.shipmentNumber + ' created');
+                            loadInvoice(data.invoiceKey);
+                        }, 400);
 
                     }, function (reason) {
-                        notificationsService.error("Save Shipment Failed", reason.message);
+                        notificationsService.error("New Shipment Failed", reason.message);
                     });
-                }, function (reason) {
-                    notificationsService.error("New Shipment Failed", reason.message);
-                });
+                } else {
+                    $scope.preValuesLoaded = true;
+                    notificationsService.warning('Shipment would not contain any items', 'The shipment was not created as it would not contain any items.');
+                }
             };
 
             // initialize the controller

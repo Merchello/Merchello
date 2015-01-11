@@ -19,7 +19,7 @@
                     },
                     transform: function(jsonResult) {
                         var invoiceLineItems = genericModelBuilder.transform(jsonResult, Constructor);
-                        if(invoiceLineItems.length) {
+                        if(angular.isArray(invoiceLineItems)) {
                             for(var i = 0; i < invoiceLineItems.length; i++) {
                                 invoiceLineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
                                 invoiceLineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);

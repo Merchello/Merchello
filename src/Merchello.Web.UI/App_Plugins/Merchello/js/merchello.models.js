@@ -276,10 +276,13 @@
      */
     var CreateShipmentDialogData = function() {
         var self = this;
+        self.invoiceKey = '';
         self.order = {};
         self.shipmentStatuses = [];
-        self.shipment = {};
+        self.shipmentStatus = {};
+        self.shipmentRequest = {};
         self.shipMethods = {};
+        self.trackingNumber = '';
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
@@ -635,8 +638,8 @@
         }
 
         function getFulfillmentStatus () {
-            if (!_.isEmpty(self.orders)) {
-                return self.orders[0].orderStatus.name;
+            if (!_.isEmpty(this.orders)) {
+                return this.orders[0].orderStatus.name;
             }
             // TODO this should be localized
             return 'Not Fulfilled';
@@ -755,29 +758,16 @@
     };
 
     OrderDisplay.prototype = (function() {
-        // private
-        // TODO this could address the issue in current merchello.view.controller
-        // $scope.processFulfillShipmentDialog
-        function createShipment(shipmentStatus, origin, destination, lineItems) {
-            if (shipmentStatus === undefined) {
-                return;
-            }
-            var shipment = new ShipmentDisplay();
-            shipment.setOriginAddress(origin);
-            shipment.setDestinationAddress(destination);
-            shipment.shipmentStatus = shipmentStatus;
-            if (lineItems === undefined) {
-                shipment.items = this.items;
-            }
-            else {
-                shipment.items = lineItems;
-            }
-            return shipment;
+
+        function getUnShippedItems() {
+            return _.filter(this.items, function(item) {
+                return item.shipmentKey === '' || item.shipmentKey === null;
+            });
         }
 
         // public
         return {
-            createShipment: createShipment
+            getUnShippedItems: getUnShippedItems
         };
 
     }());
@@ -797,7 +787,7 @@
         self.name = '';
         self.alias = '';
         self.reportable = '';
-        self.active = '';
+        self.active = true;
         self.sortOrder = '';
     };
 
@@ -1039,7 +1029,6 @@
     ShipmentDisplay.prototype = (function () {
 
         //// Private members
-
             // returns the shipment destination as an Address
         var getDestinationAddress = function() {
                 return buildAddress.call(this, this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion,
@@ -1144,6 +1133,23 @@
     }());
 
     angular.module('merchello.models').constant('ShipmentDisplay', ShipmentDisplay);
+
+    /**
+     * @ngdoc model
+     * @name ShipmentRequestDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipmentRequestDisplay object
+     */
+    var ShipmentRequestDisplay = function() {
+        var self = this;
+        self.shipmentStatusKey = '';
+        self.order = {};
+        self.trackingNumber = '';
+    };
+
+    angular.module('merchello.models').constant('ShipmentRequestDisplay', ShipmentRequestDisplay);
 
     /**
     * @ngdoc model
@@ -1561,7 +1567,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     },
                     transform: function(jsonResult) {
                         var invoices = genericModelBuilder.transform(jsonResult, Constructor);
-                        if (invoices.length) {
+                        if (angular.isArray(invoices)) {
                             for(var i = 0; i < invoices.length; i++) {
                                 invoices[ i ].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[ i ].invoiceStatus);
                                 invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
@@ -1598,7 +1604,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     },
                     transform: function(jsonResult) {
                         var invoiceLineItems = genericModelBuilder.transform(jsonResult, Constructor);
-                        if(invoiceLineItems.length) {
+                        if(angular.isArray(invoiceLineItems)) {
                             for(var i = 0; i < invoiceLineItems.length; i++) {
                                 invoiceLineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
                                 invoiceLineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);
@@ -1655,7 +1661,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
                     },
                     transform: function(jsonResult) {
                         var orders = genericModelBuilder.transform(jsonResult, Constructor);
-                        if (orders.length) {
+                        if (angular.isArray(orders)) {
                             for(var i = 0; i < orders.length; i++) {
                                 orders[ i ].orderStatus = orderStatusDisplayBuilder.transform(jsonResult[ i ].orderStatus);
                                 orders[ i ].items = orderLineItemDisplayBuilder.transform(jsonResult[ i ].items);

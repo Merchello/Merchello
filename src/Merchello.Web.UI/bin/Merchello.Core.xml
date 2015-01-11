@@ -2633,6 +2633,11 @@
             A collection of order line item keys to be included in the shipment
             </summary>
         </member>
+        <member name="F:Merchello.Core.Builders.ShipmentBuilderChain._trackingNumber">
+            <summary>
+            The shipment tracking number.
+            </summary>
+        </member>
         <member name="F:Merchello.Core.Builders.ShipmentBuilderChain._merchelloContext">
             <summary>
             The merchello context.
@@ -2643,7 +2648,7 @@
             Constructor parameters for the base class activator
             </summary>
         </member>
-        <member name="M:Merchello.Core.Builders.ShipmentBuilderChain.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IOrder,System.Collections.Generic.IEnumerable{System.Guid},System.Guid)">
+        <member name="M:Merchello.Core.Builders.ShipmentBuilderChain.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IOrder,System.Collections.Generic.IEnumerable{System.Guid},System.Guid,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Core.Builders.ShipmentBuilderChain"/> class.
             </summary>
@@ -2658,6 +2663,9 @@
             </param>
             <param name="shipmentStatusKey">
             The shipment Status Key.
+            </param>
+            <param name="trackingNumber">
+            The tracking Number.
             </param>
         </member>
         <member name="M:Merchello.Core.Builders.ShipmentBuilderChain.Build">
