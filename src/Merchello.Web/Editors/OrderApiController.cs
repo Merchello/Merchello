@@ -171,13 +171,13 @@
 
             if (shipmentLineItem == null)
             {
-                throw new KeyNotFoundException("Shipment line item not found in the invoice");
+                return null;
             }
 
             var shipment = shipmentLineItem.ExtendedData.GetShipment<OrderLineItem>();
             if (shipment == null)
             {
-                throw new KeyNotFoundException("Shipment not found in shipment line item extended data collection");
+                return null;
             }
 
             return shipment.GetDestinationAddress().ToAddressDisplay();

@@ -27,7 +27,19 @@ describe('InvoiceDisplay prototype tests', function() {
 
         //// Assert
         expect (hasOrders).toBeDefined();
-        expect(fulfillmentStatus).toBe('Not Fulfilled');
+        expect(fulfillmentStatus).toBeDefined();
+    }));
+
+    it('should be able to retrieve a shipment line item', inject(function(invoiceDisplayBuilder, invoiceMocks) {
+       //// Arrange
+        var json = invoiceMocks.randomInvoice();
+        var invoice = invoiceDisplayBuilder.transform(json);
+
+        //// Act
+        //var lineItem = invoice.getShippingLineItems();
+
+        //// expect
+        //expect(lineItem).toBeDefined();
     }));
 
 });

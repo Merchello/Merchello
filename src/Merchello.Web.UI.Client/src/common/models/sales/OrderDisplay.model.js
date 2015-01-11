@@ -21,29 +21,16 @@
     };
 
     OrderDisplay.prototype = (function() {
-        // private
-        // TODO this could address the issue in current merchello.view.controller
-        // $scope.processFulfillShipmentDialog
-        function createShipment(shipmentStatus, origin, destination, lineItems) {
-            if (shipmentStatus === undefined) {
-                return;
-            }
-            var shipment = new ShipmentDisplay();
-            shipment.setOriginAddress(origin);
-            shipment.setDestinationAddress(destination);
-            shipment.shipmentStatus = shipmentStatus;
-            if (lineItems === undefined) {
-                shipment.items = this.items;
-            }
-            else {
-                shipment.items = lineItems;
-            }
-            return shipment;
+
+        function getUnShippedItems() {
+            return _.filter(this.items, function(item) {
+                return item.shipmentKey === '' || item.shipmentKey === null;
+            });
         }
 
         // public
         return {
-            createShipment: createShipment
+            getUnShippedItems: getUnShippedItems
         };
 
     }());

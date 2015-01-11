@@ -11,10 +11,13 @@
      */
     var CreateShipmentDialogData = function() {
         var self = this;
+        self.invoiceKey = '';
         self.order = {};
         self.shipmentStatuses = [];
-        self.shipment = {};
+        self.shipmentStatus = {};
+        self.shipmentRequest = {};
         self.shipMethods = {};
+        self.trackingNumber = '';
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);

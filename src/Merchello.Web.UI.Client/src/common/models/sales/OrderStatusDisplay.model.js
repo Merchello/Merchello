@@ -12,7 +12,7 @@
         self.name = '';
         self.alias = '';
         self.reportable = '';
-        self.active = '';
+        self.active = true;
         self.sortOrder = '';
     };
 

@@ -19,7 +19,7 @@
                     },
                     transform: function(jsonResult) {
                         var orders = genericModelBuilder.transform(jsonResult, Constructor);
-                        if (orders.length) {
+                        if (angular.isArray(orders)) {
                             for(var i = 0; i < orders.length; i++) {
                                 orders[ i ].orderStatus = orderStatusDisplayBuilder.transform(jsonResult[ i ].orderStatus);
                                 orders[ i ].items = orderLineItemDisplayBuilder.transform(jsonResult[ i ].items);

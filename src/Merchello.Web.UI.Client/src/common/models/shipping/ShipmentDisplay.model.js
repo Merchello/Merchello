@@ -47,7 +47,6 @@
     ShipmentDisplay.prototype = (function () {
 
         //// Private members
-
             // returns the shipment destination as an Address
         var getDestinationAddress = function() {
                 return buildAddress.call(this, this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion,

@@ -6,10 +6,10 @@ xdescribe('salesoverview.controller', function() {
     beforeEach(module('umbraco'));
 
     beforeEach(inject(function ($rootScope, $controller, $httpBackend, $timeout, assetsService, dialogService, localizationService, notificationsService,
-                                settingsResource, shipmentResourceMock,
-                                localizationMocks, auditLogResource, auditLogResourceMock, invoiceResource, invoiceResourceMock,
-                                paymentResource, paymentResourceMock, shipmentResource, settingResourceMock, dialogDataFactory, salesHistoryDisplayBuilder,
-                                invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplay) {
+                                settingsResource, shipmentResourceMock, orderResourceMocks,
+                                localizationMocks, auditLogResource, auditLogResourceMock, invoiceResource, orderResource, invoiceResourceMock,
+                                paymentResource, paymentResourceMock, shipmentResource, settingResourceMock, dialogDataFactory, addressDisplayBuilder,
+                                salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplay) {
 
         httpBackend = $httpBackend;
 
@@ -21,14 +21,15 @@ xdescribe('salesoverview.controller', function() {
         paymentResourceMock.register();
         settingResourceMock.register();
         localizationMocks.register();
+        orderResourceMocks.register();
 
         controller = $controller('Merchello.Dashboards.SalesOverviewController',
             { $scope: scope, $routeParams: { id: 'dd62d5a2-6a52-4de3-a740-193d2a25bbbb' }, $timeout: $timeout,
                 assetsService: assetsService, notificationsService: notificationsService, dialogService: dialogService, localizationService: localizationService,
-                auditLogResource: auditLogResource, invoiceResource: invoiceResource, settingsResource: settingsResource,
-                paymentResource: paymentResource, shipmentResource: shipmentResource, dialogDataFactory: dialogDataFactory, paymentDisplayBuilder: paymentDisplayBuilder,
-                salesHistoryDisplayBuilder: salesHistoryDisplayBuilder, invoiceDisplayBuilder: invoiceDisplayBuilder, shipMethodsQueryDisplay: shipMethodsQueryDisplay
-                 });
+                auditLogResource: auditLogResource, invoiceResource: invoiceResource, settingsResource: settingsResource, orderResource: orderResource,
+                paymentResource: paymentResource, shipmentResource: shipmentResource, dialogDataFactory: dialogDataFactory, addressDisplayBuilder: addressDisplayBuilder,
+                paymentDisplayBuilder: paymentDisplayBuilder, salesHistoryDisplayBuilder: salesHistoryDisplayBuilder,
+                invoiceDisplayBuilder: invoiceDisplayBuilder, shipMethodsQueryDisplay: shipMethodsQueryDisplay});
 
         //scope.$digest resolves the promise against the httpbackend
         scope.$digest();

@@ -62,8 +62,8 @@
         }
 
         function getFulfillmentStatus () {
-            if (!_.isEmpty(self.orders)) {
-                return self.orders[0].orderStatus.name;
+            if (!_.isEmpty(this.orders)) {
+                return this.orders[0].orderStatus.name;
             }
             // TODO this should be localized
             return 'Not Fulfilled';
