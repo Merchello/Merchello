@@ -19,11 +19,11 @@ namespace Merchello.Plugin.Payments.PayPal
 	/// </summary>
 	public class PayPalPaymentProcessor
 	{
-		private readonly PayPalProcessorSettings _settings;
+        public readonly PayPalProcessorSettings Settings;
 
 		public PayPalPaymentProcessor(PayPalProcessorSettings settings)
         {
-            _settings = settings;
+            Settings = settings;
         }
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Merchello.Plugin.Payments.PayPal
             var setExpressCheckoutRequestDetails = new SetExpressCheckoutRequestDetailsType
             {
                 ReturnURL = String.Format("{0}/umbraco/MerchelloPayPal/PayPalApi/AuthorizePayment?InvoiceKey={1}&PaymentKey={2}", GetWebsiteUrl(), invoice.Key, payment.Key),
-                CancelURL = GetWebsiteUrl(),
+                CancelURL = GetWebsiteUrl() + Settings.ConfirmationReturnUrl.Replace("%INVOICE%", invoice.Key.ToString().EncryptWithMachineKey()),
                 PaymentDetails = new List<PaymentDetailsType> { GetPaymentDetails(invoice) }
             };
 
@@ -205,9 +205,9 @@ namespace Merchello.Plugin.Payments.PayPal
             return new PayPalAPIInterfaceServiceService(new Dictionary<string, string>
 					{
 						{"mode", "sandbox"},
-						{"account1.apiUsername", _settings.ApiUsername},
-						{"account1.apiPassword", _settings.ApiPassword},
-						{"account1.apiSignature", _settings.ApiSignature}
+						{"account1.apiUsername", Settings.ApiUsername},
+						{"account1.apiPassword", Settings.ApiPassword},
+						{"account1.apiSignature", Settings.ApiSignature}
 					});
         }
 
@@ -250,7 +250,7 @@ namespace Merchello.Plugin.Payments.PayPal
                 ShippingTotal = new BasicAmountType(CurrencyCodeType.USD, shippingTotal.ToString("0.00")),
                 OrderTotal = new BasicAmountType(CurrencyCodeType.USD, (itemTotal + taxTotal + shippingTotal).ToString("0.00")),
                 PaymentAction = PaymentActionCodeType.ORDER,
-                SellerDetails = new SellerDetailsType { PayPalAccountID = _settings.AccountId },
+                SellerDetails = new SellerDetailsType { PayPalAccountID = Settings.AccountId },
                 PaymentRequestID = "PaymentRequest",
                 //ShipToAddress = shipToAddress,
                 NotifyURL = "http://IPNhost"

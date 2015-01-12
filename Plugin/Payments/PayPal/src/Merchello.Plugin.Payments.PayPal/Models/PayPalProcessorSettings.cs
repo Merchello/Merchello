@@ -6,6 +6,7 @@
 		public string ApiUsername { get; set; }
 		public string ApiPassword { get; set; }
 		public string ApiSignature { get; set; }
+        public string ConfirmationReturnUrl { get; set; }
 
         public string ApiVersion
         {
