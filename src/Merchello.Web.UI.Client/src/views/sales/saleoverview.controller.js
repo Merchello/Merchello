@@ -6,7 +6,7 @@
      * @description
      * The controller for the sales overview page
      */
-    angular.module('merchello').controller('Merchello.Dashboards.SalesOverviewController',
+    angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
             'orderResource', 'dialogDataFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
@@ -26,7 +26,6 @@
             $scope.salesHistory = {};
             $scope.payments = [];
             $scope.billingAddress = {};
-            $scope.shippingAddress = {};
             $scope.hasShippingAddress = false;
             $scope.authorizedCapturedLabel = '';
             $scope.shipmentLineItems = [];

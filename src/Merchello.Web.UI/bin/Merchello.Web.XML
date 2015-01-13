@@ -6295,14 +6295,13 @@
              
              </remarks>
         </member>
-        <member name="M:Merchello.Web.Editors.ShipmentApiController.PutShipment(Merchello.Web.Models.ContentEditing.ShipmentOrderDisplay)">
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.PutShipment(Merchello.Web.Models.ContentEditing.ShipmentDisplay)">
             <summary>
             Updates and existing shipment
             PUT /umbraco/Merchello/ShipmentApi/PutShipment
             </summary>
             <param name="shipment">ShipmentDisplay object serialized from WebApi</param>
-            <param name="order">The order.</param>
-            <returns></returns>
+            <returns>A <see cref="T:Merchello.Web.Models.ContentEditing.ShipmentDisplay"/></returns>
         </member>
         <member name="M:Merchello.Web.Editors.ShipmentApiController.GetAllShipmentStatuses">
             <summary>

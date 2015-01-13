@@ -506,12 +506,13 @@
         ['$http', 'umbRequestHelper', function($http, umbRequestHelper) {
         return {
 
-            getAllShipmentStatuses: function() {
+            getAllShipmentStatuses: function () {
 
                 return umbRequestHelper.resourcePromise(
                     $http({
                         url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetAllShipmentStatuses'),
-                        method: 'GET'}),
+                        method: 'GET'
+                    }),
                     'Failed to get shipment statuses');
 
             },
@@ -522,16 +523,16 @@
                     $http({
                         url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipment'),
                         method: "GET",
-                        params: { id: key }
+                        params: {id: key}
                     }),
                     'Failed to get shipment: ' + key);
             },
 
-           getShipmentsByInvoice: function (invoice) {
+            getShipmentsByInvoice: function (invoice) {
                 var shipmentKeys = [];
 
-                angular.forEach(invoice.orders, function(order) {
-                    var newShipmentKeys = _.map(order.items, function(orderLineItem) {
+                angular.forEach(invoice.orders, function (order) {
+                    var newShipmentKeys = _.map(order.items, function (orderLineItem) {
                         return orderLineItem.shipmentKey;
                     });
                     shipmentKeys = _.union(shipmentKeys, newShipmentKeys);
@@ -544,7 +545,7 @@
                     $http({
                         url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipments', shipmentKeysStr),
                         method: "GET",
-                        params: { ids: shipmentKeys }
+                        params: {ids: shipmentKeys}
                     }),
                     'Failed to get shipments: ' + shipmentKeys);
             },
@@ -556,7 +557,7 @@
                     $http({
                         url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethodAndAlternatives'),
                         method: "GET",
-                        params: { key: shipMethodKey }
+                        params: {key: shipMethodKey}
                     }),
                     'Failed to get shipment method');
             },
@@ -570,18 +571,14 @@
                     'Failed to create shipment');
             },
 
-            putShipment: function (shipment, order) {
-                var shipmentOrder = {};
-                shipmentOrder.ShipmentDisplay = shipment;
-                shipmentOrder.OrderDisplay = order;
-
+            saveShipment: function (shipment) {
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'PutShipment'),
-                        shipmentOrder
+                        shipment
                     ),
                     'Failed to save shipment');
             }
         };
-    }]);
+        }]);
 
 })();

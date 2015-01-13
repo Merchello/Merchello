@@ -257,48 +257,18 @@ namespace Merchello.Web.Editors
         /// PUT /umbraco/Merchello/ShipmentApi/PutShipment
         /// </summary>
         /// <param name="shipment">ShipmentDisplay object serialized from WebApi</param>
-        /// <param name="order">The order.</param>
-        /// <returns></returns>
+        /// <returns>A <see cref="ShipmentDisplay"/></returns>
         [HttpPost, HttpPut]
-        public HttpResponseMessage PutShipment(ShipmentOrderDisplay shipmentOrder)
+        public ShipmentDisplay PutShipment(ShipmentDisplay shipment)
         {
-            var response = Request.CreateResponse(HttpStatusCode.OK);
+            var merchShipment = _shipmentService.GetByKey(shipment.Key);
+            if (merchShipment == null) throw new NullReferenceException("Shipment not found for key");
 
-            var shipment = shipmentOrder.ShipmentDisplay;
-            var order = shipmentOrder.OrderDisplay;
-            try
-            {
-                var merchShipment = _shipmentService.GetByKey(shipment.Key);
+            merchShipment = shipment.ToShipment(merchShipment);
 
-                if (merchShipment == null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
+            _shipmentService.Save(merchShipment);
 
-                merchShipment = shipment.ToShipment(merchShipment);
-
-
-                // TODO this needs to be refactored in 1.5.1
-                //if (order.Items.Count() == shipment.Items.Count())
-                //{
-                //    merchShipment.AuditCreated();
-                //    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
-                //}
-                //else
-                //{
-                //    merchShipment.AuditCreated();            
-                //    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
-                //}
-
-                _shipmentService.Save(merchShipment);
-
-            }
-            catch (Exception ex)
-            {
-                response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
-            }
-
-            return response;
+            return merchShipment.ToShipmentDisplay();
         }
 
         /// <summary>

@@ -288,6 +288,24 @@
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
     /**
      * @ngdoc model
+     * @name EditAddressDialogData
+     * @function
+     *
+     * @description
+     * A back office model used for address data to the dialogService
+     *
+     */
+    var EditAddressDialogData = function() {
+        var self = this;
+        self.address = {};
+        self.countries = [];
+        self.selectedCountry = {};
+        self.selectedProvince = {};
+    };
+
+    angular.module('merchello.models').constant('EditAddressDialogData', EditAddressDialogData);
+    /**
+     * @ngdoc model
      * @name GatewayResourceDisplay
      * @function
      *
@@ -1292,8 +1310,8 @@
  * A utility service that builds dialogData models
  */
 angular.module('merchello.models').factory('dialogDataFactory',
-    ['CapturePaymentDialogData',
-    function(CapturePaymentDialogData) {
+    ['CapturePaymentDialogData', 'CreateShipmentDialogData', 'EditAddressDialogData',
+    function(CapturePaymentDialogData, CreateShipmentDialogData, EditAddressDialogData) {
 
         // creates dialogData object for capturing a payment
         function createCapturePaymentDialogData() {
@@ -1305,9 +1323,14 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new CreateShipmentDialogData();
         }
 
+        function createEditAddressDialogData() {
+            return new EditAddressDialogData();
+        }
+
         return {
             createCapturePaymentDialogData: createCapturePaymentDialogData,
-            createCreateShipmentDialogData: createCreateShipmentDialogData
+            createCreateShipmentDialogData: createCreateShipmentDialogData,
+            createEditAddressDialogData: createEditAddressDialogData
         };
 }]);
 

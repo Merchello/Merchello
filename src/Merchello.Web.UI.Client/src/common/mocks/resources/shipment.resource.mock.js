@@ -13,6 +13,11 @@ angular.module('merchello.mocks')
                 return shipmentMocks.shipmentStatuses();
             }
 
+            function getShipments() {
+                return shipmentMocks.shipmentsArray();
+            }
+
+
             function getShipMethodAndAlternatives() {
                 return {
                     selected: { },
@@ -26,6 +31,10 @@ angular.module('merchello.mocks')
                     $httpBackend
                         .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/ShipmentApi/GetShipment'))
                         .respond(getShipment);
+
+                    $httpBackend
+                        .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/ShipmentApi/GetShipments'))
+                        .respond(getShipments);
 
                     $httpBackend
                         .whenGET(mocksUtils.urlRegex('/umbraco/backoffice/Merchello/ShipmentApi/GetAllShipmentStatuses'))
