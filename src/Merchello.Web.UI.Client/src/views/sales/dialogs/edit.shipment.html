@@ -18,7 +18,7 @@
                 <th><localize key="merchelloGeneral_quantity" /></th>
             </tr>
             <tr data-ng-repeat="lineitem in dialogData.shipment.items">
-                <td><input type="checkbox" data-ng-model="lineitem.selected" /></td>
+                <td><input type="checkbox" data-ng-model="lineitem.selected" data-ng-disabled="checkboxDisabled()" /></td>
                 <td>
                     <h4>{{lineitem.name}}</h4>
                     <span><localize key="merchelloGeneral_sku" />: {{lineitem.sku}}</span>

@@ -317,6 +317,9 @@
         var self = this;
         self.shipment = {};
         self.shipmentStatuses = [];
+        self.showPhone = false;
+        self.showEmail = false;
+        self.showIsCommercial = false;
     };
 
     angular.module('merchello.models').constant('EditShipmentDialogData', EditShipmentDialogData);
@@ -1066,7 +1069,7 @@
             // returns the shipment destination as an Address
         var getDestinationAddress = function() {
                 return buildAddress.call(this, this.toName, this.toAddress1, this.toAddress2, this.toLocality, this.toRegion,
-                    this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, '', '', 'shipping');
+                    this.toPostalCode, this.toCountryCode, this.toOrganization, this.toIsCommercial, this.phone, this.email, 'shipping');
             },
 
             // returns the shipment origin as an Address

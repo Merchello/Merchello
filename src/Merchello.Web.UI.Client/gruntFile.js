@@ -85,7 +85,10 @@
 
             assets: {
                 // this requires that the scss as been compiled.
-                files: [{ dest: '<%= distdir %>/assets/css', src: '*.css', expand: true, cwd: 'src/scss/' }]
+                files: [
+                    { dest: '<%= distdir %>/assets/css', src: '*.css', expand: true, cwd: 'src/scss/' },
+                    { dest: '<%= distdir %>/assets/images', src: '**/*.*', expand: true, cwd: 'src/images/' }
+                ]
             },
 
             vs: {

@@ -184,7 +184,6 @@
                 },
 
                 getShippingAddress: function (invoiceKey) {
-
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingAddress'),
@@ -577,8 +576,25 @@
                         shipment
                     ),
                     'Failed to save shipment');
+            },
+
+            updateShippingAddressLineItem: function(shipment) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'UpdateShippingAddressLineItem'),
+                        shipment
+                    ),
+                    'Failed to save shipment');
+            },
+
+            deleteShipment: function(shipment) {
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'DeleteShipment'),
+                        method: "GET",
+                        params: { id: shipment.key }
+                    }), 'Failed to delete shipment');
             }
         };
-        }]);
+    }]);
 
 })();

@@ -14,12 +14,17 @@ angular.module('merchello')
         $scope.save = save;
         $scope.loaded = false;
 
+        $scope.checkboxDisabled = checkboxDisabled;
+
         function init() {
             _.each($scope.dialogData.shipment.items, function(item) {
                 item.selected = true;
             });
-
             $scope.loaded = true;
+        }
+
+        function checkboxDisabled() {
+            return $scope.dialogData.shipment.shipmentStatus.name === 'Shipped' || $scope.dialogData.shipment.shipmentStatus.name === 'Delivered'
         }
 
         function save() {

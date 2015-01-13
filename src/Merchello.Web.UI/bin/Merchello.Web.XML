@@ -6303,6 +6303,30 @@
             <param name="shipment">ShipmentDisplay object serialized from WebApi</param>
             <returns>A <see cref="T:Merchello.Web.Models.ContentEditing.ShipmentDisplay"/></returns>
         </member>
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.UpdateShippingAddressLineItem(Merchello.Web.Models.ContentEditing.ShipmentDisplay)">
+            <summary>
+            The update shipping address line item.
+            </summary>
+            <param name="shipment">
+            The shipment.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.DeleteShipment(System.Guid)">
+            <summary>
+            Deletes an existing shipment
+            
+            DELETE /umbraco/Merchello/ShipmentApi/{guid}
+            </summary>
+            <param name="id">
+            The id of the shipment to delete
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.ShipmentApiController.GetAllShipmentStatuses">
             <summary>
             Returns a list of all <see cref="T:Merchello.Core.Models.IShipmentStatus"/>

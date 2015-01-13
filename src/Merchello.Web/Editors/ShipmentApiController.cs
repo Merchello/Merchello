@@ -262,13 +262,86 @@ namespace Merchello.Web.Editors
         public ShipmentDisplay PutShipment(ShipmentDisplay shipment)
         {
             var merchShipment = _shipmentService.GetByKey(shipment.Key);
+            var orderKeys = shipment.Items.Select(x => x.ContainerKey).Distinct();
+
             if (merchShipment == null) throw new NullReferenceException("Shipment not found for key");
 
             merchShipment = shipment.ToShipment(merchShipment);
 
             _shipmentService.Save(merchShipment);
 
+            this.UpdateOrderStatus(orderKeys);
+
             return merchShipment.ToShipmentDisplay();
+        }
+
+        /// <summary>
+        /// The update shipping address line item.
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage UpdateShippingAddressLineItem(ShipmentDisplay shipment)
+        {
+            var merchShipment = _shipmentService.GetByKey(shipment.Key);
+
+            // get the order keys from the shipment.  In general this will be a single
+            // order but it is possible for this to be an enumeration
+            var orderKeys = shipment.Items.Select(x => x.ContainerKey).Distinct();
+            var orders = _orderService.GetByKeys(orderKeys);
+
+            // get the collection of invoices assoicated with the orders.
+            // again, this is typically only one.
+            var invoiceKeys = orders.Select(x => x.InvoiceKey).Distinct();
+            var invoices = _invoiceService.GetByKeys(invoiceKeys);
+
+            foreach (var invoice in invoices)
+            {
+                // now we're going to update every shipment line item with the destination address
+                var shippingLineItems = invoice.ShippingLineItems().ToArray();
+                foreach (var lineItem in shippingLineItems)
+                {
+                    lineItem.ExtendedData.AddAddress(merchShipment.GetDestinationAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
+                }
+                _invoiceService.Save(invoice);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Deletes an existing shipment
+        /// 
+        /// DELETE /umbraco/Merchello/ShipmentApi/{guid}
+        /// </summary>
+        /// <param name="id">
+        /// The id of the shipment to delete
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost, HttpDelete, HttpGet]
+        public HttpResponseMessage DeleteShipment(Guid id)
+        {
+            var shipmentToDelete = _shipmentService.GetByKey(id);
+            
+            if (shipmentToDelete == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            var orderKeys = shipmentToDelete.Items.Select(x => x.ContainerKey).Distinct();
+            
+            _shipmentService.Delete(shipmentToDelete);
+
+            this.UpdateOrderStatus(orderKeys);
+
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -283,6 +356,22 @@ namespace Merchello.Web.Editors
             var statuses = _shipmentService.GetAllShipmentStatuses().OrderBy(x => x.SortOrder);
 
             return statuses.Select(x => x.ToShipmentStatusDisplay());
+        }
+
+        private void UpdateOrderStatus(IEnumerable<Guid> orderKeys)
+        {
+            // update the order status
+            var orders = _orderService.GetByKeys(orderKeys);
+            foreach (var order in orders)
+            {
+                var orderStatusKey = order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null)
+                                         ? Constants.DefaultKeys.OrderStatus.BackOrder
+                                         : Constants.DefaultKeys.OrderStatus.Fulfilled;
+
+                var orderStatus = _orderService.GetOrderStatusByKey(orderStatusKey);
+                order.OrderStatus = orderStatus;
+                _orderService.Save(order);
+            }
         }
     }
 }
