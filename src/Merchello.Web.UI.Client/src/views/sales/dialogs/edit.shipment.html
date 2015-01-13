@@ -1,18 +1,14 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.EditShipmentController" data-ng-show="loaded">
     <div class="umb-modalcolumn-header">
-        <h4><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h4>
+        <h4><localize key="actions_edit" /> <localize key="merchelloGeneral_shipment" /></h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
         <h3><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h3>
         <div class="control-group row-fluid">
             <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" />:</label>
-            <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="col-xs-6 span6" />
-            <label for="provider"><localize key="merchelloGeneral_via" /></label>
-            <label>{{dialogData.shipMethods.selected.name}}</label>
-            <!--<select name="provider" disabled="disabled" class="col-xs-6 span6"><option>{{shipMethod}}</option></select>-->
-            <!--<label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>-->
+            <input name="trackingNo" data-ng-model="dialogData.shipment.trackingCode" type="text" class="col-xs-6 span6" />
             <label>Shipment Status</label>
-            <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+            <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipment.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
         </div>
         <table class="table table-striped merchello-striped-table order-items">
             <tbody>
@@ -20,16 +16,14 @@
                 <th><localize key="general_add" /></th>
                 <th><localize key="merchelloVariant_product" /></th>
                 <th><localize key="merchelloGeneral_quantity" /></th>
-                <th><localize key="merchelloGeneral_total" /></th>
             </tr>
-            <tr data-ng-repeat="lineitem in dialogData.order.items">
-                <td><input type="checkbox" data-ng-disabled="lineitem.backOrder" data-ng-model="lineitem.selected" /></td>
+            <tr data-ng-repeat="lineitem in dialogData.shipment.items">
+                <td><input type="checkbox" data-ng-model="lineitem.selected" /></td>
                 <td>
                     <h4>{{lineitem.name}}</h4>
                     <span><localize key="merchelloGeneral_sku" />: {{lineitem.sku}}</span>
                 </td>
-                <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency : currencySymbol}}</strong></td>
-                <td class="text-right">{{lineitem.quantity * lineitem.price | currency : currencySymbol}}</td>
+                <td class="text-right">{{lineitem.quantity}}</td>
             </tr>
             </tbody>
         </table>

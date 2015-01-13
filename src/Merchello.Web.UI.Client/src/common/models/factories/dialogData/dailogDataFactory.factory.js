@@ -19,6 +19,12 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new CreateShipmentDialogData();
         }
 
+        // creates dialogData for editing ShipmentDisplay
+        function createEditShipmentDialogData() {
+            return new EditShipmentDialogData();
+        }
+
+        // creates dialogData for editing AddressDisplay
         function createEditAddressDialogData() {
             return new EditAddressDialogData();
         }
@@ -26,6 +32,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
         return {
             createCapturePaymentDialogData: createCapturePaymentDialogData,
             createCreateShipmentDialogData: createCreateShipmentDialogData,
+            createEditShipmentDialogData: createEditShipmentDialogData,
             createEditAddressDialogData: createEditAddressDialogData
         };
 }]);
