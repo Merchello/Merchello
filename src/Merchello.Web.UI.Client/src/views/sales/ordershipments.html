@@ -54,7 +54,7 @@
                                         <div class="btn-group">
                                             <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Actions <i class="icon-navigation-down"></i></a>
                                             <ul class="dropdown-menu">
-                                                <li><a data-ng-click="openShipmentDialog()">Edit Shipment</a></li>
+                                                <li><a data-ng-click="openShipmentDialog(shipment)">Edit Shipment</a></li>
                                                 <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'origin')">Edit Origin</a></li>
                                                 <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'destination')">Edit Destination</a></li>
                                                 <li><a data-ng-click="openSetOnInvoiceDialog(shipment)">Set Sale Destination</a></li>

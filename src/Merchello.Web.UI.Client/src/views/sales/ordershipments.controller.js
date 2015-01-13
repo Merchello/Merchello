@@ -15,9 +15,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.isEditableAddress = isEditableAddress;
 
             // dialogs
+            $scope.openShipmentDialog = openShipmentDialog;
+            $scope.processUpdateShipment = processUpdateShipment;
             $scope.openAddressDialog = openAddressDialog;
             $scope.processUpdateOriginAddress = processUpdateOriginAddress;
             $scope.processUpdateDestinationAddress = processUpdateDestinationAddress;
+
 
             function init() {
                 var key = $routeParams.id;
@@ -67,7 +70,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              * @name isEditableStatus
              * @function
              *
-             * @description - Returns a value indicating whether or not the shipment address can be editted.
+             * @description - Returns a value indicating whether or not the shipment address can be edited.
              */
             function isEditableAddress(shipmentStatus) {
                 if (shipmentStatus.name === 'Delivered' || shipmentStatus.name === 'Shipped') {
@@ -79,6 +82,37 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             /*
                 Dialogs
             */
+
+            /**
+             * @ngdoc method
+             * @name openShipmentDialog
+             * @function
+             *
+             * @description - responsible for opening the edit shipment dialog and passing the selected shipment.
+             */
+            function openShipmentDialog(shipment) {
+                var promiseStatuses = shipmentResource.getAllShipmentStatuses();
+                promiseStatuses.then(function(statuses) {
+                    var dialogData = dialogDataFactory.createEditShipmentDialogData();
+                    dialogData.shipment = shipment;
+                    dialogData.shipmentStatuses = statuses;
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.shipment.html',
+                        show: true,
+                        callback: $scope.processUpdateShipment,
+                        dialogData: dialogData
+                    });
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name openAddressDialog
+             * @function
+             *
+             * @description - responsible for opening the edit address dialog with the appropriate address to be edited
+             */
             function openAddressDialog(shipment, addressType) {
                 var dialogData = dialogDataFactory.createEditAddressDialogData();
                 dialogData.address = addressType === 'destination' ? shipment.getDestinationAddress() : shipment.getOriginAddress();
@@ -111,6 +145,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 });
             }
 
+            /**
+             * @ngdoc method
+             * @name processUpdateOriginAddres
+             * @function
+             *
+             * @description - updates the origin address on the shipment.
+             */
             function processUpdateOriginAddress(dialogData) {
                 $scope.preValuesLoaded = false;
                 var shipment = dialogData.shipment;
@@ -118,6 +159,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 saveShipment(shipment);
             }
 
+            /**
+             * @ngdoc method
+             * @name processUpdateDestinationAddress
+             * @function
+             *
+             * @description - updates the destination address of a shipment.
+             */
             function processUpdateDestinationAddress(dialogData) {
                 $scope.preValuesLoaded = false;
                 var shipment = dialogData.shipment;
@@ -125,6 +173,26 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 saveShipment(shipment);
             }
 
+            /**
+             * @ngdoc method
+             * @name processUpdateShipment
+             * @function
+             *
+             * @description - responsible for handling dialog data for updating a shipment.
+             */
+            function processUpdateShipment(dialogData) {
+                $scope.preValuesLoaded = false;
+                saveShipment(dialogData.shipment);
+            }
+
+
+            /**
+             * @ngdoc method
+             * @name saveShipment
+             * @function
+             *
+             * @description - responsible for saving a shipment.
+             */
             function saveShipment(shipment) {
 
                 var promise = shipmentResource.saveShipment(shipment);
@@ -133,5 +201,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 });
             }
 
+            // initializes the controller
             init();
     }]);

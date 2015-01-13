@@ -306,6 +306,22 @@
     angular.module('merchello.models').constant('EditAddressDialogData', EditAddressDialogData);
     /**
      * @ngdoc model
+     * @name EditShipmentDialogData
+     * @function
+     *
+     * @description
+     * A back office model used for shipment data to the dialogService
+     *
+     */
+    var EditShipmentDialogData = function() {
+        var self = this;
+        self.shipment = {};
+        self.shipmentStatuses = [];
+    };
+
+    angular.module('merchello.models').constant('EditShipmentDialogData', EditShipmentDialogData);
+    /**
+     * @ngdoc model
      * @name GatewayResourceDisplay
      * @function
      *
@@ -1323,6 +1339,12 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new CreateShipmentDialogData();
         }
 
+        // creates dialogData for editing ShipmentDisplay
+        function createEditShipmentDialogData() {
+            return new EditShipmentDialogData();
+        }
+
+        // creates dialogData for editing AddressDisplay
         function createEditAddressDialogData() {
             return new EditAddressDialogData();
         }
@@ -1330,6 +1352,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
         return {
             createCapturePaymentDialogData: createCapturePaymentDialogData,
             createCreateShipmentDialogData: createCreateShipmentDialogData,
+            createEditShipmentDialogData: createEditShipmentDialogData,
             createEditAddressDialogData: createEditAddressDialogData
         };
 }]);
