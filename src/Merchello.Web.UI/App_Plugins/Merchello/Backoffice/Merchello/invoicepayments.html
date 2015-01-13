@@ -24,29 +24,51 @@
                         <small>Payment methods &amp; dates</small>
                     </div>
                     <div class="merchello-controls">
-                        <div>
-                            <!-- ACTION: Return To Invoice -->
-                            <a class="btn btn-default btn-action" href="#/merchello/merchello/saleoverview/{{invoice.key}}">Return to Invoice</a>
-                            <!-- ACTION: View Shipment Information -->
-                            <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderShipmentInfo/{{invoice.key}}" data-ng-show="hasShipments()">Shipments</a>
-                        </div>
+
+                        <merchello-sales-page-nav key="invoice.key" hide-payments="true"></merchello-sales-page-nav>
+
                         <div class="row-fluid">
-                            <table class="table">
-                                <tbody>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Amount</th>
-                                    <!---th>Actions</th-->
-                                </tr>
-                                <tr data-ng-repeat="payment in invoice.appliedPayments">
-                                    <td>{{formatDate(payment.createDate)}}</td>
-                                    <td>{{payment.description}}</td>
-                                    <td>{{payment.amount}}</td>
-                                    <!--td><a href="#">Void</a> | <a href="#">Refund</a></td-->
-                                </tr>
-                                </tbody>
-                            </table>
+
+                            <div data-ng-repeat="payment in payments">
+                                <div style="padding: 8px"  data-ng-hide="true">
+                                    {{payment.paymentMethodName}}
+
+                                    <div class="btn-toolbar pull-right umb-btn-toolbar">
+                                        <button class="btn btn-default text-right"><localize key="merchelloButtons_void" /></button>
+                                        <button class="btn btn-default text-right"><localize key="merchelloButtons_refund" /></button>
+                                    </div>
+
+                                    <strong>History</strong>
+                                </div>
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th class="text-right">Amount</th>
+                                        <th class="text-center" data-ng-hide="true"></th>
+                                    </tr>
+                                    <tr data-ng-repeat="applied in payment.appliedPayments">
+                                        <td>{{applied.createDate | date : settings.dateFormat }}</td>
+                                        <td>{{applied.description}}</td>
+                                        <td class="text-right">{{applied.amount | currency: currencySymbol }}</td>
+                                        <td class="text-center" data-ng-hide="true">
+                                            <button class="btn btn-default" data-ng-click="voidPayment()">
+                                                <localize key="actions_delete" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-right">Balance due:</td>
+                                        <td class="text-right">{{remainingBalance | currency : currencySymbol }}</td>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
                         </div>
                     </div>
                 </div>

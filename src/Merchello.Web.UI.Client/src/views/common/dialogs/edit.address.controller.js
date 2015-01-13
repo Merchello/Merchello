@@ -10,19 +10,21 @@
         .controller('Merchello.Common.Dialogs.EditAddressController',
         function ($scope) {
 
-        $scope.init = function() {
-            //console.info($scope.dialogData);
-            $scope.setVariables();
-        };
+            // public methods
+            $scope.save = save;
 
-        $scope.setVariables = function() {
-            $scope.address = $scope.dialogData.address;
-        };
+            function init() {
+                $scope.address = $scope.dialogData.address;
+            };
 
-        $scope.save = function() {
-            $scope.submit();
-        };
+            function save() {
+                $scope.dialogData.address.countryCode = $scope.dialogData.selectedCountry.countryCode;
+                if($scope.dialogData.selectedCountry.provinces.length > 0) {
+                    $scope.dialogData.address.region = $scope.dialogData.selectedProvince.code;
+                }
+                $scope.submit($scope.dialogData);
+            };
 
-        $scope.init();
+        init();
     });
 

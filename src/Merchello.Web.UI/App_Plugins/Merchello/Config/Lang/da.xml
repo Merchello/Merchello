@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language alias="da_dk" intName="Danish" localName="Dansk" lcid="" culture="da-DK">
+  <area alias="merchelloButtons">
+    <key alias="void">Void</key>
+    <key alias="refund">Refund</key>
+  </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Katalog</key>
   </area>

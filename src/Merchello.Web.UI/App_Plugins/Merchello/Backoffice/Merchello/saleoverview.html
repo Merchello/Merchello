@@ -1,4 +1,4 @@
-<form novalidate name="orderForm" data-ng-controller="Merchello.Dashboards.SalesOverviewController" data-ng-show="loaded">
+<form novalidate name="orderForm" data-ng-controller="Merchello.Backoffice.SalesOverviewController" data-ng-show="loaded">
     <umb-panel val-show-validation>
         <umb-header>
             <div class="span4">
@@ -33,10 +33,16 @@
                         <div class="button-bar">
                             <!-- ACTION: Cancel Sale -->
                             <button type="button" class="btn btn-default btn-trash pull-right" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled'" data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>
+                            <!-- ACTION: Open Shipments Page -->
+                            <a class="btn btn-default btn-action pull-right" href="#/merchello/merchello/ordershipments/{{invoice.key}}">Shipments</a>
+                            <!-- ACTION: Open Payments Page -->
+                            <a class="btn btn-default btn-action pull-right" href="#/merchello/merchello/invoicepayments/{{invoice.key}}">Payments</a>
+
                             <!-- ACTION: Capture Payment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid()" data-ng-click="capturePayment()">Capture Funds</button>
                             <!-- ACTION: Fulfill Shipment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' || !invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
+
                         </div>
                         <table class="table table-striped merchello-striped-table order-items">
                             <tbody>
@@ -70,6 +76,10 @@
                                 </td>
                                 <td class="text-right"><localize key="{{authorizedCapturedLabel}}" />:</td>
                                 <td class="text-right">{{invoice.total | currency : currencySymbol}}</td>
+                            </tr>
+                            <tr ng-hide="remainingBalance == 0">
+                                <td colspan="4" class="text-right">Collected:</td>
+                                <td class="text-right">{{invoice.total - remainingBalance | currency : currencySymbol }}</td>
                             </tr>
                             <tr ng-hide="remainingBalance == 0">
                                 <td colspan="4" class="text-right">Balance due:</td>
@@ -107,12 +117,6 @@
             </div>
             <!-- Sidebar -->
             <div class="merchello-pane secondary span3">
-                <div class="button-bar"  style="margin: .5em 0 1em 0">
-                <!-- ACTION: Open Shipments Page -->
-                <a class="btn btn-default btn-action" href="#/merchello/merchello/OrderShipmentInfo/{{invoice.key}}" data-ng-show="hasShipments()">Shipments</a>
-                <!-- ACTION: Open Payments Page -->
-                <a class="btn btn-default btn-action" href="#/merchello/merchello/invoicepayments/{{invoice.key}}" data-ng-show="payments.length > 0">Payments ({{payments.length}})</a>
-                </div>
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
                     <h3><localize key="merchelloOrderView_billingAddress" /></h3><br />

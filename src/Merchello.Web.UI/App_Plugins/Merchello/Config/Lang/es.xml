@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language alias="es" intName="Spanish" localName="español" lcid="10" culture="es-ES">
+  <area alias="merchelloButtons">
+    <key alias="void">Void</key>
+    <key alias="refund">Refund</key>
+  </area>
 	<area alias="merchelloHeadline">
 		<key alias="catalog">Catálogo</key>
 	</area>

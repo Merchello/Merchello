@@ -6,8 +6,8 @@
  * A utility service that builds dialogData models
  */
 angular.module('merchello.models').factory('dialogDataFactory',
-    ['CapturePaymentDialogData',
-    function(CapturePaymentDialogData) {
+    ['CapturePaymentDialogData', 'CreateShipmentDialogData', 'EditAddressDialogData',
+    function(CapturePaymentDialogData, CreateShipmentDialogData, EditAddressDialogData) {
 
         // creates dialogData object for capturing a payment
         function createCapturePaymentDialogData() {
@@ -19,8 +19,13 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new CreateShipmentDialogData();
         }
 
+        function createEditAddressDialogData() {
+            return new EditAddressDialogData();
+        }
+
         return {
             createCapturePaymentDialogData: createCapturePaymentDialogData,
-            createCreateShipmentDialogData: createCreateShipmentDialogData
+            createCreateShipmentDialogData: createCreateShipmentDialogData,
+            createEditAddressDialogData: createEditAddressDialogData
         };
 }]);

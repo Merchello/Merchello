@@ -27,7 +27,7 @@ Umbraco.Sys.ServerVariables = {
         "merchelloSettingsApiBaseUrl": "/umbraco/backoffice/Merchello/SettingApi/",
         "merchelloPaymentApiBaseUrl": "/umbraco/backoffice/Merchello/PaymentApi/",
         "merchelloAuditLogApiBaseUrl": "/umbraco/backoffice/Merchello/AuditLogApi/",
-        "merchelloShpimentApiBaseUrl": "/umbraco/backoffice/Merchello/ShipmentApi/"
+        "merchelloShipmentApiBaseUrl": "/umbraco/backoffice/Merchello/ShipmentApi/"
     },
     umbracoSettings: {
         "umbracoPath": "/umbraco",

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language alias="it" intName="Italian" localName="italiano" lcid="" culture="it-IT">
-	<area alias="merchelloHeadline">
+  <area alias="merchelloButtons">
+    <key alias="void">Void</key>
+    <key alias="refund">Refund</key>
+  </area>
+  <area alias="merchelloHeadline">
 		<key alias="catalog">Catalogo</key>
 	</area>
 	<area alias="merchelloVariant">
