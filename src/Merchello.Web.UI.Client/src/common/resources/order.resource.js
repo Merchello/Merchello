@@ -43,7 +43,6 @@
                 },
 
                 getShippingAddress: function (invoiceKey) {
-
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingAddress'),

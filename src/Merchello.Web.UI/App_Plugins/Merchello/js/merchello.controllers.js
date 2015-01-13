@@ -125,12 +125,17 @@ angular.module('merchello')
         $scope.save = save;
         $scope.loaded = false;
 
+        $scope.checkboxDisabled = checkboxDisabled;
+
         function init() {
             _.each($scope.dialogData.shipment.items, function(item) {
                 item.selected = true;
             });
-
             $scope.loaded = true;
+        }
+
+        function checkboxDisabled() {
+            return $scope.dialogData.shipment.shipmentStatus.name === 'Shipped' || $scope.dialogData.shipment.shipmentStatus.name === 'Delivered'
         }
 
         function save() {
@@ -239,21 +244,33 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
             // methods
             $scope.isEditableAddress = isEditableAddress;
+            $scope.updateShippingAddressLineItem = updateShippingAddressLineItem;
 
             // dialogs
             $scope.openShipmentDialog = openShipmentDialog;
-            $scope.processUpdateShipment = processUpdateShipment;
             $scope.openAddressDialog = openAddressDialog;
-            $scope.processUpdateOriginAddress = processUpdateOriginAddress;
-            $scope.processUpdateDestinationAddress = processUpdateDestinationAddress;
+            $scope.openDeleteShipmentDialog = openDeleteShipmentDialog;
 
-
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description - Controller initialization.
+             */
             function init() {
                 var key = $routeParams.id;
                 loadInvoice(key);
                 $scope.loaded = true;
             }
 
+            /**
+             * @ngdoc method
+             * @name loadInvoice
+             * @function
+             *
+             * @description - responsible for loading the invoice.
+             */
             function loadInvoice(key) {
                 var invoicePromise = invoiceResource.getByKey(key);
                 invoicePromise.then(function(invoice) {
@@ -263,6 +280,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     shipmentsPromise.then(function(shipments) {
                         $scope.shipments = shipmentDisplayBuilder.transform(shipments);
                         $scope.preValuesLoaded = true;
+                        console.info(shipments);
                     })
                 }, function(reason) {
                     notificationsService.error('Failed to load invoice', reason.message);
@@ -285,12 +303,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 })
             }
 
-            function getActionButtons(shipment) {
-                var actions = [
-                    { }
-                ];
-            }
-
             /**
              * @ngdoc method
              * @name isEditableStatus
@@ -305,9 +317,32 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 return true;
             }
 
-            /*
+            /*--------------------------------------------------------------------------------
                 Dialogs
-            */
+            ----------------------------------------------------------------------------------*/
+
+            function updateShippingAddressLineItem(shipment) {
+                var promise = shipmentResource.updateShippingAddressLineItem(shipment);
+                promise.then(function() {
+                    loadInvoice($scope.invoice.key);
+                    notificationsService.success('Successfully updated sales shipping address.')
+                }, function(reason) {
+                    notificationsService.error('Failed to update shipping addresses on invoice', reason.message);
+                })
+            }
+
+
+            function openDeleteShipmentDialog(shipment) {
+                var dialogData = {};
+                dialogData.name = 'Shipment #' + shipment.shipmentNumber;
+                dialogData.shipment = shipment;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteShipmentDialog,
+                    dialogData: dialogData
+                });
+            }
 
             /**
              * @ngdoc method
@@ -322,11 +357,14 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     var dialogData = dialogDataFactory.createEditShipmentDialogData();
                     dialogData.shipment = shipment;
                     dialogData.shipmentStatuses = statuses;
+                    dialogData.shipment.shipmentStatus = _.find(statuses, function(status) {
+                      return status.key === dialogData.shipment.shipmentStatus.key;
+                    });
 
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.shipment.html',
                         show: true,
-                        callback: $scope.processUpdateShipment,
+                        callback: processUpdateShipment,
                         dialogData: dialogData
                     });
                 });
@@ -341,7 +379,16 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              */
             function openAddressDialog(shipment, addressType) {
                 var dialogData = dialogDataFactory.createEditAddressDialogData();
-                dialogData.address = addressType === 'destination' ? shipment.getDestinationAddress() : shipment.getOriginAddress();
+                if (addressType === 'destination') {
+                    dialogData.address = shipment.getDestinationAddress();
+                    dialogData.showPhone = true;
+                    dialogData.showEmail = true;
+                    dialogData.showIsCommercial = true;
+                }
+                else
+                {
+                    dialogData.address = shipment.getOriginAddress();
+                }
 
                 // add the shipment -- this modifies the EditAddressDialogData model with an extra property
                 dialogData.shipment = shipment;
@@ -365,7 +412,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.address.html',
                         show: true,
-                        callback: addressType === 'destination' ? $scope.processUpdateDestinationAddress : $scope.processUpdateOriginAddress,
+                        callback: addressType === 'destination' ? processUpdateDestinationAddress : processUpdateOriginAddress,
                         dialogData: dialogData
                     });
                 });
@@ -411,6 +458,21 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 saveShipment(dialogData.shipment);
             }
 
+            /**
+             * @ngdoc method
+             * @name processDeleteShipmentDialog
+             * @function
+             *
+             * @description - responsible for deleting a shipment.
+             */
+            function processDeleteShipmentDialog(dialogData) {
+                var promise = shipmentResource.deleteShipment(dialogData.shipment);
+                promise.then(function() {
+                    loadInvoice($scope.invoice.key);
+                }, function(reason) {
+                  notificationsService.error('Failed to delete the invoice.', reason.message)
+                });
+            }
 
             /**
              * @ngdoc method
@@ -426,6 +488,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     loadInvoice($scope.invoice.key);
                 });
             }
+
 
             // initializes the controller
             init();

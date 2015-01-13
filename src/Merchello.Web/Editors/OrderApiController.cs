@@ -158,6 +158,7 @@
         /// <returns>
         /// The <see cref="AddressDisplay"/>.
         /// </returns>
+        [HttpGet]
         public AddressDisplay GetShippingAddress(Guid id)
         {
             var invoice = _invoiceService.GetByKey(id);
@@ -182,6 +183,7 @@
 
             return shipment.GetDestinationAddress().ToAddressDisplay();
         }
+
 
         /// <summary>
         /// Adds items to the backoffice basket to calculate shipping and Sales tax

@@ -11,6 +11,9 @@
         var self = this;
         self.shipment = {};
         self.shipmentStatuses = [];
+        self.showPhone = false;
+        self.showEmail = false;
+        self.showIsCommercial = false;
     };
 
     angular.module('merchello.models').constant('EditShipmentDialogData', EditShipmentDialogData);
