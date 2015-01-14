@@ -29,6 +29,6 @@
         /// </summary>
         /// <param name="shipCountry">The <see cref="IShipCountry"/></param>
         /// <returns>A collection of <see cref="IShippingGatewayProvider"/>s associated with the ship country</returns>
-        IEnumerable<IShippingGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry);
+        IEnumerable<ShippingGatewayProviderBase> GetGatewayProvidersByShipCountry(IShipCountry shipCountry);
     }
 }
