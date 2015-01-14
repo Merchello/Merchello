@@ -124,7 +124,7 @@
             Console.WriteLine(JsonConvert.SerializeObject(countries.Select(x => x.ToCountryDisplay())));
         }
 
-        [Test]
+        //[Test]
         public void ShipmentStatuses()
         {
             var shipmentService = MerchelloContext.Current.Services.ShipmentService;

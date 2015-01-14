@@ -394,27 +394,38 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
 
 
 
-angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderController',
-    [function() {
+angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersController',
+    ['$scope', 'notificationsService', 'dialogService',
+    'settingsResource', 'warehouseResource', 'shippingGatewayProviderResource',
+    'settingDisplayBuilder', 'warehouseDisplayBuilder', 'countryDisplayBuilder', 'shippingGatewayProviderDisplayBuilder',
+    'gatewayResourceDisplayBuilder', 'shipCountryDisplayBuilder',
+    function($scope, notificationsService, dialogService,
+             settingsResource, warehouseResource, shippingGatewayProviderResource,
+             settingDisplayBuilder, warehouseDisplayBuilder, countryDisplayBuilder, shippingGatewayProviderDisplayBuilder,
+             gatewayResourceDisplayBuilder, shipCountryDisplayBuilder) {
 
+        $scope.loaded = true;
         $scope.sortProperty = "name";
         $scope.availableCountries = [];
         $scope.availableFixedRateGatewayResources = [];
         $scope.countries = [];
         $scope.warehouses = [];
         $scope.providers = [];
-        $scope.newWarehouse = new merchello.Models.Warehouse();
-        $scope.primaryWarehouse = new merchello.Models.Warehouse();
+        //$scope.newWarehouse = new merchello.Models.Warehouse();
+        $scope.primaryWarehouse = {};
+        $scope.primaryWarehouseAddress = {};
         $scope.visible = {
             catalogPanel: true,
             shippingMethodPanel: true,
             warehouseInfoPanel: false,
             warehouseListPanel: true
         };
-        $scope.countryToAdd = new merchello.Models.Country();
-        $scope.providerToAdd = {};
+        //$scope.countryToAdd = new merchello.Models.Country();
+        //$scope.providerToAdd = {};
         $scope.currentShipCountry = {};
-        $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
+        $scope.selectedCatalog = {};
+
+        // exposed methods
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
@@ -444,24 +455,23 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
          */
         function loadAllAvailableCountries() {
 
-            var promiseAllCountries = merchelloSettingsService.getAllCountries();
+            var promiseAllCountries = settingsResource.getAllCountries();
             promiseAllCountries.then(function (allCountries) {
 
-                $scope.availableCountries = _.map(allCountries, function (country) {
-                    return new merchello.Models.Country(country);
+                $scope.availableCountries = _.sortBy(countryDisplayBuilder.transform(allCountries), function(country) {
+                    return country.name;
                 });
 
                 // Add Everywhere Else as an option
-                var everywhereElseCountry = new merchello.Models.Country();
-                everywhereElseCountry.key = "7501029f-5ab3-4733-935d-1dd37b37bf8";
-                everywhereElseCountry.countryCode = "ELSE";
-                everywhereElseCountry.name = "Everywhere Else";
-                $scope.availableCountries.push(everywhereElseCountry);
+                var elseCountry = countryDisplayBuilder.createDefault();
+                elseCountry.key = '7501029f-5ab3-4733-935d-1dd37b37bf8';
+                elseCountry.countryCode = 'ELSE';
+                // TODO this should be localized
+                elseCountry.name = 'Everywhere Else';
+                $scope.availableCountries.push(elseCountry);
 
             }, function (reason) {
-
                 notificationsService.error("Available Countries Load Failed", reason.message);
-
             });
         }
 
@@ -475,11 +485,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
          * in Merchello models and add to the scope via the providers collection in the resources collection.
          */
         function loadAllAvailableGatewayResources(shipProvider) {
-            var promiseAllResources = merchelloCatalogShippingService.getAllShipGatewayResourcesForProvider(shipProvider);
+            var promiseAllResources = shippingGatewayProviderResource.getAllShipGatewayResourcesForProvider(shipProvider);
             promiseAllResources.then(function (allResources) {
-                shipProvider.resources = _.map(allResources, function (resource) {
-                    return new merchello.Models.GatewayResource(resource);
-                });
+                shipProvider.resources = gatewayResourceDisplayBuilder.transform(allResources);
             }, function (reason) {
                 notificationsService.error("Available Gateway Resources Load Failed", reason.message);
             });
@@ -495,15 +503,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
          * in Merchello models and add to the scope via the providers collection.
          */
         function loadAllShipProviders() {
-            var promiseAllProviders = merchelloCatalogShippingService.getAllShipGatewayProviders();
+            var promiseAllProviders = shippingGatewayProviderResource.getAllShipGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
-                $scope.providers = _.map(allProviders, function (providerFromServer) {
-                    return new merchello.Models.GatewayProvider(providerFromServer);
-                });
-                _.each($scope.providers, function (element, index, list) {
-                    $scope.loadAllAvailableGatewayResources(element);
-                });
-                $scope.loadCountries();
+                $scope.providers = shippingGatewayProviderDisplayBuilder.transform(allProviders);
+                loadCountries();
             }, function (reason) {
                 notificationsService.error("Available Ship Providers Load Failed", reason.message);
             });
@@ -523,14 +526,16 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
         function loadCountries() {
             if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
                 var catalogKey = $scope.selectedCatalog.key;
-                var promiseShipCountries = merchelloCatalogShippingService.getWarehouseCatalogShippingCountries(catalogKey);
-                promiseShipCountries.then(function (shipCountriesFromServer) {
-                    $scope.countries = _.map(shipCountriesFromServer, function (shippingCountryFromServer) {
-                        return new merchello.Models.ShippingCountry(shippingCountryFromServer);
+                var promiseShipCountries = shippingGatewayProviderResource.getWarehouseCatalogShippingCountries(catalogKey);
+                promiseShipCountries.then(function (shipCountries) {
+                    $scope.countries = shipCountryDisplayBuilder.transform(shipCountries);
+
+                    angular.forEach($scope.countries, function(country) {
+                        loadCountryProviders(country);
                     });
-                    _.each($scope.countries, function (element, index, list) {
-                        $scope.loadCountryProviders(element);
-                    });
+                    //_.each($scope.countries, function (element, index, list) {
+                    //    $scope.loadCountryProviders(element);
+                    //});
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -552,12 +557,12 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
         function loadCountryProviders(country) {
 
             if (country) {
-                var promiseProviders = merchelloCatalogShippingService.getAllShipCountryProviders(country);
+                var promiseProviders = shippingGatewayProviderResource.getAllShipCountryProviders(country);
                 promiseProviders.then(function (providerFromServer) {
 
-                    if (providerFromServer.length > 0) {
-
-                        _.each(providerFromServer, function (element, index, list) {
+                    if (angular.isArray(providerFromServer)) {
+                        console.info(providerFromServer);
+                       /* _.each(providerFromServer, function (element, index, list) {
                             if (element) {
                                 var newProvider = new merchello.Models.ShippingGatewayProvider(element);
                                 // Need this to get the name for now.
@@ -570,17 +575,14 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
                                 newProvider.shipMethods = [];
                                 country.shippingGatewayProviders.push(newProvider);
                                 $scope.loadProviderMethods(newProvider, country);
-                            }
-                        });
+                            } */
+                        }
 
-                        $scope.loaded = true;
-                        $scope.preValuesLoaded = true;
-                    }
-
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                    
                 }, function (reason) {
-
                     notificationsService.error("Fixed Rate Shipping Countries Providers Load Failed", reason.message);
-
                 });
             }
         }
@@ -616,11 +618,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
          * Once loaded, it calls the loadCountries method.
          */
         function loadWarehouses() {
-            var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse(); // Only a default warehouse in v1
-            promiseWarehouses.then(function (warehouseFromServer) {
-                $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
-                $scope.changePrimaryWarehouse();
-                $scope.loadAllShipProviders();
+            var promiseWarehouses = warehouseResource.getDefaultWarehouse(); // Only a default warehouse in v1
+            promiseWarehouses.then(function (warehouses) {
+                $scope.warehouses.push(warehouseDisplayBuilder.transform(warehouses));
+                changePrimaryWarehouse();
+                loadAllShipProviders();
             }, function (reason) {
                 notificationsService.error("Warehouses Load Failed", reason.message);
             });
@@ -644,21 +646,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
          * warehouse that has the isDefault == true will be set as the primary warehouse on the scope.
          */
         function changePrimaryWarehouse(warehouse) {
-            for (var i = 0; i < $scope.warehouses.length; i++) {
-                if (warehouse) {
-                    if (warehouse.key == $scope.warehouses[i].key) {
-                        $scope.warehouses[i].isDefault = true;
-                        $scope.primaryWarehouse = $scope.warehouses[i];
-                    } else {
-                        $scope.warehouses[i].isDefault = false;
-                    }
-                } else {
-                    if ($scope.warehouses[i].isDefault == true) {
-                        $scope.primaryWarehouse = $scope.warehouses[i];
-                    }
-                }
-            }
-            $scope.changeSelectedCatalog();
+            $scope.primaryWarehouse = _.find($scope.warehouses, function(warehouse) {
+                   return warehouse.isDefault;
+            });
+            $scope.primaryWarehouseAddress = $scope.primaryWarehouse.getAddress();
+            changeSelectedCatalog();
         }
 
         /**
@@ -672,7 +664,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
          * choose the default warehouse.
          */
         function changeSelectedCatalog(catalogIndex) {
-            if ((typeof catalogIndex) != 'undefined') {
+            if ((typeof catalogIndex) !== 'undefined') {
                 if ($scope.primaryWarehouse.warehouseCatalogs.length > catalogIndex) {
                     $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[catalogIndex];
                 } else {
@@ -708,22 +700,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
             return result;
         }
 
-        /**
-         * @ngdoc method
-         * @name doesWarehouseHaveAddress
-         * @function
-         *
-         * @description
-         * Returns true if the warehouse has an address. Returns false if it does not.
-         */
-        function doesWarehouseHaveAddress() {
-            var result = true;
-            var warehouse = $scope.primaryWarehouse;
-            if (warehouse.address1 === '' || warehouse.locality === '' || warehouse.address1 === null || warehouse.locality === null) {
-                result = false;
-            }
-            return result;
-        }
 
         //--------------------------------------------------------------------------------------
         // Event Handlers
@@ -973,57 +949,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
 
         }
 
-        /**
-         * @ngdoc method
-         * @name addWarehouse
-         * @function
-         *
-         * @description
-         * Opens the edit warehouse dialog via the Umbraco dialogService.
-         */
-        function addWarehouse(warehouse) {
-            if (warehouse == undefined) {
-                warehouse = new merchello.Models.Warehouse();
-                warehouse.key = "no key created";
-            }
-
-            var dialogData = {}
-            dialogData.warehouse = warehouse;
-            dialogData.availableCountries = $scope.availableCountries;
-
-            dialogService.open({
-                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.editwarehouse.html',
-                show: true,
-                callback: $scope.addWarehouseDialogConfirm,
-                dialogData: dialogData
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @name addWarehouseDialogConfirm
-         * @function
-         *
-         * @description
-         * Handles the add/edit after recieving the dialogData from the dialog view/controller
-         */
-        function addWarehouseDialogConfirm(dialogData) {
-            var warehouse = dialogData.warehouse;
-            var promiseWarehouseSave = merchelloWarehouseService.save(warehouse); // Only a default warehouse in v1
-            promiseWarehouseSave.then(function () {
-
-                notificationsService.success("Warehouse Saved", "");
-
-                if ($scope.newWarehouse.isDefault) {
-                    $scope.changePrimaryWarehouse(warehouse);
-                }
-
-            }, function (reason) {
-
-                notificationsService.error("Warehouses Save Failed", reason.message);
-
-            });
-        }
 
         /**
          * @ngdoc method
@@ -1274,7 +1199,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderCon
             });
         }
 
-        //init();
+        // initialize the controller
+        init();
 
 
     }]);

@@ -24,7 +24,7 @@
                         <!-- ACTION: Add Country -->
                         <a class="" data-ng-click="addCountry()"><i class="icon icon-add"></i> Add Country</a>
                     </div>
-                    <div class="merchello-controls">
+                    <div class="merchello-controls" data-ng-show="preValuesLoaded">
                         <div>
 
                         </div>
@@ -81,13 +81,7 @@
                         <!-- ACTION: Edit Warehouse -->
                         <a class="btn btn-default btn-action pull-right" data-ng-click="addWarehouse(primaryWarehouse)"><i class="icon-edit"></i></a>
                     </h3>
-                    <h4>{{primaryWarehouse.name}}</h4>
-                    <div class="adr" data-ng-show="doesWarehouseHaveAddress()">
-                        <div class="street-address">{{primaryWarehouse.address1}}</div>
-                        <div class="extended-address">{{primaryWarehouse.address2}}</div>
-                        <span class="locality">{{primaryWarehouse.locality}}</span>, <span class="region">{{primaryWarehouse.region}}</span> <span class="postal-code">{{primaryWarehouse.postalCode}}</span>
-                        <div class="country">{{primaryWarehouse.countryCode}}</div>
-                    </div>
+                    <merchello-address address="primaryWarehouseAddress" data-ng-show="!primaryWarehouseAddress.isEmpty()"></merchello-address>
                 </div>
                 <!-- Catalogs -->
                 <div class="well catalog-info" data-ng-show="visible.catalogPanel">
@@ -104,7 +98,7 @@
                     <a class="" data-ng-click="addEditWarehouseCatalogDialogOpen(primaryWarehouse)"><i class="icon icon-add"></i> Add Catalog</a>
                 </div>
             </div>
-            <merchello-debug-section data-props-to-debug="warehouses,providers,countries"></merchello-debug-section>
+            <!--merchello-debug-section data-props-to-debug="warehouses,providers,countries"></merchello-debug-section-->
         </merchello-panel>
     </umb-panel>
 </div>

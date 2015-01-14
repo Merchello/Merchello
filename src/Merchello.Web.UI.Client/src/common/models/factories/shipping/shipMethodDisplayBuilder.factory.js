@@ -7,19 +7,22 @@
      */
     angular.module('merchello.services')
         .factory('shipMethodDisplayBuilder',
-            ['genericModelBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
-            function(genericModelBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
+            ['genericModelBuilder', 'dialogEditorViewDisplayBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
+            function(genericModelBuilder, dialogEditorViewDisplayBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
 
                 var Constructor = ShipMethodDisplay;
 
                 return {
                     createDefault: function() {
-                        return new Constructor();
+                        var shipMethod = new Constructor();
+                        shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                        return shipMethod;
                     },
                     transform: function(jsonResult) {
                         var shipMethod = genericModelBuilder.transform(jsonResult, Constructor);
                         if (jsonResult.provinces) {
                             shipMethod.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                         }
                         return shipMethod;
                     }

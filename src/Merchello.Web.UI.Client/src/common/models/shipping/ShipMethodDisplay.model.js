@@ -15,6 +15,7 @@
         self.serviceCode = '';
         self.taxable = false;
         self.provinces = [];
+        self.dialogEditorView = {};
     };
 
     angular.module('merchello.models').constant('ShipMethodDisplay', ShipMethodDisplay);
