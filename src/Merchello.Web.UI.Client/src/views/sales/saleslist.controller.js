@@ -8,9 +8,9 @@
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', 'angularHelper', 'assetsService', 'notificationsService',
+    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService',
         'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
-        function($scope, $element, angularHelper, assetsService, notificationService, invoiceResource,
+        function($scope, $element, $log, angularHelper, assetsService, notificationService, invoiceResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
         {
 

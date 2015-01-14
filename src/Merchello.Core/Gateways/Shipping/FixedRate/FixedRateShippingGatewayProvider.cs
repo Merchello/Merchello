@@ -18,7 +18,6 @@
     /// 
     /// </remarks>
     [GatewayProviderActivation("AEC7A923-9F64-41D0-B17B-0EF64725F576", "Fixed Rate Shipping Provider", "Fixed Rate Shipping Provider")]
-    [GatewayProviderEditor("Fixed Rate Shipping Provider", "Fixed Rate Shipping Provider", "~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html")]
     public class FixedRateShippingGatewayProvider : ShippingGatewayProviderBase, IFixedRateShippingGatewayProvider
     {
         #region "Available Methods"

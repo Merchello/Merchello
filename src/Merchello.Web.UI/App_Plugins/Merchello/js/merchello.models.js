@@ -73,6 +73,22 @@
 
     /**
      * @ngdoc model
+     * @name DialogEditorViewDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's DialogEditorViewDisplay object
+     */
+    var DialogEditorViewDisplay = function() {
+        var self = this;
+        self.title = '';
+        self.description = '';
+        self.editorView = '';
+    };
+
+    angular.module('merchello.models').constant('DialogEditorViewDisplay', DialogEditorViewDisplay);
+    /**
+     * @ngdoc model
      * @name ExtendedDataDisplay
      * @function
      *
@@ -109,27 +125,28 @@
             return value;
         }
 
-        /*function setValue(key, value) {
-            var found = false;
-            var i = 0;
-            while(i < this.items.length && !found) {
-                if (this[ i ].key === key) {
-                    found = true;
-                    this[ i ].value = value;
-                }
-                i++;
-            }
-            if (found) {
+        function setValue(key, value) {
+
+            var existing = _.find(this.items, function(item) {
+              return item.key === key;
+            });
+            if(existing) {
+                existing.value = value;
                 return;
             }
-            this.push({ key: key, value: value });
-        }*/
 
+            this.items.push({ key: key, value: value });
+        }
+
+        function toArray() {
+            return this.items;
+        }
 
         return {
             isEmpty: isEmpty,
-            getValue: getValue
-            //setValue: setValue
+            getValue: getValue,
+            setValue: setValue,
+            toArray: toArray
         };
     }());
 
@@ -323,6 +340,27 @@
     };
 
     angular.module('merchello.models').constant('EditShipmentDialogData', EditShipmentDialogData);
+    /**
+     * @ngdoc model
+     * @name GatewayProviderDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's GatewayProviderDisplay object
+     */
+    var GatewayProviderDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.providerTfKey = '';
+        self.name = '';
+        self.description = '';
+        self.extendedData = [];
+        self.encryptExtendedData = false;
+        self.activated = false;
+        self.dialogEditorView = {};
+    };
+
+    angular.module('merchello.models').constant('GatewayProviderDisplay', GatewayProviderDisplay);
     /**
      * @ngdoc model
      * @name GatewayResourceDisplay
@@ -1362,6 +1400,30 @@ angular.module('merchello.models').factory('dialogDataFactory',
 
     /**
      * @ngdoc service
+     * @name merchello.models.dialogEditorViewDisplayBuilder
+     *
+     * @description
+     * A utility service that builds dialogEditorViewDisplay models
+     */
+    angular.module('merchello.models').factory('dialogEditorViewDisplayBuilder',
+        ['genericModelBuilder', 'DialogEditorViewDisplay',
+            function(genericModelBuilder, DialogEditorViewDisplay) {
+
+                var Constructor = DialogEditorViewDisplay;
+
+                return {
+                    createDefault: function () {
+                        return new Constructor();
+                    },
+                    transform: function (jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+            }]);
+
+
+    /**
+     * @ngdoc service
      * @name merchello.models.extendedDataDisplayBuilder
      *
      * @description
@@ -1414,6 +1476,42 @@ angular.module('merchello.models').factory('dialogDataFactory',
                 };
             }]);
 
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.gatewayProviderDisplayBuilder
+     *
+     * @description
+     * A utility service that builds GatewayProviderDisplay models
+     */
+    angular.module('merchello.models').factory('gatewayProviderDisplayBuilder',
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'dialogEditorViewDisplayBuilder', 'GatewayProviderDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, dialogEditorViewDisplayBuilder, GatewayProviderDisplay) {
+
+            var Constructor = GatewayProviderDisplay;
+
+            return {
+                createDefault: function () {
+                    var gatewayProvider = new Constructor();
+                    gatewayProvider.extendedData = extendedDataDisplayBuilder.createDefault();
+                    gatewayProvider.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    return gatewayProvider;
+                },
+                transform: function (jsonResult) {
+                    var gatewayProviders = genericModelBuilder.transform(jsonResult, Constructor);
+                    if (angular.isArray(gatewayProviders)) {
+                        for (var i = 0; i < gatewayProviders.length; i++) {
+                            gatewayProviders[i].extendedData = extendedDataDisplayBuilder.transform(jsonResult[i].extendedData);
+                            gatewayProviders[i].dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[i].dialogEditorView);
+                        }
+                    } else {
+                        gatewayProviders.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        gatewayProviders.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                    }
+                    return gatewayProviders;
+                }
+            };
+        }]);
 
     /**
      * @ngdoc service

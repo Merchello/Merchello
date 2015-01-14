@@ -51,6 +51,1234 @@
     });
 
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Backoffice.SettingsController
+ * @function
+ *
+ * @description
+ * The controller for the settings management page
+ */
+angular.module('merchello').controller('Merchello.Backoffice.SettingsController',
+    ['$scope', '$log', 'serverValidationManager', 'notificationsService', 'settingsResource', 'settingDisplayBuilder',
+        'currencyDisplayBuilder', 'countryDisplayBuilder',
+        function($scope, $log, serverValidationManager, notificationsService, settingsResource, settingDisplayBuilder, currencyDisplayBuilder) {
+
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+            $scope.savingStoreSettings = false;
+            $scope.settingsDisplay = settingDisplayBuilder.createDefault();
+            $scope.currencies = [];
+            $scope.selectedCurrency = {};
+
+            // exposed methods
+            $scope.currencyChanged = currencyChanged;
+            $scope.save = save;
+
+            function loadCurrency() {
+                var promise = settingsResource.getAllCurrencies();
+                promise.then(function(currenices) {
+                    $scope.currencies = _.sortBy(currencyDisplayBuilder.transform(currenices), function(currency) {
+                        return currency.name;
+                    });
+                    $scope.selectedCurrency = _.find($scope.currencies, function(currency) {
+                      return currency.currencyCode === $scope.settingsDisplay.currencyCode;
+                    });
+
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    alert('Failed: ' + reason.message);
+                });
+            }
+
+            function loadSettings() {
+                var promise = settingsResource.getCurrentSettings();
+                promise.then(function (settings) {
+                    $scope.settingsDisplay = settingDisplayBuilder.transform(settings);
+                    loadCurrency();
+                }, function (reason) {
+                    alert('Failed: ' + reason.message);
+                });
+            }
+
+            function save () {
+                $scope.preValuesLoaded = false;
+
+                notificationsService.info("Saving...", "");
+                $scope.savingStoreSettings = true;
+                $scope.$watch($scope.storeSettingsForm, function(value) {
+                    var promise = settingsResource.save($scope.settingsDisplay);
+                    promise.then(function(settingDisplay) {
+                        notificationsService.success("Store Settings Saved", "");
+                        $scope.savingStoreSettings = false;
+                        $scope.settingDisplay = settingDisplayBuilder.transform(settingDisplay);
+                        loadSettings();
+                    }, function(reason) {
+                        notificationsService.error("Store Settings Save Failed", reason.message);
+                    });
+                });
+
+            }
+
+            function currencyChanged(currency) {
+                $scope.settingsDisplay.currencyCode = currency.currencyCode;
+            }
+
+            loadSettings();
+}]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.GatewayProvider.Dialogs.NotificationsProviderSettingsSmtpController
+     * @function
+     *
+     * @description
+     * The controller for configuring thee SMTP provider
+     */
+    angular.module('merchello').controller('Merchello.GatewayProvider.Dialogs.NotificationsProviderSettingsSmtpController',
+        ['$scope', function($scope) {
+
+            $scope.notificationProviderSettings = {};
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Method called on intial page load.  Loads in data from server and sets up scope.
+             */
+            function init() {
+
+                //$scope.dialogData.provider.extendedData
+
+                // on initial load extendedData will be empty but we need to populate with key values
+                //
+                if ($scope.dialogData.provider.extendedData.items.length > 0) {
+                    var extendedDataKey = 'merchSmtpProviderSettings';
+                    var settingsString = $scope.dialogData.provider.extendedData.getValue(extendedDataKey);
+                    $scope.notificationProviderSettings = angular.fromJson(settingsString);
+                    console.info($scope.dialogData);
+                    console.info($scope.notificationProviderSettings);
+
+                    // Watch with object equality to convert back to a string for the submit() call on the Save button
+                    $scope.$watch(function () {
+                        return $scope.notificationProviderSettings;
+                    }, function (newValue, oldValue) {
+                        $scope.dialogData.provider.extendedData.setValue(extendedDataKey, angular.toJson(newValue));
+                    }, true);
+                }
+            }
+
+            // Initialize
+            init();
+
+        }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Backoffice.GatewayProvidersListController
+ * @function
+ *
+ * @description
+ * The controller for the gateway providers list view controller
+ */
+angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListController",
+    ['$scope', 'assetsService', 'notificationsService', 'dialogService',
+        'gatewayProviderResource', 'gatewayProviderDisplayBuilder',
+        function($scope, assetsService, notificationsService, dialogService, gatewayProviderResource, gatewayProviderDisplayBuilder)
+        {
+            // load the css file
+            assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
+
+            $scope.loaded = true;
+            $scope.notificationGatewayProviders = [];
+            $scope.paymentGatewayProviders = [];
+            $scope.shippingGatewayProviders = [];
+            $scope.taxationGatewayProviders = [];
+
+            // exposed methods
+            $scope.activateProvider = activateProvider;
+            $scope.deactivateProvider = deactivateProvider;
+            $scope.editProviderConfigDialogOpen = editProviderConfigDialogOpen;
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Method called on intial page load.  Loads in data from server and sets up scope.
+             */
+            function init() {
+                loadAllNotificationGatwayProviders();
+                loadAllPaymentGatewayProviders();
+                loadAllShippingGatewayProviders();
+                loadAllTaxationGatewayProviders();
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadAllNotificationGatwayProviders
+             * @function
+             *
+             * @description
+             * Loads in notification gateway providers from server into the scope.  Called in init().
+             */
+            function loadAllNotificationGatwayProviders() {
+                var promiseAllProviders = gatewayProviderResource.getResolvedNotificationGatewayProviders();
+                promiseAllProviders.then(function(allProviders) {
+                    $scope.notificationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function(reason) {
+                    notificationsService.error("Available Notification Gateway Providers Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadAllPaymentGatewayProviders
+             * @function
+             *
+             * @description
+             * Loads in payment gateway providers from server into the scope.  Called in init().
+             */
+            function loadAllPaymentGatewayProviders() {
+                var promiseAllProviders = gatewayProviderResource.getResolvedPaymentGatewayProviders();
+                promiseAllProviders.then(function (allProviders) {
+                    $scope.paymentGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Available Payment Gateway Providers Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadAllShippingGatewayProviders
+             * @function
+             *
+             * @description
+             * Loads in shipping gateway providers from server into the scope.  Called in init().
+             */
+            function loadAllShippingGatewayProviders() {
+                var promiseAllProviders = gatewayProviderResource.getResolvedShippingGatewayProviders();
+                promiseAllProviders.then(function (allProviders) {
+                    $scope.shippingGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Available Shipping Gateway Providers Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadAllTaxationGatewayProviders
+             * @function
+             *
+             * @description
+             * Loads in taxation gateway providers from server into the scope.  Called in init().
+             */
+            function loadAllTaxationGatewayProviders() {
+                var promiseAllProviders = gatewayProviderResource.getResolvedTaxationGatewayProviders();
+                promiseAllProviders.then(function (allProviders) {
+                    $scope.taxationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Available Taxation Gateway Providers Load Failed", reason.message);
+                });
+            }
+
+            /* -------------------------------------------------------------------
+                Events
+            ----------------------------------------------------------------------- */
+
+            /**
+             * @ngdoc method
+             * @name activateProvider
+             * @param {GatewayProvider} provider The GatewayProvider to activate
+             * @function
+             *
+             * @description
+             * Calls the merchelloGatewayProviderService to activate the provider.
+             */
+            function activateProvider(provider) {
+                var promiseActivate = gatewayProviderResource.activateGatewayProvider(provider);
+                promiseActivate.then(function () {
+                    provider.activated = true;
+                    init();
+                    notificationsService.success("Payment Method Activated");
+                }, function (reason) {
+                    notificationsService.error("Payment Method Activate Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name deactivateProvider
+             * @param {GatewayProvider} provider The GatewayProvider to deactivate
+             * @function
+             *
+             * @description
+             * Calls the merchelloGatewayProviderService to deactivate the provider.
+             */
+            function deactivateProvider(provider) {
+                var promiseDeactivate = gatewayProviderResource.deactivateGatewayProvider(provider);
+                promiseDeactivate.then(function () {
+                    provider.activated = false;
+                    notificationsService.success("Payment Method Deactivated");
+                }, function (reason) {
+                    notificationsService.error("Payment Method Deactivate Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name editProviderConfigDialogOpen
+             * @param {GatewayProvider} provider The GatewayProvider to configure
+             * @function
+             *
+             * @description
+             * Opens the dialog to allow user to add provider configurations
+             */
+            function editProviderConfigDialogOpen(provider) {
+                var dialogProvider = provider;
+                if (!provider) {
+                    return;
+                }
+                var myDialogData = {
+                    provider: dialogProvider
+                };
+                dialogService.open({
+                    template: provider.dialogEditorView.editorView,
+                    show: true,
+                    callback: providerConfigDialogConfirm,
+                    dialogData: myDialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name providerConfigDialogConfirm
+             * @param {dialogData} model returned from the dialog view
+             * @function
+             *
+             * @description
+             * Handles the data passed back from the provider editor dialog and saves it to the database
+             */
+            function providerConfigDialogConfirm(data) {
+                var promise = gatewayProviderResource.saveGatewayProvider(data.provider);
+                promise.then(function (provider) {
+                        notificationsService.success("Gateway Provider Saved", "");
+                    },
+                    function (reason) {
+                        notificationsService.error("Gateway Provider Save Failed", reason.message);
+                    }
+                );
+            }
+
+            // Initialize the controller
+
+            init();
+
+        }]);
+
+
+
+
+
+
+
+angular.module('merchello').controller('Merchello.Backoffice.ShippingProviderController',
+    [function() {
+
+        $scope.sortProperty = "name";
+        $scope.availableCountries = [];
+        $scope.availableFixedRateGatewayResources = [];
+        $scope.countries = [];
+        $scope.warehouses = [];
+        $scope.providers = [];
+        $scope.newWarehouse = new merchello.Models.Warehouse();
+        $scope.primaryWarehouse = new merchello.Models.Warehouse();
+        $scope.visible = {
+            catalogPanel: true,
+            shippingMethodPanel: true,
+            warehouseInfoPanel: false,
+            warehouseListPanel: true
+        };
+        $scope.countryToAdd = new merchello.Models.Country();
+        $scope.providerToAdd = {};
+        $scope.currentShipCountry = {};
+        $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
+
+        //--------------------------------------------------------------------------------------
+        // Initialization methods
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         *
+         * @description
+         * Method called on intial page load.  Loads in data from server and sets up scope.
+         */
+        function init() {
+            loadWarehouses();
+            loadAllAvailableCountries();
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadAllAvailableCountries
+         * @function
+         *
+         * @description
+         * Load the countries from the settings service, then wrap the results
+         * in Merchello models and add to the scope via the availableCountries collection.
+         */
+        function loadAllAvailableCountries() {
+
+            var promiseAllCountries = merchelloSettingsService.getAllCountries();
+            promiseAllCountries.then(function (allCountries) {
+
+                $scope.availableCountries = _.map(allCountries, function (country) {
+                    return new merchello.Models.Country(country);
+                });
+
+                // Add Everywhere Else as an option
+                var everywhereElseCountry = new merchello.Models.Country();
+                everywhereElseCountry.key = "7501029f-5ab3-4733-935d-1dd37b37bf8";
+                everywhereElseCountry.countryCode = "ELSE";
+                everywhereElseCountry.name = "Everywhere Else";
+                $scope.availableCountries.push(everywhereElseCountry);
+
+            }, function (reason) {
+
+                notificationsService.error("Available Countries Load Failed", reason.message);
+
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadAllAvailableGatewayResources
+         * @function
+         *
+         * @description
+         * Load the shipping gateway resources from the shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the providers collection in the resources collection.
+         */
+        function loadAllAvailableGatewayResources(shipProvider) {
+            var promiseAllResources = merchelloCatalogShippingService.getAllShipGatewayResourcesForProvider(shipProvider);
+            promiseAllResources.then(function (allResources) {
+                shipProvider.resources = _.map(allResources, function (resource) {
+                    return new merchello.Models.GatewayResource(resource);
+                });
+            }, function (reason) {
+                notificationsService.error("Available Gateway Resources Load Failed", reason.message);
+            });
+        };
+
+        /**
+         * @ngdoc method
+         * @name loadAllShipProviders
+         * @function
+         *
+         * @description
+         * Load the shipping gateway providers from the shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the providers collection.
+         */
+        function loadAllShipProviders() {
+            var promiseAllProviders = merchelloCatalogShippingService.getAllShipGatewayProviders();
+            promiseAllProviders.then(function (allProviders) {
+                $scope.providers = _.map(allProviders, function (providerFromServer) {
+                    return new merchello.Models.GatewayProvider(providerFromServer);
+                });
+                _.each($scope.providers, function (element, index, list) {
+                    $scope.loadAllAvailableGatewayResources(element);
+                });
+                $scope.loadCountries();
+            }, function (reason) {
+                notificationsService.error("Available Ship Providers Load Failed", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadCountries
+         * @function
+         *
+         * @description
+         * Load the countries from the shipping service, then wrap the results
+         * in Merchello models and add to the scope via the countries collection.
+         * Once loaded, it calls the loadCountryProviders method for each
+         * country.
+         */
+        function loadCountries() {
+            if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
+                var catalogKey = $scope.selectedCatalog.key;
+                var promiseShipCountries = merchelloCatalogShippingService.getWarehouseCatalogShippingCountries(catalogKey);
+                promiseShipCountries.then(function (shipCountriesFromServer) {
+                    $scope.countries = _.map(shipCountriesFromServer, function (shippingCountryFromServer) {
+                        return new merchello.Models.ShippingCountry(shippingCountryFromServer);
+                    });
+                    _.each($scope.countries, function (element, index, list) {
+                        $scope.loadCountryProviders(element);
+                    });
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Shipping Countries Load Failed", reason.message);
+                });
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadCountryProviders
+         * @function
+         *
+         * @description
+         * Load the shipping gateway providers from the shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the shippingGatewayProviders collection on the country model.  After
+         * load is complete, it calls the loadProviderMethods to load in the methods.
+         */
+        function loadCountryProviders(country) {
+
+            if (country) {
+                var promiseProviders = merchelloCatalogShippingService.getAllShipCountryProviders(country);
+                promiseProviders.then(function (providerFromServer) {
+
+                    if (providerFromServer.length > 0) {
+
+                        _.each(providerFromServer, function (element, index, list) {
+                            if (element) {
+                                var newProvider = new merchello.Models.ShippingGatewayProvider(element);
+                                // Need this to get the name for now.
+                                var tempGlobalProvider = _.find($scope.providers, function (p) {
+                                    return p.key == newProvider.key;
+                                });
+                                newProvider.name = tempGlobalProvider.name;
+                                newProvider.typeFullName = tempGlobalProvider.typeFullName;
+                                newProvider.resources = tempGlobalProvider.resources;
+                                newProvider.shipMethods = [];
+                                country.shippingGatewayProviders.push(newProvider);
+                                $scope.loadProviderMethods(newProvider, country);
+                            }
+                        });
+
+                        $scope.loaded = true;
+                        $scope.preValuesLoaded = true;
+                    }
+
+                }, function (reason) {
+
+                    notificationsService.error("Fixed Rate Shipping Countries Providers Load Failed", reason.message);
+
+                });
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadShipMethods
+         * @function
+         *
+         * @description
+         * Load the shipping methods from the shipping gateway service, then wrap the results
+         * in Merchello models and add to the scope via the provider in the shipMethods collection.
+         */
+        function loadProviderMethods(shipProvider, country) {
+            var promiseShipMethods = merchelloCatalogShippingService.getShippingProviderShipMethodsByCountry(shipProvider, country);
+            promiseShipMethods.then(function (shipMethods) {
+                shipProvider.shipMethods = _.map(shipMethods, function (method) {
+                    return new merchello.Models.ShippingMethod(method);
+                });
+            }, function (reason) {
+                notificationsService.error("Available Shipping Methods Load Failed", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadWarehouses
+         * @function
+         *
+         * @description
+         * Load the warehouses from the warehouse service, then wrap the results
+         * in Merchello models and add to the scope via the warehouses collection.
+         * Once loaded, it calls the loadCountries method.
+         */
+        function loadWarehouses() {
+            var promiseWarehouses = merchelloWarehouseService.getDefaultWarehouse(); // Only a default warehouse in v1
+            promiseWarehouses.then(function (warehouseFromServer) {
+                $scope.warehouses.push(new merchello.Models.Warehouse(warehouseFromServer));
+                $scope.changePrimaryWarehouse();
+                $scope.loadAllShipProviders();
+            }, function (reason) {
+                notificationsService.error("Warehouses Load Failed", reason.message);
+            });
+        }
+
+
+        //--------------------------------------------------------------------------------------
+        // Helper methods
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name changePrimaryWarehouse
+         * @function
+         *
+         * @description
+         * Helper method to set the primary warehouse on the scope and to make sure the isDefault flag on
+         * all warehouses is set properly.  If a warehouse is passed in, then it will find that warehouse
+         * and set it as the primary and set isDefault to true.  All other warehouses will have their
+         * isDefault flag reset to false.  If no warehouse is passed in (usually on loading data) then the
+         * warehouse that has the isDefault == true will be set as the primary warehouse on the scope.
+         */
+        function changePrimaryWarehouse(warehouse) {
+            for (var i = 0; i < $scope.warehouses.length; i++) {
+                if (warehouse) {
+                    if (warehouse.key == $scope.warehouses[i].key) {
+                        $scope.warehouses[i].isDefault = true;
+                        $scope.primaryWarehouse = $scope.warehouses[i];
+                    } else {
+                        $scope.warehouses[i].isDefault = false;
+                    }
+                } else {
+                    if ($scope.warehouses[i].isDefault == true) {
+                        $scope.primaryWarehouse = $scope.warehouses[i];
+                    }
+                }
+            }
+            $scope.changeSelectedCatalog();
+        }
+
+        /**
+         * @ngdoc method
+         * @name changeSelectedCatalog
+         * @function
+         *
+         * @description
+         * Helper method to change between the selected catalog on the screen. If catalogIndex is passed
+         * in, then the function will select the catalog at that index if it exists. If it doesn't, then
+         * choose the default warehouse.
+         */
+        function changeSelectedCatalog(catalogIndex) {
+            if ((typeof catalogIndex) != 'undefined') {
+                if ($scope.primaryWarehouse.warehouseCatalogs.length > catalogIndex) {
+                    $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[catalogIndex];
+                } else {
+                    $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
+                }
+            } else {
+                var foundDefault = false;
+                for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
+                    if ($scope.primaryWarehouse.warehouseCatalogs[i].isDefault == true) {
+                        $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[i];
+                        foundDefault = true;
+                    }
+                }
+                if (!foundDefault) {
+                    $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[0];
+                }
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name countryHasProvinces
+         * @function
+         *
+         * @description
+         * Helper method to determine if the provided country has provinces or not.
+         */
+        function countryHasProvinces(country) {
+            var result = false;
+            if (country.provinces.length > 0) {
+                result = true;
+            }
+            return result;
+        }
+
+        /**
+         * @ngdoc method
+         * @name doesWarehouseHaveAddress
+         * @function
+         *
+         * @description
+         * Returns true if the warehouse has an address. Returns false if it does not.
+         */
+        function doesWarehouseHaveAddress() {
+            var result = true;
+            var warehouse = $scope.primaryWarehouse;
+            if (warehouse.address1 === '' || warehouse.locality === '' || warehouse.address1 === null || warehouse.locality === null) {
+                result = false;
+            }
+            return result;
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Event Handlers
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name deleteCountry
+         * @function
+         *
+         * @description
+         * Calls the shipping service to delete the country passed in via the country parameter.
+         * When complete, the countries are reloaded from the api to get the latest from the database.
+         *
+         */
+        function deleteCountryDialogConfirm(country) {
+
+            var promiseDelete = merchelloCatalogShippingService.deleteShipCountry(country.key);
+            promiseDelete.then(function () {
+
+                notificationsService.success("Shipping Country Deleted");
+
+                $scope.loadCountries();
+
+            }, function (reason) {
+
+                notificationsService.error("Shipping Country Delete Failed", reason.message);
+
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name removeMethodFromProviderDialogConfirmation
+         * @function
+         *
+         * @description
+         * Calls the fixed rate shipping service to delete the method passed in via the method parameter.
+         * After method is deleted, reload the list of methods for that provider in that country.
+         */
+        function removeMethodFromProviderDialogConfirmation(data) {
+            var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(data.method);
+            promiseDelete.then(function () {
+                data.provider.shipMethods = [];
+                $scope.loadProviderMethods(data.provider, data.country);
+                notificationsService.success("Shipping Method Deleted");
+            }, function (reason) {
+                notificationsService.error("Shipping Method Delete Failed", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name removeMethodFromProviderDialog
+         * @function
+         *
+         * @description
+         * Opens the delete confirmation dialog via the Umbraco dialogService.
+         * Country and provider passed through dialogService so that on confirm the provider's
+         * methods can be reloaded after the method is deleted.
+         */
+        function removeMethodFromProviderDialog(country, provider, method) {
+            var dialogData = {
+                country: country,
+                name: method.name,
+                method: method,
+                provider: provider
+            };
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.removeMethodFromProviderDialogConfirmation,
+                dialogData: dialogData
+            });
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Dialog methods
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name addCountry
+         * @function
+         *
+         * @description
+         * Opens the add country dialog via the Umbraco dialogService.
+         */
+        function addCountry() {
+            var dialogData = {};
+            dialogData.availableCountries = $scope.availableCountries;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addcountry.html',
+                show: true,
+                callback: $scope.addCountryDialogConfirm,
+                dialogData: dialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name addCountryDialogConfirm
+         * @function
+         *
+         * @description
+         * Handles the save after recieving the country to add from the dialog view/controller
+         */
+        function addCountryDialogConfirm(dialogData) {
+            var countryOnCatalog = _.find($scope.countries, function (shipCountry) { return shipCountry.countryCode == dialogData.selectedCountry.countryCode; });
+            if (!countryOnCatalog) {
+
+                var catalogKey = $scope.selectedCatalog.key;
+
+                var promiseShipCountries = merchelloCatalogShippingService.newWarehouseCatalogShippingCountry(catalogKey, dialogData.selectedCountry.countryCode);
+                promiseShipCountries.then(function (shippingCountryFromServer) {
+
+                    $scope.countries.push(new merchello.Models.ShippingCountry(shippingCountryFromServer));
+
+                }, function (reason) {
+
+                    notificationsService.error("Shipping Countries Create Failed", reason.message);
+
+                });
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name addEditShippingMethodDialogOpen
+         * @function
+         *
+         * @description
+         * Opens the add/edit shipping method dialog via the Umbraco dialogService.
+         */
+        function addEditShippingMethodDialogOpen(country, gatewayProvider, method) {
+
+            var dialogMethod = method;
+            var provider;
+            for (var i = 0; i < $scope.providers.length; i++) {
+                if (gatewayProvider.key == $scope.providers[i].key) {
+                    provider = new merchello.Models.GatewayProvider($scope.providers[i]);
+                    provider.resources = _.map($scope.providers[i].resources, function (resource) {
+                        return new merchello.Models.GatewayResource(resource);
+                    });
+                }
+            }
+            // If no method exists, create a new, blank one.
+            if (!method) {
+                dialogMethod = new merchello.Models.ShippingMethod();
+                dialogMethod.shipCountryKey = country.key;
+                dialogMethod.providerKey = gatewayProvider.key;
+                dialogMethod.dialogEditorView.editorView = provider.dialogEditorView.editorView;
+            } else {
+                if (method.shipCountryKey === "00000000-0000-0000-0000-000000000000") {
+                    method.shipCountryKey = country.key;
+                }
+            }
+
+            // Acquire the provider's available resources.
+            var availableResources = gatewayProvider.resources;
+
+            // Get the editor template for the method's dialog.
+            var templatePage = dialogMethod.dialogEditorView.editorView;
+
+            var myDialogData = {
+                method: dialogMethod,
+                country: country,
+                provider: gatewayProvider,
+                gatewayResources: availableResources
+            };
+            dialogService.open({
+                template: templatePage,
+                show: true,
+                callback: $scope.shippingMethodDialogConfirm,
+                dialogData: myDialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name addEditShippingProviderDialogOpen
+         * @function
+         *
+         * @description
+         * Opens the shipping provider dialog via the Umbraco dialogService.
+         */
+        function addEditShippingProviderDialogOpen(country, provider) {
+            var dialogProvider = provider;
+            if (!provider) {
+                dialogProvider = new merchello.Models.ShippingGatewayProvider();
+            }
+            var providers = _.map($scope.providers, function (item) {
+                var newProvider = new merchello.Models.GatewayProvider(item);
+                newProvider.resources = _.map(item.resources, function (resource) {
+                    return new merchello.Models.GatewayResource(resource);
+                });
+                return newProvider;
+            });
+            // Clean out any placeholder dropdown values for the providers' resources.
+            for (var i = 0; i < providers.length; i++) {
+                for (var j = 0; j < providers[i].resources.length; j++) {
+                    if (providers[i].resources[j].serviceCode === '') {
+                        providers[i].resources.splice(j, 1);
+                        j -= 1;
+                    }
+                }
+            }
+            var myDialogData = {
+                country: country,
+                provider: dialogProvider,
+                availableProviders: providers
+            };
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingprovider.html',
+                show: true,
+                callback: $scope.shippingProviderDialogConfirm,
+                dialogData: myDialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name addEditWarehouseCatalogDialogOpen
+         * @function
+         *
+         * @description
+         * Opens the warehouse catalog dialog via the Umbraco dialogService.
+         */
+        function addEditWarehouseCatalogDialogOpen(warehouse, catalog) {
+
+            var dialogCatalog = catalog;
+            if (!catalog) {
+                dialogCatalog = new merchello.Models.WarehouseCatalog();
+            }
+
+            var myDialogData = {
+                warehouseKey: warehouse.key,
+                catalog: dialogCatalog
+            };
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addeditcatalog.html',
+                show: true,
+                callback: $scope.warehouseCatalogDialogConfirm,
+                dialogData: myDialogData
+            });
+
+        }
+
+        /**
+         * @ngdoc method
+         * @name addWarehouse
+         * @function
+         *
+         * @description
+         * Opens the edit warehouse dialog via the Umbraco dialogService.
+         */
+        function addWarehouse(warehouse) {
+            if (warehouse == undefined) {
+                warehouse = new merchello.Models.Warehouse();
+                warehouse.key = "no key created";
+            }
+
+            var dialogData = {}
+            dialogData.warehouse = warehouse;
+            dialogData.availableCountries = $scope.availableCountries;
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.editwarehouse.html',
+                show: true,
+                callback: $scope.addWarehouseDialogConfirm,
+                dialogData: dialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name addWarehouseDialogConfirm
+         * @function
+         *
+         * @description
+         * Handles the add/edit after recieving the dialogData from the dialog view/controller
+         */
+        function addWarehouseDialogConfirm(dialogData) {
+            var warehouse = dialogData.warehouse;
+            var promiseWarehouseSave = merchelloWarehouseService.save(warehouse); // Only a default warehouse in v1
+            promiseWarehouseSave.then(function () {
+
+                notificationsService.success("Warehouse Saved", "");
+
+                if ($scope.newWarehouse.isDefault) {
+                    $scope.changePrimaryWarehouse(warehouse);
+                }
+
+            }, function (reason) {
+
+                notificationsService.error("Warehouses Save Failed", reason.message);
+
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name deleteCatalog
+         * @function
+         *
+         * @description
+         * Opens the delete catalog dialog via the Umbraco dialogService.
+         */
+        function deleteCatalog() {
+            var dialogData = {};
+            dialogData.name = $scope.selectedCatalog.name;
+            dialogData.catalog = $scope.selectedCatalog;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.deleteCatalogConfirm,
+                dialogData: dialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name deleteCatalogConfirm
+         * @function
+         *
+         * @description
+         * Handles the delete after recieving the catalog to delete from the dialog view/controller
+         */
+        function deleteCatalogConfirm(data) {
+            var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
+            var promiseDeleteCatalog = merchelloWarehouseService.deleteWarehouseCatalog(selectedCatalog.key);
+            promiseDeleteCatalog.then(function (responseCatalog) {
+                $scope.loadWarehouses();
+            }, function (reason) {
+                notificationsService.error('Catalog Delete Failed', reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name addCountry
+         * @function
+         *
+         * @description
+         * Opens the add country dialog via the Umbraco dialogService.
+         */
+        function deleteCountryDialog(country) {
+            var dialogData = {};
+            dialogData = country;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                show: true,
+                callback: $scope.deleteCountryDialogConfirm,
+                dialogData: dialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name deleteWarehouse
+         * @function
+         *
+         * @description
+         * Opens the delete warehouse dialog via the Umbraco dialogService.
+         */
+        function deleteWarehouse(warehouse) {
+            if (warehouse != undefined) {
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.deletewarehouse.html',
+                    show: true,
+                    callback: $scope.deleteWarehouseDialogConfirm,
+                    dialogData: warehouse
+                });
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name deleteWarehouseDialogConfirm
+         * @function
+         *
+         * @description
+         * Handles the delete after recieving the warehouse to delete from the dialog view/controller
+         */
+        function deleteWarehouseDialogConfirm(warehouse) {
+
+            // Todo: call API method to delete warehouse and then reload warehouses from API
+
+        }
+
+        /**
+         * @ngdoc method
+         * @name editRegionalShippingRatesDialogOpen
+         * @function
+         *
+         * @description
+         * Opens the edit regional shipping rates dialog via the Umbraco dialogService.
+         */
+        function editRegionalShippingRatesDialogOpen(country, provider, method) {
+
+            var dialogMethod = method;
+            var availableResources = provider.resources;
+            var templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
+
+            if (!method) {
+                dialogMethod = new merchello.Models.ShippingMethod();
+                dialogMethod.shipCountryKey = country.key;
+                dialogMethod.providerKey = provider.key;
+                dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
+            }
+
+            var myDialogData = {
+                method: dialogMethod,
+                country: country,
+                provider: provider,
+                gatewayResources: availableResources
+            };
+
+            dialogService.open({
+                template: templatePage,
+                show: true,
+                callback: $scope.shippingMethodDialogConfirm,
+                dialogData: myDialogData
+            });
+
+        }
+
+        /**
+         * @ngdoc method
+         * @name selectCatalogDialogConfirm
+         * @function
+         *
+         * @description
+         * Handles the catalog selection after recieving the dialogData from the dialog view/controller
+         */
+        function selectCatalogDialogConfirm(data) {
+
+            var index = data.filter.id;
+            $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[index];
+            $scope.countries = [];
+            // Load the countries associated with this catalog.
+            $scope.loadCountries();
+        }
+
+        /**
+         * @ngdoc method
+         * @name selectCatalogDialogOpen
+         * @function
+         *
+         * @description
+         * Opens the catalog selection dialog via the Umbraco dialogService.
+         */
+        function selectCatalogDialogOpen() {
+
+            var availableCatalogs = [];
+            var filter = availableCatalogs[0];
+            for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
+                var catalog = {
+                    id: i,
+                    name: $scope.primaryWarehouse.warehouseCatalogs[i].name
+                };
+                availableCatalogs.push(catalog);
+                if ($scope.primaryWarehouse.warehouseCatalogs[i].key == $scope.selectedCatalog.key) {
+                    filter = availableCatalogs[i];
+                }
+            }
+            var myDialogData = {
+                availableCatalogs: availableCatalogs,
+                filter: filter
+            };
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.selectcatalog.html',
+                show: true,
+                callback: $scope.selectCatalogDialogConfirm,
+                dialogData: myDialogData
+            });
+
+        }
+
+        /**
+         * @ngdoc method
+         * @name shippingMethodDialogConfirm
+         * @function
+         *
+         * @description
+         * Handles the edit after recieving the dialogData from the dialog view/controller
+         */
+        function shippingMethodDialogConfirm(data) {
+
+            var promiseShipMethodSave = merchelloCatalogShippingService.saveShipMethod(data.method);
+            promiseShipMethodSave.then(function() {
+            }, function (reason) {
+                notificationsService.error("Shipping Method Save Failed", reason.message);
+            });
+            data.provider.shipMethods = [];
+            $scope.loadProviderMethods(data.provider, data.country);
+        }
+
+        /**
+         * @ngdoc method
+         * @name shippingProviderDialogConfirm
+         * @function
+         *
+         * @description
+         * Handles the edit after recieving the dialogData from the dialog view/controller
+         */
+        function shippingProviderDialogConfirm(data) {
+            var selectedProvider = data.provider;
+            var selectedResource = data.resource;
+            var newShippingMethod = new merchello.Models.ShippingMethod();
+            newShippingMethod.name = data.country.name + " " + selectedResource.name;
+            newShippingMethod.providerKey = selectedProvider.key;
+            newShippingMethod.serviceCode = selectedResource.serviceCode;
+            newShippingMethod.shipCountryKey = data.country.key;
+            var promiseAddMethod;
+            promiseAddMethod = merchelloCatalogShippingService.addShipMethod(newShippingMethod);
+            promiseAddMethod.then(function () {
+                data.country.shippingGatewayProviders = [];
+                $scope.loadCountryProviders(data.country);
+            }, function (reason) {
+                notificationsService.error("Shipping Provider / Initial Method Create Failed", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name warehouseCatalogDialogConfirm
+         * @function
+         *
+         * @description
+         * Handles the add/edit after recieving the dialogData from the dialog view/controller.
+         * If the selectedCatalog is set to be default, ensure that original default is no longer default.
+         */
+        function warehouseCatalogDialogConfirm(data) {
+            var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
+            var promiseUpdateCatalog;
+            if (selectedCatalog.key === "") {
+                promiseUpdateCatalog = merchelloWarehouseService.addWarehouseCatalog(selectedCatalog);
+                selectedCatalog.warehouseKey = $scope.primaryWarehouse.key;
+            } else {
+                promiseUpdateCatalog = merchelloWarehouseService.putWarehouseCatalog(selectedCatalog);
+            }
+            promiseUpdateCatalog.then(function(responseCatalog) {
+                $scope.loadWarehouses();
+            }, function(reason) {
+                notificationsService.error('Catalog Update Failed', reason.message);
+            });
+        }
+
+        //init();
+
+
+    }]);
+
     'use strict';
     /**
      * @ngdoc controller
@@ -150,11 +1378,19 @@ angular.module('merchello')
     }]);
 
 
-angular.module('merchello').controller('Merchello.Dashboards.InvoicePaymentsController',
-    ['$scope', '$routeParams',
+/**
+ * @ngdoc controller
+ * @name Merchello.Dashboards.InvoicePaymentsController
+ * @function
+ *
+ * @description
+ * The controller for the invoice payments view
+ */
+angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsController',
+    ['$scope', '$log', '$routeParams',
         'invoiceResource', 'paymentResource', 'settingsResource',
         'invoiceDisplayBuilder', 'paymentDisplayBuilder',
-        function($scope, $routeParams, invoiceResource, paymentResource, settingsResource,
+        function($scope, $log, $routeParams, invoiceResource, paymentResource, settingsResource,
         invoiceDisplayBuilder, paymentDisplayBuilder) {
 
             $scope.loaded = false;
@@ -229,11 +1465,19 @@ angular.module('merchello').controller('Merchello.Dashboards.InvoicePaymentsCont
         init();
 }]);
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Dashboards.OrderShipmentsController
+ * @function
+ *
+ * @description
+ * The controller for the order shipments view
+ */
 angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsController',
-    ['$scope', '$routeParams', 'notificationsService', 'dialogService', 'dialogDataFactory',
+    ['$scope', '$routeParams', '$log', 'notificationsService', 'dialogService', 'dialogDataFactory',
         'invoiceResource', 'settingsResource', 'shipmentResource',
         'invoiceDisplayBuilder', 'shipmentDisplayBuilder',
-        function($scope, $routeParams, notificationsService, dialogService, dialogDataFactory, invoiceResource,
+        function($scope, $routeParams, $log, notificationsService, dialogService, dialogDataFactory, invoiceResource,
                  settingsResource, shipmentResource, invoiceDisplayBuilder, shipmentDisplayBuilder) {
 
             $scope.loaded = false;
@@ -280,7 +1524,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     shipmentsPromise.then(function(shipments) {
                         $scope.shipments = shipmentDisplayBuilder.transform(shipments);
                         $scope.preValuesLoaded = true;
-                        console.info(shipments);
                     })
                 }, function(reason) {
                     notificationsService.error('Failed to load invoice', reason.message);
@@ -362,7 +1605,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     });
 
                     dialogService.open({
-                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.shipment.html',
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.edit.shipment.html',
                         show: true,
                         callback: processUpdateShipment,
                         dialogData: dialogData
@@ -500,14 +1743,14 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
      * @function
      *
      * @description
-     * The controller for the sales overview page
+     * The controller for the sales overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
-        ['$scope', '$routeParams', '$timeout', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
+        ['$scope', '$routeParams', '$timeout', '$log', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
             'orderResource', 'dialogDataFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
-        function($scope, $routeParams, $timeout, assetsService, dialogService, localizationService, notificationsService,
+        function($scope, $routeParams, $timeout, $log, assetsService, dialogService, localizationService, notificationsService,
                  auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
                  addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
@@ -762,7 +2005,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                         shipMethodPromise.then(function(result) {
                             data.shipMethods = shipMethodsQueryDisplayBuilder.transform(result);
                             dialogService.open({
-                                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/create.shipment.html',
+                                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.create.shipment.html',
                                 show: true,
                                 callback: $scope.processFulfillShipmentDialog,
                                 dialogData: data
@@ -830,9 +2073,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', 'angularHelper', 'assetsService', 'notificationsService',
+    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService',
         'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
-        function($scope, $element, angularHelper, assetsService, notificationService, invoiceResource,
+        function($scope, $element, $log, angularHelper, assetsService, notificationService, invoiceResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
         {
 

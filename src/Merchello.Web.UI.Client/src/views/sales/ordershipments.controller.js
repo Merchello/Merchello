@@ -1,8 +1,16 @@
+/**
+ * @ngdoc controller
+ * @name Merchello.Dashboards.OrderShipmentsController
+ * @function
+ *
+ * @description
+ * The controller for the order shipments view
+ */
 angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsController',
-    ['$scope', '$routeParams', 'notificationsService', 'dialogService', 'dialogDataFactory',
+    ['$scope', '$routeParams', '$log', 'notificationsService', 'dialogService', 'dialogDataFactory',
         'invoiceResource', 'settingsResource', 'shipmentResource',
         'invoiceDisplayBuilder', 'shipmentDisplayBuilder',
-        function($scope, $routeParams, notificationsService, dialogService, dialogDataFactory, invoiceResource,
+        function($scope, $routeParams, $log, notificationsService, dialogService, dialogDataFactory, invoiceResource,
                  settingsResource, shipmentResource, invoiceDisplayBuilder, shipmentDisplayBuilder) {
 
             $scope.loaded = false;
@@ -49,7 +57,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     shipmentsPromise.then(function(shipments) {
                         $scope.shipments = shipmentDisplayBuilder.transform(shipments);
                         $scope.preValuesLoaded = true;
-                        console.info(shipments);
                     })
                 }, function(reason) {
                     notificationsService.error('Failed to load invoice', reason.message);
@@ -131,7 +138,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     });
 
                     dialogService.open({
-                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.shipment.html',
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.edit.shipment.html',
                         show: true,
                         callback: processUpdateShipment,
                         dialogData: dialogData

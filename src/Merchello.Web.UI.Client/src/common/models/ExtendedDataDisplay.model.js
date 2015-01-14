@@ -36,27 +36,28 @@
             return value;
         }
 
-        /*function setValue(key, value) {
-            var found = false;
-            var i = 0;
-            while(i < this.items.length && !found) {
-                if (this[ i ].key === key) {
-                    found = true;
-                    this[ i ].value = value;
-                }
-                i++;
-            }
-            if (found) {
+        function setValue(key, value) {
+
+            var existing = _.find(this.items, function(item) {
+              return item.key === key;
+            });
+            if(existing) {
+                existing.value = value;
                 return;
             }
-            this.push({ key: key, value: value });
-        }*/
 
+            this.items.push({ key: key, value: value });
+        }
+
+        function toArray() {
+            return this.items;
+        }
 
         return {
             isEmpty: isEmpty,
-            getValue: getValue
-            //setValue: setValue
+            getValue: getValue,
+            setValue: setValue,
+            toArray: toArray
         };
     }());
 
