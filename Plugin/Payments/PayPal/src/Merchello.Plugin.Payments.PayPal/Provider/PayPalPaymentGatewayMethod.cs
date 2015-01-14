@@ -37,25 +37,6 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 			var result = _processor.ProcessPayment(invoice, payment, args);
 			GatewayProviderService.Save(payment);
 
-			GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, string.Format("To show promise of a {0} payment", PaymentMethod.Name), 0);
-
-			return result;
-		}
-
-		protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount,
-														ProcessorArgumentCollection args)
-		{
-			var token = args["token"];
-			var payerId = args["PayerID"];
-
-			var result = _processor.CompletePayment(invoice, payment, token, payerId);
-
-			GatewayProviderService.Save(payment);
-
-			// TODO
-			GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal Payment", payment.Amount);
-
-			/*
 			if (!result.Payment.Success)
 			{
 				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied,
@@ -64,9 +45,40 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 			else
 			{
 				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit,
-					payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureTransactionResult), amount);
+					string.Format("To show promise of a {0} payment", PaymentMethod.Name), 0);
 			}
-			*/
+
+			return result;
+		}
+
+		protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
+		{
+			string token;
+			string payerId;
+			
+			args.TryGetValue("token", out token);
+			args.TryGetValue("PayerID", out payerId);
+
+			var result = _processor.CompletePayment(invoice, payment, token, payerId);
+
+			GatewayProviderService.Save(payment);
+
+			// previous call:
+			/// GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal Payment", payment.Amount);
+
+			
+			if (!result.Payment.Success)
+			{
+				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied,
+					result.Payment.Exception.Message, 0);
+			}
+			else
+			{
+				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit,
+					"PayPal Payment", amount);
+					//payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureTransactionResult), amount);
+			}
+			
 
 			return result;
 		}

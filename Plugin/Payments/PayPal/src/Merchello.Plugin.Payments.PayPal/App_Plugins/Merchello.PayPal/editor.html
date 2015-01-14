@@ -10,13 +10,13 @@
             <div class="control-group row-fluid">
                 <p>Account ID or Email<br /></p>
                 <div class="input-prepend col-xs-12 span12">
-                    <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.AccountId">
+                    <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.AccountId" placeholder="paypal@account.com">
                 </div>
             </div>
             <div class="control-group row-fluid">
                 <p>API Username<br /></p>
                 <div class="input-prepend col-xs-12 span12">
-                    <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.ApiUsername">
+                    <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.ApiUsername" placeholder="paypal_api_account_com">
                 </div>
             </div>
             <div class="control-group row-fluid">
@@ -25,12 +25,36 @@
                     <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.ApiPassword">
                 </div>
             </div>
+	        <div class="control-group row-fluid">
+		        <p>API Signature<br /></p>
+		        <div class="input-prepend col-xs-12 span12">
+			        <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.ApiSignature">
+		        </div>
+	        </div>
+	        <div class="control-group row-fluid">
+		        <p>Return URL<br /></p>
+		        <div class="input-prepend col-xs-12 span12">
+			        <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.ReturnUrl" placeholder="/basket/done">
+		        </div>
+	        </div>
+	        <div class="control-group row-fluid">
+		        <p>Cancel URL<br /></p>
+		        <div class="input-prepend col-xs-12 span12">
+			        <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.CancelUrl" placeholder="/basket">
+		        </div>
+	        </div>
+	        <div class="control-group row-fluid">
+		        <p>All articles path<br /></p>
+		        <div class="input-prepend col-xs-12 span12">
+			        <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.ArticleBySkuPath" placeholder="/all-products/">
+		        </div>
+	        </div>
             <div class="control-group row-fluid">
-                <p>API Signature<br /></p>
+                <p>'Live' mode instead of 'sandbox' mode?<br /></p>
                 <div class="input-prepend col-xs-12 span12">
-                    <input class="col-xs-8 span8" type="text" data-ng-model="paypalSettings.ApiSignature">
+                    <input class="col-xs-8 span8" type="checkbox" data-ng-model="paypalSettings.LiveMode">
                 </div>
-            </div>
+            </div> 
             <div class="control-group row-fluid">
                 <p>Encrypt Provider Configuration?<br /></p>
                 <div class="input-prepend col-xs-12 span12">

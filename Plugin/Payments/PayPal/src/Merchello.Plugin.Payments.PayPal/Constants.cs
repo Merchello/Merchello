@@ -25,5 +25,15 @@
 			public static string VoidDeclinedResult = "paypalVoidDeclined";
 			*/
 		}
+
+		public static class ProcessorArgumentsKeys
+		{
+			public static string ReturnUrl = "ReturnUrl";
+
+			public static string CancelUrl = "CancelUrl";
+
+			public static string ArticleBySkuPath = "ArticleBySkuPath";
+		}
+
 	}
 }
