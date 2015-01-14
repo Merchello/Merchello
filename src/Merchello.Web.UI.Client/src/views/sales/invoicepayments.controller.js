@@ -1,8 +1,16 @@
-angular.module('merchello').controller('Merchello.Dashboards.InvoicePaymentsController',
-    ['$scope', '$routeParams',
+/**
+ * @ngdoc controller
+ * @name Merchello.Dashboards.InvoicePaymentsController
+ * @function
+ *
+ * @description
+ * The controller for the invoice payments view
+ */
+angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsController',
+    ['$scope', '$log', '$routeParams',
         'invoiceResource', 'paymentResource', 'settingsResource',
         'invoiceDisplayBuilder', 'paymentDisplayBuilder',
-        function($scope, $routeParams, invoiceResource, paymentResource, settingsResource,
+        function($scope, $log, $routeParams, invoiceResource, paymentResource, settingsResource,
         invoiceDisplayBuilder, paymentDisplayBuilder) {
 
             $scope.loaded = false;

@@ -105,6 +105,7 @@
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/customer' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/settings' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/dashboards' },
+                    { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/gatewayproviders' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/common/dialogs' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/directives', src: '**', expand: true, cwd: '<%= distdir %>/views/directives' },
                     { dest: '<%= vsdir %>/views/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' }
@@ -154,7 +155,7 @@
                 }
             },
             directives: {
-                src: ['src/views/directives/**/*.js'],
+                src: ['src/views/**/*.directive.js'],
                 dest: '<%= distdir %>/js/merchello.directives.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',

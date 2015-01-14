@@ -5,7 +5,7 @@ describe('Merchello.Backoffice.SalesListController', function () {
 
     beforeEach(module('umbraco'));
 
-    beforeEach(inject(function ($rootScope, $controller, $httpBackend, angularHelper, assetsService, notificationsService, invoiceResource,
+    beforeEach(inject(function ($rootScope, $controller, $httpBackend, $log, angularHelper, assetsService, notificationsService, invoiceResource,
                                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, invoiceResourceMock) {
         httpBackend = $httpBackend;
 
@@ -15,7 +15,7 @@ describe('Merchello.Backoffice.SalesListController', function () {
         invoiceResourceMock.register();
 
         controller = $controller('Merchello.Backoffice.SalesListController',
-            { $scope: scope, $element: element, angularHelper: angularHelper, assetsService: assetsService, notificationsService: notificationsService,
+            { $scope: scope, $element: element, $log: $log, angularHelper: angularHelper, assetsService: assetsService, notificationsService: notificationsService,
                 invoiceResource: invoiceResource, queryDisplayBuilder: queryDisplayBuilder, queryResultDisplayBuilder: queryResultDisplayBuilder,
                 invoiceDisplayBuilder: invoiceDisplayBuilder});
 
