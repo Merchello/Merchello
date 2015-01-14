@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Models;
+
     /// <summary>
     /// Marker interface for Providers 
     /// </summary>
-    public interface IProvider
+    public interface IProvider : IHasExtendedData
     {
         /// <summary>
         /// Gets the unique key for the gateway.  

@@ -32,7 +32,22 @@
         self.email = '';
         self.isCommercial = false;
     };
-    
+
+    AddressDisplay.prototype = (function() {
+
+        function isEmpty() {
+            var result = false;
+            if (this.address1 === '' || this.locality === '' || this.address1 === null || this.locality === null) {
+                result = true;
+            }
+            return result;
+        }
+
+        return {
+            isEmpty: isEmpty
+        };
+    }());
+
     angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);
 
     /**
@@ -521,6 +536,25 @@
     }());
 
     angular.module('merchello.models').constant('PaymentDisplay', PaymentDisplay);
+    /**
+     * @ngdoc model
+     * @name CatalogInventoryDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's CatalogInventoryDisplay object
+     */
+    var CatalogInventoryDisplay = function() {
+        var self = this;
+        self.productVariantKey = '';
+        self.catalogKey = '';
+        self.count = 0;
+        self.lowCount = 0;
+        self.location = '';
+        self.update = new Date();
+    };
+
+    angular.module('merchello.models').constant('CatalogInventoryDisplay', CatalogInventoryDisplay);
     /**
      * @ngdoc model
      * @name QueryDisplay
@@ -1022,6 +1056,26 @@
     angular.module('merchello.models').constant('SalesHistoryMessageDisplay', SalesHistoryMessageDisplay);
     /**
      * @ngdoc model
+     * @name ShipCountryDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipCountryDisplay object
+     */
+    var ShipCountryDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.catalogKey = '';
+        self.countryCode = '';
+        self.name = '';
+        self.provinceLabel = '';
+        self.provinces = [];
+        self.hasProvinces = false;
+    };
+
+    angular.module('merchello.models').constant('ShipCountryDisplay', ShipCountryDisplay);
+    /**
+     * @ngdoc model
      * @name ShipMethodDisplay
      *
      * @description
@@ -1037,6 +1091,7 @@
         self.serviceCode = '';
         self.taxable = false;
         self.provinces = [];
+        self.dialogEditorView = {};
     };
 
     angular.module('merchello.models').constant('ShipMethodDisplay', ShipMethodDisplay);
@@ -1245,6 +1300,159 @@
     };
 
     angular.module('merchello.models').constant('ShipmentStatusDisplay', ShipmentStatusDisplay);
+    /**
+     * @ngdoc model
+     * @name ShippingGatewayProviderDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipmentDisplay object
+     */
+    var ShippingGatewayProviderDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.extendedData = {};
+        self.shipMethods = [];
+    };
+
+    ShippingGatewayProviderDisplay.prototype = (function() {
+
+        function addMethod(shippingMethod) {
+            this.shipMethods.push(shippingMethod);
+        }
+
+        function removeMethod(shippingMethod) {
+            this.shipMethods = _.reject(this.shipMethods, function(m) {
+              return m.key === shipmethod.key;
+            });
+        }
+
+        return {
+            addMethod: addMethod,
+            removeMethod: removeMethod
+        };
+
+    }());
+
+    angular.module('merchello.models').constant('ShippingGatewayProviderDisplay', ShippingGatewayProviderDisplay);
+    /**
+     * @ngdoc model
+     * @name ShipFixedRateTableDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipFixedRateTableDisplay object
+     */
+    var ShipFixedRateTableDisplay = function() {
+        var self = this;
+        self.shipMethodKey = '';
+        self.shipCountryKey = '';
+        self.rows = [];
+    };
+
+    angular.module('merchello.models').constant('ShipFixedRateTableDisplay', ShipFixedRateTableDisplay);
+    /**
+     * @ngdoc model
+     * @name ShipRateTierDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipRateTierDisplay object
+     */
+    var ShipRateTierDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.shipMethodKey = '';
+        self.rangeLow = 0.0;
+        self.rangeHigh = 0.0;
+        self.rate = 0.0;
+    };
+
+    angular.module('merchello.models').constant('ShipRateTierDisplay', ShipRateTierDisplay);
+    /**
+     * @ngdoc model
+     * @name WarehouseCatalogDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's WarehouseCatalogDisplay object
+     */
+    var WarehouseCatalogDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.warehouseKey = '';
+        self.name = '';
+        self.description = '';
+        self.isDefault = true;
+    };
+
+    angular.module('merchello.models').constant('WarehouseCatalogDisplay', WarehouseCatalogDisplay);
+    /**
+     * @ngdoc model
+     * @name WarehouseDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's WarehouseDisplay object
+     */
+    var WarehouseDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.address1 = '';
+        self.address2 = '';
+        self.locality = '';
+        self.region = '';
+        self.postalCode = '';
+        self.countryCode = '';
+        self.phone = '';
+        self.email = '';
+        self.isDefault = true;
+        self.warehouseCatalogs = [];
+    };
+
+    WarehouseDisplay.prototype = (function() {
+
+        function getAddress() {
+            var adr = new AddressDisplay();
+            adr.name = this.name;
+            adr.address1 = this.address1;
+            adr.address2 = this.address2;
+            adr.locality = this.locality;
+            adr.region = this.region;
+            adr.postalCode = this.postalCode;
+            adr.countryCode = this.countryCode;
+            adr.phone = this.phone;
+            adr.email = this.email;
+            adr.addressType = 'shipping';
+            return adr;
+        }
+
+        function setAddress(address) {
+            this.name = address.name;
+            this.address1 = address.address1;
+            this.address2 = address.address2;
+            this.locality = address.locality;
+            this.region = address.region;
+            this.postalCode = address.postalCode;
+            this.countryCode = address.countryCode;
+            this.phone = address.phone;
+            this.email = address.email;
+        }
+
+        function findDefaultCatalog() {
+            return _.find(this.warehouseCatalogs, function (catalog) { return catalog.isDefault; });
+        }
+
+        return {
+            getAddress: getAddress,
+            setAddress: setAddress,
+            findDefaultCatalog: findDefaultCatalog
+        };
+    }());
+
+    angular.module('merchello.models').constant('WarehouseDisplay', WarehouseDisplay);
     /**
    * @ngdoc service
    * @name merchello.models.genericModelBuilder
@@ -1456,29 +1664,6 @@ angular.module('merchello.models').factory('dialogDataFactory',
 
     /**
      * @ngdoc service
-     * @name merchello.models.gatewayResourceDisplayBuilder
-     *
-     * @description
-     * A utility service that builds GatewayResourceDisplay models
-     */
-    angular.module('merchello.models')
-        .factory('gatewayResourceDisplayBuilder',
-        ['genericModelBuilder', 'GatewayResourceDisplay',
-            function(genericModelBuilder, GatewayResourceDisplay) {
-                var Constructor = GatewayResourceDisplay;
-                return {
-                    createDefault: function() {
-                        return new Constructor();
-                    },
-                    transform: function(jsonResult) {
-                        return genericModelBuilder.transform(jsonResult, Constructor);
-                    }
-                };
-            }]);
-
-
-    /**
-     * @ngdoc service
      * @name merchello.models.gatewayProviderDisplayBuilder
      *
      * @description
@@ -1512,6 +1697,29 @@ angular.module('merchello.models').factory('dialogDataFactory',
                 }
             };
         }]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.gatewayResourceDisplayBuilder
+     *
+     * @description
+     * A utility service that builds GatewayResourceDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('gatewayResourceDisplayBuilder',
+        ['genericModelBuilder', 'GatewayResourceDisplay',
+            function(genericModelBuilder, GatewayResourceDisplay) {
+                var Constructor = GatewayResourceDisplay;
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+            }]);
+
 
     /**
      * @ngdoc service
@@ -2020,6 +2228,38 @@ angular.module('merchello.models').factory('dialogDataFactory',
 
     /**
      * @ngdoc service
+     * @name merchello.models.shipCountryDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ShipCountryDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('shipCountryDisplayBuilder',
+        ['genericModelBuilder', 'shipProvinceDisplayBuilder', 'ShipCountryDisplay',
+            function(genericModelBuilder, shipProvinceDisplayBuilder, ShipCountryDisplay) {
+
+                var Constructor = ShipCountryDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        var countries = genericModelBuilder.transform(jsonResult, Constructor);
+                        if(angular.isArray(jsonResult)) {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                countries[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                            }
+                        } else {
+                            countries.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                        }
+                        return countries;
+                    }
+                };
+            }]);
+
+    /**
+     * @ngdoc service
      * @name merchello.models.shipMethodDisplayBuilder
      *
      * @description
@@ -2027,19 +2267,22 @@ angular.module('merchello.models').factory('dialogDataFactory',
      */
     angular.module('merchello.services')
         .factory('shipMethodDisplayBuilder',
-            ['genericModelBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
-            function(genericModelBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
+            ['genericModelBuilder', 'dialogEditorViewDisplayBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
+            function(genericModelBuilder, dialogEditorViewDisplayBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
 
                 var Constructor = ShipMethodDisplay;
 
                 return {
                     createDefault: function() {
-                        return new Constructor();
+                        var shipMethod = new Constructor();
+                        shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                        return shipMethod;
                     },
                     transform: function(jsonResult) {
                         var shipMethod = genericModelBuilder.transform(jsonResult, Constructor);
                         if (jsonResult.provinces) {
                             shipMethod.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                         }
                         return shipMethod;
                     }
@@ -2127,6 +2370,30 @@ angular.module('merchello.models').factory('dialogDataFactory',
             };
         }]);
 
+angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilder',
+    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'ShippingGatewayProviderDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, ShippingGatewayProviderDisplay) {
+
+            var Constructor = ShippingGatewayProviderDisplay;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var providers = genericModelBuilder.transform(jsonResult, Constructor);
+                    if(angular.isArray(providers)) {
+                        for(var i = 0; i < providers.length; i++) {
+                            providers[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ]);
+                        }
+                    } else {
+                        providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult);
+                    }
+                    return providers;
+                }
+            };
+    }]);
+
     /**
      * @ngdoc service
      * @name merchello.models.typeFieldDisplayBuilder
@@ -2150,6 +2417,57 @@ angular.module('merchello.models').factory('dialogDataFactory',
                 }
             };
         }]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.warehouseCatalogDisplayBuilder
+     *
+     * @description
+     * A utility service that builds WarehouseCatalogDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('warehouseCatalogDisplayBuilder',
+        ['genericModelBuilder', 'WarehouseCatalogDisplay',
+            function(genericModelBuilder, WarehouseCatalogDisplay) {
+
+                var Constructor = WarehouseCatalogDisplay;
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+
+            }]);
+
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.warehouseDisplayBuilder
+     *
+     * @description
+     * A utility service that builds WarehouseDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('warehouseDisplayBuilder',
+        ['genericModelBuilder', 'warehouseCatalogDisplayBuilder', 'WarehouseDisplay',
+        function(genericModelBuilder, warehouseCatalogDisplayBuilder, WarehouseDisplay) {
+
+            var Constructor = WarehouseDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var warehouse = genericModelBuilder.transform(jsonResult, Constructor);
+                    warehouse.warehouseCatalogs = warehouseCatalogDisplayBuilder.transform(jsonResult.warehouseCatalogs);
+                    return warehouse;
+                }
+            };
+
+    }]);
 
 
 })();

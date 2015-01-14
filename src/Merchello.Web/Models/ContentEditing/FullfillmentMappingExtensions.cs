@@ -147,7 +147,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipGatewayProviderDisplay
 
-		internal static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShippingGatewayProvider shipGatewayProvider)
+		internal static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this ShippingGatewayProviderBase shipGatewayProvider)
 		{
 			return AutoMapper.Mapper.Map<ShippingGatewayProviderDisplay>(shipGatewayProvider); 
 		}

@@ -18,8 +18,11 @@
         private static void CreateShippingMappings()
         {
             // shipping     
-            AutoMapper.Mapper.CreateMap<IShippingGatewayProvider, ShippingGatewayProviderDisplay>();
-                ////.ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()));
+            AutoMapper.Mapper.CreateMap<ShippingGatewayProviderBase, ShippingGatewayProviderDisplay>()
+                .ForMember(
+                    dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.GatewayProviderSettings.Name));
 
             AutoMapper.Mapper.CreateMap<IShipCountry, ShipCountryDisplay>();
 

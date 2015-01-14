@@ -507,6 +507,12 @@
   padding: 2px 8px;
   margin-bottom: 2px; }
 
+.warehouse-info .vcard {
+  margin-top: 1em; }
+  .warehouse-info .vcard .fn {
+    font-size: 17.5px;
+    font-width: bold; }
+
 .merchello-product-picker .selector {
   margin-bottom: 5px; }
 .merchello-product-picker table {
