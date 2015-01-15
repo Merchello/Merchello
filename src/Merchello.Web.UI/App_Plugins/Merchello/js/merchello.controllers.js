@@ -134,7 +134,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
      * @function
      *
      * @description
-     * The controller for configuring thee SMTP provider
+     * The controller for configuring the SMTP provider
      */
     angular.module('merchello').controller('Merchello.GatewayProvider.Dialogs.NotificationsProviderSettingsSmtpController',
         ['$scope', function($scope) {
@@ -173,6 +173,19 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
 
             // Initialize
             init();
+
+        }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.GatewayProvider.Dialogs.ShippingAddCountryController
+     * @function
+     *
+     * @description
+     * The controller for associating countries with shipping providers and warehouse catalogs
+     */
+    angular.module('merchello').controller('Merchello.GatewayProvider.Dialogs.ShippingAddCountryController',
+        ['$scope', function($scope) {
 
         }]);
 
@@ -405,10 +418,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
              gatewayResourceDisplayBuilder, shipCountryDisplayBuilder) {
 
         $scope.loaded = true;
-        $scope.sortProperty = "name";
         $scope.countries = [];
         $scope.warehouses = [];
-        $scope.providers = [];
         $scope.primaryWarehouse = {};
         $scope.selectedCatalog = {};
         $scope.primaryWarehouseAddress = {};
@@ -420,6 +431,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
         };
 
         // exposed methods
+        $scope.addCountry = addCountry;
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
@@ -435,7 +447,65 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          */
         function init() {
             loadWarehouses();
-            loadAllAvailableCountries();
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadWarehouses
+         * @function
+         *
+         * @description
+         * Load the warehouses from the warehouse service, then wrap the results
+         * in Merchello models and add to the scope via the warehouses collection.
+         * Once loaded, it calls the loadCountries method.
+         */
+        function loadWarehouses() {
+            var promiseWarehouses = warehouseResource.getDefaultWarehouse(); // Only a default warehouse in v1
+            promiseWarehouses.then(function (warehouses) {
+                $scope.warehouses.push(warehouseDisplayBuilder.transform(warehouses));
+                changePrimaryWarehouse();
+                loadCountries();
+                //loadAllShipProviders();
+            }, function (reason) {
+                notificationsService.error("Warehouses Load Failed", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadCountries
+         * @function
+         *
+         * @description
+         * Load the countries from the shipping service, then wrap the results
+         * in Merchello models and add to the scope via the countries collection.
+         * Once loaded, it calls the loadCountryProviders method for each
+         * country.
+         */
+        function loadCountries() {
+            if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
+                var catalogKey = $scope.selectedCatalog.key;
+                var promiseShipCountries = shippingGatewayProviderResource.getWarehouseCatalogShippingCountries(catalogKey);
+                promiseShipCountries.then(function (shipCountries) {
+                    $scope.countries = _.sortBy(shipCountryDisplayBuilder.transform(shipCountries), function(country) {
+                        return country.name;
+                    });
+                    var elseCountry = _.find($scope.countries, function(country) {
+                        return country.countryCode === 'ELSE';
+                    });
+                    if(elseCountry !== null && elseCountry !== undefined) {
+                        $scope.countries = _.reject($scope.countries, function(country) {
+                            return country.countryCode === 'ELSE';
+                        });
+                        $scope.countries.push(elseCountry);
+                    }
+                    loadAllAvailableCountries();
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Shipping Countries Load Failed", reason.message);
+                });
+            }
         }
 
         /**
@@ -448,13 +518,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * in Merchello models and add to the scope via the availableCountries collection.
          */
         function loadAllAvailableCountries() {
-
             var promiseAllCountries = settingsResource.getAllCountries();
             promiseAllCountries.then(function (allCountries) {
-
-                $scope.availableCountries = _.sortBy(countryDisplayBuilder.transform(allCountries), function(country) {
-                    return country.name;
-                });
+                var countries = countryDisplayBuilder.transform(allCountries);
 
                 // Add Everywhere Else as an option
                 var elseCountry = countryDisplayBuilder.createDefault();
@@ -462,7 +528,19 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
                 elseCountry.countryCode = 'ELSE';
                 // TODO this should be localized
                 elseCountry.name = 'Everywhere Else';
-                $scope.availableCountries.push(elseCountry);
+                countries.push(elseCountry);
+
+                // we only want available countries that are not already in use
+                $scope.availableCountries = _.sortBy(
+                    _.filter(countries, function(country) {
+                        var found = _.find($scope.countries, function(assigned) {
+                            return country.countryCode === assigned.countryCode;
+                        });
+                        return found === undefined || found === null;
+                    }), function(country) {
+                        return country.name;
+                    });
+                console.info($scope.availableCountries);
 
             }, function (reason) {
                 notificationsService.error("Available Countries Load Failed", reason.message);
@@ -496,7 +574,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * @description
          * Load the shipping gateway providers from the shipping gateway service, then wrap the results
          * in Merchello models and add to the scope via the providers collection.
-         */
+
         function loadAllShipProviders() {
             var promiseAllProviders = shippingGatewayProviderResource.getAllShipGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
@@ -506,64 +584,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
                 notificationsService.error("Available Ship Providers Load Failed", reason.message);
             });
         }
-
-        /**
-         * @ngdoc method
-         * @name loadCountries
-         * @function
-         *
-         * @description
-         * Load the countries from the shipping service, then wrap the results
-         * in Merchello models and add to the scope via the countries collection.
-         * Once loaded, it calls the loadCountryProviders method for each
-         * country.
          */
-        function loadCountries() {
-            if ($scope.primaryWarehouse.warehouseCatalogs.length > 0) {
-                var catalogKey = $scope.selectedCatalog.key;
-                var promiseShipCountries = shippingGatewayProviderResource.getWarehouseCatalogShippingCountries(catalogKey);
-                promiseShipCountries.then(function (shipCountries) {
-                    $scope.countries = _.sortBy(shipCountryDisplayBuilder.transform(shipCountries), function(country) {
-                        return country.name;
-                    });
-                    var elseCountry = _.find($scope.countries, function(country) {
-                        return country.countryCode === 'ELSE';
-                    });
-                    if(elseCountry !== null && elseCountry !== undefined) {
-                        $scope.countries = _.reject($scope.countries, function(country) {
-                            return country.countryCode === 'ELSE';
-                        });
-                        $scope.countries.push(elseCountry);
-                    }
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
-                }, function (reason) {
-                    notificationsService.error("Shipping Countries Load Failed", reason.message);
-                });
-            }
-        }
-
-
-        /**
-         * @ngdoc method
-         * @name loadWarehouses
-         * @function
-         *
-         * @description
-         * Load the warehouses from the warehouse service, then wrap the results
-         * in Merchello models and add to the scope via the warehouses collection.
-         * Once loaded, it calls the loadCountries method.
-         */
-        function loadWarehouses() {
-            var promiseWarehouses = warehouseResource.getDefaultWarehouse(); // Only a default warehouse in v1
-            promiseWarehouses.then(function (warehouses) {
-                $scope.warehouses.push(warehouseDisplayBuilder.transform(warehouses));
-                changePrimaryWarehouse();
-                loadAllShipProviders();
-            }, function (reason) {
-                notificationsService.error("Warehouses Load Failed", reason.message);
-            });
-        }
 
 
         //--------------------------------------------------------------------------------------
@@ -621,21 +642,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
             }
         }
 
-        /**
-         * @ngdoc method
-         * @name countryHasProvinces
-         * @function
-         *
-         * @description
-         * Helper method to determine if the provided country has provinces or not.
-         */
-        function countryHasProvinces(country) {
-            var result = false;
-            if (country.provinces.length > 0) {
-                result = true;
-            }
-            return result;
-        }
 
 
         //--------------------------------------------------------------------------------------
@@ -676,7 +682,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * @description
          * Calls the fixed rate shipping service to delete the method passed in via the method parameter.
          * After method is deleted, reload the list of methods for that provider in that country.
-         */
+
         function removeMethodFromProviderDialogConfirmation(data) {
             var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(data.method);
             promiseDelete.then(function () {
@@ -687,6 +693,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
                 notificationsService.error("Shipping Method Delete Failed", reason.message);
             });
         }
+         */
 
         /**
          * @ngdoc method
@@ -697,7 +704,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * Opens the delete confirmation dialog via the Umbraco dialogService.
          * Country and provider passed through dialogService so that on confirm the provider's
          * methods can be reloaded after the method is deleted.
-         */
+
         function removeMethodFromProviderDialog(country, provider, method) {
             var dialogData = {
                 country: country,
@@ -712,6 +719,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
                 dialogData: dialogData
             });
         }
+         */
 
         //--------------------------------------------------------------------------------------
         // Dialog methods
@@ -729,9 +737,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
             var dialogData = {};
             dialogData.availableCountries = $scope.availableCountries;
             dialogService.open({
-                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addcountry.html',
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.addcountry.html',
                 show: true,
-                callback: $scope.addCountryDialogConfirm,
+                callback: addCountryDialogConfirm,
                 dialogData: dialogData
             });
         }

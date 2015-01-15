@@ -50,9 +50,6 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders',
                              } */
                         }
 
-                        $scope.loaded = true;
-                        $scope.preValuesLoaded = true;
-
                     }, function (reason) {
                         notificationsService.error("Fixed Rate Shipping Countries Providers Load Failed", reason.message);
                     });
