@@ -156,15 +156,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipMethodDisplay
 
-		internal static ShipMethodDisplay ToShipMethodDisplay(this IShipMethod shipMethod)
-		{            
-			return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);      
-		}
 
-		internal static ShipMethodDisplay ToShipMethodDisplay(this IShippingGatewayMethod shippingGatewayMethod)
-		{
-			return AutoMapper.Mapper.Map<ShipMethodDisplay>(shippingGatewayMethod);
-		}
 
 		#endregion
 

@@ -4,7 +4,7 @@
      * @function
      *
      * @description
-     * The controller for configuring thee SMTP provider
+     * The controller for configuring the SMTP provider
      */
     angular.module('merchello').controller('Merchello.GatewayProvider.Dialogs.NotificationsProviderSettingsSmtpController',
         ['$scope', function($scope) {

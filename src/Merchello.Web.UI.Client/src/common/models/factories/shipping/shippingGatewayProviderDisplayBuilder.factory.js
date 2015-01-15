@@ -1,6 +1,6 @@
 angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilder',
-    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'ShippingGatewayProviderDisplay',
-        function(genericModelBuilder, extendedDataDisplayBuilder, ShippingGatewayProviderDisplay) {
+    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'shipMethodDisplayBuilder', 'ShippingGatewayProviderDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, shipMethodDisplayBuilder, ShippingGatewayProviderDisplay) {
 
             var Constructor = ShippingGatewayProviderDisplay;
 
@@ -12,10 +12,12 @@ angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilde
                     var providers = genericModelBuilder.transform(jsonResult, Constructor);
                     if(angular.isArray(providers)) {
                         for(var i = 0; i < providers.length; i++) {
-                            providers[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ]);
+                            providers[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                            providers[ i ].shipMethods = shipMethodDisplayBuilder.transform(jsonResult[ i ].shipMethods);
                         }
                     } else {
-                        providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult);
+                        providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        providers.shipMethods = shipmentDisplayBuilder.transform(jsonResult.shipMethods)
                     }
                     return providers;
                 }

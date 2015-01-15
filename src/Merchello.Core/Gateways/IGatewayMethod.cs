@@ -4,5 +4,6 @@
     /// Marker interface for GatewayMethods
     /// </summary>
     public interface IGatewayMethod
-    { }
+    {
+    }
 }

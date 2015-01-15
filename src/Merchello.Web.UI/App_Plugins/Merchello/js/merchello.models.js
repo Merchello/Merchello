@@ -1091,7 +1091,6 @@
         self.serviceCode = '';
         self.taxable = false;
         self.provinces = [];
-        self.dialogEditorView = {};
     };
 
     angular.module('merchello.models').constant('ShipMethodDisplay', ShipMethodDisplay);
@@ -2279,12 +2278,21 @@ angular.module('merchello.models').factory('dialogDataFactory',
                         return shipMethod;
                     },
                     transform: function(jsonResult) {
-                        var shipMethod = genericModelBuilder.transform(jsonResult, Constructor);
-                        if (jsonResult.provinces) {
-                            shipMethod.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
-                            shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                        if(jsonResult === undefined) {
+                            return;
                         }
-                        return shipMethod;
+                        var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
+                        if (angular.isArray(jsonResult))
+                        {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                                shipMethods[ i ].dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                            }
+                        } else {
+                            shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            shipMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                        }
+                        return shipMethods;
                     }
                 };
 
@@ -2371,8 +2379,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
         }]);
 
 angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilder',
-    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'ShippingGatewayProviderDisplay',
-        function(genericModelBuilder, extendedDataDisplayBuilder, ShippingGatewayProviderDisplay) {
+    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'shipMethodDisplayBuilder', 'ShippingGatewayProviderDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, shipMethodDisplayBuilder, ShippingGatewayProviderDisplay) {
 
             var Constructor = ShippingGatewayProviderDisplay;
 
@@ -2384,10 +2392,12 @@ angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilde
                     var providers = genericModelBuilder.transform(jsonResult, Constructor);
                     if(angular.isArray(providers)) {
                         for(var i = 0; i < providers.length; i++) {
-                            providers[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ]);
+                            providers[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                            providers[ i ].shipMethods = shipMethodDisplayBuilder.transform(jsonResult[ i ].shipMethods);
                         }
                     } else {
-                        providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult);
+                        providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        providers.shipMethods = shipmentDisplayBuilder.transform(jsonResult.shipMethods)
                     }
                     return providers;
                 }

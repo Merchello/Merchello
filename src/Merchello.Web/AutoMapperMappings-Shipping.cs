@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web
 {
+    using AutoMapper;
+
     using Core.Gateways.Shipping;
     using Core.Gateways.Shipping.FixedRate;
     using Core.Models;
@@ -28,7 +30,7 @@
 
             AutoMapper.Mapper.CreateMap<IShipMethod, ShipMethodDisplay>();
 
-            AutoMapper.Mapper.CreateMap<IShippingGatewayMethod, ShipMethodDisplay>()
+            AutoMapper.Mapper.CreateMap<ShippingGatewayMethodBase, ShipMethodDisplay>()
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.ShipMethod.Key))
                 .ForMember(dest => dest.ProviderKey, opt => opt.MapFrom(src => src.ShipMethod.ProviderKey))
                 .ForMember(dest => dest.ShipCountryKey, opt => opt.MapFrom(src => src.ShipMethod.ShipCountryKey))

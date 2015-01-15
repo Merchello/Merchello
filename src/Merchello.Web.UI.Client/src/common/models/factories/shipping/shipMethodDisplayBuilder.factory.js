@@ -19,12 +19,21 @@
                         return shipMethod;
                     },
                     transform: function(jsonResult) {
-                        var shipMethod = genericModelBuilder.transform(jsonResult, Constructor);
-                        if (jsonResult.provinces) {
-                            shipMethod.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
-                            shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                        if(jsonResult === undefined) {
+                            return;
                         }
-                        return shipMethod;
+                        var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
+                        if (angular.isArray(jsonResult))
+                        {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                                shipMethods[ i ].dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                            }
+                        } else {
+                            shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            shipMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                        }
+                        return shipMethods;
                     }
                 };
 
