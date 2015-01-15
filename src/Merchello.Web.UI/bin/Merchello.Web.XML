@@ -7754,6 +7754,33 @@
             Gets or sets the provinces.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplayExtensions">
+            <summary>
+            The ship method display extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ShipMethodDisplayExtensions.ToShipMethodDisplay(Merchello.Core.Models.IShipMethod)">
+            <summary>
+            Maps <see cref="T:Merchello.Core.Gateways.Shipping.IShippingGatewayMethod"/> to <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>
+            </summary>
+            <param name="shipMethod">
+            The shipping gateway method.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ShipMethodDisplayExtensions.ToShipMethodDisplay(Merchello.Core.Gateways.Shipping.IShippingGatewayMethod)">
+            <summary>
+            Maps <see cref="T:Merchello.Core.Gateways.Shipping.IShippingGatewayMethod"/> to <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>
+            </summary>
+            <param name="shippingGatewayMethod">
+            The shipping gateway method.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.ShipProvinceDisplay">
             <summary>
             The ship province display.
