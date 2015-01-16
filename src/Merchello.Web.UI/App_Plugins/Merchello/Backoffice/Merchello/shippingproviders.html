@@ -33,7 +33,7 @@
                 <div class="control-group umb-control-group">
                     <!-- Shipping Countries -->
                     <div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
-                        <ship-country-gateway-providers country="country"></ship-country-gateway-providers>
+                        <ship-country-gateway-providers country="country" reload="loadCountries()" delete="deleteCountryDialog(country)"></ship-country-gateway-providers>
                     </div>
                 </div>
             </div>

@@ -29,7 +29,31 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new EditAddressDialogData();
         }
 
+        // creates dialogData for adding Ship Countries
+        function createAddShipCountryDialogData() {
+            return new AddShipCountryDialogData();
+        }
+
+        // creates dialogData for deleting ship countries
+        function createDeleteShipCountryDialogData() {
+            return new DeleteShipCountryDialogData();
+        }
+
+        // creates dialogData for adding providers to ship countries
+        function createAddShipCountryProviderDialogData() {
+            return new AddShipCountryProviderDialogData();
+        }
+
+        // creates a dialogData for deleting ship country ship methods
+        function createDeleteShipCountryShipMethodDialogData() {
+            return new DeleteShipCountryShipMethodDialogData();
+        }
+
         return {
+            createAddShipCountryDialogData: createAddShipCountryDialogData,
+            createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
+            createAddShipCountryProviderDialogData: createAddShipCountryProviderDialogData,
+            deleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData,
             createCapturePaymentDialogData: createCapturePaymentDialogData,
             createCreateShipmentDialogData: createCreateShipmentDialogData,
             createEditShipmentDialogData: createEditShipmentDialogData,

@@ -4,7 +4,7 @@
      * @function
      *
      * @description
-     * A back office model used for shipment data to the dialogService
+     * A back office dialogData model used for shipment data to the dialogService
      *
      */
     var EditShipmentDialogData = function() {

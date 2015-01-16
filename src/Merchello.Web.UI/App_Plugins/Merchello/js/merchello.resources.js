@@ -759,11 +759,11 @@ angular.module('merchello.resources')
                         'Failed to retreive shipping methods');
                 },
 
-                getShippingProviderShipMethodsByCountry: function (shipProvider, shipCountry) {
+                getShippingGatewayMethodsByCountry: function (shipProvider, shipCountry) {
 
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShippingProviderShipMethodsByCountry'),
+                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShippingGatewayMethodsByCountry'),
                             method: "GET",
                             params: { id: shipProvider.key, shipCountryId: shipCountry.key }
                         }),

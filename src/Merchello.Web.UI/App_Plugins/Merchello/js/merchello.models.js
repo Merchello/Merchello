@@ -240,11 +240,46 @@
 
     /**
      * @ngdoc model
+     * @name AddShipCountryDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for adding ship countries to shipping configurations.
+     */
+    var AddShipCountryDialogData = function() {
+        var self = this;
+        self.availableCountries = [];
+        self.selectedCountry = {};
+    };
+
+    angular.module('merchello.models').constant('AddShipCountryDialogData', AddShipCountryDialogData);
+
+    /**
+     * @ngdoc model
+     * @name AddShipCountryProviderDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for adding a shipping provider to ship countries.
+     */
+    var AddShipCountryProviderDialogData = function() {
+        var self = this;
+        self.showProvidersDropDown = true;
+        self.availableProviders = [];
+        self.selectedProvider = {};
+        self.selectedResource = {};
+        self.country = {};
+    };
+
+    angular.module('merchello.models').constant('AddShipCountryProviderDialogData', AddShipCountryProviderDialogData);
+
+    /**
+     * @ngdoc model
      * @name PaymentRequest
      * @function
      *
      * @description
-     * A back office model used for making payment requests to a payment provider
+     * A back office dialogData model used for making payment requests to a payment provider
      *
      * @note
      * Presently there is not a corresponding Merchello.Web model
@@ -301,7 +336,7 @@
      * @function
      *
      * @description
-     * A back office model used for passing shipment creation information to the dialogService
+     * A back office dialogData model used for passing shipment creation information to the dialogService
      *
      * @note
      * Presently there is not a corresponding Merchello.Web model
@@ -320,11 +355,42 @@
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
     /**
      * @ngdoc model
+     * @name AddShipCountryDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for deleting ship countries to shipping configurations.
+     */
+    var DeleteShipCountryDialogData = function() {
+        var self = this;
+        self.country = {};
+        self.name = '';
+    };
+
+    angular.module('merchello.models').constant('DeleteShipCountryDialogData', DeleteShipCountryDialogData);
+
+    /**
+     * @ngdoc model
+     * @name DeleteShipCountryShipMethodDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for deleting ship countries ship methods.
+     */
+    var DeleteShipCountryShipMethodDialogData = function() {
+        var self = this;
+        self.shipMethod = {};
+        self.name = '';
+    };
+
+    angular.module('merchello.models').constant('DeleteShipCountryShipMethodDialogData', DeleteShipCountryShipMethodDialogData);
+    /**
+     * @ngdoc model
      * @name EditAddressDialogData
      * @function
      *
      * @description
-     * A back office model used for address data to the dialogService
+     * A back office dialogData model used for address data to the dialogService
      *
      */
     var EditAddressDialogData = function() {
@@ -342,7 +408,7 @@
      * @function
      *
      * @description
-     * A back office model used for shipment data to the dialogService
+     * A back office dialogData model used for shipment data to the dialogService
      *
      */
     var EditShipmentDialogData = function() {
@@ -1301,6 +1367,22 @@
     angular.module('merchello.models').constant('ShipmentStatusDisplay', ShipmentStatusDisplay);
     /**
      * @ngdoc model
+     * @name ShipMethodDisplay
+     *
+     * @description
+     * Represents a JS version of Merchello's ShippingGatewayMethodDisplay object
+     */
+    var ShippingGatewayMethodDisplay = function() {
+        var self = this;
+        self.gatewayResource = {};
+        self.shipMethod = {};
+        self.shipCountry = {};
+    }
+
+    angular.module('merchello.models').constant('ShippingGatewayMethodDisplay', ShippingGatewayMethodDisplay);
+
+    /**
+     * @ngdoc model
      * @name ShippingGatewayProviderDisplay
      * @function
      *
@@ -1313,6 +1395,7 @@
         self.name = '';
         self.extendedData = {};
         self.shipMethods = [];
+        self.availableResources = [];
     };
 
     ShippingGatewayProviderDisplay.prototype = (function() {
@@ -1597,7 +1680,31 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new EditAddressDialogData();
         }
 
+        // creates dialogData for adding Ship Countries
+        function createAddShipCountryDialogData() {
+            return new AddShipCountryDialogData();
+        }
+
+        // creates dialogData for deleting ship countries
+        function createDeleteShipCountryDialogData() {
+            return new DeleteShipCountryDialogData();
+        }
+
+        // creates dialogData for adding providers to ship countries
+        function createAddShipCountryProviderDialogData() {
+            return new AddShipCountryProviderDialogData();
+        }
+
+        // creates a dialogData for deleting ship country ship methods
+        function createDeleteShipCountryShipMethodDialogData() {
+            return new DeleteShipCountryShipMethodDialogData();
+        }
+
         return {
+            createAddShipCountryDialogData: createAddShipCountryDialogData,
+            createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
+            createAddShipCountryProviderDialogData: createAddShipCountryProviderDialogData,
+            deleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData,
             createCapturePaymentDialogData: createCapturePaymentDialogData,
             createCreateShipmentDialogData: createCreateShipmentDialogData,
             createEditShipmentDialogData: createEditShipmentDialogData,
@@ -2235,27 +2342,28 @@ angular.module('merchello.models').factory('dialogDataFactory',
     angular.module('merchello.models')
         .factory('shipCountryDisplayBuilder',
         ['genericModelBuilder', 'shipProvinceDisplayBuilder', 'ShipCountryDisplay',
-            function(genericModelBuilder, shipProvinceDisplayBuilder, ShipCountryDisplay) {
-
-                var Constructor = ShipCountryDisplay;
-
-                return {
-                    createDefault: function() {
-                        return new Constructor();
-                    },
-                    transform: function(jsonResult) {
-                        var countries = genericModelBuilder.transform(jsonResult, Constructor);
-                        if(angular.isArray(jsonResult)) {
-                            for(var i = 0; i < jsonResult.length; i++) {
-                                countries[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
-                            }
-                        } else {
-                            countries.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
-                        }
-                        return countries;
+        function(genericModelBuilder, shipProvinceDisplayBuilder, ShipCountryDisplay) {
+            var Constructor = ShipCountryDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    if(jsonResult === undefined || jsonResult === null) {
+                        return;
                     }
-                };
-            }]);
+                    var countries = genericModelBuilder.transform(jsonResult, Constructor);
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            countries[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                        }
+                    } else {
+                        countries.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                    }
+                    return countries;
+                }
+            };
+        }]);
 
     /**
      * @ngdoc service
@@ -2273,9 +2381,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
 
                 return {
                     createDefault: function() {
-                        var shipMethod = new Constructor();
-                        shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
-                        return shipMethod;
+                        return new Constructor();
                     },
                     transform: function(jsonResult) {
                         if(jsonResult === undefined) {
@@ -2286,11 +2392,9 @@ angular.module('merchello.models').factory('dialogDataFactory',
                         {
                             for(var i = 0; i < jsonResult.length; i++) {
                                 shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
-                                shipMethods[ i ].dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
                             }
                         } else {
                             shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
-                            shipMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                         }
                         return shipMethods;
                     }
@@ -2378,9 +2482,44 @@ angular.module('merchello.models').factory('dialogDataFactory',
             };
         }]);
 
+angular.module('merchello.models').factory('shippingGatewayMethodDisplayBuilder',
+    ['genericModelBuilder', 'shipMethodDisplayBuilder', 'shipCountryDisplayBuilder', 'gatewayResourceDisplayBuilder', 'ShippingGatewayMethodDisplay',
+        function(genericModelBuilder, shipMethodDisplayBuilder, shipCountryDisplayBuilder, gatewayResourceDisplayBuilder, ShippingGatewayMethodDisplay) {
+
+            var Constructor = ShippingGatewayMethodDisplay;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+
+                    if(angular.isArray(jsonResult)) {
+                        var methods = [];
+                        angular.forEach(jsonResult, function(result) {
+                            var method = new Constructor();
+                            method.gatewayResource = gatewayResourceDisplayBuilder.transform(result.gatewayResource);
+                            method.shipMethod = shipMethodDisplayBuilder.transform(result.shipMethod);
+                            method.shipCountry = shipCountryDisplayBuilder.transform(result.shipCountry);
+                            methods.push(method);
+                        });
+                        return methods;
+                    } else {
+                        var method = new Constructor();
+                        method.gatewayResource = gatewayResourceDisplayBuilder.transform(jsonResult.gatewayResource);
+                        method.shipMethod = shipMethodDisplayBuilder.transform(jsonResult.shipMethod);
+                        method.shipCountry = shipCountryDisplayBuilder.transform(jsonResult.shipCountry);
+                        return method;
+                    }
+
+                }
+            };
+
+    }]);
+
 angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilder',
-    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'shipMethodDisplayBuilder', 'ShippingGatewayProviderDisplay',
-        function(genericModelBuilder, extendedDataDisplayBuilder, shipMethodDisplayBuilder, ShippingGatewayProviderDisplay) {
+    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'shipMethodDisplayBuilder', 'gatewayResourceDisplayBuilder', 'ShippingGatewayProviderDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, shipMethodDisplayBuilder, gatewayResourceDisplayBuilder, ShippingGatewayProviderDisplay) {
 
             var Constructor = ShippingGatewayProviderDisplay;
 
@@ -2394,10 +2533,12 @@ angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilde
                         for(var i = 0; i < providers.length; i++) {
                             providers[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
                             providers[ i ].shipMethods = shipMethodDisplayBuilder.transform(jsonResult[ i ].shipMethods);
+                            providers[ i ].availableResources = gatewayResourceDisplayBuilder.transform(jsonResult[ i ].availableResources);
                         }
                     } else {
                         providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
-                        providers.shipMethods = shipmentDisplayBuilder.transform(jsonResult.shipMethods)
+                        providers.shipMethods = shipmentDisplayBuilder.transform(jsonResult.shipMethods);
+                        providers.availableResources = gatewayResourceDisplayBuilder.transform(jsonResult.availableResources);
                     }
                     return providers;
                 }

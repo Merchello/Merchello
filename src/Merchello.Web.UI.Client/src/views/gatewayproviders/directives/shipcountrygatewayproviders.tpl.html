@@ -3,24 +3,24 @@
         <h4>
             {{country.name}}
             <!-- ACTION: Delete Country -->
-            <a data-ng-click="deleteCountryDialog(country)" class="btn btn-default btn-trash btn-xs btn-mini pull-right"><i class="icon-trash"></i></a>
+            <a data-ng-click="deleteCountry()" class="btn btn-default btn-trash btn-xs btn-mini pull-right"><i class="icon-trash"></i></a>
         </h4>
         <!-- ACTION: Add Shipping Provider to Country -->
-        <a data-ng-click="addEditShippingProviderDialogOpen(country)"><i class="icon-add"></i> Add Provider</a><br /><br />
+        <a data-ng-click="addShippingProviderDialogOpen()" data-ng-show="availableProviders.length > 0"><i class="icon-add"></i> Add Provider</a><br /><br />
     </div>
     <!-- Shipping Provider -->
     <div class="merchello-controls" data-ng-repeat="shippingGatewayProvider in assignedProviders" class="merchello-shipping-gateway-provider">
         <h5 class="row-fluid col-xs-12 span12">
             {{shippingGatewayProvider.name}}
             <!-- ACTION: Add Shipping Method to Provider -->
-            <a data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider)" class="pull-right"><i class="icon-add"></i> Add Method</a>
+            <a data-ng-click="addAddShipMethodDialogOpen(shippingGatewayProvider)" class="pull-right"><i class="icon-add"></i> Add Method</a>
         </h5>
         <!-- Shipping Methods -->
         <table class="table table-striped merchello-striped-table settings-table shipping-table">
             <tbody>
-            <tr data-ng-repeat="shipMethod in shippingGatewayProvider.shipMethods">
+            <tr data-ng-repeat="shipMethod in shippingGatewayProvider.shipMethods | filter: country.key">
                 <td>{{shipMethod.name}}</td>
-                <td></td>
+                <td>{{shippingGatewayProvider.shippingGatewayMethods.length}}</td>
                 <td></td>
                 <td class="edit">
                     <div class="btn-group">
@@ -29,7 +29,7 @@
                         <!-- ACTION: Edit Shipping Method -->
                         <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider, shipMethod)"><i class="icon-edit"></i></a>
                         <!-- ACTION: Remove Shipping Method -->
-                        <a data-ng-click="removeMethodFromProviderDialog(country, shippingGatewayProvider, shipMethod)" class="btn btn-default btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
+                        <a data-ng-click="deleteShipMethodOpen(shipMethod)" class="btn btn-default btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
                     </div>
                 </td>
             </tr>

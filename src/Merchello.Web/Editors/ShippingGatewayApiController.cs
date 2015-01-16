@@ -179,11 +179,11 @@
         /// <returns>
         /// The collection of all <see cref="GatewayProviderDisplay"/>.
         /// </returns>
-        public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
+        public IEnumerable<ShippingGatewayProviderDisplay> GetAllShipGatewayProviders()
         {
             var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().ToArray();
 
-            return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
+            return providers.Select(provider => ((ShippingGatewayProviderBase)provider).ToShipGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -270,7 +270,7 @@
         /// <summary>
         /// Get <see cref="IShipMethod"/> for a shipping provider by country
         /// 
-        /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingProviderShipMethodsByCountry/{id}
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingGatewayMethodsByCountry/{id}
         /// </summary>
         /// <param name="id">
         /// The key of the ShippingGatewayProvider
@@ -281,7 +281,7 @@
         /// <returns>
         /// The collection of <see cref="ShipMethodDisplay"/>.
         /// </returns>
-        public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethodsByCountry(Guid id, Guid shipCountryId)
+        public IEnumerable<ShippingGatewayMethodDisplay> GetShippingGatewayMethodsByCountry(Guid id, Guid shipCountryId)
         {
             var provider = _shippingContext.GetProviderByKey(id);
 
@@ -293,7 +293,7 @@
 
             var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
 
-            return methods.Select(method => method.ToShipMethodDisplay());
+            return methods.Select(method => method.ToShippingGatewayMethodDisplay());
         }
 
         /// <summary>
