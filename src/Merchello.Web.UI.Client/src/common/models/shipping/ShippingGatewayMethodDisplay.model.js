@@ -10,6 +10,7 @@
         self.gatewayResource = {};
         self.shipMethod = {};
         self.shipCountry = {};
+        self.dialogEditorView = {};
     }
 
     angular.module('merchello.models').constant('ShippingGatewayMethodDisplay', ShippingGatewayMethodDisplay);

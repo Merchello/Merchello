@@ -1,6 +1,8 @@
 angular.module('merchello.models').factory('shippingGatewayMethodDisplayBuilder',
-    ['genericModelBuilder', 'shipMethodDisplayBuilder', 'shipCountryDisplayBuilder', 'gatewayResourceDisplayBuilder', 'ShippingGatewayMethodDisplay',
-        function(genericModelBuilder, shipMethodDisplayBuilder, shipCountryDisplayBuilder, gatewayResourceDisplayBuilder, ShippingGatewayMethodDisplay) {
+    ['genericModelBuilder', 'shipMethodDisplayBuilder', 'shipCountryDisplayBuilder', 'gatewayResourceDisplayBuilder',
+        'dialogEditorViewDisplayBuilder', 'ShippingGatewayMethodDisplay',
+        function(genericModelBuilder, shipMethodDisplayBuilder, shipCountryDisplayBuilder, gatewayResourceDisplayBuilder,
+                 dialogEditorViewDisplayBuilder, ShippingGatewayMethodDisplay) {
 
             var Constructor = ShippingGatewayMethodDisplay;
 
@@ -17,6 +19,7 @@ angular.module('merchello.models').factory('shippingGatewayMethodDisplayBuilder'
                             method.gatewayResource = gatewayResourceDisplayBuilder.transform(result.gatewayResource);
                             method.shipMethod = shipMethodDisplayBuilder.transform(result.shipMethod);
                             method.shipCountry = shipCountryDisplayBuilder.transform(result.shipCountry);
+                            method.dialogEditorView = dialogEditorViewDisplayBuilder.transform(result.dialogEditorView);
                             methods.push(method);
                         });
                         return methods;
@@ -25,6 +28,7 @@ angular.module('merchello.models').factory('shippingGatewayMethodDisplayBuilder'
                         method.gatewayResource = gatewayResourceDisplayBuilder.transform(jsonResult.gatewayResource);
                         method.shipMethod = shipMethodDisplayBuilder.transform(jsonResult.shipMethod);
                         method.shipCountry = shipCountryDisplayBuilder.transform(jsonResult.shipCountry);
+                        method.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                         return method;
                     }
 

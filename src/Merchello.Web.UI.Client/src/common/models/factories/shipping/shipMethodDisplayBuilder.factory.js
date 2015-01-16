@@ -17,14 +17,14 @@
                         return new Constructor();
                     },
                     transform: function(jsonResult) {
-                        if(jsonResult === undefined) {
-                            return;
-                        }
                         var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
                         if (angular.isArray(jsonResult))
                         {
                             for(var i = 0; i < jsonResult.length; i++) {
-                                shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                                // todo these should never be returned by the api
+                                if(jsonResult[i] !== null) {
+                                    shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                                }
                             }
                         } else {
                             shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);

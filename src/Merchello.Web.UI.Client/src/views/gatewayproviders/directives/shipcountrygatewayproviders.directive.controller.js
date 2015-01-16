@@ -2,9 +2,11 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
     ['$scope', 'notificationsService', 'dialogService',
         'shippingGatewayProviderResource', 'shippingGatewayProviderDisplayBuilder', 'shipMethodDisplayBuilder',
         'shippingGatewayMethodDisplayBuilder', 'gatewayResourceDisplayBuilder', 'dialogDataFactory',
-        function($scope, notificationsService, dialogService, shippingGatewayProviderResource, shipMethodDisplayBuilder,
-                 shippingGatewayProviderDisplayBuilder, shippingGatewayMethodDisplayBuilder, gatewayResourceDisplayBuilder, dialogDataFactory) {
+        function($scope, notificationsService, dialogService,
+                 shippingGatewayProviderResource, shippingGatewayProviderDisplayBuilder, shipMethodDisplayBuilder,
+                 shippingGatewayMethodDisplayBuilder, gatewayResourceDisplayBuilder, dialogDataFactory) {
 
+            $scope.providersLoaded = false;
             $scope.allProviders = [];
             $scope.assignedProviders = [];
             $scope.availableProviders = [];
@@ -38,6 +40,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                     promiseProviders.then(function (assigned) {
                         if (angular.isArray(assigned)) {
                             $scope.assignedProviders = shippingGatewayProviderDisplayBuilder.transform(assigned);
+
                             var available = _.filter($scope.allProviders, function(provider) {
                                 var found = _.find($scope.assignedProviders, function(ap) {
                                     return ap.key === provider.key;
@@ -47,10 +50,8 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                             angular.forEach(available, function(pusher) {
                                 $scope.availableProviders.push(pusher);
                             });
-                            angular.forEach(assigned, function(provider) {
-                                loadProviderMethods(provider);
-                            });
-
+                            //console.info($scope.assignedProviders);
+                            loadProviderMethods();
                         }
                     }, function (reason) {
                         notificationsService.error("Fixed Rate Shipping Countries Providers Load Failed", reason.message);
@@ -88,18 +89,19 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
              * Load the shipping methods from the shipping gateway service, then wrap the results
              * in Merchello models and add to the scope via the provider in the shipMethods collection.
              */
-            function loadProviderMethods(shipProvider) {
-                var promiseShipMethods = shippingGatewayProviderResource.getShippingGatewayMethodsByCountry(shipProvider, $scope.country);
-                promiseShipMethods.then(function (shipMethods) {
+            function loadProviderMethods() {
+                angular.forEach($scope.assignedProviders, function(shipProvider) {
+                    var promiseShipMethods = shippingGatewayProviderResource.getShippingGatewayMethodsByCountry(shipProvider, $scope.country);
+                    promiseShipMethods.then(function (shipMethods) {
+                        var shippingGatewayMethods = shippingGatewayMethodDisplayBuilder.transform(shipMethods);
+                        shipProvider.shippingGatewayMethods = shippingGatewayMethods;
 
-                    var shippingGatewayMethods = shippingGatewayMethodDisplayBuilder.transform(shipMethods);
-                    shipProvider.shippingGatewayMethods = shippingGatewayMethods;
-
-                    console.info(shipProvider);
-
-                }, function (reason) {
-                    notificationsService.error("Available Shipping Methods Load Failed", reason.message);
+                    }, function (reason) {
+                        notificationsService.error("Available Shipping Methods Load Failed", reason.message);
+                    });
                 });
+                console.info($scope.assignedProviders);
+                $scope.providersLoaded = true;
             }
 
             /**
@@ -133,7 +135,6 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
              * Opens the shipping provider dialog via the Umbraco dialogService.
              */
             function addAddShipMethodDialogOpen(provider) {
-                console.info(provider);
                 var dialogData = dialogDataFactory.createAddShipCountryProviderDialogData();
                 dialogData.selectedProvider = provider;
                 dialogData.selectedResource = dialogData.selectedProvider.availableResources[0];

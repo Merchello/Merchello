@@ -21,6 +21,7 @@ angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilde
                         providers.shipMethods = shipmentDisplayBuilder.transform(jsonResult.shipMethods);
                         providers.availableResources = gatewayResourceDisplayBuilder.transform(jsonResult.availableResources);
                     }
+
                     return providers;
                 }
             };
