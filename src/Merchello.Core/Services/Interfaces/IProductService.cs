@@ -80,6 +80,13 @@
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
+        /// Gets a <see cref="IProduct"/> object by Sku
+        /// </summary>
+        /// <param name="sku">Sku of Product object to retrieve</param>
+        /// <returns>A single <see cref="IProduct"/></returns>
+        IProduct GetBySku(string sku);
+
+        /// <summary>
         /// Gets a collection of all <see cref="IProduct"/>.
         /// </summary>
         /// <returns>

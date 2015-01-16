@@ -184,6 +184,36 @@
             return product;
         }
 
+        /// <summary>
+        /// The perform get (by SKU).
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
+        protected override IProduct PerformGet(string sku)
+        {
+            var sql = GetBaseQuery(false)
+                .Where(GetBaseWhereClause(), new { Sku = sku });
+
+            var dto = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(sql).FirstOrDefault();
+
+            if (dto == null)
+                return null;
+
+            var inventoryCollection =((ProductVariantRepository) _productVariantRepository).GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
+            var productAttributeCollection = ((ProductVariantRepository) _productVariantRepository).GetProductAttributeCollection(dto.ProductVariantDto.Key);
+
+            var factory = new ProductFactory(productAttributeCollection, inventoryCollection, GetProductOptionCollection(dto.Key), GetProductVariantCollection(dto.Key));
+            var product = factory.BuildEntity(dto);
+
+            product.ResetDirtyProperties();
+
+            return product;
+        }
+
         protected override IEnumerable<IProduct> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
