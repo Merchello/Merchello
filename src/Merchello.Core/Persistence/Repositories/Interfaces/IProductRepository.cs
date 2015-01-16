@@ -14,5 +14,12 @@
         /// <param name="sku">The sku to be tested</param>
         /// <returns>A value indicating whether or not a sku is already exists in the database</returns>
         bool SkuExists(string sku);
+        
+        /// <summary>
+        /// Get IProduct by Sku
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <returns></returns>
+        IProduct Get(string sku);        
     }
 }
