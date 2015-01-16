@@ -14,9 +14,7 @@
 
                 return {
                     createDefault: function() {
-                        var shipMethod = new Constructor();
-                        shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
-                        return shipMethod;
+                        return new Constructor();
                     },
                     transform: function(jsonResult) {
                         if(jsonResult === undefined) {
@@ -27,11 +25,9 @@
                         {
                             for(var i = 0; i < jsonResult.length; i++) {
                                 shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
-                                shipMethods[ i ].dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
                             }
                         } else {
                             shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
-                            shipMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                         }
                         return shipMethods;
                     }

@@ -12,6 +12,7 @@
         self.name = '';
         self.extendedData = {};
         self.shipMethods = [];
+        self.availableResources = [];
     };
 
     ShippingGatewayProviderDisplay.prototype = (function() {
