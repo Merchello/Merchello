@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.resources.settingsResource
+     * @name settingsResource
      * @description Loads in data and allows modification for invoices
      **/
     angular.module('merchello.resources').factory('settingsResource',

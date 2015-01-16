@@ -191,52 +191,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
             });
         }
 
-        /**
-         * @ngdoc method
-         * @name removeMethodFromProviderDialogConfirmation
-         * @function
-         *
-         * @description
-         * Calls the fixed rate shipping service to delete the method passed in via the method parameter.
-         * After method is deleted, reload the list of methods for that provider in that country.
-
-        function removeMethodFromProviderDialogConfirmation(data) {
-            var promiseDelete = merchelloCatalogShippingService.deleteShipMethod(data.method);
-            promiseDelete.then(function () {
-                data.provider.shipMethods = [];
-                $scope.loadProviderMethods(data.provider, data.country);
-                notificationsService.success("Shipping Method Deleted");
-            }, function (reason) {
-                notificationsService.error("Shipping Method Delete Failed", reason.message);
-            });
-        }
-         */
-
-        /**
-         * @ngdoc method
-         * @name removeMethodFromProviderDialog
-         * @function
-         *
-         * @description
-         * Opens the delete confirmation dialog via the Umbraco dialogService.
-         * Country and provider passed through dialogService so that on confirm the provider's
-         * methods can be reloaded after the method is deleted.
-
-        function removeMethodFromProviderDialog(country, provider, method) {
-            var dialogData = {
-                country: country,
-                name: method.name,
-                method: method,
-                provider: provider
-            };
-            dialogService.open({
-                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
-                show: true,
-                callback: $scope.removeMethodFromProviderDialogConfirmation,
-                dialogData: dialogData
-            });
-        }
-         */
 
         //--------------------------------------------------------------------------------------
         // Dialog methods
@@ -309,59 +263,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
                 notificationsService.error("Shipping Countries Create Failed", reason.message);
             });
         }
-
-        /**
-         * @ngdoc method
-         * @name addEditShippingMethodDialogOpen
-         * @function
-         *
-         * @description
-         * Opens the add/edit shipping method dialog via the Umbraco dialogService.
-
-        function addEditShippingMethodDialogOpen(country, gatewayProvider, method) {
-
-            var dialogMethod = method;
-            var provider;
-            for (var i = 0; i < $scope.providers.length; i++) {
-                if (gatewayProvider.key == $scope.providers[i].key) {
-                    provider = new merchello.Models.GatewayProvider($scope.providers[i]);
-                    provider.resources = _.map($scope.providers[i].resources, function (resource) {
-                        return new merchello.Models.GatewayResource(resource);
-                    });
-                }
-            }
-            // If no method exists, create a new, blank one.
-            if (!method) {
-                dialogMethod = new merchello.Models.ShippingMethod();
-                dialogMethod.shipCountryKey = country.key;
-                dialogMethod.providerKey = gatewayProvider.key;
-                dialogMethod.dialogEditorView.editorView = provider.dialogEditorView.editorView;
-            } else {
-                if (method.shipCountryKey === "00000000-0000-0000-0000-000000000000") {
-                    method.shipCountryKey = country.key;
-                }
-            }
-
-            // Acquire the provider's available resources.
-            var availableResources = gatewayProvider.resources;
-
-            // Get the editor template for the method's dialog.
-            var templatePage = dialogMethod.dialogEditorView.editorView;
-
-            var myDialogData = {
-                method: dialogMethod,
-                country: country,
-                provider: gatewayProvider,
-                gatewayResources: availableResources
-            };
-            dialogService.open({
-                template: templatePage,
-                show: true,
-                callback: $scope.shippingMethodDialogConfirm,
-                dialogData: myDialogData
-            });
-        }
-         */
 
 
         /**
@@ -541,25 +442,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
                 dialogData: myDialogData
             });
 
-        }
-
-        /**
-         * @ngdoc method
-         * @name shippingMethodDialogConfirm
-         * @function
-         *
-         * @description
-         * Handles the edit after recieving the dialogData from the dialog view/controller
-         */
-        function shippingMethodDialogConfirm(data) {
-
-            var promiseShipMethodSave = merchelloCatalogShippingService.saveShipMethod(data.method);
-            promiseShipMethodSave.then(function() {
-            }, function (reason) {
-                notificationsService.error("Shipping Method Save Failed", reason.message);
-            });
-            data.provider.shipMethods = [];
-            $scope.loadProviderMethods(data.provider, data.country);
         }
 
         /**

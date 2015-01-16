@@ -267,6 +267,7 @@
         self.showProvidersDropDown = true;
         self.availableProviders = [];
         self.selectedProvider = {};
+        self.shipMethodName = '';
         self.selectedResource = {};
         self.country = {};
     };
@@ -421,6 +422,21 @@
     };
 
     angular.module('merchello.models').constant('EditShipmentDialogData', EditShipmentDialogData);
+    /**
+     * @ngdoc model
+     * @name EditShippingGatewayMethodDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for shipment gateway method data to the dialogService
+     *
+     */
+    var EditShippingGatewayMethodDialogData = function() {
+        var self = this;
+        self.shippingGatewayMethod = {};
+    }
+
+    angular.module('merchello.models').constant('EditShippingGatewayMethodDialogData', EditShippingGatewayMethodDialogData);
     /**
      * @ngdoc model
      * @name GatewayProviderDisplay
@@ -1380,6 +1396,22 @@
         self.dialogEditorView = {};
     }
 
+    ShippingGatewayMethodDisplay.prototype = (function() {
+
+        function getName() {
+            return this.shipMethod.name;
+        }
+
+        function getKey() {
+            return this.shipMethod.key;
+        }
+
+        return {
+            getName: getName,
+            getKey: getKey
+        };
+    }());
+
     angular.module('merchello.models').constant('ShippingGatewayMethodDisplay', ShippingGatewayMethodDisplay);
 
     /**
@@ -1433,6 +1465,18 @@
         self.shipCountryKey = '';
         self.rows = [];
     };
+
+    ShipFixedRateTableDisplay.prototype = (function() {
+
+        // pushes a new row into the rate table rows collection
+        function addRow(row) {
+            this.rows.push(row);
+        }
+
+        return {
+            addRow: addRow
+        }
+    }());
 
     angular.module('merchello.models').constant('ShipFixedRateTableDisplay', ShipFixedRateTableDisplay);
     /**
@@ -1701,15 +1745,21 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeleteShipCountryShipMethodDialogData();
         }
 
+        // creates a dialogData for editing shipping gateway methods
+        function createEditShippingGatewayMethodDialogData() {
+            return new EditShippingGatewayMethodDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
             createAddShipCountryProviderDialogData: createAddShipCountryProviderDialogData,
-            deleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData,
+            createEditShippingGatewayMethodDialogData: createEditShippingGatewayMethodDialogData,
             createCapturePaymentDialogData: createCapturePaymentDialogData,
             createCreateShipmentDialogData: createCreateShipmentDialogData,
             createEditShipmentDialogData: createEditShipmentDialogData,
-            createEditAddressDialogData: createEditAddressDialogData
+            createEditAddressDialogData: createEditAddressDialogData,
+            deleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData
         };
 }]);
 
@@ -2366,6 +2416,31 @@ angular.module('merchello.models').factory('dialogDataFactory',
             };
         }]);
 
+/**
+ * @ngdoc service
+ * @name shipFixedRateTableDisplayBuilder
+ *
+ * @description
+ * A utility service that builds ShipFixedRateTableDisplay models
+ */
+angular.module('merchello.models').factory('shipFixedRateTableDisplayBuilder',
+    ['genericModelBuilder', 'shipRateTierDisplayBuilder', 'ShipFixedRateTableDisplay',
+    function(genericModelBuilder, shipRateTierDisplayBuilder, ShipFixedRateTableDisplay) {
+
+        var Constructor = ShipFixedRateTableDisplay;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                var rateTable = genericModelBuilder.transform(jsonResult, Constructor);
+                rateTable.rows = shipRateTierDisplayBuilder.transform(jsonResult.rows);
+                return rateTable;
+            }
+        };
+    }]);
+
     /**
      * @ngdoc service
      * @name merchello.models.shipMethodDisplayBuilder
@@ -2373,7 +2448,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
      * @description
      * A utility service that builds ShipMethodDisplay models
      */
-    angular.module('merchello.services')
+    angular.module('merchello.models')
         .factory('shipMethodDisplayBuilder',
             ['genericModelBuilder', 'dialogEditorViewDisplayBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
             function(genericModelBuilder, dialogEditorViewDisplayBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
@@ -2423,6 +2498,27 @@ angular.module('merchello.models').factory('dialogDataFactory',
                 }
             };
     }]);
+/**
+ * @ngdoc service
+ * @name shipRateTierDisplayBuilder
+ *
+ * @description
+ * A utility service that builds ShipRateTierDisplay models
+ */
+angular.module('merchello.models').factory('shipRateTierDisplayBuilder',
+    ['genericModelBuilder', 'ShipRateTierDisplay',
+        function(genericModelBuilder, ShipRateTierDisplay) {
+            var Constructor = ShipRateTierDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
+
     /**
      * @ngdoc service
      * @name merchello.models.shipmentDisplayBuilder

@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.resources.paymentResource
+     * @name paymentResource
      * @description Loads in data and allows modification for payments
      **/
     angular.module('merchello.resources').factory('paymentResource',

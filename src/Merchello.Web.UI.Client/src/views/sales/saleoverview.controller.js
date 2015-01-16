@@ -288,7 +288,7 @@
                 var promiseDeleteInvoice = invoiceResource.deleteInvoice($scope.invoice.key);
                 promiseDeleteInvoice.then(function (response) {
                     notificationsService.success('Invoice Deleted');
-                    window.location.href = '#/merchello/merchello/invoicelist/manage';
+                    window.location.href = '#/merchello/merchello/saleslist/manage';
                 }, function (reason) {
                     notificationsService.error('Failed to Delete Invoice', reason.message);
                 });

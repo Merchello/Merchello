@@ -49,14 +49,20 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeleteShipCountryShipMethodDialogData();
         }
 
+        // creates a dialogData for editing shipping gateway methods
+        function createEditShippingGatewayMethodDialogData() {
+            return new EditShippingGatewayMethodDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
             createAddShipCountryProviderDialogData: createAddShipCountryProviderDialogData,
-            deleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData,
+            createEditShippingGatewayMethodDialogData: createEditShippingGatewayMethodDialogData,
             createCapturePaymentDialogData: createCapturePaymentDialogData,
             createCreateShipmentDialogData: createCreateShipmentDialogData,
             createEditShipmentDialogData: createEditShipmentDialogData,
-            createEditAddressDialogData: createEditAddressDialogData
+            createEditAddressDialogData: createEditAddressDialogData,
+            deleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData
         };
 }]);

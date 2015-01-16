@@ -11,6 +11,7 @@
         self.showProvidersDropDown = true;
         self.availableProviders = [];
         self.selectedProvider = {};
+        self.shipMethodName = '';
         self.selectedResource = {};
         self.country = {};
     };

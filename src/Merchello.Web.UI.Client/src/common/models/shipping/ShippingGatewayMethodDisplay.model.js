@@ -13,4 +13,20 @@
         self.dialogEditorView = {};
     }
 
+    ShippingGatewayMethodDisplay.prototype = (function() {
+
+        function getName() {
+            return this.shipMethod.name;
+        }
+
+        function getKey() {
+            return this.shipMethod.key;
+        }
+
+        return {
+            getName: getName,
+            getKey: getKey
+        };
+    }());
+
     angular.module('merchello.models').constant('ShippingGatewayMethodDisplay', ShippingGatewayMethodDisplay);

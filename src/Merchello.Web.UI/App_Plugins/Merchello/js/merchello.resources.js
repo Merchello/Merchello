@@ -6,6 +6,11 @@
 
 (function() { 
 
+    /**
+     * @ngdoc service
+     * @name auditLogResource
+     * @description Loads in data and allows modification of audit logs
+     **/
     angular.module('merchello.resources').factory('auditLogResource', [
         '$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
@@ -30,7 +35,7 @@
 
 /**
  * @ngdoc service
- * @name merchello.resources.gatewayProviderResource
+ * @name gatewayProviderResource
  * @description Loads in data and allows modification of gateway providers
  **/
 angular.module('merchello.resources')
@@ -122,7 +127,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.invoiceResource
+     * @name invoiceResource
      * @description Loads in data and allows modification for invoices
      **/
     angular.module('merchello.resources')
@@ -233,7 +238,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.orderResource
+     * @name orderResource
      * @description Loads in data and allows modification for orders
      **/
     angular.module('merchello.resources')
@@ -343,7 +348,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.paymentResource
+     * @name paymentResource
      * @description Loads in data and allows modification for payments
      **/
     angular.module('merchello.resources').factory('paymentResource',
@@ -413,7 +418,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.settingsResource
+     * @name settingsResource
      * @description Loads in data and allows modification for invoices
      **/
     angular.module('merchello.resources').factory('settingsResource',
@@ -590,7 +595,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.shipmentResource
+     * @name shipmentResource
      * @description Loads in data and allows modification for shipments
      **/
     angular.module('merchello.resources').factory('shipmentResource',
@@ -688,9 +693,34 @@ angular.module('merchello.resources')
             }
         };
     }]);
+angular.module('merchello.resources')
+    .factory('shippingFixedRateProviderResource',
+    ['$http', 'umbRequestHelper',
+    function($http, umbRequestHelper) {
+
+        return {
+
+            getRateTable: function(shipMethod) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloFixedRateShippingApiBaseUrl', 'GetShipFixedRateTable'), shipMethod),
+                    'Failed to acquire rate table');
+
+            },
+
+            saveRateTable: function(rateTable) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloFixedRateShippingApiBaseUrl', 'PutShipFixedRateTable'), rateTable),
+                    'Failed to save rate table');
+            }
+
+        };
+
+    }]);
+
 /**
  * @ngdoc service
- * @name merchello.resources.shippingGatewayProviderResource
+ * @name shippingGatewayProviderResource
  * @description Loads in data for shipping providers and store shipping settings
  **/
 angular.module('merchello.resources')
@@ -832,7 +862,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.warehouseResource
+     * @name warehouseResource
      * @description Loads in data and allows modification of warehouses
      **/
     angular.module('merchello.resources').factory('warehouseResource',
