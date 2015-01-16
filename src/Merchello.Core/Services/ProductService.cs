@@ -346,6 +346,19 @@
         }
 
         /// <summary>
+        /// Gets a Product by its unique SKU
+        /// </summary>
+        /// <param name="sku">Unique SKU  for the Product</param>
+        /// <returns><see cref="IProductVariant"/></returns>
+        public IProduct GetBySku(string sku)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(sku);
+            }
+        }
+
+        /// <summary>
         /// Gets a page of <see cref="IProduct"/>
         /// </summary>
         /// <param name="page">
