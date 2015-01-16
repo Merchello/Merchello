@@ -291,9 +291,17 @@
             
             if (shipCountry == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
+            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId).ToArray();
 
-            return methods.Select(method => method.ToShippingGatewayMethodDisplay());
+            var gatewayShipMethods = new List<ShippingGatewayMethodDisplay>();
+
+            foreach (var gatewayMethodDisplay in methods.Select(method => method.ToShippingGatewayMethodDisplay()))
+            {
+                gatewayMethodDisplay.ShipCountry = shipCountry.ToShipCountryDisplay();
+                gatewayShipMethods.Add(gatewayMethodDisplay);
+            }
+
+            return gatewayShipMethods;
         }
 
         /// <summary>
