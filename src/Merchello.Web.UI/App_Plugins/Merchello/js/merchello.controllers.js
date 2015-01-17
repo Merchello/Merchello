@@ -1342,11 +1342,15 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
     }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersController',
-    ['$scope',
-    function($scope) {
+    ['$scope', 'settingsResource', 'taxationGatewayProviderResource',
+        'settingDisplayBuilder', 'countryDisplayBuilder', 'taxCountryDisplayBuilder',
+        'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder',
+    function($scope, settingsResource, taxationGatewayProviderResource,
+             settingDisplayBuilder, countryDisplayBuilder, taxCountryDisplayBuilder,
+             gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder) {
 
-        $scope.loaded = true;
-        $scope.preValuesLoaded = true;
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
         $scope.allCountries = [];
         $scope.availableCountries = [];
         $scope.taxationGatewayProviders = [];
@@ -1354,6 +1358,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         //--------------------------------------------------------------------------------------
         // Initialization methods
         //--------------------------------------------------------------------------------------
+
         /**
          * @ngdoc method
          * @name init
@@ -1363,78 +1368,81 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
          * Method called on intial page load.  Loads in data from server and sets up scope.
          */
         function init() {
-
-            //loadAllAvailableCountries();
-            //loadAllTaxationGatewayProviders();
-
+            loadAllAvailableCountries();
+            loadAllTaxationGatewayProviders();
         }
 
+        /**
+         * @ngdoc method
+         * @name loadAllAvailableCountries
+         * @function
+         *
+         * @description
+         * Method called on initial page load.  Loads in data from server and sets up scope.
+         */
         function loadAllAvailableCountries() {
-
-            var promiseAllCountries = merchelloSettingsService.getAllCountries();
+            var promiseAllCountries = settingsResource.getAllCountries();
             promiseAllCountries.then(function (allCountries) {
-
-                $scope.allCountries = _.map(allCountries, function (country) {
-                    return new merchello.Models.Country(country);
-                });
-
+                $scope.allCountries = countryDisplayBuilder.transform(allCountries);
             }, function (reason) {
-
                 notificationsService.error("Available Countries Load Failed", reason.message);
-
             });
-
         }
 
+        /**
+         * @ngdoc method
+         * @name loadAllTaxationGatewayProviders
+         * @function
+         *
+         * @description
+         * Loads all taxation gateway providers.
+         */
         function loadAllTaxationGatewayProviders() {
 
-            var promiseAllProviders = merchelloTaxationGatewayService.getAllGatewayProviders();
+            var promiseAllProviders = taxationGatewayProviderResource.getAllGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
 
-                $scope.taxationGatewayProviders = _.map(allProviders, function (providerFromServer) {
-                    return new merchello.Models.GatewayProvider(providerFromServer);
-                });
+                $scope.taxationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                console.info($scope.taxationGatewayProviders);
 
-                var noTaxProvider = new merchello.Models.GatewayProvider({ key: "-1", name: "Not Taxed", description: "" });
-                $scope.taxationGatewayProviders.push(noTaxProvider);
-
-                if ($scope.taxationGatewayProviders.length > 0) {
-                    $scope.loadAvailableCountriesWithoutMethod($scope.taxationGatewayProviders[0]);
-                    $scope.loadTaxMethods($scope.taxationGatewayProviders[0]);
+                if($scope.taxationGatewayProviders.length > 0) {
+                    for(var i = 0; i < $scope.taxationGatewayProviders.length; i++) {
+                        loadAvailableCountriesWithoutMethod($scope.taxationGatewayProviders[i]);
+                        loadTaxMethods($scope.taxationGatewayProviders[i]);
+                    }
                 }
 
+                var noTaxProvider = gatewayProviderDisplayBuilder.createDefault();
+                noTaxProvider.key = -1;
+                noTaxProvider.name = 'Not Taxed';
+                $scope.taxationGatewayProviders.push(noTaxProvider);
+
             }, function (reason) {
-
                 notificationsService.error("Available Taxation Providers Load Failed", reason.message);
-
             });
-
         }
 
         function loadAvailableCountriesWithoutMethod(taxationGatewayProvider) {
 
-            var promiseGwResources = merchelloTaxationGatewayService.getGatewayResources(taxationGatewayProvider.key);
+            var promiseGwResources = taxationGatewayProviderResource.getGatewayResources(taxationGatewayProvider.key);
             promiseGwResources.then(function (resources) {
 
                 var newAvailableCountries = _.map(resources, function (resourceFromServer) {
-                    var taxCountry = new merchello.Models.TaxCountry(resourceFromServer);
-
-                    taxCountry.country = _.find($scope.allCountries, function (c) { return c.countryCode == taxCountry.serviceCode; });
-
+                    var taxCountry = taxCountryDisplayBuilder.transform(resourceFromServer);
+                    taxCountry.country = _.find($scope.allCountries, function (c) { return c.countryCode == taxCountry.gatewayResource.serviceCode; });
                     if (taxCountry.country) {
                         taxCountry.setCountryName(taxCountry.country.name);
                     } else {
-                        if (taxCountry.name == 'ELSE-FixedRate') {
+                        if (taxCountry.gatewayResource.serviceCodeStartsWith('ELSE')) {
                             taxCountry.setCountryName('Everywhere Else');
                         } else {
                             taxCountry.setCountryName(taxCountry.name);
                         }
                     }
-
                     return taxCountry;
                 });
 
-                _.each(newAvailableCountries, function (country) {
+                angular.forEach(newAvailableCountries, function(country) {
                     $scope.availableCountries.push(country);
                 });
 
@@ -1442,11 +1450,8 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
                 $scope.preValuesLoaded = true;
 
             }, function (reason) {
-
                 notificationsService.error("Available Gateway Resources Load Failed", reason.message);
-
             });
-
         }
 
         function loadTaxMethods(taxationGatewayProvider) {

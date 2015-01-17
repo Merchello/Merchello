@@ -535,6 +535,18 @@
         self.serviceCode = '';
     };
 
+    GatewayResourceDisplay.prototype = (function() {
+
+        function serviceCodeStartsWith(str) {
+            return this.serviceCode.indexOf(str) === 0;
+        }
+
+        return {
+            serviceCodeStartsWith: serviceCodeStartsWith
+        };
+
+    }());
+
     angular.module('merchello.models').constant('GatewayResourceDisplay', GatewayResourceDisplay);
     /**
      * @ngdoc model
@@ -1563,6 +1575,75 @@
     angular.module('merchello.models').constant('ShipRateTierDisplay', ShipRateTierDisplay);
     /**
      * @ngdoc model
+     * @name TaxCountryDisplay
+     * @function
+     *
+     * @description
+     * Represents a TaxCountryDisplay
+     *
+     * @note
+     * There is not a corresponding Merchello model
+     */
+    var TaxCountryDisplay = function() {
+        var self = this;
+        self.name = '';
+        self.country = {};
+        self.taxMethod = {};
+        self.gatewayResource = {};
+        self.sortOrder = 0;
+    };
+
+    TaxCountryDisplay.prototype = (function() {
+
+        function setCountryName(str) {
+            this.countryName = str;
+        }
+
+        return {
+            setCountryName: setCountryName
+        };
+
+    }());
+
+    angular.module('merchello.models').constant('TaxCountryDisplay', TaxCountryDisplay);
+    /**
+     * @ngdoc model
+     * @name TaxMethodDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's TaxMethodDisplay object
+     */
+    var TaxMethodDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.providerKey = '';
+        self.name = '';
+        self.countryCode = '';
+        self.percentageTaxRate = 0.0;
+        self.provinces = [];
+    };
+
+    angular.module('merchello.models').constant('TaxMethodDisplay', TaxMethodDisplay);
+
+    /**
+     * @ngdoc model
+     * @name TaxProvinceDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's TaxProvinceDisplay object
+     */
+    var TaxProvinceDisplay = function() {
+        var self = this;
+        self.name = '';
+        self.code = '';
+        self.percentAdjustment = 0;
+    };
+
+    angular.module('merchello.models').constant('TaxProvinceDisplay', TaxProvinceDisplay);
+    /**
+     * @ngdoc model
      * @name WarehouseCatalogDisplay
      * @function
      *
@@ -1731,7 +1812,6 @@
                         return countries;
                     }
                 };
-
         }]);
 
     /**
@@ -2732,6 +2812,91 @@ angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilde
                 }
             };
     }]);
+
+    /**
+     * @ngdoc service
+     * @name taxCountryDisplayBuilder
+     *
+     * @description
+     * A utility service that builds TaxCountryDisplay models
+     */
+    angular.module('merchello.models').factory('taxCountryDisplayBuilder', [
+        'genericModelBuilder', 'gatewayResourceDisplayBuilder', 'TaxCountryDisplay',
+        function(genericModelBuilder, gatewayResourceDisplayBuilder, TaxCountryDisplay) {
+
+            var Constructor = TaxCountryDisplay;
+
+            function buildSingle(resource) {
+                var taxCountry = new Constructor();
+                taxCountry.name = resource.name;
+                taxCountry.gatewayResource = resource;
+                return taxCountry;
+            }
+
+            return {
+                createDefault: function() {
+                    return buildSingle(gatewayResourceDisplayBuilder.createDefault());
+                },
+                transform: function(jsonResult) {
+                    var resources = gatewayResourceDisplayBuilder.transform(jsonResult);
+                    var countries = [];
+                    if(angular.isArray(resources)) {
+                        angular.forEach(resources, function(resource) {
+                            countries.push(buildSingle(resource));
+                        });
+                    } else {
+                        countries = buildSingle(resources);
+                    }
+                    return countries;
+                }
+            };
+        }]);
+
+    /**
+     * @ngdoc service
+     * @name taxMethodDisplayBuilder
+     *
+     * @description
+     * A utility service that builds TaxMethodDisplay models
+     */
+    angular.module('merchello.models').factory('taxMethodDisplayBuilder',
+        ['genericModelBuilder', 'TaxMethodDisplay',
+            function(genericModelBuilder, TaxMethodDisplay) {
+
+                var Constructor = TaxMethodDisplay;
+
+                return {
+                    createDefault: function() {
+                        return new Constructor();
+                    },
+                    transform: function(jsonResult) {
+                        return genericModelBuilder.transform(jsonResult, Constructor);
+                    }
+                };
+    }]);
+
+    /**
+     * @ngdoc service
+     * @name taxProvinceDisplayBuilder
+     *
+     * @description
+     * A utility service that builds TaxProvinceDisplay models
+     */
+    angular.module('merchello.models').factory('taxProvinceDisplayBuilder',
+        ['genericModelBuilder', 'TaxProvinceDisplay',
+        function(genericModelBuilder, TaxProvinceDisplay) {
+
+            var Constructor = TaxProvinceDisplay;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
 
     /**
      * @ngdoc service
