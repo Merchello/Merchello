@@ -1,6 +1,6 @@
 /**
  * @ngdoc service
- * @name merchello.resources.shippingGatewayProviderResource
+ * @name shippingGatewayProviderResource
  * @description Loads in data for shipping providers and store shipping settings
  **/
 angular.module('merchello.resources')

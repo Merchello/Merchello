@@ -1,4 +1,4 @@
-<div>
+<div data-ng-show="providersLoaded">
     <div class="merchello-section-label">
         <h4>
             {{country.name}}
@@ -18,18 +18,18 @@
         <!-- Shipping Methods -->
         <table class="table table-striped merchello-striped-table settings-table shipping-table">
             <tbody>
-            <tr data-ng-repeat="shipMethod in shippingGatewayProvider.shipMethods | filter: country.key">
-                <td>{{shipMethod.name}}</td>
-                <td>{{shippingGatewayProvider.shippingGatewayMethods.length}}</td>
+            <tr data-ng-repeat="gatewayMethod in shippingGatewayProvider.shippingGatewayMethods">
+                <td>{{gatewayMethod.shipMethod.name}}</td>
+                <td></td>
                 <td></td>
                 <td class="edit">
                     <div class="btn-group">
                         <!-- ACTION: Edit Method's Province Rates -->
-                        <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="country.provinces.length > 0" data-ng-click="editRegionalShippingRatesDialogOpen(country, shippingGatewayProvider, shipMethod)"><i class="icon-globe-alt"></i></a>
+                        <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="country.provinces.length > 0" data-ng-click="editShippingMethodRegionsOpen(gatewayMethod)"><i class="icon-globe-alt"></i></a>
                         <!-- ACTION: Edit Shipping Method -->
-                        <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-click="addEditShippingMethodDialogOpen(country, shippingGatewayProvider, shipMethod)"><i class="icon-edit"></i></a>
+                        <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="gatewayMethod.dialogEditorView.editorView !== ''" data-ng-click="editShippingMethodDialogOpen(gatewayMethod)"><i class="icon-edit"></i></a>
                         <!-- ACTION: Remove Shipping Method -->
-                        <a data-ng-click="deleteShipMethodOpen(shipMethod)" class="btn btn-default btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
+                        <a data-ng-click="deleteShipMethodOpen(gatewayMethod.shipMethod)" class="btn btn-default btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
                     </div>
                 </td>
             </tr>

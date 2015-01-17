@@ -958,6 +958,14 @@
             The contacts.
             </param>
         </member>
+        <member name="M:Merchello.Core.Gateways.Notification.Triggering.NotificationTriggerBase`2.Notify(`0)">
+            <summary>
+            Value to pass to the notification monitors
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+        </member>
         <member name="M:Merchello.Core.Gateways.Notification.Triggering.NotificationTriggerBase`2.Notify(`0,System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Value to pass to the notification monitors with addtional contacts not defined in notification message (ex. an instance specific customer or vender)

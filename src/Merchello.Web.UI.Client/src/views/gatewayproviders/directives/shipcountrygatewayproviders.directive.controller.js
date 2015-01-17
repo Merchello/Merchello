@@ -2,9 +2,11 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
     ['$scope', 'notificationsService', 'dialogService',
         'shippingGatewayProviderResource', 'shippingGatewayProviderDisplayBuilder', 'shipMethodDisplayBuilder',
         'shippingGatewayMethodDisplayBuilder', 'gatewayResourceDisplayBuilder', 'dialogDataFactory',
-        function($scope, notificationsService, dialogService, shippingGatewayProviderResource, shipMethodDisplayBuilder,
-                 shippingGatewayProviderDisplayBuilder, shippingGatewayMethodDisplayBuilder, gatewayResourceDisplayBuilder, dialogDataFactory) {
+        function($scope, notificationsService, dialogService,
+                 shippingGatewayProviderResource, shippingGatewayProviderDisplayBuilder, shipMethodDisplayBuilder,
+                 shippingGatewayMethodDisplayBuilder, gatewayResourceDisplayBuilder, dialogDataFactory) {
 
+            $scope.providersLoaded = false;
             $scope.allProviders = [];
             $scope.assignedProviders = [];
             $scope.availableProviders = [];
@@ -14,7 +16,17 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
             $scope.addShippingProviderDialogOpen = addShippingProviderDialogOpen;
             $scope.addAddShipMethodDialogOpen = addAddShipMethodDialogOpen;
             $scope.deleteShipMethodOpen = deleteShipMethodOpen;
+            $scope.editShippingMethodDialogOpen = editShippingMethodDialogOpen;
+            $scope.editShippingMethodRegionsOpen = editShippingMethodRegionsOpen;
 
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Initializes the controller
+             */
             function init() {
                 loadCountryProviders();
             }
@@ -38,6 +50,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                     promiseProviders.then(function (assigned) {
                         if (angular.isArray(assigned)) {
                             $scope.assignedProviders = shippingGatewayProviderDisplayBuilder.transform(assigned);
+
                             var available = _.filter($scope.allProviders, function(provider) {
                                 var found = _.find($scope.assignedProviders, function(ap) {
                                     return ap.key === provider.key;
@@ -47,10 +60,8 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                             angular.forEach(available, function(pusher) {
                                 $scope.availableProviders.push(pusher);
                             });
-                            angular.forEach(assigned, function(provider) {
-                                loadProviderMethods(provider);
-                            });
-
+                            //console.info($scope.assignedProviders);
+                            loadProviderMethods();
                         }
                     }, function (reason) {
                         notificationsService.error("Fixed Rate Shipping Countries Providers Load Failed", reason.message);
@@ -62,25 +73,6 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
 
             /**
              * @ngdoc method
-             * @name loadAllAvailableGatewayResources
-             * @function
-             *
-             * @description
-             * Load the shipping gateway resources from the shipping gateway service, then wrap the results
-             * in Merchello models and add to the scope via the providers collection in the resources collection.
-
-            function loadAllAvailableGatewayResources(shipProvider) {
-                var promiseAllResources = shippingGatewayProviderResource.getAllShipGatewayResourcesForProvider(shipProvider);
-                promiseAllResources.then(function (allResources) {
-                    shipProvider.resources = gatewayResourceDisplayBuilder.transform(allResources);
-                }, function (reason) {
-                    notificationsService.error("Available Gateway Resources Load Failed", reason.message);
-                });
-            }
-            */
-
-            /**
-             * @ngdoc method
              * @name loadShipMethods
              * @function
              *
@@ -88,18 +80,19 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
              * Load the shipping methods from the shipping gateway service, then wrap the results
              * in Merchello models and add to the scope via the provider in the shipMethods collection.
              */
-            function loadProviderMethods(shipProvider) {
-                var promiseShipMethods = shippingGatewayProviderResource.getShippingGatewayMethodsByCountry(shipProvider, $scope.country);
-                promiseShipMethods.then(function (shipMethods) {
-
-                    var shippingGatewayMethods = shippingGatewayMethodDisplayBuilder.transform(shipMethods);
-                    shipProvider.shippingGatewayMethods = shippingGatewayMethods;
-
-                    console.info(shipProvider);
-
-                }, function (reason) {
-                    notificationsService.error("Available Shipping Methods Load Failed", reason.message);
+            function loadProviderMethods() {
+                angular.forEach($scope.assignedProviders, function(shipProvider) {
+                    var promiseShipMethods = shippingGatewayProviderResource.getShippingGatewayMethodsByCountry(shipProvider, $scope.country);
+                    promiseShipMethods.then(function (shipMethods) {
+                        var shippingGatewayMethods = shippingGatewayMethodDisplayBuilder.transform(shipMethods);
+                        shipProvider.shippingGatewayMethods = _.sortBy(shippingGatewayMethods, function(gatewayMethod) {
+                            return gatewayMethod.getName();
+                        });
+                    }, function (reason) {
+                        notificationsService.error("Available Shipping Methods Load Failed", reason.message);
+                    });
                 });
+                $scope.providersLoaded = true;
             }
 
             /**
@@ -116,6 +109,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                 dialogData.availableProviders = $scope.availableProviders;
                 dialogData.selectedProvider = dialogData.availableProviders[0];
                 dialogData.selectedResource = dialogData.selectedProvider.availableResources[0];
+                dialogData.shipMethodName = 'New ship method';
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.shipcountry.addprovider.html',
                     show: true,
@@ -133,16 +127,36 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
              * Opens the shipping provider dialog via the Umbraco dialogService.
              */
             function addAddShipMethodDialogOpen(provider) {
-                console.info(provider);
                 var dialogData = dialogDataFactory.createAddShipCountryProviderDialogData();
                 dialogData.selectedProvider = provider;
                 dialogData.selectedResource = dialogData.selectedProvider.availableResources[0];
+                dialogData.shipMethodName = $scope.country.name + " " + dialogData.selectedResource.name;
                 dialogData.country = $scope.country;
                 dialogData.showProvidersDropDown = false;
+                console.info(dialogData);
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.shipcountry.addprovider.html',
                     show: true,
                     callback: shippingProviderDialogConfirm,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name editShippingMethodDialogOpen
+             * @function
+             *
+             * @description
+             * Opens an injected dialog for editing a the shipping provider's ship method
+             */
+            function editShippingMethodRegionsOpen(gatewayMethod) {
+                var dialogData = dialogDataFactory.createEditShippingGatewayMethodDialogData();
+                dialogData.shippingGatewayMethod = gatewayMethod;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.shipmethod.regions.html',
+                    show: true,
+                    callback: shippingMethodDialogConfirm,
                     dialogData: dialogData
                 });
             }
@@ -157,7 +171,11 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
              */
             function shippingProviderDialogConfirm(dialogData) {
                 var newShippingMethod = shipMethodDisplayBuilder.createDefault();
-                newShippingMethod.name = $scope.country.name + " " + dialogData.selectedResource.name;
+                if(dialogData.shipMethodName ==='') {
+                    newShippingMethod.name = $scope.country.name + " " + dialogData.selectedResource.name;
+                } else {
+                    newShippingMethod.name = dialogData.shipMethodName;
+                }
                 newShippingMethod.providerKey = dialogData.selectedProvider.key;
                 newShippingMethod.serviceCode = dialogData.selectedResource.serviceCode;
                 newShippingMethod.shipCountryKey = $scope.country.key;
@@ -204,6 +222,44 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                 promise.then(function() {
                     reload();
                 });
+            }
+
+            // injected dialogs
+
+            /**
+             * @ngdoc method
+             * @name editShippingMethodDialogOpen
+             * @function
+             *
+             * @description
+             * Opens an injected dialog for editing a the shipping provider's ship method
+             */
+            function editShippingMethodDialogOpen(gatewayMethod) {
+                var dialogData = dialogDataFactory.createEditShippingGatewayMethodDialogData();
+                dialogData.shippingGatewayMethod = gatewayMethod;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.fixedrate.shipmethod.html',
+                    show: true,
+                    callback: shippingMethodDialogConfirm,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name shippingMethodDialogConfirm
+             * @function
+             *
+             * @description
+             * Handles the edit after recieving the dialogData from the dialog view/controller
+             */
+            function shippingMethodDialogConfirm(dialogData) {
+                var promiseShipMethodSave = shippingGatewayProviderResource.saveShipMethod(dialogData.shippingGatewayMethod.shipMethod);
+                promiseShipMethodSave.then(function() {
+                }, function (reason) {
+                    notificationsService.error("Shipping Method Save Failed", reason.message);
+                });
+                reload();
             }
 
             /**

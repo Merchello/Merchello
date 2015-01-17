@@ -10,6 +10,10 @@
                 <select name="availableProviders" data-ng-model="dialogData.selectedProvider" data-ng-options="p.name for p in dialogData.availableProviders track by p.key"></select>
             </div>
         </div>
+        <div class="form-group row-fluid">
+            <label for="method-name"><localize key="general_name" /></label>
+            <input name="method-name" data-ng-model="dialogData.shipMethodName" class="col-xs-12 span12" type="text" />
+        </div>
         <div class="form-group row-fluid provider-dropdown">
             <label for="provider-name"><localize key="merchelloShippingProvider_selectResource" /></label>
             <div class="input-append col-xs-12 span12">

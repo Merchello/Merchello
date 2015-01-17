@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.resources.warehouseResource
+     * @name warehouseResource
      * @description Loads in data and allows modification of warehouses
      **/
     angular.module('merchello.resources').factory('warehouseResource',

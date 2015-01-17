@@ -190,7 +190,7 @@
                 // TODO inject the template for the capture payment dialog so that we can
                 // have different fields for other providers
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/capture.payment.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.capture.payment.html',
                     show: true,
                     callback: $scope.capturePaymentDialogConfirm,
                     dialogData: data
@@ -288,7 +288,7 @@
                 var promiseDeleteInvoice = invoiceResource.deleteInvoice($scope.invoice.key);
                 promiseDeleteInvoice.then(function (response) {
                     notificationsService.success('Invoice Deleted');
-                    window.location.href = '#/merchello/merchello/invoicelist/manage';
+                    window.location.href = '#/merchello/merchello/saleslist/manage';
                 }, function (reason) {
                     notificationsService.error('Failed to Delete Invoice', reason.message);
                 });
