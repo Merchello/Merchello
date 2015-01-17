@@ -109,6 +109,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                 dialogData.availableProviders = $scope.availableProviders;
                 dialogData.selectedProvider = dialogData.availableProviders[0];
                 dialogData.selectedResource = dialogData.selectedProvider.availableResources[0];
+                dialogData.shipMethodName = 'New ship method';
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.shipcountry.addprovider.html',
                     show: true,
@@ -170,7 +171,11 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
              */
             function shippingProviderDialogConfirm(dialogData) {
                 var newShippingMethod = shipMethodDisplayBuilder.createDefault();
-                newShippingMethod.name = dialogData.shipMethodName;
+                if(dialogData.shipMethodName ==='') {
+                    newShippingMethod.name = $scope.country.name + " " + dialogData.selectedResource.name;
+                } else {
+                    newShippingMethod.name = dialogData.shipMethodName;
+                }
                 newShippingMethod.providerKey = dialogData.selectedProvider.key;
                 newShippingMethod.serviceCode = dialogData.selectedResource.serviceCode;
                 newShippingMethod.shipCountryKey = $scope.country.key;

@@ -347,7 +347,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
             // exposed methods
             $scope.toggleAllProvinces = toggleAllProvinces;
 
-            console.info($scope.dialogData);
 
             /**
              * @ngdoc method
@@ -364,6 +363,22 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
                 });
             }
     }]);
+
+angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.WarehouseAddEditController',
+    ['$scope',
+    function($scope) {
+
+        // exposed methods
+        $scope.save = save;
+
+        function save() {
+            if($scope.dialogData.selectedCountry.provinces.length > 0) {
+                $scope.dialogData.warehouse.region = $scope.dialogData.selectedProvince.code;
+            }
+            $scope.dialogData.warehouse.countryCode = $scope.dialogData.selectedCountry.countryCode;
+            $scope.submit($scope.dialogData);
+        }
+}]);
 
 angular.module('merchello').controller('Merchello.Directives.ShipCountryGatewaysProviderDirectiveController',
     ['$scope', 'notificationsService', 'dialogService',
@@ -476,6 +491,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                 dialogData.availableProviders = $scope.availableProviders;
                 dialogData.selectedProvider = dialogData.availableProviders[0];
                 dialogData.selectedResource = dialogData.selectedProvider.availableResources[0];
+                dialogData.shipMethodName = 'New ship method';
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.shipcountry.addprovider.html',
                     show: true,
@@ -537,7 +553,11 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
              */
             function shippingProviderDialogConfirm(dialogData) {
                 var newShippingMethod = shipMethodDisplayBuilder.createDefault();
-                newShippingMethod.name = dialogData.shipMethodName;
+                if(dialogData.shipMethodName ==='') {
+                    newShippingMethod.name = $scope.country.name + " " + dialogData.selectedResource.name;
+                } else {
+                    newShippingMethod.name = dialogData.shipMethodName;
+                }
                 newShippingMethod.providerKey = dialogData.selectedProvider.key;
                 newShippingMethod.serviceCode = dialogData.selectedResource.serviceCode;
                 newShippingMethod.shipCountryKey = $scope.country.key;
@@ -881,12 +901,12 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
 angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersController',
     ['$scope', 'notificationsService', 'dialogService',
     'settingsResource', 'warehouseResource', 'shippingGatewayProviderResource', 'dialogDataFactory',
-    'settingDisplayBuilder', 'warehouseDisplayBuilder', 'countryDisplayBuilder',
-        'shippingGatewayProviderDisplayBuilder', 'shipCountryDisplayBuilder', 'shipMethodDisplayBuilder',
+    'settingDisplayBuilder', 'warehouseDisplayBuilder', 'warehouseCatalogDisplayBuilder', 'countryDisplayBuilder',
+        'shippingGatewayProviderDisplayBuilder', 'shipCountryDisplayBuilder',
     function($scope, notificationsService, dialogService,
              settingsResource, warehouseResource, shippingGatewayProviderResource, dialogDataFactory,
-             settingDisplayBuilder, warehouseDisplayBuilder, countryDisplayBuilder,
-             shippingGatewayProviderDisplayBuilder, shipCountryDisplayBuilder, shipMethodDisplayBuilder) {
+             settingDisplayBuilder, warehouseDisplayBuilder, warehouseCatalogDisplayBuilder, countryDisplayBuilder,
+             shippingGatewayProviderDisplayBuilder, shipCountryDisplayBuilder) {
 
         $scope.loaded = true;
         $scope.countries = [];
@@ -906,6 +926,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
         $scope.loadCountries = loadCountries;
         $scope.addCountry = addCountry;
         $scope.deleteCountryDialog = deleteCountryDialog;
+        $scope.addEditWarehouseDialogOpen = addEditWarehouseDialogOpen;
+        $scope.addEditWarehouseCatalogDialogOpen = addEditWarehouseCatalogDialogOpen;
+        $scope.changeSelectedCatalogOpen = changeSelectedCatalogOpen;
+        $scope.deleteWarehouseCatalogOpen = deleteWarehouseCatalogOpen;
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
@@ -1004,7 +1028,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
                    return warehouse.isDefault;
             });
             $scope.primaryWarehouseAddress = $scope.primaryWarehouse.getAddress();
-            changeSelectedCatalog();
+            //changeSelectedCatalog();
+            $scope.selectedCatalog = _.find($scope.primaryWarehouse.warehouseCatalogs, function(catalog) {
+                return catalog.isDefault === true;
+            });
         }
 
         /**
@@ -1013,54 +1040,17 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * @function
          *
          * @description
-         * Helper method to change between the selected catalog on the screen. If catalogIndex is passed
-         * in, then the function will select the catalog at that index if it exists. If it doesn't, then
-         * choose the default warehouse.
-         */
-        function changeSelectedCatalog(catalogIndex) {
-            if ((typeof catalogIndex) !== 'undefined') {
-                if ($scope.primaryWarehouse.warehouseCatalogs.length > catalogIndex) {
-                    $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[catalogIndex];
-                } else {
-                    $scope.selectedCatalog = new merchello.Models.WarehouseCatalog();
-                }
-            } else {
-                var foundDefault = false;
-                for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
-                    if ($scope.primaryWarehouse.warehouseCatalogs[i].isDefault == true) {
-                        $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[i];
-                        foundDefault = true;
-                    }
-                }
-                if (!foundDefault) {
-                    $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[0];
-                }
-            }
-        }
-
-
-        //--------------------------------------------------------------------------------------
-        // Event Handlers
-        //--------------------------------------------------------------------------------------
-
-        /**
-         * @ngdoc method
-         * @name deleteCountry
-         * @function
-         *
-         * @description
-         * Calls the shipping service to delete the country passed in via the country parameter.
-         * When complete, the countries are reloaded from the api to get the latest from the database.
          *
          */
-        function deleteCountryDialogConfirm(dialogData) {
-            $scope.preValuesLoaded = true;
-            var promiseDelete = shippingGatewayProviderResource.deleteShipCountry(dialogData.country.key);
-            promiseDelete.then(function () {
-                notificationsService.success("Shipping Country Deleted");
-                loadCountries();
-            }, function (reason) {
-                notificationsService.error("Shipping Country Delete Failed", reason.message);
+        function changeSelectedCatalogOpen() {
+            var dialogData = dialogDataFactory.createChangeWarehouseCatalogDialogData();
+            dialogData.warehouse = $scope.primaryWarehouse;
+            dialogData.selectedWarehouseCatalog = $scope.selectedCatalog;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.warehousecatalog.select.html',
+                show: true,
+                callback: selectCatalogDialogConfirm,
+                dialogData: dialogData
             });
         }
 
@@ -1137,6 +1127,56 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
             });
         }
 
+        /**
+         * @ngdoc method
+         * @name addEditWarehouseDialogOpen
+         * @function
+         *
+         * @description
+         * Handles opening a dialog for adding or editing a warehouse
+         */
+        function addEditWarehouseDialogOpen(warehouse) {
+            // todo this will need to be refactored once we expose multiple warehouse
+            var dialogData = dialogDataFactory.createAddEditWarehouseDialogData();
+            dialogData.warehouse = warehouse;
+            var promise = settingsResource.getAllCountries();
+            promise.then(function(countries) {
+                dialogData.availableCountries  = countryDisplayBuilder.transform(countries);
+                dialogData.selectedCountry = _.find(dialogData.availableCountries, function(country) {
+                    return country.countryCode === warehouse.countryCode;
+                });
+                if (dialogData.selectedCountry === undefined) {
+                    dialogData.selectedCountry = dialogData.availableCountries[0];
+                }
+                if(dialogData.selectedCountry.provinces.length > 0) {
+                    dialogData.selectedProvince = _.find(dialogData.selectedCountry.provinces, function(province) {
+                        return province.code === warehouse.region;
+                    });
+                }
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.warehouse.addedit.html',
+                    show: true,
+                    callback: addEditWarehouseDialogConfirm,
+                    dialogData: dialogData
+                });
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name addEditWarehouseDialogConfirm
+         * @function
+         *
+         * @description
+         * Handles the saving of warehouse information
+         */
+        function addEditWarehouseDialogConfirm(dialogData) {
+            $scope.preValuesLoaded = false;
+            var promise = warehouseResource.save(dialogData.warehouse);
+            promise.then(function() {
+              loadWarehouses();
+            });
+        }
 
         /**
          * @ngdoc method
@@ -1146,27 +1186,24 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * @description
          * Opens the warehouse catalog dialog via the Umbraco dialogService.
          */
-        function addEditWarehouseCatalogDialogOpen(warehouse, catalog) {
-
-            var dialogCatalog = catalog;
-            if (!catalog) {
-                dialogCatalog = new merchello.Models.WarehouseCatalog();
+        function addEditWarehouseCatalogDialogOpen(catalog) {
+            var dialogData = dialogDataFactory.createAddEditWarehouseCatalogDialogData();
+            dialogData.warehouse = $scope.primaryWarehouse;
+            if(catalog === undefined || catalog === null) {
+                dialogData.warehouseCatalog = warehouseCatalogDisplayBuilder.createDefault();
+                dialogData.warehouseCatalog.warehouseKey = dialogData.warehouse.key;
+            } else {
+                dialogData.warehouseCatalog = catalog;
             }
 
-            var myDialogData = {
-                warehouseKey: warehouse.key,
-                catalog: dialogCatalog
-            };
-
             dialogService.open({
-                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.addeditcatalog.html',
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.warehousecatalog.addedit.html',
                 show: true,
-                callback: $scope.warehouseCatalogDialogConfirm,
-                dialogData: myDialogData
+                callback: warehouseCatalogDialogConfirm,
+                dialogData: dialogData
             });
 
         }
-
 
         /**
          * @ngdoc method
@@ -1176,14 +1213,14 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * @description
          * Opens the delete catalog dialog via the Umbraco dialogService.
          */
-        function deleteCatalog() {
-            var dialogData = {};
+        function deleteWarehouseCatalogOpen() {
+            var dialogData = dialogDataFactory.createDeleteWarehouseCatalogDialogData();
             dialogData.name = $scope.selectedCatalog.name;
-            dialogData.catalog = $scope.selectedCatalog;
+            dialogData.warehouseCatalog = $scope.selectedCatalog;
             dialogService.open({
-                template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                 show: true,
-                callback: deleteCatalogConfirm,
+                callback: deleteWarehouseCatalogConfirm,
                 dialogData: dialogData
             });
         }
@@ -1196,14 +1233,21 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * @description
          * Handles the delete after recieving the catalog to delete from the dialog view/controller
          */
-        function deleteCatalogConfirm(data) {
-            var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
-            var promiseDeleteCatalog = shippingGatewayProviderResource.deleteWarehouseCatalog(selectedCatalog.key);
-            promiseDeleteCatalog.then(function (responseCatalog) {
-                $scope.loadWarehouses();
-            }, function (reason) {
-                notificationsService.error('Catalog Delete Failed', reason.message);
-            });
+        function deleteWarehouseCatalogConfirm(dialogData) {
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            if(dialogData.warehouseCatalog.isDefault === false)
+            {
+                var promiseDeleteCatalog = warehouseResource.deleteWarehouseCatalog(dialogData.warehouseCatalog.key);
+                promiseDeleteCatalog.then(function (responseCatalog) {
+                    $scope.warehouses = [];
+                    init();
+                }, function (reason) {
+                    notificationsService.error('Catalog Delete Failed', reason.message);
+                });
+            } else {
+                notificationsService.warning('Cannot delete the default catalog.')
+            }
         }
 
         /**
@@ -1226,44 +1270,26 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
             });
         }
 
-
         /**
          * @ngdoc method
-         * @name editRegionalShippingRatesDialogOpen
+         * @name deleteCountry
          * @function
          *
          * @description
-         * Opens the edit regional shipping rates dialog via the Umbraco dialogService.
-
-        function editRegionalShippingRatesDialogOpen(country, provider, method) {
-
-            var dialogMethod = method;
-            var availableResources = provider.resources;
-            var templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
-
-            if (!method) {
-                dialogMethod = new merchello.Models.ShippingMethod();
-                dialogMethod.shipCountryKey = country.key;
-                dialogMethod.providerKey = provider.key;
-                dialogMethod.dialogEditorView.editorView = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
-            }
-
-            var myDialogData = {
-                method: dialogMethod,
-                country: country,
-                provider: provider,
-                gatewayResources: availableResources
-            };
-
-            dialogService.open({
-                template: templatePage,
-                show: true,
-                callback: $scope.shippingMethodDialogConfirm,
-                dialogData: myDialogData
-            });
-
-        }
+         * Calls the shipping service to delete the country passed in via the country parameter.
+         * When complete, the countries are reloaded from the api to get the latest from the database.
+         *
          */
+        function deleteCountryDialogConfirm(dialogData) {
+            $scope.preValuesLoaded = true;
+            var promiseDelete = shippingGatewayProviderResource.deleteShipCountry(dialogData.country.key);
+            promiseDelete.then(function () {
+                notificationsService.success("Shipping Country Deleted");
+                loadCountries();
+            }, function (reason) {
+                notificationsService.error("Shipping Country Delete Failed", reason.message);
+            });
+        }
 
         /**
          * @ngdoc method
@@ -1273,48 +1299,14 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * @description
          * Handles the catalog selection after recieving the dialogData from the dialog view/controller
          */
-        function selectCatalogDialogConfirm(data) {
-
-            var index = data.filter.id;
-            $scope.selectedCatalog = $scope.primaryWarehouse.warehouseCatalogs[index];
-            $scope.countries = [];
-            // Load the countries associated with this catalog.
-            $scope.loadCountries();
-        }
-
-        /**
-         * @ngdoc method
-         * @name selectCatalogDialogOpen
-         * @function
-         *
-         * @description
-         * Opens the catalog selection dialog via the Umbraco dialogService.
-         */
-        function selectCatalogDialogOpen() {
-
-            var availableCatalogs = [];
-            var filter = availableCatalogs[0];
-            for (var i = 0; i < $scope.primaryWarehouse.warehouseCatalogs.length; i++) {
-                var catalog = {
-                    id: i,
-                    name: $scope.primaryWarehouse.warehouseCatalogs[i].name
-                };
-                availableCatalogs.push(catalog);
-                if ($scope.primaryWarehouse.warehouseCatalogs[i].key == $scope.selectedCatalog.key) {
-                    filter = availableCatalogs[i];
-                }
-            }
-            var myDialogData = {
-                availableCatalogs: availableCatalogs,
-                filter: filter
-            };
-            dialogService.open({
-                template: '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shipping.selectcatalog.html',
-                show: true,
-                callback: $scope.selectCatalogDialogConfirm,
-                dialogData: myDialogData
+        function selectCatalogDialogConfirm(dialogData) {
+            $scope.preValuesLoaded = false;
+            $scope.selectedCatalog = _.find($scope.primaryWarehouse.warehouseCatalogs, function(catalog) {
+                return catalog.key === dialogData.selectedWarehouseCatalog.key;
             });
 
+            // Load the countries associated with this catalog.
+            loadCountries();
         }
 
         /**
@@ -1326,17 +1318,18 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          * Handles the add/edit after recieving the dialogData from the dialog view/controller.
          * If the selectedCatalog is set to be default, ensure that original default is no longer default.
          */
-        function warehouseCatalogDialogConfirm(data) {
-            var selectedCatalog = new merchello.Models.WarehouseCatalog(data.catalog);
+        function warehouseCatalogDialogConfirm(dialogData) {
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             var promiseUpdateCatalog;
-            if (selectedCatalog.key === "") {
-                promiseUpdateCatalog = merchelloWarehouseService.addWarehouseCatalog(selectedCatalog);
-                selectedCatalog.warehouseKey = $scope.primaryWarehouse.key;
+            if (dialogData.warehouseCatalog.key === "") {
+                promiseUpdateCatalog = warehouseResource.addWarehouseCatalog(dialogData.warehouseCatalog);
             } else {
-                promiseUpdateCatalog = merchelloWarehouseService.putWarehouseCatalog(selectedCatalog);
+                promiseUpdateCatalog = warehouseResource.putWarehouseCatalog(dialogData.warehouseCatalog);
             }
-            promiseUpdateCatalog.then(function(responseCatalog) {
-                $scope.loadWarehouses();
+            promiseUpdateCatalog.then(function(response) {
+                $scope.warehouses = [];
+                init();
             }, function(reason) {
                 notificationsService.error('Catalog Update Failed', reason.message);
             });

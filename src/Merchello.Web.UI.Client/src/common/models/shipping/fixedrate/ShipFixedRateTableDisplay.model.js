@@ -22,7 +22,7 @@
 
         return {
             addRow: addRow
-        }
+        };
     }());
 
     angular.module('merchello.models').constant('ShipFixedRateTableDisplay', ShipFixedRateTableDisplay);

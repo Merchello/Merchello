@@ -54,15 +54,37 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new EditShippingGatewayMethodDialogData();
         }
 
+        // creates a dialogData for adding or editing warehouses
+        function createAddEditWarehouseDialogData() {
+            return new AddEditWarehouseDialogData();
+        }
+
+        // creates a dialogData for adding or editing warehouse catalogs
+        function createAddEditWarehouseCatalogDialogData() {
+            return new AddEditWarehouseCatalogDialogData();
+        }
+
+        function createDeleteWarehouseCatalogDialogData() {
+            return new DeleteWarehouseCatalogDialogData();
+        }
+
+        function createChangeWarehouseCatalogDialogData() {
+            return new ChangeWarehouseCatalogDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
             createAddShipCountryProviderDialogData: createAddShipCountryProviderDialogData,
+            createChangeWarehouseCatalogDialogData: createChangeWarehouseCatalogDialogData,
+            createDeleteWarehouseCatalogDialogData: createDeleteWarehouseCatalogDialogData,
             createEditShippingGatewayMethodDialogData: createEditShippingGatewayMethodDialogData,
+            createAddEditWarehouseCatalogDialogData: createAddEditWarehouseCatalogDialogData,
             createCapturePaymentDialogData: createCapturePaymentDialogData,
             createCreateShipmentDialogData: createCreateShipmentDialogData,
             createEditShipmentDialogData: createEditShipmentDialogData,
             createEditAddressDialogData: createEditAddressDialogData,
-            deleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData
+            createAddEditWarehouseDialogData: createAddEditWarehouseDialogData,
+            createDeleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData
         };
 }]);

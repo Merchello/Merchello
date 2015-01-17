@@ -240,6 +240,39 @@
 
     /**
      * @ngdoc model
+     * @name AddEditWarehouseCatalogDialogData
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's AddEditWarehouseCatalogDialogData object
+     */
+    var AddEditWarehouseCatalogDialogData = function() {
+        var self = this;
+        self.warehouse = {};
+        self.warehouseCatalog = {};
+    };
+
+    angular.module('merchello.models').constant('AddEditWarehouseCatalogDialogData', AddEditWarehouseCatalogDialogData);
+    /**
+     * @ngdoc model
+     * @name AddShipCountryDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for adding ship countries to shipping configurations.
+     */
+    var AddEditWarehouseDialogData = function() {
+        var self = this;
+        self.warehouse = {};
+        self.availableCountries = [];
+        self.selectedCountry = {};
+        self.selectedProvince = {};
+    };
+
+    angular.module('merchello.models').constant('AddEditWarehouseDialogData', AddEditWarehouseDialogData);
+
+    /**
+     * @ngdoc model
      * @name AddShipCountryDialogData
      * @function
      *
@@ -333,6 +366,21 @@
 
     /**
      * @ngdoc model
+     * @name ChangeWarehouseCatalogDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for changes warehouse catalogs.
+     */
+    var ChangeWarehouseCatalogDialogData  = function() {
+        var self = this;
+        self.warehouse = {};
+        self.selectedWarehouseCatalog = {};
+    };
+
+    angular.module('merchello.models').constant('ChangeWarehouseCatalogDialogData', ChangeWarehouseCatalogDialogData);
+    /**
+     * @ngdoc model
      * @name CreateShipmentDialogData
      * @function
      *
@@ -385,6 +433,22 @@
     };
 
     angular.module('merchello.models').constant('DeleteShipCountryShipMethodDialogData', DeleteShipCountryShipMethodDialogData);
+    /**
+     * @ngdoc model
+     * @name DeleteWarehouseCatalogDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for deleting a warehouse catalog.
+     */
+    var DeleteWarehouseCatalogDialogData = function() {
+        var self = this;
+        self.warehouseCatalog = {};
+        self.name = '';
+    }
+
+    angular.module('merchello.models').constant('DeleteWarehouseCatalogDialogData', DeleteWarehouseCatalogDialogData);
+
     /**
      * @ngdoc model
      * @name EditAddressDialogData
@@ -1394,7 +1458,7 @@
         self.shipMethod = {};
         self.shipCountry = {};
         self.dialogEditorView = {};
-    }
+    };
 
     ShippingGatewayMethodDisplay.prototype = (function() {
 
@@ -1475,7 +1539,7 @@
 
         return {
             addRow: addRow
-        }
+        };
     }());
 
     angular.module('merchello.models').constant('ShipFixedRateTableDisplay', ShipFixedRateTableDisplay);
@@ -1750,16 +1814,38 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new EditShippingGatewayMethodDialogData();
         }
 
+        // creates a dialogData for adding or editing warehouses
+        function createAddEditWarehouseDialogData() {
+            return new AddEditWarehouseDialogData();
+        }
+
+        // creates a dialogData for adding or editing warehouse catalogs
+        function createAddEditWarehouseCatalogDialogData() {
+            return new AddEditWarehouseCatalogDialogData();
+        }
+
+        function createDeleteWarehouseCatalogDialogData() {
+            return new DeleteWarehouseCatalogDialogData();
+        }
+
+        function createChangeWarehouseCatalogDialogData() {
+            return new ChangeWarehouseCatalogDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
             createAddShipCountryProviderDialogData: createAddShipCountryProviderDialogData,
+            createChangeWarehouseCatalogDialogData: createChangeWarehouseCatalogDialogData,
+            createDeleteWarehouseCatalogDialogData: createDeleteWarehouseCatalogDialogData,
             createEditShippingGatewayMethodDialogData: createEditShippingGatewayMethodDialogData,
+            createAddEditWarehouseCatalogDialogData: createAddEditWarehouseCatalogDialogData,
             createCapturePaymentDialogData: createCapturePaymentDialogData,
             createCreateShipmentDialogData: createCreateShipmentDialogData,
             createEditShipmentDialogData: createEditShipmentDialogData,
             createEditAddressDialogData: createEditAddressDialogData,
-            deleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData
+            createAddEditWarehouseDialogData: createAddEditWarehouseDialogData,
+            createDeleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData
         };
 }]);
 

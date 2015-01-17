@@ -14,7 +14,6 @@
             // exposed methods
             $scope.toggleAllProvinces = toggleAllProvinces;
 
-            console.info($scope.dialogData);
 
             /**
              * @ngdoc method

@@ -11,7 +11,7 @@
         self.shipMethod = {};
         self.shipCountry = {};
         self.dialogEditorView = {};
-    }
+    };
 
     ShippingGatewayMethodDisplay.prototype = (function() {
 
