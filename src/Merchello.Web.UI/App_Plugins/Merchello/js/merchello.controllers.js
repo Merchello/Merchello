@@ -2376,9 +2376,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService',
+    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'settingsResource',
         'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
-        function($scope, $element, $log, angularHelper, assetsService, notificationService, invoiceResource,
+        function($scope, $element, $log, angularHelper, assetsService, notificationService, settingsResource, invoiceResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
         {
 
@@ -2395,6 +2395,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.salesLoaded = true;
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
+            $scope.currencySymbol = '$';
             $scope.settings = {};
             $scope.sortOrder = "desc";
             $scope.sortProperty = "-invoiceNumber";
@@ -2418,6 +2419,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * Changes the current page.
              */
             $scope.changePage = function (page) {
+                $scope.preValuesLoaded = false;
                 $scope.currentPage = page;
                 var query = buildQuery($scope.filterText);
                 loadInvoices(query);
@@ -2458,6 +2460,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * Helper function to set the amount of items to show per page for the paging filters and calculations
              */
             $scope.limitChanged = function (newVal) {
+                $scope.preValuesLoaded = false;
                 $scope.limitAmount = newVal;
                 $scope.currentPage = 0;
                 var query = buildQuery($scope.filterText);
@@ -2573,11 +2576,31 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     $scope.salesLoaded = true;
                     $scope.maxPages = queryResult.totalPages;
                     $scope.itemCount = queryResult.totalItems;
+                    loadSettings();
                 }, function (reason) {
                     notificationsService.error("Failed To Load Invoices", reason.message);
                 });
 
             }
+
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description - Load the Merchello settings.
+             */
+            function loadSettings() {
+                // TODO this is technically an error, we should look up the currency symbol based on what
+                // is represented in the invoice line items.
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                }, function (reason) {
+                    alert('Failed: ' + reason.message);
+                });
+            };
 
             /**
              * @ngdoc method
