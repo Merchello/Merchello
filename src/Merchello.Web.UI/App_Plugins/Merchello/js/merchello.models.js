@@ -216,7 +216,7 @@
 
         // safely adds a tab to the collection
         function addTab(id, name, url) {
-            var existing = _.find(this.items, function(tab) { return tab.id === id; })
+            var existing = _.find(this.items, function(tab) { return tab.id === id; });
             if (existing === undefined || existing === null) {
                 var tab = new MerchelloTab();
                 tab.id = id;
@@ -889,21 +889,6 @@
     angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
     /**
      * @ngdoc model
-     * @name ShipMethodsQueryDisplay
-     * @function
-     *
-     * @description
-     * Represents a JS version of Merchello's ShipMethodsQueryDisplay object
-     */
-    var ShipMethodsQueryDisplay = function() {
-        var self = this;
-        self.selected = {};
-        self.alternatives = [];
-    };
-
-    angular.module('merchello.models').constant('ShipMethodsQueryDisplay', ShipMethodsQueryDisplay);
-    /**
-     * @ngdoc model
      * @name InvoiceDisplay
      * @function
      *
@@ -1315,6 +1300,21 @@
     angular.module('merchello.models').constant('ShipMethodDisplay', ShipMethodDisplay);
     /**
      * @ngdoc model
+     * @name ShipMethodsQueryDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ShipMethodsQueryDisplay object
+     */
+    var ShipMethodsQueryDisplay = function() {
+        var self = this;
+        self.selected = {};
+        self.alternatives = [];
+    };
+
+    angular.module('merchello.models').constant('ShipMethodsQueryDisplay', ShipMethodsQueryDisplay);
+    /**
+     * @ngdoc model
      * @name ShipMethodDisplay
      *
      * @description
@@ -1494,6 +1494,7 @@
         var self = this;
         self.shipmentStatusKey = '';
         self.order = {};
+        self.shipMethodKey = '';
         self.trackingNumber = '';
     };
 
@@ -2708,6 +2709,9 @@ angular.module('merchello.models').factory('shipFixedRateTableDisplayBuilder',
                     },
                     transform: function(jsonResult) {
                         var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
+                        if(!jsonResult) {
+                            return;
+                        }
                         if (angular.isArray(jsonResult))
                         {
                             for(var i = 0; i < jsonResult.length; i++) {
@@ -2717,7 +2721,9 @@ angular.module('merchello.models').factory('shipFixedRateTableDisplayBuilder',
                                 }
                             }
                         } else {
-                            shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            if(jsonResult.provinces) {
+                                shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            }
                         }
                         return shipMethods;
                     }

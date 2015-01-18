@@ -32,7 +32,7 @@
 
         // safely adds a tab to the collection
         function addTab(id, name, url) {
-            var existing = _.find(this.items, function(tab) { return tab.id === id; })
+            var existing = _.find(this.items, function(tab) { return tab.id === id; });
             if (existing === undefined || existing === null) {
                 var tab = new MerchelloTab();
                 tab.id = id;

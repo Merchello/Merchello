@@ -2631,6 +2631,11 @@
             The shipment status key.
             </summary>
         </member>
+        <member name="F:Merchello.Core.Builders.ShipmentBuilderChain._shipMethodKey">
+            <summary>
+            The ship method key.
+            </summary>
+        </member>
         <member name="F:Merchello.Core.Builders.ShipmentBuilderChain._order">
             <summary>
             The _order.
@@ -2656,7 +2661,7 @@
             Constructor parameters for the base class activator
             </summary>
         </member>
-        <member name="M:Merchello.Core.Builders.ShipmentBuilderChain.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IOrder,System.Collections.Generic.IEnumerable{System.Guid},System.Guid,System.String)">
+        <member name="M:Merchello.Core.Builders.ShipmentBuilderChain.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IOrder,System.Collections.Generic.IEnumerable{System.Guid},System.Guid,System.Guid,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Core.Builders.ShipmentBuilderChain"/> class.
             </summary>
@@ -2668,6 +2673,9 @@
             </param>
             <param name="keysToShip">
             A collection of line item keys which identifies which line items in the order are to be included in the shipment being packaged
+            </param>
+            <param name="shipMethodKey">
+            The ship Method Key.
             </param>
             <param name="shipmentStatusKey">
             The shipment Status Key.
@@ -9768,6 +9776,11 @@
         <member name="P:Merchello.Core.Constants.DefaultKeys.OrderStatus.NotFulfilled">
             <summary>
             Gets the not fulfilled (or not shipped) order status key
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Constants.DefaultKeys.OrderStatus.Open">
+            <summary>
+            Gets the order status open key.
             </summary>
         </member>
         <member name="P:Merchello.Core.Constants.DefaultKeys.OrderStatus.BackOrder">
