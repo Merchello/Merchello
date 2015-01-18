@@ -1690,13 +1690,14 @@ angular.module('merchello')
  * The controller for the invoice payments view
  */
 angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsController',
-    ['$scope', '$log', '$routeParams',
+    ['$scope', '$log', '$routeParams', 'merchelloTabsFactory',
         'invoiceResource', 'paymentResource', 'settingsResource',
         'invoiceDisplayBuilder', 'paymentDisplayBuilder',
-        function($scope, $log, $routeParams, invoiceResource, paymentResource, settingsResource,
+        function($scope, $log, $routeParams, merchelloTabsFactory, invoiceResource, paymentResource, settingsResource,
         invoiceDisplayBuilder, paymentDisplayBuilder) {
 
             $scope.loaded = false;
+            $scope.tabs = [];
             $scope.invoice = {};
             $scope.payments = [];
             $scope.settings = {};
@@ -1704,8 +1705,10 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             $scope.remainingBalance = 0;
 
         function init() {
-            var paymentKey = $routeParams.id;
-            loadInvoice(paymentKey);
+            var key = $routeParams.id;
+            loadInvoice(key);
+            $scope.tabs = merchelloTabsFactory.createSalesTabs(key);
+            $scope.tabs.setActive('payments');
         }
 
         /**
@@ -1777,14 +1780,15 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
  * The controller for the order shipments view
  */
 angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsController',
-    ['$scope', '$routeParams', '$log', 'notificationsService', 'dialogService', 'dialogDataFactory',
+    ['$scope', '$routeParams', '$log', 'notificationsService', 'dialogService', 'dialogDataFactory', 'merchelloTabsFactory',
         'invoiceResource', 'settingsResource', 'shipmentResource',
         'invoiceDisplayBuilder', 'shipmentDisplayBuilder',
-        function($scope, $routeParams, $log, notificationsService, dialogService, dialogDataFactory, invoiceResource,
+        function($scope, $routeParams, $log, notificationsService, dialogService, dialogDataFactory, merchelloTabsFactory, invoiceResource,
                  settingsResource, shipmentResource, invoiceDisplayBuilder, shipmentDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
+            $scope.tabs = [];
             $scope.invoice = {};
             $scope.settings = {};
             $scope.shipments = [];
@@ -1808,6 +1812,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             function init() {
                 var key = $routeParams.id;
                 loadInvoice(key);
+                $scope.tabs = merchelloTabsFactory.createSalesTabs(key);
+                $scope.tabs.setActive('shipments');
                 $scope.loaded = true;
             }
 
@@ -2051,15 +2057,18 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', '$log', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
-            'orderResource', 'dialogDataFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
+            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, assetsService, dialogService, localizationService, notificationsService,
                  auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
-                 addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
-            $scope.historyLoaded = false;
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             $scope.invoice = {};
+            $scope.tabs = [];
+            $scope.historyLoaded = false;
             $scope.remainingBalance = 0.0;
             $scope.shippingTotal = 0.0;
             $scope.taxTotal = 0.0;
@@ -2094,6 +2103,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             function init () {
                 loadInvoice($routeParams.id);
                 loadSettings();
+                $scope.tabs = merchelloTabsFactory.createSalesTabs($routeParams.id);
+                $scope.tabs.setActive('overview');
                 $scope.loaded = true;
             };
 
