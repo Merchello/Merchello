@@ -10,6 +10,6 @@
         var self = this;
         self.warehouseCatalog = {};
         self.name = '';
-    }
+    };
 
     angular.module('merchello.models').constant('DeleteWarehouseCatalogDialogData', DeleteWarehouseCatalogDialogData);

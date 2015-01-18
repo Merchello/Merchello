@@ -290,6 +290,11 @@
             Gets or sets the shipment status key.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.ShipMethodKey">
+            <summary>
+            Gets or sets the ship method key.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.Order">
             <summary>
             Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.OrderDisplay"/>.
@@ -298,6 +303,26 @@
         <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.TrackingNumber">
             <summary>
             Gets or sets the tracking number.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay">
+            <summary>
+            The ship method request display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay.InvoiceKey">
+            <summary>
+            Gets or sets the invoice key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay.LineItemKey">
+            <summary>
+            Gets or sets the line item key for the line item that contains the shipment
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay.ShipMethodKey">
+            <summary>
+            Gets or sets the ship method key.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.Shipping.ShipMethodsQueryDisplay">
@@ -4253,7 +4278,7 @@
         </member>
         <member name="M:Merchello.Web.Editors.OrderApiController.ProcessesProductsToBackofficeOrder(Merchello.Web.Models.ContentEditing.BackofficeAddItemModel)">
             <summary>
-            Adds items to the backoffice basket to calculate shipping and Sales tax
+            Adds items to the back office basket to calculate shipping and Sales tax
             </summary>
             <param name="model"></param>
             <returns></returns>
@@ -6364,13 +6389,13 @@
             <param name="order"></param>
             <returns></returns>
         </member>
-        <member name="M:Merchello.Web.Editors.ShipmentApiController.GetShipMethodAndAlternatives(System.Guid)">
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.SearchShipMethodAndAlternatives(Merchello.Web.Models.Shipping.ShipMethodRequestDisplay)">
             <summary>
             Gets the <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/> by it's key and alternative <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/> 
             for the same shipCountry.
             </summary>
-            <param name="key">
-            The shipmethod key from the quoted shipment 
+            <param name="request">
+            The <see cref="T:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay"/>
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Shipping.ShipMethodsQueryDisplay"/>.
@@ -6431,6 +6456,14 @@
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.UpdateOrderStatus(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            Utility method to determine the current order status.
+            </summary>
+            <param name="orderKeys">
+            The order keys.
+            </param>
         </member>
         <member name="T:Merchello.Web.Editors.TaxationGatewayApiController">
             <summary>

@@ -186,7 +186,7 @@
 
 
         /// <summary>
-        /// Adds items to the backoffice basket to calculate shipping and Sales tax
+        /// Adds items to the back office basket to calculate shipping and Sales tax
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>

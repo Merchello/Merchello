@@ -10,6 +10,7 @@
         var self = this;
         self.shipmentStatusKey = '';
         self.order = {};
+        self.shipMethodKey = '';
         self.trackingNumber = '';
     };
 

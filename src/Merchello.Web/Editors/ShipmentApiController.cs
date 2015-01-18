@@ -172,7 +172,7 @@ namespace Merchello.Web.Editors
 
                 return shipMethod.ToShipMethodDisplay();
             }
-
+            
             return new ShipMethodDisplay() { Name = "Not Found" };
         }
 
@@ -180,35 +180,35 @@ namespace Merchello.Web.Editors
         /// Gets the <see cref="ShipMethodDisplay"/> by it's key and alternative <see cref="ShipMethodDisplay"/> 
         /// for the same shipCountry.
         /// </summary>
-        /// <param name="key">
-        /// The shipmethod key from the quoted shipment 
+        /// <param name="request">
+        /// The <see cref="ShipMethodRequestDisplay"/>
         /// </param>
         /// <returns>
         /// The <see cref="ShipMethodsQueryDisplay"/>.
         /// </returns>
-        [HttpGet]
-        public ShipMethodsQueryDisplay GetShipMethodAndAlternatives(Guid key)
+        [HttpPost]
+        public ShipMethodsQueryDisplay SearchShipMethodAndAlternatives(ShipMethodRequestDisplay request)
         {
-            // Get the ShipMethod by the key
-            var shipMethod = _shipMethodService.GetByKey(key);
-            if (shipMethod == null) throw new NullReferenceException("Reference to ShipMethod passed was null. It must have been deleted.");
+            // Get the invoice so we can get all available ship methods by requoting the shipment
+            var invoice = _invoiceService.GetByKey(request.InvoiceKey);
+            if (invoice == null) throw new NullReferenceException("Reference to invoice passed was null. It must have been deleted.");
+            
+            // find the particular line item
+            var shipmentLineItem = invoice.ShippingLineItems().FirstOrDefault(x => x.Key == request.LineItemKey);
+            if (shipmentLineItem == null) throw new NullReferenceException("Reference to invoice line item passed was null. It must have been deleted.");
 
-            // Get the ShipCountry
-            var shipCountry = ((ServiceContext)MerchelloContext.Services).ShipCountryService.GetByKey(shipMethod.ShipCountryKey);
-            if (shipCountry == null) throw new NullReferenceException("ShipCountry for ShipMethod passed was null. It must have been deleted.");
-
-            // Get all providers associated with the ShipCountry
-            var providers = MerchelloContext.Gateways.Shipping.GetGatewayProvidersByShipCountry(shipCountry);
+            // Reconstruct the shipment so that it can be quoted to find the available shipmethods
+            var shipment = shipmentLineItem.ExtendedData.GetShipment<InvoiceLineItem>();
+            var quotes = shipment.ShipmentRateQuotes(false).ToArray();
+            if (!quotes.Any()) throw new NullReferenceException("The shipment could no longer be quoted.  Are there any qualifying ship mehtods configured?");
             
             var allowed = new List<IShipMethod>();
-            foreach (var shipMethods in providers.Select(provider => provider.GetAllShippingGatewayMethods(shipCountry)))
-            {
-                allowed.AddRange(shipMethods.Select(x => x.ShipMethod));
-            }
+            allowed.AddRange(quotes.Select(x => x.ShipMethod));
 
+            var selected = allowed.FirstOrDefault(x => x.Key == request.ShipMethodKey);
             return new ShipMethodsQueryDisplay()
                 {
-                    Selected = shipMethod.ToShipMethodDisplay(),
+                    Selected = selected == null ? null : selected.ToShipMethodDisplay(),
                     Alternatives = allowed.Select(x => x.ToShipMethodDisplay())
                 };
         }
@@ -232,17 +232,18 @@ namespace Merchello.Web.Editors
         {
             try
             {
-                if (!shipmentRequest.Order.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
+                if (!shipmentRequest.Order.Items.Any()) throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "The shipment did not include any line items"));
                 
                 var merchOrder = _orderService.GetByKey(shipmentRequest.Order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, shipmentRequest.Order.Items.Select(x => x.Key), shipmentRequest.ShipmentStatusKey, shipmentRequest.TrackingNumber);
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, shipmentRequest.Order.Items.Select(x => x.Key), shipmentRequest.ShipMethodKey, shipmentRequest.ShipmentStatusKey, shipmentRequest.TrackingNumber);
 
                 var attempt = builder.Build();
                 
                 if (!attempt.Success)
                     throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
-                                                                     
+                
+                                  
                 return attempt.Result.ToShipmentDisplay();
 
             }
@@ -358,6 +359,12 @@ namespace Merchello.Web.Editors
             return statuses.Select(x => x.ToShipmentStatusDisplay());
         }
 
+        /// <summary>
+        /// Utility method to determine the current order status.
+        /// </summary>
+        /// <param name="orderKeys">
+        /// The order keys.
+        /// </param>
         private void UpdateOrderStatus(IEnumerable<Guid> orderKeys)
         {
             // update the order status
@@ -365,7 +372,7 @@ namespace Merchello.Web.Editors
             foreach (var order in orders)
             {
                 var orderStatusKey = order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null)
-                                         ? Constants.DefaultKeys.OrderStatus.BackOrder
+                                         ? Constants.DefaultKeys.OrderStatus.Open
                                          : Constants.DefaultKeys.OrderStatus.Fulfilled;
 
                 var orderStatus = _orderService.GetOrderStatusByKey(orderStatusKey);

@@ -19,6 +19,11 @@
         private readonly Guid _shipmentStatusKey;
 
         /// <summary>
+        /// The ship method key.
+        /// </summary>
+        private readonly Guid _shipMethodKey;
+
+        /// <summary>
         /// The _order.
         /// </summary>
         private readonly IOrder _order;
@@ -55,22 +60,27 @@
         /// <param name="keysToShip">
         /// A collection of line item keys which identifies which line items in the order are to be included in the shipment being packaged
         /// </param>
+        /// <param name="shipMethodKey">
+        /// The ship Method Key.
+        /// </param>
         /// <param name="shipmentStatusKey">
         /// The shipment Status Key.
         /// </param>
         /// <param name="trackingNumber">
         /// The tracking Number.
         /// </param>
-        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip, Guid shipmentStatusKey, string trackingNumber)
+        public ShipmentBuilderChain(IMerchelloContext merchelloContext, IOrder order, IEnumerable<Guid> keysToShip, Guid shipMethodKey, Guid shipmentStatusKey, string trackingNumber)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(order, "order");
             Mandate.ParameterNotNull(keysToShip, "keysToShip");
+            Mandate.ParameterCondition(!shipMethodKey.Equals(Guid.Empty), "shipMethodKey");
             Mandate.ParameterCondition(!shipmentStatusKey.Equals(Guid.Empty), "shipmentStatusKey");
 
             _merchelloContext = merchelloContext;
             _order = order;
             _keysToShip = keysToShip;
+            _shipMethodKey = shipMethodKey;
             _shipmentStatusKey = shipmentStatusKey;
             _trackingNumber = trackingNumber;
             ResolveChain(Core.Constants.TaskChainAlias.OrderPreparationShipmentCreate);
@@ -121,7 +131,7 @@
                 ? TaskHandlers.First().Execute(
                         new Shipment(status, quoted.GetOriginAddress(), quoted.GetDestinationAddress())
                             {
-                                ShipMethodKey = quoted.ShipMethodKey,
+                                ShipMethodKey = _shipMethodKey,
                                 VersionKey = quoted.VersionKey,
                                 TrackingCode = _trackingNumber
                             })

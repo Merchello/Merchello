@@ -230,6 +230,7 @@
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
     <Compile Include="Models\Shipping\ShipmentRequestDisplay.cs" />
+    <Compile Include="Models\Shipping\ShipMethodRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodsQueryDisplay.cs" />
     <Compile Include="Models\MapperResolvers\CustomerInvoicesResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityTypeResolver.cs" />

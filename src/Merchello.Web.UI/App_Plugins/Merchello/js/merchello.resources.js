@@ -646,16 +646,13 @@ angular.module('merchello.resources')
                     'Failed to get shipments: ' + shipmentKeys);
             },
 
-
-            getShipMethodAndAlternatives: function (shipMethodKey) {
+            getShipMethodAndAlternatives: function (shipMethodRequest) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethodAndAlternatives'),
-                        method: "GET",
-                        params: {key: shipMethodKey}
-                    }),
-                    'Failed to get shipment method');
+                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'SearchShipMethodAndAlternatives'),
+                        shipMethodRequest
+                    ),
+                    'Failed to get the ship methods');
             },
 
             newShipment: function (shipmentRequest) {

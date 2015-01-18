@@ -18,6 +18,9 @@
                     },
                     transform: function(jsonResult) {
                         var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
+                        if(!jsonResult) {
+                            return;
+                        }
                         if (angular.isArray(jsonResult))
                         {
                             for(var i = 0; i < jsonResult.length; i++) {
@@ -27,7 +30,9 @@
                                 }
                             }
                         } else {
-                            shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            if(jsonResult.provinces) {
+                                shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            }
                         }
                         return shipMethods;
                     }

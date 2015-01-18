@@ -52,7 +52,7 @@ namespace Merchello.Core.Chains.ShipmentCreation
             return SaveOrderStatus(
                 value,
                 Order.ShippableItems().Any(x => ((OrderLineItem) x).ShipmentKey == null)
-                    ? Core.Constants.DefaultKeys.OrderStatus.BackOrder
+                    ? Core.Constants.DefaultKeys.OrderStatus.Open
                     : Core.Constants.DefaultKeys.OrderStatus.Fulfilled);
         }
 

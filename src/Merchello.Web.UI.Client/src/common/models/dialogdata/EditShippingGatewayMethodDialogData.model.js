@@ -10,6 +10,6 @@
     var EditShippingGatewayMethodDialogData = function() {
         var self = this;
         self.shippingGatewayMethod = {};
-    }
+    };
 
     angular.module('merchello.models').constant('EditShippingGatewayMethodDialogData', EditShippingGatewayMethodDialogData);

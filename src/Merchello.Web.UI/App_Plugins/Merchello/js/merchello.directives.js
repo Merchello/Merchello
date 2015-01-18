@@ -60,7 +60,7 @@
                 isOpen: '=',
                 classes: '=?'
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tbl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tpl.html',
             link: function ($scope, $element, attrs) {
 
                 if ($scope.classes == undefined) {
@@ -69,6 +69,17 @@
             }
         };
     });
+
+angular.module('merchello.directives').directive('merchelloTabs', [function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            tabs: '='
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/html/merchellotabs.tpl.html'
+    };
+}]);
 
 /**
  * @ngdoc directive
@@ -85,7 +96,7 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             scope: {
                 address: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloAddress.tpl.html'
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloaddress.tpl.html'
         };
     }).directive('merchelloAddress', function() {
         return {
@@ -118,28 +129,6 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellopager.tpl.html'
         };
     });
-    /**
-     * @ngdoc directive
-     * @name MerchelloSalesPageNav
-     * @function
-     *
-     * @description
-     * directive to display display a buttons on subordinate sales pages.
-     */
-
-    angular.module('merchello.directives').directive('merchelloSalesPageNav', function() {
-        return {
-            restrict: 'E',
-            replace: true,
-            scope: {
-                key: '=',
-                hideShipments: '=',
-                hidePayments: '='
-            },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/salespagesnav.tpl.html'
-        };
-    });
-
 angular.module('merchello.directives').directive('resolvedGatewayProviders', [function() {
     return {
         restrict: 'E',

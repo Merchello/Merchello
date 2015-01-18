@@ -6,7 +6,7 @@ describe('Merchello.Backoffice.OrderShipmentsController', function () {
     beforeEach(module('umbraco'));
 
     beforeEach(inject(function ($rootScope, $controller, $httpBackend, $log, dialogService, notificationsService, invoiceResource, dialogDataFactory,
-                                invoiceDisplayBuilder, invoiceResourceMock, settingsResource, settingResourceMock,
+                                merchelloTabsFactory, invoiceDisplayBuilder, invoiceResourceMock, settingsResource, settingResourceMock,
                                 shipmentResource, shipmentResourceMock, shipmentDisplayBuilder){
 
         httpBackend = $httpBackend;
@@ -19,7 +19,7 @@ describe('Merchello.Backoffice.OrderShipmentsController', function () {
 
         controller = $controller('Merchello.Backoffice.OrderShipmentsController',
             { $scope: scope, $routeParams: { id: 'dd62d5a2-6a52-4de3-a740-193d2a25bbbb' }, $log: $log, notificationsService: notificationsService,
-                dialogService: dialogService, invoiceResource: invoiceResource, dialogDataFactory: dialogDataFactory,
+                dialogService: dialogService, invoiceResource: invoiceResource, dialogDataFactory: dialogDataFactory, merchelloTabsFactory: merchelloTabsFactory,
                 settingsResource: settingsResource, shipmentResource: shipmentResource,
                 invoiceDisplayBuilder: invoiceDisplayBuilder, shipmentDisplayBuilder: shipmentDisplayBuilder});
 
