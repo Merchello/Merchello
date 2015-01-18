@@ -2113,7 +2113,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             function createSalesTabs(invoiceKey) {
                 var tabs = new Constructor();
-                tabs.addTab('overview', 'Sales Overview', '#/merchello/merchello/saleoverview/' + invoiceKey);
+                tabs.addTab('overview', 'Overview', '#/merchello/merchello/saleoverview/' + invoiceKey);
                 tabs.addTab('payments', 'Payments', '#/merchello/merchello/invoicepayments/' + invoiceKey);
                 tabs.addTab('shipments', 'Shipments', '#/merchello/merchello/ordershipments/' + invoiceKey);
                 return tabs;
