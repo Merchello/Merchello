@@ -66,9 +66,12 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 notificationsService.error('Failed to load global settings', reason.message);
             })
 
-            var currencySymbolPromise = settingsResource.getCurrencySymbol();
-            currencySymbolPromise.then(function (currencySymbol) {
-                $scope.currencySymbol = currencySymbol;
+            var currencySymbolPromise = settingsResource.getAllCurrencies();
+            currencySymbolPromise.then(function (symbols) {
+                var currency = _.find(symbols, function(symbol) {
+                    return symbol.currencyCode === $scope.invoice.getCurrencyCode()
+                });
+                $scope.currencySymbol = currency.symbol;
             }, function (reason) {
                 alert('Failed: ' + reason.message);
             });

@@ -21,6 +21,11 @@ namespace Merchello.Core.Chains.ShipmentCreation
         private readonly IOrderService _orderService;
 
         /// <summary>
+        /// The _shipment service.
+        /// </summary>
+        private readonly IShipmentService _shipmentService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SetOrderStatusTask"/> class.
         /// </summary>
         /// <param name="merchelloContext">
@@ -36,6 +41,7 @@ namespace Merchello.Core.Chains.ShipmentCreation
             : base(merchelloContext, order, keysToShip)
         {
             _orderService = MerchelloContext.Services.OrderService;
+            _shipmentService = MerchelloContext.Services.ShipmentService;
         }
 
         /// <summary>
@@ -49,11 +55,34 @@ namespace Merchello.Core.Chains.ShipmentCreation
         /// </returns>
         public override Attempt<IShipment> PerformTask(IShipment value)
         {
-            return SaveOrderStatus(
-                value,
-                Order.ShippableItems().Any(x => ((OrderLineItem) x).ShipmentKey == null)
-                    ? Core.Constants.DefaultKeys.OrderStatus.Open
-                    : Core.Constants.DefaultKeys.OrderStatus.Fulfilled);
+            Guid orderStatusKey;
+
+            // not fulfilled
+            if (Order.ShippableItems().All(x => ((OrderLineItem)x).ShipmentKey == null))
+            {
+                orderStatusKey = Core.Constants.DefaultKeys.OrderStatus.NotFulfilled;
+                return this.SaveOrderStatus(value, orderStatusKey);
+            }
+
+            if (Order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null))
+            {
+                orderStatusKey = Core.Constants.DefaultKeys.OrderStatus.Open;
+                return this.SaveOrderStatus(value, orderStatusKey);
+            }
+
+            // now we need to look at all of the shipments to make sure the shipment statuses are either
+            // shipped or delivered.  If either of those two, we will consider the shipment as 'Fulfilled',
+            // otherwise the shipment will remain in the open status
+            var shipmentKeys = Order.ShippableItems().Select(x => ((OrderLineItem)x).ShipmentKey.GetValueOrDefault()).Distinct();
+            var shipments = _shipmentService.GetByKeys(shipmentKeys);
+            orderStatusKey =
+                shipments.All(x =>
+                    x.ShipmentStatusKey.Equals(Core.Constants.DefaultKeys.ShipmentStatus.Delivered)
+                    || x.ShipmentStatusKey.Equals(Core.Constants.DefaultKeys.ShipmentStatus.Shipped)) ?
+                        Core.Constants.DefaultKeys.OrderStatus.Fulfilled :
+                        Core.Constants.DefaultKeys.OrderStatus.Open;
+
+            return this.SaveOrderStatus(value, orderStatusKey);
         }
 
         /// <summary>

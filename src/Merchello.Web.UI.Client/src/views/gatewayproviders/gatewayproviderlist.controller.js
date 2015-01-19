@@ -7,9 +7,9 @@
  * The controller for the gateway providers list view controller
  */
 angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListController",
-    ['$scope', 'assetsService', 'notificationsService', 'dialogService',
+    ['$scope', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
         'gatewayProviderResource', 'gatewayProviderDisplayBuilder',
-        function($scope, assetsService, notificationsService, dialogService, gatewayProviderResource, gatewayProviderDisplayBuilder)
+        function($scope, assetsService, notificationsService, dialogService, merchelloTabsFactory, gatewayProviderResource, gatewayProviderDisplayBuilder)
         {
             // load the css file
             assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
@@ -19,6 +19,7 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
             $scope.paymentGatewayProviders = [];
             $scope.shippingGatewayProviders = [];
             $scope.taxationGatewayProviders = [];
+            $scope.tabs = [];
 
             // exposed methods
             $scope.activateProvider = activateProvider;
@@ -38,6 +39,8 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 loadAllPaymentGatewayProviders();
                 loadAllShippingGatewayProviders();
                 loadAllTaxationGatewayProviders();
+                $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+                $scope.tabs.setActive('providers');
             }
 
             /**

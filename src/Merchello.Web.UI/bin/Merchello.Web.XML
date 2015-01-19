@@ -6465,6 +6465,17 @@
             The order keys.
             </param>
         </member>
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.SaveOrder(Merchello.Core.Models.IOrder,System.Guid)">
+            <summary>
+            The save order.
+            </summary>
+            <param name="order">
+            The order.
+            </param>
+            <param name="orderStatusKey">
+            The order status key.
+            </param>
+        </member>
         <member name="T:Merchello.Web.Editors.TaxationGatewayApiController">
             <summary>
             The taxation gateway api controller.

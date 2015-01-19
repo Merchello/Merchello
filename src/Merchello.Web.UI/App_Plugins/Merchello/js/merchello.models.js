@@ -958,6 +958,13 @@
             return 'Not Fulfilled';
         }
 
+        // gets the currency code for the invoice
+        function getCurrencyCode() {
+            var first = this.items[0];
+            var currencyCode = first.extendedData.getValue('merchCurrencyCode');
+            return currencyCode;
+        }
+
         // gets the product line items
         function getProductLineItems() {
             return _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; });
@@ -1015,6 +1022,7 @@
         return {
             getPaymentStatus: getPaymentStatus,
             getFulfillmentStatus: getFulfillmentStatus,
+            getCurrencyCode: getCurrencyCode,
             getProductLineItems: getProductLineItems,
             getTaxLineItem: getTaxLineItem,
             getShippingLineItems: getShippingLineItems,
@@ -2112,6 +2120,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             var Constructor = MerchelloTabCollection;
 
+            // creates the tabs for sales overview section
             function createSalesTabs(invoiceKey) {
                 var tabs = new Constructor();
                 tabs.addTab('overview', 'Overview', '#/merchello/merchello/saleoverview/' + invoiceKey);
@@ -2120,8 +2129,18 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates the tabs for the gateway provider section
+            function createGatewayProviderTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('providers', 'Gateway Providers', '#/merchello/merchello/gatewayproviderlist/manage');
+                tabs.addTab('shipping', 'Shipping', '#/merchello/merchello/shippingproviders/manage');
+                tabs.addTab('taxation', 'Taxation', '#/merchello/merchello/taxationproviders/manage');
+                return tabs;
+            }
+
             return {
-                createSalesTabs: createSalesTabs
+                createSalesTabs: createSalesTabs,
+                createGatewayProviderTabs: createGatewayProviderTabs
             };
 
 }]);

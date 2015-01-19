@@ -3035,6 +3035,11 @@
             The _order service.
             </summary>
         </member>
+        <member name="F:Merchello.Core.Chains.ShipmentCreation.SetOrderStatusTask._shipmentService">
+            <summary>
+            The _shipment service.
+            </summary>
+        </member>
         <member name="M:Merchello.Core.Chains.ShipmentCreation.SetOrderStatusTask.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IOrder,System.Collections.Generic.IEnumerable{System.Guid})">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Core.Chains.ShipmentCreation.SetOrderStatusTask"/> class.

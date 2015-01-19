@@ -1,13 +1,14 @@
 angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersController',
-    ['$scope', 'settingsResource', 'taxationGatewayProviderResource',
+    ['$scope', 'settingsResource', 'taxationGatewayProviderResource', 'merchelloTabsFactory',
         'settingDisplayBuilder', 'countryDisplayBuilder', 'taxCountryDisplayBuilder',
         'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder',
-    function($scope, settingsResource, taxationGatewayProviderResource,
+    function($scope, settingsResource, taxationGatewayProviderResource, merchelloTabsFactory,
              settingDisplayBuilder, countryDisplayBuilder, taxCountryDisplayBuilder,
              gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
+        $scope.tabs = [];
         $scope.allCountries = [];
         $scope.availableCountries = [];
         $scope.taxationGatewayProviders = [];
@@ -27,6 +28,8 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         function init() {
             loadAllAvailableCountries();
             loadAllTaxationGatewayProviders();
+            $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+            $scope.tabs.setActive('taxation');
         }
 
         /**

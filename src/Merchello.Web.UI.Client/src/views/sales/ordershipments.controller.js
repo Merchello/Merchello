@@ -234,7 +234,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              */
             function processUpdateShipment(dialogData) {
                 $scope.preValuesLoaded = false;
-                saveShipment(dialogData.shipment);
+                if(dialogData.shipment.items.length > 0) {
+                    saveShipment(dialogData.shipment);
+                } else {
+                    notificationsService.warning('Cannot remove all items from the shipment.  Instead, consider deleting the shipment.');
+                    loadInvoice($scope.invoice.key);
+                };
             }
 
             /**

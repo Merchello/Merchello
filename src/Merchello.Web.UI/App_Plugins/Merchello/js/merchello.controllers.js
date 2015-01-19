@@ -682,9 +682,9 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
  * The controller for the gateway providers list view controller
  */
 angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListController",
-    ['$scope', 'assetsService', 'notificationsService', 'dialogService',
+    ['$scope', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
         'gatewayProviderResource', 'gatewayProviderDisplayBuilder',
-        function($scope, assetsService, notificationsService, dialogService, gatewayProviderResource, gatewayProviderDisplayBuilder)
+        function($scope, assetsService, notificationsService, dialogService, merchelloTabsFactory, gatewayProviderResource, gatewayProviderDisplayBuilder)
         {
             // load the css file
             assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
@@ -694,6 +694,7 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
             $scope.paymentGatewayProviders = [];
             $scope.shippingGatewayProviders = [];
             $scope.taxationGatewayProviders = [];
+            $scope.tabs = [];
 
             // exposed methods
             $scope.activateProvider = activateProvider;
@@ -713,6 +714,8 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 loadAllPaymentGatewayProviders();
                 loadAllShippingGatewayProviders();
                 loadAllTaxationGatewayProviders();
+                $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+                $scope.tabs.setActive('providers');
             }
 
             /**
@@ -899,16 +902,17 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
  * The controller for the shipment provider view
  */
 angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersController',
-    ['$scope', 'notificationsService', 'dialogService',
+    ['$scope', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
     'settingsResource', 'warehouseResource', 'shippingGatewayProviderResource', 'dialogDataFactory',
     'settingDisplayBuilder', 'warehouseDisplayBuilder', 'warehouseCatalogDisplayBuilder', 'countryDisplayBuilder',
         'shippingGatewayProviderDisplayBuilder', 'shipCountryDisplayBuilder',
-    function($scope, notificationsService, dialogService,
+    function($scope, notificationsService, dialogService, merchelloTabsFactory,
              settingsResource, warehouseResource, shippingGatewayProviderResource, dialogDataFactory,
              settingDisplayBuilder, warehouseDisplayBuilder, warehouseCatalogDisplayBuilder, countryDisplayBuilder,
              shippingGatewayProviderDisplayBuilder, shipCountryDisplayBuilder) {
 
         $scope.loaded = true;
+        $scope.tabs = [];
         $scope.countries = [];
         $scope.warehouses = [];
         $scope.primaryWarehouse = {};
@@ -945,6 +949,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          */
         function init() {
             loadWarehouses();
+            $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+            $scope.tabs.setActive('shipping');
         }
 
         /**
@@ -1342,15 +1348,16 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
     }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersController',
-    ['$scope', 'settingsResource', 'taxationGatewayProviderResource',
+    ['$scope', 'settingsResource', 'taxationGatewayProviderResource', 'merchelloTabsFactory',
         'settingDisplayBuilder', 'countryDisplayBuilder', 'taxCountryDisplayBuilder',
         'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder',
-    function($scope, settingsResource, taxationGatewayProviderResource,
+    function($scope, settingsResource, taxationGatewayProviderResource, merchelloTabsFactory,
              settingDisplayBuilder, countryDisplayBuilder, taxCountryDisplayBuilder,
              gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
+        $scope.tabs = [];
         $scope.allCountries = [];
         $scope.availableCountries = [];
         $scope.taxationGatewayProviders = [];
@@ -1370,6 +1377,8 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         function init() {
             loadAllAvailableCountries();
             loadAllTaxationGatewayProviders();
+            $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+            $scope.tabs.setActive('taxation');
         }
 
         /**
@@ -1755,9 +1764,12 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 notificationsService.error('Failed to load global settings', reason.message);
             })
 
-            var currencySymbolPromise = settingsResource.getCurrencySymbol();
-            currencySymbolPromise.then(function (currencySymbol) {
-                $scope.currencySymbol = currencySymbol;
+            var currencySymbolPromise = settingsResource.getAllCurrencies();
+            currencySymbolPromise.then(function (symbols) {
+                var currency = _.find(symbols, function(symbol) {
+                    return symbol.currencyCode === $scope.invoice.getCurrencyCode()
+                });
+                $scope.currencySymbol = currency.symbol;
             }, function (reason) {
                 alert('Failed: ' + reason.message);
             });
@@ -2013,7 +2025,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              */
             function processUpdateShipment(dialogData) {
                 $scope.preValuesLoaded = false;
-                saveShipment(dialogData.shipment);
+                if(dialogData.shipment.items.length > 0) {
+                    saveShipment(dialogData.shipment);
+                } else {
+                    notificationsService.warning('Cannot remove all items from the shipment.  Instead, consider deleting the shipment.');
+                    loadInvoice($scope.invoice.key);
+                };
             }
 
             /**
@@ -2090,6 +2107,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             // exposed methods
             //  dialogs
             $scope.capturePayment = capturePayment;
+            $scope.showFulfill = true;
             $scope.capturePaymentDialogConfirm = capturePaymentDialogConfirm,
             $scope.openDeleteInvoiceDialog = openDeleteInvoiceDialog;
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
@@ -2108,11 +2126,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              */
             function init () {
                 loadInvoice($routeParams.id);
-                loadSettings();
                 $scope.tabs = merchelloTabsFactory.createSalesTabs($routeParams.id);
                 $scope.tabs.setActive('overview');
                 $scope.loaded = true;
-            };
+            }
 
             function localizeMessage(msg) {
                 return msg.localize(localizationService);
@@ -2147,7 +2164,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                         notificationsService.error('Failed to load sales history', reason.message);
                     });
                 }
-            };
+            }
 
             /**
              * @ngdoc method
@@ -2163,9 +2180,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
                     $scope.taxTotal = $scope.invoice.getTaxLineItem().price;
                     $scope.shippingTotal = $scope.invoice.shippingTotal();
+                    loadSettings();
                     loadPayments(id);
                     loadAuditLog(id);
                     loadShippingAddress(id);
+                    $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                     var shipmentLineItem = $scope.invoice.getShippingLineItems();
@@ -2176,7 +2195,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
-            };
+            }
 
 
            /**
@@ -2195,13 +2214,16 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                    notificationsService.error('Failed to load global settings', reason.message);
                })
 
-                var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                currencySymbolPromise.then(function (currencySymbol) {
-                    $scope.currencySymbol = currencySymbol;
+                var currencySymbolPromise = settingsResource.getAllCurrencies();
+                currencySymbolPromise.then(function (symbols) {
+                    var currency = _.find(symbols, function(symbol) {
+                        return symbol.currencyCode === $scope.invoice.getCurrencyCode()
+                    });
+                    $scope.currencySymbol = currency.symbol;
                 }, function (reason) {
                     alert('Failed: ' + reason.message);
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -2254,7 +2276,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     callback: $scope.capturePaymentDialogConfirm,
                     dialogData: data
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -2275,7 +2297,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -2293,7 +2315,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     callback: processDeleteInvoiceDialog,
                     dialogData: dialogData
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -2325,6 +2347,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                         var shipMethodPromise = shipmentResource.getShipMethodAndAlternatives(request);
                         shipMethodPromise.then(function(result) {
                             data.shipMethods = shipMethodsQueryDisplayBuilder.transform(result);
+                            data.shipMethods.selected = _.find(data.shipMethods.alternatives, function(method) {
+                                return method.key === shipMethodKey;
+                            });
                             dialogService.open({
                                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.create.shipment.html',
                                 show: true,
@@ -2335,7 +2360,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                         });
                     }
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -2352,7 +2377,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }, function (reason) {
                     notificationsService.error('Failed to Delete Invoice', reason.message);
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -2378,7 +2403,35 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     $scope.preValuesLoaded = true;
                     notificationsService.warning('Shipment would not contain any items', 'The shipment was not created as it would not contain any items.');
                 }
-            };
+            }
+
+            /**
+             * @ngdoc method
+             * @name hasUnPackagedLineItems
+             * @function
+             *
+             * @description - Process the fulfill shipment functionality on callback from the dialog service.
+             */
+            function hasUnPackagedLineItems() {
+                var fulfilled = $scope.invoice.getFulfillmentStatus() === 'Fulfilled';
+                if (fulfilled) {
+                    return false;
+                }
+                var i = 0; // order count
+                var found = false;
+                while(i < $scope.invoice.orders.length && !found) {
+                    var item = _.find($scope.invoice.orders[ i ].items, function(item) {
+                      return item.shipmentKey === '' || item.shipmentKey === null;
+                    });
+                    if(item !== null && item !== undefined) {
+                        found = true;
+                    } else {
+                        i++;
+                    }
+                }
+
+                return found;
+            }
 
             // initialize the controller
             init();
@@ -2413,7 +2466,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.salesLoaded = true;
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
-            $scope.currencySymbol = '$';
+            //$scope.currencySymbol = '$';
             $scope.settings = {};
             $scope.sortOrder = "desc";
             $scope.sortProperty = "-invoiceNumber";
@@ -2421,8 +2474,14 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.visible.bulkActionDropdown = false;
             $scope.currentFilters = [];
 
+            // exposed methods
+            $scope.getCurrencySymbol = getCurrencySymbol;
+
             // for testing
             $scope.itemCount = 0;
+
+            var allCurrencies = [];
+            var globalCurrency = '$';
 
             //--------------------------------------------------------------------------------------
             // Event Handlers
@@ -2610,11 +2669,16 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
-                // TODO this is technically an error, we should look up the currency symbol based on what
-                // is represented in the invoice line items.
+                var currenciesPromise = settingsResource.getAllCurrencies();
+                currenciesPromise.then(function(currencies) {
+                    allCurrencies = currencies;
+                }, function(reason) {
+                    alert('Failed' + reason.message);
+                });
+
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
-                    $scope.currencySymbol = currencySymbol;
+                    globalCurrency = currencySymbol;
                 }, function (reason) {
                     alert('Failed: ' + reason.message);
                 });
@@ -2712,8 +2776,29 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 });
             };
 
+            /**
+             * @ngdoc method
+             * @name getCurrencySymbol
+             * @function
+             *
+             * @description
+             * Utility method to get the currency symbol for an invoice
+             */
+            function getCurrencySymbol(invoice) {
+                var currencyCode = invoice.getCurrencyCode();
+                var currency = _.find(allCurrencies, function(currency) {
+                    return currency.currencyCode === currencyCode;
+                });
+                if(currency === null || currency === undefined) {
+                    return globalCurrency;
+                } else {
+                    return currency.symbol;
+                }
+            }
+
+
             //// Initialize
-            assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
+            assetsService.loadCss('/umbraco/lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
                 var filesToLoad = [
                     'lib/moment/moment-with-locales.js',
                     'lib/datetimepicker/bootstrap-datetimepicker.js'];
