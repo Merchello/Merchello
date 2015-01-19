@@ -241,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\PayPalApiController.cs" />
     <Compile Include="ExtendedDataExtensions.cs" />
     <Compile Include="Models\PayPalProcessorSettings.cs" />
     <Compile Include="PayPalApplicationEventListener.cs" />
@@ -259,7 +260,6 @@
   <ItemGroup>
     <Content Include="App_Plugins\Merchello.PayPal\editor.html" />
     <Content Include="App_Plugins\Merchello.PayPal\merchello.paypal.controller.js" />
-    <Content Include="App_Plugins\Merchello.PayPal\PayPalExpressCheckout.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

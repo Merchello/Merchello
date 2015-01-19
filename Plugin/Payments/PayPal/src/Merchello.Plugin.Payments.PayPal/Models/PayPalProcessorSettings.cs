@@ -14,6 +14,7 @@
 		public string ReturnUrl { get; set; }
 		public string CancelUrl { get; set; }
 
+		public bool CaptureFunds { get; set; }
 
         public string ApiVersion
         {

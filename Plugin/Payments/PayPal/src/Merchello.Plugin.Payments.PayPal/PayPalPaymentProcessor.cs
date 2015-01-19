@@ -66,9 +66,29 @@ namespace Merchello.Plugin.Payments.PayPal
 					};
 		}
 
+
+		public bool CaptureFundsImmediately {
+			get { return this._settings.CaptureFunds; }
+		}
+
+        private PayPalAPIInterfaceServiceService GetPayPalService()
+        {
+            var config = CreatePayPalApiConfig(this._settings);
+			return new PayPalAPIInterfaceServiceService(config);
+        }
+
+		private Exception CreateErrorResult(List<ErrorType> errors) {
+			var errorText = errors.Count == 0 ? "Unknown error" : ("- " + string.Join("\n- ", errors.Select(item => item.LongMessage)));
+			return new Exception(errorText);
+		}
+
 		private static CurrencyCodeType PayPalCurrency(string currencyCode)
 		{
 			return (CurrencyCodeType)Enum.Parse(typeof(CurrencyCodeType), currencyCode, true);
+		}
+
+		private PaymentActionCodeType GetPayPalPaymentAction() {
+			return this._settings.CaptureFunds ? PaymentActionCodeType.SALE : PaymentActionCodeType.ORDER;
 		}
 		
 		private static int CurrencyDecimals(CurrencyCodeType currency)
@@ -92,63 +112,8 @@ namespace Merchello.Plugin.Payments.PayPal
 		}
 
 
-		/// <summary>
-		/// Processes the Authorize and AuthorizeAndCapture transactions
-		/// </summary>
-		/// <param name="invoice">The <see cref="IInvoice"/> to be paid</param>
-		/// <param name="payment">The <see cref="IPayment"/> record</param>
-		/// <param name="args"></param>
-		/// <returns>The <see cref="IPaymentResult"/></returns>
-		public IPaymentResult ProcessPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args) {
 
-			var setExpressCheckoutRequestDetails = new SetExpressCheckoutRequestDetailsType();
-
-			Func<string, string> adjustUrl = (url) => {
-				url = url.Replace("{invoiceKey}", invoice.Key.ToString(), StringComparison.InvariantCultureIgnoreCase);
-				url = url.Replace("{paymentKey}", payment.Key.ToString(), StringComparison.InvariantCultureIgnoreCase);
-				url = url.Replace("{paymentMethodKey}", payment.PaymentMethodKey.ToString(), StringComparison.InvariantCultureIgnoreCase);
-				return url;
-			};
-
-			setExpressCheckoutRequestDetails.ReturnURL = args.GetReturnUrl();
-			if (setExpressCheckoutRequestDetails.ReturnURL.IsEmpty()) setExpressCheckoutRequestDetails.ReturnURL = _settings.ReturnUrl;
-			if (setExpressCheckoutRequestDetails.ReturnURL.IsEmpty()) setExpressCheckoutRequestDetails.ReturnURL = GetWebsiteUrl() + ("/App_Plugins/Merchello.PayPal/PayPalExpressCheckout.html?Result=success&InvoiceKey={invoiceKey}&PaymentKey={paymentKey}&PaymentMethodKey={paymentMethodKey}");
-			setExpressCheckoutRequestDetails.ReturnURL = adjustUrl(setExpressCheckoutRequestDetails.ReturnURL);
-
-			setExpressCheckoutRequestDetails.CancelURL = args.GetCancelUrl();
-			if (setExpressCheckoutRequestDetails.CancelURL.IsEmpty()) setExpressCheckoutRequestDetails.CancelURL = _settings.CancelUrl;
-			if (setExpressCheckoutRequestDetails.CancelURL.IsEmpty()) setExpressCheckoutRequestDetails.CancelURL = GetWebsiteUrl() + ("/App_Plugins/Merchello.PayPal/PayPalExpressCheckout.html?Result=fail&InvoiceKey={invoiceKey}&PaymentKey={paymentKey}&PaymentMethodKey={paymentMethodKey}");
-			setExpressCheckoutRequestDetails.CancelURL = adjustUrl(setExpressCheckoutRequestDetails.CancelURL);
-
-			setExpressCheckoutRequestDetails.PaymentDetails = new List<PaymentDetailsType> { GetPaymentDetails(invoice, args) };
-
-
-			var setExpressCheckout = new SetExpressCheckoutReq();
-			var setExpressCheckoutRequest = new SetExpressCheckoutRequestType(setExpressCheckoutRequestDetails);
-			setExpressCheckout.SetExpressCheckoutRequest = setExpressCheckoutRequest;
-
-			var config = CreatePayPalApiConfig(_settings);
-			var service = new PayPalAPIInterfaceServiceService(config);
-			var setExpressCheckoutResponseType = service.SetExpressCheckout(setExpressCheckout);
-
-			payment.ExtendedData.SetValue("token", setExpressCheckoutResponseType.Token);
-
-			switch (setExpressCheckoutResponseType.Ack.Value)
-			{
-				case AckCodeType.FAILURE:
-				case AckCodeType.FAILUREWITHWARNING:
-					var error = new InvalidOperationException("- " + string.Join("\n- ", setExpressCheckoutResponseType.Errors.Select(item => item.LongMessage)));
-					return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);
-			}
-
-			// If this were using a service we might want to store some of the transaction data in the ExtendedData for record
-			var redirectUrl = string.Format("https://www.{0}paypal.com/cgi-bin/webscr?cmd=_express-checkout&token={1}", (_settings.LiveMode ? "" : "sandbox."), setExpressCheckoutResponseType.Token);
-			payment.ExtendedData.SetValue("RedirectUrl", redirectUrl);
-
-			return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
-		}
-
-		private PaymentDetailsType GetPaymentDetails(IInvoice invoice, ProcessorArgumentCollection args = null)
+		private PaymentDetailsType CreatePayPalPaymentDetails(IInvoice invoice, ProcessorArgumentCollection args = null)
 		{
 			
 			string articleBySkuPath = args.GetArticleBySkuPath(_settings.ArticleBySkuPath.IsEmpty() ? null : GetWebsiteUrl() + _settings.ArticleBySkuPath);
@@ -211,55 +176,199 @@ namespace Merchello.Plugin.Payments.PayPal
 			return paymentDetails;
 		}
 
-		public IPaymentResult CompletePayment(IInvoice invoice, IPayment payment, string token, string payerId)
-		{
-			var config = CreatePayPalApiConfig(_settings);
-			var service = new PayPalAPIInterfaceServiceService(config);
+		
+		/// <summary>
+		/// Processes the Authorize and AuthorizeAndCapture transactions
+		/// </summary>
+		/// <param name="invoice">The <see cref="IInvoice"/> to be paid</param>
+		/// <param name="payment">The <see cref="IPayment"/> record</param>
+		/// <param name="args"></param>
+		/// <returns>The <see cref="IPaymentResult"/></returns>
+		public IPaymentResult InitializePayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args) {
 
-			var getExpressCheckoutDetails = new GetExpressCheckoutDetailsReq
-				{
-					GetExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType(token)
-				};
+			var setExpressCheckoutRequestDetails = new SetExpressCheckoutRequestDetailsType();
+
+			Func<string, string> adjustUrl = (url) => {
+				if (!url.StartsWith("http")) url = GetWebsiteUrl() + (url[0] == '/' ? "" : "/") + url;
+				url = url.Replace("{invoiceKey}", invoice.Key.ToString(), StringComparison.InvariantCultureIgnoreCase);
+				url = url.Replace("{paymentKey}", payment.Key.ToString(), StringComparison.InvariantCultureIgnoreCase);
+				url = url.Replace("{paymentMethodKey}", payment.PaymentMethodKey.ToString(), StringComparison.InvariantCultureIgnoreCase);
+				return url;
+			};
 			
-			var expressCheckoutDetailsResponse = service.GetExpressCheckoutDetails(getExpressCheckoutDetails);
-			if (expressCheckoutDetailsResponse == null || expressCheckoutDetailsResponse.Ack != AckCodeType.SUCCESS)
-			{
-				var error = new InvalidOperationException("- " + string.Join("\n- ", expressCheckoutDetailsResponse.Errors.Select(item => item.LongMessage)));
-				return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);
+			// Save ReturnUrl and CancelUrl in ExtendedData.
+			// They will be usefull in PayPalApiController.
+
+			var returnUrl = args.GetReturnUrl();
+			if (returnUrl.IsEmpty()) returnUrl = _settings.ReturnUrl;
+			if (returnUrl.IsEmpty()) returnUrl = "/";
+			returnUrl = adjustUrl(returnUrl);
+			payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.ReturnUrl, returnUrl);
+
+			var cancelUrl = args.GetCancelUrl();
+			if (cancelUrl.IsEmpty()) cancelUrl = _settings.CancelUrl;
+			if (cancelUrl.IsEmpty()) cancelUrl = "/";
+			cancelUrl = adjustUrl(cancelUrl);
+			payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CancelUrl, cancelUrl);
+
+			// Set ReturnUrl and CancelUrl of PayPal request to PayPalApiController.
+			setExpressCheckoutRequestDetails.ReturnURL = adjustUrl("/umbraco/MerchelloPayPal/PayPalApi/SuccessPayment?InvoiceKey={invoiceKey}&PaymentKey={paymentKey}");
+			setExpressCheckoutRequestDetails.CancelURL = adjustUrl("/umbraco/MerchelloPayPal/PayPalApi/AbortPayment?InvoiceKey={invoiceKey}&PaymentKey={paymentKey}");
+
+			//setExpressCheckoutRequestDetails.OrderDescription = "#" + invoice.InvoiceNumber;
+			setExpressCheckoutRequestDetails.PaymentDetails = new List<PaymentDetailsType> { CreatePayPalPaymentDetails(invoice, args) };
+
+			var setExpressCheckout = new SetExpressCheckoutReq() {
+				SetExpressCheckoutRequest = new SetExpressCheckoutRequestType(setExpressCheckoutRequestDetails)
+			};
+
+			try {
+				var response = GetPayPalService().SetExpressCheckout(setExpressCheckout);
+				if (response.Ack != AckCodeType.SUCCESS && response.Ack != AckCodeType.SUCCESSWITHWARNING) {
+					return new PaymentResult(Attempt<IPayment>.Fail(payment, CreateErrorResult(response.Errors)), invoice, false);
+				}
+
+				var redirectUrl = string.Format("https://www.{0}paypal.com/cgi-bin/webscr?cmd=_express-checkout&token={1}", (_settings.LiveMode ? "" : "sandbox."), response.Token);
+				payment.ExtendedData.SetValue("RedirectUrl", redirectUrl);
+				return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+
+			} catch (Exception ex) {
+				return new PaymentResult(Attempt<IPayment>.Fail(payment, ex), invoice, true);
 			}
+
+		}
+
+		public IPaymentResult AuthorizePayment(IInvoice invoice, IPayment payment, string token, string payerId)
+		{
+			var service = GetPayPalService();
+
+			var getExpressCheckoutReq = new GetExpressCheckoutDetailsReq() { GetExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType(token) };
+			
+			GetExpressCheckoutDetailsResponseType expressCheckoutDetailsResponse;
+			try {
+				expressCheckoutDetailsResponse = service.GetExpressCheckoutDetails(getExpressCheckoutReq);
+				if (expressCheckoutDetailsResponse.Ack != AckCodeType.SUCCESS && expressCheckoutDetailsResponse.Ack != AckCodeType.SUCCESSWITHWARNING) {
+					return new PaymentResult(Attempt<IPayment>.Fail(payment, CreateErrorResult(expressCheckoutDetailsResponse.Errors)), invoice, false);
+				}
+			} catch (Exception ex) {
+				return new PaymentResult(Attempt<IPayment>.Fail(payment, ex), invoice, false);
+			}
+			
+			// check if already do
+			if (payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.PaymentAuthorized) != "true") {
+				
+				// do express checkout
+				var doExpressCheckoutPaymentRequest = new DoExpressCheckoutPaymentRequestType(new DoExpressCheckoutPaymentRequestDetailsType
+					{
+						Token = token,
+						PayerID = payerId,
+						PaymentDetails = new List<PaymentDetailsType> { CreatePayPalPaymentDetails(invoice) }
+					});
+				var doExpressCheckoutPayment = new DoExpressCheckoutPaymentReq() { DoExpressCheckoutPaymentRequest = doExpressCheckoutPaymentRequest };
+
+				DoExpressCheckoutPaymentResponseType doExpressCheckoutPaymentResponse;
+				try {
+					doExpressCheckoutPaymentResponse = service.DoExpressCheckoutPayment(doExpressCheckoutPayment);
+					if (doExpressCheckoutPaymentResponse.Ack != AckCodeType.SUCCESS && doExpressCheckoutPaymentResponse.Ack != AckCodeType.SUCCESSWITHWARNING) {
+						return new PaymentResult(Attempt<IPayment>.Fail(payment, CreateErrorResult(doExpressCheckoutPaymentResponse.Errors)), invoice, false);
+					}
+				} catch (Exception ex) {
+					return new PaymentResult(Attempt<IPayment>.Fail(payment, ex), invoice, false);
+				}
+				
+				var transactionId = doExpressCheckoutPaymentResponse.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].TransactionID;
+				var currency = doExpressCheckoutPaymentResponse.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].GrossAmount.currencyID;
+				var amount = doExpressCheckoutPaymentResponse.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].GrossAmount.value;
+			
+				// do authorization
+				var doAuthorizationResponse = service.DoAuthorization(new DoAuthorizationReq
+					{
+						DoAuthorizationRequest = new DoAuthorizationRequestType
+						{
+							TransactionID = transactionId,
+							Amount = new BasicAmountType(currency, amount)
+						}
+					});
+				if (doAuthorizationResponse.Ack != AckCodeType.SUCCESS && doAuthorizationResponse.Ack != AckCodeType.SUCCESSWITHWARNING)
+				{
+					return new PaymentResult(Attempt<IPayment>.Fail(payment, CreateErrorResult(doAuthorizationResponse.Errors)), invoice, false);
+				}
+			
+				payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AuthorizationId, doAuthorizationResponse.TransactionID);
+				payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.AmountCurrencyId, currency.ToString());
+				payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.PaymentAuthorized, "true");
+			}
+
+			payment.Authorized = true;
+
+			return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+		}
+		
+		public IPaymentResult CapturePayment(IInvoice invoice, IPayment payment, decimal amount, bool isPartialPayment)
+		{
+			var service = GetPayPalService();
+			var authorizationId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationId);
+			var currency = PayPalCurrency(invoice.CurrencyCode());
+			var currencyDecimals = CurrencyDecimals(currency);
 			
 			// do express checkout
-			var doExpressCheckoutPayment = new DoExpressCheckoutPaymentReq();
-			var doExpressCheckoutPaymentRequestDetails = new DoExpressCheckoutPaymentRequestDetailsType
+			var doCaptureRequest = new DoCaptureRequestType() 
 				{
-					Token = token,
-					PayerID = payerId,
-					PaymentDetails = new List<PaymentDetailsType> {GetPaymentDetails(invoice)}
+					AuthorizationID = authorizationId,
+					Amount = new BasicAmountType(currency, PriceToString(amount, currencyDecimals)),
+					CompleteType = (isPartialPayment ? CompleteCodeType.NOTCOMPLETE : CompleteCodeType.COMPLETE)
 				};
+			var doCaptureReq = new DoCaptureReq() { DoCaptureRequest = doCaptureRequest };
 
-			var doExpressCheckoutPaymentRequest = new DoExpressCheckoutPaymentRequestType(doExpressCheckoutPaymentRequestDetails);
-			doExpressCheckoutPayment.DoExpressCheckoutPaymentRequest = doExpressCheckoutPaymentRequest;
-
-			var doExpressCheckoutPaymentResponse = service.DoExpressCheckoutPayment(doExpressCheckoutPayment);
-
-			if (doExpressCheckoutPaymentResponse == null || doExpressCheckoutPaymentResponse.Ack != AckCodeType.SUCCESS)
-			{
-				var error = new InvalidOperationException("- " + string.Join("\n- ", doExpressCheckoutPaymentResponse.Errors.Select(item => item.LongMessage)));
-				return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);
-			}
+			//if (payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.PaymentCaptured) != "true") {
+				DoCaptureResponseType doCaptureResponse;
+				try {
+					doCaptureResponse = service.DoCapture(doCaptureReq);
+					if (doCaptureResponse.Ack != AckCodeType.SUCCESS && doCaptureResponse.Ack != AckCodeType.SUCCESSWITHWARNING) {
+						return new PaymentResult(Attempt<IPayment>.Fail(payment, CreateErrorResult(doCaptureResponse.Errors)), invoice, false);
+					}
+				} catch (Exception ex) {
+					return new PaymentResult(Attempt<IPayment>.Fail(payment, ex), invoice, false);
+				}
+			
+				payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.TransactionId, doCaptureResponse.DoCaptureResponseDetails.PaymentInfo.TransactionID);
+				payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.PaymentCaptured, "true");	
+			//}
 			
 			payment.Authorized = true;
 			payment.Collected = true;
 			return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
 			
 		}
+		
+        public IPaymentResult RefundPayment(IInvoice invoice, IPayment payment)
+        {
+            var transactionId = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.TransactionId);
+
+            var wrapper = new RefundTransactionReq
+            {
+                RefundTransactionRequest =
+                    {
+                        TransactionID = transactionId,
+                        RefundType = RefundType.FULL
+                    }
+            };
+            RefundTransactionResponseType refundTransactionResponse = GetPayPalService().RefundTransaction(wrapper);
+
+            if (refundTransactionResponse.Ack != AckCodeType.SUCCESS && refundTransactionResponse.Ack != AckCodeType.SUCCESSWITHWARNING)
+            {
+                return new PaymentResult(Attempt<IPayment>.Fail(payment), invoice, false);
+            }
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
+        }
 
 		/// <summary>
 		/// The PayPal API version
 		/// </summary>
 		public static string ApiVersion
 		{
-			get { return "1.0"; }
+			get { return "1.1.0"; }
 		}
 	}
 }
