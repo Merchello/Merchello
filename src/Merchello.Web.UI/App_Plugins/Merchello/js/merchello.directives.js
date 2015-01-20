@@ -105,7 +105,7 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             scope: {
                 setAddress: '&setAddress'
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloAddress.tpl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloaddress.tpl.html',
             link: function(scope, elm, attr) {
                 scope.address = scope.setAddress();
             }
@@ -129,6 +129,15 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellopager.tpl.html'
         };
     });
+
+    angular.module('merchello.directives').directive('notificationMethods', function() {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/notificationmethods.tpl.html'
+        };
+    });
+
 angular.module('merchello.directives').directive('resolvedGatewayProviders', [function() {
     return {
         restrict: 'E',

@@ -301,6 +301,36 @@
 
     /**
      * @ngdoc model
+     * @name AddEditNotificationMessageDialogData
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's AddEditNotificationMessageDialogData object
+     */
+    var AddEditNotificationMessageDialogData = function() {
+        var self = this;
+        self.notificationMessage = {};
+        self.notificationMonitors = [];
+        self.selectedMonitor = {};
+    };
+
+    angular.module('merchello.models').constant('AddEditNotificationMessageDialogData', AddEditNotificationMessageDialogData);
+    /**
+     * @ngdoc model
+     * @name AddEditNotificationMethodDialogData
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's AddEditNotificationMethodDialogData object
+     */
+    var AddEditNotificationMethodDialogData = function() {
+        var self = this;
+        self.notificationMethod = {};
+    };
+
+    angular.module('merchello.models').constant('AddEditNotificationMethodDialogData', AddEditNotificationMethodDialogData);
+    /**
+     * @ngdoc model
      * @name AddEditWarehouseCatalogDialogData
      * @function
      *
@@ -463,6 +493,22 @@
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
+    /**
+     * @ngdoc model
+     * @name DeleteNotificationMethodDialogData
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's DeleteNotificationMethodDialogData object
+     */
+    var DeleteNotificationMethodDialogData = function() {
+        var self = this;
+        self.notificationMethod = {};
+        self.name = '';
+    };
+
+    angular.module('merchello.models').constant('DeleteNotificationMethodDialogData', DeleteNotificationMethodDialogData);
+
 /**
  * @ngdoc model
  * @name DeletePaymentMethodDialogData
@@ -727,6 +773,7 @@
         self.extendedData = {};
         self.encryptExtendedData = false;
         self.activated = false;
+        self.showSelectedResource = false;
         self.dialogEditorView = {};
         self.gatewayResources = [];
         self.notificationMethods = [];
@@ -779,6 +826,23 @@
     };
 
     angular.module('merchello.models').constant('NotificationMethodDisplay', NotificationMethodDisplay);
+    /**
+     * @ngdoc model
+     * @name NotificationMonitorDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's NotificationMonitorDisplay object
+     */
+    var NotificationMonitorDisplay = function() {
+        var self = this;
+        self.monitorKey = '';
+        self.name = '';
+        self.alias = '';
+    };
+
+    angular.module('merchello.models').constant('NotificationMonitorDisplay', NotificationMonitorDisplay);
+
     /**
      * @ngdoc model
      * @name AppliedPaymentDisplay
@@ -2147,6 +2211,21 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeletePaymentMethodDialogData();
         }
 
+        // creates a dialog data model for adding or editing a notification method
+        function createAddEditNotificationMethodDialogData() {
+            return new AddEditNotificationMethodDialogData();
+        }
+
+        // creates a dialog data model for deleting a notification method
+        function createDeleteNotificationMethodDialogData() {
+            return new DeleteNotificationMethodDialogData();
+        }
+
+        // creates a dialog data model for adding and editing a notification message
+        function createAddEditNotificationMessageDialogData() {
+            return new AddEditNotificationMessageDialogData();
+        };
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -2162,7 +2241,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createAddEditWarehouseDialogData: createAddEditWarehouseDialogData,
             createDeleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData,
             createEditTaxCountryDialogData: createEditTaxCountryDialogData,
-            createDeletePaymentMethodDialogData: createDeletePaymentMethodDialogData
+            createDeletePaymentMethodDialogData: createDeletePaymentMethodDialogData,
+            createAddEditNotificationMethodDialogData: createAddEditNotificationMethodDialogData,
+            createDeleteNotificationMethodDialogData: createDeleteNotificationMethodDialogData,
+            createAddEditNotificationMessageDialogData: createAddEditNotificationMessageDialogData
         };
 }]);
 
@@ -2321,7 +2403,6 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
  * @description
  * A utility service that builds NotificationGatewayProviderDisplay models
  */
-
 angular.module('merchello.models').factory('notificationGatewayProviderDisplayBuilder',
     ['genericModelBuilder',
         'dialogEditorViewDisplayBuilder', 'extendedDataDisplayBuilder', 'NotificationGatewayProviderDisplay',
@@ -2344,7 +2425,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             providers.push(provider);
                         }
                     } else {
-                        var providers = genericModelBuilder.transform(jsonResult, Constructor);
+                        providers = genericModelBuilder.transform(jsonResult, Constructor);
                         providers.dialogEditorView = dialogEditorViewBuilder.transform(jsonResult.dialogEditorView);
                         providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
                     }
@@ -2377,7 +2458,13 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
     }]);
 
 
-
+    /**
+     * @ngdoc service
+     * @name notificationMethodDisplayBuilder
+     *
+     * @description
+     * A utility service that builds NotificationMethodDisplay models
+     */
     angular.module('merchello.models').factory('notificationMethodDisplayBuilder',
     ['genericModelBuilder', 'notificationMessageDisplayBuilder', 'NotificationMethodDisplay',
         function(genericModelBuilder, notificationMessageDisplayBuilder, NotificationMethodDisplay) {
@@ -2398,12 +2485,33 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         }
                     } else {
                         methods = genericModelBuilder.transform(jsonResult, Constructor);
-                        method.notificationMessages = notificationMessageDisplayBuilder.transform(jsonResult.notificationMessages);
+                        methods.notificationMessages = notificationMessageDisplayBuilder.transform(jsonResult.notificationMessages);
                     }
                     return methods;
                 }
             };
     }]);
+
+    /**
+     * @ngdoc service
+     * @name notificationMonitorDisplayBuilder
+     *
+     * @description
+     * A utility service that builds NotificationMonitorDisplayDisplay models
+     */
+    angular.module('merchello.models').factory('notificationMonitorDisplayBuilder',
+        ['genericModelBuilder', 'NotificationMonitorDisplay',
+        function(genericModelBuilder, NotificationMonitorDisplay) {
+            var Constructor = NotificationMonitorDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
 
     /**
      * @ngdoc service
@@ -2479,7 +2587,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             providers.push(provider);
                         }
                     } else {
-                        var providers = genericModelBuilder.transform(jsonResult, Constructor);
+                        providers = genericModelBuilder.transform(jsonResult, Constructor);
                         providers.dialogEditorView = dialogEditorViewBuilder.transform(jsonResult.dialogEditorView);
                         providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
                     }
@@ -2509,7 +2617,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             paymentMethods.push(paymentMethod);
                         }
                     } else {
-                        var paymentMethods = genericModelBuilder.transform(jsonResult, Constructor);
+                        paymentMethods = genericModelBuilder.transform(jsonResult, Constructor);
                         paymentMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                     }
                     return paymentMethods;
@@ -3304,7 +3412,7 @@ angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilde
                                 methods.push(method);
                             }
                         } else {
-                            var methods = genericModelBuilder.transform(jsonResult, Constructor);
+                            methods = genericModelBuilder.transform(jsonResult, Constructor);
                             methods.provinces = taxProvinceDisplayBuilder.transform(jsonResult.provinces);
                         }
                         return methods;

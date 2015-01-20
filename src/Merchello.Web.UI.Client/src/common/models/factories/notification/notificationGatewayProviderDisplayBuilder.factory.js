@@ -5,7 +5,6 @@
  * @description
  * A utility service that builds NotificationGatewayProviderDisplay models
  */
-
 angular.module('merchello.models').factory('notificationGatewayProviderDisplayBuilder',
     ['genericModelBuilder',
         'dialogEditorViewDisplayBuilder', 'extendedDataDisplayBuilder', 'NotificationGatewayProviderDisplay',
@@ -28,7 +27,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             providers.push(provider);
                         }
                     } else {
-                        var providers = genericModelBuilder.transform(jsonResult, Constructor);
+                        providers = genericModelBuilder.transform(jsonResult, Constructor);
                         providers.dialogEditorView = dialogEditorViewBuilder.transform(jsonResult.dialogEditorView);
                         providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
                     }

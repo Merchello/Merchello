@@ -15,6 +15,7 @@
         self.extendedData = {};
         self.encryptExtendedData = false;
         self.activated = false;
+        self.showSelectedResource = false;
         self.dialogEditorView = {};
         self.gatewayResources = [];
         self.notificationMethods = [];
