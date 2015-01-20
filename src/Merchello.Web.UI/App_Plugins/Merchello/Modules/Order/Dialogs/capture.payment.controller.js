@@ -17,10 +17,10 @@
         $scope.payments = {};
 
         $scope.paymentRequest = new merchello.Models.PaymentRequest();
-        $scope.paymentRequest.invoiceKey = $scope.dialogData.key;
-        $scope.paymentRequest.amount = round($scope.dialogData.total, 2);
+        $scope.paymentRequest.invoiceKey = $scope.dialogData.invoice.key;
+        $scope.paymentRequest.amount = round($scope.dialogData.invoice.total, 2);
 
-	    var payments = _.map($scope.dialogData.appliedPayments, function(appliedPayment) {
+	    var payments = _.map($scope.dialogData.invoice.appliedPayments, function(appliedPayment) {
 		    return appliedPayment.payment;
 	    });
 

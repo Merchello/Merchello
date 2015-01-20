@@ -26,6 +26,25 @@
 	        $scope.setVariables();
 	        $scope.loadWarehouses();
 	        $scope.loadAllAvailableCountries();
+	        $scope.loadSettings();
+	    };
+
+	    /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         * 
+         * @description
+         * Load the Merchello settings.
+         */
+	    $scope.loadSettings = function () {
+	        var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+	        currencySymbolPromise.then(function (currencySymbol) {
+	            $scope.currencySymbol = currencySymbol;
+
+	        }, function (reason) {
+	            alert('Failed: ' + reason.message);
+	        });
 	    };
 
 	    /**
@@ -516,7 +535,8 @@
 		        method: dialogMethod,
 		        country: country,
 		        provider: gatewayProvider,
-		        gatewayResources: availableResources
+		        gatewayResources: availableResources,
+		        currencySymbol: $scope.currencySymbol
 		    };
 		    dialogService.open({
 		        template: templatePage,
@@ -749,6 +769,9 @@
         */
 		$scope.editRegionalShippingRatesDialogOpen = function (country, provider, method) {
 
+		    /// TODO: DFB - m-548 pass global settings into both dialogs
+		    /// in order to get rid of dependency on merchelloGeneral_moneySymbol 
+
 		    var dialogMethod = method;
 		    var availableResources = provider.resources;
 		    var templatePage = '/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingregions.html';
@@ -764,7 +787,8 @@
 		        method: dialogMethod,
 		        country: country,
 		        provider: provider,
-		        gatewayResources: availableResources
+		        gatewayResources: availableResources,
+		        currencySymbol: $scope.currencySymbol
 		    };
 
 		    dialogService.open({

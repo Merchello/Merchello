@@ -8,7 +8,7 @@
      * @description
      * The controller for the customers list page
      */
-    controllers.CustomerListController = function ($scope, dialogService, assetsService, merchelloCustomerService, merchelloInvoiceService, notificationsService) {
+    controllers.CustomerListController = function ($scope, dialogService, assetsService, merchelloCustomerService, merchelloInvoiceService, notificationsService, merchelloSettingsService) {
 
         assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
 
@@ -52,6 +52,25 @@
 
         /**
          * @ngdoc method
+         * @name loadSettings
+         * @function
+         * 
+         * @description
+         * Load the settings from the settings service to get the currency symbol
+         */
+        $scope.loadSettings = function () {
+
+            var currencySymbolPromise = merchelloSettingsService.getCurrencySymbol();
+            currencySymbolPromise.then(function (currencySymbol) {
+                $scope.currencySymbol = currencySymbol;
+
+            }, function (reason) {
+                notificationsService.error("Settings Load Failed", reason.message);
+            });
+        };
+
+        /**
+         * @ngdoc method
          * @name init
          * @function
          * 
@@ -61,6 +80,7 @@
         $scope.init = function () {
             $scope.setVariables();
             $scope.loadCustomers();
+            $scope.loadSettings();
         };
 
         /**
@@ -255,6 +275,6 @@
     };
 
 
-    angular.module("umbraco").controller("Merchello.Dashboards.Customer.ListController", ['$scope', 'dialogService', 'assetsService', 'merchelloCustomerService', 'merchelloInvoiceService', 'notificationsService', merchello.Controllers.CustomerListController]);
+    angular.module("umbraco").controller("Merchello.Dashboards.Customer.ListController", ['$scope', 'dialogService', 'assetsService', 'merchelloCustomerService', 'merchelloInvoiceService', 'notificationsService', 'merchelloSettingsService', merchello.Controllers.CustomerListController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));
