@@ -13,7 +13,7 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             scope: {
                 address: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloAddress.tpl.html'
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloaddress.tpl.html'
         };
     }).directive('merchelloAddress', function() {
         return {

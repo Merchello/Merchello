@@ -1,3 +1,8 @@
+    /**
+     * @ngdoc service
+     * @name auditLogResource
+     * @description Loads in data and allows modification of audit logs
+     **/
     angular.module('merchello.resources').factory('auditLogResource', [
         '$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {

@@ -199,13 +199,13 @@
         [AcceptVerbs("GET", "DELETE")]
         public HttpResponseMessage DeletePaymentMethod(Guid id)
         {
-            var paymentMethodService = ((ServiceContext)MerchelloContext.Services).PaymentMethodService;
-            var methodToDelete = paymentMethodService.GetByKey(id);
+            var paymentProvider = MerchelloContext.Gateways.Payment.GetProviderByMethodKey(id);
+            if (paymentProvider == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            if (methodToDelete == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            var methodToDelete = paymentProvider.GetPaymentGatewayMethodByKey(id);
 
-            paymentMethodService.Delete(methodToDelete);
-
+            paymentProvider.DeletePaymentMethod(methodToDelete);
+           
             return Request.CreateResponse(HttpStatusCode.OK);
         }
          

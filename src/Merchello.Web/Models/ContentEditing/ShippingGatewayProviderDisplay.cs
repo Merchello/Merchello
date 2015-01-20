@@ -28,5 +28,10 @@
         /// Gets or sets the ship methods.
         /// </summary>
         public IEnumerable<ShipMethodDisplay> ShipMethods { get; set; }
+
+        /// <summary>
+        /// Gets or sets the available resources.
+        /// </summary>
+        public IEnumerable<GatewayResourceDisplay> AvailableResources { get; set; } 
     }
 }

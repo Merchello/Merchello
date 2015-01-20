@@ -6,6 +6,11 @@
 
 (function() { 
 
+    /**
+     * @ngdoc service
+     * @name auditLogResource
+     * @description Loads in data and allows modification of audit logs
+     **/
     angular.module('merchello.resources').factory('auditLogResource', [
         '$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
@@ -30,7 +35,7 @@
 
 /**
  * @ngdoc service
- * @name merchello.resources.gatewayProviderResource
+ * @name gatewayProviderResource
  * @description Loads in data and allows modification of gateway providers
  **/
 angular.module('merchello.resources')
@@ -122,7 +127,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.invoiceResource
+     * @name invoiceResource
      * @description Loads in data and allows modification for invoices
      **/
     angular.module('merchello.resources')
@@ -232,8 +237,121 @@ angular.module('merchello.resources')
             }]);
 
     /**
+     * @ngdoc resource
+     * @name notificationGatewayProviderResource
+     * @description Loads in data for notification providers
+     **/
+    angular.module('merchello.resources').factory('notificationGatewayProviderResource',
+        ['$http', 'umbRequestHelper',
+            function($http, umbRequestHelper) {
+
+                return {
+
+                    getGatewayResources: function (key) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetGatewayResources') + "?id=" + key,
+                                method: "GET"
+                            }),
+                            'Failed to save data for Notification');
+                    },
+
+                    getAllGatewayProviders: function () {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllGatewayProviders'),
+                                method: "GET"
+                            }),
+                            'Failed to retreive data for all gateway providers');
+                    },
+
+                    getAllNotificationTriggers: function () {
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllNotificationMonitors'),
+                                method: "GET"
+                            }),
+                            'Failed to retreive data for all gateway providers');
+                    },
+
+                    getNotificationProviderNotificationMethods: function (id) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationProviderNotificationMethods') + "?id=" + id,
+                                method: "GET"
+                            }),
+                            'Failed to save data for Notification');
+                    },
+
+                    saveNotificationMethod: function (method) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'AddNotificationMethod'),
+                                angular.toJson(method)
+                            ),
+                            'Failed to save data for Notification');
+                    },
+
+                    deleteNotificationMethod: function (methodKey) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'DeleteNotificationMethod') + "?id=" + methodKey,
+                                method: "DELETE"
+                            }),
+                            'Failed to delete data for Notification');
+                    },
+
+                    getNotificationMessagesByKey: function (id) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationMessagesByKey') + "?id=" + id,
+                                method: "GET"
+                            }),
+                            'Failed to save data for Notification');
+
+                    },
+
+                    saveNotificationMessage: function (notification) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'PutNotificationMessage'),
+                                angular.toJson(notification)
+                            ),
+                            'Failed to save data for Notification');
+                    },
+
+                    deleteNotificationMessage: function (methodKey) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'DeleteNotificationMessage') + "?id=" + methodKey,
+                                method: "DELETE"
+                            }),
+                            'Failed to delete data for Notification');
+                    },
+
+                    updateNotificationMessage: function (notification) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'UpdateNotificationMessage'),
+                                angular.toJson(notification)
+                            ),
+                            'Failed to save data for Notification');
+                    }
+                };
+    }]);
+
+    /**
      * @ngdoc service
-     * @name merchello.resources.orderResource
+     * @name orderResource
      * @description Loads in data and allows modification for orders
      **/
     angular.module('merchello.resources')
@@ -343,7 +461,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.paymentResource
+     * @name paymentResource
      * @description Loads in data and allows modification for payments
      **/
     angular.module('merchello.resources').factory('paymentResource',
@@ -412,8 +530,83 @@ angular.module('merchello.resources')
     }]);
 
     /**
+     * @ngdoc resource
+     * @name paymentGatewayProviderResource
+     * @description Loads in data for payment providers
+     **/
+    angular.module('merchello.resources').factory('paymentGatewayProviderResource',
+        ['$http', 'umbRequestHelper',
+        function($http, umbRequestHelper) {
+
+            return {
+                getGatewayResources: function (paymentGatewayProviderKey) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetGatewayResources'),
+                            method: "GET",
+                            params: {id: paymentGatewayProviderKey}
+                        }),
+                        'Failed to retreive gateway resource data for warehouse catalog');
+                },
+
+                getAllGatewayProviders: function () {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetAllGatewayProviders'),
+                            method: "GET"
+                        }),
+                        'Failed to retreive data for all gateway providers');
+                },
+
+                getPaymentProviderPaymentMethods: function (paymentGatewayProviderKey) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetPaymentProviderPaymentMethods'),
+                            method: "GET",
+                            params: {id: paymentGatewayProviderKey}
+                        }),
+                        'Failed to payment provider methods for: ' + paymentGatewayProviderKey);
+                },
+
+                addPaymentMethod: function (paymentMethod) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'AddPaymentMethod'),
+                            paymentMethod
+                        ),
+                        'Failed to create paymentMethod');
+                },
+
+                savePaymentMethod: function (paymentMethod) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'PutPaymentMethod'),
+                            paymentMethod
+                        ),
+                        'Failed to save paymentMethod');
+                },
+
+                deletePaymentMethod: function (paymentMethodKey) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'DeletePaymentMethod'),
+                            method: "GET",
+                            params: {id: paymentMethodKey}
+                        }),
+                        'Failed to delete paymentMethod');
+                }
+
+            };
+
+    }]);
+
+    /**
      * @ngdoc service
-     * @name merchello.resources.settingsResource
+     * @name settingsResource
      * @description Loads in data and allows modification for invoices
      **/
     angular.module('merchello.resources').factory('settingsResource',
@@ -590,7 +783,7 @@ angular.module('merchello.resources')
 
     /**
      * @ngdoc service
-     * @name merchello.resources.shipmentResource
+     * @name shipmentResource
      * @description Loads in data and allows modification for shipments
      **/
     angular.module('merchello.resources').factory('shipmentResource',
@@ -641,16 +834,13 @@ angular.module('merchello.resources')
                     'Failed to get shipments: ' + shipmentKeys);
             },
 
-
-            getShipMethodAndAlternatives: function (shipMethodKey) {
+            getShipMethodAndAlternatives: function (shipMethodRequest) {
 
                 return umbRequestHelper.resourcePromise(
-                    $http({
-                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipMethodAndAlternatives'),
-                        method: "GET",
-                        params: {key: shipMethodKey}
-                    }),
-                    'Failed to get shipment method');
+                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'SearchShipMethodAndAlternatives'),
+                        shipMethodRequest
+                    ),
+                    'Failed to get the ship methods');
             },
 
             newShipment: function (shipmentRequest) {
@@ -688,9 +878,34 @@ angular.module('merchello.resources')
             }
         };
     }]);
+angular.module('merchello.resources')
+    .factory('shippingFixedRateProviderResource',
+    ['$http', 'umbRequestHelper',
+    function($http, umbRequestHelper) {
+
+        return {
+
+            getRateTable: function(shipMethod) {
+
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloFixedRateShippingApiBaseUrl', 'GetShipFixedRateTable'), shipMethod),
+                    'Failed to acquire rate table');
+
+            },
+
+            saveRateTable: function(rateTable) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloFixedRateShippingApiBaseUrl', 'PutShipFixedRateTable'), rateTable),
+                    'Failed to save rate table');
+            }
+
+        };
+
+    }]);
+
 /**
  * @ngdoc service
- * @name merchello.resources.shippingGatewayProviderResource
+ * @name shippingGatewayProviderResource
  * @description Loads in data for shipping providers and store shipping settings
  **/
 angular.module('merchello.resources')
@@ -759,11 +974,11 @@ angular.module('merchello.resources')
                         'Failed to retreive shipping methods');
                 },
 
-                getShippingProviderShipMethodsByCountry: function (shipProvider, shipCountry) {
+                getShippingGatewayMethodsByCountry: function (shipProvider, shipCountry) {
 
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShippingProviderShipMethodsByCountry'),
+                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShippingGatewayMethodsByCountry'),
                             method: "GET",
                             params: { id: shipProvider.key, shipCountryId: shipCountry.key }
                         }),
@@ -830,9 +1045,81 @@ angular.module('merchello.resources')
             };
         }]);
 
+/**
+ * @ngdoc service
+ * @name taxationGatewayProviderResource
+ * @description Loads in data for taxation providers
+ **/
+angular.module('merchello.resources').factory('taxationGatewayProviderResource',
+    ['$http', 'umbRequestHelper',
+    function($http, umbRequestHelper) {
+    return {
+        getGatewayResources: function (taxationGatewayProviderKey) {
+
+            return umbRequestHelper.resourcePromise(
+                $http({
+                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetGatewayResources'),
+                    method: "GET",
+                    params: {id: taxationGatewayProviderKey}
+                }),
+                'Failed to retreive gateway resource data for warehouse catalog');
+        },
+
+        getAllGatewayProviders: function () {
+
+            return umbRequestHelper.resourcePromise(
+                $http({
+                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetAllGatewayProviders'),
+                    method: "GET"
+                }),
+                'Failed to retreive data for all gateway providers');
+        },
+
+        getTaxationProviderTaxMethods: function (taxationGatewayProviderKey) {
+
+            return umbRequestHelper.resourcePromise(
+                $http({
+                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetTaxationProviderTaxMethods'),
+                    method: "GET",
+                    params: {id: taxationGatewayProviderKey}
+                }),
+                'Failed to tax provider methods for: ' + taxationGatewayProviderKey);
+        },
+
+        addTaxMethod: function (taxMethod) {
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'AddTaxMethod'),
+                    taxMethod
+                ),
+                'Failed to create taxMethod');
+        },
+
+        saveTaxMethod: function (taxMethod) {
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'PutTaxMethod'),
+                    taxMethod
+                ),
+                'Failed to save taxMethod');
+        },
+
+        deleteTaxMethod: function (taxMethodKey) {
+
+            return umbRequestHelper.resourcePromise(
+                $http({
+                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'DeleteTaxMethod'),
+                    method: "GET",
+                    params: {id: taxMethodKey}
+                }),
+                'Failed to delete tax method');
+        }
+    };
+}]);
+
     /**
      * @ngdoc service
-     * @name merchello.resources.warehouseResource
+     * @name warehouseResource
      * @description Loads in data and allows modification of warehouses
      **/
     angular.module('merchello.resources').factory('warehouseResource',

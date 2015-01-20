@@ -69,6 +69,13 @@
             return 'Not Fulfilled';
         }
 
+        // gets the currency code for the invoice
+        function getCurrencyCode() {
+            var first = this.items[0];
+            var currencyCode = first.extendedData.getValue('merchCurrencyCode');
+            return currencyCode;
+        }
+
         // gets the product line items
         function getProductLineItems() {
             return _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; });
@@ -126,6 +133,7 @@
         return {
             getPaymentStatus: getPaymentStatus,
             getFulfillmentStatus: getFulfillmentStatus,
+            getCurrencyCode: getCurrencyCode,
             getProductLineItems: getProductLineItems,
             getTaxLineItem: getTaxLineItem,
             getShippingLineItems: getShippingLineItems,

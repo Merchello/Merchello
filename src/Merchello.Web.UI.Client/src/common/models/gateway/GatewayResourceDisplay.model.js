@@ -11,4 +11,16 @@
         self.serviceCode = '';
     };
 
+    GatewayResourceDisplay.prototype = (function() {
+
+        function serviceCodeStartsWith(str) {
+            return this.serviceCode.indexOf(str) === 0;
+        }
+
+        return {
+            serviceCodeStartsWith: serviceCodeStartsWith
+        };
+
+    }());
+
     angular.module('merchello.models').constant('GatewayResourceDisplay', GatewayResourceDisplay);

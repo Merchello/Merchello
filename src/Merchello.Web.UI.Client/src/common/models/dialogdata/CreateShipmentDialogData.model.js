@@ -4,7 +4,7 @@
      * @function
      *
      * @description
-     * A back office model used for passing shipment creation information to the dialogService
+     * A back office dialogData model used for passing shipment creation information to the dialogService
      *
      * @note
      * Presently there is not a corresponding Merchello.Web model

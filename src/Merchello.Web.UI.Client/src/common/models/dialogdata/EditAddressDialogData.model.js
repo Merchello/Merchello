@@ -4,7 +4,7 @@
      * @function
      *
      * @description
-     * A back office model used for address data to the dialogService
+     * A back office dialogData model used for address data to the dialogService
      *
      */
     var EditAddressDialogData = function() {

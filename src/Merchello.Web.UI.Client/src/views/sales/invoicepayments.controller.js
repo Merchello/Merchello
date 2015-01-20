@@ -7,13 +7,14 @@
  * The controller for the invoice payments view
  */
 angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsController',
-    ['$scope', '$log', '$routeParams',
+    ['$scope', '$log', '$routeParams', 'merchelloTabsFactory',
         'invoiceResource', 'paymentResource', 'settingsResource',
         'invoiceDisplayBuilder', 'paymentDisplayBuilder',
-        function($scope, $log, $routeParams, invoiceResource, paymentResource, settingsResource,
+        function($scope, $log, $routeParams, merchelloTabsFactory, invoiceResource, paymentResource, settingsResource,
         invoiceDisplayBuilder, paymentDisplayBuilder) {
 
             $scope.loaded = false;
+            $scope.tabs = [];
             $scope.invoice = {};
             $scope.payments = [];
             $scope.settings = {};
@@ -21,8 +22,10 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             $scope.remainingBalance = 0;
 
         function init() {
-            var paymentKey = $routeParams.id;
-            loadInvoice(paymentKey);
+            var key = $routeParams.id;
+            loadInvoice(key);
+            $scope.tabs = merchelloTabsFactory.createSalesTabs(key);
+            $scope.tabs.setActive('payments');
         }
 
         /**
@@ -63,9 +66,12 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 notificationsService.error('Failed to load global settings', reason.message);
             })
 
-            var currencySymbolPromise = settingsResource.getCurrencySymbol();
-            currencySymbolPromise.then(function (currencySymbol) {
-                $scope.currencySymbol = currencySymbol;
+            var currencySymbolPromise = settingsResource.getAllCurrencies();
+            currencySymbolPromise.then(function (symbols) {
+                var currency = _.find(symbols, function(symbol) {
+                    return symbol.currencyCode === $scope.invoice.getCurrencyCode()
+                });
+                $scope.currencySymbol = currency.symbol;
             }, function (reason) {
                 alert('Failed: ' + reason.message);
             });

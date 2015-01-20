@@ -5,7 +5,7 @@
      * @description
      * A utility service that builds ShipMethodDisplay models
      */
-    angular.module('merchello.services')
+    angular.module('merchello.models')
         .factory('shipMethodDisplayBuilder',
             ['genericModelBuilder', 'dialogEditorViewDisplayBuilder', 'shipProvinceDisplayBuilder', 'ShipMethodDisplay',
             function(genericModelBuilder, dialogEditorViewDisplayBuilder, shipProvinceDisplayBuilder, ShipMethodDisplay) {
@@ -14,24 +14,25 @@
 
                 return {
                     createDefault: function() {
-                        var shipMethod = new Constructor();
-                        shipMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
-                        return shipMethod;
+                        return new Constructor();
                     },
                     transform: function(jsonResult) {
-                        if(jsonResult === undefined) {
+                        var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
+                        if(!jsonResult) {
                             return;
                         }
-                        var shipMethods = genericModelBuilder.transform(jsonResult, Constructor);
                         if (angular.isArray(jsonResult))
                         {
                             for(var i = 0; i < jsonResult.length; i++) {
-                                shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
-                                shipMethods[ i ].dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                                // todo these should never be returned by the api
+                                if(jsonResult[i] !== null) {
+                                    shipMethods[ i ].provinces = shipProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                                }
                             }
                         } else {
-                            shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
-                            shipMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                            if(jsonResult.provinces) {
+                                shipMethods.provinces = shipProvinceDisplayBuilder.transform(jsonResult.provinces);
+                            }
                         }
                         return shipMethods;
                     }

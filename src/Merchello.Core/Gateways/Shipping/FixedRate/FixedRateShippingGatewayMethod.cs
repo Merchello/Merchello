@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines the rate table ship method
     /// </summary>
-    [GatewayMethodEditor("Fixed rate ship method editor", "Fixed rate ship method editor", "~/App_Plugins/Merchello/Modules/Settings/Shipping/Dialogs/shippingmethod.html")]
+    [GatewayMethodEditor("Fixed rate ship method editor", "Fixed rate ship method editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.fixedrate.shipmethod.html")]
     public class FixedRateShippingGatewayMethod : ShippingGatewayMethodBase, IFixedRateShippingGatewayMethod
     {
         /// <summary>

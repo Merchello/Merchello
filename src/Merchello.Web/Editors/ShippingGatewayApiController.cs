@@ -179,11 +179,11 @@
         /// <returns>
         /// The collection of all <see cref="GatewayProviderDisplay"/>.
         /// </returns>
-        public IEnumerable<GatewayProviderDisplay> GetAllShipGatewayProviders()
+        public IEnumerable<ShippingGatewayProviderDisplay> GetAllShipGatewayProviders()
         {
             var providers = MerchelloContext.Gateways.Shipping.GetAllActivatedProviders().ToArray();
 
-            return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
+            return providers.Select(provider => ((ShippingGatewayProviderBase)provider).ToShipGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -270,7 +270,7 @@
         /// <summary>
         /// Get <see cref="IShipMethod"/> for a shipping provider by country
         /// 
-        /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingProviderShipMethodsByCountry/{id}
+        /// GET /umbraco/Merchello/ShippingMethodsApi/GetShippingGatewayMethodsByCountry/{id}
         /// </summary>
         /// <param name="id">
         /// The key of the ShippingGatewayProvider
@@ -281,7 +281,7 @@
         /// <returns>
         /// The collection of <see cref="ShipMethodDisplay"/>.
         /// </returns>
-        public IEnumerable<ShipMethodDisplay> GetShippingProviderShipMethodsByCountry(Guid id, Guid shipCountryId)
+        public IEnumerable<ShippingGatewayMethodDisplay> GetShippingGatewayMethodsByCountry(Guid id, Guid shipCountryId)
         {
             var provider = _shippingContext.GetProviderByKey(id);
 
@@ -291,9 +291,17 @@
             
             if (shipCountry == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 
-            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId);
+            var methods = provider.GetAllShippingGatewayMethodsForShipCountry(shipCountryId).ToArray();
 
-            return methods.Select(method => method.ToShipMethodDisplay());
+            var gatewayShipMethods = new List<ShippingGatewayMethodDisplay>();
+
+            foreach (var gatewayMethodDisplay in methods.Select(method => method.ToShippingGatewayMethodDisplay()))
+            {
+                gatewayMethodDisplay.ShipCountry = shipCountry.ToShipCountryDisplay();
+                gatewayShipMethods.Add(gatewayMethodDisplay);
+            }
+
+            return gatewayShipMethods;
         }
 
         /// <summary>

@@ -9,15 +9,18 @@
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', '$log', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
-            'orderResource', 'dialogDataFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
+            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, assetsService, dialogService, localizationService, notificationsService,
                  auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
-                 addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
-            $scope.historyLoaded = false;
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             $scope.invoice = {};
+            $scope.tabs = [];
+            $scope.historyLoaded = false;
             $scope.remainingBalance = 0.0;
             $scope.shippingTotal = 0.0;
             $scope.taxTotal = 0.0;
@@ -33,6 +36,7 @@
             // exposed methods
             //  dialogs
             $scope.capturePayment = capturePayment;
+            $scope.showFulfill = true;
             $scope.capturePaymentDialogConfirm = capturePaymentDialogConfirm,
             $scope.openDeleteInvoiceDialog = openDeleteInvoiceDialog;
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
@@ -51,9 +55,10 @@
              */
             function init () {
                 loadInvoice($routeParams.id);
-                loadSettings();
+                $scope.tabs = merchelloTabsFactory.createSalesTabs($routeParams.id);
+                $scope.tabs.setActive('overview');
                 $scope.loaded = true;
-            };
+            }
 
             function localizeMessage(msg) {
                 return msg.localize(localizationService);
@@ -88,7 +93,7 @@
                         notificationsService.error('Failed to load sales history', reason.message);
                     });
                 }
-            };
+            }
 
             /**
              * @ngdoc method
@@ -104,9 +109,11 @@
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
                     $scope.taxTotal = $scope.invoice.getTaxLineItem().price;
                     $scope.shippingTotal = $scope.invoice.shippingTotal();
+                    loadSettings();
                     loadPayments(id);
                     loadAuditLog(id);
                     loadShippingAddress(id);
+                    $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                     var shipmentLineItem = $scope.invoice.getShippingLineItems();
@@ -117,7 +124,7 @@
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
-            };
+            }
 
 
            /**
@@ -136,13 +143,16 @@
                    notificationsService.error('Failed to load global settings', reason.message);
                })
 
-                var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                currencySymbolPromise.then(function (currencySymbol) {
-                    $scope.currencySymbol = currencySymbol;
+                var currencySymbolPromise = settingsResource.getAllCurrencies();
+                currencySymbolPromise.then(function (symbols) {
+                    var currency = _.find(symbols, function(symbol) {
+                        return symbol.currencyCode === $scope.invoice.getCurrencyCode()
+                    });
+                    $scope.currencySymbol = currency.symbol;
                 }, function (reason) {
                     alert('Failed: ' + reason.message);
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -190,12 +200,12 @@
                 // TODO inject the template for the capture payment dialog so that we can
                 // have different fields for other providers
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/capture.payment.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.capture.payment.html',
                     show: true,
                     callback: $scope.capturePaymentDialogConfirm,
                     dialogData: data
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -216,7 +226,7 @@
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -234,7 +244,7 @@
                     callback: processDeleteInvoiceDialog,
                     dialogData: dialogData
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -262,9 +272,13 @@
                     var shipmentLineItem = $scope.invoice.getShippingLineItems();
                     if ($scope.shipmentLineItems[0]) {
                         var shipMethodKey = $scope.shipmentLineItems[0].extendedData.getValue('merchShipMethodKey');
-                        var shipMethodPromise = shipmentResource.getShipMethodAndAlternatives(shipMethodKey);
+                        var request = { shipMethodKey: shipMethodKey, invoiceKey: data.invoiceKey, lineItemKey: $scope.shipmentLineItems[0].key };
+                        var shipMethodPromise = shipmentResource.getShipMethodAndAlternatives(request);
                         shipMethodPromise.then(function(result) {
                             data.shipMethods = shipMethodsQueryDisplayBuilder.transform(result);
+                            data.shipMethods.selected = _.find(data.shipMethods.alternatives, function(method) {
+                                return method.key === shipMethodKey;
+                            });
                             dialogService.open({
                                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.create.shipment.html',
                                 show: true,
@@ -275,7 +289,7 @@
                         });
                     }
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -288,11 +302,11 @@
                 var promiseDeleteInvoice = invoiceResource.deleteInvoice($scope.invoice.key);
                 promiseDeleteInvoice.then(function (response) {
                     notificationsService.success('Invoice Deleted');
-                    window.location.href = '#/merchello/merchello/invoicelist/manage';
+                    window.location.href = '#/merchello/merchello/saleslist/manage';
                 }, function (reason) {
                     notificationsService.error('Failed to Delete Invoice', reason.message);
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -318,7 +332,35 @@
                     $scope.preValuesLoaded = true;
                     notificationsService.warning('Shipment would not contain any items', 'The shipment was not created as it would not contain any items.');
                 }
-            };
+            }
+
+            /**
+             * @ngdoc method
+             * @name hasUnPackagedLineItems
+             * @function
+             *
+             * @description - Process the fulfill shipment functionality on callback from the dialog service.
+             */
+            function hasUnPackagedLineItems() {
+                var fulfilled = $scope.invoice.getFulfillmentStatus() === 'Fulfilled';
+                if (fulfilled) {
+                    return false;
+                }
+                var i = 0; // order count
+                var found = false;
+                while(i < $scope.invoice.orders.length && !found) {
+                    var item = _.find($scope.invoice.orders[ i ].items, function(item) {
+                      return item.shipmentKey === '' || item.shipmentKey === null;
+                    });
+                    if(item !== null && item !== undefined) {
+                        found = true;
+                    } else {
+                        i++;
+                    }
+                }
+
+                return found;
+            }
 
             // initialize the controller
             init();

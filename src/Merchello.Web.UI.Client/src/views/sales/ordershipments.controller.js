@@ -7,14 +7,15 @@
  * The controller for the order shipments view
  */
 angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsController',
-    ['$scope', '$routeParams', '$log', 'notificationsService', 'dialogService', 'dialogDataFactory',
+    ['$scope', '$routeParams', '$log', 'notificationsService', 'dialogService', 'dialogDataFactory', 'merchelloTabsFactory',
         'invoiceResource', 'settingsResource', 'shipmentResource',
         'invoiceDisplayBuilder', 'shipmentDisplayBuilder',
-        function($scope, $routeParams, $log, notificationsService, dialogService, dialogDataFactory, invoiceResource,
+        function($scope, $routeParams, $log, notificationsService, dialogService, dialogDataFactory, merchelloTabsFactory, invoiceResource,
                  settingsResource, shipmentResource, invoiceDisplayBuilder, shipmentDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
+            $scope.tabs = [];
             $scope.invoice = {};
             $scope.settings = {};
             $scope.shipments = [];
@@ -38,6 +39,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             function init() {
                 var key = $routeParams.id;
                 loadInvoice(key);
+                $scope.tabs = merchelloTabsFactory.createSalesTabs(key);
+                $scope.tabs.setActive('shipments');
                 $scope.loaded = true;
             }
 
@@ -231,7 +234,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              */
             function processUpdateShipment(dialogData) {
                 $scope.preValuesLoaded = false;
-                saveShipment(dialogData.shipment);
+                if(dialogData.shipment.items.length > 0) {
+                    saveShipment(dialogData.shipment);
+                } else {
+                    notificationsService.warning('Cannot remove all items from the shipment.  Instead, consider deleting the shipment.');
+                    loadInvoice($scope.invoice.key);
+                };
             }
 
             /**
