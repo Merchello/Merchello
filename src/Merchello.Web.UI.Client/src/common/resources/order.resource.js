@@ -1,6 +1,6 @@
     /**
      * @ngdoc service
-     * @name merchello.resources.orderResource
+     * @name orderResource
      * @description Loads in data and allows modification for orders
      **/
     angular.module('merchello.resources')

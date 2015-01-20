@@ -30,6 +30,51 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay">
+            <summary>
+            The gate provider settings display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay.ProviderTfKey">
+            <summary>
+            Gets or sets the provider type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay.EncryptExtendedData">
+            <summary>
+            Gets or sets a value indicating whether encrypt extended data.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay.Activated">
+            <summary>
+            Gets a value indicating whether activated.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay.GatewayProviderType">
+            <summary>
+            Gets the gateway provider type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay.ExtendedData">
+            <summary>
+            Gets the extended data.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.LineItemDisplayBase">
             <summary>
             The line item display base.
@@ -173,6 +218,68 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ShipmentStatusDisplay"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay">
+            <summary>
+            The shipping gateway method display.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.DialogEditorDisplayBase">
+            <summary>
+            Base class for display objects that contain dialog editor views
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.DialogEditorDisplayBase.DialogEditorView">
+            <summary>
+            Gets or sets the dialog editor view.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay.GatewayResource">
+            <summary>
+            Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.GatewayResourceDisplay"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay.ShipCountry">
+            <summary>
+            Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.ShipCountryDisplay"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay.ShipMethod">
+            <summary>
+            Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplayExtensions">
+            <summary>
+            The shipping gateway method display extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplayExtensions.ToShippingGatewayMethodDisplay(Merchello.Core.Gateways.Shipping.IShippingGatewayMethod)">
+            <summary>
+            Maps a <see cref="T:Merchello.Core.Gateways.Shipping.ShippingGatewayMethodBase"/> to <see cref="T:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay"/>.
+            </summary>
+            <param name="method">
+            The method.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.AvailableGatewayResourcesResolver">
+            <summary>
+            Maps the ListResourcesOffered to an enumeration of <see cref="T:Merchello.Web.Models.ContentEditing.GatewayProviderDisplay"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.AvailableGatewayResourcesResolver.ResolveCore(Merchello.Core.Gateways.GatewayProviderBase)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay">
             <summary>
             API object for handling new shipment requests.
@@ -183,6 +290,11 @@
             Gets or sets the shipment status key.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.ShipMethodKey">
+            <summary>
+            Gets or sets the ship method key.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.Order">
             <summary>
             Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.OrderDisplay"/>.
@@ -191,6 +303,26 @@
         <member name="P:Merchello.Web.Models.Shipping.ShipmentRequestDisplay.TrackingNumber">
             <summary>
             Gets or sets the tracking number.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay">
+            <summary>
+            The ship method request display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay.InvoiceKey">
+            <summary>
+            Gets or sets the invoice key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay.LineItemKey">
+            <summary>
+            Gets or sets the line item key for the line item that contains the shipment
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay.ShipMethodKey">
+            <summary>
+            Gets or sets the ship method key.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.Shipping.ShipMethodsQueryDisplay">
@@ -4146,7 +4278,7 @@
         </member>
         <member name="M:Merchello.Web.Editors.OrderApiController.ProcessesProductsToBackofficeOrder(Merchello.Web.Models.ContentEditing.BackofficeAddItemModel)">
             <summary>
-            Adds items to the backoffice basket to calculate shipping and Sales tax
+            Adds items to the back office basket to calculate shipping and Sales tax
             </summary>
             <param name="model"></param>
             <returns></returns>
@@ -4504,16 +4636,6 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.CustomerDisplay"/>.
             </returns>
-        </member>
-        <member name="T:Merchello.Web.Models.ContentEditing.DialogEditorDisplayBase">
-            <summary>
-            Base class for display objects that contain dialog editor views
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.DialogEditorDisplayBase.DialogEditorView">
-            <summary>
-            Gets or sets the dialog editor view.
-            </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay">
             <summary>
@@ -6136,11 +6258,11 @@
             The collection of <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Editors.ShippingGatewayApiController.GetShippingProviderShipMethodsByCountry(System.Guid,System.Guid)">
+        <member name="M:Merchello.Web.Editors.ShippingGatewayApiController.GetShippingGatewayMethodsByCountry(System.Guid,System.Guid)">
             <summary>
             Get <see cref="T:Merchello.Core.Models.IShipMethod"/> for a shipping provider by country
             
-            GET /umbraco/Merchello/ShippingMethodsApi/GetShippingProviderShipMethodsByCountry/{id}
+            GET /umbraco/Merchello/ShippingMethodsApi/GetShippingGatewayMethodsByCountry/{id}
             </summary>
             <param name="id">
             The key of the ShippingGatewayProvider
@@ -6267,13 +6389,13 @@
             <param name="order"></param>
             <returns></returns>
         </member>
-        <member name="M:Merchello.Web.Editors.ShipmentApiController.GetShipMethodAndAlternatives(System.Guid)">
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.SearchShipMethodAndAlternatives(Merchello.Web.Models.Shipping.ShipMethodRequestDisplay)">
             <summary>
             Gets the <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/> by it's key and alternative <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/> 
             for the same shipCountry.
             </summary>
-            <param name="key">
-            The shipmethod key from the quoted shipment 
+            <param name="request">
+            The <see cref="T:Merchello.Web.Models.Shipping.ShipMethodRequestDisplay"/>
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Shipping.ShipMethodsQueryDisplay"/>.
@@ -6334,6 +6456,25 @@
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.UpdateOrderStatus(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            Utility method to determine the current order status.
+            </summary>
+            <param name="orderKeys">
+            The order keys.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.SaveOrder(Merchello.Core.Models.IOrder,System.Guid)">
+            <summary>
+            The save order.
+            </summary>
+            <param name="order">
+            The order.
+            </param>
+            <param name="orderStatusKey">
+            The order status key.
+            </param>
         </member>
         <member name="T:Merchello.Web.Editors.TaxationGatewayApiController">
             <summary>
@@ -6792,6 +6933,36 @@
             <summary>
             Gets or sets a value indicating whether activated.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.GatewayProviderDisplayExtensions">
+            <summary>
+            Mapping extensions for <see cref="T:Merchello.Web.Models.ContentEditing.GatewayProviderDisplay"/> classes.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.GatewayProviderDisplayExtensions.ToGatewayProviderDisplay(Merchello.Core.Models.IGatewayProviderSettings)">
+            <summary>
+            Maps <see cref="T:Merchello.Core.Models.IGatewayProviderSettings"/> to <see cref="T:Merchello.Web.Models.ContentEditing.GatewayProviderDisplay"/>.
+            </summary>
+            <param name="gatewayProviderSettings">
+            The gateway provider settings.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.GatewayProviderDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.GatewayProviderDisplayExtensions.ToGatewayProvider(Merchello.Web.Models.ContentEditing.GatewayProviderDisplay,Merchello.Core.Models.IGatewayProviderSettings)">
+            <summary>
+            Maps <see cref="T:Merchello.Web.Models.ContentEditing.GatewayProviderDisplay"/> to <see cref="T:Merchello.Core.Models.IGatewayProviderSettings"/>.
+            </summary>
+            <param name="gatewayProvider">
+            The gateway provider.
+            </param>
+            <param name="destination">
+            The destination.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IGatewayProviderSettings"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.GatewayResourceDisplay">
             <summary>
@@ -7707,6 +7878,11 @@
         <member name="P:Merchello.Web.Models.ContentEditing.ShippingGatewayProviderDisplay.ShipMethods">
             <summary>
             Gets or sets the ship methods.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ShippingGatewayProviderDisplay.AvailableResources">
+            <summary>
+            Gets or sets the available resources.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay">

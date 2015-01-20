@@ -6,16 +6,17 @@ describe('Merchello.Backoffice.SalesListController', function () {
     beforeEach(module('umbraco'));
 
     beforeEach(inject(function ($rootScope, $controller, $httpBackend, $log, angularHelper, assetsService, notificationsService, invoiceResource,
-                                queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, invoiceResourceMock) {
+                                settingsResource, settingResourceMock, queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, invoiceResourceMock) {
         httpBackend = $httpBackend;
 
         $controllerConstructor = $controller;
         scope = $rootScope.$new();
         element = function() { };
         invoiceResourceMock.register();
+        settingResourceMock.register();
 
         controller = $controller('Merchello.Backoffice.SalesListController',
-            { $scope: scope, $element: element, $log: $log, angularHelper: angularHelper, assetsService: assetsService, notificationsService: notificationsService,
+            { $scope: scope, $element: element, $log: $log, angularHelper: angularHelper, settingsResource: settingsResource, assetsService: assetsService, notificationsService: notificationsService,
                 invoiceResource: invoiceResource, queryDisplayBuilder: queryDisplayBuilder, queryResultDisplayBuilder: queryResultDisplayBuilder,
                 invoiceDisplayBuilder: invoiceDisplayBuilder});
 

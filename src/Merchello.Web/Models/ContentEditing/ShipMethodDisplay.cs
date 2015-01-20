@@ -10,7 +10,7 @@
     /// <summary>
     /// The ship method display.
     /// </summary>
-    public class ShipMethodDisplay : DialogEditorDisplayBase
+    public class ShipMethodDisplay
     {
         /// <summary>
         /// Gets or sets the key.

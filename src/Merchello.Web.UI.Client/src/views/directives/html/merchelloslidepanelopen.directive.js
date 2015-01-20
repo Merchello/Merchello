@@ -15,7 +15,7 @@
                 isOpen: '=',
                 classes: '=?'
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tbl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tpl.html',
             link: function ($scope, $element, attrs) {
 
                 if ($scope.classes == undefined) {

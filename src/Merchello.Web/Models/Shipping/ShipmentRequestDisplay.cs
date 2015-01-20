@@ -15,6 +15,11 @@
         public Guid ShipmentStatusKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the ship method key.
+        /// </summary>
+        public Guid ShipMethodKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the <see cref="OrderDisplay"/>.
         /// </summary>
         public OrderDisplay Order { get; set; }

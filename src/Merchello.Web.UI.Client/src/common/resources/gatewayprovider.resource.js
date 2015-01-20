@@ -1,6 +1,6 @@
 /**
  * @ngdoc service
- * @name merchello.resources.gatewayProviderResource
+ * @name gatewayProviderResource
  * @description Loads in data and allows modification of gateway providers
  **/
 angular.module('merchello.resources')

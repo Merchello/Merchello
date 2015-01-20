@@ -14,7 +14,7 @@
     /// Represents a CashPaymentMethod
     /// </summary>    
     [GatewayMethodUi("CashPaymentMethod")]
-    [GatewayMethodEditor("Cash Method Editor", "~/App_Plugins/Merchello/Modules/Settings/Payment/Dialogs/paymentmethod.html")]
+    [GatewayMethodEditor("Cash Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
     public class CashPaymentGatewayMethod : PaymentGatewayMethodBase, ICashPaymentGatewayMethod
     {
         /// <summary>

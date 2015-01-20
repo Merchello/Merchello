@@ -54,7 +54,7 @@
             AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
 
 
-            // Gateway Provider       
+            // Gateway Provider    
             AutoMapper.Mapper.CreateMap<IGatewayProviderSettings, GatewayProviderDisplay>()
                 .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
                 .ForMember(dest => dest.DialogEditorView, opt => opt.ResolveUsing<GatewayProviderDialogEditorViewResolver>().ConstructedBy(() => new GatewayProviderDialogEditorViewResolver()));

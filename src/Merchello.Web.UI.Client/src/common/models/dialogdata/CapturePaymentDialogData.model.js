@@ -4,7 +4,7 @@
      * @function
      *
      * @description
-     * A back office model used for making payment requests to a payment provider
+     * A back office dialogData model used for making payment requests to a payment provider
      *
      * @note
      * Presently there is not a corresponding Merchello.Web model

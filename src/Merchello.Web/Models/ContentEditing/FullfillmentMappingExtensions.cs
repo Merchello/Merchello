@@ -67,28 +67,6 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#endregion
 
-		#region GatewayProviderDisplay
-
-		internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProviderSettings gatewayProviderSettings)
-		{
-			return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProviderSettings);
-		}
-
-		internal static IGatewayProviderSettings ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProviderSettings destination)
-		{
-			if (gatewayProvider.Key != Guid.Empty) destination.Key = gatewayProvider.Key;
-			// type key and typeFullName should be handled by the resolver 
-			destination.Name = gatewayProvider.Name;
-			destination.Description = gatewayProvider.Description;
-			destination.EncryptExtendedData = gatewayProvider.EncryptExtendedData;
-			
-			((GatewayProviderSettings)destination).ExtendedData = gatewayProvider.ExtendedData.AsExtendedDataCollection();
-
-			return destination;
-		}
-
-
-		#endregion
 
 		#region GatewayResourceDisplay
 
