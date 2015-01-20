@@ -26,7 +26,6 @@
             $scope.setVariables();
             $scope.loadTypeFields(function () { $scope.loadInvoice($routeParams.id); });
             $scope.loadSettings();
-            $scope.loadShipmentStatuses();
         };
 
         /**
@@ -40,8 +39,6 @@
         $scope.setVariables = function () {
             $scope.loaded = false;
             $scope.invoice = {};
-            $scope.shipments = [];
-            $scope.shipmentStatuses = [];
             $scope.typeFields = [];
         };
 
@@ -50,36 +47,20 @@
         //--------------------------------------------------------------------------------------
 
         /**
-        * @ngdoc method
-        * @name editShipment
-        * @function
-        * 
-        * @description
-        * Edits a shipment record.
-        */
-        $scope.editShipment = function (shipmentKey) {
-
-            var dialogData = {};
-            dialogData.shipmentStatuses = $scope.shipmentStatuses;
-
-            // find the shipment that was selected
-            var i = 0;
-            var found = false;
-            while (i < $scope.shipments.length && !found) {
-                if ($scope.shipments[i].key == shipmentKey) {
-                    dialogData.shipment = $scope.shipments[i];
-                    found = true;
-                } else {
-                    i++;
-                }
-            }
-
+         * @ngdoc method
+         * @name capturePayment
+         * @function
+         * 
+         * @description
+         * Open the capture shipment dialog.
+         */
+        $scope.capturePayment = function () {
             dialogService.open({
-                template: '/App_Plugins/Merchello/Modules/Order/Dialogs/shipment.editshipment.html',
+                template: '/App_Plugins/Merchello/Modules/Order/Dialogs/capture.payment.html',
                 show: true,
                 callback: $scope.capturePaymentDialogConfirm,
-                dialogData: dialogData
-        });
+                dialogData: $scope.invoice
+            });
         };
 
         //--------------------------------------------------------------------------------------
@@ -129,6 +110,14 @@
             var promise = merchelloInvoiceService.getByKey(id);
             promise.then(function (invoice) {
                 $scope.invoice = new merchello.Models.Invoice(invoice);
+                _.each($scope.invoice.items, function (lineItem) {
+                    if (lineItem.lineItemTfKey) {
+                        var matchedTypeField = _.find($scope.typeFields, function (type) {
+                            return type.typeKey == lineItem.lineItemTfKey;
+                        });
+                        lineItem.lineItemType = matchedTypeField;
+                    }
+                });
                 $scope.loaded = true;
                 $scope.loadShipments($scope.invoice);
             }, function (reason) {
@@ -166,7 +155,7 @@
             if ($scope.hasOrder()) {
                 var promise = merchelloShipmentService.getShipmentsByInvoice(invoice);
                 promise.then(function (shipments) {
-                    $scope.shipments = _.map(shipments, function (shipment) {
+                    $scope.invoice.shipments = _.map(shipments, function (shipment) {
                         return new merchello.Models.Shipment(shipment);
                     });
                     $scope.loaded = true;
@@ -196,16 +185,6 @@
                 }
             }, function (reason) {
                 notificationsService.error("TypeFields Load Failed", reason.message);
-            });
-        };
-
-        $scope.loadShipmentStatuses = function() {
-            var promise = merchelloShipmentService.getAllShipmentStatuses();
-            promise.then(function(response) {
-                console.info(response);
-                _.each(response, function(option) {
-                    $scope.shipmentStatuses.push(option);
-                });
             });
         };
 

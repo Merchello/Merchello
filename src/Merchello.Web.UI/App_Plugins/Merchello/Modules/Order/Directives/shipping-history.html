@@ -1,102 +1,36 @@
 ﻿<div class="control-group umb-control-group" data-ng-show="shipments.length">
 
-	<!--<div class="merchello-section-label">
+	<div class="merchello-section-label">
 	    Shipping Information
         <small>Information regarding the shipment of this order</small>
-	</div>-->
+	</div>
 
-    <!--<div class="merchello-controls">-->
-    
-    <div class="row-fluid merchello-repeater-panel" data-ng-repeat="shipment in shipments">
-        
-        <div class="row-fluid">
-            <table class="table table-striped merchello-striped-table invoice-payments">
-                <thead>
-                    <tr>
-                        <th><localize key="merchelloShippingHistory_shipment" /> #</th>
-                        <th>Tracking code</th>
-                        <th>Shipped Date</th>
-                        <th>Ship method</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{shipment.shipmentNumberPrefix + shipment.shipmentNumber}}</td>
-                        <td>{{shipment.trackingCode}}</td>
-                        <td>{{shipment.shippedDate  | date : 'M/d/yyyy'}}</td>
-                        <td> -- </td>
-                        <td class="text-right"><a class="btn btn-default btn-action" data-ng-click="editShipment(shipment)"><i class="icon-edit"></i></a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="row-fluid">
-            <!-- Shipping Address -->
-            <div class="well shipping-address-info span6">
-                <h3>
-                    From Address
-                    <!-- ACTION: Add or Edit Address -->
-                    <a class="btn btn-default btn-action pull-right" data-ng-click="editAddress(shipment, 'from')"><i class="icon icon-edit"></i></a>
-                </h3>
-                <div class="vcard">
-                    <span class="fn" data-ng-show="shipment.fromName != ''">{{shipment.fromName}}</span>
-                    <span class="org" data-ng-show="shipment.fromOrganization != ''">{{shipment.fromOrganization}}</span>
-                    <span class="adr">
-                        <span class="street-address">{{shipment.fromAddress1}}</span>
-                        <span class="extended-address" data-ng-show="shipment.fromAddress2 != ''">{{shipment.fromAddress2}}</span>
-                        <span class="locality">{{shipment.fromLocality}}</span>, <span class="region">{{shipment.fromRegion}}</span>, <span class="postal-code">{{shipment.fromPostalCode}}</span>
-                        <span class="country-name">{{shipment.fromCountryCode}}</span>
-                    </span>
-                </div>
-            </div>
-            <!-- Shipping Address -->
-            <div class="well shipping-address-info span6">
-                <h3>
-                    To Address
-                    <!-- ACTION: Add or Edit Address -->
-                    <a class="btn btn-default btn-action pull-right" data-ng-click="editAddress(shipment, 'to')"><i class="icon icon-edit"></i></a>
-                </h3>
-                <div class="vcard">
-                    <span class="fn" data-ng-show="shipment.toName != ''">{{shipment.toName}}</span>
-                    <span class="org" data-ng-show="shipment.toOrganization != ''">{{shipment.toOrganization}}</span>
-                    <span class="adr">
-                        <span class="street-address">{{shipment.toAddress1}}</span>
-                        <span class="extended-address" data-ng-show="shipment.toAddress2 != ''">{{shipment.toAddress2}}</span>
-                        <span class="locality">{{shipment.toLocality}}</span>, <span class="region">{{shipment.toRegion}}</span>, <span class="postal-code">{{shipment.toPostalCode}}</span>
-                        <span class="country-name">{{shipment.toCountryCode}}</span>
-                        <span class="tel" data-ng-show="shipment.phone != ''">Tel: {{shipment.phone}}</span>
-                    </span>
-                </div>
-                <div data-ng-show="defaultShippingAddress == false">
-                    <h5>No Shipping Address</h5>
-                </div>
-            </div>
+	<div class="merchello-controls">
+		<div class="row-fluid" data-ng-repeat="shipment in shipments">
+			<div class="row-fluid">
+				<div class="merchello-section-label">
+					<localize key="merchelloShippingHistory_shipment" /> - {{shipment.shippedDate  | date : 'M/d/yyyy'}}
+					<small><localize key="merchelloShippingHistory_trackingNumber " />: <a href="javascript:;">{{shipment.trackingCode}}</a></small>
+				</div>
+			</div>
 
-        </div>
-
-        <table class="table table-striped merchello-striped-table invoice-payments">
-                
-            <thead>
-                <tr>
-                    <th><localize key="general_name" /></th>
-                    <th><localize key="merchelloGeneral_sku" /></th>
-                    <th><localize key="merchelloGeneral_quantity" /></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-ng-repeat="lineitem in shipment.items">
-                    <td class="text-left">{{lineitem.name}}</td>
-                    <td class="text-left">{{lineitem.sku}}</td>
-                    <td class="text-left">{{lineitem.quantity}}</td>
-                    <td>
-                    <td class="text-right"><a class="btn btn-default btn-action" data-ng-click="removeItem(lineitem.key)"><i class="icon-delete"></i></a></td>
-                </tr>
-            </tbody>
-            </table>
-</div>
-	<!--</div>-->
+			<table class="table table-striped merchello-striped-table invoice-payments">
+				<tbody>
+				<thead>
+					<tr>
+						<th><localize key="general_name" /></th>
+						<th><localize key="merchelloGeneral_sku" /></th>
+						<th><localize key="merchelloGeneral_quantity" /></th>
+					</tr>
+				</thead>
+				<tr data-ng-repeat="lineitem in shipment.items">
+					<td class="text-left">{{lineitem.name}}</td>
+					<td class="text-left">{{lineitem.sku}}</td>
+					<td class="text-left">{{lineitem.quantity}}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 
 </div>
