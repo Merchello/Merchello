@@ -6,8 +6,8 @@
      * A utility service that builds TaxMethodDisplay models
      */
     angular.module('merchello.models').factory('taxMethodDisplayBuilder',
-        ['genericModelBuilder', 'TaxMethodDisplay',
-            function(genericModelBuilder, TaxMethodDisplay) {
+        ['genericModelBuilder', 'taxProvinceDisplayBuilder', 'TaxMethodDisplay',
+            function(genericModelBuilder, taxProvinceDisplayBuilder, TaxMethodDisplay) {
 
                 var Constructor = TaxMethodDisplay;
 
@@ -16,7 +16,18 @@
                         return new Constructor();
                     },
                     transform: function(jsonResult) {
-                        return genericModelBuilder.transform(jsonResult, Constructor);
+                        var methods = [];
+                        if(angular.isArray(jsonResult)) {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                var method = genericModelBuilder.transform(jsonResult[ i ]);
+                                method.provinces = taxProvinceDisplayBuilder.transform(jsonResult[ i ].provinces);
+                                methods.push(method);
+                            }
+                        } else {
+                            var methods = genericModelBuilder.transform(jsonResult, Constructor);
+                            methods.provinces = taxProvinceDisplayBuilder.transform(jsonResult.provinces);
+                        }
+                        return methods;
                     }
                 };
     }]);

@@ -171,6 +171,12 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
 
         }]);
 
+    angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.PaymentMethodAddEditController',
+        ['$scope',
+            function($scope) {
+
+        }]);
+
     /**
      * @ngdoc controller
      * @name Merchello.GatewayProvider.Dialogs.ShippingAddCountryController
@@ -379,6 +385,13 @@ angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.Wareh
             $scope.submit($scope.dialogData);
         }
 }]);
+
+    angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.TaxationEditTaxMethodController',
+        ['$scope', function($scope) {
+
+
+
+    }]);
 
 angular.module('merchello').controller('Merchello.Directives.ShipCountryGatewaysProviderDirectiveController',
     ['$scope', 'notificationsService', 'dialogService',
@@ -894,6 +907,249 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
 
 
 
+    angular.module('merchello').controller('Merchello.Backoffice.PaymentProvidersController',
+        ['$scope', 'notificationsService', 'dialogService', 'paymentGatewayProviderResource', 'merchelloTabsFactory',
+           'gatewayResourceDisplayBuilder', 'paymentGatewayProviderDisplayBuilder', 'paymentMethodDisplayBuilder',
+        function($scope, notificationsService, dialogService, paymentGatewayProviderResource, merchelloTabsFactory,
+                 gatewayResourceDisplayBuilder, paymentGatewayProviderDisplayBuilder, paymentMethodDisplayBuilder) {
+
+            $scope.paymentGatewayProviders = [];
+            $scope.tabs = [];
+
+            // exposed methods
+            $scope.addEditPaymentMethod = addEditPaymentMethod;
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Method called on intial page load.  Loads in data from server and sets up scope.
+             */
+            function init() {
+                loadAllPaymentGatewayProviders();
+                $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+                $scope.tabs.setActive('payment');
+            }
+
+            /**
+             * @ngdoc method
+             * @name getProviderByKey
+             * @function
+             *
+             * @description
+             * Helper method to get a provider from the paymentGatewayProviders array using the provider key passed in.
+             */
+            function getProviderByKey(providerkey) {
+                return _.find($scope.paymentGatewayProviders, function (gatewayprovider) { return gatewayprovider.key == providerkey; });
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Initialization methods
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name loadAllPaymentGatewayProviders
+             * @function
+             *
+             * @description
+             * Load the payment gateway providers from the payment gateway service, then wrap the results
+             * in Merchello models and add to the scope via the paymentGatewayProviders collection.
+             */
+            function loadAllPaymentGatewayProviders() {
+
+                var promiseAllProviders = paymentGatewayProviderResource.getAllGatewayProviders();
+                promiseAllProviders.then(function(allProviders) {
+
+                    $scope.paymentGatewayProviders = paymentGatewayProviderDisplayBuilder.transform(allProviders);
+
+                    angular.forEach($scope.paymentGatewayProviders, function(provider) {
+                        loadPaymentGatewayResources(provider.key);
+                        loadPaymentMethods(provider.key);
+                    });
+
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function(reason) {
+                    notificationsService.error("Available Payment Providers Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadPaymentGatewayResources
+             * @function
+             *
+             * @description
+             * Load the payment gateway resources from the payment gateway service, then wrap the results
+             * in Merchello models and add to the provider in the resources collection.  This will only
+             * return resources that haven't already been added via other methods on the provider.
+             */
+            function loadPaymentGatewayResources(providerKey) {
+
+                var provider = getProviderByKey(providerKey);
+                provider.showSelectResource = false;
+                var promiseAllResources = paymentGatewayProviderResource.getGatewayResources(provider.key);
+                promiseAllResources.then(function (allResources) {
+                    console.info(allResources);
+                    provider.gatewayResources = gatewayResourceDisplayBuilder.transform(allResources);
+                    if (provider.gatewayResources.length > 0) {
+                        provider.selectedGatewayResource = provider.gatewayResources[0];
+                    }
+
+                }, function (reason) {
+                    notificationsService.error("Available Payment Provider Resources Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadPaymentMethods
+             * @function
+             *
+             * @description
+             * Load the payment gateway methods from the payment gateway service, then wrap the results
+             * in Merchello models and add to the provider in the methods collection.
+             */
+            function loadPaymentMethods(providerKey) {
+
+                var provider = getProviderByKey(providerKey);
+                var promiseAllResources = paymentGatewayProviderResource.getPaymentProviderPaymentMethods(providerKey);
+                promiseAllResources.then(function (allMethods) {
+                    provider.paymentMethods = paymentMethodDisplayBuilder.transform(allMethods);
+                }, function (reason) {
+                    notificationsService.error("Payment Methods Load Failed", reason.message);
+                });
+            }
+
+
+
+            //--------------------------------------------------------------------------------------
+            // Event Handlers
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name removeMethod
+             * @function
+             *
+             * @description
+             * Calls the payment gateway service to delete the method passed in via the method parameter
+             */
+            function removeMethod(method) {
+                var promiseDelete = merchelloPaymentGatewayService.deletePaymentMethod(method.key);
+                promiseDelete.then(function () {
+                    loadPaymentMethods(method.providerKey);
+                    loadPaymentGatewayResources(method.providerKey);
+                    notificationsService.success("Payment Method Deleted");
+                }, function (reason) {
+                    notificationsService.error("Payment Method Delete Failed", reason.message);
+                });
+            }
+
+
+            //--------------------------------------------------------------------------------------
+            // Dialogs
+            //--------------------------------------------------------------------------------------
+
+            /// Method add/edit Dialog
+
+            /**
+             * @ngdoc method
+             * @name paymentMethodDialogConfirm
+             * @function
+             *
+             * @description
+             * Handles the save after recieving the edited method from the dialog view/controller
+             */
+            function paymentMethodDialogConfirm(method) {
+                var promiseSave;
+                if (method.key.length > 0) {
+                    // Save existing method
+                    promiseSave = paymentGatewayProviderResource.savePaymentMethod(method);
+                } else {
+                    // Create new method
+                    promiseSave = paymentGatewayProviderResource.addPaymentMethod(method);
+                }
+
+                var provider = getProviderByKey(method.providerKey);
+                provider.showSelectResource = false;
+
+                promiseSave.then(function () {
+                    loadPaymentMethods(method.providerKey);
+                    loadPaymentGatewayResources(method.providerKey);
+                    notificationsService.success("Payment Method Saved");
+                }, function (reason) {
+                    notificationsService.error("Payment Method Save Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name addEditPaymentMethod
+             * @function
+             *
+             * @description
+             * Opens the payment method dialog via the Umbraco dialogService.  This will default to the dialog view in Merchello
+             * unless specified on the custom method in the payment provider.  Also, if it is an add (not edit) then it will
+             * initialize a new method and pass that to the dialog service.
+             */
+            function addEditPaymentMethod(provider, method) {
+                if (method == undefined) {
+                    method = paymentMethodDisplayBuilder.createDefault();
+                    method.providerKey = provider.key; //Todo: When able to add external providers, make this select the correct provider
+                    method.paymentCode = provider.selectedGatewayResource.serviceCode;
+                    method.name = provider.selectedGatewayResource.name;
+                    method.dialogEditorView.editorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html';
+                }
+
+                dialogService.open({
+                    template: method.dialogEditorView.editorView,
+                    show: true,
+                    callback: paymentMethodDialogConfirm,
+                    dialogData: method
+                });
+            }
+
+            /// Method delete Dialog
+
+            /**
+             * @ngdoc method
+             * @name paymentMethodDeleteDialogConfirm
+             * @function
+             *
+             * @description
+             * Handles the save after recieving the deleted method from the dialog view/controller
+             */
+            function paymentMethodDeleteDialogConfirm(method) {
+                removeMethod(method);
+            }
+
+            /**
+             * @ngdoc method
+             * @name deletePaymentMethod
+             * @function
+             *
+             * @description
+             * Opens the delete dialog via the Umbraco dialogService
+             */
+            function deletePaymentMethod(method) {
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Modules/Settings/Payment/Dialogs/paymentdelete.html',
+                    show: true,
+                    callback: $scope.paymentMethodDeleteDialogConfirm,
+                    dialogData: method
+                });
+            }
+
+            // Initializes the controller
+            init();
+
+    }]);
+
 /**
  * @ngdoc service
  * @name Merchello.Backoffice.ShippingProvidersController
@@ -1348,12 +1604,12 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
     }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersController',
-    ['$scope', 'settingsResource', 'taxationGatewayProviderResource', 'merchelloTabsFactory',
+    ['$scope', '$timeout', 'settingsResource', 'notificationsService', 'dialogService', 'taxationGatewayProviderResource', 'dialogDataFactory', 'merchelloTabsFactory',
         'settingDisplayBuilder', 'countryDisplayBuilder', 'taxCountryDisplayBuilder',
-        'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder',
-    function($scope, settingsResource, taxationGatewayProviderResource, merchelloTabsFactory,
+        'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder', 'taxMethodDisplayBuilder',
+    function($scope, $timeout, settingsResource, notificationsService, dialogService, taxationGatewayProviderResource, dialogDataFactory, merchelloTabsFactory,
              settingDisplayBuilder, countryDisplayBuilder, taxCountryDisplayBuilder,
-             gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder) {
+             gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder, taxMethodDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -1361,6 +1617,10 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         $scope.allCountries = [];
         $scope.availableCountries = [];
         $scope.taxationGatewayProviders = [];
+
+        // exposed methods
+        $scope.save = save;
+        $scope.editTaxMethodProvinces = editTaxMethodProvinces;
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
@@ -1375,10 +1635,15 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
          * Method called on intial page load.  Loads in data from server and sets up scope.
          */
         function init() {
+            $scope.availableCountries = [];
+            $scope.taxationGatewayProviders = [];
             loadAllAvailableCountries();
             loadAllTaxationGatewayProviders();
             $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
             $scope.tabs.setActive('taxation');
+            _.sortBy($scope.availableCountries, function(country) {
+                return country.name;
+            });
         }
 
         /**
@@ -1410,28 +1675,27 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
             var promiseAllProviders = taxationGatewayProviderResource.getAllGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
-
                 $scope.taxationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
-                console.info($scope.taxationGatewayProviders);
-
-                if($scope.taxationGatewayProviders.length > 0) {
-                    for(var i = 0; i < $scope.taxationGatewayProviders.length; i++) {
-                        loadAvailableCountriesWithoutMethod($scope.taxationGatewayProviders[i]);
-                        loadTaxMethods($scope.taxationGatewayProviders[i]);
-                    }
-                }
 
                 var noTaxProvider = gatewayProviderDisplayBuilder.createDefault();
                 noTaxProvider.key = -1;
                 noTaxProvider.name = 'Not Taxed';
-                $scope.taxationGatewayProviders.push(noTaxProvider);
+
+                if($scope.taxationGatewayProviders.length > 0) {
+                    for(var i = 0; i < $scope.taxationGatewayProviders.length; i++) {
+                        loadAvailableCountriesWithoutMethod($scope.taxationGatewayProviders[i], noTaxProvider);
+                        loadTaxMethods($scope.taxationGatewayProviders[i]);
+                    }
+                }
+
+                $scope.taxationGatewayProviders.unshift(noTaxProvider);
 
             }, function (reason) {
                 notificationsService.error("Available Taxation Providers Load Failed", reason.message);
             });
         }
 
-        function loadAvailableCountriesWithoutMethod(taxationGatewayProvider) {
+        function loadAvailableCountriesWithoutMethod(taxationGatewayProvider, noTaxProvider) {
 
             var promiseGwResources = taxationGatewayProviderResource.getGatewayResources(taxationGatewayProvider.key);
             promiseGwResources.then(function (resources) {
@@ -1443,17 +1707,24 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
                         taxCountry.setCountryName(taxCountry.country.name);
                     } else {
                         if (taxCountry.gatewayResource.serviceCodeStartsWith('ELSE')) {
+                            taxCountry.country = countryDisplayBuilder.createDefault();
                             taxCountry.setCountryName('Everywhere Else');
+                            taxCountry.country.countryCode = 'ELSE';
+                            taxCountry.sortOrder = 9999;
                         } else {
                             taxCountry.setCountryName(taxCountry.name);
                         }
                     }
                     return taxCountry;
                 });
-
                 angular.forEach(newAvailableCountries, function(country) {
+                    country.taxMethod = taxMethodDisplayBuilder.createDefault();
+                    country.provider = noTaxProvider;
+                    country.taxMethod.providerKey = '-1';
                     $scope.availableCountries.push(country);
                 });
+
+                console.info($scope.availableCountries);
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
@@ -1465,38 +1736,44 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
         function loadTaxMethods(taxationGatewayProvider) {
 
-            var promiseGwResources = merchelloTaxationGatewayService.getTaxationProviderTaxMethods(taxationGatewayProvider.key);
+            var promiseGwResources = taxationGatewayProviderResource.getTaxationProviderTaxMethods(taxationGatewayProvider.key);
             promiseGwResources.then(function (methods) {
 
                 var newCountries = _.map(methods, function(methodFromServer) {
-                    var taxMethod = new merchello.Models.TaxMethod(methodFromServer);
-                    taxMethod.provider = taxationGatewayProvider;
+                    var taxMethod = taxMethodDisplayBuilder.transform(methodFromServer);
 
-                    var taxCountry = new merchello.Models.TaxCountry();
-
-                    taxCountry.method = taxMethod;
-                    taxCountry.country = _.find($scope.allCountries, function(c) { return c.countryCode == taxMethod.countryCode; });
-
+                    var taxCountry = taxCountryDisplayBuilder.createDefault();
+                    taxCountry.provider = taxationGatewayProvider;
+                    taxCountry.taxMethod = taxMethod;
+                    taxCountry.taxMethod.providerKey = taxationGatewayProvider.key;
+                    if(taxCountry.taxMethod.countryCode === 'ELSE') {
+                        taxCountry.country = countryDisplayBuilder.createDefault();
+                        taxCountry.country.name = 'Everywhere Else';
+                        taxCountry.country.countryCode = 'ELSE';
+                    } else {
+                        taxCountry.country = _.find($scope.allCountries, function(c) { return c.countryCode == taxMethod.countryCode; });
+                    }
                     if (taxCountry.country) {
                         taxCountry.setCountryName(taxCountry.country.name);
                     } else {
                         taxCountry.setCountryName(taxMethod.name);
                     }
-
                     return taxCountry;
                 });
 
                 _.each(newCountries, function(country) {
+                    if (country.country.countryCode === 'ELSE') {
+                        country.sortOrder = 9999;
+                    }
                     $scope.availableCountries.push(country);
                 });
+
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
             }, function (reason) {
-
                 notificationsService.error("Available Gateway Resources Load Failed", reason.message);
-
             });
 
         }
@@ -1505,70 +1782,53 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         //--------------------------------------------------------------------------------------
         // Events methods
         //--------------------------------------------------------------------------------------
-
-        function providerChange(method, providerSelected) {
-            if (providerSelected.key.length > 0 && providerSelected.key != '-1') {
-                method.providerKey = providerSelected.key;
-            } else {
-                method.providerKey = "";
-            }
-        };
-
         function save() {
-
-            _.each($scope.availableCountries, function(taxCountry) {
-
-                if (taxCountry.method.key.length > 0) {
-
-                    if (taxCountry.method.providerKey.length > 0) {     // Already exists, just save it
-
-                        var promiseTaxMethodSave = merchelloTaxationGatewayService.saveTaxMethod(taxCountry.method);
-                        promiseTaxMethodSave.then(function() {
+            $scope.preValuesLoaded = false;
+            angular.forEach($scope.availableCountries, function(country) {
+                if(country.provider.key === -1) {
+                    // delete the provider
+                    if(country.taxMethod.key !== '') {
+                        var promiseDelete = taxationGatewayProviderResource.deleteTaxMethod(country.taxMethod.key);
+                        promiseDelete.then(function() {
+                            notificationsService.success("TaxMethod Removed", "");
+                        }, function(reason) {
+                            notificationsService.error("TaxMethod Save Failed", reason.message);
+                        });
+                    }
+                } else {
+                    if(country.taxMethod.providerKey !== country.provider.key) {
+                            country.taxMethod.providerKey = country.provider.key;
+                            country.taxMethod.countryCode = country.country.countryCode;
+                            var promiseSave = taxationGatewayProviderResource.addTaxMethod(country.taxMethod);
+                            promiseSave.then(function() {
+                                notificationsService.success("TaxMethod Saved", "");
+                            }, function(reason) {
+                                notificationsService.error("TaxMethod Save Failed", reason.message);
+                        });
+                    } else {
+                        var promiseSave = taxationGatewayProviderResource.saveTaxMethod(country.taxMethod);
+                        promiseSave.then(function() {
                             notificationsService.success("TaxMethod Saved", "");
                         }, function(reason) {
                             notificationsService.error("TaxMethod Save Failed", reason.message);
                         });
-
-                    } else { // Existed, but set to Not Taxed, so delete it
-
-                        var promiseTaxMethodDelete = merchelloTaxationGatewayService.deleteTaxMethod(taxCountry.method.key);
-                        promiseTaxMethodDelete.then(function() {
-                            notificationsService.success("TaxMethod Removed", "");
-                        }, function(reason) {
-                            notificationsService.error("TaxMethod Removal Failed", reason.message);
-                        });
-
                     }
-
-                } else {
-
-                    if (taxCountry.method.providerKey.length > 0) { // Didn't exist before, create it
-
-                        var promiseTaxMethodCreate = merchelloTaxationGatewayService.addTaxMethod(taxCountry.method);
-                        promiseTaxMethodCreate.then(function() {
-                            notificationsService.success("TaxMethod Created", "");
-                        }, function(reason) {
-                            notificationsService.error("TaxMethod Created Failed", reason.message);
-                        });
-
-                    }
-
                 }
-
             });
-
+            $timeout(function() {
+                init();
+            }, 400);
         }
 
         //--------------------------------------------------------------------------------------
         // Dialogs
         //--------------------------------------------------------------------------------------
 
-        function taxMethodDialogConfirm(country) {
+        function taxMethodDialogConfirm(dialogData) {
             var promiseSave;
 
             // Save existing method
-            promiseSave = merchelloTaxationGatewayService.saveTaxMethod(country.method);
-
+            promiseSave = taxationGatewayProviderResource.saveTaxMethod(dialogData.country.taxMethod);
             promiseSave.then(function () {
                 notificationsService.success("Taxation Method Saved");
             }, function (reason) {
@@ -1578,11 +1838,13 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
         function editTaxMethodProvinces(country) {
             if (country) {
+                var dialogData = dialogDataFactory.createEditTaxCountryDialogData();
+                dialogData.country = country;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Taxation/Dialogs/taxationmethod.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/dialogs/taxation.edittaxmethod.html',
                     show: true,
-                    callback: $scope.taxMethodDialogConfirm,
-                    dialogData: country
+                    callback: taxMethodDialogConfirm,
+                    dialogData: dialogData
                 });
             }
         }

@@ -16,4 +16,15 @@
         self.provinces = [];
     };
 
+    TaxMethodDisplay.prototype = (function() {
+
+        function hasProvinces() {
+            return this.provinces.length > 0;
+        }
+
+        return {
+            hasProvinces: hasProvinces
+        };
+    }());
+
     angular.module('merchello.models').constant('TaxMethodDisplay', TaxMethodDisplay);

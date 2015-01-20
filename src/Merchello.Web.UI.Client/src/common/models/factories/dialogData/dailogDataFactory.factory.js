@@ -72,6 +72,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new ChangeWarehouseCatalogDialogData();
         }
 
+        function createEditTaxCountryDialogData() {
+            return new EditTaxCountryDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -85,6 +89,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createEditShipmentDialogData: createEditShipmentDialogData,
             createEditAddressDialogData: createEditAddressDialogData,
             createAddEditWarehouseDialogData: createAddEditWarehouseDialogData,
-            createDeleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData
+            createDeleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData,
+            createEditTaxCountryDialogData: createEditTaxCountryDialogData
         };
 }]);

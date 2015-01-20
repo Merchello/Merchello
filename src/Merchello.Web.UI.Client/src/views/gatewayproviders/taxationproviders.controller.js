@@ -1,10 +1,10 @@
 angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersController',
-    ['$scope', 'settingsResource', 'taxationGatewayProviderResource', 'merchelloTabsFactory',
+    ['$scope', '$timeout', 'settingsResource', 'notificationsService', 'dialogService', 'taxationGatewayProviderResource', 'dialogDataFactory', 'merchelloTabsFactory',
         'settingDisplayBuilder', 'countryDisplayBuilder', 'taxCountryDisplayBuilder',
-        'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder',
-    function($scope, settingsResource, taxationGatewayProviderResource, merchelloTabsFactory,
+        'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder', 'taxMethodDisplayBuilder',
+    function($scope, $timeout, settingsResource, notificationsService, dialogService, taxationGatewayProviderResource, dialogDataFactory, merchelloTabsFactory,
              settingDisplayBuilder, countryDisplayBuilder, taxCountryDisplayBuilder,
-             gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder) {
+             gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder, taxMethodDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -12,6 +12,10 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         $scope.allCountries = [];
         $scope.availableCountries = [];
         $scope.taxationGatewayProviders = [];
+
+        // exposed methods
+        $scope.save = save;
+        $scope.editTaxMethodProvinces = editTaxMethodProvinces;
 
         //--------------------------------------------------------------------------------------
         // Initialization methods
@@ -26,10 +30,15 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
          * Method called on intial page load.  Loads in data from server and sets up scope.
          */
         function init() {
+            $scope.availableCountries = [];
+            $scope.taxationGatewayProviders = [];
             loadAllAvailableCountries();
             loadAllTaxationGatewayProviders();
             $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
             $scope.tabs.setActive('taxation');
+            _.sortBy($scope.availableCountries, function(country) {
+                return country.name;
+            });
         }
 
         /**
@@ -61,28 +70,27 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
             var promiseAllProviders = taxationGatewayProviderResource.getAllGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
-
                 $scope.taxationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
-                console.info($scope.taxationGatewayProviders);
-
-                if($scope.taxationGatewayProviders.length > 0) {
-                    for(var i = 0; i < $scope.taxationGatewayProviders.length; i++) {
-                        loadAvailableCountriesWithoutMethod($scope.taxationGatewayProviders[i]);
-                        loadTaxMethods($scope.taxationGatewayProviders[i]);
-                    }
-                }
 
                 var noTaxProvider = gatewayProviderDisplayBuilder.createDefault();
                 noTaxProvider.key = -1;
                 noTaxProvider.name = 'Not Taxed';
-                $scope.taxationGatewayProviders.push(noTaxProvider);
+
+                if($scope.taxationGatewayProviders.length > 0) {
+                    for(var i = 0; i < $scope.taxationGatewayProviders.length; i++) {
+                        loadAvailableCountriesWithoutMethod($scope.taxationGatewayProviders[i], noTaxProvider);
+                        loadTaxMethods($scope.taxationGatewayProviders[i]);
+                    }
+                }
+
+                $scope.taxationGatewayProviders.unshift(noTaxProvider);
 
             }, function (reason) {
                 notificationsService.error("Available Taxation Providers Load Failed", reason.message);
             });
         }
 
-        function loadAvailableCountriesWithoutMethod(taxationGatewayProvider) {
+        function loadAvailableCountriesWithoutMethod(taxationGatewayProvider, noTaxProvider) {
 
             var promiseGwResources = taxationGatewayProviderResource.getGatewayResources(taxationGatewayProvider.key);
             promiseGwResources.then(function (resources) {
@@ -94,17 +102,24 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
                         taxCountry.setCountryName(taxCountry.country.name);
                     } else {
                         if (taxCountry.gatewayResource.serviceCodeStartsWith('ELSE')) {
+                            taxCountry.country = countryDisplayBuilder.createDefault();
                             taxCountry.setCountryName('Everywhere Else');
+                            taxCountry.country.countryCode = 'ELSE';
+                            taxCountry.sortOrder = 9999;
                         } else {
                             taxCountry.setCountryName(taxCountry.name);
                         }
                     }
                     return taxCountry;
                 });
-
                 angular.forEach(newAvailableCountries, function(country) {
+                    country.taxMethod = taxMethodDisplayBuilder.createDefault();
+                    country.provider = noTaxProvider;
+                    country.taxMethod.providerKey = '-1';
                     $scope.availableCountries.push(country);
                 });
+
+                console.info($scope.availableCountries);
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
@@ -116,38 +131,44 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
         function loadTaxMethods(taxationGatewayProvider) {
 
-            var promiseGwResources = merchelloTaxationGatewayService.getTaxationProviderTaxMethods(taxationGatewayProvider.key);
+            var promiseGwResources = taxationGatewayProviderResource.getTaxationProviderTaxMethods(taxationGatewayProvider.key);
             promiseGwResources.then(function (methods) {
 
                 var newCountries = _.map(methods, function(methodFromServer) {
-                    var taxMethod = new merchello.Models.TaxMethod(methodFromServer);
-                    taxMethod.provider = taxationGatewayProvider;
+                    var taxMethod = taxMethodDisplayBuilder.transform(methodFromServer);
 
-                    var taxCountry = new merchello.Models.TaxCountry();
-
-                    taxCountry.method = taxMethod;
-                    taxCountry.country = _.find($scope.allCountries, function(c) { return c.countryCode == taxMethod.countryCode; });
-
+                    var taxCountry = taxCountryDisplayBuilder.createDefault();
+                    taxCountry.provider = taxationGatewayProvider;
+                    taxCountry.taxMethod = taxMethod;
+                    taxCountry.taxMethod.providerKey = taxationGatewayProvider.key;
+                    if(taxCountry.taxMethod.countryCode === 'ELSE') {
+                        taxCountry.country = countryDisplayBuilder.createDefault();
+                        taxCountry.country.name = 'Everywhere Else';
+                        taxCountry.country.countryCode = 'ELSE';
+                    } else {
+                        taxCountry.country = _.find($scope.allCountries, function(c) { return c.countryCode == taxMethod.countryCode; });
+                    }
                     if (taxCountry.country) {
                         taxCountry.setCountryName(taxCountry.country.name);
                     } else {
                         taxCountry.setCountryName(taxMethod.name);
                     }
-
                     return taxCountry;
                 });
 
                 _.each(newCountries, function(country) {
+                    if (country.country.countryCode === 'ELSE') {
+                        country.sortOrder = 9999;
+                    }
                     $scope.availableCountries.push(country);
                 });
+
 
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
             }, function (reason) {
-
                 notificationsService.error("Available Gateway Resources Load Failed", reason.message);
-
             });
 
         }
@@ -156,70 +177,53 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         //--------------------------------------------------------------------------------------
         // Events methods
         //--------------------------------------------------------------------------------------
-
-        function providerChange(method, providerSelected) {
-            if (providerSelected.key.length > 0 && providerSelected.key != '-1') {
-                method.providerKey = providerSelected.key;
-            } else {
-                method.providerKey = "";
-            }
-        };
-
         function save() {
-
-            _.each($scope.availableCountries, function(taxCountry) {
-
-                if (taxCountry.method.key.length > 0) {
-
-                    if (taxCountry.method.providerKey.length > 0) {     // Already exists, just save it
-
-                        var promiseTaxMethodSave = merchelloTaxationGatewayService.saveTaxMethod(taxCountry.method);
-                        promiseTaxMethodSave.then(function() {
+            $scope.preValuesLoaded = false;
+            angular.forEach($scope.availableCountries, function(country) {
+                if(country.provider.key === -1) {
+                    // delete the provider
+                    if(country.taxMethod.key !== '') {
+                        var promiseDelete = taxationGatewayProviderResource.deleteTaxMethod(country.taxMethod.key);
+                        promiseDelete.then(function() {
+                            notificationsService.success("TaxMethod Removed", "");
+                        }, function(reason) {
+                            notificationsService.error("TaxMethod Save Failed", reason.message);
+                        });
+                    }
+                } else {
+                    if(country.taxMethod.providerKey !== country.provider.key) {
+                            country.taxMethod.providerKey = country.provider.key;
+                            country.taxMethod.countryCode = country.country.countryCode;
+                            var promiseSave = taxationGatewayProviderResource.addTaxMethod(country.taxMethod);
+                            promiseSave.then(function() {
+                                notificationsService.success("TaxMethod Saved", "");
+                            }, function(reason) {
+                                notificationsService.error("TaxMethod Save Failed", reason.message);
+                        });
+                    } else {
+                        var promiseSave = taxationGatewayProviderResource.saveTaxMethod(country.taxMethod);
+                        promiseSave.then(function() {
                             notificationsService.success("TaxMethod Saved", "");
                         }, function(reason) {
                             notificationsService.error("TaxMethod Save Failed", reason.message);
                         });
-
-                    } else { // Existed, but set to Not Taxed, so delete it
-
-                        var promiseTaxMethodDelete = merchelloTaxationGatewayService.deleteTaxMethod(taxCountry.method.key);
-                        promiseTaxMethodDelete.then(function() {
-                            notificationsService.success("TaxMethod Removed", "");
-                        }, function(reason) {
-                            notificationsService.error("TaxMethod Removal Failed", reason.message);
-                        });
-
                     }
-
-                } else {
-
-                    if (taxCountry.method.providerKey.length > 0) { // Didn't exist before, create it
-
-                        var promiseTaxMethodCreate = merchelloTaxationGatewayService.addTaxMethod(taxCountry.method);
-                        promiseTaxMethodCreate.then(function() {
-                            notificationsService.success("TaxMethod Created", "");
-                        }, function(reason) {
-                            notificationsService.error("TaxMethod Created Failed", reason.message);
-                        });
-
-                    }
-
                 }
-
             });
-
+            $timeout(function() {
+                init();
+            }, 400);
         }
 
         //--------------------------------------------------------------------------------------
         // Dialogs
         //--------------------------------------------------------------------------------------
 
-        function taxMethodDialogConfirm(country) {
+        function taxMethodDialogConfirm(dialogData) {
             var promiseSave;
 
             // Save existing method
-            promiseSave = merchelloTaxationGatewayService.saveTaxMethod(country.method);
-
+            promiseSave = taxationGatewayProviderResource.saveTaxMethod(dialogData.country.taxMethod);
             promiseSave.then(function () {
                 notificationsService.success("Taxation Method Saved");
             }, function (reason) {
@@ -229,11 +233,13 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
         function editTaxMethodProvinces(country) {
             if (country) {
+                var dialogData = dialogDataFactory.createEditTaxCountryDialogData();
+                dialogData.country = country;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Taxation/Dialogs/taxationmethod.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/dialogs/taxation.edittaxmethod.html',
                     show: true,
-                    callback: $scope.taxMethodDialogConfirm,
-                    dialogData: country
+                    callback: taxMethodDialogConfirm,
+                    dialogData: dialogData
                 });
             }
         }
