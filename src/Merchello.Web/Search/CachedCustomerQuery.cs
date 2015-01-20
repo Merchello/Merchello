@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Web.Search
 {
-    using System;    
+    using System;
+    using System.Collections.Generic;
+
     using Core;
     using Core.Models;
     using Core.Persistence.Querying;
@@ -20,6 +22,11 @@
         /// The customer service.
         /// </summary>
         private readonly CustomerService _customerService;
+
+        /// <summary>
+        /// The method to retrieve invoices for a customer
+        /// </summary>
+        private readonly Func<Guid, IEnumerable<InvoiceDisplay>> _getInvoiceByCustomer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedCustomerQuery"/> class.
@@ -43,6 +50,7 @@
         {            
         }
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedCustomerQuery"/> class.
         /// </summary>
@@ -55,11 +63,33 @@
         /// <param name="searchProvider">
         /// The search provider.
         /// </param>
-        internal CachedCustomerQuery(IPageCachedService<ICustomer> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider) 
+        internal CachedCustomerQuery(IPageCachedService<ICustomer> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider)
+            : this(service, indexProvider, searchProvider, new CachedInvoiceQuery(MerchelloContext.Current.Services.InvoiceService).GetByCustomerKey)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedCustomerQuery"/> class.
+        /// </summary>
+        /// <param name="service">
+        /// The service.
+        /// </param>
+        /// <param name="indexProvider">
+        /// The index provider.
+        /// </param>
+        /// <param name="searchProvider">
+        /// The search provider.
+        /// </param>
+        /// <param name="getInvoicesByCustomer">
+        /// The get Invoices By Customer.
+        /// </param>
+        internal CachedCustomerQuery(IPageCachedService<ICustomer> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, Func<Guid, IEnumerable<InvoiceDisplay>> getInvoicesByCustomer)
             : base(service, indexProvider, searchProvider)
         {
             _customerService = (CustomerService)service;
+            _getInvoiceByCustomer = getInvoicesByCustomer;
         }
+
 
         /// <summary>
         /// Gets the key field in index.
@@ -185,7 +215,7 @@
         /// </returns>
         protected override CustomerDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
-            return result.ToCustomerDisplay();
+            return result.ToCustomerDisplay(_getInvoiceByCustomer);
         }
     }
 }

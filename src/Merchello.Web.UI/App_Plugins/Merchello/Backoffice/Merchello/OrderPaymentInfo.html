@@ -43,7 +43,7 @@
                                     <tr data-ng-repeat="payment in invoice.appliedPayments">
                                         <td>{{formatDate(payment.createDate)}}</td>
                                         <td>{{payment.description}}</td>
-                                        <td>{{payment.amount}}</td>
+                                        <td>{{payment.amount | currency : currencySymbol}}</td>
                                         <!--td><a href="#">Void</a> | <a href="#">Refund</a></td-->
                                     </tr>
                                 </tbody>

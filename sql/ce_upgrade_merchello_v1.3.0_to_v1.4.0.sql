@@ -3,7 +3,7 @@
 -- Add versionKey column to existing table merchProductVariant
 ALTER TABLE merchProductVariant
 ADD COLUMN versionKey UNIQUEIDENTIFIER NOT NULL
-CONSTRAINT [DF_merchProductVariant_versionKey] DEFAULT (newid())
+CONSTRAINT [DF_merchProductVariant_versionKey] DEFAULT ('newid()')
 
 Go
 

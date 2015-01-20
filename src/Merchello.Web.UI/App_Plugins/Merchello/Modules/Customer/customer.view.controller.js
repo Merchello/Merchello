@@ -8,7 +8,10 @@
      * @description
      * The controller for the Customer view page
      */
-    controllers.CustomerViewController = function($scope, $routeParams, dialogService, merchelloCustomerService, merchelloGravatarService, merchelloInvoiceService, merchelloSettingsService, notificationsService) {
+    controllers.CustomerViewController = function ($scope, $routeParams, dialogService, assetsService, merchelloCustomerService, merchelloGravatarService, merchelloInvoiceService, merchelloSettingsService, notificationsService) {
+
+        assetsService.loadCss("/App_Plugins/Merchello/Common/Css/merchello.css");
+
 
         /**
          * @ngdoc method
@@ -124,16 +127,20 @@
          * Load the invoices for the customer.
          */
         $scope.loadInvoices = function() {
-            var promiseInvoices = merchelloInvoiceService.getByCustomerKey($scope.customer.key);
-            promiseInvoices.then(function(invoicesResponse) {
-                $scope.invoices = _.map(invoicesResponse.items, function (invoice) {
-                    return new merchello.Models.Invoice(invoice);
-                });
-                for (var i = 0; i < invoicesResponse.length; i++) {
-                    $scope.invoiceTotal += (invoicesResponse[i].total * 1);
-                }
+            //var promiseInvoices = merchelloInvoiceService.getByCustomerKey($scope.customer.key);
+            //promiseInvoices.then(function(invoicesResponse) {
+            //    $scope.invoices = _.map(invoicesResponse.items, function (invoice) {
+            //        return new merchello.Models.Invoice(invoice);
+            //    });
+            //    for (var i = 0; i < invoicesResponse.length; i++) {
+            //        $scope.invoiceTotal += (invoicesResponse[i].total * 1);
+            //    }
 
-            });
+            //});
+            $scope.invoices = $scope.customer.invoices;
+            for (var i = 0; i < $scope.invoices.length; i++) {
+                $scope.invoiceTotal += $scope.invoices[i].total * 1;
+            }
         };
 
         /**
@@ -377,6 +384,6 @@
 
     };
 
-    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'dialogService', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloInvoiceService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerViewController]);
+    angular.module("umbraco").controller("Merchello.Editors.Customer.ViewController", ['$scope', '$routeParams', 'dialogService', 'assetsService', 'merchelloCustomerService', 'merchelloGravatarService', 'merchelloInvoiceService', 'merchelloSettingsService', 'notificationsService', merchello.Controllers.CustomerViewController]);
 
 }(window.merchello.Controllers = window.merchello.Controllers || {}));

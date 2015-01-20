@@ -68,15 +68,20 @@ $active: lighten($green, 50%);
         div.warning { padding: 30px 20px; margin-bottom: 20px; background: lighten($orange, 40%); border: solid 1px $orange; color: $orange; }
     }
 
-    .merchello-controls { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; 
+    .merchello-controls, .merchello-repeater-panel { margin-left: 240px; padding-top: 5px; @include box-sizing; width: auto; 
         label small { padding-top: 0; }
     }
 
-    .merchello-control-label, .merchello-section-label { text-align: left; float: left; padding-top: 8px; width: 160px; 
+    .merchello-repeater-panel { margin-left: 0; padding-top: 25px; }
+    
+    .merchello-control-label, .merchello-section-label, .merchello-block-label { text-align: left; float: left; padding-top: 8px; width: 160px; 
         small { display: block; color: #b3b3b3; padding-top: 5px; padding-bottom: 10px; font-size: 11px; line-height: 13px; }
     }
 
+    .merchello-block-label { width : auto; }
+
     .control-group { overflow: hidden; @include box-sizing; }
+
 
     *[class*="icon"]{
         &.large { font-size: 2.5em; float: left; display: inline-block; margin-right: 10px; line-height: .8em;
@@ -163,7 +168,7 @@ $active: lighten($green, 50%);
     }
 
     // DFB: restyle tax table
-	.tax-table{
+	.tax-table .settings-table{
 		td.last-of-type{width:10%;}
 
         //  DFB: give more visual space to input box so tax can include more digits like 8.765

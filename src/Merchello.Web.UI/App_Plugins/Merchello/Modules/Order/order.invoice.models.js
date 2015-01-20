@@ -110,6 +110,7 @@
 			self.key = "";
 			self.containerKey = "";
 			self.lineItemTfKey = "";
+		    self.lineItemTypeField = [];
 			self.sku = "";
 			self.name = "";
 			self.quantity = "";
@@ -124,8 +125,9 @@
 			self.quantity = data.quantity;
 			self.price = data.price;
 			self.exported = data.exported;
+			self.lineItemType = data.lineItemType;
+			self.lineItemTypeField = new merchello.Models.TypeField(data.lineItemTypeField);
 		}
-		self.lineItemType = new merchello.Models.TypeField();
 	};
 
 	models.InvoiceStatus = function (data) {
@@ -225,15 +227,15 @@
 		};
 
 		self.getProductLineItems = function () {
-			return _.filter(self.items, function (item) { return item.lineItemType.alias == "Product"; });
+			return _.filter(self.items, function (item) { return item.lineItemTypeField.alias == "Product"; });
 		};
 
 		self.getTaxLineItem = function () {
-			return _.find(self.items, function (item) { return item.lineItemType.alias == "Tax"; });
+			return _.find(self.items, function (item) { return item.lineItemTypeField.alias == "Tax"; });
 		};
 
 		self.getShippingLineItem = function () {
-			return _.find(self.items, function (item) { return item.lineItemType.alias == "Shipping"; });
+			return _.find(self.items, function (item) { return item.lineItemTypeField.alias == "Shipping"; });
 		};
 
 	};
@@ -348,7 +350,9 @@
 		var self = this;
 
 		if (data == undefined) {
-			self.key = "";
+		    self.key = "";
+		    self.shipmentNumber = "";
+		    self.shipmentNumberPrefix = "";
 			self.versionKey = "";
 			self.fromOrganization = "";
 			self.fromName = "";
@@ -377,7 +381,9 @@
 			self.items = [];
 			self.shipmentStatus = new merchello.Models.ShipmentStatus();
 		} else {
-			self.key = data.key;
+		    self.key = data.key;
+		    self.shipmentNumber = data.shipmentNumber;
+		    self.shipmentNumberPrefix = data.shipmentNumberPrefix;
 			self.versionKey = data.versionKey;
 			self.fromOrganization = data.fromOrganization;
 			self.fromName = data.fromName;

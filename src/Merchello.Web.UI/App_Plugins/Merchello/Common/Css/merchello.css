@@ -133,7 +133,7 @@
       background: #feede3;
       border: solid 1px #f57020;
       color: #f57020; }
-  .merchello-panel-body .merchello-controls {
+  .merchello-panel-body .merchello-controls, .merchello-panel-body .merchello-repeater-panel {
     margin-left: 240px;
     padding-top: 5px;
     -moz-box-sizing: border-box;
@@ -142,20 +142,25 @@
     -o-box-sizing: border-box;
     box-sizing: border-box;
     width: auto; }
-    .merchello-panel-body .merchello-controls label small {
+    .merchello-panel-body .merchello-controls label small, .merchello-panel-body .merchello-repeater-panel label small {
       padding-top: 0; }
-  .merchello-panel-body .merchello-control-label, .merchello-panel-body .merchello-section-label {
+  .merchello-panel-body .merchello-repeater-panel {
+    margin-left: 0;
+    padding-top: 25px; }
+  .merchello-panel-body .merchello-control-label, .merchello-panel-body .merchello-section-label, .merchello-panel-body .merchello-block-label {
     text-align: left;
     float: left;
     padding-top: 8px;
     width: 160px; }
-    .merchello-panel-body .merchello-control-label small, .merchello-panel-body .merchello-section-label small {
+    .merchello-panel-body .merchello-control-label small, .merchello-panel-body .merchello-section-label small, .merchello-panel-body .merchello-block-label small {
       display: block;
       color: #b3b3b3;
       padding-top: 5px;
       padding-bottom: 10px;
       font-size: 11px;
       line-height: 13px; }
+  .merchello-panel-body .merchello-block-label {
+    width: auto; }
   .merchello-panel-body .control-group {
     overflow: hidden;
     -moz-box-sizing: border-box;
@@ -248,9 +253,9 @@
     width: 20%; }
   .merchello-panel-body .shipping-table td:nth-child(4) {
     width: 10%; }
-  .merchello-panel-body .tax-table td.last-of-type {
+  .merchello-panel-body .tax-table .settings-table td.last-of-type {
     width: 10%; }
-  .merchello-panel-body .tax-table .percent {
+  .merchello-panel-body .tax-table .settings-table .percent {
     width: 70%; }
   .merchello-panel-body td.edit {
     text-align: left; }

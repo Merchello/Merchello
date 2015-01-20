@@ -8,6 +8,7 @@
     using global::Examine.LuceneEngine.SearchCriteria;
     using global::Examine.SearchCriteria;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Examine;
@@ -53,24 +54,12 @@
         /// <returns>
         /// The <see cref="CustomerDisplay"/>.
         /// </returns>
+        [Obsolete("Use MerchelloHelper.Query.Customer.GetByKey")]
         public static CustomerDisplay GetByKey(string key)
         {
-            var criteria = ExamineManager.Instance.CreateSearchCriteria(BooleanOperation.And);
-            criteria.Field("customerKey", key);
+            var query = new CachedCustomerQuery(MerchelloContext.Current.Services.CustomerService);
 
-            var customer = ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).Select(result => result.ToCustomerDisplay()).FirstOrDefault();
-
-            if (customer != null) return customer;
-            var merchelloContext = GetMerchelloContext();
-
-            var retrieved = merchelloContext.Services.CustomerService.GetByKey(new Guid(key));
-
-            if (retrieved == null) return null;
-
-            ReindexCustomer(retrieved);
-
-            return AutoMapper.Mapper.Map<CustomerDisplay>(retrieved);
+            return query.GetByKey(new Guid(key));
         }
 
         /// <summary>
@@ -79,61 +68,44 @@
         /// <returns>
         /// The collection of all customers.
         /// </returns>
+        [Obsolete("User MerchelloHelper.Query.Customer.Search")]
         public static IEnumerable<CustomerDisplay> GetAllCustomers()
         {
-            var merchelloContext = GetMerchelloContext();
+            var query = new CachedCustomerQuery(MerchelloContext.Current.Services.CustomerService);
 
-            var criteria = ExamineManager.Instance.CreateSearchCriteria(IndexTypes.Customer);
-            criteria.Field("allDocs", "1");
-
-            var results = ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).Select(result => result.ToCustomerDisplay()).ToArray();
-
-
-            var count = merchelloContext.Services.CustomerService.CustomerCount();
-
-            if (results.Any() && (count == results.Count())) return results;
-
-            if (count != results.Count())
-            {
-                RebuildIndex(IndexName);
-            }
-
-            var retrieved = ((CustomerService)merchelloContext.Services.CustomerService).GetAll();
-
-            return retrieved.Select(AutoMapper.Mapper.Map<CustomerDisplay>).ToList();
+            return query.Search(1, long.MaxValue).Items.Select(x => (CustomerDisplay)x);
         }
 
-        /// <summary>
-        /// Searches CustomerIndex by first name, last name, login name and email address for the 'term' passed
-        /// </summary>
-        /// <param name="term">Searches the customer index for a term</param>
-        /// <returns>A collection of <see cref="CustomerDisplay"/></returns>
-        public static IEnumerable<CustomerDisplay> Search(string term)
-        {
-            var criteria = ExamineManager.Instance.CreateSearchCriteria();
-            criteria.GroupedOr(
-                new[] { "loginName", "firstName", "lastName", "email" },
-                term.ToSearchTerms().Select(x => x.SearchTermType == SearchTermType.SingleWord ? x.Term.Fuzzy() : x.Term.MultipleCharacterWildcard()).ToArray());
+        ///// <summary>
+        ///// Searches CustomerIndex by first name, last name, login name and email address for the 'term' passed
+        ///// </summary>
+        ///// <param name="term">Searches the customer index for a term</param>
+        ///// <returns>A collection of <see cref="CustomerDisplay"/></returns>
+        //public static IEnumerable<CustomerDisplay> Search(string term)
+        //{
+        //    var criteria = ExamineManager.Instance.CreateSearchCriteria();
+        //    criteria.GroupedOr(
+        //        new[] { "loginName", "firstName", "lastName", "email" },
+        //        term.ToSearchTerms().Select(x => x.SearchTermType == SearchTermType.SingleWord ? x.Term.Fuzzy() : x.Term.MultipleCharacterWildcard()).ToArray());
 
-            return Search(criteria);
-        }
+        //    return Search(criteria);
+        //}
 
-        /// <summary>
-        /// Searches CustomerIndex using <see cref="ISearchCriteria"/> passed
-        /// </summary>
-        /// <param name="criteria">
-        /// The criteria.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="CustomerDisplay"/>
-        /// </returns>
-        public static IEnumerable<CustomerDisplay> Search(ISearchCriteria criteria)
-        {
-            return ExamineManager.Instance.SearchProviderCollection[SearcherName]
-                .Search(criteria).OrderByDescending(x => x.Score)
-                .Select(result => result.ToCustomerDisplay());
-        }
+        ///// <summary>
+        ///// Searches CustomerIndex using <see cref="ISearchCriteria"/> passed
+        ///// </summary>
+        ///// <param name="criteria">
+        ///// The criteria.
+        ///// </param>
+        ///// <returns>
+        ///// A collection of <see cref="CustomerDisplay"/>
+        ///// </returns>
+        //public static IEnumerable<CustomerDisplay> Search(ISearchCriteria criteria)
+        //{
+        //    return ExamineManager.Instance.SearchProviderCollection[SearcherName]
+        //        .Search(criteria).OrderByDescending(x => x.Score)
+        //        .Select(result => result.ToCustomerDisplay());
+        //}
 
         /// <summary>
         /// Re-indexes a customer.

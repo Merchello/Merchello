@@ -1,6 +1,4 @@
-﻿<link href="/App_Plugins/Merchello/Common/Css/merchello.css" rel="stylesheet">
-
-<form novalidate name="customerForm" data-ng-controller="Merchello.Editors.Customer.ViewController" data-ng-show="loaded" data-ng-submit="save()">
+﻿<form novalidate name="customerForm" data-ng-controller="Merchello.Editors.Customer.ViewController" data-ng-show="loaded" data-ng-submit="save()">
     <umb-panel val-show-validation>
         <umb-header>
             <div class="span4">
@@ -38,18 +36,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr data-ng-repeat="invoice in invoices">
+                                <tr data-ng-repeat="invoice in customer.invoices">
                                     <td><input type="checkbox" /></td>
                                     <td>#<a href="#/merchello/merchello/OrderView/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
                                     <td>{{invoice.invoiceDate}}</td>
                                     <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
                                     <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
-                                    <td>{{invoice.total | currency : currencySymbol}}</td>
+                                    <td><localize key="merchelloGeneral_moneySymbol" />{{invoice.total}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="4"></td>
                                     <td>Total Spent:</td>
-                                    <td>{{invoiceTotal | currency : currencySymbol}}</td>
+                                    <td><localize key="merchelloGeneral_moneySymbol" />{{invoiceTotal}}</td>
                                 </tr>
                             </tbody>
                         </table>

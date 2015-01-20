@@ -66,6 +66,11 @@ namespace Merchello.Core.Models.TypeFields
             get { return GetTypeField(GatewayProviderType.Taxation); }
         }
 
+        internal static TypeFieldCollection GatewayProviders
+        {
+            get { return Fields.GatewayProvider; }
+        }
+
         /// <summary>
         /// Returns a gateway provider typefield or NullTypeField TypeKey (Guid)
         /// </summary>
@@ -76,11 +81,6 @@ namespace Merchello.Core.Models.TypeFields
             return GetTypeField(GatewayProviders[alias]);
         }
 
-
-        private static TypeFieldCollection GatewayProviders
-        {
-            get { return Fields.GatewayProvider; }
-        }
        
     }
 }

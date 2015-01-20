@@ -25,6 +25,7 @@
             $scope.setVariables();
             $scope.loadTypeFields(function () { $scope.loadInvoice($routeParams.id); });
             $scope.loadSettings();
+            $scope.loaded = true;
         };
 
         /**
@@ -72,7 +73,7 @@
                         lineItem.lineItemType = matchedTypeField;
                     }
                 });
-                $scope.loadShippingAddress($scope.invoice);
+                //$scope.loadShippingAddress($scope.invoice);
                 $scope.loadPayments($scope.invoice);
                 $scope.loadShipments($scope.invoice);
                 $scope.loadAuditLog($scope.invoice.key);
@@ -156,26 +157,26 @@
             }
         };
 
-        /**
-         * @ngdoc method
-         * @name loadShippingAddress
-         * @function
-         * 
-         * @description
-         * Load the shipping address associated with the provided invoice.
-         */
-        $scope.loadShippingAddress = function (invoice) {
-            if ($scope.hasOrder()) {
-                var promise = merchelloOrderService.getShippingAddress(invoice.key);
-                promise.then(function (address) {
-                    $scope.shippingAddress = new merchello.Models.Address(address);
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
-                }, function (reason) {
-                    notificationsService.error("Address Load Failed", reason.message);
-                });
-            }
-        };
+        ///**
+        // * @ngdoc method
+        // * @name loadShippingAddress
+        // * @function
+        // * 
+        // * @description
+        // * Load the shipping address associated with the provided invoice.
+        // */
+        //$scope.loadShippingAddress = function (invoice) {
+        //    if ($scope.hasOrder()) {
+        //        var promise = merchelloOrderService.getShippingAddress(invoice.key);
+        //        promise.then(function (address) {
+        //            $scope.shippingAddress = new merchello.Models.Address(address);
+        //            $scope.loaded = true;
+        //            $scope.preValuesLoaded = true;
+        //        }, function (reason) {
+        //            notificationsService.error("Address Load Failed", reason.message);
+        //        });
+        //    }
+        //};
 
         /**
          * @ngdoc method
@@ -209,7 +210,7 @@
             $scope.historyLoaded = false;
             $scope.invoice = {};
             $scope.typeFields = [];
-            $scope.shippingAddress = {};
+           // $scope.shippingAddress = {};
             $scope.salesHistory = {
                 days: []
             };

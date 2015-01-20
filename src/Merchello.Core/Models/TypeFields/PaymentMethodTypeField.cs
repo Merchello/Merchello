@@ -64,7 +64,7 @@ namespace Merchello.Core.Models.TypeFields
         }
 
 
-        private static TypeFieldCollection PaymentMethods
+        internal static TypeFieldCollection PaymentMethods
         {
             get { return Fields.PaymentMethod; }
         }
