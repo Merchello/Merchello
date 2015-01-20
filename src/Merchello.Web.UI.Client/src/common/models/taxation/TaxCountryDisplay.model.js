@@ -13,6 +13,7 @@
         var self = this;
         self.name = '';
         self.country = {};
+        self.provider = {};
         self.taxMethod = {};
         self.gatewayResource = {};
         self.sortOrder = 0;
@@ -21,7 +22,7 @@
     TaxCountryDisplay.prototype = (function() {
 
         function setCountryName(str) {
-            this.countryName = str;
+            this.name = str;
         }
 
         return {

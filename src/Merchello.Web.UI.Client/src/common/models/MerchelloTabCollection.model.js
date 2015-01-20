@@ -49,7 +49,7 @@
                } else {
                    item.active = false;
                }
-           })
+           });
         }
 
         return {

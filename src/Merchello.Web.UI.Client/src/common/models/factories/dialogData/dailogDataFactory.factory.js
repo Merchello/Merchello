@@ -6,8 +6,8 @@
  * A utility service that builds dialogData models
  */
 angular.module('merchello.models').factory('dialogDataFactory',
-    ['CapturePaymentDialogData', 'CreateShipmentDialogData', 'EditAddressDialogData',
-    function(CapturePaymentDialogData, CreateShipmentDialogData, EditAddressDialogData) {
+    [
+    function() {
 
         // creates dialogData object for capturing a payment
         function createCapturePaymentDialogData() {
@@ -72,6 +72,14 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new ChangeWarehouseCatalogDialogData();
         }
 
+        function createEditTaxCountryDialogData() {
+            return new EditTaxCountryDialogData();
+        }
+
+        function createDeletePaymentMethodDialogData() {
+            return new DeletePaymentMethodDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -85,6 +93,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createEditShipmentDialogData: createEditShipmentDialogData,
             createEditAddressDialogData: createEditAddressDialogData,
             createAddEditWarehouseDialogData: createAddEditWarehouseDialogData,
-            createDeleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData
+            createDeleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData,
+            createEditTaxCountryDialogData: createEditTaxCountryDialogData,
+            createDeletePaymentMethodDialogData: createDeletePaymentMethodDialogData
         };
 }]);

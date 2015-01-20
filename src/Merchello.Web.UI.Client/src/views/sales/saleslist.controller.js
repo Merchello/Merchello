@@ -27,7 +27,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.salesLoaded = true;
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
-            $scope.currencySymbol = '$';
+            //$scope.currencySymbol = '$';
             $scope.settings = {};
             $scope.sortOrder = "desc";
             $scope.sortProperty = "-invoiceNumber";
@@ -35,8 +35,14 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.visible.bulkActionDropdown = false;
             $scope.currentFilters = [];
 
+            // exposed methods
+            $scope.getCurrencySymbol = getCurrencySymbol;
+
             // for testing
             $scope.itemCount = 0;
+
+            var allCurrencies = [];
+            var globalCurrency = '$';
 
             //--------------------------------------------------------------------------------------
             // Event Handlers
@@ -224,11 +230,16 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
-                // TODO this is technically an error, we should look up the currency symbol based on what
-                // is represented in the invoice line items.
+                var currenciesPromise = settingsResource.getAllCurrencies();
+                currenciesPromise.then(function(currencies) {
+                    allCurrencies = currencies;
+                }, function(reason) {
+                    alert('Failed' + reason.message);
+                });
+
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
-                    $scope.currencySymbol = currencySymbol;
+                    globalCurrency = currencySymbol;
                 }, function (reason) {
                     alert('Failed: ' + reason.message);
                 });
@@ -326,8 +337,29 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 });
             };
 
+            /**
+             * @ngdoc method
+             * @name getCurrencySymbol
+             * @function
+             *
+             * @description
+             * Utility method to get the currency symbol for an invoice
+             */
+            function getCurrencySymbol(invoice) {
+                var currencyCode = invoice.getCurrencyCode();
+                var currency = _.find(allCurrencies, function(currency) {
+                    return currency.currencyCode === currencyCode;
+                });
+                if(currency === null || currency === undefined) {
+                    return globalCurrency;
+                } else {
+                    return currency.symbol;
+                }
+            }
+
+
             //// Initialize
-            assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
+            assetsService.loadCss('/umbraco/lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
                 var filesToLoad = [
                     'lib/moment/moment-with-locales.js',
                     'lib/datetimepicker/bootstrap-datetimepicker.js'];

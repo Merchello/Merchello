@@ -6,16 +6,17 @@
  * The controller for the shipment provider view
  */
 angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersController',
-    ['$scope', 'notificationsService', 'dialogService',
+    ['$scope', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
     'settingsResource', 'warehouseResource', 'shippingGatewayProviderResource', 'dialogDataFactory',
     'settingDisplayBuilder', 'warehouseDisplayBuilder', 'warehouseCatalogDisplayBuilder', 'countryDisplayBuilder',
         'shippingGatewayProviderDisplayBuilder', 'shipCountryDisplayBuilder',
-    function($scope, notificationsService, dialogService,
+    function($scope, notificationsService, dialogService, merchelloTabsFactory,
              settingsResource, warehouseResource, shippingGatewayProviderResource, dialogDataFactory,
              settingDisplayBuilder, warehouseDisplayBuilder, warehouseCatalogDisplayBuilder, countryDisplayBuilder,
              shippingGatewayProviderDisplayBuilder, shipCountryDisplayBuilder) {
 
         $scope.loaded = true;
+        $scope.tabs = [];
         $scope.countries = [];
         $scope.warehouses = [];
         $scope.primaryWarehouse = {};
@@ -52,6 +53,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
          */
         function init() {
             loadWarehouses();
+            $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+            $scope.tabs.setActive('shipping');
         }
 
         /**

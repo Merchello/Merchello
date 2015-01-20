@@ -34,7 +34,7 @@
                             <!-- ACTION: Capture Payment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid()" data-ng-click="capturePayment()">Capture Funds</button>
                             <!-- ACTION: Fulfill Shipment -->
-                            <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' || !invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
+                            <button type="button" class="btn btn-default btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
 
                         </div>
                         <table class="table table-striped merchello-striped-table order-items">

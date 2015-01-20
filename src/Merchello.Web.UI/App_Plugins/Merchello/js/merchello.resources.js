@@ -237,6 +237,119 @@ angular.module('merchello.resources')
             }]);
 
     /**
+     * @ngdoc resource
+     * @name notificationGatewayProviderResource
+     * @description Loads in data for notification providers
+     **/
+    angular.module('merchello.resources').factory('notificationGatewayProviderResource',
+        ['$http', 'umbRequestHelper',
+            function($http, umbRequestHelper) {
+
+                return {
+
+                    getGatewayResources: function (key) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetGatewayResources') + "?id=" + key,
+                                method: "GET"
+                            }),
+                            'Failed to save data for Notification');
+                    },
+
+                    getAllGatewayProviders: function () {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllGatewayProviders'),
+                                method: "GET"
+                            }),
+                            'Failed to retreive data for all gateway providers');
+                    },
+
+                    getAllNotificationTriggers: function () {
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllNotificationMonitors'),
+                                method: "GET"
+                            }),
+                            'Failed to retreive data for all gateway providers');
+                    },
+
+                    getNotificationProviderNotificationMethods: function (id) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationProviderNotificationMethods') + "?id=" + id,
+                                method: "GET"
+                            }),
+                            'Failed to save data for Notification');
+                    },
+
+                    saveNotificationMethod: function (method) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'AddNotificationMethod'),
+                                angular.toJson(method)
+                            ),
+                            'Failed to save data for Notification');
+                    },
+
+                    deleteNotificationMethod: function (methodKey) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'DeleteNotificationMethod') + "?id=" + methodKey,
+                                method: "DELETE"
+                            }),
+                            'Failed to delete data for Notification');
+                    },
+
+                    getNotificationMessagesByKey: function (id) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationMessagesByKey') + "?id=" + id,
+                                method: "GET"
+                            }),
+                            'Failed to save data for Notification');
+
+                    },
+
+                    saveNotificationMessage: function (notification) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'PutNotificationMessage'),
+                                angular.toJson(notification)
+                            ),
+                            'Failed to save data for Notification');
+                    },
+
+                    deleteNotificationMessage: function (methodKey) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http({
+                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'DeleteNotificationMessage') + "?id=" + methodKey,
+                                method: "DELETE"
+                            }),
+                            'Failed to delete data for Notification');
+                    },
+
+                    updateNotificationMessage: function (notification) {
+
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'UpdateNotificationMessage'),
+                                angular.toJson(notification)
+                            ),
+                            'Failed to save data for Notification');
+                    }
+                };
+    }]);
+
+    /**
      * @ngdoc service
      * @name orderResource
      * @description Loads in data and allows modification for orders
@@ -414,6 +527,81 @@ angular.module('merchello.resources')
                     'Failed to refund payment');
             }
         };
+    }]);
+
+    /**
+     * @ngdoc resource
+     * @name paymentGatewayProviderResource
+     * @description Loads in data for payment providers
+     **/
+    angular.module('merchello.resources').factory('paymentGatewayProviderResource',
+        ['$http', 'umbRequestHelper',
+        function($http, umbRequestHelper) {
+
+            return {
+                getGatewayResources: function (paymentGatewayProviderKey) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetGatewayResources'),
+                            method: "GET",
+                            params: {id: paymentGatewayProviderKey}
+                        }),
+                        'Failed to retreive gateway resource data for warehouse catalog');
+                },
+
+                getAllGatewayProviders: function () {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetAllGatewayProviders'),
+                            method: "GET"
+                        }),
+                        'Failed to retreive data for all gateway providers');
+                },
+
+                getPaymentProviderPaymentMethods: function (paymentGatewayProviderKey) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetPaymentProviderPaymentMethods'),
+                            method: "GET",
+                            params: {id: paymentGatewayProviderKey}
+                        }),
+                        'Failed to payment provider methods for: ' + paymentGatewayProviderKey);
+                },
+
+                addPaymentMethod: function (paymentMethod) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'AddPaymentMethod'),
+                            paymentMethod
+                        ),
+                        'Failed to create paymentMethod');
+                },
+
+                savePaymentMethod: function (paymentMethod) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'PutPaymentMethod'),
+                            paymentMethod
+                        ),
+                        'Failed to save paymentMethod');
+                },
+
+                deletePaymentMethod: function (paymentMethodKey) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'DeletePaymentMethod'),
+                            method: "GET",
+                            params: {id: paymentMethodKey}
+                        }),
+                        'Failed to delete paymentMethod');
+                }
+
+            };
+
     }]);
 
     /**

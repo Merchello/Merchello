@@ -513,6 +513,9 @@
     font-size: 17.5px;
     font-width: bold; }
 
+.tax-rate {
+  width: 60px; }
+
 .merchello-product-picker .selector {
   margin-bottom: 5px; }
 .merchello-product-picker table {

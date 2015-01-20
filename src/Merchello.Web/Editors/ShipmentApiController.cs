@@ -134,7 +134,7 @@ namespace Merchello.Web.Editors
 		        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 		    }
 
-		    return shipments.Select(s => s.ToShipmentDisplay()).OrderByDescending(x => x.ShipmentNumber);
+		    return shipments.Where(s => s != null).Select(s => s.ToShipmentDisplay()).OrderByDescending(x => x.ShipmentNumber);
 		}
 
         /// <summary>
@@ -371,14 +371,53 @@ namespace Merchello.Web.Editors
             var orders = _orderService.GetByKeys(orderKeys);
             foreach (var order in orders)
             {
-                var orderStatusKey = order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null)
-                                         ? Constants.DefaultKeys.OrderStatus.Open
-                                         : Constants.DefaultKeys.OrderStatus.Fulfilled;
+                Guid orderStatusKey;
 
-                var orderStatus = _orderService.GetOrderStatusByKey(orderStatusKey);
-                order.OrderStatus = orderStatus;
-                _orderService.Save(order);
+                // not fulfilled
+                if (order.ShippableItems().All(x => ((OrderLineItem)x).ShipmentKey == null))
+                {
+                    orderStatusKey = Constants.DefaultKeys.OrderStatus.NotFulfilled;
+                    this.SaveOrder(order, orderStatusKey);
+                    continue;
+                }
+
+                if (order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null))
+                {
+                    orderStatusKey = Constants.DefaultKeys.OrderStatus.Open;
+                    this.SaveOrder(order, orderStatusKey);
+                    continue;
+                }
+
+                // now we need to look at all of the shipments to make sure the shipment statuses are either
+                // shipped or delivered.  If either of those two, we will consider the shipment as 'Fulfilled',
+                // otherwise the shipment will remain in the open status
+                var shipmentKeys = order.ShippableItems().Select(x => ((OrderLineItem)x).ShipmentKey.GetValueOrDefault()).Distinct();
+                var shipments = _shipmentService.GetByKeys(shipmentKeys);
+                orderStatusKey =
+                    shipments.All(x => 
+                        x.ShipmentStatusKey.Equals(Constants.DefaultKeys.ShipmentStatus.Delivered)
+                        || x.ShipmentStatusKey.Equals(Constants.DefaultKeys.ShipmentStatus.Shipped)) ? 
+                            Constants.DefaultKeys.OrderStatus.Fulfilled :
+                            Constants.DefaultKeys.OrderStatus.Open;
+
+                this.SaveOrder(order, orderStatusKey);
             }
+        }
+
+        /// <summary>
+        /// The save order.
+        /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        private void SaveOrder(IOrder order, Guid orderStatusKey)
+        {
+            var orderStatus = _orderService.GetOrderStatusByKey(orderStatusKey);
+            order.OrderStatus = orderStatus;
+            _orderService.Save(order);
         }
     }
 }
