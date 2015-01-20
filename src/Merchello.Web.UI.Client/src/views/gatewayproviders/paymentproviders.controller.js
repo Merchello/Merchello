@@ -1,14 +1,17 @@
     angular.module('merchello').controller('Merchello.Backoffice.PaymentProvidersController',
-        ['$scope', 'notificationsService', 'dialogService', 'paymentGatewayProviderResource', 'merchelloTabsFactory',
+        ['$scope', 'notificationsService', 'dialogService', 'paymentGatewayProviderResource', 'dialogDataFactory', 'merchelloTabsFactory',
            'gatewayResourceDisplayBuilder', 'paymentGatewayProviderDisplayBuilder', 'paymentMethodDisplayBuilder',
-        function($scope, notificationsService, dialogService, paymentGatewayProviderResource, merchelloTabsFactory,
+        function($scope, notificationsService, dialogService, paymentGatewayProviderResource, dialogDataFactory, merchelloTabsFactory,
                  gatewayResourceDisplayBuilder, paymentGatewayProviderDisplayBuilder, paymentMethodDisplayBuilder) {
 
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             $scope.paymentGatewayProviders = [];
             $scope.tabs = [];
 
             // exposed methods
             $scope.addEditPaymentMethod = addEditPaymentMethod;
+            $scope.deletePaymentMethod = deletePaymentMethod;
 
             /**
              * @ngdoc method
@@ -131,10 +134,10 @@
              * Calls the payment gateway service to delete the method passed in via the method parameter
              */
             function removeMethod(method) {
-                var promiseDelete = merchelloPaymentGatewayService.deletePaymentMethod(method.key);
+                $scope.preValuesLoaded = false;
+                var promiseDelete = paymentGatewayProviderResource.deletePaymentMethod(method.key);
                 promiseDelete.then(function () {
-                    loadPaymentMethods(method.providerKey);
-                    loadPaymentGatewayResources(method.providerKey);
+                    loadAllPaymentGatewayProviders();
                     notificationsService.success("Payment Method Deleted");
                 }, function (reason) {
                     notificationsService.error("Payment Method Delete Failed", reason.message);
@@ -157,6 +160,7 @@
              * Handles the save after recieving the edited method from the dialog view/controller
              */
             function paymentMethodDialogConfirm(method) {
+                $scope.preValuesLoaded = false;
                 var promiseSave;
                 if (method.key.length > 0) {
                     // Save existing method
@@ -172,6 +176,7 @@
                 promiseSave.then(function () {
                     loadPaymentMethods(method.providerKey);
                     loadPaymentGatewayResources(method.providerKey);
+                    $scope.preValuesLoaded = true;
                     notificationsService.success("Payment Method Saved");
                 }, function (reason) {
                     notificationsService.error("Payment Method Save Failed", reason.message);
@@ -215,8 +220,8 @@
              * @description
              * Handles the save after recieving the deleted method from the dialog view/controller
              */
-            function paymentMethodDeleteDialogConfirm(method) {
-                removeMethod(method);
+            function paymentMethodDeleteDialogConfirm(dialogData) {
+                removeMethod(dialogData.paymentMethod);
             }
 
             /**
@@ -228,11 +233,14 @@
              * Opens the delete dialog via the Umbraco dialogService
              */
             function deletePaymentMethod(method) {
+                var dialogData = dialogDataFactory.createDeletePaymentMethodDialogData();
+                dialogData.paymentMethod = method;
+                dialogData.name = method.name;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Payment/Dialogs/paymentdelete.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.paymentMethodDeleteDialogConfirm,
-                    dialogData: method
+                    callback: paymentMethodDeleteDialogConfirm,
+                    dialogData: dialogData
                 });
             }
 
