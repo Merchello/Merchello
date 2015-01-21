@@ -66,7 +66,7 @@ namespace Merchello.Core.Models
         public string Name
         {
             get { return _name; }
-            internal set
+            set
             {
                 SetPropertyValueAndDetectChanges(o =>
                 {
