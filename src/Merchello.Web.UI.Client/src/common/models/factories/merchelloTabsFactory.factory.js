@@ -14,7 +14,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             // creates the tabs for sales overview section
             function createSalesTabs(invoiceKey) {
                 var tabs = new Constructor();
-                tabs.addTab('overview', 'Overview', '#/merchello/merchello/saleoverview/' + invoiceKey);
+                tabs.addTab('saleslist', 'Sales Listing', '#/merchello/merchello/saleslist/manage');
+                tabs.addTab('overview', 'Sale', '#/merchello/merchello/saleoverview/' + invoiceKey);
                 tabs.addTab('payments', 'Payments', '#/merchello/merchello/invoicepayments/' + invoiceKey);
                 tabs.addTab('shipments', 'Shipments', '#/merchello/merchello/ordershipments/' + invoiceKey);
                 return tabs;
@@ -24,6 +25,14 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             function createCustomerListTabs() {
                 var tabs = new Constructor();
                 tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
+                return tabs;
+            }
+
+            // creates the customer overview tabs
+            function createCustomerOverviewTabs(customerKey) {
+                var tabs = new Constructor();
+                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
+                tabs.addTab('overview', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
                 return tabs;
             }
 
@@ -48,6 +57,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
                 createCustomerListTabs: createCustomerListTabs,
+                createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs
             };

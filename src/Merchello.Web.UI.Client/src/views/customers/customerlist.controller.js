@@ -1,4 +1,11 @@
-
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.CustomerListController
+     * @function
+     *
+     * @description
+     * The controller for customer list view
+     */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
         ['$scope', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'customerResource', 'queryDisplayBuilder',
             'queryResultDisplayBuilder', 'customerDisplayBuilder',
@@ -11,7 +18,7 @@
             $scope.currentPage = 0;
             $scope.customers = [];
             $scope.filterText = '';
-            $scope.limitAmount = 100;
+            $scope.limitAmount = 25;
             $scope.maxPages = 0;
             $scope.sortProperty = 'loginName';
             $scope.visible = {
@@ -58,15 +65,12 @@
 
                 var promiseAllCustomers = customerResource.searchCustomers(query);
                 promiseAllCustomers.then(function (customersResponse) {
+                    $scope.customers = [];
+                    var queryResult = queryResultDisplayBuilder.transform(customersResponse, customerDisplayBuilder);
+                    $scope.customers = queryResult.items;
+                    console.info($scope.customers);
+                    $scope.maxPages = queryResult.totalPages;
 
-                    if (customersResponse) {
-                        $scope.customers = [];
-                        var queryResult = queryResultDisplayBuilder.transform(customersResponse, customerDisplayBuilder);
-                        $scope.customers = queryResult.items;
-                        $scope.maxPages = queryResult.totalPages;
-                        // TODO: comment out line below once the merchelloInvoiceService.getByCustomerKey API endpoint returns valid results.
-                        // $scope.loadMostRecentOrders();
-                    }
                 });
             }
 

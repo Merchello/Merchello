@@ -54,7 +54,7 @@
                 <table class="table table-hover merchello-selectable-table">
                     <thead>
                     <tr>
-                        <th><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
+                        <th data-ng-show="visible.bulkActionButton"><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
                         <th data-ng-click="changeSortOrder('loginName')" data-ng-class="{'sorted': sortProperty == 'loginName' ||  sortProperty == '-loginName'}">
                             <i data-ng-class="{'icon-navigation-up': sortProperty == 'loginName', 'icon-navigation-down': sortProperty == '-loginName'}"></i>
                             Login
@@ -64,7 +64,7 @@
                             Name
                         </th>
                         <th>Location</th>
-                        <th>Last Order Total</th>
+                        <th>Last Invoice Total</th>
                     </tr>
                     <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
                     <tr data-ng-show="visible.bulkActionButton">
@@ -83,12 +83,12 @@
                     </thead>
                     <tbody>
                     <tr data-ng-repeat="customer in customers">
-                        <td><input type="checkbox" /></td>
+                        <td data-ng-show="visible.bulkActionButton"><input type="checkbox" /></td>
                         <!-- ACTION: Go To Customer View Page -->
-                        <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.loginName}}</a></td>
-                        <td><a href="#/merchello/merchello/CustomerView/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
+                        <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.loginName}}</a></td>
+                        <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
                         <td>{{customer.primaryLocation()}}</td>
-                        <td><localize key="merchelloGeneral_moneySymbol" />{{customer.lastOrderTotal}}</td>
+                        <td><localize key="merchelloGeneral_moneySymbol" />{{customer.getLastInvoice().total}}</td>
                     </tr>
                     </tbody>
                 </table>
