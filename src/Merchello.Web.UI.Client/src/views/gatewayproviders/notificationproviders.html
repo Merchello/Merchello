@@ -22,7 +22,7 @@
 
         <merchello-panel>
 
-            <div class="merchello-pane row-fluid">
+            <div class="merchello-pane row-fluid" data-ng-show="preValuesLoaded">
 
                 <div class="control-group umb-control-group" data-ng-repeat="provider in notificationGatewayProviders">
                     <label class="merchello-control-label">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <div class="control-group umb-control-group warning" data-ng-show="notificationGatewayProviders.length == 0">
+                <div class="control-group umb-control-group warning" data-ng-show="preValuesLoaded && notificationGatewayProviders.length == 0">
                     There are no providers activated.  Please go to the Gateway Providers section and activate a Notification provider.
                 </div>
 

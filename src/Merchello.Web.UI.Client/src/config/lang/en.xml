@@ -277,6 +277,7 @@
     <key alias="merchelloNotificationsDelete_deleteNotification">Delete a Notification Method</key>
   </area>
   <area alias="merchelloNotificationsMessage">
+    <add alias="replyTo">Reply to</add>
     <key alias="addEditMessage" >Add/Edit a Notification Message</key>
     <key alias="attachedEvent" >Attached Event</key>
     <key alias="fromEmail" ><![CDATA[From Email Address<small>(i.e. confirmation@yourdomain.com)</small>]]></key>

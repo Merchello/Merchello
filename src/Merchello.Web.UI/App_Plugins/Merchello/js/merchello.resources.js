@@ -267,7 +267,7 @@ angular.module('merchello.resources')
                             'Failed to retreive data for all gateway providers');
                     },
 
-                    getAllNotificationTriggers: function () {
+                    getAllNotificationMonitors: function () {
                         return umbRequestHelper.resourcePromise(
                             $http({
                                 url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllNotificationMonitors'),

@@ -25,11 +25,11 @@
         <table class="table table-striped merchello-striped-table settings-table notifications-table form-horizontal">
             <thead>
             <tr>
-                <th><localize key="merchelloNotificationsMethod_notification" /></th>
+                <th><localize key="merchelloNotificationsMethod_notification" /> Subject</th>
                 <th><localize key="merchelloNotificationsEdit_description" /></th>
                 <th><localize key="merchelloNotificationsMethod_event" /></th>
-                <th><localize key="merchelloNotificationsMethod_sendTo" /></th>
-                <th><localize key="merchelloNotificationsMethod_emailCustomer" /></th>
+                <th><localize key="general_email" /></th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -37,12 +37,12 @@
             <tr data-ng-repeat="message in notificationMethods.notificationMessages">
                 <td>{{message.name}}</td>
                 <td>{{message.description}}</td>
-                <td><div data-ng-repeat="trigger in notificationTriggers | filter: {monitorKey: message.monitorKey}">{{trigger.name}}</div>
+                <td>{{ getMonitorName(message.monitoryKey) }}</td>
+                <td><a href="{{message.fromAddress}}">{{message.fromAddress}}</a></td>
+                <td nowrap>
+                    <a class="btn btn-default btn-xs btn-mini" href="#/merchello/merchello/notification.messageeditor/{{message.key}}/"><i class="icon-edit"></i></a>
+                    <a data-ng-click="deleteNotificationMessage(message)" class="btn btn-default btn-xs btn-mini btn-warning"><i class="icon-trash"></i></a>
                 </td>
-                <td>{{message.recipients}}</td>
-                <td><input data-ng-checked="message.sendToCustomer" type="checkbox" /></td>
-                <td class="edit"><a class="btn btn-default btn-xs btn-mini" data-ng-click="addNotificationMessageToMethodClick(notificationMethods.key, message)"><i class="icon-edit"></i></a>
-                    <a data-ng-click="deleteNotificationMessage(message)" class="btn btn-default btn-xs btn-mini btn-warning"><i class="icon-trash"></i></a></td>
             </tr>
             </tbody>
         </table>

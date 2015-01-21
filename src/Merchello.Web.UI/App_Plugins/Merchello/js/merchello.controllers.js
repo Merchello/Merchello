@@ -137,7 +137,18 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
      * The controller for the adding / editing Notification messages on the Notifications page
      */
     angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.NotificationsMessageAddController',
-        ['$scope', function($scope) {
+        ['$scope',
+        function($scope) {
+
+            // exposed methods
+            $scope.save = save;
+
+            console.info($scope.dialogData);
+
+            function save() {
+                $scope.dialogData.notificationMessage.monitorKey = $scope.dialogData.selectedMonitor.monitorKey;
+                $scope.submit($scope.dialogData);
+            }
 
     }]);
 
@@ -926,6 +937,100 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
 
 
 
+
+    angular.module('merchello').controller('Merchello.Backoffice.NotificationMessageEditorController',
+    ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'merchelloTabsFactory',
+    'notificationGatewayProviderResource', 'notificationMessageDisplayBuilder',
+    function($scope, $routeParams, dialogService, notificationsService, merchelloTabsFactory,
+    notificationGatewayProviderResource, notificationMessageDisplayBuilder) {
+
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+        $scope.tabs = [];
+        $scope.rteProperties = {
+            label: 'bodyText',
+            view: 'rte',
+            config: {
+                editor: {
+                    toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+                    stylesheets: [],
+                    dimensions: { height: 350 }
+                }
+            },
+            value: ""
+        };
+
+        // exposed methods
+        $scope.save = save;
+
+        function init() {
+            var key = $routeParams.id;
+            loadNotificationMessage(key);
+            loadAllNotificationMonitors();
+            $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+            $scope.tabs.insertTab('messageEditor', 'Message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
+            $scope.tabs.setActive('messageEditor');
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadNotificationMessage
+         * @function
+         *
+         * @description
+         * Loads all of the Notification Message
+         */
+        function loadNotificationMessage(key) {
+            var promise = notificationGatewayProviderResource.getNotificationMessagesByKey(key);
+            promise.then(function (notification) {
+                $scope.notificationMessage = notificationMessageDisplayBuilder.transform(notification);
+                $scope.rteProperties.value = notification.bodyText;
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+            });
+            return promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadAllNotificationMonitors
+         * @function
+         *
+         * @description
+         * Loads all of the Notification Monitors
+         */
+        function loadAllNotificationMonitors() {
+            var promise = notificationGatewayProviderResource.getAllNotificationMonitors();
+            promise.then(function (monitors) {
+                $scope.notificationTriggers = notificationMessageDisplayBuilder.transform(monitors);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name save
+         * @function
+         *
+         * @description
+         * Saves the notification message
+         */
+        function save() {
+            $scope.preValuesLoaded = false;
+            $scope.notificationMessage.bodyText = $scope.rteProperties.value;
+            var promiseSave = notificationGatewayProviderResource.updateNotificationMessage($scope.notificationMessage);
+            promiseSave.then(function () {
+                notificationsService.success("Payment Method Saved");
+                init();
+            }, function (reason) {
+                notificationsService.error("Payment Method Save Failed", reason.message);
+            });
+        }
+
+        // Initialize the controller
+        init();
+
+    }]);
+
     angular.module('merchello').controller('Merchello.Backoffice.NotificationProvidersController',
         ['$scope', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'gatewayResourceDisplayBuilder',
         'notificationGatewayProviderResource', 'notificationGatewayProviderDisplayBuilder', 'notificationMethodDisplayBuilder',
@@ -934,9 +1039,8 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
         notificationGatewayProviderResource, notificationGatewayProviderDisplayBuilder, notificationMethodDisplayBuilder,
         notificationMonitorDisplayBuilder, notificationMessageDisplayBuilder) {
 
-            //$scope.currentTab = "Template";
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             $scope.notificationMonitors = [];
             $scope.tabs = [];
 
@@ -946,6 +1050,7 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
             $scope.addNotificationMethod = addNotificationMethod;
             $scope.deleteNotificationMethod = deleteNotificationMethod;
             $scope.addNotificationMessage = addNotificationMessage;
+            $scope.deleteNotificationMessage = deleteNotificationMessage;
 
             function init() {
                 loadAllNotificationGatewayProviders();
@@ -976,7 +1081,6 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * in Merchello models and add to the scope via the notificationGatewayProviders collection.
              */
             function loadAllNotificationGatewayProviders() {
-
                 var promiseAllProviders = notificationGatewayProviderResource.getAllGatewayProviders();
                 promiseAllProviders.then(function (allProviders) {
                     $scope.notificationGatewayProviders = notificationGatewayProviderDisplayBuilder.transform(allProviders);
@@ -984,9 +1088,6 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                         loadNotificationGatewayResources(provider.key);
                         loadNotificationMethods(provider.key);
                     });
-
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
 
                 }, function (reason) {
                     notificationsService.error("Available Notification Providers Load Failed", reason.message);
@@ -1025,7 +1126,7 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Loads the triggers for the notification messages.
              */
             function loadAllNotificationMonitors() {
-                var promise = notificationGatewayProviderResource.getAllNotificationTriggers();
+                var promise = notificationGatewayProviderResource.getAllNotificationMonitors();
                 promise.then(function (notificationMonitors) {
                     $scope.notificationMonitors = notificationMonitorDisplayBuilder.transform(notificationMonitors);
                 });
@@ -1043,93 +1144,19 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
             function loadNotificationMethods(providerKey) {
 
                 var provider = getProviderByKey(providerKey);
-
                 var promiseAllResources = notificationGatewayProviderResource.getNotificationProviderNotificationMethods(providerKey);
                 promiseAllResources.then(function (allMethods) {
                     provider.notificationMethods = notificationMethodDisplayBuilder.transform(allMethods);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Notification Methods Load Failed", reason.message);
                 });
             }
 
-            /*
-            $scope.addAddressFlyout = new merchello.Models.Flyout(
-                $scope.flyouts.addAddress,
-                function(isOpen) {
-                    $scope.flyouts.addAddress = isOpen;
-                },
-                {
-                    clear: function() {
-                        var self = $scope.addAddressFlyout;
-                        self.model = new merchello.Models.NotificationSubscriber();
-                    },
-                    confirm: function() {
-                        var self = $scope.addAddressFlyout;
-                        var newKey = $scope.subscribers.length;
-                        // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                        self.model.pk = newKey;
-                        $scope.subscribers.push(self.model);
-                        // Note From Kyle: An API call will need to be wired in here to add the new Subscriber to the email notification list in the database.
-                        self.clear();
-                        self.close();
-                    }
-                });
-
-
-            $scope.deleteAddressFlyout = new merchello.Models.Flyout(
-                $scope.flyouts.deleteAddress,
-                function(isOpen) {
-                    $scope.flyouts.deleteAddress = isOpen;
-                },
-                {
-                    clear: function() {
-                        var self = $scope.deleteAddressFlyout;
-                        self.model = new merchello.Models.NotificationSubscriber();
-                    },
-                    confirm: function() {
-                        var self = $scope.deleteAddressFlyout;
-                        var idx = -1;
-                        for (i = 0; i < $scope.subscribers.length; i++) {
-                            if ($scope.subscribers[i].pk == self.model.pk) {
-                                idx = i;
-                            }
-                        }
-                        if (idx > -1) {
-                            $scope.subscribers.splice(idx, 1);
-                            // Note From Kyle: An API call will need to be wired in here to delete the subscriber from the notification list in the database.
-                        }
-                        self.clear();
-                        self.close();
-                    }
-                });
-
-             */
-
-            /**
-             * @ngdoc method
-             * @name addNotificationMessageToMethodClick
-             * @function
-             *
-             * @description
-             * Saves a Notification Message to the Notification Method.
-             */
-            function addNotificationMessageToMethodClick(methodKey, notificationMessage) {
-                var redirectKey = "create";
-                if (notificationMessage == undefined) {
-                    notificationMessage = new merchello.Models.NotificationMessage();
-                    notificationMessage.methodKey = methodKey;
-                }
-                else {
-                    redirectKey = notificationMessage.key;
-                }
-                $scope.notificationMessage = notificationMessage;
-                window.location.hash = "#/merchello/merchello/NotificationsEdit/" + redirectKey;
-            }
-
             //--------------------------------------------------------------------------------------
             // Dialog methods
             //--------------------------------------------------------------------------------------
-
 
             /**
              * @ngdoc method
@@ -1143,8 +1170,8 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 $scope.preValuesLoaded = false;
                 var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMethod(dialogData.notificationMethod);
                 promiseNotificationMethod.then(function(notificationFromServer) {
-                    init();
                     notificationsService.success("Notification Method Created!", "");
+                    init();
                 }, function(reason) {
                     notificationsService.error("Notification Method Create Failed", reason.message);
                 });
@@ -1185,8 +1212,8 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 $scope.preValuesLoaded = false;
                 var promiseNotificationMethod = notificationGatewayProviderResource.deleteNotificationMethod(dialogData.notificationMethod.key);
                 promiseNotificationMethod.then(function () {
-                    init();
                     notificationsService.success("Notification Deleted");
+                    init();
                 }, function (reason) {
                     notificationsService.error("Notification Method Deletion Failed", reason.message);
                 });
@@ -1221,14 +1248,13 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Handles the delete after recieving the deleted command from the dialog view/controller
              */
             function notificationsMessageDeleteDialogConfirm(dialogData) {
-                var promiseNotificationMethod = merchelloNotificationsService.deleteNotificationMessage(dialogData.key);
-
+                console.info(dialogData);
+                var promiseNotificationMethod = notificationGatewayProviderResource.deleteNotificationMessage(dialogData.notificationMessage.key);
                 promiseNotificationMethod.then(function () {
                     notificationsService.success("Notification Deleted");
+                    init();
                 }, function (reason) {
-
                     notificationsService.error("Notification Method Deletion Failed", reason.message);
-
                 });
             }
 
@@ -1240,12 +1266,16 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * @description
              * Opens the delete dialog via the Umbraco dialogService
              */
-            function deleteNotificationMessage(method) {
+            function deleteNotificationMessage(message) {
+                var dialogData = dialogDataFactory.createDeleteNotificationMessageDialogData();
+                dialogData.notificationMessage = message;
+                dialogData.name = message.name;
+
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsdelete.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.notificationsMessageDeleteDialogConfirm,
-                    dialogData: method
+                    callback: notificationsMessageDeleteDialogConfirm,
+                    dialogData: dialogData
                 });
             }
 
@@ -1257,13 +1287,12 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * @description
              * Handles the save after recieving the save command from the dialog view/controller
              */
-            function notificationsMessageAddDialogConfirm(message) {
-                message.monitorKey = message.monitorKey.monitorKey;
-                var promiseNotificationMethod = merchelloNotificationsService.saveNotificationMessage(message);
-
+            function notificationsMessageAddDialogConfirm(dialogData) {
+                console.info(dialogData);
+                var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMessage(dialogData.notificationMessage);
                 promiseNotificationMethod.then(function (keyFromServer) {
                     notificationsService.success("Notification Saved", "");
-                    location.reload();
+                    init();
                 }, function (reason) {
                     notificationsService.error("Notification Message Saved Failed", reason.message);
                 });
@@ -1280,7 +1309,9 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
             function addNotificationMessage(method) {
                 var dialogData = dialogDataFactory.createAddEditNotificationMessageDialogData();
                 dialogData.notificationMessage = notificationMessageDisplayBuilder.createDefault();
+                console.info(method);
                 dialogData.notificationMessage.methodKey = method.key;
+                dialogData.notificationMessage.name = method.name;
                 dialogData.notificationMonitors = $scope.notificationMonitors;
                 dialogData.selectedMonitor = $scope.notificationMonitors[0];
                 dialogService.open({
