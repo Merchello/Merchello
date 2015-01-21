@@ -4,12 +4,35 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             var Constructor = MerchelloTabCollection;
 
+            // creates tabs for the sales listing page
+            function createSalesListTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('saleslist', 'Sales Listing', '#/merchello/merchello/saleslist/manage');
+                return tabs;
+            }
+
             // creates the tabs for sales overview section
             function createSalesTabs(invoiceKey) {
                 var tabs = new Constructor();
-                tabs.addTab('overview', 'Overview', '#/merchello/merchello/saleoverview/' + invoiceKey);
+                tabs.addTab('saleslist', 'Sales Listing', '#/merchello/merchello/saleslist/manage');
+                tabs.addTab('overview', 'Sale', '#/merchello/merchello/saleoverview/' + invoiceKey);
                 tabs.addTab('payments', 'Payments', '#/merchello/merchello/invoicepayments/' + invoiceKey);
                 tabs.addTab('shipments', 'Shipments', '#/merchello/merchello/ordershipments/' + invoiceKey);
+                return tabs;
+            }
+
+            // creates the tabs for the customer list page
+            function createCustomerListTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
+                return tabs;
+            }
+
+            // creates the customer overview tabs
+            function createCustomerOverviewTabs(customerKey) {
+                var tabs = new Constructor();
+                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
+                tabs.addTab('overview', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
                 return tabs;
             }
 
@@ -24,9 +47,19 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            function createReportsTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
+                return tabs;
+            }
+
             return {
+                createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
-                createGatewayProviderTabs: createGatewayProviderTabs
+                createCustomerListTabs: createCustomerListTabs,
+                createCustomerOverviewTabs: createCustomerOverviewTabs,
+                createGatewayProviderTabs: createGatewayProviderTabs,
+                createReportsTabs: createReportsTabs
             };
 
 }]);

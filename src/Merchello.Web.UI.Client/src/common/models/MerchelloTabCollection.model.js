@@ -52,9 +52,25 @@
            });
         }
 
+        function insertTab(id, name, url, index) {
+            var existing = _.find(this.items, function(tab) { return tab.id === id; });
+            if (existing === undefined || existing === null) {
+                var tab = new MerchelloTab();
+                tab.id = id;
+                tab.name = name;
+                tab.url = url;
+                if (this.items.length <= index) {
+                    addTab.call(this, tab);
+                } else {
+                    this.items.splice(index, 0, tab);
+                }
+            }
+        }
+
         return {
             addTab: addTab,
-            setActive: setActive
+            setActive: setActive,
+            insertTab: insertTab
         };
     }());
 

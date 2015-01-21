@@ -264,6 +264,7 @@
     <key alias="merchelloNotificationsDelete_deleteNotification">Slet en notifikations metode</key>
   </area>
   <area alias="merchelloNotificationsMessage">
+    <add alias="replyTo">Reply to</add>
     <key alias="addEditMessage">Tilføj/Redigér notifikations besked</key>
     <key alias="attachedEvent">Vedhæftet begivenhed</key>
     <key alias="fromEmail"><![CDATA[Fra e-mail adresse<small>(i.e. confirmation@yourdomain.com)</small>]]></key>

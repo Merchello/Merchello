@@ -1286,6 +1286,7 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area><area alias="merchelloNotificationsDelete">
     <key alias="merchelloNotificationsDelete_deleteNotification">Delete a Notification Method</key>
   </area><area alias="merchelloNotificationsMessage">
+    <key alias="replyTo">Reply to</key>
     <key alias="addEditMessage">Add/Edit a Notification Message</key>
     <key alias="attachedEvent">Attached Event</key>
     <key alias="fromEmail"><![CDATA[From Email Address<small>(i.e. confirmation@yourdomain.com)</small>]]></key>

@@ -8,15 +8,16 @@
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'settingsResource',
+    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
         'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
-        function($scope, $element, $log, angularHelper, assetsService, notificationService, settingsResource, invoiceResource,
+        function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
         {
 
             // expose on scope
             $scope.loaded = true;
             $scope.currentPage = 0;
+            $scope.tabs = [];
             $scope.filterText = '';
             $scope.filterStartDate = '';
             $scope.filterEndDate = '';
@@ -198,6 +199,8 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             function init() {
                 $scope.currencySymbol = '$';
                 loadInvoices(buildQuery());
+                $scope.tabs = merchelloTabsFactory.createSalesListTabs();
+                $scope.tabs.setActive('saleslist');
                 $scope.loaded = true;
             }
 

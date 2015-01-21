@@ -250,6 +250,7 @@ namespace Merchello.Web.Models.ContentEditing
 		internal static INotificationMessage ToNotificationMessage(this NotificationMessageDisplay notificationMessageDisplay, INotificationMessage destination)
 		{
 			if (notificationMessageDisplay.Key != Guid.Empty) destination.Key = notificationMessageDisplay.Key;
+		    destination.Name = notificationMessageDisplay.Name;
 			destination.Description = notificationMessageDisplay.Description;
 			destination.BodyText = notificationMessageDisplay.BodyText;
 			destination.MaxLength = notificationMessageDisplay.MaxLength;

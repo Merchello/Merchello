@@ -19,7 +19,7 @@
                             paymentMethods.push(paymentMethod);
                         }
                     } else {
-                        var paymentMethods = genericModelBuilder.transform(jsonResult, Constructor);
+                        paymentMethods = genericModelBuilder.transform(jsonResult, Constructor);
                         paymentMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                     }
                     return paymentMethods;
