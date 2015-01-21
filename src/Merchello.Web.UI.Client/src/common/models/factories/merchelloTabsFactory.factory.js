@@ -20,6 +20,13 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates the tabs for the customer list page
+            function createCustomerListTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
+                return tabs;
+            }
+
             // creates the tabs for the gateway provider section
             function createGatewayProviderTabs() {
                 var tabs = new Constructor();
@@ -40,6 +47,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             return {
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
+                createCustomerListTabs: createCustomerListTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs
             };

@@ -317,6 +317,59 @@
 
     /**
      * @ngdoc model
+     * @name CustomerAddressDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's CustomerAddressDisplay object
+     */
+    var CustomerAddressDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.label = '';
+        self.customerKey = '';
+        self.fullName = '';
+        self.address1 = '';
+        self.address2 = '';
+        self.locality = '';
+        self.region = '';
+        self.postalCode = '';
+        self.addressType = '';
+        self.addressTypeFieldKey = '';
+        self.company = '';
+        self.countryCode = '';
+        self.phone = '';
+        self.isDefault = false;
+    };
+
+    angular.module('merchello.models').constant('CustomerAddressDisplay', CustomerAddressDisplay);
+    /**
+     * @ngdoc model
+     * @name CustomerDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's CustomerDisplay object
+     */
+    var CustomerDisplay = function() {
+        var self = this;
+        self.firstName = '';
+        self.key = '';
+        self.lastActivityDate = '';
+        self.lastName = '';
+        self.loginName = '';
+        self.notes = '';
+        self.email = '';
+        self.taxExempt = false;
+        self.extendedData = {};
+        self.addresses = [];
+        self.invoices = [];
+    };
+
+    angular.module('merchello.models').constant('CustomerDisplay', CustomerDisplay);
+
+    /**
+     * @ngdoc model
      * @name AddEditNotificationMessageDialogData
      * @function
      *
@@ -2162,6 +2215,68 @@
 
 /**
  * @ngdoc service
+ * @name customerAddressDisplayBuilder
+ *
+ * @description
+ * A utility service that builds CustomerAddressDisplay models
+ */
+angular.module('merchello.models').factory('customerAddressDisplayBuilder',
+     ['genericModelBuilder', 'CustomerAddressDisplay',
+     function(genericModelBuilder, CustomerAddressDisplay) {
+
+         var Constructor = CustomerAddressDisplay;
+         return {
+             createDefault: function() {
+                 return new Constructor();
+             },
+             transform: function(jsonResult) {
+                 return genericModelBuilder.transform(jsonResult, Constructor);
+             }
+         };
+
+    }]);
+
+    /**
+     * @ngdoc service
+     * @name customerDisplayBuilder
+     *
+     * @description
+     * A utility service that builds CustomerDisplay models
+     */
+    angular.module('merchello.models').factory('customerDisplayBuilder',
+        ['genericModelBuilder', 'customerAddressDisplayBuilder', 'extendedDataDisplayBuilder', 'invoiceDisplayBuilder', 'CustomerDisplay',
+        function(genericModelBuilder, customerAddressDisplayBuilder, extendedDataDisplayBuilder,
+                 invoiceDisplayBuilder, CustomerDisplay) {
+
+            var Constructor = CustomerDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var customers = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var customer = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            customer.addresses = customerAddressDisplayBuilder.transform(jsonResult[ i ].addresses);
+                            customer.invoices = invoiceDisplayBuilder.transform(jsonResult[ i ].invoices);
+                            customer.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                            customers.push(customer);
+                        }
+                    } else {
+                        customers = genericModelBuilder.transform(jsonResult, Constructor);
+                        customers.addresses = customerAddressDisplayBuilder.transform(jsonResult.addresses);
+                        customers.invoices = invoiceDisplayBuilder.transform(jsonResult.invoices);
+                        customers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                    }
+                    return customers;
+                }
+            };
+
+    }]);
+
+/**
+ * @ngdoc service
  * @name merchello.models.dialogDataFactory
  *
  * @description
@@ -2422,6 +2537,13 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates the tabs for the customer list page
+            function createCustomerListTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
+                return tabs;
+            }
+
             // creates the tabs for the gateway provider section
             function createGatewayProviderTabs() {
                 var tabs = new Constructor();
@@ -2442,6 +2564,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             return {
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
+                createCustomerListTabs: createCustomerListTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs
             };
