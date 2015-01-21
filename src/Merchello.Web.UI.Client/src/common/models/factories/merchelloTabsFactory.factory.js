@@ -4,6 +4,13 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             var Constructor = MerchelloTabCollection;
 
+            // creates tabs for the sales listing page
+            function createSalesListTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('saleslist', 'Sales Listing', '#/merchello/merchello/saleslist/manage');
+                return tabs;
+            }
+
             // creates the tabs for sales overview section
             function createSalesTabs(invoiceKey) {
                 var tabs = new Constructor();
@@ -24,9 +31,17 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            function createReportsTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
+                return tabs;
+            }
+
             return {
+                createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
-                createGatewayProviderTabs: createGatewayProviderTabs
+                createGatewayProviderTabs: createGatewayProviderTabs,
+                createReportsTabs: createReportsTabs
             };
 
 }]);

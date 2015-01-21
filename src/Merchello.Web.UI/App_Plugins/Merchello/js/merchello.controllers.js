@@ -2280,6 +2280,60 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ReportsViewReportController
+     * @function
+     *
+     * @description
+     * The controller for load custom reports
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ReportsViewReportController',
+        ['$scope', '$routeParams',
+         function($scope, $routeParams) {
+
+             $scope.loaded = true;
+             $scope.preValuesLoaded = true;
+
+             // Property to control the report to show
+             $scope.reportParam = $routeParams.id;
+
+             var re = /(\\)/g;
+             var subst = '/';
+
+             var result = $scope.reportParam.replace(re, subst);
+
+             //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
+             $scope.reportPath = "/App_Plugins/" + result + ".html";
+
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ReportsListController
+     * @function
+     *
+     * @description
+     * The controller for the invoice payments view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ReportsListController',
+    ['$scope', 'merchelloTabsFactory',
+    function($scope, merchelloTabsFactory) {
+
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+        $scope.tabs = [];
+
+        function init() {
+            $scope.tabs = merchelloTabsFactory.createReportsTabs();
+            $scope.tabs.setActive('reportslist');
+        }
+
+        // initialize the controller
+        init();
+
+    }]);
+
     'use strict';
     /**
      * @ngdoc controller
@@ -3136,15 +3190,16 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'settingsResource',
+    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
         'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
-        function($scope, $element, $log, angularHelper, assetsService, notificationService, settingsResource, invoiceResource,
+        function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
         {
 
             // expose on scope
             $scope.loaded = true;
             $scope.currentPage = 0;
+            $scope.tabs = [];
             $scope.filterText = '';
             $scope.filterStartDate = '';
             $scope.filterEndDate = '';
@@ -3326,6 +3381,8 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             function init() {
                 $scope.currencySymbol = '$';
                 loadInvoices(buildQuery());
+                $scope.tabs = merchelloTabsFactory.createSalesListTabs();
+                $scope.tabs.setActive('saleslist');
                 $scope.loaded = true;
             }
 

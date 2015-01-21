@@ -93,7 +93,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
         // creates a dialog data model for adding and editing a notification message
         function createAddEditNotificationMessageDialogData() {
             return new AddEditNotificationMessageDialogData();
-        };
+        }
 
         // creates a dialog data model for deleting a notification message
         function createDeleteNotificationMessageDialogData() {
