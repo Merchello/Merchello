@@ -281,8 +281,10 @@
      * The controller for customer overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
-        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'customerResource', 'customerDisplayBuilder',
-        function($scope, $routeParams, dialogService, notificationsService, merchelloTabsFactory, customerResource, customerDisplayBuilder) {
+        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
+            'customerResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder',
+        function($scope, $routeParams, dialogService, notificationsService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
+                 customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder) {
 
             $scope.loaded = true;
             $scope.preValuesLoaded = true;
@@ -294,6 +296,16 @@
             $scope.filters = {
                 province: {}
             };
+            $scope.invoiceTotals = [];
+
+            // exposed methods
+            $scope.getCurrency = getCurrency;
+
+            // private properties
+            var settings = {};
+            var defaultCurrency = {};
+            var countries = [];
+            var currencies = [];
 
             /**
              * @ngdoc method
@@ -305,38 +317,10 @@
              */
             function init() {
                 var key = $routeParams.id;
-                //loadCountries();
+                loadSettings();
                 $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key);
                 $scope.tabs.setActive('overview');
                 loadCustomer(key);
-            }
-
-            /**
-             * @ngdoc method
-             * @name loadCountries
-             * @function
-             *
-             * @description
-             * Load a list of countries and provinces from the API.
-             */
-            function loadCountries() {
-                $scope.countries = [];
-                var promiseCountries = merchelloSettingsService.getAllCountries();
-                promiseCountries.then(function (countriesResponse) {
-                    for (var i = 0; i < countriesResponse.length; i++) {
-                        var country = countriesResponse[i];
-                        var newCountry = {
-                            id: i,
-                            countryCode: country.countryCode,
-                            name: country.name,
-                            provinces: country.provinces,
-                            provinceLabel: country.provinceLabel
-                        };
-                        $scope.countries.push(newCountry);
-                    }
-                    $scope.countries.sort($scope.sortCountries);
-                    $scope.countries.unshift({ id: -1, name: 'Select Country', countryCode: '00', provinces: {}, provinceLabel: '' });
-                });
             }
 
             /**
@@ -351,10 +335,46 @@
                 var promiseLoadCustomer = customerResource.GetCustomer(key);
                 promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = customerDisplayBuilder.transform(customerResponse);
+                    $scope.invoiceTotals = invoiceHelper.getTotalsByCurrencyCode($scope.customer.invoices);
+                    console.info($scope.invoiceTotals);
                     $scope.loaded = true;
                     //$scope.avatarUrl = merchelloGravatarService.avatarUrl($scope.customer.email);
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadCountries
+             * @function
+             *
+             * @description
+             * Load a list of countries and provinces from the API.
+             */
+            function loadSettings() {
+                // gets all of the countries
+                var promiseCountries = settingsResource.getAllCountries();
+                promiseCountries.then(function(countriesResponse) {
+                    countries = countryDisplayBuilder.transform(countriesResponse);
+                });
+
+                // gets all of the settings
+                var promiseSettings = settingsResource.getAllSettings();
+                promiseSettings.then(function(settingsResponse) {
+                    settings = settingDisplayBuilder.transform(settingsResponse);
+
+                    // we need all of the currencies since invoices may be billed in various currencies
+                    var promiseCurrencies = settingsResource.getAllCurrencies();
+                    promiseCurrencies.then(function(currenciesResponse) {
+                        currencies = currencyDisplayBuilder.transform(currenciesResponse);
+
+                        // get the default currency from the settings in case we cannot determine
+                        // the currency used in an invoice
+                        defaultCurrency = _.find(currencies, function(c) {
+                            return c.currencyCode === settings.currencyCode;
+                        });
+                    });
                 });
             }
 
@@ -551,7 +571,7 @@
 
             /**
              * @ngdoc method
-             * @name saveCustoemr
+             * @name saveCustomer
              * @function
              *
              * @description
@@ -567,6 +587,24 @@
                 }, function(reason) {
                     notificationsService.error("Customer  Failed", reason.message);
                 });
+            }
+
+            /**
+             * @ngdoc method
+             * @name getCurrencySymbol
+             * @function
+             *
+             * @description
+             * Gets the currency symbol for an invoice.
+             */
+            function getCurrency(currencyCode) {
+                var currency = _.find(currencies, function(c) {
+                    return c.currencyCode === currencyCode;
+                });
+                if (currency === null || currency === undefined) {
+                    currency = defaultCurrency;
+                }
+                return currency;
             }
 
             // Initializes the controller
@@ -3005,6 +3043,8 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             promise.then(function (invoice) {
                 $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                 $scope.billingAddress = $scope.invoice.getBillToAddress();
+                // append the customer tab if needed
+                $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
                 loadPayments(id);
                 loadSettings();
                 $scope.loaded = true;
@@ -3113,6 +3153,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var invoicePromise = invoiceResource.getByKey(key);
                 invoicePromise.then(function(invoice) {
                     $scope.invoice = invoice;
+                    // append the customer tab
+                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
                     loadSettings();
                     var shipmentsPromise = shipmentResource.getShipmentsByInvoice(invoice);
                     shipmentsPromise.then(function(shipments) {
@@ -3458,7 +3500,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     if (shipmentLineItem) {
                         $scope.shipmentLineItems.push(shipmentLineItem);
                     }
-                   //console.info($scope.invoice);
+
+                   $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });

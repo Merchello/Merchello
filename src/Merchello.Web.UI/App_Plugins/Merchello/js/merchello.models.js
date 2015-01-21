@@ -251,10 +251,18 @@
             }
         }
 
+        /// appends a customer tab to the current collection
+        function appendCustomerTab(customerKey) {
+            if(customerKey !== '00000000-0000-0000-0000-000000000000') {
+                addTab.call(this, 'customer', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
+            }
+        }
+
         return {
             addTab: addTab,
             setActive: setActive,
-            insertTab: insertTab
+            insertTab: insertTab,
+            appendCustomerTab: appendCustomerTab
         };
     }());
 
@@ -390,6 +398,21 @@
     }());
 
     angular.module('merchello.models').constant('CustomerDisplay', CustomerDisplay);
+
+    /**
+     * @ngdoc model
+     * @name AddEditCustomerDialogData
+     * @function
+     *
+     * @description
+     *  A dialog data object for adding or editing CustomerDisplay objects
+     */
+    var AddEditCustomerDialogData = function() {
+        var self = this;
+        self.customer = {};
+    };
+
+    angular.module('merchello.models').constant('AddEditCustomerDialogData', AddEditCustomerDialogData);
 
     /**
      * @ngdoc model
@@ -2400,6 +2423,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeleteNotificationMessageDialogData();
         }
 
+        // creates a dialog data model for adding or updating a customer
+        function createAddEditCustomerDialogData() {
+            return new AddEditCustomerDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -2419,7 +2447,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createAddEditNotificationMethodDialogData: createAddEditNotificationMethodDialogData,
             createDeleteNotificationMethodDialogData: createDeleteNotificationMethodDialogData,
             createAddEditNotificationMessageDialogData: createAddEditNotificationMessageDialogData,
-            createDeleteNotificationMessageDialogData: createDeleteNotificationMessageDialogData
+            createDeleteNotificationMessageDialogData: createDeleteNotificationMessageDialogData,
+            createAddEditCustomerDialogData: createAddEditCustomerDialogData
         };
 }]);
 
@@ -2592,6 +2621,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
                 return tabs;
             }
+
 
             return {
                 createSalesListTabs: createSalesListTabs,

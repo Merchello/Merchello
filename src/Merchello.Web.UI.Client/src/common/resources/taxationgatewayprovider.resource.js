@@ -1,5 +1,5 @@
 /**
- * @ngdoc service
+ * @ngdoc resource
  * @name taxationGatewayProviderResource
  * @description Loads in data for taxation providers
  **/

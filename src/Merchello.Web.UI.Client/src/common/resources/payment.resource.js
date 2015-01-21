@@ -1,5 +1,5 @@
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name paymentResource
      * @description Loads in data and allows modification for payments
      **/

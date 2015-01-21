@@ -120,7 +120,9 @@
                     if (shipmentLineItem) {
                         $scope.shipmentLineItems.push(shipmentLineItem);
                     }
-                   //console.info($scope.invoice);
+
+                   $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });

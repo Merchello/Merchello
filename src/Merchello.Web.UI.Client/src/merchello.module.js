@@ -13,7 +13,7 @@
     angular.module('merchello.filters', []);
     angular.module('merchello.directives', []);
     angular.module('merchello.resources', []);
-    angular.module('merchello.services', ['merchello.models', 'merchello.resources']);
+    angular.module('merchello.services', ['merchello.models']);
 
     //// Assert our dependencies
     angular.module('umbraco.packages').requires.push('merchello');

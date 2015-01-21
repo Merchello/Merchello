@@ -17,7 +17,7 @@ angular.module('merchello.models', []);
 angular.module('merchello.filters', []);
 angular.module('merchello.directives', []);
 angular.module('merchello.resources', []);
-angular.module('merchello.services', ['merchello.models', 'merchello.resources']);
+angular.module('merchello.services', ['merchello.models']);
 angular.module('merchello.mocks', ['merchello.models']);
 
 //// Assert our dependencies

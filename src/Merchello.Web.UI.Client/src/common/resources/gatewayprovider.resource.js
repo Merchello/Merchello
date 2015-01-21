@@ -1,5 +1,5 @@
 /**
- * @ngdoc service
+ * @ngdoc resource
  * @name gatewayProviderResource
  * @description Loads in data and allows modification of gateway providers
  **/

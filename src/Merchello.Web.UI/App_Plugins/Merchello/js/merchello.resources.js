@@ -7,7 +7,7 @@
 (function() { 
 
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name auditLogResource
      * @description Loads in data and allows modification of audit logs
      **/
@@ -34,7 +34,7 @@
     }]);
 
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name customerResource
      * @description Deals with customers api.
      **/
@@ -144,7 +144,7 @@
     }]);
 
 /**
- * @ngdoc service
+ * @ngdoc resource
  * @name gatewayProviderResource
  * @description Loads in data and allows modification of gateway providers
  **/
@@ -236,7 +236,7 @@ angular.module('merchello.resources')
     }]);
 
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name invoiceResource
      * @description Loads in data and allows modification for invoices
      **/
@@ -460,7 +460,7 @@ angular.module('merchello.resources')
     }]);
 
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name orderResource
      * @description Loads in data and allows modification for orders
      **/
@@ -570,7 +570,7 @@ angular.module('merchello.resources')
         }]);
 
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name paymentResource
      * @description Loads in data and allows modification for payments
      **/
@@ -715,7 +715,7 @@ angular.module('merchello.resources')
     }]);
 
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name settingsResource
      * @description Loads in data and allows modification for invoices
      **/
@@ -892,7 +892,7 @@ angular.module('merchello.resources')
     }]);
 
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name shipmentResource
      * @description Loads in data and allows modification for shipments
      **/
@@ -1014,7 +1014,7 @@ angular.module('merchello.resources')
     }]);
 
 /**
- * @ngdoc service
+ * @ngdoc resource
  * @name shippingGatewayProviderResource
  * @description Loads in data for shipping providers and store shipping settings
  **/
@@ -1156,7 +1156,7 @@ angular.module('merchello.resources')
         }]);
 
 /**
- * @ngdoc service
+ * @ngdoc resource
  * @name taxationGatewayProviderResource
  * @description Loads in data for taxation providers
  **/
@@ -1228,7 +1228,7 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
 }]);
 
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name warehouseResource
      * @description Loads in data and allows modification of warehouses
      **/

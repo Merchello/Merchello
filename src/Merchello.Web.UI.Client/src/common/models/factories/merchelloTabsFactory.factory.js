@@ -53,6 +53,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+
             return {
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
