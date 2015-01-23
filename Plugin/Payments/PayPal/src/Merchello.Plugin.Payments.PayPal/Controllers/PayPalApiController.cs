@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
+using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
@@ -20,19 +21,9 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
     public class PayPalApiController : UmbracoApiController
     {
         /// <summary>
-        /// The invoice service.
+        /// Merchello context
         /// </summary>
-        private readonly IInvoiceService _invoiceService;
-
-        /// <summary>
-        /// The payment service.
-        /// </summary>
-        private readonly IPaymentService _paymentService;
-
-        /// <summary>
-        /// The gateway provider service.
-        /// </summary>
-        private readonly IGatewayProviderService _gatewayProviderService;
+        private readonly IMerchelloContext _merchelloContext;
 
         /// <summary>
         /// The PayPal payment processor.
@@ -65,10 +56,7 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
                 throw ex;
             }
 
-            _invoiceService = merchelloContext.Services.InvoiceService;
-            _paymentService = merchelloContext.Services.PaymentService;
-            _gatewayProviderService = merchelloContext.Services.GatewayProviderService;
-
+            _merchelloContext = merchelloContext;
             _processor = new PayPalPaymentProcessor(provider.ExtendedData.GetProcessorSettings());
         }
 
@@ -84,9 +72,8 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
         [HttpGet]
         public HttpResponseMessage AuthorizePayment(Guid invoiceKey, Guid paymentKey, string token, string payerId)
         {
-            var invoice = _invoiceService.GetByKey(invoiceKey);
-            var payment = _paymentService.GetByKey(paymentKey);
-
+            var invoice = _merchelloContext.Services.InvoiceService.GetByKey(invoiceKey);
+            var payment = _merchelloContext.Services.PaymentService.GetByKey(paymentKey);
             if (invoice == null || payment == null || String.IsNullOrEmpty(token) || String.IsNullOrEmpty(payerId))
             {
                 var ex = new NullReferenceException(string.Format("Invalid argument exception. Arguments: invoiceKey={0}, paymentKey={1}, token={2}, payerId={3}.", invoiceKey, paymentKey, token, payerId));
@@ -94,18 +81,27 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
                 throw ex;
             }
 
-            var result = _processor.AuthorizePayment(invoice, payment, token, payerId);
-            _gatewayProviderService.Save(payment);
-
-            if (!result.Payment.Success)
+            // Authorize
+            var authorizeResult = _processor.AuthorizePayment(invoice, payment, token, payerId);
+            _merchelloContext.Services.GatewayProviderService.Save(payment);
+            if (!authorizeResult.Payment.Success)
             {
-                LogHelper.Error<PayPalApiController>("Payment is not authorized.", result.Payment.Exception);
-                throw result.Payment.Exception;
+                LogHelper.Error<PayPalApiController>("Payment is not authorized.", authorizeResult.Payment.Exception);
+                throw authorizeResult.Payment.Exception;
             }
-            
-            // redirect to Home page
+
+            // Capture
+            var paymentGatewayMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(payment.PaymentMethodKey.Value);
+            var captureResult = paymentGatewayMethod.CapturePayment(invoice, payment, payment.Amount, null);
+            if (!captureResult.Payment.Success)
+            {
+                LogHelper.Error<PayPalApiController>("Payment is not captured.", captureResult.Payment.Exception);
+                throw captureResult.Payment.Exception;
+            }
+
+            // redirect to Site
             var response = Request.CreateResponse(HttpStatusCode.Moved);
-            response.Headers.Location = new Uri(PayPalPaymentProcessor.GetWebsiteUrl());
+            response.Headers.Location = new Uri(PayPalPaymentProcessor.GetWebsiteUrl() + _processor.Settings.ConfirmationReturnUrl.Replace("%INVOICE%", invoice.Key.ToString().EncryptWithMachineKey()));
             return response;
         }
 
@@ -114,8 +110,8 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
         [HttpGet]
         public string RefundPayment(Guid invoiceKey, Guid paymentKey)
         {
-            var invoice = _invoiceService.GetByKey(invoiceKey);
-            var payment = _paymentService.GetByKey(paymentKey);
+            var invoice = _merchelloContext.Services.InvoiceService.GetByKey(invoiceKey);
+            var payment = _merchelloContext.Services.PaymentService.GetByKey(paymentKey);
             if (invoice == null || payment == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             var result = _processor.RefundPayment(invoice, payment, 0);
             return "";
