@@ -105,6 +105,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new AddEditCustomerDialogData();
         }
 
+        // creates a dialog data model for deleting a customer
+        function createDeleteCustomerDialogData() {
+            return new DeleteCustomerDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -125,6 +130,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteNotificationMethodDialogData: createDeleteNotificationMethodDialogData,
             createAddEditNotificationMessageDialogData: createAddEditNotificationMessageDialogData,
             createDeleteNotificationMessageDialogData: createDeleteNotificationMessageDialogData,
-            createAddEditCustomerDialogData: createAddEditCustomerDialogData
+            createAddEditCustomerDialogData: createAddEditCustomerDialogData,
+            createDeleteCustomerDialogData: createDeleteCustomerDialogData
         };
 }]);

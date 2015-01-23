@@ -409,7 +409,9 @@
      */
     var AddEditCustomerDialogData = function() {
         var self = this;
-        self.customer = {};
+        self.firstName = '';
+        self.lastName = '';
+        self.email = '';
     };
 
     angular.module('merchello.models').constant('AddEditCustomerDialogData', AddEditCustomerDialogData);
@@ -608,6 +610,22 @@
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
+    /**
+     * @ngdoc model
+     * @name DeleteCustomerDialogData
+     * @function
+     *
+     * @description
+     *  A dialog data object for deleting CustomerDisplay objects
+     */
+    var DeleteCustomerDialogData = function() {
+        var self = this;
+        self.customer = {};
+        self.name = '';
+    };
+
+    angular.module('merchello.models').constant('DeleteCustomerDialogData', DeleteCustomerDialogData);
+
     /**
      * @ngdoc model
      * @name DeleteNotificationMessageDialogData
@@ -2297,7 +2315,9 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
             var Constructor = CustomerDisplay;
             return {
                 createDefault: function() {
-                    return new Constructor();
+                    var customer = new Constructor();
+                    customer.extendedData = extendedDataDisplayBuilder.createDefault();
+                    return customer;
                 },
                 transform: function(jsonResult) {
                     var customers = [];
@@ -2428,6 +2448,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new AddEditCustomerDialogData();
         }
 
+        // creates a dialog data model for deleting a customer
+        function createDeleteCustomerDialogData() {
+            return new DeleteCustomerDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -2448,7 +2473,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteNotificationMethodDialogData: createDeleteNotificationMethodDialogData,
             createAddEditNotificationMessageDialogData: createAddEditNotificationMessageDialogData,
             createDeleteNotificationMessageDialogData: createDeleteNotificationMessageDialogData,
-            createAddEditCustomerDialogData: createAddEditCustomerDialogData
+            createAddEditCustomerDialogData: createAddEditCustomerDialogData,
+            createDeleteCustomerDialogData: createDeleteCustomerDialogData
         };
 }]);
 

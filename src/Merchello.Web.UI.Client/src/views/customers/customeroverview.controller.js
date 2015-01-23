@@ -7,9 +7,9 @@
      * The controller for customer overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
-        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
+        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
             'customerResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder',
-        function($scope, $routeParams, dialogService, notificationsService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
+        function($scope, $routeParams, dialogService, notificationsService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
                  customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder) {
 
             $scope.loaded = true;
@@ -26,6 +26,8 @@
 
             // exposed methods
             $scope.getCurrency = getCurrency;
+            $scope.openEditInfoDialog = openEditInfoDialog;
+            $scope.openDeleteCustomerDialog = openDeleteCustomerDialog;
 
             // private properties
             var settings = {};
@@ -62,9 +64,9 @@
                 promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = customerDisplayBuilder.transform(customerResponse);
                     $scope.invoiceTotals = invoiceHelper.getTotalsByCurrencyCode($scope.customer.invoices);
-                    console.info($scope.invoiceTotals);
+                    $scope.avatarUrl = gravatarService.getAvatarUrl($scope.customer.email);
                     $scope.loaded = true;
-                    //$scope.avatarUrl = merchelloGravatarService.avatarUrl($scope.customer.email);
+                    $scope.preValuesLoaded = true;
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
                 });
@@ -169,12 +171,13 @@
              * Opens the delete customer dialog via the Umbraco dialogService.
              */
             function openDeleteCustomerDialog() {
-                var dialogData = {};
+                var dialogData = dialogDataFactory.createDeleteCustomerDialogData();
+                dialogData.customer = $scope.customer;
                 dialogData.name = $scope.customer.firstName + ' ' + $scope.customer.lastName;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.processDeleteCustomerDialog,
+                    callback: processDeleteCustomerDialog,
                     dialogData: dialogData
                 });
             }
@@ -190,7 +193,9 @@
             function openEditInfoDialog() {
 
                 var dialogData = dialogDataFactory.createAddEditCustomerDialogData();
-                dialogData.customer = $scope.customer;
+                dialogData.firstName = $scope.customer.firstName;
+                dialogData.lastName = $scope.customer.lastName;
+                dialogData.email = $scope.customer.email;
 
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.info.edit.html',
@@ -269,11 +274,11 @@
              * Delete a customer.
              */
             function processDeleteCustomerDialog(dialogData) {
-                notificationsService.info("Deleting " + $scope.customer.firstName + " " + $scope.customer.lastName, "");
-                var promiseDeleteCustomer = merchelloCustomerService.DeleteCustomer($scope.customer.key);
+                notificationsService.info("Deleting " + dialogData.customer.firstName + " " + dialogData.customer.lastName, "");
+                var promiseDeleteCustomer = customerResource.DeleteCustomer(dialogData.customer.key);
                 promiseDeleteCustomer.then(function() {
                     notificationsService.success("Customer deleted.", "");
-                    window.location.hash = "#/merchello/merchello/CustomerList/manage";
+                    window.location.hash = "#/merchello/merchello/customerList/manage";
                 }, function(reason) {
                     notificationsService.error("Customer Deletion Failed", reason.message);
                 });
@@ -287,11 +292,11 @@
              * @description
              * Update the customer info and save.
              */
-            function processEditInfoDialog(data) {
-                $scope.customer.firstName = data.firstName;
-                $scope.customer.lastName = data.lastName;
-                $scope.customer.email = data.email;
-                $scope.saveCustomer();
+            function processEditInfoDialog(dialogData) {
+                $scope.customer.firstName = dialogData.firstName;
+                $scope.customer.lastName = dialogData.lastName;
+                $scope.customer.email = dialogData.email;
+                saveCustomer();
             }
 
             /**
@@ -303,12 +308,13 @@
              * Save the customer with the new note.
              */
             function saveCustomer() {
+                $scope.preValuesLoaded = false;
                 notificationsService.info("Saving...", "");
-                var promiseSaveCustomer = merchelloCustomerService.SaveCustomer($scope.customer);
+                var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
                 promiseSaveCustomer.then(function(customerResponse) {
-                    $scope.customer = new merchello.Models.Customer(customerResponse);
                     notificationsService.success("Customer Saved", "");
-                    $scope.getDefaultAddresses();
+                    init();
+
                 }, function(reason) {
                     notificationsService.error("Customer  Failed", reason.message);
                 });

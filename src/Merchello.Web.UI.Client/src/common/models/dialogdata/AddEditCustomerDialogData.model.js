@@ -8,7 +8,9 @@
      */
     var AddEditCustomerDialogData = function() {
         var self = this;
-        self.customer = {};
+        self.firstName = '';
+        self.lastName = '';
+        self.email = '';
     };
 
     angular.module('merchello.models').constant('AddEditCustomerDialogData', AddEditCustomerDialogData);
