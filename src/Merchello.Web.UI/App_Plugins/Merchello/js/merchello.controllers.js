@@ -57,6 +57,33 @@
      * @function
      *
      * @description
+     * The controller for customer addresses view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.CustomerAddressesController',
+        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'customerResource', 'customerDisplayBuilder',
+        function($scope, $routeParams, dialogService, notificationsService, merchelloTabsFactory, customerResource, customerDisplayBuilder) {
+
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+            $scope.tabs = [];
+            $scope.customer = {}
+
+            function init() {
+                var key = $routeParams.id;
+                $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key);
+                $scope.tabs.setActive('addresses');
+            }
+
+            // initialize the controller
+            init();
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.CustomerListController
+     * @function
+     *
+     * @description
      * The controller for customer list view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
@@ -286,22 +313,20 @@
         function($scope, $routeParams, dialogService, notificationsService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
                  customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder) {
 
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             $scope.tabs = [];
             $scope.avatarUrl = "";
-            $scope.billingAddresses = [];
-            $scope.countries = [];
+            $scope.defaultShippingAddress = {};
+            $scope.defaultBillingAddress = {};
             $scope.customer = {};
-            $scope.filters = {
-                province: {}
-            };
             $scope.invoiceTotals = [];
 
             // exposed methods
             $scope.getCurrency = getCurrency;
             $scope.openEditInfoDialog = openEditInfoDialog;
             $scope.openDeleteCustomerDialog = openDeleteCustomerDialog;
+            $scope.openAddressAddEditDialog = openAddressAddEditDialog;
 
             // private properties
             var settings = {};
@@ -320,8 +345,6 @@
             function init() {
                 var key = $routeParams.id;
                 loadSettings();
-                $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key);
-                $scope.tabs.setActive('overview');
                 loadCustomer(key);
             }
 
@@ -339,6 +362,10 @@
                     $scope.customer = customerDisplayBuilder.transform(customerResponse);
                     $scope.invoiceTotals = invoiceHelper.getTotalsByCurrencyCode($scope.customer.invoices);
                     $scope.avatarUrl = gravatarService.getAvatarUrl($scope.customer.email);
+                    $scope.defaultBillingAddress = $scope.customer.getDefaultBillingAddress();
+                    $scope.defaultShippingAddress = $scope.customer.getDefaultShippingAddress();
+                    $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key, $scope.customer.hasAddresses());
+                    $scope.tabs.setActive('overview');
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function(reason) {
@@ -388,50 +415,30 @@
              * @description
              * Opens the edit address dialog via the Umbraco dialogService.
              */
-            function openAddressEditDialog(type) {
-                var dialogData = {};
-                dialogData.addressToReturn = new merchello.Models.CustomerAddress();
-                dialogData.countries = $scope.countries;
-                dialogData.shouldDelete = false;
-                $scope.currentAddress = new merchello.Models.CustomerAddress();
-                dialogData.addressType = type;
-                if (type == 'billing') {
-                    dialogData.addresses = _.map($scope.billingAddresses, function (billingAddress) {
-                        return new merchello.Models.CustomerAddress(billingAddress);
-                    });
+            function openAddressAddEditDialog(address) {
+                var dialogData = dialogDataFactory.createAddEditCustomerAddressDialogData();
+
+                // if the address is not defined we need to create a default (empty) CustomerAddressDisplay
+                if(address === null || address === undefined) {
+                    dialogData.customerAddress = customerDisplayBuilder.createDefault();
+                    dialogData.selectedCountry = countries[0];
                 } else {
-                    dialogData.addresses = _.map($scope.shippingAddresses, function (shippingAddress) {
-                        return new merchello.Models.CustomerAddress(shippingAddress);
+                    dialogData.customerAddress = address;
+                    dialogData.selectedCountry === _.find(countries, function(country) {
+                        return country.countryCode === address.countryCode;
                     });
                 }
-                var aliases = [];
-                for (var i = 0; i < dialogData.addresses.length; i++) {
-                    var address = dialogData.addresses[i];
-                    var alias = address.label;
-                    aliases.push({ id: i, name: alias });
-                };
-                aliases.unshift({ id: -1, name: 'New Address' });
-                dialogData.addressAliases = aliases;
-                dialogData.addresses.unshift(new merchello.Models.CustomerAddress());
-                dialogData.type = [
-                    { id: 0, name: 'Billing' },
-                    { id: 1, name: 'Shipping' }
-                ];
-                dialogData.filters = {
-                    address: dialogData.addressAliases[0],
-                    country: $scope.countries[0],
-                    province: {},
-                    type: {}
-                };
-                if (type === 'billing') {
-                    dialogData.filters.type = dialogData.type[0];
-                } else {
-                    dialogData.filters.type = dialogData.type[1];
+                dialogData.countries = countries;
+                // if the customer has not addresses of the given type we are going to force an added
+                // address to be the primary address
+                if(!$scope.customer.hasDefaultAddressOfType(dialogData.customerAddress.addressType)) {
+                    dialogData.customerAddress.isDefault = true;
+                    dialogData.setDefault = true;
                 }
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Customer/Dialogs/customer.editaddress.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.customeraddress.addedit.html',
                     show: true,
-                    callback: $scope.processEditAddressDialog,
+                    callback: processAddEditAddressDialog,
                     dialogData: dialogData
                 });
             }
@@ -479,24 +486,6 @@
                 });
             }
 
-            /**
-             * @ngdoc method
-             * @name prepareAddressesForSave
-             * @function
-             *
-             * @description
-             * Prepare a list of addresses to save with the customer
-             */
-            function prepareAddressesForSave() {
-                var addresses = [];
-                _.each($scope.billingAddresses, function(address) {
-                    addresses.push(new merchello.Models.CustomerAddress(address));
-                });
-                _.each($scope.shippingAddresses, function(address) {
-                    addresses.push(new merchello.Models.CustomerAddress(address));
-                });
-                return addresses;
-            };
 
             /**
              * @ngdoc method
@@ -506,7 +495,9 @@
              * @description
              * Edit an address and update the associated lists.
              */
-            function processEditAddressDialog(data) {
+            function processAddEditAddressDialog(dialogData) {
+                console.info(dialogData);
+                /*
                 var addresses = data.addresses;
                 //  Filter out an address if it's marked to be deleted.
                 if (data.shouldDelete) {
@@ -537,6 +528,7 @@
                 // Combine the address lists and update the customer.
                 $scope.customer.addresses = $scope.prepareAddressesForSave();
                 $scope.saveCustomer();
+                */
             }
 
             /**
@@ -614,6 +606,45 @@
 
             // Initializes the controller
             init();
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Customer.Dialogs.CustomerAddressAddEditController
+     * @function
+     *
+     * @description
+     * The controller for adding and editing customer addresses
+     */
+    angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerAddressAddEditController',
+        ['$scope',
+        function($scope) {
+
+            // exposed methods
+            $scope.updateProvinceList = updateProvinceList;
+            $scope.toTitleCase = toTitleCase;
+
+            console.info($scope.dialogData);
+
+            function updateProvinceList() {
+                // try to find the province matching the province code of the customer address
+                var provinceCode = $scope.dialogData.customerAddress.region;
+                if($scope.dialogData.selectedCountry.provinces.length > 0) {
+                    var province = _.find($scope.dialogData.selectedCountry.provinces, function(p) {
+                        return p.code === provinceCode;
+                    });
+                    if (province === null || province === undefined) {
+                        $scope.dialogData.selectedProvince = $scope.dialogData.selectedCountry.provinces[0];
+                    } else {
+                        $scope.dialogData.selectedProvince = province;
+                    }
+                }
+            }
+
+            function toTitleCase(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
     }]);
 
     /**

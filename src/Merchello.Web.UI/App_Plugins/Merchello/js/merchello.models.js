@@ -350,6 +350,32 @@
         self.isDefault = false;
     };
 
+    CustomerAddressDisplay.prototype = (function() {
+
+        function isEmpty() {
+            var result = false;
+            if (this.address1 === '' || this.locality === '' || this.address1 === null || this.locality === null) {
+                result = true;
+            }
+            return result;
+        }
+
+        // maps CustomerAddressDisplay to AddressDisplay
+        function asAddressDisplay() {
+            var address = new AddressDisplay();
+            angular.extend(address, this);
+            // corrections
+            address.name = this.fullName;
+            address.organization = this.company;
+            return address;
+        }
+
+        return {
+            isEmpty: isEmpty,
+            asAddressDisplay: asAddressDisplay
+        };
+    }());
+
     angular.module('merchello.models').constant('CustomerAddressDisplay', CustomerAddressDisplay);
     /**
      * @ngdoc model
@@ -376,6 +402,61 @@
 
     CustomerDisplay.prototype = (function() {
 
+        function getDefaultAddress(addressType) {
+            console.info(addressType);
+            return _.find(this.addresses, function(address) {
+                return address.addressType === addressType && address.isDefault === true;
+            });
+        }
+
+        function getAddressesByAddressType(addressType) {
+            return _.filter(this.addresses, function(address) {
+                return address.addressType === addressType;
+            });
+        }
+
+        // returns a value indicating whether or not the customer has addresses
+        function hasAddresses() {
+            return this.addresses.length > 0;
+        }
+
+        // returns a value indicating whether or not the customer has a default address of a given type
+        function hasDefaultAddressOfType(addressType) {
+            var address = getDefaultAddress.call(this, addressType);
+            return address !== null && address !== undefined;
+        }
+
+        // gets the default billing address
+        function getDefaultBillingAddress() {
+            var address = getDefaultAddress.call(this, 'billing');
+            if(address === null || address === undefined) {
+                address = new CustomerAddressDisplay();
+                address.addressType = 'billing';
+            }
+            return address;
+        }
+
+        // gets the collection of billing addresses
+        function getBillingAddresses() {
+            return getAddressesByAddressType.call(this, 'billing');
+        }
+
+        // get default shipping address
+        function getDefaultShippingAddress() {
+            var address = getDefaultAddress.call(this, 'shipping');
+            if(address === null || address === undefined) {
+                address = new CustomerAddressDisplay();
+                address.addressType = 'shipping';
+            }
+            return address;
+        }
+
+        // gets the shipping address collection
+        function getShippingAddresses() {
+            return getAddressesByAddressType.call(this, 'shipping');
+        }
+
+        // gets the last invoice billed to the customer
         function getLastInvoice() {
             if (this.invoices.length > 0) {
                 var sorted = _.sortBy(this.invoices, function(invoice) {
@@ -392,13 +473,37 @@
         }
 
         return {
-            getLastInvoice: getLastInvoice
+            getLastInvoice: getLastInvoice,
+            hasAddresses: hasAddresses,
+            hasDefaultAddressOfType: hasDefaultAddressOfType,
+            getDefaultBillingAddress: getDefaultBillingAddress,
+            getBillingAddresses: getBillingAddresses,
+            getDefaultShippingAddress: getDefaultShippingAddress,
+            getShippingAddresses: getShippingAddresses
         }
 
     }());
 
     angular.module('merchello.models').constant('CustomerDisplay', CustomerDisplay);
 
+    /**
+     * @ngdoc model
+     * @name AddEditCustomerAddressDialogData
+     * @function
+     *
+     * @description
+     *  A dialog data object for adding or editing CustomerAddressDisplay objects
+     */
+    var AddEditCustomerAddressDialogData = function() {
+        var self = this;
+        self.customerAddress = {};
+        self.countries = [];
+        self.selectedCountry = {};
+        self.selectedProvince = {};
+        self.setDefault = false;
+    };
+
+    angular.module('merchello.models').constant('AddEditCustomerAddressDialogData', AddEditCustomerAddressDialogData);
     /**
      * @ngdoc model
      * @name AddEditCustomerDialogData
@@ -2453,6 +2558,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeleteCustomerDialogData();
         }
 
+        // creates a dialog data model for adding or updating customer addresses
+        function createAddEditCustomerAddressDialogData() {
+            return new AddEditCustomerAddressDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -2474,7 +2584,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createAddEditNotificationMessageDialogData: createAddEditNotificationMessageDialogData,
             createDeleteNotificationMessageDialogData: createDeleteNotificationMessageDialogData,
             createAddEditCustomerDialogData: createAddEditCustomerDialogData,
-            createDeleteCustomerDialogData: createDeleteCustomerDialogData
+            createDeleteCustomerDialogData: createDeleteCustomerDialogData,
+            createAddEditCustomerAddressDialogData: createAddEditCustomerAddressDialogData
         };
 }]);
 
@@ -2624,10 +2735,13 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             }
 
             // creates the customer overview tabs
-            function createCustomerOverviewTabs(customerKey) {
+            function createCustomerOverviewTabs(customerKey, hasAddresses) {
                 var tabs = new Constructor();
                 tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
                 tabs.addTab('overview', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
+                if(hasAddresses) {
+                    tabs.addTab('addresses', 'Addresses', '#/merchello/merchello/customeraddresses/' + customerKey);
+                }
                 return tabs;
             }
 

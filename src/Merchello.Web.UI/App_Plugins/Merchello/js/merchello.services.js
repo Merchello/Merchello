@@ -268,13 +268,13 @@
                     var total = inv.total;
                     var existing = _.find(totals, function(t) { return t.currencyCode === cc; });
                     if (existing === null || existing === undefined) {
-                        totals.push({ currencyCode: cc, total: total })
+                        totals.push({ currencyCode: cc, total: total });
                     } else {
                         existing.total += total;
                     }
                 });
                 return _.sortBy(totals, function(o) { return o.currencyCode; });
-            }
+            };
 
 
     }]);
