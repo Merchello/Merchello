@@ -48,32 +48,32 @@
 
         // gets the default billing address
         function getDefaultBillingAddress() {
-            var address = getDefaultAddress.call(this, 'billing');
+            var address = getDefaultAddress.call(this, 'Billing');
             if(address === null || address === undefined) {
                 address = new CustomerAddressDisplay();
-                address.addressType = 'billing';
+                address.addressType = 'Billing';
             }
             return address;
         }
 
         // gets the collection of billing addresses
         function getBillingAddresses() {
-            return getAddressesByAddressType.call(this, 'billing');
+            return getAddressesByAddressType.call(this, 'Billing');
         }
 
         // get default shipping address
         function getDefaultShippingAddress() {
-            var address = getDefaultAddress.call(this, 'shipping');
+            var address = getDefaultAddress.call(this, 'Shipping');
             if(address === null || address === undefined) {
                 address = new CustomerAddressDisplay();
-                address.addressType = 'shipping';
+                address.addressType = 'Shipping';
             }
             return address;
         }
 
         // gets the shipping address collection
         function getShippingAddresses() {
-            return getAddressesByAddressType.call(this, 'shipping');
+            return getAddressesByAddressType.call(this, 'Shipping');
         }
 
         // gets the last invoice billed to the customer
@@ -96,6 +96,8 @@
             getLastInvoice: getLastInvoice,
             hasAddresses: hasAddresses,
             hasDefaultAddressOfType: hasDefaultAddressOfType,
+            getAddressesByAddressType: getAddressesByAddressType,
+            getDefaultAddress: getDefaultAddress,
             getDefaultBillingAddress: getDefaultBillingAddress,
             getBillingAddresses: getBillingAddresses,
             getDefaultShippingAddress: getDefaultShippingAddress,

@@ -9,6 +9,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
@@ -324,6 +325,7 @@
             foreach (var address in customer.Addresses.Where(x => x.Key == Guid.Empty))
             {
                 var customerAddress = address.ToCustomerAddress(new CustomerAddress(customer.Key));
+                customerAddress.AddressType = address.AddressType;
                 _customerAddressService.Save(customerAddress);
                 address.Key = customerAddress.Key;
             }
