@@ -1,5 +1,5 @@
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name auditLogResource
      * @description Loads in data and allows modification of audit logs
      **/

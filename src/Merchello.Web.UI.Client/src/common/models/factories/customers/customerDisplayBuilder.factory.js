@@ -13,7 +13,9 @@
             var Constructor = CustomerDisplay;
             return {
                 createDefault: function() {
-                    return new Constructor();
+                    var customer = new Constructor();
+                    customer.extendedData = extendedDataDisplayBuilder.createDefault();
+                    return customer;
                 },
                 transform: function(jsonResult) {
                     var customers = [];

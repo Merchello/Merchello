@@ -29,10 +29,13 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             }
 
             // creates the customer overview tabs
-            function createCustomerOverviewTabs(customerKey) {
+            function createCustomerOverviewTabs(customerKey, hasAddresses) {
                 var tabs = new Constructor();
                 tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
                 tabs.addTab('overview', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
+                if(hasAddresses) {
+                    tabs.addTab('addresses', 'Addresses', '#/merchello/merchello/customeraddresses/' + customerKey);
+                }
                 return tabs;
             }
 
@@ -52,6 +55,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
                 return tabs;
             }
+
 
             return {
                 createSalesListTabs: createSalesListTabs,

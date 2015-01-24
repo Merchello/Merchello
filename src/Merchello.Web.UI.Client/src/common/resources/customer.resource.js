@@ -1,5 +1,5 @@
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name customerResource
      * @description Deals with customers api.
      **/

@@ -67,10 +67,18 @@
             }
         }
 
+        /// appends a customer tab to the current collection
+        function appendCustomerTab(customerKey) {
+            if(customerKey !== '00000000-0000-0000-0000-000000000000') {
+                addTab.call(this, 'customer', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
+            }
+        }
+
         return {
             addTab: addTab,
             setActive: setActive,
-            insertTab: insertTab
+            insertTab: insertTab,
+            appendCustomerTab: appendCustomerTab
         };
     }());
 

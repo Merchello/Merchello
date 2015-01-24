@@ -7,19 +7,31 @@
      * The controller for customer overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
-        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'customerResource', 'customerDisplayBuilder',
-        function($scope, $routeParams, dialogService, notificationsService, merchelloTabsFactory, customerResource, customerDisplayBuilder) {
+        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
+            'customerResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder',
+        function($scope, $routeParams, dialogService, notificationsService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
+                 customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder) {
 
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             $scope.tabs = [];
             $scope.avatarUrl = "";
-            $scope.billingAddresses = [];
-            $scope.countries = [];
+            $scope.defaultShippingAddress = {};
+            $scope.defaultBillingAddress = {};
             $scope.customer = {};
-            $scope.filters = {
-                province: {}
-            };
+            $scope.invoiceTotals = [];
+
+            // exposed methods
+            $scope.getCurrency = getCurrency;
+            $scope.openEditInfoDialog = openEditInfoDialog;
+            $scope.openDeleteCustomerDialog = openDeleteCustomerDialog;
+            $scope.openAddressAddEditDialog = openAddressAddEditDialog;
+
+            // private properties
+            var settings = {};
+            var defaultCurrency = {};
+            var countries = [];
+            var currencies = [];
 
             /**
              * @ngdoc method
@@ -31,38 +43,8 @@
              */
             function init() {
                 var key = $routeParams.id;
-                //loadCountries();
-                $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key);
-                $scope.tabs.setActive('overview');
+                loadSettings();
                 loadCustomer(key);
-            }
-
-            /**
-             * @ngdoc method
-             * @name loadCountries
-             * @function
-             *
-             * @description
-             * Load a list of countries and provinces from the API.
-             */
-            function loadCountries() {
-                $scope.countries = [];
-                var promiseCountries = merchelloSettingsService.getAllCountries();
-                promiseCountries.then(function (countriesResponse) {
-                    for (var i = 0; i < countriesResponse.length; i++) {
-                        var country = countriesResponse[i];
-                        var newCountry = {
-                            id: i,
-                            countryCode: country.countryCode,
-                            name: country.name,
-                            provinces: country.provinces,
-                            provinceLabel: country.provinceLabel
-                        };
-                        $scope.countries.push(newCountry);
-                    }
-                    $scope.countries.sort($scope.sortCountries);
-                    $scope.countries.unshift({ id: -1, name: 'Select Country', countryCode: '00', provinces: {}, provinceLabel: '' });
-                });
             }
 
             /**
@@ -77,10 +59,50 @@
                 var promiseLoadCustomer = customerResource.GetCustomer(key);
                 promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = customerDisplayBuilder.transform(customerResponse);
+                    $scope.invoiceTotals = invoiceHelper.getTotalsByCurrencyCode($scope.customer.invoices);
+                    $scope.avatarUrl = gravatarService.getAvatarUrl($scope.customer.email);
+                    $scope.defaultBillingAddress = $scope.customer.getDefaultBillingAddress();
+                    $scope.defaultShippingAddress = $scope.customer.getDefaultShippingAddress();
+                    $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key, $scope.customer.hasAddresses());
+                    $scope.tabs.setActive('overview');
                     $scope.loaded = true;
-                    //$scope.avatarUrl = merchelloGravatarService.avatarUrl($scope.customer.email);
+                    $scope.preValuesLoaded = true;
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadCountries
+             * @function
+             *
+             * @description
+             * Load a list of countries and provinces from the API.
+             */
+            function loadSettings() {
+                // gets all of the countries
+                var promiseCountries = settingsResource.getAllCountries();
+                promiseCountries.then(function(countriesResponse) {
+                    countries = countryDisplayBuilder.transform(countriesResponse);
+                });
+
+                // gets all of the settings
+                var promiseSettings = settingsResource.getAllSettings();
+                promiseSettings.then(function(settingsResponse) {
+                    settings = settingDisplayBuilder.transform(settingsResponse);
+
+                    // we need all of the currencies since invoices may be billed in various currencies
+                    var promiseCurrencies = settingsResource.getAllCurrencies();
+                    promiseCurrencies.then(function(currenciesResponse) {
+                        currencies = currencyDisplayBuilder.transform(currenciesResponse);
+
+                        // get the default currency from the settings in case we cannot determine
+                        // the currency used in an invoice
+                        defaultCurrency = _.find(currencies, function(c) {
+                            return c.currencyCode === settings.currencyCode;
+                        });
+                    });
                 });
             }
 
@@ -92,50 +114,31 @@
              * @description
              * Opens the edit address dialog via the Umbraco dialogService.
              */
-            function openAddressEditDialog(type) {
-                var dialogData = {};
-                dialogData.addressToReturn = new merchello.Models.CustomerAddress();
-                dialogData.countries = $scope.countries;
-                dialogData.shouldDelete = false;
-                $scope.currentAddress = new merchello.Models.CustomerAddress();
-                dialogData.addressType = type;
-                if (type == 'billing') {
-                    dialogData.addresses = _.map($scope.billingAddresses, function (billingAddress) {
-                        return new merchello.Models.CustomerAddress(billingAddress);
-                    });
+            function openAddressAddEditDialog(address) {
+                var dialogData = dialogDataFactory.createAddEditCustomerAddressDialogData();
+                // if the address is not defined we need to create a default (empty) CustomerAddressDisplay
+                if(address === null || address === undefined) {
+                    dialogData.customerAddress = customerDisplayBuilder.createDefault();
+                    dialogData.selectedCountry = countries[0];
                 } else {
-                    dialogData.addresses = _.map($scope.shippingAddresses, function (shippingAddress) {
-                        return new merchello.Models.CustomerAddress(shippingAddress);
+                    dialogData.customerAddress = address;
+                    dialogData.selectedCountry = address.countryCode === '' ? countries[0] :
+                        _.find(countries, function(country) {
+                        return country.countryCode === address.countryCode;
                     });
                 }
-                var aliases = [];
-                for (var i = 0; i < dialogData.addresses.length; i++) {
-                    var address = dialogData.addresses[i];
-                    var alias = address.label;
-                    aliases.push({ id: i, name: alias });
-                };
-                aliases.unshift({ id: -1, name: 'New Address' });
-                dialogData.addressAliases = aliases;
-                dialogData.addresses.unshift(new merchello.Models.CustomerAddress());
-                dialogData.type = [
-                    { id: 0, name: 'Billing' },
-                    { id: 1, name: 'Shipping' }
-                ];
-                dialogData.filters = {
-                    address: dialogData.addressAliases[0],
-                    country: $scope.countries[0],
-                    province: {},
-                    type: {}
-                };
-                if (type === 'billing') {
-                    dialogData.filters.type = dialogData.type[0];
-                } else {
-                    dialogData.filters.type = dialogData.type[1];
+                dialogData.countries = countries;
+                dialogData.customerAddress.customerKey = $scope.customer.key;
+                // if the customer has not addresses of the given type we are going to force an added
+                // address to be the primary address
+                if(!$scope.customer.hasDefaultAddressOfType(dialogData.customerAddress.addressType)) {
+                    dialogData.customerAddress.isDefault = true;
+                    dialogData.setDefault = true;
                 }
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Customer/Dialogs/customer.editaddress.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.customeraddress.addedit.html',
                     show: true,
-                    callback: $scope.processEditAddressDialog,
+                    callback: processAddEditAddressDialog,
                     dialogData: dialogData
                 });
             }
@@ -149,12 +152,13 @@
              * Opens the delete customer dialog via the Umbraco dialogService.
              */
             function openDeleteCustomerDialog() {
-                var dialogData = {};
+                var dialogData = dialogDataFactory.createDeleteCustomerDialogData();
+                dialogData.customer = $scope.customer;
                 dialogData.name = $scope.customer.firstName + ' ' + $scope.customer.lastName;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.processDeleteCustomerDialog,
+                    callback: processDeleteCustomerDialog,
                     dialogData: dialogData
                 });
             }
@@ -168,37 +172,20 @@
              * Opens the edit customer info dialog via the Umbraco dialogService.
              */
             function openEditInfoDialog() {
-                var dialogData = {
-                    firstName: $scope.customer.firstName,
-                    lastName: $scope.customer.lastName,
-                    email: $scope.customer.email
-                };
+
+                var dialogData = dialogDataFactory.createAddEditCustomerDialogData();
+                dialogData.firstName = $scope.customer.firstName;
+                dialogData.lastName = $scope.customer.lastName;
+                dialogData.email = $scope.customer.email;
+
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Customer/Dialogs/customer.editinfo.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.info.edit.html',
                     show: true,
-                    callback: $scope.processEditInfoDialog,
+                    callback: processEditInfoDialog,
                     dialogData: dialogData
                 });
             }
 
-            /**
-             * @ngdoc method
-             * @name prepareAddressesForSave
-             * @function
-             *
-             * @description
-             * Prepare a list of addresses to save with the customer
-             */
-            function prepareAddressesForSave() {
-                var addresses = [];
-                _.each($scope.billingAddresses, function(address) {
-                    addresses.push(new merchello.Models.CustomerAddress(address));
-                });
-                _.each($scope.shippingAddresses, function(address) {
-                    addresses.push(new merchello.Models.CustomerAddress(address));
-                });
-                return addresses;
-            };
 
             /**
              * @ngdoc method
@@ -208,7 +195,9 @@
              * @description
              * Edit an address and update the associated lists.
              */
-            function processEditAddressDialog(data) {
+            function processAddEditAddressDialog(dialogData) {
+                console.info(dialogData);
+                /*
                 var addresses = data.addresses;
                 //  Filter out an address if it's marked to be deleted.
                 if (data.shouldDelete) {
@@ -239,6 +228,7 @@
                 // Combine the address lists and update the customer.
                 $scope.customer.addresses = $scope.prepareAddressesForSave();
                 $scope.saveCustomer();
+                */
             }
 
             /**
@@ -250,11 +240,11 @@
              * Delete a customer.
              */
             function processDeleteCustomerDialog(dialogData) {
-                notificationsService.info("Deleting " + $scope.customer.firstName + " " + $scope.customer.lastName, "");
-                var promiseDeleteCustomer = merchelloCustomerService.DeleteCustomer($scope.customer.key);
+                notificationsService.info("Deleting " + dialogData.customer.firstName + " " + dialogData.customer.lastName, "");
+                var promiseDeleteCustomer = customerResource.DeleteCustomer(dialogData.customer.key);
                 promiseDeleteCustomer.then(function() {
                     notificationsService.success("Customer deleted.", "");
-                    window.location.hash = "#/merchello/merchello/CustomerList/manage";
+                    window.location.hash = "#/merchello/merchello/customerList/manage";
                 }, function(reason) {
                     notificationsService.error("Customer Deletion Failed", reason.message);
                 });
@@ -268,31 +258,50 @@
              * @description
              * Update the customer info and save.
              */
-            function processEditInfoDialog(data) {
-                $scope.customer.firstName = data.firstName;
-                $scope.customer.lastName = data.lastName;
-                $scope.customer.email = data.email;
-                $scope.saveCustomer();
+            function processEditInfoDialog(dialogData) {
+                $scope.customer.firstName = dialogData.firstName;
+                $scope.customer.lastName = dialogData.lastName;
+                $scope.customer.email = dialogData.email;
+                saveCustomer();
             }
 
             /**
              * @ngdoc method
-             * @name saveCustoemr
+             * @name saveCustomer
              * @function
              *
              * @description
              * Save the customer with the new note.
              */
             function saveCustomer() {
+                $scope.preValuesLoaded = false;
                 notificationsService.info("Saving...", "");
-                var promiseSaveCustomer = merchelloCustomerService.SaveCustomer($scope.customer);
+                var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
                 promiseSaveCustomer.then(function(customerResponse) {
-                    $scope.customer = new merchello.Models.Customer(customerResponse);
                     notificationsService.success("Customer Saved", "");
-                    $scope.getDefaultAddresses();
+                    init();
+
                 }, function(reason) {
                     notificationsService.error("Customer  Failed", reason.message);
                 });
+            }
+
+            /**
+             * @ngdoc method
+             * @name getCurrencySymbol
+             * @function
+             *
+             * @description
+             * Gets the currency symbol for an invoice.
+             */
+            function getCurrency(currencyCode) {
+                var currency = _.find(currencies, function(c) {
+                    return c.currencyCode === currencyCode;
+                });
+                if (currency === null || currency === undefined) {
+                    currency = defaultCurrency;
+                }
+                return currency;
             }
 
             // Initializes the controller

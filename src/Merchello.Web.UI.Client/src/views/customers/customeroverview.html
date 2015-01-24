@@ -43,12 +43,13 @@
                                 <td>{{invoice.invoiceDate}}</td>
                                 <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
                                 <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
-                                <td>{{invoice.total | currency : currencySymbol}}</td>
+                                <td>{{invoice.total | currency : getCurrency(invoice.getCurrencyCode()).symbol }}</td>
                             </tr>
-                            <tr>
-                                <td colspan="4"></td>
-                                <td>Total Spent:</td>
-                                <td>{{invoiceTotal | currency : currencySymbol}}</td>
+                            <tr data-ng-repeat="total in invoiceTotals" class="invoice-total">
+                                <td data-ng-show="false"></td>
+                                <td colspan="3"></td>
+                                <td>Total Spent: {{total.currencyCode}}</td>
+                                <td>{{total.total | currency : getCurrency(total.currencyCode).symbol }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -85,9 +86,9 @@
                     <h3>
                         Billing Address
                         <!-- ACTION: Add or Edit Address -->
-                        <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressEditDialog('billing')"><i class="icon icon-edit"></i></a>
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressAddEditDialog(defaultBillingAddress)"><i class="icon icon-edit"></i></a>
                     </h3>
-                    <div class="vcard" data-ng-show="defaultBillingAddress != false">
+                    <div class="vcard" data-ng-show="!defaultBillingAddress.isEmpty()">
                         <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
                         <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
                         <span class="adr">
@@ -98,7 +99,7 @@
                             <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
                         </span>
                     </div>
-                    <div data-ng-show="defaultBillingAddress == false">
+                    <div data-ng-show="defaultBillingAddress.isEmpty()">
                         <h5>No Billing Address</h5>
                     </div>
                 </div>
@@ -107,9 +108,9 @@
                     <h3>
                         Shipping Address
                         <!-- ACTION: Add or Edit Address -->
-                        <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressEditDialog('shipping')"><i class="icon icon-edit"></i></a>
+                        <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressAddEditDialog(defaultShippingAddress)"><i class="icon icon-edit"></i></a>
                     </h3>
-                    <div class="vcard" data-ng-show="defaultShippingAddress != false">
+                    <div class="vcard" data-ng-show="!defaultShippingAddress.isEmpty()">
                         <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
                         <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
                         <span class="adr">
@@ -120,7 +121,7 @@
                             <span class="country-name">{{defaultShippingAddress.countryCode}}</span>
                         </span>
                     </div>
-                    <div data-ng-show="defaultShippingAddress == false">
+                    <div data-ng-show="defaultShippingAddress.isEmpty()">
                         <h5>No Shipping Address</h5>
                     </div>
                 </div>
