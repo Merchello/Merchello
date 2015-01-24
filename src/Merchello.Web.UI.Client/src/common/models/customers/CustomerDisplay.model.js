@@ -24,7 +24,6 @@
     CustomerDisplay.prototype = (function() {
 
         function getDefaultAddress(addressType) {
-            console.info(addressType);
             return _.find(this.addresses, function(address) {
                 return address.addressType === addressType && address.isDefault === true;
             });

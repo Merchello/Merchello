@@ -116,18 +116,19 @@
              */
             function openAddressAddEditDialog(address) {
                 var dialogData = dialogDataFactory.createAddEditCustomerAddressDialogData();
-
                 // if the address is not defined we need to create a default (empty) CustomerAddressDisplay
                 if(address === null || address === undefined) {
                     dialogData.customerAddress = customerDisplayBuilder.createDefault();
                     dialogData.selectedCountry = countries[0];
                 } else {
                     dialogData.customerAddress = address;
-                    dialogData.selectedCountry === _.find(countries, function(country) {
+                    dialogData.selectedCountry = address.countryCode === '' ? countries[0] :
+                        _.find(countries, function(country) {
                         return country.countryCode === address.countryCode;
                     });
                 }
                 dialogData.countries = countries;
+                dialogData.customerAddress.customerKey = $scope.customer.key;
                 // if the customer has not addresses of the given type we are going to force an added
                 // address to be the primary address
                 if(!$scope.customer.hasDefaultAddressOfType(dialogData.customerAddress.addressType)) {

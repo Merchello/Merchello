@@ -13,8 +13,7 @@
             // exposed methods
             $scope.updateProvinceList = updateProvinceList;
             $scope.toTitleCase = toTitleCase;
-
-            console.info($scope.dialogData);
+            $scope.save = save;
 
             function updateProvinceList() {
                 // try to find the province matching the province code of the customer address
@@ -29,6 +28,14 @@
                         $scope.dialogData.selectedProvince = province;
                     }
                 }
+            }
+
+            function save() {
+                if(dialogData.selectedCountry.hasProvinces()) {
+                    dialogData.customerAddress.region = dialogData.selectedProvince.code;
+                }
+                dialogData.customerAddress.countryCode = dialogData.selectedCountry.countryCode;
+                $scope.submit(dialogData);
             }
 
             function toTitleCase(str) {
