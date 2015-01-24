@@ -20,7 +20,7 @@
                             providers.push(provider);
                         }
                     } else {
-                        var providers = genericModelBuilder.transform(jsonResult, Constructor);
+                        providers = genericModelBuilder.transform(jsonResult, Constructor);
                         providers.dialogEditorView = dialogEditorViewBuilder.transform(jsonResult.dialogEditorView);
                         providers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
                     }

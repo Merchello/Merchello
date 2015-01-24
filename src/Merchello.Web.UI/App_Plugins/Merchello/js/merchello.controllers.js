@@ -51,6 +51,638 @@
     });
 
 
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.CustomerListController
+     * @function
+     *
+     * @description
+     * The controller for customer addresses view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.CustomerAddressesController',
+        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'customerResource', 'customerDisplayBuilder',
+        function($scope, $routeParams, dialogService, notificationsService, merchelloTabsFactory, customerResource, customerDisplayBuilder) {
+
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+            $scope.tabs = [];
+            $scope.customer = {}
+
+            function init() {
+                var key = $routeParams.id;
+                $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key);
+                $scope.tabs.setActive('addresses');
+            }
+
+            // initialize the controller
+            init();
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.CustomerListController
+     * @function
+     *
+     * @description
+     * The controller for customer list view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
+        ['$scope', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'customerResource', 'queryDisplayBuilder',
+            'queryResultDisplayBuilder', 'customerDisplayBuilder',
+        function($scope, dialogService, notificationsService, merchelloTabsFactory, customerResource,
+                 queryDisplayBuilder, queryResultDisplayBuilder, customerDisplayBuilder) {
+
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+
+            $scope.currentPage = 0;
+            $scope.customers = [];
+            $scope.filterText = '';
+            $scope.limitAmount = 25;
+            $scope.maxPages = 0;
+            $scope.sortProperty = 'loginName';
+            $scope.visible = {
+                bulkActionButton: function() {
+                    var result = false;
+                    return result;
+                },
+                bulkActionDropdown: false
+            };
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * initialized when the scope loads.
+             */
+            function init() {
+                loadCustomers($scope.filterText);
+                $scope.tabs = merchelloTabsFactory.createCustomerListTabs();
+                $scope.tabs.setActive('customerlist');
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadCustomers
+             * @function
+             *
+             * @description
+             * Load the customers from the API using the provided filter (if any).
+             */
+            function loadCustomers(filterText) {
+                var query = queryDisplayBuilder.createDefault();
+                query.currentPage = $scope.currentPage;
+                query.itemsPerPage = $scope.limitAmount;
+                query.sortBy = sortInfo().sortBy;
+                query.sortDirection = sortInfo().sortDirection;
+                if (filterText !== $scope.filterText) {
+                    query.currentPage = 0;
+                    $scope.currentPage = 0;
+                }
+                query.addFilterTermParam(filterText);
+
+                var promiseAllCustomers = customerResource.searchCustomers(query);
+                promiseAllCustomers.then(function (customersResponse) {
+                    $scope.customers = [];
+                    var queryResult = queryResultDisplayBuilder.transform(customersResponse, customerDisplayBuilder);
+                    $scope.customers = queryResult.items;
+                    console.info($scope.customers);
+                    $scope.maxPages = queryResult.totalPages;
+
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name changePage
+             * @function
+             *
+             * @description
+             * Changes the current page.
+             */
+            function changePage(page) {
+                $scope.currentPage = page;
+                $scope.loadCustomers($scope.filterText);
+            }
+
+            /**
+             * @ngdoc method
+             * @name changeSortOrder
+             * @function
+             *
+             * @description
+             * Helper function to set the current sort on the table and switch the
+             * direction if the property is already the current sort column.
+             */
+            function changeSortOrder(propertyToSort) {
+                if ($scope.sortProperty == propertyToSort) {
+                    if ($scope.sortOrder == "asc") {
+                        $scope.sortProperty = "-" + propertyToSort;
+                        $scope.sortOrder = "desc";
+                    } else {
+                        $scope.sortProperty = propertyToSort;
+                        $scope.sortOrder = "asc";
+                    }
+                } else {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "asc";
+                }
+                $scope.loadCustomers($scope.filterText);
+            }
+
+            /**
+             * @ngdoc method
+             * @name limitChanged
+             * @function
+             *
+             * @description
+             * Helper function to set the amount of items to show per page for the paging filters and calculations
+             */
+            function limitChanged(newVal) {
+                $scope.limitAmount = newVal;
+                $scope.currentPage = 0;
+                $scope.loadCustomers($scope.filterText);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadMostRecentOrders
+             * @function
+             *
+             * @description
+             * Iterate through all the customers in the list, and acquire their most recent order.
+             */
+            function loadMostRecentOrders() {
+                _.each($scope.customers, function (customer) {
+                    var promiseOrder = merchelloInvoiceService.getByCustomerKey(customer.key);
+                    promiseOrder.then(function (response) {
+                        // TODO: Finish function acquiring the most recent order total for each customer once the merchelloInvoiceService.getByCustomerKey API endpoint returns valid results.
+                    });
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name openNewCustomerDialog
+             * @function
+             *
+             * @description
+             * Opens the new customer dialog via the Umbraco dialogService.
+             */
+            function openNewCustomerDialog() {
+                var dialogData = {
+                    firstName: '',
+                    lastName: '',
+                    email: ''
+                };
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Modules/Customer/Dialogs/customer.editinfo.html',
+                    show: true,
+                    callback: $scope.processNewCustomerDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name processEditInfoDialog
+             * @function
+             *
+             * @description
+             * Update the customer info and save.
+             */
+            function processNewCustomerDialog(data) {
+                var newCustomer = new merchello.Models.Customer();
+                newCustomer.firstName = data.firstName;
+                newCustomer.lastName = data.lastName;
+                newCustomer.email = data.email;
+                newCustomer.loginName = data.email;
+                var promiseSaveCustomer = merchelloCustomerService.AddCustomer(newCustomer);
+                promiseSaveCustomer.then(function (customerResponse) {
+                    notificationsService.success("Customer Saved", "");
+                    $scope.init();
+                }, function (reason) {
+                    notificationsService.error("Customer Save Failed", reason.message);
+                });
+            }
+
+
+            /**
+             * @ngdoc method
+             * @name setVariables
+             * @function
+             *
+             * @description
+             * Returns sort information based off the current $scope.sortProperty.
+             */
+            function sortInfo() {
+                var sortDirection, sortBy;
+                // If the sortProperty starts with '-', it's representing a descending value.
+                if ($scope.sortProperty.indexOf('-') > -1) {
+                    // Get the text after the '-' for sortBy
+                    sortBy = $scope.sortProperty.split('-')[1];
+                    sortDirection = 'Descending';
+                    // Otherwise it is ascending.
+                } else {
+                    sortBy = $scope.sortProperty;
+                    sortDirection = 'Ascending';
+                }
+                return {
+                    sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
+                    sortDirection: sortDirection
+                }
+            }
+
+            // Initializes the controller
+            init();
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.CustomerOverviewController
+     * @function
+     *
+     * @description
+     * The controller for customer overview view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
+        ['$scope', '$routeParams', '$timeout', 'dialogService', 'notificationsService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
+            'customerResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder',
+        function($scope, $routeParams, $timeout, dialogService, notificationsService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
+                 customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.tabs = [];
+            $scope.avatarUrl = "";
+            $scope.defaultShippingAddress = {};
+            $scope.defaultBillingAddress = {};
+            $scope.customer = {};
+            $scope.invoiceTotals = [];
+
+            // exposed methods
+            $scope.getCurrency = getCurrency;
+            $scope.openEditInfoDialog = openEditInfoDialog;
+            $scope.openDeleteCustomerDialog = openDeleteCustomerDialog;
+            $scope.openAddressAddEditDialog = openAddressAddEditDialog;
+
+            // private properties
+            var settings = {};
+            var defaultCurrency = {};
+            var countries = [];
+            var currencies = [];
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Inititalizes the scope.
+             */
+            function init() {
+                var key = $routeParams.id;
+                loadSettings();
+                loadCustomer(key);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadCustomer
+             * @function
+             *
+             * @description
+             * Load the customer information if needed.
+             */
+            function loadCustomer(key) {
+                var promiseLoadCustomer = customerResource.GetCustomer(key);
+                promiseLoadCustomer.then(function(customerResponse) {
+                    $scope.customer = customerDisplayBuilder.transform(customerResponse);
+                    $scope.invoiceTotals = invoiceHelper.getTotalsByCurrencyCode($scope.customer.invoices);
+                    $scope.avatarUrl = gravatarService.getAvatarUrl($scope.customer.email);
+                    $scope.defaultBillingAddress = $scope.customer.getDefaultBillingAddress();
+                    $scope.defaultShippingAddress = $scope.customer.getDefaultShippingAddress();
+                    $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key, $scope.customer.hasAddresses());
+                    $scope.tabs.setActive('overview');
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                    console.info($scope.customer);
+                }, function(reason) {
+                    notificationsService.error("Failed to load customer", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadCountries
+             * @function
+             *
+             * @description
+             * Load a list of countries and provinces from the API.
+             */
+            function loadSettings() {
+                // gets all of the countries
+                var promiseCountries = settingsResource.getAllCountries();
+                promiseCountries.then(function(countriesResponse) {
+                    countries = countryDisplayBuilder.transform(countriesResponse);
+                });
+
+                // gets all of the settings
+                var promiseSettings = settingsResource.getAllSettings();
+                promiseSettings.then(function(settingsResponse) {
+                    settings = settingDisplayBuilder.transform(settingsResponse);
+
+                    // we need all of the currencies since invoices may be billed in various currencies
+                    var promiseCurrencies = settingsResource.getAllCurrencies();
+                    promiseCurrencies.then(function(currenciesResponse) {
+                        currencies = currencyDisplayBuilder.transform(currenciesResponse);
+
+                        // get the default currency from the settings in case we cannot determine
+                        // the currency used in an invoice
+                        defaultCurrency = _.find(currencies, function(c) {
+                            return c.currencyCode === settings.currencyCode;
+                        });
+                    });
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name openAddressEditDialog
+             * @function
+             *
+             * @description
+             * Opens the edit address dialog via the Umbraco dialogService.
+             */
+            function openAddressAddEditDialog(address) {
+                var dialogData = dialogDataFactory.createAddEditCustomerAddressDialogData();
+                // if the address is not defined we need to create a default (empty) CustomerAddressDisplay
+                if(address === null || address === undefined) {
+                    dialogData.customerAddress = customerDisplayBuilder.createDefault();
+                    dialogData.selectedCountry = countries[0];
+                } else {
+                    dialogData.customerAddress = address;
+                    dialogData.selectedCountry = address.countryCode === '' ? countries[0] :
+                        _.find(countries, function(country) {
+                        return country.countryCode === address.countryCode;
+                    });
+                }
+                dialogData.countries = countries;
+                dialogData.customerAddress.customerKey = $scope.customer.key;
+                if (dialogData.selectedCountry.hasProvinces()) {
+                    if(dialogData.customerAddress.region !== '') {
+                        dialogData.selectedProvince = _.find(dialogData.selectedCountry.provinces, function(province) {
+                            return province.code === address.region;
+                        });
+                    }
+                    if(dialogData.selectedProvince === null || dialogData.selectedProvince === undefined) {
+                        dialogData.selectedProvince = dialogData.selectedCountry.provinces[0];
+                    }
+                }
+                // if the customer has not addresses of the given type we are going to force an added
+                // address to be the primary address
+                if(!$scope.customer.hasDefaultAddressOfType(dialogData.customerAddress.addressType) || address.isDefault) {
+                    dialogData.customerAddress.isDefault = true;
+                    dialogData.setDefault = true;
+                }
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.customeraddress.addedit.html',
+                    show: true,
+                    callback: processAddEditAddressDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name openDeleteCustomerDialog
+             * @function
+             *
+             * @description
+             * Opens the delete customer dialog via the Umbraco dialogService.
+             */
+            function openDeleteCustomerDialog() {
+                var dialogData = dialogDataFactory.createDeleteCustomerDialogData();
+                dialogData.customer = $scope.customer;
+                dialogData.name = $scope.customer.firstName + ' ' + $scope.customer.lastName;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteCustomerDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name openEditInfoDialog
+             * @function
+             *
+             * @description
+             * Opens the edit customer info dialog via the Umbraco dialogService.
+             */
+            function openEditInfoDialog() {
+
+                var dialogData = dialogDataFactory.createAddEditCustomerDialogData();
+                dialogData.firstName = $scope.customer.firstName;
+                dialogData.lastName = $scope.customer.lastName;
+                dialogData.email = $scope.customer.email;
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.info.edit.html',
+                    show: true,
+                    callback: processEditInfoDialog,
+                    dialogData: dialogData
+                });
+            }
+
+
+            /**
+             * @ngdoc method
+             * @name processEditAddressDialog
+             * @function
+             *
+             * @description
+             * Edit an address and update the associated lists.
+             */
+            function processAddEditAddressDialog(dialogData) {
+                var defaultAddressOfType = $scope.customer.getDefaultAddress(dialogData.customerAddress.addressType);
+                if(dialogData.customerAddress.key !== '') {
+                    _.reject($scope.customer.addresses, function(address) {
+                      return address.key == dialogData.customerAddress.key;
+                    });
+                }
+                if (dialogData.customerAddress.isDefault && defaultAddressOfType !== undefined) {
+                    if(dialogData.customerAddress.key !== defaultAddressOfType.key) {
+                        defaultAddressOfType.isDefault = false;
+                    }
+                }
+                $scope.customer.addresses.push(dialogData.customerAddress);
+                saveCustomer();
+            }
+
+            /**
+             * @ngdoc method
+             * @name processDeleteCustomerDialog
+             * @function
+             *
+             * @description
+             * Delete a customer.
+             */
+            function processDeleteCustomerDialog(dialogData) {
+                notificationsService.info("Deleting " + dialogData.customer.firstName + " " + dialogData.customer.lastName, "");
+                var promiseDeleteCustomer = customerResource.DeleteCustomer(dialogData.customer.key);
+                promiseDeleteCustomer.then(function() {
+                    notificationsService.success("Customer deleted.", "");
+                    window.location.hash = "#/merchello/merchello/customerList/manage";
+                }, function(reason) {
+                    notificationsService.error("Customer Deletion Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name processEditInfoDialog
+             * @function
+             *
+             * @description
+             * Update the customer info and save.
+             */
+            function processEditInfoDialog(dialogData) {
+                $scope.customer.firstName = dialogData.firstName;
+                $scope.customer.lastName = dialogData.lastName;
+                $scope.customer.email = dialogData.email;
+                saveCustomer();
+            }
+
+            /**
+             * @ngdoc method
+             * @name saveCustomer
+             * @function
+             *
+             * @description
+             * Save the customer with the new note.
+             */
+            function saveCustomer() {
+                $scope.preValuesLoaded = false;
+                notificationsService.info("Saving...", "");
+                var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
+                promiseSaveCustomer.then(function(customerResponse) {
+                    $timeout(function() {
+                    notificationsService.success("Customer Saved", "");
+                        init();
+                    }, 400);
+
+                }, function(reason) {
+                    notificationsService.error("Customer  Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name getCurrencySymbol
+             * @function
+             *
+             * @description
+             * Gets the currency symbol for an invoice.
+             */
+            function getCurrency(currencyCode) {
+                var currency = _.find(currencies, function(c) {
+                    return c.currencyCode === currencyCode;
+                });
+                if (currency === null || currency === undefined) {
+                    currency = defaultCurrency;
+                }
+                return currency;
+            }
+
+            // Initializes the controller
+            init();
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Customer.Dialogs.CustomerAddressAddEditController
+     * @function
+     *
+     * @description
+     * The controller for adding and editing customer addresses
+     */
+    angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerAddressAddEditController',
+        ['$scope',
+        function($scope) {
+
+            // exposed methods
+            $scope.updateProvinceList = updateProvinceList;
+            $scope.toTitleCase = toTitleCase;
+            $scope.save = save;
+
+            function updateProvinceList() {
+                // try to find the province matching the province code of the customer address
+                var provinceCode = $scope.dialogData.customerAddress.region;
+                if($scope.dialogData.selectedCountry.provinces.length > 0) {
+                    var province = _.find($scope.dialogData.selectedCountry.provinces, function(p) {
+                        return p.code === provinceCode;
+                    });
+                    if (province === null || province === undefined) {
+                        $scope.dialogData.selectedProvince = $scope.dialogData.selectedCountry.provinces[0];
+                    } else {
+                        $scope.dialogData.selectedProvince = province;
+                    }
+                }
+            }
+
+            function save() {
+                if($scope.dialogData.selectedCountry.hasProvinces()) {
+                    $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
+                }
+                $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
+                $scope.submit($scope.dialogData);
+            }
+
+            function toTitleCase(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Customer.Dialogs.CustomerInfoEditController
+     * @function
+     *
+     * @description
+     * The controller for editing customer information
+     */
+    angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerInfoEditController',
+        ['$scope',
+        function($scope) {
+
+            $scope.wasFormSubmitted = false;
+
+            // exposed methods
+            $scope.save = save;
+
+            /**
+             * @ngdoc method
+             * @name submitIfValid
+             * @function
+             *
+             * @description
+             * Submit form if valid.
+             */
+            function save() {
+                $scope.wasFormSubmitted = true;
+                console.info($scope.dialogData);
+                if ($scope.editInfoForm.email.$valid) {
+                    $scope.submit($scope.dialogData);
+                }
+            }
+
+        }]);
+
 /**
  * @ngdoc controller
  * @name Merchello.Backoffice.SettingsController
@@ -126,6 +758,36 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
             }
 
             loadSettings();
+}]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.GatewayProviders.Dialogs.NotificationsMessageAddController
+     * @function
+     *
+     * @description
+     * The controller for the adding / editing Notification messages on the Notifications page
+     */
+    angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.NotificationsMessageAddController',
+        ['$scope',
+        function($scope) {
+
+            // exposed methods
+            $scope.save = save;
+
+            console.info($scope.dialogData);
+
+            function save() {
+                $scope.dialogData.notificationMessage.monitorKey = $scope.dialogData.selectedMonitor.monitorKey;
+                $scope.submit($scope.dialogData);
+            }
+
+    }]);
+
+angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.NotificationsMethodAddEditController',
+    ['$scope',
+    function($scope) {
+
 }]);
 
     /**
@@ -907,32 +1569,124 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
 
 
 
+
+    angular.module('merchello').controller('Merchello.Backoffice.NotificationMessageEditorController',
+    ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'merchelloTabsFactory',
+    'notificationGatewayProviderResource', 'notificationMessageDisplayBuilder',
+    function($scope, $routeParams, dialogService, notificationsService, merchelloTabsFactory,
+    notificationGatewayProviderResource, notificationMessageDisplayBuilder) {
+
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+        $scope.tabs = [];
+        $scope.rteProperties = {
+            label: 'bodyText',
+            view: 'rte',
+            config: {
+                editor: {
+                    toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+                    stylesheets: [],
+                    dimensions: { height: 350 }
+                }
+            },
+            value: ""
+        };
+
+        // exposed methods
+        $scope.save = save;
+
+        function init() {
+            var key = $routeParams.id;
+            loadNotificationMessage(key);
+            loadAllNotificationMonitors();
+            $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+            $scope.tabs.insertTab('messageEditor', 'Message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
+            $scope.tabs.setActive('messageEditor');
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadNotificationMessage
+         * @function
+         *
+         * @description
+         * Loads all of the Notification Message
+         */
+        function loadNotificationMessage(key) {
+            var promise = notificationGatewayProviderResource.getNotificationMessagesByKey(key);
+            promise.then(function (notification) {
+                $scope.notificationMessage = notificationMessageDisplayBuilder.transform(notification);
+                $scope.rteProperties.value = notification.bodyText;
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+            });
+            return promise;
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadAllNotificationMonitors
+         * @function
+         *
+         * @description
+         * Loads all of the Notification Monitors
+         */
+        function loadAllNotificationMonitors() {
+            var promise = notificationGatewayProviderResource.getAllNotificationMonitors();
+            promise.then(function (monitors) {
+                $scope.notificationTriggers = notificationMessageDisplayBuilder.transform(monitors);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name save
+         * @function
+         *
+         * @description
+         * Saves the notification message
+         */
+        function save() {
+            $scope.preValuesLoaded = false;
+            $scope.notificationMessage.bodyText = $scope.rteProperties.value;
+            var promiseSave = notificationGatewayProviderResource.updateNotificationMessage($scope.notificationMessage);
+            promiseSave.then(function () {
+                notificationsService.success("Payment Method Saved");
+                init();
+            }, function (reason) {
+                notificationsService.error("Payment Method Save Failed", reason.message);
+            });
+        }
+
+        // Initialize the controller
+        init();
+
+    }]);
+
     angular.module('merchello').controller('Merchello.Backoffice.NotificationProvidersController',
         ['$scope', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'gatewayResourceDisplayBuilder',
-            'notificationGatewayProviderResource', 'notificationGatewayProviderDisplayBuilder', 'notificationMethodDisplayBuilder',
-            function($scope, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, gatewayResourceDisplayBuilder,
-                     notificationGatewayProviderResource, notificationGatewayProviderDisplayBuilder, notificationMethodDisplayBuilder) {
+        'notificationGatewayProviderResource', 'notificationGatewayProviderDisplayBuilder', 'notificationMethodDisplayBuilder',
+        'notificationMonitorDisplayBuilder', 'notificationMessageDisplayBuilder',
+        function($scope, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, gatewayResourceDisplayBuilder,
+        notificationGatewayProviderResource, notificationGatewayProviderDisplayBuilder, notificationMethodDisplayBuilder,
+        notificationMonitorDisplayBuilder, notificationMessageDisplayBuilder) {
 
-            $scope.currentTab = "Template";
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.notificationMonitors = [];
             $scope.tabs = [];
 
             $scope.notificationGatewayProviders = [];
-            $scope.notificationTriggers = [];
-            $scope.notificationMessage = {};
-            $scope.notificationMethods = [];
 
-            $scope.subscribers = [];
-            $scope.flyouts = {
-                editTemplate: false,
-                addAddress: false,
-                deleteAddress: false
-            };
+            // exposed methods
+            $scope.addNotificationMethod = addNotificationMethod;
+            $scope.deleteNotificationMethod = deleteNotificationMethod;
+            $scope.addNotificationMessage = addNotificationMessage;
+            $scope.deleteNotificationMessage = deleteNotificationMessage;
 
             function init() {
                 loadAllNotificationGatewayProviders();
-                //loadAllNotificationTriggers();
+                loadAllNotificationMonitors();
                 $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
                 $scope.tabs.setActive('notification');
             }
@@ -959,18 +1713,13 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * in Merchello models and add to the scope via the notificationGatewayProviders collection.
              */
             function loadAllNotificationGatewayProviders() {
-
                 var promiseAllProviders = notificationGatewayProviderResource.getAllGatewayProviders();
                 promiseAllProviders.then(function (allProviders) {
-
                     $scope.notificationGatewayProviders = notificationGatewayProviderDisplayBuilder.transform(allProviders);
                     angular.forEach($scope.notificationGatewayProviders, function(provider) {
                         loadNotificationGatewayResources(provider.key);
                         loadNotificationMethods(provider.key);
                     });
-
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
 
                 }, function (reason) {
                     notificationsService.error("Available Notification Providers Load Failed", reason.message);
@@ -988,22 +1737,15 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * return resources that haven't already been added via other methods on the provider.
              */
             function loadNotificationGatewayResources(providerKey) {
-
                 var provider = getProviderByKey(providerKey);
-
                 var promiseAllResources = notificationGatewayProviderResource.getGatewayResources(provider.key);
                 promiseAllResources.then(function (allResources) {
-
                     provider.gatewayResources = gatewayResourceDisplayBuilder.transform(allResources);
-
                     if (provider.gatewayResources.length > 0) {
                         provider.selectedGatewayResource = provider.gatewayResources[0];
                     }
-
                 }, function (reason) {
-
                     notificationsService.error("Available Notification Provider Resources Load Failed", reason.message);
-
                 });
             }
 
@@ -1015,10 +1757,10 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * @description
              * Loads the triggers for the notification messages.
              */
-            function loadAllNotificationTriggers() {
-                var promise = merchelloNotificationsService.getAllNotificationTriggers();
-                promise.then(function (notificationTriggers) {
-                    $scope.notificationTriggers = notificationTriggers;
+            function loadAllNotificationMonitors() {
+                var promise = notificationGatewayProviderResource.getAllNotificationMonitors();
+                promise.then(function (notificationMonitors) {
+                    $scope.notificationMonitors = notificationMonitorDisplayBuilder.transform(notificationMonitors);
                 });
             }
 
@@ -1034,94 +1776,19 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
             function loadNotificationMethods(providerKey) {
 
                 var provider = getProviderByKey(providerKey);
-
                 var promiseAllResources = notificationGatewayProviderResource.getNotificationProviderNotificationMethods(providerKey);
                 promiseAllResources.then(function (allMethods) {
                     provider.notificationMethods = notificationMethodDisplayBuilder.transform(allMethods);
-                    console.info(provider);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Notification Methods Load Failed", reason.message);
                 });
             }
 
-            /*
-            $scope.addAddressFlyout = new merchello.Models.Flyout(
-                $scope.flyouts.addAddress,
-                function(isOpen) {
-                    $scope.flyouts.addAddress = isOpen;
-                },
-                {
-                    clear: function() {
-                        var self = $scope.addAddressFlyout;
-                        self.model = new merchello.Models.NotificationSubscriber();
-                    },
-                    confirm: function() {
-                        var self = $scope.addAddressFlyout;
-                        var newKey = $scope.subscribers.length;
-                        // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                        self.model.pk = newKey;
-                        $scope.subscribers.push(self.model);
-                        // Note From Kyle: An API call will need to be wired in here to add the new Subscriber to the email notification list in the database.
-                        self.clear();
-                        self.close();
-                    }
-                });
-
-
-            $scope.deleteAddressFlyout = new merchello.Models.Flyout(
-                $scope.flyouts.deleteAddress,
-                function(isOpen) {
-                    $scope.flyouts.deleteAddress = isOpen;
-                },
-                {
-                    clear: function() {
-                        var self = $scope.deleteAddressFlyout;
-                        self.model = new merchello.Models.NotificationSubscriber();
-                    },
-                    confirm: function() {
-                        var self = $scope.deleteAddressFlyout;
-                        var idx = -1;
-                        for (i = 0; i < $scope.subscribers.length; i++) {
-                            if ($scope.subscribers[i].pk == self.model.pk) {
-                                idx = i;
-                            }
-                        }
-                        if (idx > -1) {
-                            $scope.subscribers.splice(idx, 1);
-                            // Note From Kyle: An API call will need to be wired in here to delete the subscriber from the notification list in the database.
-                        }
-                        self.clear();
-                        self.close();
-                    }
-                });
-
-             */
-
-            /**
-             * @ngdoc method
-             * @name addNotificationMessageToMethodClick
-             * @function
-             *
-             * @description
-             * Saves a Notification Message to the Notification Method.
-             */
-            function addNotificationMessageToMethodClick(methodKey, notificationMessage) {
-                var redirectKey = "create";
-                if (notificationMessage == undefined) {
-                    notificationMessage = new merchello.Models.NotificationMessage();
-                    notificationMessage.methodKey = methodKey;
-                }
-                else {
-                    redirectKey = notificationMessage.key;
-                }
-                $scope.notificationMessage = notificationMessage;
-                window.location.hash = "#/merchello/merchello/NotificationsEdit/" + redirectKey;
-            }
-
             //--------------------------------------------------------------------------------------
             // Dialog methods
             //--------------------------------------------------------------------------------------
-
 
             /**
              * @ngdoc method
@@ -1132,16 +1799,13 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Handles the save after recieving the notification to add from the dialog view/controller
              */
             function addNotificationsDialogConfirm(dialogData) {
-                var promiseNotificationMethod = merchelloNotificationsService.saveNotificationMethod(dialogData);
-
+                $scope.preValuesLoaded = false;
+                var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMethod(dialogData.notificationMethod);
                 promiseNotificationMethod.then(function(notificationFromServer) {
-                    $scope.notificationMethods.push(new merchello.Models.NotificationMethod(notificationFromServer));
-                    location.reload();
                     notificationsService.success("Notification Method Created!", "");
+                    init();
                 }, function(reason) {
-
                     notificationsService.error("Notification Method Create Failed", reason.message);
-
                 });
             }
 
@@ -1153,19 +1817,18 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * @description
              * Opens the add notification method dialog via the Umbraco dialogService.
              */
-            function addNotificationMethod(provider, method) {
-                if (method == undefined) {
-                    method = new merchello.Models.NotificationMethod();
-                    method.providerKey = provider.key; //Todo: When able to add external providers, make this select the correct provider
-                    method.serviceCode = "Email";
-                    method.name = "Email";
-                }
-                method.resources = provider.resources;
+            function addNotificationMethod(provider, resource) {
+                var dialogData = dialogDataFactory.createAddEditNotificationMethodDialogData();
+                var method = notificationMethodDisplayBuilder.createDefault();
+                method.name = resource.name;
+                method.serviceCode = resource.serviceCode;
+                method.providerKey = provider.key;
+                dialogData.notificationMethod = method;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsmethod.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notification.notificationmethod.addedit.html',
                     show: true,
-                    callback: $scope.addNotificationsDialogConfirm,
-                    dialogData: method
+                    callback: addNotificationsDialogConfirm,
+                    dialogData: dialogData
                 });
             }
 
@@ -1178,15 +1841,13 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Handles the delete after recieving the deleted command from the dialog view/controller
              */
             function notificationsMethodDeleteDialogConfirm(dialogData) {
-                var promiseNotificationMethod = merchelloNotificationsService.deleteNotificationMethod(dialogData.key);
-
+                $scope.preValuesLoaded = false;
+                var promiseNotificationMethod = notificationGatewayProviderResource.deleteNotificationMethod(dialogData.notificationMethod.key);
                 promiseNotificationMethod.then(function () {
-                    location.reload();
                     notificationsService.success("Notification Deleted");
+                    init();
                 }, function (reason) {
-
                     notificationsService.error("Notification Method Deletion Failed", reason.message);
-
                 });
             }
 
@@ -1199,11 +1860,14 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Opens the delete dialog via the Umbraco dialogService
              */
             function deleteNotificationMethod(method) {
+                var dialogData = dialogDataFactory.createDeleteNotificationMethodDialogData();
+                dialogData.notificationMethod = method;
+                dialogData.name = method.name;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsdelete.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.notificationsMethodDeleteDialogConfirm,
-                    dialogData: method
+                    callback: notificationsMethodDeleteDialogConfirm,
+                    dialogData: dialogData
                 });
             }
 
@@ -1216,14 +1880,13 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Handles the delete after recieving the deleted command from the dialog view/controller
              */
             function notificationsMessageDeleteDialogConfirm(dialogData) {
-                var promiseNotificationMethod = merchelloNotificationsService.deleteNotificationMessage(dialogData.key);
-
+                console.info(dialogData);
+                var promiseNotificationMethod = notificationGatewayProviderResource.deleteNotificationMessage(dialogData.notificationMessage.key);
                 promiseNotificationMethod.then(function () {
                     notificationsService.success("Notification Deleted");
+                    init();
                 }, function (reason) {
-
                     notificationsService.error("Notification Method Deletion Failed", reason.message);
-
                 });
             }
 
@@ -1235,12 +1898,16 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * @description
              * Opens the delete dialog via the Umbraco dialogService
              */
-            function deleteNotificationMessage(method) {
+            function deleteNotificationMessage(message) {
+                var dialogData = dialogDataFactory.createDeleteNotificationMessageDialogData();
+                dialogData.notificationMessage = message;
+                dialogData.name = message.name;
+
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsdelete.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.notificationsMessageDeleteDialogConfirm,
-                    dialogData: method
+                    callback: notificationsMessageDeleteDialogConfirm,
+                    dialogData: dialogData
                 });
             }
 
@@ -1252,13 +1919,12 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * @description
              * Handles the save after recieving the save command from the dialog view/controller
              */
-            function notificationsMessageAddDialogConfirm(message) {
-                message.monitorKey = message.monitorKey.monitorKey;
-                var promiseNotificationMethod = merchelloNotificationsService.saveNotificationMessage(message);
-
+            function notificationsMessageAddDialogConfirm(dialogData) {
+                console.info(dialogData);
+                var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMessage(dialogData.notificationMessage);
                 promiseNotificationMethod.then(function (keyFromServer) {
                     notificationsService.success("Notification Saved", "");
-                    location.reload();
+                    init();
                 }, function (reason) {
                     notificationsService.error("Notification Message Saved Failed", reason.message);
                 });
@@ -1273,19 +1939,23 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Opens the add notification dialog via the Umbraco dialogService
              */
             function addNotificationMessage(method) {
-                var dialogData = new merchello.Models.NotificationMessage();
-                dialogData.methodKey = method.key;
-                dialogData.notificationTriggers = $scope.notificationTriggers;
+                var dialogData = dialogDataFactory.createAddEditNotificationMessageDialogData();
+                dialogData.notificationMessage = notificationMessageDisplayBuilder.createDefault();
+                console.info(method);
+                dialogData.notificationMessage.methodKey = method.key;
+                dialogData.notificationMessage.name = method.name;
+                dialogData.notificationMonitors = $scope.notificationMonitors;
+                dialogData.selectedMonitor = $scope.notificationMonitors[0];
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsmessage.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notification.notificationmessage.add.html',
                     show: true,
-                    callback: $scope.notificationsMessageAddDialogConfirm,
+                    callback: notificationsMessageAddDialogConfirm,
                     dialogData: dialogData
                 });
             }
 
-                // Initialize the controller
-                init();
+            // Initialize the controller
+            init();
     }]);
 
     angular.module('merchello').controller('Merchello.Backoffice.PaymentProvidersController',
@@ -2242,6 +2912,62 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ReportsViewReportController
+     * @function
+     *
+     * @description
+     * The controller for the ViewReport page
+     *
+     * This is a bootstrapper to allow reports that are plugins to be loaded using the merchello application route.
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ReportsViewReportController',
+        ['$scope', '$routeParams',
+         function($scope, $routeParams) {
+
+             $scope.loaded = true;
+             $scope.preValuesLoaded = true;
+
+             // Property to control the report to show
+             $scope.reportParam = $routeParams.id;
+
+             var re = /(\\)/g;
+             var subst = '/';
+
+             var result = $scope.reportParam.replace(re, subst);
+
+             //$scope.reportPath = "/App_Plugins/Merchello.ExportOrders|ExportOrders.html";
+             $scope.reportPath = "/App_Plugins/" + result + ".html";
+
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ReportsListController
+     * @function
+     *
+     * @description
+     * The controller for the invoice payments view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ReportsListController',
+    ['$scope', 'merchelloTabsFactory',
+    function($scope, merchelloTabsFactory) {
+
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+        $scope.tabs = [];
+
+        function init() {
+            $scope.tabs = merchelloTabsFactory.createReportsTabs();
+            $scope.tabs.setActive('reportslist');
+        }
+
+        // initialize the controller
+        init();
+
+    }]);
+
     'use strict';
     /**
      * @ngdoc controller
@@ -2389,6 +3115,8 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             promise.then(function (invoice) {
                 $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                 $scope.billingAddress = $scope.invoice.getBillToAddress();
+                // append the customer tab if needed
+                $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
                 loadPayments(id);
                 loadSettings();
                 $scope.loaded = true;
@@ -2497,6 +3225,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var invoicePromise = invoiceResource.getByKey(key);
                 invoicePromise.then(function(invoice) {
                     $scope.invoice = invoice;
+                    // append the customer tab
+                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
                     loadSettings();
                     var shipmentsPromise = shipmentResource.getShipmentsByInvoice(invoice);
                     shipmentsPromise.then(function(shipments) {
@@ -2842,7 +3572,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     if (shipmentLineItem) {
                         $scope.shipmentLineItems.push(shipmentLineItem);
                     }
-                   //console.info($scope.invoice);
+
+                   $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -3098,15 +3830,16 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'settingsResource',
+    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
         'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
-        function($scope, $element, $log, angularHelper, assetsService, notificationService, settingsResource, invoiceResource,
+        function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
         {
 
             // expose on scope
             $scope.loaded = true;
             $scope.currentPage = 0;
+            $scope.tabs = [];
             $scope.filterText = '';
             $scope.filterStartDate = '';
             $scope.filterEndDate = '';
@@ -3288,6 +4021,8 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             function init() {
                 $scope.currencySymbol = '$';
                 loadInvoices(buildQuery());
+                $scope.tabs = merchelloTabsFactory.createSalesListTabs();
+                $scope.tabs.setActive('saleslist');
                 $scope.loaded = true;
             }
 

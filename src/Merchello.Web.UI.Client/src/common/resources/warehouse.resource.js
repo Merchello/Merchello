@@ -1,5 +1,5 @@
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name warehouseResource
      * @description Loads in data and allows modification of warehouses
      **/

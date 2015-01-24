@@ -1,5 +1,5 @@
     /**
-     * @ngdoc service
+     * @ngdoc resource
      * @name invoiceResource
      * @description Loads in data and allows modification for invoices
      **/

@@ -55,6 +55,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var invoicePromise = invoiceResource.getByKey(key);
                 invoicePromise.then(function(invoice) {
                     $scope.invoice = invoice;
+                    // append the customer tab
+                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
                     loadSettings();
                     var shipmentsPromise = shipmentResource.getShipmentsByInvoice(invoice);
                     shipmentsPromise.then(function(shipments) {

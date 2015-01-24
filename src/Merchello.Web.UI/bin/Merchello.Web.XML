@@ -4767,11 +4767,6 @@
             Represents a NotificationMonitorDisplay
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.NotificationMonitorDisplay.TriggerKey">
-            <summary>
-            Gets or sets the trigger key
-            </summary>
-        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.NotificationMonitorDisplay.MonitorKey">
             <summary>
             Gets or sets the monitor key

@@ -7,10 +7,10 @@
     /// </summary>
     public class NotificationMonitorDisplay
     {
-        /// <summary>
-        /// Gets or sets the trigger key
-        /// </summary>
-        public Guid TriggerKey { get; set; }
+        ///// <summary>
+        ///// Gets or sets the trigger key
+        ///// </summary>
+        //public Guid TriggerKey { get; set; }
 
         /// <summary>
         /// Gets or sets the monitor key

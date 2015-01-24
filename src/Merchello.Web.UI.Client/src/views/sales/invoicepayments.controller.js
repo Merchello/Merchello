@@ -40,6 +40,8 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             promise.then(function (invoice) {
                 $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                 $scope.billingAddress = $scope.invoice.getBillToAddress();
+                // append the customer tab if needed
+                $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
                 loadPayments(id);
                 loadSettings();
                 $scope.loaded = true;

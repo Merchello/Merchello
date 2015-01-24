@@ -1,5 +1,5 @@
 /**
- * @ngdoc service
+ * @ngdoc resource
  * @name shippingGatewayProviderResource
  * @description Loads in data for shipping providers and store shipping settings
  **/
