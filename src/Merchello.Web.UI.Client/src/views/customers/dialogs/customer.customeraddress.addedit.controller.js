@@ -31,11 +31,11 @@
             }
 
             function save() {
-                if(dialogData.selectedCountry.hasProvinces()) {
-                    dialogData.customerAddress.region = dialogData.selectedProvince.code;
+                if($scope.dialogData.selectedCountry.hasProvinces()) {
+                    $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
                 }
-                dialogData.customerAddress.countryCode = dialogData.selectedCountry.countryCode;
-                $scope.submit(dialogData);
+                $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
+                $scope.submit($scope.dialogData);
             }
 
             function toTitleCase(str) {

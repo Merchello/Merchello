@@ -7,9 +7,9 @@
      * The controller for customer overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
-        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
+        ['$scope', '$routeParams', '$timeout', 'dialogService', 'notificationsService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
             'customerResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder',
-        function($scope, $routeParams, dialogService, notificationsService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
+        function($scope, $routeParams, $timeout, dialogService, notificationsService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
                  customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder) {
 
             $scope.loaded = false;
@@ -67,6 +67,7 @@
                     $scope.tabs.setActive('overview');
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
+                    console.info($scope.customer);
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
                 });
@@ -129,9 +130,19 @@
                 }
                 dialogData.countries = countries;
                 dialogData.customerAddress.customerKey = $scope.customer.key;
+                if (dialogData.selectedCountry.hasProvinces()) {
+                    if(dialogData.customerAddress.region !== '') {
+                        dialogData.selectedProvince = _.find(dialogData.selectedCountry.provinces, function(province) {
+                            return province.code === address.region;
+                        });
+                    }
+                    if(dialogData.selectedProvince === null || dialogData.selectedProvince === undefined) {
+                        dialogData.selectedProvince = dialogData.selectedCountry.provinces[0];
+                    }
+                }
                 // if the customer has not addresses of the given type we are going to force an added
                 // address to be the primary address
-                if(!$scope.customer.hasDefaultAddressOfType(dialogData.customerAddress.addressType)) {
+                if(!$scope.customer.hasDefaultAddressOfType(dialogData.customerAddress.addressType) || address.isDefault) {
                     dialogData.customerAddress.isDefault = true;
                     dialogData.setDefault = true;
                 }
@@ -196,39 +207,19 @@
              * Edit an address and update the associated lists.
              */
             function processAddEditAddressDialog(dialogData) {
-                console.info(dialogData);
-                /*
-                var addresses = data.addresses;
-                //  Filter out an address if it's marked to be deleted.
-                if (data.shouldDelete) {
-                    addresses = _.reject(addresses, function(address) {
-                        return address.key == data.addressToReturn.key;
+                var defaultAddressOfType = $scope.customer.getDefaultAddress(dialogData.customerAddress.addressType);
+                if(dialogData.customerAddress.key !== '') {
+                    _.reject($scope.customer.addresses, function(address) {
+                      return address.key == dialogData.customerAddress.key;
                     });
                 }
-                // Insert the applicable customer, billing, and shipping keys and types into new addresses.
-                _.each(addresses, function(address) {
-                    address.customerKey = $scope.customer.key;
-                    if (data.addressType.toLowerCase() === 'billing') {
-                        address.addressType = 'Billing';
-                    } else {
-                        address.addressType = 'Shipping';
+                if (dialogData.customerAddress.isDefault && defaultAddressOfType !== undefined) {
+                    if(dialogData.customerAddress.key !== defaultAddressOfType.key) {
+                        defaultAddressOfType.isDefault = false;
                     }
-                });
-                // Update the appropriate address list.
-                if (data.addressType.toLowerCase() === 'billing') {
-                    $scope.billingAddresses = _.map(addresses, function(address) {
-                        return new merchello.Models.CustomerAddress(address);
-                    });
-                } else {
-                    $scope.shippingAddresses = _.map(addresses, function (address) {
-                        return new merchello.Models.CustomerAddress(address);
-                    });
                 }
-                notificationsService.info("Preparing addresses for updating...", "");
-                // Combine the address lists and update the customer.
-                $scope.customer.addresses = $scope.prepareAddressesForSave();
-                $scope.saveCustomer();
-                */
+                $scope.customer.addresses.push(dialogData.customerAddress);
+                saveCustomer();
             }
 
             /**
@@ -278,8 +269,10 @@
                 notificationsService.info("Saving...", "");
                 var promiseSaveCustomer = customerResource.SaveCustomer($scope.customer);
                 promiseSaveCustomer.then(function(customerResponse) {
+                    $timeout(function() {
                     notificationsService.success("Customer Saved", "");
-                    init();
+                        init();
+                    }, 400);
 
                 }, function(reason) {
                     notificationsService.error("Customer  Failed", reason.message);
