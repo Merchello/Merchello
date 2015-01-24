@@ -24,7 +24,7 @@
                                 methods.push(method);
                             }
                         } else {
-                            var methods = genericModelBuilder.transform(jsonResult, Constructor);
+                            methods = genericModelBuilder.transform(jsonResult, Constructor);
                             methods.provinces = taxProvinceDisplayBuilder.transform(jsonResult.provinces);
                         }
                         return methods;

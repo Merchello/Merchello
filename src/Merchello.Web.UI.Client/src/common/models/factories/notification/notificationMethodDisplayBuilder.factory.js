@@ -1,4 +1,10 @@
-
+    /**
+     * @ngdoc service
+     * @name notificationMethodDisplayBuilder
+     *
+     * @description
+     * A utility service that builds NotificationMethodDisplay models
+     */
     angular.module('merchello.models').factory('notificationMethodDisplayBuilder',
     ['genericModelBuilder', 'notificationMessageDisplayBuilder', 'NotificationMethodDisplay',
         function(genericModelBuilder, notificationMessageDisplayBuilder, NotificationMethodDisplay) {
@@ -19,7 +25,7 @@
                         }
                     } else {
                         methods = genericModelBuilder.transform(jsonResult, Constructor);
-                        method.notificationMessages = notificationMessageDisplayBuilder.transform(jsonResult.notificationMessages);
+                        methods.notificationMessages = notificationMessageDisplayBuilder.transform(jsonResult.notificationMessages);
                     }
                     return methods;
                 }

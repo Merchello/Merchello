@@ -170,17 +170,23 @@
             {
                 case GatewayProviderType.Payment:
                     var paymentMethods = _paymentMethodService.GetPaymentMethodsByProviderKey(gatewayProviderSettings.Key).ToArray();
-                    if(paymentMethods.Any()) _paymentMethodService.Delete(paymentMethods);
+                    if (paymentMethods.Any()) _paymentMethodService.Delete(paymentMethods);
                     break;
                     
                 case GatewayProviderType.Shipping:
                     var shippingMethods = _shipMethodService.GetShipMethodsByProviderKey(gatewayProviderSettings.Key).ToArray();
-                    if(shippingMethods.Any()) _shipMethodService.Delete(shippingMethods);
+                    if (shippingMethods.Any()) _shipMethodService.Delete(shippingMethods);
                     break;
 
                 case GatewayProviderType.Taxation:
                     var taxMethods = _taxMethodService.GetTaxMethodsByProviderKey(gatewayProviderSettings.Key).ToArray();
-                    if(taxMethods.Any()) _taxMethodService.Delete(taxMethods);
+                    if (taxMethods.Any()) _taxMethodService.Delete(taxMethods);
+                    break;
+
+                case GatewayProviderType.Notification:
+                    var notificationMethods =
+                        _notificationMethodService.GetNotifcationMethodsByProviderKey(gatewayProviderSettings.Key).ToArray();
+                    if (notificationMethods.Any()) _notificationMethodService.Delete(notificationMethods);
                     break;
             }
 

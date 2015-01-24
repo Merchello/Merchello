@@ -22,7 +22,7 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             scope: {
                 setAddress: '&setAddress'
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloAddress.tpl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloaddress.tpl.html',
             link: function(scope, elm, attr) {
                 scope.address = scope.setAddress();
             }

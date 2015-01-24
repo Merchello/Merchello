@@ -80,6 +80,41 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeletePaymentMethodDialogData();
         }
 
+        // creates a dialog data model for adding or editing a notification method
+        function createAddEditNotificationMethodDialogData() {
+            return new AddEditNotificationMethodDialogData();
+        }
+
+        // creates a dialog data model for deleting a notification method
+        function createDeleteNotificationMethodDialogData() {
+            return new DeleteNotificationMethodDialogData();
+        }
+
+        // creates a dialog data model for adding and editing a notification message
+        function createAddEditNotificationMessageDialogData() {
+            return new AddEditNotificationMessageDialogData();
+        }
+
+        // creates a dialog data model for deleting a notification message
+        function createDeleteNotificationMessageDialogData() {
+            return new DeleteNotificationMessageDialogData();
+        }
+
+        // creates a dialog data model for adding or updating a customer
+        function createAddEditCustomerDialogData() {
+            return new AddEditCustomerDialogData();
+        }
+
+        // creates a dialog data model for deleting a customer
+        function createDeleteCustomerDialogData() {
+            return new DeleteCustomerDialogData();
+        }
+
+        // creates a dialog data model for adding or updating customer addresses
+        function createAddEditCustomerAddressDialogData() {
+            return new AddEditCustomerAddressDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -95,6 +130,13 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createAddEditWarehouseDialogData: createAddEditWarehouseDialogData,
             createDeleteShipCountryShipMethodDialogData: createDeleteShipCountryShipMethodDialogData,
             createEditTaxCountryDialogData: createEditTaxCountryDialogData,
-            createDeletePaymentMethodDialogData: createDeletePaymentMethodDialogData
+            createDeletePaymentMethodDialogData: createDeletePaymentMethodDialogData,
+            createAddEditNotificationMethodDialogData: createAddEditNotificationMethodDialogData,
+            createDeleteNotificationMethodDialogData: createDeleteNotificationMethodDialogData,
+            createAddEditNotificationMessageDialogData: createAddEditNotificationMessageDialogData,
+            createDeleteNotificationMessageDialogData: createDeleteNotificationMessageDialogData,
+            createAddEditCustomerDialogData: createAddEditCustomerDialogData,
+            createDeleteCustomerDialogData: createDeleteCustomerDialogData,
+            createAddEditCustomerAddressDialogData: createAddEditCustomerAddressDialogData
         };
 }]);

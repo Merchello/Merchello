@@ -1,29 +1,27 @@
     angular.module('merchello').controller('Merchello.Backoffice.NotificationProvidersController',
         ['$scope', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'gatewayResourceDisplayBuilder',
-            'notificationGatewayProviderResource', 'notificationGatewayProviderDisplayBuilder', 'notificationMethodDisplayBuilder',
-            function($scope, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, gatewayResourceDisplayBuilder,
-                     notificationGatewayProviderResource, notificationGatewayProviderDisplayBuilder, notificationMethodDisplayBuilder) {
+        'notificationGatewayProviderResource', 'notificationGatewayProviderDisplayBuilder', 'notificationMethodDisplayBuilder',
+        'notificationMonitorDisplayBuilder', 'notificationMessageDisplayBuilder',
+        function($scope, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, gatewayResourceDisplayBuilder,
+        notificationGatewayProviderResource, notificationGatewayProviderDisplayBuilder, notificationMethodDisplayBuilder,
+        notificationMonitorDisplayBuilder, notificationMessageDisplayBuilder) {
 
-            $scope.currentTab = "Template";
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.notificationMonitors = [];
             $scope.tabs = [];
 
             $scope.notificationGatewayProviders = [];
-            $scope.notificationTriggers = [];
-            $scope.notificationMessage = {};
-            $scope.notificationMethods = [];
 
-            $scope.subscribers = [];
-            $scope.flyouts = {
-                editTemplate: false,
-                addAddress: false,
-                deleteAddress: false
-            };
+            // exposed methods
+            $scope.addNotificationMethod = addNotificationMethod;
+            $scope.deleteNotificationMethod = deleteNotificationMethod;
+            $scope.addNotificationMessage = addNotificationMessage;
+            $scope.deleteNotificationMessage = deleteNotificationMessage;
 
             function init() {
                 loadAllNotificationGatewayProviders();
-                //loadAllNotificationTriggers();
+                loadAllNotificationMonitors();
                 $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
                 $scope.tabs.setActive('notification');
             }
@@ -50,18 +48,13 @@
              * in Merchello models and add to the scope via the notificationGatewayProviders collection.
              */
             function loadAllNotificationGatewayProviders() {
-
                 var promiseAllProviders = notificationGatewayProviderResource.getAllGatewayProviders();
                 promiseAllProviders.then(function (allProviders) {
-
                     $scope.notificationGatewayProviders = notificationGatewayProviderDisplayBuilder.transform(allProviders);
                     angular.forEach($scope.notificationGatewayProviders, function(provider) {
                         loadNotificationGatewayResources(provider.key);
                         loadNotificationMethods(provider.key);
                     });
-
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
 
                 }, function (reason) {
                     notificationsService.error("Available Notification Providers Load Failed", reason.message);
@@ -79,22 +72,15 @@
              * return resources that haven't already been added via other methods on the provider.
              */
             function loadNotificationGatewayResources(providerKey) {
-
                 var provider = getProviderByKey(providerKey);
-
                 var promiseAllResources = notificationGatewayProviderResource.getGatewayResources(provider.key);
                 promiseAllResources.then(function (allResources) {
-
                     provider.gatewayResources = gatewayResourceDisplayBuilder.transform(allResources);
-
                     if (provider.gatewayResources.length > 0) {
                         provider.selectedGatewayResource = provider.gatewayResources[0];
                     }
-
                 }, function (reason) {
-
                     notificationsService.error("Available Notification Provider Resources Load Failed", reason.message);
-
                 });
             }
 
@@ -106,10 +92,10 @@
              * @description
              * Loads the triggers for the notification messages.
              */
-            function loadAllNotificationTriggers() {
-                var promise = merchelloNotificationsService.getAllNotificationTriggers();
-                promise.then(function (notificationTriggers) {
-                    $scope.notificationTriggers = notificationTriggers;
+            function loadAllNotificationMonitors() {
+                var promise = notificationGatewayProviderResource.getAllNotificationMonitors();
+                promise.then(function (notificationMonitors) {
+                    $scope.notificationMonitors = notificationMonitorDisplayBuilder.transform(notificationMonitors);
                 });
             }
 
@@ -125,94 +111,19 @@
             function loadNotificationMethods(providerKey) {
 
                 var provider = getProviderByKey(providerKey);
-
                 var promiseAllResources = notificationGatewayProviderResource.getNotificationProviderNotificationMethods(providerKey);
                 promiseAllResources.then(function (allMethods) {
                     provider.notificationMethods = notificationMethodDisplayBuilder.transform(allMethods);
-                    console.info(provider);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Notification Methods Load Failed", reason.message);
                 });
             }
 
-            /*
-            $scope.addAddressFlyout = new merchello.Models.Flyout(
-                $scope.flyouts.addAddress,
-                function(isOpen) {
-                    $scope.flyouts.addAddress = isOpen;
-                },
-                {
-                    clear: function() {
-                        var self = $scope.addAddressFlyout;
-                        self.model = new merchello.Models.NotificationSubscriber();
-                    },
-                    confirm: function() {
-                        var self = $scope.addAddressFlyout;
-                        var newKey = $scope.subscribers.length;
-                        // Note From Kyle: This key-creation logic will need to be modified to fit whatever works for the database.
-                        self.model.pk = newKey;
-                        $scope.subscribers.push(self.model);
-                        // Note From Kyle: An API call will need to be wired in here to add the new Subscriber to the email notification list in the database.
-                        self.clear();
-                        self.close();
-                    }
-                });
-
-
-            $scope.deleteAddressFlyout = new merchello.Models.Flyout(
-                $scope.flyouts.deleteAddress,
-                function(isOpen) {
-                    $scope.flyouts.deleteAddress = isOpen;
-                },
-                {
-                    clear: function() {
-                        var self = $scope.deleteAddressFlyout;
-                        self.model = new merchello.Models.NotificationSubscriber();
-                    },
-                    confirm: function() {
-                        var self = $scope.deleteAddressFlyout;
-                        var idx = -1;
-                        for (i = 0; i < $scope.subscribers.length; i++) {
-                            if ($scope.subscribers[i].pk == self.model.pk) {
-                                idx = i;
-                            }
-                        }
-                        if (idx > -1) {
-                            $scope.subscribers.splice(idx, 1);
-                            // Note From Kyle: An API call will need to be wired in here to delete the subscriber from the notification list in the database.
-                        }
-                        self.clear();
-                        self.close();
-                    }
-                });
-
-             */
-
-            /**
-             * @ngdoc method
-             * @name addNotificationMessageToMethodClick
-             * @function
-             *
-             * @description
-             * Saves a Notification Message to the Notification Method.
-             */
-            function addNotificationMessageToMethodClick(methodKey, notificationMessage) {
-                var redirectKey = "create";
-                if (notificationMessage == undefined) {
-                    notificationMessage = new merchello.Models.NotificationMessage();
-                    notificationMessage.methodKey = methodKey;
-                }
-                else {
-                    redirectKey = notificationMessage.key;
-                }
-                $scope.notificationMessage = notificationMessage;
-                window.location.hash = "#/merchello/merchello/NotificationsEdit/" + redirectKey;
-            }
-
             //--------------------------------------------------------------------------------------
             // Dialog methods
             //--------------------------------------------------------------------------------------
-
 
             /**
              * @ngdoc method
@@ -223,16 +134,13 @@
              * Handles the save after recieving the notification to add from the dialog view/controller
              */
             function addNotificationsDialogConfirm(dialogData) {
-                var promiseNotificationMethod = merchelloNotificationsService.saveNotificationMethod(dialogData);
-
+                $scope.preValuesLoaded = false;
+                var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMethod(dialogData.notificationMethod);
                 promiseNotificationMethod.then(function(notificationFromServer) {
-                    $scope.notificationMethods.push(new merchello.Models.NotificationMethod(notificationFromServer));
-                    location.reload();
                     notificationsService.success("Notification Method Created!", "");
+                    init();
                 }, function(reason) {
-
                     notificationsService.error("Notification Method Create Failed", reason.message);
-
                 });
             }
 
@@ -244,19 +152,18 @@
              * @description
              * Opens the add notification method dialog via the Umbraco dialogService.
              */
-            function addNotificationMethod(provider, method) {
-                if (method == undefined) {
-                    method = new merchello.Models.NotificationMethod();
-                    method.providerKey = provider.key; //Todo: When able to add external providers, make this select the correct provider
-                    method.serviceCode = "Email";
-                    method.name = "Email";
-                }
-                method.resources = provider.resources;
+            function addNotificationMethod(provider, resource) {
+                var dialogData = dialogDataFactory.createAddEditNotificationMethodDialogData();
+                var method = notificationMethodDisplayBuilder.createDefault();
+                method.name = resource.name;
+                method.serviceCode = resource.serviceCode;
+                method.providerKey = provider.key;
+                dialogData.notificationMethod = method;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsmethod.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notification.notificationmethod.addedit.html',
                     show: true,
-                    callback: $scope.addNotificationsDialogConfirm,
-                    dialogData: method
+                    callback: addNotificationsDialogConfirm,
+                    dialogData: dialogData
                 });
             }
 
@@ -269,15 +176,13 @@
              * Handles the delete after recieving the deleted command from the dialog view/controller
              */
             function notificationsMethodDeleteDialogConfirm(dialogData) {
-                var promiseNotificationMethod = merchelloNotificationsService.deleteNotificationMethod(dialogData.key);
-
+                $scope.preValuesLoaded = false;
+                var promiseNotificationMethod = notificationGatewayProviderResource.deleteNotificationMethod(dialogData.notificationMethod.key);
                 promiseNotificationMethod.then(function () {
-                    location.reload();
                     notificationsService.success("Notification Deleted");
+                    init();
                 }, function (reason) {
-
                     notificationsService.error("Notification Method Deletion Failed", reason.message);
-
                 });
             }
 
@@ -290,11 +195,14 @@
              * Opens the delete dialog via the Umbraco dialogService
              */
             function deleteNotificationMethod(method) {
+                var dialogData = dialogDataFactory.createDeleteNotificationMethodDialogData();
+                dialogData.notificationMethod = method;
+                dialogData.name = method.name;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsdelete.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.notificationsMethodDeleteDialogConfirm,
-                    dialogData: method
+                    callback: notificationsMethodDeleteDialogConfirm,
+                    dialogData: dialogData
                 });
             }
 
@@ -307,14 +215,13 @@
              * Handles the delete after recieving the deleted command from the dialog view/controller
              */
             function notificationsMessageDeleteDialogConfirm(dialogData) {
-                var promiseNotificationMethod = merchelloNotificationsService.deleteNotificationMessage(dialogData.key);
-
+                console.info(dialogData);
+                var promiseNotificationMethod = notificationGatewayProviderResource.deleteNotificationMessage(dialogData.notificationMessage.key);
                 promiseNotificationMethod.then(function () {
                     notificationsService.success("Notification Deleted");
+                    init();
                 }, function (reason) {
-
                     notificationsService.error("Notification Method Deletion Failed", reason.message);
-
                 });
             }
 
@@ -326,12 +233,16 @@
              * @description
              * Opens the delete dialog via the Umbraco dialogService
              */
-            function deleteNotificationMessage(method) {
+            function deleteNotificationMessage(message) {
+                var dialogData = dialogDataFactory.createDeleteNotificationMessageDialogData();
+                dialogData.notificationMessage = message;
+                dialogData.name = message.name;
+
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsdelete.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.notificationsMessageDeleteDialogConfirm,
-                    dialogData: method
+                    callback: notificationsMessageDeleteDialogConfirm,
+                    dialogData: dialogData
                 });
             }
 
@@ -343,13 +254,12 @@
              * @description
              * Handles the save after recieving the save command from the dialog view/controller
              */
-            function notificationsMessageAddDialogConfirm(message) {
-                message.monitorKey = message.monitorKey.monitorKey;
-                var promiseNotificationMethod = merchelloNotificationsService.saveNotificationMessage(message);
-
+            function notificationsMessageAddDialogConfirm(dialogData) {
+                console.info(dialogData);
+                var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMessage(dialogData.notificationMessage);
                 promiseNotificationMethod.then(function (keyFromServer) {
                     notificationsService.success("Notification Saved", "");
-                    location.reload();
+                    init();
                 }, function (reason) {
                     notificationsService.error("Notification Message Saved Failed", reason.message);
                 });
@@ -364,17 +274,21 @@
              * Opens the add notification dialog via the Umbraco dialogService
              */
             function addNotificationMessage(method) {
-                var dialogData = new merchello.Models.NotificationMessage();
-                dialogData.methodKey = method.key;
-                dialogData.notificationTriggers = $scope.notificationTriggers;
+                var dialogData = dialogDataFactory.createAddEditNotificationMessageDialogData();
+                dialogData.notificationMessage = notificationMessageDisplayBuilder.createDefault();
+                console.info(method);
+                dialogData.notificationMessage.methodKey = method.key;
+                dialogData.notificationMessage.name = method.name;
+                dialogData.notificationMonitors = $scope.notificationMonitors;
+                dialogData.selectedMonitor = $scope.notificationMonitors[0];
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Settings/Notifications/Dialogs/notificationsmessage.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notification.notificationmessage.add.html',
                     show: true,
-                    callback: $scope.notificationsMessageAddDialogConfirm,
+                    callback: notificationsMessageAddDialogConfirm,
                     dialogData: dialogData
                 });
             }
 
-                // Initialize the controller
-                init();
+            // Initialize the controller
+            init();
     }]);

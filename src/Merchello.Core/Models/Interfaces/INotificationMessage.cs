@@ -25,7 +25,7 @@ namespace Merchello.Core.Models
         /// The name of the notification
         /// </summary>
         [DataMember]
-        string Name { get; }
+        string Name { get; set; }
 
         /// <summary>
         /// A brief description of the notification

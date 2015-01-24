@@ -1,0 +1,13 @@
+.order-items {
+  ul { margin: 0; padding: 0; list-style-type: none; }
+  li { display: inline-block; margin: 0; padding: 0;
+    &:before { content: '|'; padding-right: 5px; }
+    &:first-child::before { content: ''; padding-right: 0; }
+  }
+  a { font-size: 1.2em;}
+  input[type="checkbox"] { margin-top: 2px; }
+}
+
+.invoice-total {
+  font-weight: bold;
+}
