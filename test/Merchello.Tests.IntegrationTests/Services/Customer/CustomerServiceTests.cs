@@ -7,6 +7,10 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Services.Customer
 {
+    using System;
+
+    using Merchello.Tests.Base.DataMakers;
+
     [TestFixture]
     [Category("Service Integration")]
     public class CustomerServiceTests : DatabaseIntegrationTestBase
@@ -167,8 +171,78 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
 
             //// Assert
             Assert.NotNull(customerAddress, "Customer address was null");
+            Assert.AreEqual(AddressType.Billing, customerAddress.AddressType);
             Assert.IsTrue(customerAddress.HasIdentity, "Customer address does not have an identity");
             Assert.IsTrue(customerAddress.IsDefault, "Customer address is not the default address");
+        }
+
+        [Test]
+        public void Can_Create_A_Customer_With_Addresses()
+        {
+            //// Arrange
+            var customer = MockCustomerDataMaker.CustomerForInserting();
+            _customerService.Save(customer);
+            
+            //// Act
+            var customerAddresses = MockCustomerAddressDataMaker.AddressCollectionForInserting(customer, "addresses", 4).ToArray();
+            customerAddresses[0].AddressType = AddressType.Billing;
+            customerAddresses[1].AddressType = AddressType.Billing;
+            foreach (var address in customerAddresses)
+            {
+                address.IsDefault = true;
+                
+            }
+            ((Core.Models.Customer)customer).Addresses = customerAddresses;
+            _customerService.Save(customer);
+
+           //// Assert
+           Assert.AreEqual(4, customer.Addresses.Count());
+            var defaultBilling = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing);
+            var defaultShipping = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Shipping);
+            Assert.NotNull(defaultBilling);
+            Assert.NotNull(defaultShipping);
+            Assert.AreEqual(2, customer.Addresses.Count(x => x.AddressType == AddressType.Billing));
+            Assert.AreEqual(2, customer.Addresses.Count(x => x.AddressType == AddressType.Shipping));
+            Assert.AreEqual(1, customer.Addresses.Count(x => x.AddressType == AddressType.Billing && x.IsDefault));
+            Assert.AreEqual(1, customer.Addresses.Count(x => x.AddressType == AddressType.Shipping && x.IsDefault));
+        }
+
+        [Test]
+        public void Can_Add_New_Address_To_Customer_Add_Save_It_As_Default()
+        {
+            //// Arrange
+            var customer = MockCustomerDataMaker.CustomerForInserting();
+            _customerService.Save(customer);
+           
+            var customerAddresses = MockCustomerAddressDataMaker.AddressCollectionForInserting(customer, "addresses", 4).ToArray();
+            customerAddresses[0].AddressType = AddressType.Billing;
+            customerAddresses[1].AddressType = AddressType.Billing;
+            foreach (var address in customerAddresses)
+            {
+                address.IsDefault = true;
+
+            }
+            ((Core.Models.Customer)customer).Addresses = customerAddresses;
+            _customerService.Save(customer);
+            var oldDefaultKey = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing).Key;
+
+            //// Act
+            var addresses = customer.Addresses.ToList();
+            var newAddress = MockCustomerAddressDataMaker.CustomerAddressForInserting(customer.Key);
+            newAddress.AddressType = AddressType.Billing;
+            newAddress.IsDefault = true;
+            addresses.Add(newAddress);
+            ((Core.Models.Customer)customer).Addresses = addresses;
+            _customerService.Save(customer);
+
+            //// Assert
+            Assert.AreEqual(5, customer.Addresses.Count());
+            var newDefaultKey = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing).Key;
+            Assert.AreNotEqual(oldDefaultKey, newDefaultKey);
+            Assert.AreEqual(3, customer.Addresses.Count(x => x.AddressType == AddressType.Billing));
+            Assert.AreEqual(2, customer.Addresses.Count(x => x.AddressType == AddressType.Shipping));
+            Assert.AreEqual(1, customer.Addresses.Count(x => x.AddressType == AddressType.Billing && x.IsDefault));
+            Assert.AreEqual(1, customer.Addresses.Count(x => x.AddressType == AddressType.Shipping && x.IsDefault));
         }
 
         /// <summary>

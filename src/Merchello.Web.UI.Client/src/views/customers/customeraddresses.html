@@ -28,9 +28,11 @@
 
                         <div class="row-fluid">
 
-                            <div data-ng-repeat="payment in payments">
-
-                            </div>
+                            <ul data-ng-show="billingAddresses.length > 0">
+                                <li data-ng-repeat="address in billingAddresses" class="well">
+                                    <merchello-address address="address.asAddressDisplay()"></merchello-address>
+                                </li>
+                            </ul>
 
 
                         </div>
@@ -44,12 +46,11 @@
                     <div class="merchello-controls">
 
                         <div class="row-fluid">
-
-                            <div data-ng-repeat="payment in payments">
-
-                            </div>
-
-
+                            <ul class="inline" data-ng-show="shippingAddresses.length > 0">
+                            <li data-ng-repeat="address in shippingAddresses" class="well span3">
+                                <merchello-address address="address.asAddressDisplay()"></merchello-address>
+                            </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

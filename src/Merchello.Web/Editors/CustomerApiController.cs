@@ -265,8 +265,10 @@
             merchCustomer = customer.ToCustomer(merchCustomer);
 
            _customerService.Save(merchCustomer);
-            
-            return merchCustomer.ToCustomerDisplay();
+
+            var updated = _customerService.GetByKey(merchCustomer.Key);
+            _customerService.Save(updated);
+            return updated.ToCustomerDisplay();
         }
 
 

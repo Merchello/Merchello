@@ -271,7 +271,7 @@
                 promiseSaveCustomer.then(function(customerResponse) {
                     $timeout(function() {
                     notificationsService.success("Customer Saved", "");
-                        init();
+                        loadCustomer($scope.customer.key);
                     }, 400);
 
                 }, function(reason) {
