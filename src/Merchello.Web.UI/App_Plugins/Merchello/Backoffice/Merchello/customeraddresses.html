@@ -27,15 +27,9 @@
                     <div class="merchello-controls">
 
                         <div class="row-fluid">
+                            <customer-address-table customer="customer" addresses="billingAddresses" countries="countries" address-type="Billing" save="save(customer)"></customer-address-table>
+                        </div><br />
 
-                            <ul data-ng-show="billingAddresses.length > 0">
-                                <li data-ng-repeat="address in billingAddresses" class="well">
-                                    <merchello-address address="address.asAddressDisplay()"></merchello-address>
-                                </li>
-                            </ul>
-
-
-                        </div>
                     </div>
                 </div>
                 <div class="control-group umb-control-group">
@@ -46,12 +40,8 @@
                     <div class="merchello-controls">
 
                         <div class="row-fluid">
-                            <ul class="inline" data-ng-show="shippingAddresses.length > 0">
-                            <li data-ng-repeat="address in shippingAddresses" class="well span3">
-                                <merchello-address address="address.asAddressDisplay()"></merchello-address>
-                            </li>
-                            </ul>
-                        </div>
+                            <customer-address-table customer="customer" addresses="shippingAddresses" countries="countries" address-type="Shipping" save="save(customer)"></customer-address-table>
+                        </div><br />
                     </div>
                 </div>
             </div>

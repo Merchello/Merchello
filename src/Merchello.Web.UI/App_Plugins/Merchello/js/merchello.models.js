@@ -483,6 +483,15 @@
             }
         }
 
+        function getPrimaryLocation() {
+            var shippingAddress = getDefaultShippingAddress.call(this);
+            if (!shippingAddress.isEmpty()) {
+                return shippingAddress;
+            } else {
+                return getDefaultBillingAddress.call(this);
+            }
+        }
+
         return {
             getLastInvoice: getLastInvoice,
             hasAddresses: hasAddresses,
@@ -492,7 +501,8 @@
             getDefaultBillingAddress: getDefaultBillingAddress,
             getBillingAddresses: getBillingAddresses,
             getDefaultShippingAddress: getDefaultShippingAddress,
-            getShippingAddresses: getShippingAddresses
+            getShippingAddresses: getShippingAddresses,
+            getPrimaryLocation: getPrimaryLocation
         }
 
     }());
@@ -728,6 +738,21 @@
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
+    /**
+     * @ngdoc model
+     * @name DeleteCustomerAddressDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for passing customer addresses for deletion
+     */
+    var DeleteCustomerAddressDialogData = function() {
+        var self = this;
+        self.customerAddress = {};
+        self.name = '';
+    };
+
+    angular.module('merchello.models').constant('DeleteCustomerAddressDialogData', DeleteCustomerAddressDialogData);
     /**
      * @ngdoc model
      * @name DeleteCustomerDialogData
@@ -2576,6 +2601,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new AddEditCustomerAddressDialogData();
         }
 
+        // creates a dialog data model for deleting a customer address
+        function createDeleteCustomerAddressDialogData() {
+            return new DeleteCustomerAddressDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -2598,7 +2628,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteNotificationMessageDialogData: createDeleteNotificationMessageDialogData,
             createAddEditCustomerDialogData: createAddEditCustomerDialogData,
             createDeleteCustomerDialogData: createDeleteCustomerDialogData,
-            createAddEditCustomerAddressDialogData: createAddEditCustomerAddressDialogData
+            createAddEditCustomerAddressDialogData: createAddEditCustomerAddressDialogData,
+            createDeleteCustomerAddressDialogData: createDeleteCustomerAddressDialogData
         };
 }]);
 

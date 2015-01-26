@@ -26,6 +26,7 @@
             $scope.openEditInfoDialog = openEditInfoDialog;
             $scope.openDeleteCustomerDialog = openDeleteCustomerDialog;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
+            $scope.saveCustomer = saveCustomer;
 
             // private properties
             var settings = {};
@@ -119,7 +120,7 @@
                 var dialogData = dialogDataFactory.createAddEditCustomerAddressDialogData();
                 // if the address is not defined we need to create a default (empty) CustomerAddressDisplay
                 if(address === null || address === undefined) {
-                    dialogData.customerAddress = customerDisplayBuilder.createDefault();
+                    dialogData.customerAddress = customerAddressDisplayBuilder.createDefault();
                     dialogData.selectedCountry = countries[0];
                 } else {
                     dialogData.customerAddress = address;
@@ -190,7 +191,7 @@
                 dialogData.email = $scope.customer.email;
 
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.info.edit.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.info.addedit.html',
                     show: true,
                     callback: processEditInfoDialog,
                     dialogData: dialogData
@@ -209,7 +210,7 @@
             function processAddEditAddressDialog(dialogData) {
                 var defaultAddressOfType = $scope.customer.getDefaultAddress(dialogData.customerAddress.addressType);
                 if(dialogData.customerAddress.key !== '') {
-                    _.reject($scope.customer.addresses, function(address) {
+                    $scope.customer.addresses =_.reject($scope.customer.addresses, function(address) {
                       return address.key == dialogData.customerAddress.key;
                     });
                 }

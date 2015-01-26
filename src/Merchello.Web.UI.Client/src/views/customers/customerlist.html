@@ -24,6 +24,7 @@
                     <div class="controls pull-right" data-ng-show="customers.length > 0">
                         <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
                         <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
+                            <option value="2">2</option>
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -40,18 +41,20 @@
                         </div>
                     </div>
                 </form>
+                <reset-list-filters></reset-list-filters>
             </div>
             <div class="merchello-pane">
                 <!-- Pagination -->
-                <div class="pager" data-ng-show="maxPages > 1">
-                    <!-- ACTION: Previous Page -->
+                <merchello-pager></merchello-pager>
+                <!--div class="pager" data-ng-show="maxPages > 1">
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)"><localize key="general_previous" /></button>
                     {{currentPage+1}}/{{maxPages}}
-                    <!-- ACTION: Next Page -->
+
                     <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)"><localize key="general_next" /></button>
-                </div>
+                </div-->
+
                 <!-- Table of Customers -->
-                <table class="table table-hover merchello-selectable-table">
+                <table class="table table-hover merchello-selectable-table" data-ng-show="preValuesLoaded">
                     <thead>
                     <tr>
                         <th data-ng-show="visible.bulkActionButton"><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
@@ -87,19 +90,20 @@
                         <!-- ACTION: Go To Customer View Page -->
                         <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.loginName}}</a></td>
                         <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
-                        <td>{{customer.primaryLocation()}}</td>
+                        <td><customer-location address="customer.getPrimaryLocation()"></customer-location></td>
                         <td><localize key="merchelloGeneral_moneySymbol" />{{customer.getLastInvoice().total}}</td>
                     </tr>
                     </tbody>
                 </table>
                 <!-- Pagination -->
-                <div class="pager" data-ng-show="maxPages > 1">
-                    <!-- ACTION: Previous Page -->
+                <merchello-pager></merchello-pager>
+                <!--div class="pager" data-ng-show="maxPages > 1">
+
                     <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)"><localize key="general_previous" /></button>
                     {{currentPage+1}}/{{maxPages}}
-                    <!-- ACTION: Next Page -->
+
                     <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)"><localize key="general_next" /></button>
-                </div>
+                </div-->
             </div>
         </merchello-panel>
     </umb-panel>
