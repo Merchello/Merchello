@@ -31,11 +31,13 @@
             }
 
             function save() {
-                if($scope.dialogData.selectedCountry.hasProvinces()) {
-                    $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
+                if($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode.$valid) {
+                    if($scope.dialogData.selectedCountry.hasProvinces()) {
+                        $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
+                    }
+                    $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
+                    $scope.submit($scope.dialogData);
                 }
-                $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
-                $scope.submit($scope.dialogData);
             }
 
             function toTitleCase(str) {

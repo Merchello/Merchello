@@ -89,6 +89,7 @@
                         <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressAddEditDialog(defaultBillingAddress)"><i class="icon icon-edit"></i></a>
                     </h3>
                     <div class="vcard" data-ng-show="!defaultBillingAddress.isEmpty()">
+                        <h4>{{defaultBillingAddress.label}}</h4>
                         <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
                         <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
                         <span class="adr">
@@ -111,6 +112,7 @@
                         <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressAddEditDialog(defaultShippingAddress)"><i class="icon icon-edit"></i></a>
                     </h3>
                     <div class="vcard" data-ng-show="!defaultShippingAddress.isEmpty()">
+                        <h4>{{defaultShippingAddress.label}}</h4>
                         <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
                         <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
                         <span class="adr">

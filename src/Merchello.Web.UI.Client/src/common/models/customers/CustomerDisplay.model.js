@@ -92,6 +92,15 @@
             }
         }
 
+        function getPrimaryLocation() {
+            var shippingAddress = getDefaultShippingAddress.call(this);
+            if (!shippingAddress.isEmpty()) {
+                return shippingAddress;
+            } else {
+                return getDefaultBillingAddress.call(this);
+            }
+        }
+
         return {
             getLastInvoice: getLastInvoice,
             hasAddresses: hasAddresses,
@@ -101,7 +110,8 @@
             getDefaultBillingAddress: getDefaultBillingAddress,
             getBillingAddresses: getBillingAddresses,
             getDefaultShippingAddress: getDefaultShippingAddress,
-            getShippingAddresses: getShippingAddresses
+            getShippingAddresses: getShippingAddresses,
+            getPrimaryLocation: getPrimaryLocation
         }
 
     }());
