@@ -308,10 +308,10 @@
              * Fired when the reset filter button is clicked.
              */
             function resetFilters() {
+                $scope.preValuesLoaded = false;
                 $scope.currentFilters = [];
                 $scope.filterText = "";
                 loadCustomers($scope.filterText);
-                $scope.filterAction = false;
             }
 
 
@@ -3016,23 +3016,29 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'settingsResource', 'productResource', 'productDisplayBuilder',
+        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
             'queryDisplayBuilder', 'queryResultDisplayBuilder',
-        function($scope, $routeParams, $location, assetsService, notificationsService, settingsResource, productResource, productDisplayBuilder,
+        function($scope, $routeParams, $location, assetsService, notificationsService, settingsResource, merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder,
         queryDisplayBuilder, queryResultDisplayBuilder) {
 
-            $scope.filtertext = '';
+            $scope.filterText = '';
+            $scope.tabs = [];
             $scope.products = [];
-            $scope.filteredproducts = [];
-            $scope.watchCount = 0;
+            $scope.currentFilters = [];
             $scope.sortProperty = 'name';
             $scope.sortOrder = 'Ascending';
-            $scope.limitAmount = 10;
+            $scope.limitAmount = 25;
             $scope.currentPage = 0;
             $scope.maxPages = 0;
 
             // exposed methods
             $scope.getEditUrl = getEditUrl;
+            $scope.limitChanged = limitChanged;
+            $scope.numberOfPages = numberOfPages;
+            $scope.changePage = changePage;
+            $scope.changeSortOrder = changeSortOrder;
+            $scope.getFilteredProducts = getFilteredProducts;
+            $scope.resetFilters = resetFilters;
 
             /**
              * @ngdoc method
@@ -3045,6 +3051,8 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
             function init() {
                 loadProducts();
                 loadSettings();
+                $scope.tabs = merchelloTabsFactory.createProductListTabs();
+                $scope.tabs.setActive('productlist');
             }
 
             /**
@@ -3068,7 +3076,11 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
                 query.itemsPerPage = perPage;
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
+                console.info($scope.filterText);
                 query.addFilterTermParam($scope.filterText);
+                $scope.currentFilters = query.parameters;
+
+                console.info(query);
 
                 var promise = productResource.searchProducts(query);
                 promise.then(function (response) {
@@ -3083,8 +3095,6 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
                 });
 
             }
-
-
 
             /**
              * @ngdoc method
@@ -3118,7 +3128,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
             function limitChanged(newVal) {
                 $scope.limitAmount = newVal;
                 $scope.currentPage = 0;
-                $scope.loadProducts();
+                loadProducts();
             }
 
             /**
@@ -3171,8 +3181,8 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
              * param.  This searches the Examine index in the core.
              */
             function getFilteredProducts(filter) {
-                //notificationsService.info("Filtering...", "");
-                $scope.filtertext = filter;
+                $scope.preValuesLoaded = false;
+                $scope.filterText = filter;
                 $scope.currentPage = 0;
                 loadProducts();
             }
@@ -3193,6 +3203,22 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
             function numberOfPages() {
                 return $scope.maxPages;
                 //return Math.ceil($scope.products.length / $scope.limitAmount);
+            }
+
+            /**
+             * @ngdoc method
+             * @name resetFilters
+             * @function
+             *
+             * @description
+             * Fired when the reset filter button is clicked.
+             */
+            function resetFilters() {
+                $scope.preValuesLoaded = false;
+                $scope.currentFilters = [];
+                $scope.filterText = '';
+                loadProducts();
+
             }
 
             function getEditUrl(product) {

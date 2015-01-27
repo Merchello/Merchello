@@ -155,10 +155,10 @@
              * Fired when the reset filter button is clicked.
              */
             function resetFilters() {
+                $scope.preValuesLoaded = false;
                 $scope.currentFilters = [];
                 $scope.filterText = "";
                 loadCustomers($scope.filterText);
-                $scope.filterAction = false;
             }
 
 
