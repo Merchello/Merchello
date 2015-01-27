@@ -41,7 +41,7 @@
 
 
         function addFilterTermParam(term) {
-            if(term.length <= 0) {
+            if(term === undefined || term.length <= 0) {
                 return;
             }
             var param = new QueryParameterDisplay();

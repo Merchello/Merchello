@@ -24,7 +24,6 @@
                     <div class="controls pull-right" data-ng-show="customers.length > 0">
                         <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
                         <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                            <option value="2">2</option>
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -46,13 +45,6 @@
             <div class="merchello-pane">
                 <!-- Pagination -->
                 <merchello-pager></merchello-pager>
-                <!--div class="pager" data-ng-show="maxPages > 1">
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)"><localize key="general_previous" /></button>
-                    {{currentPage+1}}/{{maxPages}}
-
-                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)"><localize key="general_next" /></button>
-                </div-->
-
                 <!-- Table of Customers -->
                 <table class="table table-hover merchello-selectable-table" data-ng-show="preValuesLoaded">
                     <thead>
@@ -97,13 +89,6 @@
                 </table>
                 <!-- Pagination -->
                 <merchello-pager></merchello-pager>
-                <!--div class="pager" data-ng-show="maxPages > 1">
-
-                    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage - 1)"><localize key="general_previous" /></button>
-                    {{currentPage+1}}/{{maxPages}}
-
-                    <button class="btn" data-ng-disabled="currentPage >= maxPages - 1" data-ng-click="changePage(currentPage + 1)"><localize key="general_next" /></button>
-                </div-->
             </div>
         </merchello-panel>
     </umb-panel>
