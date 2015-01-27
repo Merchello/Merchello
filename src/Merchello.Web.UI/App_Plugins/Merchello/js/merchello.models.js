@@ -1276,6 +1276,138 @@
     angular.module('merchello.models').constant('CatalogInventoryDisplay', CatalogInventoryDisplay);
     /**
      * @ngdoc model
+     * @name ProductAttributeDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProductAttributeDisplay object
+     */
+    var ProductAttributeDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.optionKey = '';
+        self.name = '';
+        self.sku = '';
+        self.sortOrder = 0;
+    };
+
+    angular.module('merchello.models').constant('ProductAttributeDisplay', ProductAttributeDisplay);
+
+    /**
+     * @ngdoc model
+     * @name ProductAttributeDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProductDisplay object
+     */
+    var ProductDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.sku = '';
+        self.price = 0.00;
+        self.costOfGoods = 0.00;
+        self.salePrice = 0.00;
+        self.onSale = false;
+        self.manufacturer = '';
+        self.manufacturerModelNumber = '';
+        self.weight = 0;
+        self.length = 0;
+        self.width = 0;
+        self.height = 0;
+        self.barcode = "";
+        self.available = true;
+        self.trackInventory = false;
+        self.outOfStockPurchase = false;
+        self.taxable = false;
+        self.shippable = false;
+        self.download = false;
+        self.downloadMediaId = -1;
+        self.hasOptions = false;
+        self.hasVariants = false;
+        self.productOptions = [];
+        self.productVariants = [];
+        self.catalogInventories = [];
+    };
+
+    ProductDisplay.prototype = (function() {
+
+        // returns a value indicating whether or not the product has variants
+        function hasVariants() {
+            return this.productVariants.length > 0;
+        }
+
+        function totalInventory() {
+
+        }
+
+        return {
+            hasVariants: hasVariants
+        };
+    }());
+
+    angular.module('merchello.models').constant('ProductDisplay', ProductDisplay);
+    /**
+     * @ngdoc model
+     * @name ProductAttributeDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProductOptionDisplay object
+     */
+    var ProductOptionDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.required = true;
+        self.sortOrder = 1;
+        self.choices = [];
+    };
+
+    angular.module('merchello.models').constant('ProductOptionDisplay', ProductOptionDisplay);
+    /**
+     * @ngdoc model
+     * @name ProductAttributeDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProductVariantDisplay object
+     */
+    var ProductVariantDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.productKey = '';
+        self.versionKey = '';
+        self.name = '';
+        self.sku = '';
+        self.price = 0.00;
+        self.costOfGoods = 0.00;
+        self.salePrice = 0.00;
+        self.onSale = false;
+        self.manufacturer = '';
+        self.manufacturerModelNumber = '';
+        self.weight = 0;
+        self.length = 0;
+        self.width = 0;
+        self.height = 0;
+        self.barcode = '';
+        self.available = true;
+        self.trackInventory = false;
+        self.outOfStockPurchase = false;
+        self.taxable = false;
+        self.shippable = false;
+        self.download = false;
+        self.downloadMediaId = -1;
+        self.totalInventoryCount = 0;
+        self.attributes = [];
+        self.catalogInventories = [];
+    };
+
+    angular.module('merchello.models').constant('ProductVariantDisplay', ProductVariantDisplay);
+
+    /**
+     * @ngdoc model
      * @name QueryDisplay
      * @function
      *
@@ -1317,7 +1449,7 @@
 
 
         function addFilterTermParam(term) {
-            if(term.length <= 0) {
+            if(term === undefined || term.length <= 0) {
                 return;
             }
             var param = new QueryParameterDisplay();
@@ -2754,6 +2886,13 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             var Constructor = MerchelloTabCollection;
 
+            // creates tabs for the product listing page
+            function createProductListTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                return tabs;
+            }
+
             // creates tabs for the sales listing page
             function createSalesListTabs() {
                 var tabs = new Constructor();
@@ -2808,6 +2947,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
 
             return {
+                createProductListTabs: createProductListTabs,
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
                 createCustomerListTabs: createCustomerListTabs,
@@ -3046,6 +3186,162 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                 }
             };
         }]);
+
+    /**
+     * @ngdoc models
+     * @name catalogInventoryDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ProductAttributeDisplay models
+     */
+    angular.module('merchello.models').factory('catalogInventoryDisplayBuilder',
+        ['genericModelBuilder', 'CatalogInventoryDisplay',
+        function(genericModelBuilder, CatalogInventoryDisplay) {
+
+            var Constructor = CatalogInventoryDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+
+    }]);
+
+    /**
+     * @ngdoc models
+     * @name productAttributeDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ProductAttributeDisplay models
+     */
+    angular.module('merchello.models').factory('productAttributeDisplayBuilder',
+        ['genericModelBuilder',
+        function(genericModelBuilder, ProductAttributeDisplay) {
+
+            var Constructor = ProductAttributeDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+    }]);
+
+    /**
+     * @ngdoc models
+     * @name productDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ProductDisplay models
+     */
+    angular.module('merchello.models').factory('productDisplayBuilder',
+        ['genericModelBuilder', 'productVariantDisplayBuilder', 'productOptionDisplayBuilder', 'catalogInventoryDisplayBuilder',
+            'ProductDisplay',
+        function(genericModelBuilder, productVariantDisplayBuilder, productOptionDisplayBuilder, catalogInventoryDisplayBuilder,
+        ProductDisplay) {
+
+            var Constructor = ProductDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var products = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var product = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            product.productVariants = productVariantDisplayBuilder.transform(jsonResult[ i ].productVariants);
+                            product.productOptions = productOptionDisplayBuilder.transform(jsonResult[ i ].productOptions);
+                            product.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult[ i ].catalogInventories);
+                            products.push(product);
+                        }
+                    } else {
+                        products = genericModelBuilder.transform(jsonResult, Constructor);
+                        products.productVariants = productVariantDisplayBuilder.transform(jsonResult.productVariants);
+                        products.productOptions = productOptionDisplayBuilder.transform(jsonResult.productOptions);
+                        products.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult.catalogInventories);
+                    }
+                    return products;
+
+                }
+            };
+
+    }]);
+
+    /**
+     * @ngdoc models
+     * @name productOptionDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ProductOptionDisplay models
+     */
+    angular.module('merchello.models').factory('productOptionDisplayBuilder',
+        ['genericModelBuilder', 'productAttributeDisplayBuilder', 'ProductOptionDisplay',
+        function(genericModelBuilder, productAttributeDisplayBuilder, ProductOptionDisplay) {
+
+            var Constructor = ProductOptionDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var options = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var option = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            option.choices = productAttributeDisplayBuilder.transform(jsonResult[ i ].choices);
+                            options.push(option);
+                        }
+                    } else {
+                        options = genericModelBuilder.transform(jsonResult, Constructor);
+                        options.choices = productAttributeDisplayBuilder.transform(jsonResult.choices);
+                    }
+                    return options;
+                }
+            };
+
+    }]);
+
+    /**
+     * @ngdoc models
+     * @name productVariantDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ProductVariantDisplay models
+     */
+    angular.module('merchello.models').factory('productVariantDisplayBuilder',
+        ['genericModelBuilder', 'productAttributeDisplayBuilder', 'catalogInventoryDisplayBuilder', 'ProductVariantDisplay',
+        function(genericModelBuilder, productAttributeDisplayBuilder, catalogInventoryDisplayBuilder, ProductVariantDisplay) {
+
+            var Constructor = ProductVariantDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var variants = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var variant = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            variant.attributes = productAttributeDisplayBuilder.transform(jsonResult[ i ].attributes);
+                            variant.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult[ i ].catalogInventories);
+                            variants.push(variant);
+                        }
+                    } else {
+                        variants = genericModelBuilder.transform(jsonResult, Constructor);
+                        variants.attributes = productAttributeDisplayBuilder.transform(jsonResult.attributes);
+                        variants.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult.catalogInventories);
+                    }
+                    return variants;
+                }
+            };
+
+    }]);
 
     /**
      * @ngdoc service
