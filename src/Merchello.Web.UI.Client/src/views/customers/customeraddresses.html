@@ -27,13 +27,9 @@
                     <div class="merchello-controls">
 
                         <div class="row-fluid">
+                            <customer-address-table customer="customer" addresses="billingAddresses" countries="countries" address-type="Billing" save="save(customer)"></customer-address-table>
+                        </div><br />
 
-                            <div data-ng-repeat="payment in payments">
-
-                            </div>
-
-
-                        </div>
                     </div>
                 </div>
                 <div class="control-group umb-control-group">
@@ -44,13 +40,8 @@
                     <div class="merchello-controls">
 
                         <div class="row-fluid">
-
-                            <div data-ng-repeat="payment in payments">
-
-                            </div>
-
-
-                        </div>
+                            <customer-address-table customer="customer" addresses="shippingAddresses" countries="countries" address-type="Shipping" save="save(customer)"></customer-address-table>
+                        </div><br />
                     </div>
                 </div>
             </div>

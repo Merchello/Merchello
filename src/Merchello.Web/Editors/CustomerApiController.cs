@@ -208,7 +208,7 @@
         public CustomerDisplay AddCustomer(CustomerDisplay customer)
         {
             var newCustomer = _customerService.CreateCustomer(
-                customer.LoginName,
+                string.IsNullOrEmpty(customer.LoginName) ? customer.Email : customer.LoginName,
                 customer.FirstName,
                 customer.LastName,
                 customer.Email);
@@ -265,7 +265,7 @@
             merchCustomer = customer.ToCustomer(merchCustomer);
 
            _customerService.Save(merchCustomer);
-            
+
             return merchCustomer.ToCustomerDisplay();
         }
 

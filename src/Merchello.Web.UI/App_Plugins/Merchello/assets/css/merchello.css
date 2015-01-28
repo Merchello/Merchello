@@ -487,35 +487,37 @@
   padding: 2px 8px;
   margin-bottom: 2px; }
 
-.order-items ul {
+.merchello-panel-body .order-items ul {
   margin: 0;
   padding: 0;
   list-style-type: none; }
-.order-items li {
+.merchello-panel-body .order-items li {
   display: inline-block;
   margin: 0;
   padding: 0; }
-  .order-items li:before {
+  .merchello-panel-body .order-items li:before {
     content: '|';
     padding-right: 5px; }
-  .order-items li:first-child::before {
+  .merchello-panel-body .order-items li:first-child::before {
     content: '';
     padding-right: 0; }
-.order-items a {
+.merchello-panel-body .order-items a {
   font-size: 1.2em; }
-.order-items input[type="checkbox"] {
+.merchello-panel-body .order-items input[type="checkbox"] {
   margin-top: 2px; }
-
-.invoice-total {
+.merchello-panel-body .invoice-total {
   font-weight: bold; }
 
-.warehouse-info .vcard {
+.merchello-panel-body .warehouse-info .vcard {
   margin-top: 1em; }
-  .warehouse-info .vcard .fn {
+  .merchello-panel-body .warehouse-info .vcard .fn {
     font-size: 17.5px;
     font-width: bold; }
 
-.tax-rate {
+.merchello-panel-body .shipping-dimensions {
+  margin-bottom: 1.5em; }
+
+.merchello-panel-body .tax-rate {
   width: 60px; }
 
 .merchello-product-picker .selector {

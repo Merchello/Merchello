@@ -132,6 +132,7 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Address1 = address.Address1;
             destination.Address2 = address.Address2;
             destination.AddressTypeFieldKey = address.AddressTypeFieldKey;
+            destination.AddressType = address.AddressType;
             destination.Region = address.Region;
             destination.Locality = address.Locality;
             destination.PostalCode = address.PostalCode;

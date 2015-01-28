@@ -7,20 +7,20 @@
      * The controller for customer list view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
-        ['$scope', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'customerResource', 'queryDisplayBuilder',
+        ['$scope', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'dialogDataFactory', 'customerResource', 'queryDisplayBuilder',
             'queryResultDisplayBuilder', 'customerDisplayBuilder',
-        function($scope, dialogService, notificationsService, merchelloTabsFactory, customerResource,
+        function($scope, dialogService, notificationsService, merchelloTabsFactory, dialogDataFactory, customerResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, customerDisplayBuilder) {
 
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
 
             $scope.currentPage = 0;
             $scope.customers = [];
             $scope.filterText = '';
             $scope.limitAmount = 25;
-            $scope.maxPages = 0;
             $scope.sortProperty = 'loginName';
+            $scope.currentFilters = [];
             $scope.visible = {
                 bulkActionButton: function() {
                     var result = false;
@@ -28,6 +28,18 @@
                 },
                 bulkActionDropdown: false
             };
+
+
+            // exposed methods
+            $scope.loadCustomers = loadCustomers;
+            $scope.resetFilters = resetFilters;
+            $scope.openNewCustomerDialog = openNewCustomerDialog;
+            $scope.numberOfPages = numberOfPages;
+            $scope.limitChanged = limitChanged;
+            $scope.changePage = changePage;
+            $scope.changeSortOrder = changeSortOrder;
+
+            var maxPages = 0;
 
             /**
              * @ngdoc method
@@ -41,6 +53,7 @@
                 loadCustomers($scope.filterText);
                 $scope.tabs = merchelloTabsFactory.createCustomerListTabs();
                 $scope.tabs.setActive('customerlist');
+                $scope.loaded = true;
             }
 
             /**
@@ -52,6 +65,7 @@
              * Load the customers from the API using the provided filter (if any).
              */
             function loadCustomers(filterText) {
+                $scope.preValuesLoaded = false;
                 var query = queryDisplayBuilder.createDefault();
                 query.currentPage = $scope.currentPage;
                 query.itemsPerPage = $scope.limitAmount;
@@ -68,8 +82,14 @@
                     $scope.customers = [];
                     var queryResult = queryResultDisplayBuilder.transform(customersResponse, customerDisplayBuilder);
                     $scope.customers = queryResult.items;
-                    console.info($scope.customers);
-                    $scope.maxPages = queryResult.totalPages;
+                    maxPages = queryResult.totalPages;
+                    if(query.parameters.length >= 0) {
+                        $scope.currentFilters = query.parameters;
+                    } else {
+                        $scope.currentFilters = [];
+                    }
+                    $scope.filterText = filterText;
+                    $scope.preValuesLoaded = true;
 
                 });
             }
@@ -128,19 +148,17 @@
 
             /**
              * @ngdoc method
-             * @name loadMostRecentOrders
+             * @name resetFilters
              * @function
              *
              * @description
-             * Iterate through all the customers in the list, and acquire their most recent order.
+             * Fired when the reset filter button is clicked.
              */
-            function loadMostRecentOrders() {
-                _.each($scope.customers, function (customer) {
-                    var promiseOrder = merchelloInvoiceService.getByCustomerKey(customer.key);
-                    promiseOrder.then(function (response) {
-                        // TODO: Finish function acquiring the most recent order total for each customer once the merchelloInvoiceService.getByCustomerKey API endpoint returns valid results.
-                    });
-                });
+            function resetFilters() {
+                $scope.preValuesLoaded = false;
+                $scope.currentFilters = [];
+                $scope.filterText = "";
+                loadCustomers($scope.filterText);
             }
 
             /**
@@ -152,15 +170,11 @@
              * Opens the new customer dialog via the Umbraco dialogService.
              */
             function openNewCustomerDialog() {
-                var dialogData = {
-                    firstName: '',
-                    lastName: '',
-                    email: ''
-                };
+                var dialogData = dialogDataFactory.createAddEditCustomerDialogData();
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Modules/Customer/Dialogs/customer.editinfo.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.info.addedit.html',
                     show: true,
-                    callback: $scope.processNewCustomerDialog,
+                    callback: processNewCustomerDialog,
                     dialogData: dialogData
                 });
             }
@@ -173,21 +187,25 @@
              * @description
              * Update the customer info and save.
              */
-            function processNewCustomerDialog(data) {
-                var newCustomer = new merchello.Models.Customer();
-                newCustomer.firstName = data.firstName;
-                newCustomer.lastName = data.lastName;
-                newCustomer.email = data.email;
-                newCustomer.loginName = data.email;
-                var promiseSaveCustomer = merchelloCustomerService.AddCustomer(newCustomer);
+            function processNewCustomerDialog(dialogData) {
+                var customer = customerDisplayBuilder.createDefault();
+                customer.loginName = dialogData.email;
+                customer.email = dialogData.email;
+                customer.firstName = dialogData.firstName;
+                customer.lastName = dialogData.lastName;
+
+                var promiseSaveCustomer = customerResource.AddCustomer(customer);
                 promiseSaveCustomer.then(function (customerResponse) {
                     notificationsService.success("Customer Saved", "");
-                    $scope.init();
+                    init();
                 }, function (reason) {
                     notificationsService.error("Customer Save Failed", reason.message);
                 });
             }
 
+            function numberOfPages() {
+                return maxPages;
+            }
 
             /**
              * @ngdoc method

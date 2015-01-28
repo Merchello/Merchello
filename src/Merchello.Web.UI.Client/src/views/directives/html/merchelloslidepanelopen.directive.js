@@ -13,7 +13,8 @@
             transclude: 'true',
             scope: {
                 isOpen: '=',
-                classes: '=?'
+                classes: '=?',
+                hideClose: '='
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tpl.html',
             link: function ($scope, $element, attrs) {
