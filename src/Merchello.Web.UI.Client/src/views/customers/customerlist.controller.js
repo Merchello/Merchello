@@ -161,7 +161,6 @@
                 loadCustomers($scope.filterText);
             }
 
-
             /**
              * @ngdoc method
              * @name openNewCustomerDialog

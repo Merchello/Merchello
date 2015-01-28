@@ -36,4 +36,25 @@
         self.catalogInventories = [];
     };
 
+    ProductVariantDisplay.prototype = (function() {
+
+        function getProductForMasterVariant() {
+            var product = new ProductDisplay();
+            product = angular.extend(product, this);
+            // do some corrections
+            var pvk = product.key;
+            product.key = product.productKey;
+            product.productVariantKey = pvk;
+            delete product['productKey'];
+            delete product['attributes'];
+            // remove catalog inventories that are not active
+            product.catalogInventories = _.reject(product.catalogInventories, function(ci) { return ci.active === false});
+            return product;
+        }
+
+        return {
+            getProductForMasterVariant : getProductForMasterVariant
+        }
+    }());
+
     angular.module('merchello.models').constant('ProductVariantDisplay', ProductVariantDisplay);

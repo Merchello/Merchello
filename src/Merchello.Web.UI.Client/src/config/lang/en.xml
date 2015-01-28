@@ -125,8 +125,8 @@
     <!-- things -->
     <key alias="shipping">Shipping</key>
     <key alias="info">Shipping Information</key>
-    <key alias="weight"><![CDATA[Weight <small>(in pounds)</small>]]></key>
-    <key alias="dimensions"><![CDATA[Dimensions <small>(inches)</small>]]></key>
+    <key alias="weight">Weight</key>
+    <key alias="dimensions">Dimensions</key>
     <!-- actions -->
     <key alias="setVars">Set shipping variables: Weight, and dimensions</key>
     <!-- phrases -->
@@ -346,7 +346,7 @@
     <key alias="optionValueHelper">(e.g. red, green, blue)</key>
     <key alias="addStyle">Add a style...</key>
     <key alias="addAnotherOption">Add Another Option</key>
-    <key alias="variantInformation">Variant Information</key>
+    <key alias="variantInformation">Product Information</key>
     <key alias="variantInformationHelper">Edit the variants for this product.</key>
     <key alias="selectProduct">Select Product...</key>
     <key alias="selectMerchelloProduct">Select Merchello Product</key>

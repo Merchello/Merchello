@@ -7,6 +7,10 @@ using System.Collections.Generic;
 
 namespace Merchello.Web.Models.ContentEditing
 {
+    using System.Security.Cryptography;
+
+    using umbraco.presentation.actions;
+
     internal static class ProductMappingExtensions
     {
 
@@ -43,6 +47,17 @@ namespace Merchello.Web.Models.ContentEditing
             destination.Download = productDisplay.Download;
             destination.DownloadMediaId = productDisplay.DownloadMediaId;
 
+            // We need to refactor the CatalogInventories to not be immutable if we are
+            // going to need to do operations like this.  In the UI, the user "unchecks" a catalog that was
+            // previously checked - so we need to remove it.
+            var deletedCatalogKeys =
+                destination.CatalogInventories.Where(
+                    x => !productDisplay.CatalogInventories.Select(ci => ci.CatalogKey).Contains(x.CatalogKey)).Select(x => x.CatalogKey).ToArray();
+            foreach (var deletedCatalogKey in deletedCatalogKeys)
+            {
+                ((Product)destination).MasterVariant.RemoveFromCatalogInventory(deletedCatalogKey);
+            }
+
             foreach (var catalogInventory in productDisplay.CatalogInventories)
             {
                 var catInv = destination.CatalogInventories.FirstOrDefault(x => x.CatalogKey == catalogInventory.CatalogKey);
@@ -53,10 +68,15 @@ namespace Merchello.Web.Models.ContentEditing
 
                     destinationCatalogInventory = catalogInventory.ToCatalogInventory(destinationCatalogInventory);
                 }
-                else if (!Guid.Empty.Equals(catalogInventory.CatalogKey) && destination.HasIdentity)
+                else
                 {
                     //// Add to a new catalog
-                    ((Product)destination).MasterVariant.AddToCatalogInventory(catalogInventory.CatalogKey);
+                    ((Product)destination).MasterVariant.AddToCatalogInventory(new CatalogInventory(catalogInventory.CatalogKey, catalogInventory.ProductVariantKey)
+                                                                                   {
+                                                                                       Location = catalogInventory.Location,
+                                                                                       Count = catalogInventory.Count,
+                                                                                       LowCount = catalogInventory.LowCount
+                                                                                   });
                 }
             }
 

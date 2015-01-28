@@ -75,10 +75,10 @@
                         <!--<td><input type="checkbox" data-ng-model="product.selected"/></td>-->
                         <td><a data-ng-href="{{getEditUrl(product)}}">{{product.name}}</a></td>
                         <td>{{product.sku}}</td>
-                        <td data-ng-show="!product.hasVariants && !product.onSale"><localize key="general_no" /></td>
-                        <td data-ng-show="!product.hasVariants && product.onSale"><localize key="general_yes" /></td>
-                        <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
-                        <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
+                        <td data-ng-show="!product.hasVariants() && !product.onSale"><localize key="general_no" /></td>
+                        <td data-ng-show="!product.hasVariants() && product.onSale"><localize key="general_yes" /></td>
+                        <td data-ng-hide="product.hasVariants()">{{product.price | currency : currencySymbol}}</td>
+                        <td data-ng-show="product.hasVariants()">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
                     </tr>
                     </tbody>
                 </table>

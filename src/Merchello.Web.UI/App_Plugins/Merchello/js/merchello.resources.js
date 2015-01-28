@@ -863,7 +863,7 @@ angular.module('merchello.resources')
                  * @name updateProduct
                  * @description Saves product changes and delivers the new Product model in the promise data
                  **/
-                updateProduct: function (product) {
+                /*updateProduct: function (product) {
 
                     var deferred = $q.defer();
 
@@ -880,7 +880,7 @@ angular.module('merchello.resources')
                     });
 
                     return deferred.promise;
-                },
+                }, */
 
                 /**
                  * @ngdoc method

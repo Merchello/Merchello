@@ -167,10 +167,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
             scope: {
                 address: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/customer.customerlocation.tpl.html',
-            controller: function($scope) {
-                console.info($scope.address);
-            }
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/customer.customerlocation.tpl.html'
         };
     }]);
 
@@ -226,7 +223,8 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
             transclude: 'true',
             scope: {
                 isOpen: '=',
-                classes: '=?'
+                classes: '=?',
+                hideClose: '='
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchelloslidepanelopen.tpl.html',
             link: function ($scope, $element, attrs) {
@@ -365,5 +363,199 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
         controller: 'Merchello.Directives.ShipCountryGatewaysProviderDirectiveController'
     };
 });
+    /**
+     * @ngdoc controller
+     * @name productOptionsManage
+     * @function
+     *
+     * @description
+     * The productOptionsManage directive
+     */
+    angular.module('merchello.directives').directive('productOptionsManage', function() {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '=',
+                parentForm: '=',
+                classes: '=',
+                'update': '&onUpdate'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.optionsmanage.tpl.html',
+
+            controller: function ($scope) {
+                $scope.rebuildVariants = false;
+
+                /**
+                 * @ngdoc method
+                 * @name addOption
+                 * @function
+                 *
+                 * @description
+                 * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
+                 */
+                function addOption() {
+                    $scope.rebuildVariants = true;
+                    $scope.product.addBlankOption();
+                }
+
+                /**
+                 * @ngdoc method
+                 * @name removeOption
+                 * @function
+                 *
+                 * @description
+                 * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
+                 */
+                function removeOption (option) {
+                    $scope.rebuildVariants = true;
+                    $scope.product.removeOption(option);
+                }
+
+                /**
+                 * @ngdoc method
+                 * @name updateOptions
+                 * @function
+                 *
+                 * @description
+                 * Called when the update options button is pressed
+                 */
+                function updateOptions() {
+                    $scope.update({ form: $scope.parentForm, rebuild: $scope.rebuildVariants });
+                    $scope.rebuildVariants = false;
+                }
+            }
+        };
+
+    });
+
+    /**
+     * @ngdoc controller
+     * @name productVariantDigitalDownload
+     * @function
+     *
+     * @description
+     * The productVariantDigitalDownload directive
+     */
+    angular.module('merchello.directives').directive('productVariantDigitalDownload',
+        function() {
+
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    product: '=',
+                    productVariant: '='
+                },
+                templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.digitaldownload.tpl.html',
+
+                controller: function ($scope, dialogService, mediaHelper, mediaResource) {
+
+                    $scope.id = $scope.productVariant.downloadMediaId;
+                    if ($scope.productVariant.download && $scope.id != -1) {
+                        mediaResource.getById($scope.id).then(function (media) {
+                            if (!media.thumbnail) {
+                                media.thumbnail = mediaHelper.resolveFile(media, true);
+                            }
+
+                            $scope.mediaItem = media;
+                            $scope.mediaItem.umbracoFile = mediaHelper.resolveFile(media, false);
+                        });
+                    }
+
+                    /**
+                     * @ngdoc method
+                     * @name chooseMedia
+                     * @function
+                     *
+                     * @description
+                     * Called when the select media button is pressed for the digital download section.
+                     *
+                     * TODO: make a media selection dialog that works with PDFs, etc
+                     */
+                    $scope.chooseMedia = function () {
+
+                        dialogService.mediaPicker({
+                            onlyImages: false,
+                            callback: function (media) {
+                                if (!media.thumbnail) {
+                                    media.thumbnail = mediaHelper.resolveFile(media, true);
+                                }
+                                $scope.mediaItem = media;
+                                $scope.mediaItem.umbracoFile = mediaHelper.resolveFile(media, false);
+                                $scope.id = media.id;
+                                $scope.productVariant.downloadMediaId = media.id;
+                            }
+                        });
+
+                    };
+                }
+            };
+    });
+
+    /**
+     * @ngdoc controller
+     * @name productVariantMainProperties
+     * @function
+     *
+     * @description
+     * The productVariantMainProperties directive
+     */
+    angular.module('merchello.directives').directive('productVariantMainProperties',
+        [function() {
+
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    product: '=',
+                    productVariant: '=',
+                    creatingVariant: '=',
+                    editingVariant: '='
+                },
+                templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.mainproperties.tpl.html',
+                controller: function ($scope, warehouseResource, warehouseDisplayBuilder) {
+
+                    // Get the default warehouse for the ensureCatalogInventory() function below
+                    $scope.defaultWarehouse = {};
+
+                    function init() {
+                        var promiseWarehouse = warehouseResource.getDefaultWarehouse();
+                        promiseWarehouse.then(function (warehouse) {
+                            $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);
+                        })
+                    }
+
+                    // Initialize the controller
+                    init();
+                }
+            };
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name productVariantShipping
+     * @function
+     *
+     * @description
+     * The productVariantShipping directive
+     */
+    angular.module('merchello.directives').directive('productVariantShipping', function() {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                product: '=',
+                productVariant: '=',
+                settings: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.shipping.tpl.html',
+            controller: 'Merchello.Directives.ProductVariantShippingDirectiveController'
+        };
+
+    });
+
 
 })();
