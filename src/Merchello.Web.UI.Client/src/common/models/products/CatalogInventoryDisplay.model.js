@@ -14,6 +14,7 @@
         self.lowCount = 0;
         self.location = '';
         self.update = new Date();
+        self.active = true;
     };
 
     angular.module('merchello.models').constant('CatalogInventoryDisplay', CatalogInventoryDisplay);

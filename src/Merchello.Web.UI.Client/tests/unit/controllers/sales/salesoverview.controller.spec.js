@@ -5,7 +5,7 @@ xdescribe('salesoverview.controller', function() {
 
     beforeEach(module('umbraco'));
 
-    beforeEach(inject(function ($rootScope, $controller, $httpBackend, $timeout, $log, assetsService, dialogService, localizationService, notificationsService,
+    beforeEach(inject(function ($rootScope, $controller, $httpBackend, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
                                 settingsResource, shipmentResourceMock, orderResourceMocks,
                                 localizationMocks, auditLogResource, auditLogResourceMock, invoiceResource, orderResource, invoiceResourceMock,
                                 paymentResource, paymentResourceMock, shipmentResource, settingResourceMock, dialogDataFactory, addressDisplayBuilder,
@@ -24,7 +24,7 @@ xdescribe('salesoverview.controller', function() {
         orderResourceMocks.register();
 
         controller = $controller('Merchello.Dashboards.SalesOverviewController',
-            { $scope: scope, $routeParams: { id: 'dd62d5a2-6a52-4de3-a740-193d2a25bbbb' }, $timeout: $timeout, $log: $log,
+            { $scope: scope, $routeParams: { id: 'dd62d5a2-6a52-4de3-a740-193d2a25bbbb' }, $timeout: $timeout, $log: $log, $location: $location,
                 assetsService: assetsService, notificationsService: notificationsService, dialogService: dialogService, localizationService: localizationService,
                 auditLogResource: auditLogResource, invoiceResource: invoiceResource, settingsResource: settingsResource, orderResource: orderResource,
                 paymentResource: paymentResource, shipmentResource: shipmentResource, dialogDataFactory: dialogDataFactory, addressDisplayBuilder: addressDisplayBuilder,
