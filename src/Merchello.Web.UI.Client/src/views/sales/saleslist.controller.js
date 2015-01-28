@@ -9,9 +9,9 @@
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
     ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
-        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
+        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
         function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
-                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
+                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, settingDisplayBuilder)
         {
 
             // expose on scope
@@ -233,18 +233,26 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
+                // this is needed for the date format
+                var settingsPromise = settingsResource.getAllSettings();
+                settingsPromise.then(function(allSettings) {
+                    $scope.settings = settingDisplayBuilder.transform(allSettings);
+                }, function(reason) {
+                    notificationService.error('Failed to load all settings', reason.message);
+                });
+                // currency matching
                 var currenciesPromise = settingsResource.getAllCurrencies();
                 currenciesPromise.then(function(currencies) {
                     allCurrencies = currencies;
                 }, function(reason) {
-                    alert('Failed' + reason.message);
+                    notificationService.error('Failed to load all currencies', reason.message);
                 });
-
+                // default currency
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
                     globalCurrency = currencySymbol;
                 }, function (reason) {
-                    alert('Failed: ' + reason.message);
+                    notificationService.error('Failed to load the currency symbol', reason.message);
                 });
             };
 

@@ -80,7 +80,6 @@
                     $scope.maxPages = queryResult.totalPages;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-
                 }, function(reason) {
                     notificationsService.success("Products Load Failed:", reason.message);
                 });

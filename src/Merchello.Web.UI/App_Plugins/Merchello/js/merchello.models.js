@@ -1374,11 +1374,53 @@
             this.productOptions.push(option);
         }
 
+        function removeOption(option) {
+            this.productOptions = _.reject(this.productOptions, function(opt) { return _.isEqual(opt, option); });
+        }
+
+        function variantsMinimumPrice(salePrice) {
+            if (this.productVariants.length > 0) {
+                if (salePrice === undefined) {
+                    return _.min(this.productVariants, function(v) { return v.price; }).price;
+                } else {
+                    return _.min(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        function variantsMaximumPrice(salePrice) {
+            if (this.productVariants.length > 0) {
+                if(salePrice === undefined) {
+                    return _.max(this.productVariants, function(v) { return v.price; }).price;
+                } else {
+                    return _.max(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        function anyVariantsOnSale() {
+            var variant = _.find(this.productVariants, function(v) { return v.onSale; });
+            return variant === undefined ? false : true;
+        }
+
+        function shippableVariants() {
+            return _.filter(this.productVariants, function(v) { return v.shippable; });
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
             getMasterVariant: getMasterVariant,
-            addEmptyOption: addEmptyOption
+            addEmptyOption: addEmptyOption,
+            removeOption: removeOption,
+            variantsMinimumPrice: variantsMinimumPrice,
+            variantsMaximumPrice: variantsMaximumPrice,
+            anyVariantsOnSale: anyVariantsOnSale,
+            shippableVariants: shippableVariants
         };
     }());
 
@@ -1399,6 +1441,21 @@
         self.sortOrder = 1;
         self.choices = [];
     };
+
+    ProductOptionDisplay.prototype = (function() {
+
+        function addAttributeChoice(choiceName) {
+            var attribute = new ProductAttributeDisplay();
+            attribute.name = choiceName;
+            attribute.sortOrder = this.choices.length + 1;
+            // TODO skus
+            this.choices.push(attribute);
+        }
+
+        return {
+            addAttributeChoice: addAttributeChoice
+        };
+    }());
 
     angular.module('merchello.models').constant('ProductOptionDisplay', ProductOptionDisplay);
     /**
@@ -2957,6 +3014,15 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates tabs for the product editor with options tabs
+            function createProductEditorWithOptionsTabs(productKey) {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('optionslist', 'Product Options', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                return tabs;
+            }
+
             // creates tabs for the sales listing page
             function createSalesListTabs() {
                 var tabs = new Constructor();
@@ -3013,6 +3079,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             return {
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
+                createProductEditorWithOptionsTabs: createProductEditorWithOptionsTabs,
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
                 createCustomerListTabs: createCustomerListTabs,
@@ -3283,7 +3350,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
      * A utility service that builds ProductAttributeDisplay models
      */
     angular.module('merchello.models').factory('productAttributeDisplayBuilder',
-        ['genericModelBuilder',
+        ['genericModelBuilder', 'ProductAttributeDisplay',
         function(genericModelBuilder, ProductAttributeDisplay) {
 
             var Constructor = ProductAttributeDisplay;

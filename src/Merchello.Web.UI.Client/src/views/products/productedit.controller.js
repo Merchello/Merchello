@@ -71,10 +71,9 @@
                 var promiseProduct = productResource.getByKey(key);
                 promiseProduct.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
+                    // we use the master variant context so that we can use directives associated with variants
                     $scope.productVariant = $scope.product.getMasterVariant();
                     loadSettings();
-                    console.info($scope.product);
-                    console.info($scope.productVariant);
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });
@@ -112,12 +111,17 @@
              * Called when the Save button is pressed.  See comments below.
              */
             function save(thisForm) {
-
+                // TODO we should unbind the return click event
+                // so that we can quickly add the options and remove the following
+                if(thisForm === undefined) {
+                    return;
+                }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
                     // Copy from master variant
+                    var productOptions = $scope.product.productOptions;
                     $scope.product = $scope.productVariant.getProductForMasterVariant();
-
+                    $scope.product.productOptions = productOptions;
                     console.info($scope.product);
 
                     var promise = productResource.save($scope.product);

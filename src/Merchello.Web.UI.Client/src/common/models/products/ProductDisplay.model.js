@@ -78,11 +78,53 @@
             this.productOptions.push(option);
         }
 
+        function removeOption(option) {
+            this.productOptions = _.reject(this.productOptions, function(opt) { return _.isEqual(opt, option); });
+        }
+
+        function variantsMinimumPrice(salePrice) {
+            if (this.productVariants.length > 0) {
+                if (salePrice === undefined) {
+                    return _.min(this.productVariants, function(v) { return v.price; }).price;
+                } else {
+                    return _.min(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        function variantsMaximumPrice(salePrice) {
+            if (this.productVariants.length > 0) {
+                if(salePrice === undefined) {
+                    return _.max(this.productVariants, function(v) { return v.price; }).price;
+                } else {
+                    return _.max(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        function anyVariantsOnSale() {
+            var variant = _.find(this.productVariants, function(v) { return v.onSale; });
+            return variant === undefined ? false : true;
+        }
+
+        function shippableVariants() {
+            return _.filter(this.productVariants, function(v) { return v.shippable; });
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
             getMasterVariant: getMasterVariant,
-            addEmptyOption: addEmptyOption
+            addEmptyOption: addEmptyOption,
+            removeOption: removeOption,
+            variantsMinimumPrice: variantsMinimumPrice,
+            variantsMaximumPrice: variantsMaximumPrice,
+            anyVariantsOnSale: anyVariantsOnSale,
+            shippableVariants: shippableVariants
         };
     }());
 

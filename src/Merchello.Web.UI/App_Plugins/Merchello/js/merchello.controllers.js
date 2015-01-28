@@ -412,6 +412,7 @@
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
             $scope.invoiceTotals = [];
+            $scope.settings = {}
 
             // exposed methods
             $scope.getCurrency = getCurrency;
@@ -421,7 +422,6 @@
             $scope.saveCustomer = saveCustomer;
 
             // private properties
-            var settings = {};
             var defaultCurrency = {};
             var countries = [];
             var currencies = [];
@@ -484,7 +484,7 @@
                 // gets all of the settings
                 var promiseSettings = settingsResource.getAllSettings();
                 promiseSettings.then(function(settingsResponse) {
-                    settings = settingDisplayBuilder.transform(settingsResponse);
+                    $scope.settings = settingDisplayBuilder.transform(settingsResponse);
 
                     // we need all of the currencies since invoices may be billed in various currencies
                     var promiseCurrencies = settingsResource.getAllCurrencies();
@@ -494,7 +494,7 @@
                         // get the default currency from the settings in case we cannot determine
                         // the currency used in an invoice
                         defaultCurrency = _.find(currencies, function(c) {
-                            return c.currencyCode === settings.currencyCode;
+                            return c.currencyCode === $scope.settings.currencyCode;
                         });
                     });
                 });
@@ -3151,10 +3151,9 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 var promiseProduct = productResource.getByKey(key);
                 promiseProduct.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
+                    // we use the master variant context so that we can use directives associated with variants
                     $scope.productVariant = $scope.product.getMasterVariant();
                     loadSettings();
-                    console.info($scope.product);
-                    console.info($scope.productVariant);
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });
@@ -3192,12 +3191,17 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Called when the Save button is pressed.  See comments below.
              */
             function save(thisForm) {
-
+                // TODO we should unbind the return click event
+                // so that we can quickly add the options and remove the following
+                if(thisForm === undefined) {
+                    return;
+                }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
                     // Copy from master variant
+                    var productOptions = $scope.product.productOptions;
                     $scope.product = $scope.productVariant.getProductForMasterVariant();
-
+                    $scope.product.productOptions = productOptions;
                     console.info($scope.product);
 
                     var promise = productResource.save($scope.product);
@@ -3263,6 +3267,55 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             init();
     }]);
 
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ProductEditWithOptionsController
+     * @function
+     *
+     * @description
+     * The controller for product edit with options view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
+        ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
+            'merchelloTabsFactory', 'productResource', 'productDisplayBuilder',
+        function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
+            merchelloTabsFactory, productResource, productDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.product = {};
+
+            function init() {
+                var key = $routeParams.id;
+                $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
+                $scope.tabs.setActive('variantlist');
+                loadProduct(key);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProduct
+             * @function
+             *
+             * @description
+             * Load a product by the product key.
+             */
+            function loadProduct(key) {
+                var promise = productResource.getByKey(key);
+                promise.then(function (product) {
+                    $scope.product = productDisplayBuilder.transform(product);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.error("Product Load Failed", reason.message);
+                });
+
+            }
+
+            // Initialize the controller
+            init();
+    }]);
     /**
      * @ngdoc controller
      * @name Merchello.Backoffice.ProductListController
@@ -3345,7 +3398,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.maxPages = queryResult.totalPages;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-
                 }, function(reason) {
                     notificationsService.success("Products Load Failed:", reason.message);
                 });
@@ -3486,6 +3538,18 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             init();
 
         }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ProductVariantEditController
+     * @function
+     *
+     * @description
+     * The controller for product variant edit view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ProductVariantEditController', [function() {
+
+    }]);
 
     /**
      * @ngdoc controller
@@ -4406,9 +4470,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
     ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
-        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
+        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
         function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
-                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
+                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, settingDisplayBuilder)
         {
 
             // expose on scope
@@ -4630,18 +4694,26 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
+                // this is needed for the date format
+                var settingsPromise = settingsResource.getAllSettings();
+                settingsPromise.then(function(allSettings) {
+                    $scope.settings = settingDisplayBuilder.transform(allSettings);
+                }, function(reason) {
+                    notificationService.error('Failed to load all settings', reason.message);
+                });
+                // currency matching
                 var currenciesPromise = settingsResource.getAllCurrencies();
                 currenciesPromise.then(function(currencies) {
                     allCurrencies = currencies;
                 }, function(reason) {
-                    alert('Failed' + reason.message);
+                    notificationService.error('Failed to load all currencies', reason.message);
                 });
-
+                // default currency
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
                     globalCurrency = currencySymbol;
                 }, function (reason) {
-                    alert('Failed: ' + reason.message);
+                    notificationService.error('Failed to load the currency symbol', reason.message);
                 });
             };
 

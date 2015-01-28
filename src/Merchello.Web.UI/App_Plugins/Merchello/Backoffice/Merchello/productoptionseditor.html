@@ -1,0 +1,19 @@
+
+<div class="control-group umb-control-group">
+    <label class="merchello-control-label">
+        <localize key="merchelloProductEdit_editOptions" />
+        <small><localize key="merchelloProductEdit_editOptionsHelper" /></small>
+    </label>
+
+    <div class="merchello-controls row-fluid">
+
+        {{rebuildVariants | json}}
+
+        <!-- Allows adding/removing/editing of options / attributes -->
+        <product-options-manage product="product" parent-form="productForm" classes="'col-xs-10 span10'" on-update="save(form, rebuild)" rebuild-variants="rebuildVariants"></product-options-manage>
+
+    </div>
+
+</div>
+
+</div>

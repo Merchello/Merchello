@@ -131,7 +131,7 @@
                         <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="updateBulkActionDropdownStatus(false, invoice.key)">
                             <!--<td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>-->
                             <td>#<a data-ng-href="#/merchello/merchello/saleoverview/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
-                            <td>{{invoice.invoiceDateString() | date : settings.dateFormat}}</td>
+                            <td>{{invoice.invoiceDateString() | date : settings.dateFormat }}</td>
                             <td>{{invoice.billToName}}</td>
                             <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
                             <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
