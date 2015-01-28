@@ -73,10 +73,16 @@
             return inventoryCount;
         }
 
+        function addEmptyOption() {
+            var option = new ProductOptionDisplay();
+            this.productOptions.push(option);
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
-            getMasterVariant: getMasterVariant
+            getMasterVariant: getMasterVariant,
+            addEmptyOption: addEmptyOption
         };
     }());
 

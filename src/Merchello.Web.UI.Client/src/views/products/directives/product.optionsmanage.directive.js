@@ -21,6 +21,7 @@
 
             controller: function ($scope) {
                 $scope.rebuildVariants = false;
+                $scope.addOption = addOption;
 
                 /**
                  * @ngdoc method
@@ -32,7 +33,7 @@
                  */
                 function addOption() {
                     $scope.rebuildVariants = true;
-                    $scope.product.addBlankOption();
+                    $scope.product.addEmptyOption();
                 }
 
                 /**
