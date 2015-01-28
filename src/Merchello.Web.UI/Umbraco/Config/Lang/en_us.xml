@@ -1057,7 +1057,7 @@ To manage your website, simply open the Umbraco back office and start adding con
 		<key alias="barcode">Barcode</key>sel
 		<key alias="manufacturer">Manufacturer</key>
 		<key alias="manufacturerModel">Manufacturer's Model No.</key>
-		<key alias="variantInfo">Variant Information</key>
+		<key alias="variantInfo">Product Information</key>
 		<key alias="variantOptions">Variant Options</key>
 		<key alias="downloads">Digital Downloads</key>
 		<key alias="optionName">Option Name</key>
@@ -1162,8 +1162,8 @@ To manage your website, simply open the Umbraco back office and start adding con
 		<!-- things -->
 		<key alias="shipping">Shipping</key>
 		<key alias="info">Shipping Information</key>
-		<key alias="weight"><![CDATA[Weight <small>(in pounds)</small>]]></key>
-		<key alias="dimensions"><![CDATA[Dimensions <small>(inches)</small>]]></key>
+    <key alias="weight">Weight</key>
+    <key alias="dimensions">Dimensions</key>
 		<!-- actions -->
 		<key alias="setVars">Set shipping variables: Weight, and dimensions</key>
 		<!-- phrases -->

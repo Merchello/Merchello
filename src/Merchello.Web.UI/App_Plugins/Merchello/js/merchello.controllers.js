@@ -314,7 +314,6 @@
                 loadCustomers($scope.filterText);
             }
 
-
             /**
              * @ngdoc method
              * @name openNewCustomerDialog
@@ -3007,6 +3006,263 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
+
+angular.module('merchello').controller('Merchello.Directives.ProductVariantShippingDirectiveController',
+    ['$scope', '$q', 'notificationsService', 'dialogService', 'warehouseResource', 'warehouseDisplayBuilder', 'catalogInventoryDisplayBuilder',
+        function($scope, $q, notificationsService, dialogService, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
+
+            $scope.warehouses = [];
+            $scope.defaultWarehouse = {};
+
+            // exposed methods
+            $scope.getUnits = getUnits;
+            $scope.mapToCatalog = mapToCatalog;
+
+            function init() {
+                loadAllWarehouses();
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadAllWarehouses
+             * @function
+             *
+             * @description
+             * Loads in default warehouse and all other warehouses from server into the scope.  Called in init().
+             */
+            function loadAllWarehouses() {
+                var deferred = $q.defer();
+                var promiseWarehouse = warehouseResource.getDefaultWarehouse();
+                promiseWarehouse.then(function (warehouse) {
+                    $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);
+                    $scope.warehouses.push($scope.defaultWarehouse);
+                    deferred.resolve();
+                }, function (reason) {
+                    notificationsService.error("Default Warehouse Load Failed", reason.message);
+                    deferred.reject(reason);
+                });
+                // TODO: load other warehouses when implemented
+                return deferred.promise;
+            }
+
+            /**
+             * @ngdoc method
+             * @name mapToCatalog
+             * @function
+             *
+             * @description
+             * Maps a catalog to a product variant catalog inventory
+             */
+            function mapToCatalog(catalog) {
+                var mapped = _.find($scope.productVariant.catalogInventories, function(ci) { return ci.catalogKey === catalog.key;});
+                if(mapped === undefined) {
+                    var catalogInventory = catalogInventoryDisplayBuilder.createDefault();
+                    catalogInventory.productVariantKey = $scope.productVariant.key;
+                    catalogInventory.catalogKey = catalog.key;
+                    catalogInventory.active = false;
+                    $scope.productVariant.catalogInventories.push(catalogInventory);
+                    mapped = catalogInventory;
+                }
+                return mapped;
+            }
+
+            function getUnits(settings, type) {
+                if(settings.unitSystem === 'Imperial') {
+                    return type === 'weight' ? '(pounds)' : '(inches)';
+                } else {
+                    return type === 'weight' ? '(kg)' : '(cm)';
+                }
+            }
+
+            // Initializes the controller
+            init();
+}]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ProductEditController
+     * @function
+     *
+     * @description
+     * The controller for product edit view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ProductEditController',
+        ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
+            'serverValidationManager', 'productResource', 'warehouseResource', 'settingsResource',
+            'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder',
+        function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
+            serverValidationManager, productResource, warehouseResource, settingsResource,
+            productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder) {
+
+            //--------------------------------------------------------------------------------------
+            // Declare and initialize key scope properties
+            //--------------------------------------------------------------------------------------
+            //
+
+            // To help umbraco directives show our page
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.tabs = [];
+
+            // settings - contains defaults for the checkboxes
+            $scope.settings = {};
+
+            // These help manage state for the four possible states this page can be in:
+            //   * Editing a Product
+            $scope.creatingProduct = false;
+            $scope.creatingVariant = false;
+            $scope.editingVariant = false;
+            $scope.hideClose = true;
+            $scope.productVariant = productVariantDisplayBuilder.createDefault();
+
+            // Exposed methods
+            $scope.save = save;
+
+
+
+            //--------------------------------------------------------------------------------------
+            // Initialization methods
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Method called on intial page load.  Loads in data from server and sets up scope.
+             */
+            function init() {
+                var key = $routeParams.id;
+                loadProduct(key);
+                $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+                $scope.tabs.setActive('productedit');
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProduct
+             * @function
+             *
+             * @description
+             * Load a product by the product key.
+             */
+            function loadProduct(key) {
+                var promiseProduct = productResource.getByKey(key);
+                promiseProduct.then(function (product) {
+                    $scope.product = productDisplayBuilder.transform(product);
+                    $scope.productVariant = $scope.product.getMasterVariant();
+                    loadSettings();
+                    console.info($scope.product);
+                    console.info($scope.productVariant);
+                }, function (reason) {
+                    notificationsService.error("Product Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Loads in store settings from server into the scope.  Called in init().
+             */
+            function loadSettings() {
+                var promiseSettings = settingsResource.getAllSettings();
+                promiseSettings.then(function(settings) {
+                    $scope.settings = settingDisplayBuilder.transform(settings);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Event Handlers
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description
+             * Called when the Save button is pressed.  See comments below.
+             */
+            function save(thisForm) {
+
+                if (thisForm.$valid) {
+                    $scope.preValuesLoaded = false;
+                    // Copy from master variant
+                    $scope.product = $scope.productVariant.getProductForMasterVariant();
+
+                    console.info($scope.product);
+
+                    var promise = productResource.save($scope.product);
+
+                    promise.then(function (product) {
+                        notificationsService.success("Product Saved", "");
+
+                        $scope.product = productDisplayBuilder.transform(product);
+                        $scope.productVariant = $scope.product.getMasterVariant();
+
+                        if ($scope.product.hasVariants()) {
+                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        }
+
+                        $scope.preValuesLoaded = true;
+                    }, function (reason) {
+                        notificationsService.error("Product Save Failed", reason.message);
+                    });
+                }
+            };
+
+
+            /**
+             * @ngdoc method
+             * @name deleteProductDialogConfirmation
+             * @function
+             *
+             * @description
+             * Called when the Delete Product button is pressed.
+             */
+            function deleteProductDialogConfirmation() {
+                var promiseDel = merchelloProductService.deleteProduct($scope.product);
+
+                promiseDel.then(function () {
+                    notificationsService.success("Product Deleted", "");
+
+                    $location.url("/merchello/merchello/ProductList/manage", true);
+
+                }, function (reason) {
+                    notificationsService.error("Product Deletion Failed", reason.message);
+                });
+            };
+
+            /**
+             * @ngdoc method
+             * @name deleteProductDialog
+             * @function
+             *
+             * @description
+             * Opens the delete confirmation dialog via the Umbraco dialogService.
+             */
+            function deleteProductDialog() {
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                    show: true,
+                    callback: $scope.deleteProductDialogConfirmation,
+                    dialogData: $scope.product
+                });
+            }
+
+            // Initialize the controller
+            init();
+    }]);
+
     /**
      * @ngdoc controller
      * @name Merchello.Backoffice.ProductListController
@@ -3222,7 +3478,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
             }
 
             function getEditUrl(product) {
-                return product.hasVariants ? "#/merchello/merchello/producteditwithoptions/" + product.key :
+                return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
                     "#/merchello/merchello/productedit/" + product.key;
             }
 
@@ -3778,11 +4034,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
      * The controller for the sales overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
-        ['$scope', '$routeParams', '$timeout', '$log', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
+        ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
             'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
-        function($scope, $routeParams, $timeout, $log, assetsService, dialogService, localizationService, notificationsService,
+        function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
                  auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
                  merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
@@ -4075,7 +4331,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var promiseDeleteInvoice = invoiceResource.deleteInvoice($scope.invoice.key);
                 promiseDeleteInvoice.then(function (response) {
                     notificationsService.success('Invoice Deleted');
-                    window.location.href = '#/merchello/merchello/saleslist/manage';
+                    $location.url("/merchello/merchello/saleslist/manage", true);
                 }, function (reason) {
                     notificationsService.error('Failed to Delete Invoice', reason.message);
                 });

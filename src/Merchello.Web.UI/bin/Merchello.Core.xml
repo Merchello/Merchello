@@ -15522,6 +15522,17 @@
             The catalog Key.
             </param>
         </member>
+        <member name="M:Merchello.Core.ProductExtensions.AddToCatalogInventory(Merchello.Core.Models.IProductVariant,Merchello.Core.Models.ICatalogInventory)">
+            <summary>
+            The add to catalog inventory.
+            </summary>
+            <param name="productVariant">
+            The <see cref="T:Merchello.Core.Models.IProductVariant"/>
+            </param>
+            <param name="catalogInventory">
+            The <see cref="T:Merchello.Core.Models.ICatalogInventory"/> to be added
+            </param>
+        </member>
         <member name="M:Merchello.Core.ProductExtensions.RemoveFromCatalogInventory(Merchello.Core.Models.IProductVariant,Merchello.Core.Models.IWarehouseCatalog)">
             <summary>
             Removes a product varaint from a catalog inventory.
@@ -15531,6 +15542,17 @@
             </param>
             <param name="catalog">
             The catalog.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.ProductExtensions.RemoveFromCatalogInventory(Merchello.Core.Models.IProductVariant,System.Guid)">
+            <summary>
+            Removes a product varaint from a catalog inventory.
+            </summary>
+            <param name="productVariant">
+            The product variant.
+            </param>
+            <param name="catalogKey">
+            The catalog key
             </param>
         </member>
         <member name="M:Merchello.Core.ProductExtensions.GetPossibleProductAttributeCombinations(Merchello.Core.Models.IProduct)">

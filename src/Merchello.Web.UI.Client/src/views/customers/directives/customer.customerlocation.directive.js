@@ -14,9 +14,6 @@
             scope: {
                 address: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/customer.customerlocation.tpl.html',
-            controller: function($scope) {
-                console.info($scope.address);
-            }
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/customer.customerlocation.tpl.html'
         };
     }]);

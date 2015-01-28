@@ -24,6 +24,8 @@
         internal ProductDisplay(ProductVariantDisplay masterVariant)
         {
             Key = masterVariant.ProductKey;
+            ProductVariantKey = masterVariant.Key;
+            VersionKey = masterVariant.VersionKey;
             Name = masterVariant.Name;
             Sku = masterVariant.Sku;
             Price = masterVariant.Price;
@@ -51,6 +53,16 @@
         /// </summary>
         public Guid Key { get; set; }
 
+        /// <summary>
+        /// Gets or sets the product variant key of the master variant.
+        /// </summary>
+        public Guid ProductVariantKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version key.
+        /// </summary>
+        public Guid VersionKey { get; set; }
+        
         /// <summary>
         /// Gets or sets the product options.
         /// </summary>

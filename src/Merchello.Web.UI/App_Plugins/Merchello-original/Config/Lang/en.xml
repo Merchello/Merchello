@@ -12,7 +12,7 @@
     <key alias="barcode">Barcode</key>sel
     <key alias="manufacturer">Manufacturer</key>
     <key alias="manufacturerModel">Manufacturer's Model No.</key>
-    <key alias="variantInfo">Variant Information</key>
+    <key alias="variantInfo">Product Information</key>
     <key alias="variantOptions">Variant Options</key>
     <key alias="downloads">Digital Downloads</key>
     <key alias="optionName">Option Name</key>

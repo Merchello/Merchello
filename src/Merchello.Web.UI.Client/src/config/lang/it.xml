@@ -16,7 +16,7 @@
 		<key alias="barcode">Barcode</key>
 		<key alias="manufacturer">Produttore</key>
 		<key alias="manufacturerModel">N. modello del produttore</key>
-		<key alias="variantInfo">Informazioni della variante</key>
+		<key alias="variantInfo">Informazioni della prodotto</key>
 		<key alias="variantOptions">Opzini della variante</key>
 		<key alias="downloads">Download digitale</key>
 		<key alias="optionName">Nome dell'opzione</key>
@@ -108,8 +108,8 @@
 		<!-- things -->
 		<key alias="shipping">Spedizione</key>
 		<key alias="info">Informazioni sulla spedizione</key>
-		<key alias="weight"><![CDATA[Peso <small>(es. grammi)</small>]]></key>
-		<key alias="dimensions"><![CDATA[Dimensioni <small>(es. cm)</small>]]></key>
+		<key alias="weight">Peso</key>
+		<key alias="dimensions">Dimensioni</key>
 		<!-- actions -->
 		<key alias="setVars"> Configuraizone informazioni sulla spedizione: peso e dimensioni</key>
 		<!-- phrases -->

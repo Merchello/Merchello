@@ -1271,6 +1271,7 @@
         self.lowCount = 0;
         self.location = '';
         self.update = new Date();
+        self.active = true;
     };
 
     angular.module('merchello.models').constant('CatalogInventoryDisplay', CatalogInventoryDisplay);
@@ -1304,6 +1305,8 @@
     var ProductDisplay = function() {
         var self = this;
         self.key = '';
+        self.productVariantKey = '';
+        self.versionKey = '';
         self.name = '';
         self.sku = '';
         self.price = 0.00;
@@ -1324,8 +1327,6 @@
         self.shippable = false;
         self.download = false;
         self.downloadMediaId = -1;
-        self.hasOptions = false;
-        self.hasVariants = false;
         self.productOptions = [];
         self.productVariants = [];
         self.catalogInventories = [];
@@ -1338,12 +1339,40 @@
             return this.productVariants.length > 0;
         }
 
-        function totalInventory() {
+        // gets the master variant that represents a product without variants
+        function getMasterVariant() {
+            var variant = new ProductVariantDisplay();
+            angular.extend(variant, this);
+            // clean up
+            variant.key = this.productVariantKey;
+            variant.productKey = this.key;
+            delete variant['productOptions'];
+            delete variant['productVariants'];
+            return variant;
+        }
 
+        // returns a count of total inventory. if product has variants sums all inventory otherwise uses
+        // the product inventory count
+        function totalInventory() {
+            var inventoryCount = 0;
+            if (hasVariants.call(this)) {
+                angular.forEach(this.productVariants, function(pv) {
+                    angular.forEach(pv.catalogInventories, function(ci) {
+                        inventoryCount += ci.count;
+                    });
+                });
+            } else {
+                angular.forEach(this.catalogInventories, function(ci) {
+                  inventoryCount += ci.count;
+                });
+            }
+            return inventoryCount;
         }
 
         return {
-            hasVariants: hasVariants
+            hasVariants: hasVariants,
+            totalInventory: totalInventory,
+            getMasterVariant: getMasterVariant
         };
     }());
 
@@ -1403,6 +1432,27 @@
         self.attributes = [];
         self.catalogInventories = [];
     };
+
+    ProductVariantDisplay.prototype = (function() {
+
+        function getProductForMasterVariant() {
+            var product = new ProductDisplay();
+            product = angular.extend(product, this);
+            // do some corrections
+            var pvk = product.key;
+            product.key = product.productKey;
+            product.productVariantKey = pvk;
+            delete product['productKey'];
+            delete product['attributes'];
+            // remove catalog inventories that are not active
+            product.catalogInventories = _.reject(product.catalogInventories, function(ci) { return ci.active === false});
+            return product;
+        }
+
+        return {
+            getProductForMasterVariant : getProductForMasterVariant
+        }
+    }());
 
     angular.module('merchello.models').constant('ProductVariantDisplay', ProductVariantDisplay);
 
@@ -2893,6 +2943,14 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates tabs for the product editor page
+            function createProductEditorTabs(productKey) {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'Product', '#/merchello/merchello/productedit/' + productKey);
+                return tabs;
+            }
+
             // creates tabs for the sales listing page
             function createSalesListTabs() {
                 var tabs = new Constructor();
@@ -2948,6 +3006,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             return {
                 createProductListTabs: createProductListTabs,
+                createProductEditorTabs: createProductEditorTabs,
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
                 createCustomerListTabs: createCustomerListTabs,
