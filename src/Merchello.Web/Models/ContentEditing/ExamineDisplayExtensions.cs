@@ -76,6 +76,7 @@
                 Available = FieldAsBoolean(result.Fields["available"]),
                 TrackInventory = FieldAsBoolean(result.Fields["trackInventory"]),
                 OutOfStockPurchase = FieldAsBoolean(result.Fields["outOfStockPurchase"]),
+                TotalInventoryCount = FieldAsInteger(result, "totalInventoryCount"),
                 Taxable = FieldAsBoolean(result.Fields["taxable"]),
                 Shippable = FieldAsBoolean(result.Fields["shippable"]),
                 Download = FieldAsBoolean(result.Fields["download"]),
@@ -84,7 +85,7 @@
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories")
             };
-
+  
             return pvd;
         }
 

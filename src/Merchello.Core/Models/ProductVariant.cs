@@ -73,6 +73,18 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// Gets the total inventory count.
+        /// </summary>
+        [DataMember]
+        public int TotalInventoryCount
+        {
+            get
+            {
+                return CatalogInventories.Sum(x => x.Count);
+            }
+        }
+
+        /// <summary>
         /// The collection of attributes that makes this variant different from other variants of the same product
         /// </summary>
         [IgnoreDataMember]
@@ -114,16 +126,6 @@ namespace Merchello.Core.Models
         internal int ExamineId {
             get { return  _examineId; }
             set { _examineId = value;  }
-        }
-
-        /// <summary>
-        /// Returns the total (sum) of inventory "counts" accross all associated warehouses
-        /// </summary>
-        /// <returns></returns>
-        [IgnoreDataMember]
-        public int TotalInventoryCount
-        {
-            get { return CatalogInventories.Sum(x => x.Count); }
         }
     }
 }

@@ -110,6 +110,13 @@ namespace Merchello.Web.Models.ContentEditing
                 destination.ProductOptions.Add(destinationProductOption);
             }
 
+            //var existingVariants = destination.ProductVariants.ToArray();
+            //destination.ProductVariants.Clear();
+            //foreach (var variant in productDisplay.ProductVariants.Where(variant => existingVariants.Any(x => x.Key == variant.Key)))
+            //{
+            //    destination.ProductVariants.Add(variant.ToProductVariant(existingVariants.FirstOrDefault(x => x.Key == variant.Key)));
+            //}
+            
             return destination;
         }
 
