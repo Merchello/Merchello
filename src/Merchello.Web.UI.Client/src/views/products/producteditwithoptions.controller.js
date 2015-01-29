@@ -8,18 +8,20 @@
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
         ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
-            'merchelloTabsFactory', 'productResource', 'productDisplayBuilder',
+            'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
         function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
-            merchelloTabsFactory, productResource, productDisplayBuilder) {
+            merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.product = {};
+            $scope.currencySymbol = '';
 
             function init() {
                 var key = $routeParams.id;
                 $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
                 $scope.tabs.setActive('variantlist');
+                loadSettings();
                 loadProduct(key);
             }
 
@@ -41,7 +43,23 @@
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });
+            }
 
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function(currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
             }
 
             // Initialize the controller

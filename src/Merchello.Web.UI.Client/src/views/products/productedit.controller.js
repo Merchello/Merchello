@@ -54,9 +54,8 @@
              */
             function init() {
                 var key = $routeParams.id;
-                loadProduct(key);
-                $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
-                $scope.tabs.setActive('productedit');
+                var productVariantKey = $routeParams.variantid;
+                loadProduct(key, productVariantKey);
             }
 
             /**
@@ -67,12 +66,20 @@
              * @description
              * Load a product by the product key.
              */
-            function loadProduct(key) {
+            function loadProduct(key, productVariantKey) {
                 var promiseProduct = productResource.getByKey(key);
                 promiseProduct.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
-                    // we use the master variant context so that we can use directives associated with variants
-                    $scope.productVariant = $scope.product.getMasterVariant();
+                    if(productVariantKey === undefined) {
+                        // this is a product edit.
+                        // we use the master variant context so that we can use directives associated with variants
+                        $scope.productVariant = $scope.product.getMasterVariant();
+                        $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+                        $scope.tabs.setActive('productedit');
+                    } else {
+                        // this is a product variant edit
+                    }
+
                     loadSettings();
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);

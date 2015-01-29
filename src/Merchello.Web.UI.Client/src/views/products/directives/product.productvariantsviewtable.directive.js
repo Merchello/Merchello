@@ -11,7 +11,8 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
         restrict: 'E',
         replace: true,
         scope: {
-            product: '='
+            product: '=',
+            currencySymbol: '='
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.productvariantsviewtable.tpl.html'
     };

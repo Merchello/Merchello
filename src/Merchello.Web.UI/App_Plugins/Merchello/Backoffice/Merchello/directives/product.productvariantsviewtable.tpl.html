@@ -47,18 +47,17 @@
         <tbody>
         <tr data-ng-repeat="variant in product.productVariants | orderBy:sortProperty"
             data-ng-class="{active: variant.selected}"
-            data-ng-click="toggleAVariant(variant)"
-                >
+            data-ng-click="toggleAVariant(variant)">
             <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="checkBulkVariantsSelected()" /></td>
             <td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td>
             <td>{{variant.sku}}</td>
-            <td>{{variant.price}}</td>
+            <td>{{variant.price | currency : currencySymbol }}</td>
             <td>{{variant.totalInventoryCount}}</td>
             <td data-ng-hide="variant.onSale"><localize key="general_no" /></td>
             <td data-ng-show="variant.onSale"><localize key="general_yes" /></td>
             <td data-ng-hide="variant.available"><localize key="general_no" /></td>
             <td data-ng-show="variant.available"><localize key="general_yes" /></td>
-            <td><a data-ng-href="#/merchello/merchello/ProductVariantEdit/{{variant.productKey}}?variantid={{variant.key}}"><localize key="general_edit" /></a></td>
+            <td><a data-ng-href="#/merchello/merchello/productedit/{{variant.productKey}}?variantid={{variant.key}}"><localize key="general_edit" /></a></td>
         </tr>
         </tbody>
     </table>

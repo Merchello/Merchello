@@ -1334,6 +1334,11 @@
 
     ProductDisplay.prototype = (function() {
 
+        // returns a product variant with the associated key
+        function getProductVariant(productVariantKey) {
+            return _.find(this.productVariants, function(v) { return v.key === productVariantKey});
+        }
+
         // returns a value indicating whether or not the product has variants
         function hasVariants() {
             return this.productVariants.length > 0;
@@ -1420,7 +1425,8 @@
             variantsMinimumPrice: variantsMinimumPrice,
             variantsMaximumPrice: variantsMaximumPrice,
             anyVariantsOnSale: anyVariantsOnSale,
-            shippableVariants: shippableVariants
+            shippableVariants: shippableVariants,
+            getProductVariant: getProductVariant
         };
     }());
 
@@ -3023,6 +3029,15 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates tabs for the product variant editor
+            function createProductVariantEditorTabs(productKey, productVariantKey) {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('varianteditor', 'Product Variant Editor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
+                return tabs;
+            }
+
             // creates tabs for the sales listing page
             function createSalesListTabs() {
                 var tabs = new Constructor();
@@ -3085,7 +3100,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createCustomerListTabs: createCustomerListTabs,
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
-                createReportsTabs: createReportsTabs
+                createReportsTabs: createReportsTabs,
+                createProductVariantEditorTabs: createProductVariantEditorTabs
             };
 
 }]);
