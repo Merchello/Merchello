@@ -67,11 +67,8 @@
                 query.itemsPerPage = perPage;
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
-                console.info($scope.filterText);
                 query.addFilterTermParam($scope.filterText);
                 $scope.currentFilters = query.parameters;
-
-                console.info(query);
 
                 var promise = productResource.searchProducts(query);
                 promise.then(function (response) {

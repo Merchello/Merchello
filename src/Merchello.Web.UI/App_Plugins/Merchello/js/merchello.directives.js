@@ -566,8 +566,7 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
                 scope: {
                     product: '=',
                     productVariant: '=',
-                    creatingVariant: '=',
-                    editingVariant: '='
+                    context: '='
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.mainproperties.tpl.html',
                 controller: function ($scope, warehouseResource, warehouseDisplayBuilder) {

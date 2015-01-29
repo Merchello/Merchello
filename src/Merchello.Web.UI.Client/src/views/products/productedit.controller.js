@@ -27,17 +27,16 @@
             // settings - contains defaults for the checkboxes
             $scope.settings = {};
 
-            // These help manage state for the four possible states this page can be in:
-            //   * Editing a Product
-            $scope.creatingProduct = false;
-            $scope.creatingVariant = false;
-            $scope.editingVariant = false;
+            // this is for the slide panel directive to get rid of the close button since we'll
+            // be handling it in a different way in this case
             $scope.hideClose = true;
-            $scope.productVariant = productVariantDisplayBuilder.createDefault();
+
+            $scope.product = {};
+            $scope.productVariant = {};
+            $scope.context = 'productedit';
 
             // Exposed methods
             $scope.save = save;
-
 
 
             //--------------------------------------------------------------------------------------
@@ -70,16 +69,21 @@
                 var promiseProduct = productResource.getByKey(key);
                 promiseProduct.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
-                    if(productVariantKey === undefined) {
+                    if(productVariantKey === '' || productVariantKey === undefined) {
                         // this is a product edit.
                         // we use the master variant context so that we can use directives associated with variants
                         $scope.productVariant = $scope.product.getMasterVariant();
+                        $scope.context = 'productedit';
                         $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
-                        $scope.tabs.setActive('productedit');
+
                     } else {
                         // this is a product variant edit
+                        // in this case we need the specific variant
+                        $scope.productVariant = $scope.product.getProductVariant(productVariantKey);
+                        $scope.context = 'varianteditor';
+                        $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
                     }
-
+                    $scope.tabs.setActive($scope.context);
                     loadSettings();
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
@@ -125,11 +129,15 @@
                 }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
-                    // Copy from master variant
-                    var productOptions = $scope.product.productOptions;
-                    $scope.product = $scope.productVariant.getProductForMasterVariant();
-                    $scope.product.productOptions = productOptions;
-                    console.info($scope.product);
+
+                    if($scope.context === 'productedit') {
+                        // Copy from master variant
+                        var productOptions = $scope.product.productOptions;
+                        $scope.product = $scope.productVariant.getProductForMasterVariant();
+                        $scope.product.productOptions = productOptions;
+                    }  else {
+                        console.info($scope.product);
+                    }// otherwise the variant is updated in the collection so we just need to save the product
 
                     var promise = productResource.save($scope.product);
 
@@ -137,10 +145,13 @@
                         notificationsService.success("Product Saved", "");
 
                         $scope.product = productDisplayBuilder.transform(product);
-                        $scope.productVariant = $scope.product.getMasterVariant();
-
-                        if ($scope.product.hasVariants()) {
-                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        if($scope.context === 'productedit') {
+                            $scope.productVariant = $scope.product.getMasterVariant();
+                            if ($scope.product.hasVariants()) {
+                                $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                            }
+                        } else {
+                            $scope.productVariant = $scope.product.getProductVariant($scope.productVariantKey);
                         }
 
                         $scope.preValuesLoaded = true;
