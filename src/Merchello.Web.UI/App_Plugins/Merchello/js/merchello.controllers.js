@@ -412,6 +412,7 @@
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
             $scope.invoiceTotals = [];
+            $scope.settings = {}
 
             // exposed methods
             $scope.getCurrency = getCurrency;
@@ -421,7 +422,6 @@
             $scope.saveCustomer = saveCustomer;
 
             // private properties
-            var settings = {};
             var defaultCurrency = {};
             var countries = [];
             var currencies = [];
@@ -484,7 +484,7 @@
                 // gets all of the settings
                 var promiseSettings = settingsResource.getAllSettings();
                 promiseSettings.then(function(settingsResponse) {
-                    settings = settingDisplayBuilder.transform(settingsResponse);
+                    $scope.settings = settingDisplayBuilder.transform(settingsResponse);
 
                     // we need all of the currencies since invoices may be billed in various currencies
                     var promiseCurrencies = settingsResource.getAllCurrencies();
@@ -494,7 +494,7 @@
                         // get the default currency from the settings in case we cannot determine
                         // the currency used in an invoice
                         defaultCurrency = _.find(currencies, function(c) {
-                            return c.currencyCode === settings.currencyCode;
+                            return c.currencyCode === $scope.settings.currencyCode;
                         });
                     });
                 });
@@ -3107,17 +3107,16 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             // settings - contains defaults for the checkboxes
             $scope.settings = {};
 
-            // These help manage state for the four possible states this page can be in:
-            //   * Editing a Product
-            $scope.creatingProduct = false;
-            $scope.creatingVariant = false;
-            $scope.editingVariant = false;
+            // this is for the slide panel directive to get rid of the close button since we'll
+            // be handling it in a different way in this case
             $scope.hideClose = true;
-            $scope.productVariant = productVariantDisplayBuilder.createDefault();
+
+            $scope.product = {};
+            $scope.productVariant = {};
+            $scope.context = 'productedit';
 
             // Exposed methods
             $scope.save = save;
-
 
 
             //--------------------------------------------------------------------------------------
@@ -3134,9 +3133,8 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              */
             function init() {
                 var key = $routeParams.id;
-                loadProduct(key);
-                $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
-                $scope.tabs.setActive('productedit');
+                var productVariantKey = $routeParams.variantid;
+                loadProduct(key, productVariantKey);
             }
 
             /**
@@ -3147,14 +3145,26 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * @description
              * Load a product by the product key.
              */
-            function loadProduct(key) {
+            function loadProduct(key, productVariantKey) {
                 var promiseProduct = productResource.getByKey(key);
                 promiseProduct.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
-                    $scope.productVariant = $scope.product.getMasterVariant();
+                    if(productVariantKey === '' || productVariantKey === undefined) {
+                        // this is a product edit.
+                        // we use the master variant context so that we can use directives associated with variants
+                        $scope.productVariant = $scope.product.getMasterVariant();
+                        $scope.context = 'productedit';
+                        $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+
+                    } else {
+                        // this is a product variant edit
+                        // in this case we need the specific variant
+                        $scope.productVariant = $scope.product.getProductVariant(productVariantKey);
+                        $scope.context = 'varianteditor';
+                        $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
+                    }
+                    $scope.tabs.setActive($scope.context);
                     loadSettings();
-                    console.info($scope.product);
-                    console.info($scope.productVariant);
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });
@@ -3192,13 +3202,22 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Called when the Save button is pressed.  See comments below.
              */
             function save(thisForm) {
-
+                // TODO we should unbind the return click event
+                // so that we can quickly add the options and remove the following
+                if(thisForm === undefined) {
+                    return;
+                }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
-                    // Copy from master variant
-                    $scope.product = $scope.productVariant.getProductForMasterVariant();
 
-                    console.info($scope.product);
+                    if($scope.context === 'productedit') {
+                        // Copy from master variant
+                        var productOptions = $scope.product.productOptions;
+                        $scope.product = $scope.productVariant.getProductForMasterVariant();
+                        $scope.product.productOptions = productOptions;
+                    }  else {
+                        console.info($scope.product);
+                    }// otherwise the variant is updated in the collection so we just need to save the product
 
                     var promise = productResource.save($scope.product);
 
@@ -3206,10 +3225,13 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                         notificationsService.success("Product Saved", "");
 
                         $scope.product = productDisplayBuilder.transform(product);
-                        $scope.productVariant = $scope.product.getMasterVariant();
-
-                        if ($scope.product.hasVariants()) {
-                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        if($scope.context === 'productedit') {
+                            $scope.productVariant = $scope.product.getMasterVariant();
+                            if ($scope.product.hasVariants()) {
+                                $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                            }
+                        } else {
+                            $scope.productVariant = $scope.product.getProductVariant($scope.productVariantKey);
                         }
 
                         $scope.preValuesLoaded = true;
@@ -3263,6 +3285,73 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             init();
     }]);
 
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ProductEditWithOptionsController
+     * @function
+     *
+     * @description
+     * The controller for product edit with options view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
+        ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
+            'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+        function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
+            merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.product = {};
+            $scope.currencySymbol = '';
+
+            function init() {
+                var key = $routeParams.id;
+                $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
+                $scope.tabs.setActive('variantlist');
+                loadSettings();
+                loadProduct(key);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProduct
+             * @function
+             *
+             * @description
+             * Load a product by the product key.
+             */
+            function loadProduct(key) {
+                var promise = productResource.getByKey(key);
+                promise.then(function (product) {
+                    $scope.product = productDisplayBuilder.transform(product);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.error("Product Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function(currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            // Initialize the controller
+            init();
+    }]);
     /**
      * @ngdoc controller
      * @name Merchello.Backoffice.ProductListController
@@ -3332,11 +3421,8 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 query.itemsPerPage = perPage;
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
-                console.info($scope.filterText);
                 query.addFilterTermParam($scope.filterText);
                 $scope.currentFilters = query.parameters;
-
-                console.info(query);
 
                 var promise = productResource.searchProducts(query);
                 promise.then(function (response) {
@@ -3345,7 +3431,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.maxPages = queryResult.totalPages;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-
                 }, function(reason) {
                     notificationsService.success("Products Load Failed:", reason.message);
                 });
@@ -3486,6 +3571,80 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             init();
 
         }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ProductVariantEditController
+     * @function
+     *
+     * @description
+     * The controller for product variant edit view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ProductVariantEditController',
+        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager', 'merchelloTabsFactory',
+            'productResource', 'warehouseResource', 'settingsResource', 'settingDisplayBuilder', 'warehouseDisplayBuilder', 'productDisplayBuilder',
+        function($scope, $routeParams, $location, assetsService, notificationsService, dialogService, serverValidationManager, merchelloTabsFactory,
+        productResource, warehouseResource, settingsResource, settingDisplayBuilder, warehouseDisplayBuilder, productDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.tabs = [];
+
+            // settings - contains defaults for the checkboxes
+            $scope.settings = {};
+
+
+            function init() {
+                var key = $routeParams.id;
+                var productVariantKey = $routeParams.variantid;
+                $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
+                $scope.tabs.setActive('varianteditor');
+                loadProduct(key, productVariantKey);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProduct
+             * @function
+             *
+             * @description
+             * Load a product by the product key.
+             */
+            function loadProduct(key, productVariantKey) {
+                console.info(key + ' ' + productVariantKey);
+                var promiseProduct = productResource.getByKey(key);
+                promiseProduct.then(function (product) {
+                    $scope.product = productDisplayBuilder.transform(product);
+                    // we use the master variant context so that we can use directives associated with variants
+                    $scope.productVariant = $scope.product.getProductVariant(productVariantKey);
+                    loadSettings();
+                }, function (reason) {
+                    notificationsService.error("Product Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Loads in store settings from server into the scope.  Called in init().
+             */
+            function loadSettings() {
+                var promiseSettings = settingsResource.getAllSettings();
+                promiseSettings.then(function(settings) {
+                    $scope.settings = settingDisplayBuilder.transform(settings);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            // Initializes the controller
+            init();
+    }]);
 
     /**
      * @ngdoc controller
@@ -4406,9 +4565,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
     ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
-        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
+        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
         function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
-                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
+                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, settingDisplayBuilder)
         {
 
             // expose on scope
@@ -4630,18 +4789,26 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
+                // this is needed for the date format
+                var settingsPromise = settingsResource.getAllSettings();
+                settingsPromise.then(function(allSettings) {
+                    $scope.settings = settingDisplayBuilder.transform(allSettings);
+                }, function(reason) {
+                    notificationService.error('Failed to load all settings', reason.message);
+                });
+                // currency matching
                 var currenciesPromise = settingsResource.getAllCurrencies();
                 currenciesPromise.then(function(currencies) {
                     allCurrencies = currencies;
                 }, function(reason) {
-                    alert('Failed' + reason.message);
+                    notificationService.error('Failed to load all currencies', reason.message);
                 });
-
+                // default currency
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
                     globalCurrency = currencySymbol;
                 }, function (reason) {
-                    alert('Failed: ' + reason.message);
+                    notificationService.error('Failed to load the currency symbol', reason.message);
                 });
             };
 

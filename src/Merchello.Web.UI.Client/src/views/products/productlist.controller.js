@@ -67,11 +67,8 @@
                 query.itemsPerPage = perPage;
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
-                console.info($scope.filterText);
                 query.addFilterTermParam($scope.filterText);
                 $scope.currentFilters = query.parameters;
-
-                console.info(query);
 
                 var promise = productResource.searchProducts(query);
                 promise.then(function (response) {
@@ -80,7 +77,6 @@
                     $scope.maxPages = queryResult.totalPages;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-
                 }, function(reason) {
                     notificationsService.success("Products Load Failed:", reason.message);
                 });

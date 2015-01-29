@@ -1334,6 +1334,11 @@
 
     ProductDisplay.prototype = (function() {
 
+        // returns a product variant with the associated key
+        function getProductVariant(productVariantKey) {
+            return _.find(this.productVariants, function(v) { return v.key === productVariantKey});
+        }
+
         // returns a value indicating whether or not the product has variants
         function hasVariants() {
             return this.productVariants.length > 0;
@@ -1369,10 +1374,59 @@
             return inventoryCount;
         }
 
+        function addEmptyOption() {
+            var option = new ProductOptionDisplay();
+            this.productOptions.push(option);
+        }
+
+        function removeOption(option) {
+            this.productOptions = _.reject(this.productOptions, function(opt) { return _.isEqual(opt, option); });
+        }
+
+        function variantsMinimumPrice(salePrice) {
+            if (this.productVariants.length > 0) {
+                if (salePrice === undefined) {
+                    return _.min(this.productVariants, function(v) { return v.price; }).price;
+                } else {
+                    return _.min(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        function variantsMaximumPrice(salePrice) {
+            if (this.productVariants.length > 0) {
+                if(salePrice === undefined) {
+                    return _.max(this.productVariants, function(v) { return v.price; }).price;
+                } else {
+                    return _.max(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        function anyVariantsOnSale() {
+            var variant = _.find(this.productVariants, function(v) { return v.onSale; });
+            return variant === undefined ? false : true;
+        }
+
+        function shippableVariants() {
+            return _.filter(this.productVariants, function(v) { return v.shippable; });
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
-            getMasterVariant: getMasterVariant
+            getMasterVariant: getMasterVariant,
+            addEmptyOption: addEmptyOption,
+            removeOption: removeOption,
+            variantsMinimumPrice: variantsMinimumPrice,
+            variantsMaximumPrice: variantsMaximumPrice,
+            anyVariantsOnSale: anyVariantsOnSale,
+            shippableVariants: shippableVariants,
+            getProductVariant: getProductVariant
         };
     }());
 
@@ -1393,6 +1447,21 @@
         self.sortOrder = 1;
         self.choices = [];
     };
+
+    ProductOptionDisplay.prototype = (function() {
+
+        function addAttributeChoice(choiceName) {
+            var attribute = new ProductAttributeDisplay();
+            attribute.name = choiceName;
+            attribute.sortOrder = this.choices.length + 1;
+            // TODO skus
+            this.choices.push(attribute);
+        }
+
+        return {
+            addAttributeChoice: addAttributeChoice
+        };
+    }());
 
     angular.module('merchello.models').constant('ProductOptionDisplay', ProductOptionDisplay);
     /**
@@ -2951,6 +3020,24 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates tabs for the product editor with options tabs
+            function createProductEditorWithOptionsTabs(productKey) {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('optionslist', 'Product Options', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                return tabs;
+            }
+
+            // creates tabs for the product variant editor
+            function createProductVariantEditorTabs(productKey, productVariantKey) {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('varianteditor', 'Product Variant Editor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
+                return tabs;
+            }
+
             // creates tabs for the sales listing page
             function createSalesListTabs() {
                 var tabs = new Constructor();
@@ -3007,12 +3094,14 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             return {
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
+                createProductEditorWithOptionsTabs: createProductEditorWithOptionsTabs,
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
                 createCustomerListTabs: createCustomerListTabs,
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
-                createReportsTabs: createReportsTabs
+                createReportsTabs: createReportsTabs,
+                createProductVariantEditorTabs: createProductVariantEditorTabs
             };
 
 }]);
@@ -3277,7 +3366,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
      * A utility service that builds ProductAttributeDisplay models
      */
     angular.module('merchello.models').factory('productAttributeDisplayBuilder',
-        ['genericModelBuilder',
+        ['genericModelBuilder', 'ProductAttributeDisplay',
         function(genericModelBuilder, ProductAttributeDisplay) {
 
             var Constructor = ProductAttributeDisplay;

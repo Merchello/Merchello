@@ -35,13 +35,13 @@
                         <div class="merchello-controls">
 
                             <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
-                            <product-variant-main-properties product="product" product-variant="productVariant" creating-variant="creatingVariant" editing-variant="editingVariant"></product-variant-main-properties>
+                            <product-variant-main-properties product="product" product-variant="productVariant" context="context"></product-variant-main-properties>
 
                         </div>
                     </div>
 
                     <!-- Digital Downloads Picker -->
-                    <merchello-slide-open-panel is-open="productVariant.download" classes="'control-group umb-control-group'">
+                    <merchello-slide-open-panel is-open="productVariant.download" classes="'control-group umb-control-group'" hide-close="hideClose">
                         <product-variant-digital-download product="product" product-variant="productVariant" ></product-variant-digital-download>
                     </merchello-slide-open-panel>
 
@@ -55,7 +55,7 @@
                         <div class="merchello-controls row-fluid">
 
                             <!-- Allows adding/removing/editing of options / attributes -->
-                            <product-options-manage product="product" parent-form="productVariantForm" classes="'well col-xs-10 span10'" on-update="updateVariants(form)"></product-options-manage>
+                            <product-options-manage product="product" parent-form="productVariantForm" classes="'well col-xs-10 span10'"></product-options-manage>
 
                         </div>
                     </merchello-slide-open-panel>
