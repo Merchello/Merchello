@@ -28,6 +28,5 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <returns></returns>
         int TotalInventoryCount { get; }
-
     }
 }

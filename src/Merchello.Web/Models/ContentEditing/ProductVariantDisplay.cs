@@ -19,11 +19,6 @@
         public Guid ProductKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the total inventory count.
-        /// </summary>
-        public int TotalInventoryCount { get; set; }
-
-        /// <summary>
         /// Gets or sets the version key.
         /// </summary>
         public Guid VersionKey { get; set; }
