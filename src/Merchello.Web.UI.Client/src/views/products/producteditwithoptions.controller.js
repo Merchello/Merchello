@@ -8,9 +8,9 @@
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
         ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
-            'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+            'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
         function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
-            merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+            merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -20,6 +20,7 @@
 
             // exposed methods
             $scope.save = save;
+            $scope.deleteProductDialog = deleteProductDialog;
 
             function init() {
                 var key = $routeParams.id;
@@ -91,6 +92,46 @@
                         });
                     }
                 }
+            }
+
+            /**
+             * @ngdoc method
+             * @name deleteProductDialog
+             * @function
+             *
+             * @description
+             * Opens the delete confirmation dialog via the Umbraco dialogService.
+             */
+            function deleteProductDialog() {
+                var dialogData = dialogDataFactory.createDeleteProductDialogData();
+                dialogData.product = $scope.product;
+                dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
+                dialogData.warning = 'This action cannot be reversed.';
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: deleteProductDialogConfirmation,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name deleteProductDialogConfirmation
+             * @function
+             *
+             * @description
+             * Called when the Delete Product button is pressed.
+             */
+            function deleteProductDialogConfirmation() {
+                var promiseDel = productResource.deleteProduct($scope.product);
+                promiseDel.then(function () {
+                    notificationsService.success("Product Deleted", "");
+                    $location.url("/merchello/merchello/productlist/manage", true);
+                }, function (reason) {
+                    notificationsService.error("Product Deletion Failed", reason.message);
+                });
             }
 
             // Initialize the controller

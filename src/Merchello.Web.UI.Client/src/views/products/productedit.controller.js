@@ -35,11 +35,12 @@
             $scope.productVariant = productVariantDisplayBuilder.createDefault();
             $scope.warehouses = [];
             $scope.defaultWarehouse = {};
-            $scope.context = 'productedit';
+            $scope.context = 'createproduct';
 
             // Exposed methods
             $scope.save = save;
             $scope.loadAllWarehouses = loadAllWarehouses;
+            $scope.deleteProductDialog = deleteProductDialog;
 
 
             //--------------------------------------------------------------------------------------
@@ -57,6 +58,7 @@
             function init() {
                 var key = $routeParams.id;
                 var productVariantKey = $routeParams.variantid;
+                loadSettings();
                 loadAllWarehouses(key, productVariantKey);
             }
 
@@ -93,7 +95,6 @@
                     $scope.productVariant = $scope.product.getMasterVariant();
                     $scope.tabs = merchelloTabsFactory.createNewProductEditorTabs();
                     $scope.tabs.setActive($scope.context);
-                    loadSettings();
                     return;
                 }
                 var promiseProduct = productResource.getByKey(key);
@@ -113,7 +114,6 @@
                         $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
                     }
                     $scope.tabs.setActive($scope.context);
-                    loadSettings();
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });
@@ -162,6 +162,7 @@
                         case "productedit":
                             // Copy from master variant
                             var productOptions = $scope.product.productOptions;
+                            $scope.productVariant.ensureCatalogInventory();
                             $scope.product = $scope.productVariant.getProductForMasterVariant();
                             $scope.product.productOptions = productOptions;
                             saveProduct();
@@ -237,7 +238,6 @@
             function saveProductVariant() {
                 //var variant = $scope.productVariant.deepClone();
                 $scope.productVariant.removeInActiveInventories();
-
                 var variantPromise = productResource.saveVariant($scope.productVariant);
                 variantPromise.then(function(resultVariant) {
                     notificationsService.success("Product Variant Saved");
@@ -258,15 +258,14 @@
              * Called when the Delete Product button is pressed.
              */
             function deleteProductDialogConfirmation() {
-                var promiseDel = merchelloProductService.deleteProduct($scope.product);
+                var promiseDel = productResource.deleteProduct($scope.product);
                 promiseDel.then(function () {
                     notificationsService.success("Product Deleted", "");
-                    $location.url("/merchello/merchello/ProductList/manage", true);
-
+                    $location.url("/merchello/merchello/productlist/manage", true);
                 }, function (reason) {
                     notificationsService.error("Product Deletion Failed", reason.message);
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -277,14 +276,19 @@
              * Opens the delete confirmation dialog via the Umbraco dialogService.
              */
             function deleteProductDialog() {
+                var dialogData = dialogDataFactory.createDeleteProductDialogData();
+                dialogData.product = $scope.product;
+                dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
+                dialogData.warning = 'This action cannot be reversed.';
 
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.deleteProductDialogConfirmation,
-                    dialogData: $scope.product
+                    callback: deleteProductDialogConfirmation,
+                    dialogData: dialogData
                 });
             }
+
             // Initialize the controller
             init();
     }]);

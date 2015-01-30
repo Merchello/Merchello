@@ -14,7 +14,8 @@
             scope: {
                 product: '=',
                 productVariant: '=',
-                settings: '='
+                settings: '=',
+                context: '@'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.shipping.tpl.html',
             controller: 'Merchello.Directives.ProductVariantShippingDirectiveController'
