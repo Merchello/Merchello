@@ -4,14 +4,7 @@
 			alias: "Merchello.ProductSelector",
 			name: "Merchello Product Selector",
 			editor: {
-				view: "~/App_Plugins/Merchello/PropertyEditors/ProductPicker/Views/merchelloproductselector.html"
-			}
-		},{ 
-			alias: "Merchello.ProductEditor",
-			name: "Merchello Product Editor",
-			editor: {
-				view: "~/App_Plugins/Merchello/PropertyEditors/ProductEditor/Views/merchelloproducteditor.html",
-				hideLabel: true
+				view: "~/App_Plugins/Merchello/propertyeditors/productpicker/merchello.productselector.html"
 			}
 		}
 	],
