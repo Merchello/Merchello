@@ -13149,6 +13149,11 @@
             True/false indicating whether or not this payment has be exported to another system
             </summary>
         </member>
+        <member name="T:Merchello.Core.Models.IProduct">
+            <summary>
+            The Product interface.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Models.IProductBase">
             <summary>
             Defines a product
@@ -15628,6 +15633,11 @@
             The key for the defining product
             </summary>
         </member>
+        <member name="P:Merchello.Core.Models.ProductVariant.TotalInventoryCount">
+            <summary>
+            Gets the total inventory count.
+            </summary>
+        </member>
         <member name="P:Merchello.Core.Models.ProductVariant.Attributes">
             <summary>
             The collection of attributes that makes this variant different from other variants of the same product
@@ -15637,12 +15647,6 @@
             <summary>
             True/false indicating whether or not this variant is the "master" variant for the product.  All products (even products without options) have a master variant.
             </summary>
-        </member>
-        <member name="P:Merchello.Core.Models.ProductVariant.TotalInventoryCount">
-            <summary>
-            Returns the total (sum) of inventory "counts" accross all associated warehouses
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:Merchello.Core.Models.ProductVariantCollection">
             <summary>
@@ -17029,6 +17033,43 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Core.Models.Rdbms.InvoiceDto"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Core.Persistence.Factories.ProductVariantFactory">
+            <summary>
+            A class responsible for building ProductVariant entities and DTO objects.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Persistence.Factories.ProductVariantFactory._productAttributeCollection">
+            <summary>
+            The <see cref="T:Merchello.Core.Models.ProductAttributeCollection"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Persistence.Factories.ProductVariantFactory._catalogInventories">
+            <summary>
+            The <see cref="T:Merchello.Core.Models.CatalogInventoryCollection"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Factories.ProductVariantFactory.#ctor(Merchello.Core.Models.ProductAttributeCollection,Merchello.Core.Models.CatalogInventoryCollection)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Persistence.Factories.ProductVariantFactory"/> class.
+            </summary>
+            <param name="productAttributes">
+            The product attributes.
+            </param>
+            <param name="catalogInventories">
+            The catalog inventories.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Factories.ProductVariantFactory.BuildEntity(Merchello.Core.Models.Rdbms.ProductVariantDto)">
+            <summary>
+            The build entity.
+            </summary>
+            <param name="dto">
+            The dto.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProductVariant"/>.
             </returns>
         </member>
         <member name="T:Merchello.Core.Persistence.Factories.ShipmentFactory">

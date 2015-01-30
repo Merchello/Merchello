@@ -9882,6 +9882,11 @@
             Gets or sets the downloadable file's Umbraco media id.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.TotalInventoryCount">
+            <summary>
+            Gets or sets the total inventory count.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.CatalogInventories">
             <summary>
             Gets or sets the catalog inventories.
@@ -9968,11 +9973,6 @@
         <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.ProductKey">
             <summary>
             Gets or sets the product key.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.TotalInventoryCount">
-            <summary>
-            Gets or sets the total inventory count.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.VersionKey">

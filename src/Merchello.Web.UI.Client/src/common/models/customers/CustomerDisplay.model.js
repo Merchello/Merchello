@@ -112,7 +112,7 @@
             getDefaultShippingAddress: getDefaultShippingAddress,
             getShippingAddresses: getShippingAddresses,
             getPrimaryLocation: getPrimaryLocation
-        }
+        };
 
     }());
 

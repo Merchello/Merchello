@@ -14,6 +14,7 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
             product: '=',
             currencySymbol: '='
         },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.productvariantsviewtable.tpl.html'
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.productvariantsviewtable.tpl.html',
+        controller: 'Merchello.Directives.ProductVariantsViewTableDirectiveController'
     };
 });

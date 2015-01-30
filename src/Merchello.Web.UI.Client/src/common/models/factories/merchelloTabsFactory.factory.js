@@ -12,6 +12,14 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             }
 
             // creates tabs for the product editor page
+            function createNewProductEditorTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('createproduct', 'Product', '#/merchello/merchello/productedit/');
+                return tabs;
+            }
+
+            // creates tabs for the product editor page
             function createProductEditorTabs(productKey) {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
@@ -91,6 +99,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
 
             return {
+                createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
                 createProductEditorWithOptionsTabs: createProductEditorWithOptionsTabs,
