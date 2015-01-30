@@ -80,7 +80,7 @@ namespace Merchello.Core.Models
         {
             get
             {
-                return CatalogInventories.Sum(x => x.Count);
+                return TrackInventory ? CatalogInventories.Sum(x => x.Count) : 0;
             }
         }
 

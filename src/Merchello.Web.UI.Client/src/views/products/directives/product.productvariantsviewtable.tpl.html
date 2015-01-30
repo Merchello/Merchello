@@ -13,9 +13,14 @@
                 <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i>
                 <localize key="merchelloGeneral_sku" />
             </th>
-            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
-                <i data-ng-class="{'icon-navigation-up': sortProperty == 'price', 'icon-navigation-down': sortProperty == '-price'}"></i>
-                <localize key="merchelloGeneral_price" />
+            <th>
+                <localize key="merchelloVariant_toggleAvailable" />
+            </th>
+            <th>
+                Shippable
+            </th>
+            <th>
+                Taxable
             </th>
             <th data-ng-click="changeSortOrder('totalInventoryCount')" data-ng-class="{'sorted': sortProperty == 'totalInventoryCount'}">
                 <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty == '-totalInventoryCount'}"></i>
@@ -24,14 +29,15 @@
             <th>
                 <localize key="merchelloVariant_toggleOnSale" />
             </th>
-            <th>
-                <localize key="merchelloVariant_toggleAvailable" />
+            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
+                <i data-ng-class="{'icon-navigation-up': sortProperty == 'price', 'icon-navigation-down': sortProperty == '-price'}"></i>
+                <localize key="merchelloGeneral_price" />
             </th>
             <th><localize key="general_edit" /></th>
         </tr>
         <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
         <tr data-ng-show="allVariants">
-            <th colspan="{{product.productOptions.length + 5}}">
+            <th colspan="{{product.productOptions.length + 9}}">
                 <div class="btn-group" data-ng-class="{ 'open': bulkAction }">
                     <a data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedVariants().length}} Variants) <i class="icon-navigation-down"></i></a>
                     <ul class="dropdown-menu">
@@ -48,15 +54,25 @@
         <tr data-ng-repeat="variant in product.productVariants | orderBy:sortProperty"
             data-ng-class="{active: variant.selected}"
             data-ng-click="toggleAVariant(variant)">
-            <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="checkBulkVariantsSelected()" /></td>
+            <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="toggleAVariant(variant)" /></td>
             <td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td>
             <td>{{variant.sku}}</td>
-            <td>{{variant.price | currency : currencySymbol }}</td>
-            <td>{{variant.totalInventoryCount}}</td>
-            <td data-ng-hide="variant.onSale"><localize key="general_no" /></td>
-            <td data-ng-show="variant.onSale"><localize key="general_yes" /></td>
+            <!-- availability -->
             <td data-ng-hide="variant.available"><localize key="general_no" /></td>
             <td data-ng-show="variant.available"><localize key="general_yes" /></td>
+            <!-- shippable -->
+            <td data-ng-hide="variant.shippable"><localize key="general_no" /></td>
+            <td data-ng-show="variant.shippable"><localize key="general_yes" /></td>
+            <!-- taxable -->
+            <td data-ng-hide="variant.taxable"><localize key="general_no" /></td>
+            <td data-ng-show="variant.taxable"><localize key="general_yes" /></td>
+            <!-- inventory count -->
+            <td>{{variant.totalInventoryCount}}</td>
+            <!-- sale information -->
+            <td data-ng-hide="variant.onSale"><localize key="general_no" /></td>
+            <td data-ng-show="variant.onSale">{{variant.salePrice | currency : currencySymbol }}</td>
+            <!-- price -->
+            <td>{{variant.price | currency : currencySymbol }}</td>
             <td><a data-ng-href="#/merchello/merchello/productedit/{{variant.productKey}}?variantid={{variant.key}}"><localize key="general_edit" /></a></td>
         </tr>
         </tbody>

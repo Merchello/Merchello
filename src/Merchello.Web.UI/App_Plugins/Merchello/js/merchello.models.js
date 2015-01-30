@@ -503,7 +503,7 @@
             getDefaultShippingAddress: getDefaultShippingAddress,
             getShippingAddresses: getShippingAddresses,
             getPrimaryLocation: getPrimaryLocation
-        }
+        };
 
     }());
 
@@ -815,6 +815,23 @@
     };
 
     angular.module('merchello.models').constant('DeletePaymentMethodDialogData', DeletePaymentMethodDialogData);
+
+    /**
+     * @ngdoc model
+     * @name DeleteProductDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for deleting products methods.
+     */
+    var DeleteProductDialogData = function() {
+        var self = this;
+        self.product = {};
+        self.name = '';
+        self.waring = '';
+    };
+
+    angular.module('merchello.models').constant('DeleteProductDialogData', DeleteProductDialogData);
 
     /**
      * @ngdoc model
@@ -1336,7 +1353,7 @@
 
         // returns a product variant with the associated key
         function getProductVariant(productVariantKey) {
-            return _.find(this.productVariants, function(v) { return v.key === productVariantKey});
+            return _.find(this.productVariants, function(v) { return v.key === productVariantKey; });
         }
 
         // returns a value indicating whether or not the product has variants
@@ -1361,59 +1378,99 @@
         function totalInventory() {
             var inventoryCount = 0;
             if (hasVariants.call(this)) {
+                var anyTracksInventory = false;
                 angular.forEach(this.productVariants, function(pv) {
-                    angular.forEach(pv.catalogInventories, function(ci) {
+                    if(pv.trackInventory) {
+                        anyTracksInventory = true;
+                        angular.forEach(pv.catalogInventories, function(ci) {
+                            inventoryCount += ci.count;
+                        });
+                    }
+                });
+                if(!anyTracksInventory) {
+                    inventoryCount = "n/a";
+                }
+            } else {
+                if(this.trackInventory) {
+                    angular.forEach(this.catalogInventories, function(ci) {
                         inventoryCount += ci.count;
                     });
-                });
-            } else {
-                angular.forEach(this.catalogInventories, function(ci) {
-                  inventoryCount += ci.count;
-                });
+                } else {
+                    inventoryCount = "n/a"
+                }
             }
             return inventoryCount;
         }
 
+        // adds an empty options
         function addEmptyOption() {
             var option = new ProductOptionDisplay();
             this.productOptions.push(option);
         }
 
+        // removes an option
         function removeOption(option) {
             this.productOptions = _.reject(this.productOptions, function(opt) { return _.isEqual(opt, option); });
         }
 
+        // finds the minimum variant price or sales price
         function variantsMinimumPrice(salePrice) {
             if (this.productVariants.length > 0) {
                 if (salePrice === undefined) {
                     return _.min(this.productVariants, function(v) { return v.price; }).price;
                 } else {
-                    return _.min(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                    var onSaleVariants = _.filter(this.productVariants, function(osv) { return osv.onSale; });
+                    if(onSaleVariants.length > 0) {
+                        var salePrice = _.min(onSaleVariants,
+                            function(v) { return v.salePrice; }
+                        ).salePrice;
+                        return salePrice;
+                    } else {
+                        return 0;
+                    }
                 }
             } else {
                 return 0;
             }
         }
 
+        // finds the maximum variant price or sales price
         function variantsMaximumPrice(salePrice) {
             if (this.productVariants.length > 0) {
                 if(salePrice === undefined) {
                     return _.max(this.productVariants, function(v) { return v.price; }).price;
                 } else {
-                    return _.max(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                    var onSaleVariants = _.filter(this.productVariants, function(osv) { return osv.onSale; });
+                    if(onSaleVariants.length > 0) {
+                        return _.max(
+                            onSaleVariants,
+                            function (v) {
+                                return v.salePrice;
+                            }
+                        ).salePrice;
+                    } else {
+                        return 0;
+                    }
                 }
             } else {
                 return 0;
             }
         }
 
+        // returns a value indicating whether or not any variants are on sale
         function anyVariantsOnSale() {
             var variant = _.find(this.productVariants, function(v) { return v.onSale; });
             return variant === undefined ? false : true;
         }
 
+        // returns a collection of shippable variants
         function shippableVariants() {
             return _.filter(this.productVariants, function(v) { return v.shippable; });
+        }
+
+        // returns a collection of taxable variants
+        function taxableVariants() {
+            return _.filter(this.productVariants, function(v) { return v.taxable; });
         }
 
         return {
@@ -1426,7 +1483,8 @@
             variantsMaximumPrice: variantsMaximumPrice,
             anyVariantsOnSale: anyVariantsOnSale,
             shippableVariants: shippableVariants,
-            getProductVariant: getProductVariant
+            getProductVariant: getProductVariant,
+            taxableVariants: taxableVariants
         };
     }());
 
@@ -1514,12 +1572,65 @@
             delete product['productKey'];
             delete product['attributes'];
             // remove catalog inventories that are not active
-            product.catalogInventories = _.reject(product.catalogInventories, function(ci) { return ci.active === false});
+            product.catalogInventories = _.reject(product.catalogInventories, function(ci) { return ci.active === false; });
             return product;
         }
 
+        // ensures a catalog is selected if the variant is marked shippable
+        function ensureCatalogInventory(defaultCatalogKey) {
+            if(!this.shippable && !this.trackInventory) {
+                return;
+            }
+            // if this product is not associated with any catalogs we need to add the default catalog
+            // so that we can associate shipping information
+            if(this.catalogInventories.length === 0) {
+                var inv = new CatalogInventoryDisplay();
+                inv.productVariantKey = this.key;
+                inv.catalogKey = defaultCatalogKey;
+                inv.active = true;
+                this.catalogInventories.push(inv);
+            } else {
+                // if there are catalogs and none are selected we need to force the default catalog to be selected.
+                var activeInventories = _.filter(this.catalogInventories, function(ci) { return ci.active; });
+                if(activeInventories.length === 0) {
+                    var defaultInv = _.find(this.catalogInventories, function(dci) { return dci.catalogKey === defaultCatalogKey; });
+                    if (defaultInv !== undefined) {
+                        defaultInv.active = true;
+                    }
+                }
+            }
+        }
+
+        // removes inactive catalog inventories from a variant before save
+        function removeInActiveInventories() {
+            this.catalogInventories = _.reject(this.catalogInventories, function(ci) { return ci.active === false; });
+        }
+
+        // TODO something like this could be used to copy productOptions from one product to another.
+        // TODO: this method is not used
+        function deepClone() {
+            var variant = new ProductVariantDisplay();
+            variant = angular.extend(variant, this);
+            variant.attributes = [];
+            angular.forEach(this.attributes, function(att) {
+                var attribute = new ProductAttributeDisplay()
+                angular.extend(attribute, att);
+                variant.attributes.push(attribute);
+            });
+            variant.catalogInventories = [];
+            angular.forEach(this.catalogInventories, function(ci) {
+                var inv = new CatalogInventoryDisplay();
+                angular.extend(inv, ci);
+                variant.catalogInventories.push(ci);
+            });
+            return variant;
+        }
+
         return {
-            getProductForMasterVariant : getProductForMasterVariant
+            getProductForMasterVariant : getProductForMasterVariant,
+            ensureCatalogInventory: ensureCatalogInventory,
+            removeInActiveInventories: removeInActiveInventories,
+            //deepClone: deepClone
         }
     }());
 
@@ -2857,6 +2968,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeleteCustomerAddressDialogData();
         }
 
+        // creates a dialog data model for deleting a product dialog
+        function createDeleteProductDialogData() {
+            return new DeleteProductDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -2880,7 +2996,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createAddEditCustomerDialogData: createAddEditCustomerDialogData,
             createDeleteCustomerDialogData: createDeleteCustomerDialogData,
             createAddEditCustomerAddressDialogData: createAddEditCustomerAddressDialogData,
-            createDeleteCustomerAddressDialogData: createDeleteCustomerAddressDialogData
+            createDeleteCustomerAddressDialogData: createDeleteCustomerAddressDialogData,
+            createDeleteProductDialogData: createDeleteProductDialogData
         };
 }]);
 
@@ -3013,6 +3130,14 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             }
 
             // creates tabs for the product editor page
+            function createNewProductEditorTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('createproduct', 'Product', '#/merchello/merchello/productedit/');
+                return tabs;
+            }
+
+            // creates tabs for the product editor page
             function createProductEditorTabs(productKey) {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
@@ -3092,6 +3217,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
 
             return {
+                createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
                 createProductEditorWithOptionsTabs: createProductEditorWithOptionsTabs,

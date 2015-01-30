@@ -4,7 +4,7 @@
         <small><localize key="merchelloShipping_setVars" /></small>
     </label>
     <div class="merchello-controls">
-        <div class="row-fluid shipping-dimensions">
+        <div class="row-fluid shipping-dimensions" data-ng-show="productVariant.shippable">
             <div class="form-group span6 col-xs-6">
                 <label for="weight">
                     <localize key="merchelloShipping_weight" />
@@ -43,7 +43,7 @@
                         <th data-ng-hide="!productVariant.trackInventory"><localize key="merchelloWarehouse_lowCount" /></th>
                     </tr>
                         <tr data-ng-repeat="catalog in warehouse.warehouseCatalogs">
-                            <td class="span1 col-xs-1"><input name="incatalog" type="checkbox" data-ng-model="mapToCatalog(catalog).active"></td>
+                            <td class="span1 col-xs-1"><input name="incatalog" type="checkbox" data-ng-model="mapToCatalog(catalog).active" data-ng-change="toggleCatalog()"></td>
                             <td class="name">{{catalog.name}}</td>
                             <td><input type="text" class="col-xs-8 span8" data-ng-model="mapToCatalog(catalog).location" /></td>
                             <td data-ng-hide="!productVariant.trackInventory"><input type="text" class="col-xs-8 span8" data-ng-disabled="!productVariant.trackInventory" data-ng-disabled="!productVariant.trackInventory" data-ng-model="mapToCatalog(catalog).count" /></td>

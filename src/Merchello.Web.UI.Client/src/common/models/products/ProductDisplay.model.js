@@ -40,7 +40,7 @@
 
         // returns a product variant with the associated key
         function getProductVariant(productVariantKey) {
-            return _.find(this.productVariants, function(v) { return v.key === productVariantKey});
+            return _.find(this.productVariants, function(v) { return v.key === productVariantKey; });
         }
 
         // returns a value indicating whether or not the product has variants
@@ -65,59 +65,99 @@
         function totalInventory() {
             var inventoryCount = 0;
             if (hasVariants.call(this)) {
+                var anyTracksInventory = false;
                 angular.forEach(this.productVariants, function(pv) {
-                    angular.forEach(pv.catalogInventories, function(ci) {
+                    if(pv.trackInventory) {
+                        anyTracksInventory = true;
+                        angular.forEach(pv.catalogInventories, function(ci) {
+                            inventoryCount += ci.count;
+                        });
+                    }
+                });
+                if(!anyTracksInventory) {
+                    inventoryCount = "n/a";
+                }
+            } else {
+                if(this.trackInventory) {
+                    angular.forEach(this.catalogInventories, function(ci) {
                         inventoryCount += ci.count;
                     });
-                });
-            } else {
-                angular.forEach(this.catalogInventories, function(ci) {
-                  inventoryCount += ci.count;
-                });
+                } else {
+                    inventoryCount = "n/a"
+                }
             }
             return inventoryCount;
         }
 
+        // adds an empty options
         function addEmptyOption() {
             var option = new ProductOptionDisplay();
             this.productOptions.push(option);
         }
 
+        // removes an option
         function removeOption(option) {
             this.productOptions = _.reject(this.productOptions, function(opt) { return _.isEqual(opt, option); });
         }
 
+        // finds the minimum variant price or sales price
         function variantsMinimumPrice(salePrice) {
             if (this.productVariants.length > 0) {
                 if (salePrice === undefined) {
                     return _.min(this.productVariants, function(v) { return v.price; }).price;
                 } else {
-                    return _.min(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                    var onSaleVariants = _.filter(this.productVariants, function(osv) { return osv.onSale; });
+                    if(onSaleVariants.length > 0) {
+                        var salePrice = _.min(onSaleVariants,
+                            function(v) { return v.salePrice; }
+                        ).salePrice;
+                        return salePrice;
+                    } else {
+                        return 0;
+                    }
                 }
             } else {
                 return 0;
             }
         }
 
+        // finds the maximum variant price or sales price
         function variantsMaximumPrice(salePrice) {
             if (this.productVariants.length > 0) {
                 if(salePrice === undefined) {
                     return _.max(this.productVariants, function(v) { return v.price; }).price;
                 } else {
-                    return _.max(this.productVariants, function(v) { return v.salePrice; }).salePrice;
+                    var onSaleVariants = _.filter(this.productVariants, function(osv) { return osv.onSale; });
+                    if(onSaleVariants.length > 0) {
+                        return _.max(
+                            onSaleVariants,
+                            function (v) {
+                                return v.salePrice;
+                            }
+                        ).salePrice;
+                    } else {
+                        return 0;
+                    }
                 }
             } else {
                 return 0;
             }
         }
 
+        // returns a value indicating whether or not any variants are on sale
         function anyVariantsOnSale() {
             var variant = _.find(this.productVariants, function(v) { return v.onSale; });
             return variant === undefined ? false : true;
         }
 
+        // returns a collection of shippable variants
         function shippableVariants() {
             return _.filter(this.productVariants, function(v) { return v.shippable; });
+        }
+
+        // returns a collection of taxable variants
+        function taxableVariants() {
+            return _.filter(this.productVariants, function(v) { return v.taxable; });
         }
 
         return {
@@ -130,7 +170,8 @@
             variantsMaximumPrice: variantsMaximumPrice,
             anyVariantsOnSale: anyVariantsOnSale,
             shippableVariants: shippableVariants,
-            getProductVariant: getProductVariant
+            getProductVariant: getProductVariant,
+            taxableVariants: taxableVariants
         };
     }());
 

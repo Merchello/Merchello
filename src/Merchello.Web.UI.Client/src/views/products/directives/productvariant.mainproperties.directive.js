@@ -15,10 +15,11 @@
                 scope: {
                     product: '=',
                     productVariant: '=',
-                    context: '='
+                    context: '=',
+                    settings: '='
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.mainproperties.tpl.html',
-                controller: function ($scope, warehouseResource, warehouseDisplayBuilder) {
+                controller: function ($scope, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
 
                     // Get the default warehouse for the ensureCatalogInventory() function below
                     $scope.defaultWarehouse = {};
@@ -27,7 +28,13 @@
                         var promiseWarehouse = warehouseResource.getDefaultWarehouse();
                         promiseWarehouse.then(function (warehouse) {
                             $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);
-                        })
+                            // set defaults in case of a createproduct
+                            if($scope.context === 'createproduct') {
+                                $scope.productVariant.shippable = $scope.settings.globalShippable;
+                                $scope.productVariant.taxable = $scope.settings.globalTaxable;
+                                $scope.productVariant.trackInventory = $scope.settings.globalTrackInventory;
+                            }
+                        });
                     }
 
                     // Initialize the controller

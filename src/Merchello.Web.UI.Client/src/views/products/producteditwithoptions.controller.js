@@ -14,8 +14,12 @@
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
-            $scope.product = {};
+            $scope.product = productDisplayBuilder.createDefault();
             $scope.currencySymbol = '';
+            $scope.reorderVariants = false;
+
+            // exposed methods
+            $scope.save = save;
 
             function init() {
                 var key = $routeParams.id;
@@ -60,6 +64,33 @@
                 }, function (reason) {
                     notificationsService.error("Settings Load Failed", reason.message);
                 });
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Event Handlers
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description
+             * Saves the product - used for changing the master variant name
+             */
+            function save(thisForm) {
+                if (thisForm) {
+                    if (thisForm.$valid) {
+                        notificationsService.info("Saving Product...", "");
+                        var promise = productResource.save($scope.product);
+                        promise.then(function (product) {
+                            notificationsService.success("Product Saved", "");
+                            $scope.product = productDisplayBuilder.transform(product);
+                        }, function (reason) {
+                            notificationsService.error("Product Save Failed", reason.message);
+                        });
+                    }
+                }
             }
 
             // Initialize the controller
