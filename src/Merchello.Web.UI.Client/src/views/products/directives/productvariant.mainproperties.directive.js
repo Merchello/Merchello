@@ -23,16 +23,22 @@
 
                     // Get the default warehouse for the ensureCatalogInventory() function below
                     $scope.defaultWarehouse = {};
+                    $scope.defaultWarehouseCatalog = {};
 
                     function init() {
                         var promiseWarehouse = warehouseResource.getDefaultWarehouse();
                         promiseWarehouse.then(function (warehouse) {
                             $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);
+                            $scope.defaultWarehouseCatalog = _.find($scope.defaultWarehouse.warehouseCatalogs, function (dwc) { return dwc.isDefault; });
                             // set defaults in case of a createproduct
                             if($scope.context === 'createproduct') {
                                 $scope.productVariant.shippable = $scope.settings.globalShippable;
                                 $scope.productVariant.taxable = $scope.settings.globalTaxable;
                                 $scope.productVariant.trackInventory = $scope.settings.globalTrackInventory;
+                                if($scope.productVariant.shippable || $scope.productVariant.trackInventory)
+                                {
+                                    $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouseCatalog.key);
+                                }
                             }
                         });
                     }

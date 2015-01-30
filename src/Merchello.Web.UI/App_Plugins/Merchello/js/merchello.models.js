@@ -645,6 +645,21 @@
 
     /**
      * @ngdoc model
+     * @name BulkVariantChangePricesDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for bulk changes to product variant prices.
+     */
+    var BulkVariantChangePricesDialogData = function() {
+        var self = this;
+        self.productVariants = [];
+        self.price = '';
+    };
+
+    angular.module('merchello.models').constant('BulkVariantChangePricesDialogData', BulkVariantChangePricesDialogData);
+    /**
+     * @ngdoc model
      * @name PaymentRequest
      * @function
      *
@@ -2973,6 +2988,13 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeleteProductDialogData();
         }
 
+        // Product Bulk Actions
+
+        // creates a dialog data model for bulk action update product variant pricing
+        function createBulkVariantChangePricesDialogData() {
+            return new BulkVariantChangePricesDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -2997,7 +3019,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteCustomerDialogData: createDeleteCustomerDialogData,
             createAddEditCustomerAddressDialogData: createAddEditCustomerAddressDialogData,
             createDeleteCustomerAddressDialogData: createDeleteCustomerAddressDialogData,
-            createDeleteProductDialogData: createDeleteProductDialogData
+            createDeleteProductDialogData: createDeleteProductDialogData,
+            createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData
         };
 }]);
 
