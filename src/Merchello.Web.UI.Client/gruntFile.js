@@ -110,7 +110,7 @@
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/products' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/common/dialogs' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/directives', src: '**', expand: true, cwd: '<%= distdir %>/views/directives' },
-                    { dest: '<%= vsdir %>/views/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' }
+                    { dest: '<%= vsdir %>/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' }
                 ]
             }
         },

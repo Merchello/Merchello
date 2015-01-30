@@ -78,10 +78,9 @@
                     if (inventory == null) return Attempt<IShipment>.Fail(new NullReferenceException("An inventory record could not be found for an order line item"));
 
                     inventory.Count -= item.Quantity;
-
                 }
 
-                _productVariantService.Save(variants);
+                if (trackableItems.Any()) _productVariantService.Save(variants);
             }
 
             // persist the shipment and update the line items

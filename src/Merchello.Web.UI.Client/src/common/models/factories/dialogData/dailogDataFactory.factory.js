@@ -132,6 +132,14 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkVariantChangePricesDialogData();
         }
 
+        /*----------------------------------------------------------------------------------------
+        Property Editors
+        -------------------------------------------------------------------------------------------*/
+
+        function createProductSelectorDialogData() {
+            return new ProductSelectorDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -157,6 +165,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createAddEditCustomerAddressDialogData: createAddEditCustomerAddressDialogData,
             createDeleteCustomerAddressDialogData: createDeleteCustomerAddressDialogData,
             createDeleteProductDialogData: createDeleteProductDialogData,
-            createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData
+            createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
+            createProductSelectorDialogData: createProductSelectorDialogData
         };
 }]);
