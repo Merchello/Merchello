@@ -125,6 +125,13 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new DeleteProductDialogData();
         }
 
+        // Product Bulk Actions
+
+        // creates a dialog data model for bulk action update product variant pricing
+        function createBulkVariantChangePricesDialogData() {
+            return new BulkVariantChangePricesDialogData();
+        }
+
         return {
             createAddShipCountryDialogData: createAddShipCountryDialogData,
             createDeleteShipCountryDialogData: createDeleteShipCountryDialogData,
@@ -149,6 +156,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteCustomerDialogData: createDeleteCustomerDialogData,
             createAddEditCustomerAddressDialogData: createAddEditCustomerAddressDialogData,
             createDeleteCustomerAddressDialogData: createDeleteCustomerAddressDialogData,
-            createDeleteProductDialogData: createDeleteProductDialogData
+            createDeleteProductDialogData: createDeleteProductDialogData,
+            createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData
         };
 }]);

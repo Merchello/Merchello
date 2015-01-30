@@ -7,8 +7,8 @@
  * The controller for the product variant view table view directive
  */
 angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
-    ['$scope', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
-    function($scope, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+    ['$scope', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
 
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
@@ -179,10 +179,14 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          * Opens the dialog for setting the new price
          */
         function changePrices() {
+            var dialogData = dialogDataFactory.createBulkVariantChangePricesDialogData();
+            dialogData.productVariants = $scope.selectedVariants();
+            dialogData.price = _.min(dialogData.productVariants, function(v) { return v.price;}).price;
             dialogService.open({
-                template: '/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.changeprices.html',
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.changeprice.html',
                 show: true,
-                callback: $scope.changePricesDialogConfirm
+                callback: changePricesDialogConfirm,
+                dialogData: dialogData
             });
         }
 
@@ -196,9 +200,9 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          */
         function updateInventory() {
             dialogService.open({
-                template: '/App_Plugins/Merchello/Modules/Catalog/Dialogs/product.updateinventory.html',
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.updateinventory.html',
                 show: true,
-                callback: $scope.updateInventoryDialogConfirm
+                callback: updateInventoryDialogConfirm
             });
         }
 
@@ -289,23 +293,11 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          * Handles the new price passed back from the dialog and sets the variants price and saves them.
          */
         function changePricesDialogConfirm(dialogData) {
-            var success = true;
-            var selected = $scope.selectedVariants();
-            for (var i = 0; i < selected.length; i++) {
-                selected[i].price = dialogData.newPrice;
-                var savepromise = merchelloProductService.updateProductVariant(selected[i]);
-                savepromise.then(function () {
-                    //notificationsService.success("Variant saved ", "");
-                }, function (reason) {
-                    success = false;
-                    //notificationsService.error("Product Variant Save Failed", reason.message);
-                });
-            }
-            if (success) {
-                notificationsService.success("Confirmed prices update", "");
-            } else {
-                notificationsService.error("Failed to update prices", "");
-            }
+            angular.forEach(dialogData.productVariants, function(pv) {
+                pv.price = dialogData.price;
+                productResource.saveVariant(pv);
+            })
+            notificationsService.success("Updated prices");
         }
 
         function assertActiveShippingCatalog() {
