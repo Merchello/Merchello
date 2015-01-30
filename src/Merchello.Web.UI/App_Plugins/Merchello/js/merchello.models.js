@@ -645,6 +645,24 @@
 
     /**
      * @ngdoc model
+     * @name BulkEditInventoryCountsDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for bulk editing of inventory counts.
+     */
+    var BulkEditInventoryCountsDialogData = function() {
+        var self = this;
+        self.count = 0;
+        self.includeLowCount = false;
+        self.lowCount = 0;
+        self.warning = '';
+    };
+
+    angular.module('merchello.models').constant('BulkEditInventoryCountsDialogData', BulkEditInventoryCountsDialogData);
+
+    /**
+     * @ngdoc model
      * @name BulkVariantChangePricesDialogData
      * @function
      *
@@ -654,7 +672,10 @@
     var BulkVariantChangePricesDialogData = function() {
         var self = this;
         self.productVariants = [];
-        self.price = '';
+        self.currencySymbol = '';
+        self.price = 0;
+        self.includeSalePrice = false;
+        self.salePrice = 0;
     };
 
     angular.module('merchello.models').constant('BulkVariantChangePricesDialogData', BulkVariantChangePricesDialogData);
@@ -1637,6 +1658,20 @@
             this.catalogInventories = _.reject(this.catalogInventories, function(ci) { return ci.active === false; });
         }
 
+        // updates all inventory counts to the count passed as a parameter
+        function setAllInventoryCount(count) {
+            angular.forEach(this.catalogInventories, function(ci) {
+                ci.count = count;
+            });
+        }
+
+        // updates all inventory low count to the low count passed as a parameter
+        function setAllInventoryLowCount(lowCount) {
+            angular.forEach(this.catalogInventories, function(ci) {
+                ci.lowCount = lowCount;
+            });
+        }
+
         // TODO something like this could be used to copy productOptions from one product to another.
         // TODO: this method is not used
         function deepClone() {
@@ -1661,6 +1696,8 @@
             getProductForMasterVariant : getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
             removeInActiveInventories: removeInActiveInventories,
+            setAllInventoryCount: setAllInventoryCount,
+            setAllInventoryLowCount: setAllInventoryLowCount
             //deepClone: deepClone
         }
     }());
@@ -3011,6 +3048,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkVariantChangePricesDialogData();
         }
 
+        // creates a dialog data module for bulk action update of product inventories
+        function createBulkEditInventoryCountsDialogData() {
+            return new BulkEditInventoryCountsDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -3045,6 +3087,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteCustomerAddressDialogData: createDeleteCustomerAddressDialogData,
             createDeleteProductDialogData: createDeleteProductDialogData,
             createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
+            createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
             createProductSelectorDialogData: createProductSelectorDialogData
         };
 }]);

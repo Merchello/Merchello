@@ -21,6 +21,7 @@
             // exposed methods
             $scope.save = save;
             $scope.deleteProductDialog = deleteProductDialog;
+            $scope.init = init;
 
             function init() {
                 var key = $routeParams.id;

@@ -7,8 +7,8 @@
  * The controller for the product variant view table view directive
  */
 angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
-    ['$scope', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
-    function($scope, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, $timeout, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
 
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
@@ -166,6 +166,37 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
             $scope.allVariants = newstate;
         }
 
+        /**
+         * @ngdoc method
+         * @name toggleAvailable
+         * @function
+         *
+         * @description
+         * Toggles the variant available setting
+         */
+        function toggleAvailable() {
+            var success = true;
+            var selected = $scope.selectedVariants();
+            for (var i = 0; i < selected.length; i++) {
+                selected[i].available = !selected[i].available;
+                var savepromise = productResource.saveVariant(selected[i]);
+                savepromise.then(function () {
+                    //notificationsService.success("Product Variant Saved", "");
+                }, function (reason) {
+                    success = false;
+                    //notificationsService.error("Product Variant Save Failed", reason.message);
+                });
+            }
+            if (success) {
+                notificationsService.success("Confirmed available update", "");
+                $timeout(function() {
+                    reload();
+                }, 400);
+            } else {
+                notificationsService.error("Failed to update available", "");
+            }
+        }
+
         //--------------------------------------------------------------------------------------
         // Dialog Event Handlers
         //--------------------------------------------------------------------------------------
@@ -182,6 +213,8 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
             var dialogData = dialogDataFactory.createBulkVariantChangePricesDialogData();
             dialogData.productVariants = $scope.selectedVariants();
             dialogData.price = _.min(dialogData.productVariants, function(v) { return v.price;}).price;
+            dialogData.salePrice = _.min(dialogData.productVariants, function(v) { return v.salePrice; }).price;
+            dialogData.currencySymbol = $scope.currencySymbol;
             dialogService.open({
                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.changeprice.html',
                 show: true,
@@ -199,47 +232,23 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          * Opens the dialog for setting the new inventory
          */
         function updateInventory() {
+            var dialogData = dialogDataFactory.createBulkEditInventoryCountsDialogData();
+            dialogData.warning = 'Note: This will update the inventory for all warehouses on all selected variants';
             dialogService.open({
                 template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.updateinventory.html',
                 show: true,
-                callback: updateInventoryDialogConfirm
+                callback: updateInventoryDialogConfirm,
+                dialogData: dialogData
             });
         }
 
-        /**
-         * @ngdoc method
-         * @name toggleAvailable
-         * @function
-         *
-         * @description
-         * Toggles the variant available setting
-         */
-        function toggleAvailable() {
-            var success = true;
-            var selected = $scope.selectedVariants();
-            for (var i = 0; i < selected.length; i++) {
-                selected[i].available = !selected[i].available;
-                var savepromise = merchelloProductService.updateProductVariant(selected[i]);
-                savepromise.then(function () {
-                    //notificationsService.success("Product Variant Saved", "");
-                }, function (reason) {
-                    success = false;
-                    //notificationsService.error("Product Variant Save Failed", reason.message);
-                });
-            }
-            if (success) {
-                notificationsService.success("Confirmed available update", "");
-            } else {
-                notificationsService.error("Failed to update available", "");
-            }
-        }
 
         function toggleOnSale() {
             var success = true;
             var selected = $scope.selectedVariants();
             for (var i = 0; i < selected.length; i++) {
                 selected[i].onSale = !selected[i].onSale;
-                var savepromise = merchelloProductService.updateProductVariant(selected[i]);
+                var savepromise = productResource.saveVariant(selected[i]);
                 savepromise.then(function () {
                     //notificationsService.success("Product Variant Saved", "");
                 }, function (reason) {
@@ -249,6 +258,9 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
             }
             if (success) {
                 notificationsService.success("Confirmed on sale update", "");
+                $timeout(function() {
+                    reload();
+                }, 400);
             } else {
                 notificationsService.error("Failed to update on sale setting", "");
             }
@@ -264,20 +276,27 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          * Handles the new inventory passed back from the dialog and sets the variants inventory and saves them.
          */
         function updateInventoryDialogConfirm(dialogData) {
+            console.info(dialogData);
             var success = true;
             var selected = $scope.selectedVariants();
             for (var i = 0; i < selected.length; i++) {
-                selected[i].globalInventoryChanged(dialogData.newInventory);
-                var savepromise = merchelloProductService.updateProductVariant(selected[i]);
+                selected[i].setAllInventoryCount(dialogData.count);
+                if(dialogData.includeLowCount) {
+                    selected[i].setAllInventoryLowCount(dialogData.lowCount);
+                }
+                var savepromise = productResource.saveVariant(selected[i]);
                 savepromise.then(function () {
-                    //notificationsService.success("Product Variant Saved", "");
+                    // don't reset success here
                 }, function (reason) {
                     success = false;
-                    //notificationsService.error("Product Variant Save Failed", reason.message);
                 });
             }
             if (success) {
                 notificationsService.success("Confirmed inventory update", "");
+                $timeout(function() {
+                    reload();
+                }, 400);
+
             } else {
                 notificationsService.error("Failed to update inventory", "");
             }
@@ -295,6 +314,9 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         function changePricesDialogConfirm(dialogData) {
             angular.forEach(dialogData.productVariants, function(pv) {
                 pv.price = dialogData.price;
+                if(dialogData.includeSalePrice) {
+                    pv.salePrice = dialogData.salePrice;
+                }
                 productResource.saveVariant(pv);
             })
             notificationsService.success("Updated prices");
@@ -302,6 +324,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
 
         function assertActiveShippingCatalog() {
             $scope.assertCatalog();
+        }
+
+        function reload() {
+            $scope.reload();
         }
 
         // initialize the controller

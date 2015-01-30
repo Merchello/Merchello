@@ -9,7 +9,10 @@
     var BulkVariantChangePricesDialogData = function() {
         var self = this;
         self.productVariants = [];
-        self.price = '';
+        self.currencySymbol = '';
+        self.price = 0;
+        self.includeSalePrice = false;
+        self.salePrice = 0;
     };
 
     angular.module('merchello.models').constant('BulkVariantChangePricesDialogData', BulkVariantChangePricesDialogData);
