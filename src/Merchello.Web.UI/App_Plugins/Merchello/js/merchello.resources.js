@@ -836,51 +836,6 @@ angular.module('merchello.resources')
                 /// Business logic
                 ///////////////////////////////////////////////////////////////////////////////////////////
 
-                /**
-                 * @ngdoc method
-                 * @name createProduct
-                 * @description Creates product and delivers the new Product model in the promise data
-                 **/
-                createProduct: function(product) {
-
-                    var deferred = $q.defer();
-
-                    var promiseCreate = prodservice.add(product);
-                    promiseCreate.then(function(newproduct) {
-
-                        product = new merchello.Models.Product(newproduct);
-                        deferred.resolve(product);
-
-                    }, function(reason) {
-                        deferred.reject(reason);
-                    });
-
-                    return deferred.promise;
-                },
-
-                /**
-                 * @ngdoc method
-                 * @name updateProduct
-                 * @description Saves product changes and delivers the new Product model in the promise data
-                 **/
-                /*updateProduct: function (product) {
-
-                    var deferred = $q.defer();
-
-                    var promise = prodservice.save(product);
-
-                    promise.then(function (savedProduct) {
-
-                        product = new merchello.Models.Product(savedProduct);
-
-                        deferred.resolve(product);
-
-                    }, function (reason) {
-                        deferred.reject(reason);
-                    });
-
-                    return deferred.promise;
-                }, */
 
                 /**
                  * @ngdoc method

@@ -14,14 +14,14 @@
             scope: {
                 product: '=',
                 parentForm: '=',
-                classes: '=',
-                'update': '&onUpdate'
+                classes: '='
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.optionsmanage.tpl.html',
 
             controller: function ($scope) {
                 $scope.rebuildVariants = false;
                 $scope.addOption = addOption;
+                $scope.removeOption = removeOption;
 
                 /**
                  * @ngdoc method
@@ -32,7 +32,6 @@
                  * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
                  */
                 function addOption() {
-                    $scope.rebuildVariants = true;
                     $scope.product.addEmptyOption();
                 }
 
@@ -45,21 +44,7 @@
                  * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
                  */
                 function removeOption (option) {
-                    $scope.rebuildVariants = true;
                     $scope.product.removeOption(option);
-                }
-
-                /**
-                 * @ngdoc method
-                 * @name updateOptions
-                 * @function
-                 *
-                 * @description
-                 * Called when the update options button is pressed
-                 */
-                function updateOptions() {
-                    $scope.update({ form: $scope.parentForm, rebuild: $scope.rebuildVariants });
-                    $scope.rebuildVariants = false;
                 }
             }
         };

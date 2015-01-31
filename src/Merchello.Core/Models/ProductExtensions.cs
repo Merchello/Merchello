@@ -19,8 +19,6 @@ namespace Merchello.Core
     /// </summary>
     public static class ProductExtensions
     {
-
-
         /// <summary>
         /// Returns a collection of ProductOption given as list of attributes (choices)
         /// </summary>
@@ -311,7 +309,6 @@ namespace Merchello.Core
                     writer.WriteAttributeString("totalInventoryCount", productVariant.TotalInventoryCount.ToString());
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
-
                     writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
                     writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));

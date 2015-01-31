@@ -11,6 +11,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
             $scope.assignedProviders = [];
             $scope.availableProviders = [];
 
+
             // exposed methods
             $scope.deleteCountry = deleteCountry;
             $scope.addShippingProviderDialogOpen = addShippingProviderDialogOpen;

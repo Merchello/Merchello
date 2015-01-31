@@ -1,14 +1,16 @@
 
 angular.module('merchello').controller('Merchello.Directives.ProductVariantShippingDirectiveController',
-    ['$scope', '$q', 'notificationsService', 'dialogService', 'warehouseResource', 'warehouseDisplayBuilder', 'catalogInventoryDisplayBuilder',
-        function($scope, $q, notificationsService, dialogService, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
+    ['$scope', 'notificationsService', 'dialogService', 'warehouseResource', 'warehouseDisplayBuilder', 'catalogInventoryDisplayBuilder',
+        function($scope, notificationsService, dialogService, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
 
             $scope.warehouses = [];
             $scope.defaultWarehouse = {};
+            $scope.defaultWarehouseCatalog = {};
 
             // exposed methods
             $scope.getUnits = getUnits;
             $scope.mapToCatalog = mapToCatalog;
+            $scope.toggleCatalog = toggleCatalog;
 
             function init() {
                 loadAllWarehouses();
@@ -23,18 +25,14 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Loads in default warehouse and all other warehouses from server into the scope.  Called in init().
              */
             function loadAllWarehouses() {
-                var deferred = $q.defer();
                 var promiseWarehouse = warehouseResource.getDefaultWarehouse();
                 promiseWarehouse.then(function (warehouse) {
                     $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);
                     $scope.warehouses.push($scope.defaultWarehouse);
-                    deferred.resolve();
+                    $scope.defaultWarehouseCatalog = _.find($scope.defaultWarehouse.warehouseCatalogs, function (dc) { return dc.isDefault; });
                 }, function (reason) {
                     notificationsService.error("Default Warehouse Load Failed", reason.message);
-                    deferred.reject(reason);
                 });
-                // TODO: load other warehouses when implemented
-                return deferred.promise;
             }
 
             /**
@@ -56,6 +54,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     mapped = catalogInventory;
                 }
                 return mapped;
+            }
+
+            function toggleCatalog() {
+                $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouseCatalog.key);
             }
 
             function getUnits(settings, type) {

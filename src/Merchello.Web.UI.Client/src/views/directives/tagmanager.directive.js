@@ -6,7 +6,7 @@
      * @description
      * directive for a tags manager.
      */
-    angular.module('merchello.directives').directive('tagsManager', function() {
+    angular.module('merchello.directives').directive('tagManager', function() {
         return {
             restrict: 'E',
             scope: { option: '=' },
@@ -14,17 +14,18 @@
             '<div class="tags">' +
             '<a ng-repeat="(idx, choice) in option.choices" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
             '</div>' +
-            '<input type="text" placeholder="Add a choice..." ng-model="new_value"></input> ' +
+            '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName"></input> ' +
             '<a class="btn btn-primary" ng-click="add()">Add</a>',
             link: function ($scope, $element) {
                 // FIXME: this is lazy and error-prone
+                // this is the option name input
                 var input = angular.element($element.children()[1]);
 
                 // This adds the new tag to the tags array
                 $scope.add = function () {
-                    if ($scope.new_value.length > 0) {
-                        $scope.option.addChoice($scope.new_value);
-                        $scope.new_value = "";
+                    if ($scope.newChoiceName.length > 0) {
+                        $scope.option.addAttributeChoice($scope.newChoiceName);
+                        $scope.newChoiceName = "";
                     }
                 };
 
@@ -38,9 +39,10 @@
                     // But we only care when Enter was pressed
                     if (event.keyCode == 13) {
                         // There's probably a better way to handle this...
-                        $scope.$apply($scope.add);
+                        $scope.add();
                     }
                 });
+
             }
         };
     });

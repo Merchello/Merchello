@@ -11,7 +11,7 @@
             <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <a href="#/merchello/merchello/ProductCreate/do?create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
+                        <a href="#/merchello/merchello/productedit/create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                 </form>
                 <reset-list-filters></reset-list-filters>
             </div>
-            <div class="merchello-pane">
+            <div class="merchello-pane" data-ng-show="preValuesLoaded">
 
                 <merchello-pager></merchello-pager>
 
@@ -59,6 +59,16 @@
                         </th>
                         <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku' ||  sortProperty == '-sku'}">
                             <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i> <localize key="merchelloVariant_sku"/>
+                        </th>
+                        <th>
+                            Shippable
+                        </th>
+                        <th>
+                            Taxable
+                        </th>
+                        <th data-ng-click="changeSortOrder('totalInventoryCount')" data-ng-class="{'sorted': sortProperty == 'totalInventoryCount'}">
+                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty == '-totalInventoryCount'}"></i>
+                            <localize key="merchelloGeneral_total" /> <localize key="merchelloGeneral_quantity" />
                         </th>
                         <th>
                             <localize key="merchelloVariant_productOnSale" />
@@ -75,8 +85,26 @@
                         <!--<td><input type="checkbox" data-ng-model="product.selected"/></td>-->
                         <td><a data-ng-href="{{getEditUrl(product)}}">{{product.name}}</a></td>
                         <td>{{product.sku}}</td>
+                        <!-- shippable -->
+                        <td data-ng-show="product.hasVariants() && product.shippableVariants().length === product.productVariants.length"><localize key="general_yes" /></td>
+                        <td data-ng-show="product.hasVariants() && product.shippableVariants().length === 0"><localize key="general_yes" /></td>
+                        <td data-ng-show="product.hasVariants() && product.shippableVariants().length !== product.productVariants.length && product.shippableVariants().length > 0">Some</td>
+                        <td data-ng-show="!product.hasVariants() && product.shippable"><localize key="general_yes" /></td>
+                        <td data-ng-show="!product.hasVariants() && !product.shippable"><localize key="general_no" /></td>
+                        <!-- taxable -->
+                        <td data-ng-show="product.hasVariants() && product.taxableVariants().length === product.productVariants.length"><localize key="general_yes" /></td>
+                        <td data-ng-show="product.hasVariants() && product.taxableVariants().length === 0"><localize key="general_yes" /></td>
+                        <td data-ng-show="product.hasVariants() && product.taxableVariants().length !== product.productVariants.length && product.taxableVariants().length > 0">Some</td>
+                        <td data-ng-show="!product.hasVariants() && product.taxable"><localize key="general_yes" /></td>
+                        <td data-ng-show="!product.hasVariants() && !product.taxable"><localize key="general_no" /></td>
+                        <!-- Inventory -->
+                        <td>{{ product.totalInventory() }}</td>
+                        <!-- on sale -->
+                        <td data-ng-show="product.hasVariants() && !product.anyVariantsOnSale()"><localize key="general_no" /></td>
+                        <td data-ng-show="product.hasVariants() && product.anyVariantsOnSale()">{{product.variantsMinimumPrice(true) | currency : currencySymbol}} - {{product.variantsMaximumPrice(true) | currency : currencySymbol}}</td>
                         <td data-ng-show="!product.hasVariants() && !product.onSale"><localize key="general_no" /></td>
-                        <td data-ng-show="!product.hasVariants() && product.onSale"><localize key="general_yes" /></td>
+                        <td data-ng-show="!product.hasVariants() && product.onSale">{{product.salePrice | currency : currencySymbol}}</td>
+                        <!-- price -->
                         <td data-ng-hide="product.hasVariants()">{{product.price | currency : currencySymbol}}</td>
                         <td data-ng-show="product.hasVariants()">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
                     </tr>
@@ -89,7 +117,7 @@
                 <div class="pager well" data-ng-show="products.length == 0">
                     <h5><localize key="merchelloVariant_noProduct"/></h5>
                     <p><localize key="merchelloVariant_newProductPrompt"/></p>
-                    <a href="#/merchello/merchello/ProductCreate/do?create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
+                    <a href="#/merchello/merchello/productedit/create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
                 </div>
 
             </div>

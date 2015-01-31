@@ -12,6 +12,8 @@ using Umbraco.Web.WebApi;
 
 namespace Controllers
 {
+    using System.Web.Mvc.Html;
+
     /// <summary>
     /// Utility controller - assists with little lookups
     /// </summary>
@@ -39,19 +41,11 @@ namespace Controllers
         [AcceptVerbs("GET")]
         public string GetProductVariantPrice(Guid productKey, string optionChoiceKeys)
         {
-            var optionsArray = optionChoiceKeys.Split(',');
+            var optionsArray = optionChoiceKeys.Split(',').Where(x => !string.IsNullOrEmpty(x)).Select(x => new Guid(x)).ToArray();
 
-            var guidOptionChoiceKeys = new List<Guid>();
-            foreach (var option in optionsArray)
-            {
-                if (!String.IsNullOrEmpty(option))
-                {
-                    guidOptionChoiceKeys.Add(new Guid(option));
-                }
-            }
 
             var product = _merchelloContext.Services.ProductService.GetByKey(productKey); 
-            var variant = _merchelloContext.Services.ProductVariantService.GetProductVariantWithAttributes(product, guidOptionChoiceKeys.ToArray());
+            var variant = _merchelloContext.Services.ProductVariantService.GetProductVariantWithAttributes(product, optionsArray);
 
             return variant.Price.ToString("C");
         }

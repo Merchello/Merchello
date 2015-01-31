@@ -110,6 +110,13 @@ namespace Merchello.Web.Models.ContentEditing
                 destination.ProductOptions.Add(destinationProductOption);
             }
 
+            //var existingVariants = destination.ProductVariants.ToArray();
+            //destination.ProductVariants.Clear();
+            //foreach (var variant in productDisplay.ProductVariants.Where(variant => existingVariants.Any(x => x.Key == variant.Key)))
+            //{
+            //    destination.ProductVariants.Add(variant.ToProductVariant(existingVariants.FirstOrDefault(x => x.Key == variant.Key)));
+            //}
+            
             return destination;
         }
 
@@ -255,6 +262,17 @@ namespace Merchello.Web.Models.ContentEditing
             destination.DownloadMediaId = productVariantDisplay.DownloadMediaId;
 
             destination.ProductKey = productVariantDisplay.ProductKey;
+
+            // We need to refactor the CatalogInventories to not be immutable if we are
+            // going to need to do operations like this.  In the UI, the user "unchecks" a catalog that was
+            // previously checked - so we need to remove it.
+            var deletedCatalogKeys =
+                destination.CatalogInventories.Where(
+                    x => !productVariantDisplay.CatalogInventories.Select(ci => ci.CatalogKey).Contains(x.CatalogKey)).Select(x => x.CatalogKey).ToArray();
+            foreach (var deletedCatalogKey in deletedCatalogKeys)
+            {
+                destination.RemoveFromCatalogInventory(deletedCatalogKey);
+            }
 
             foreach (var catalogInventory in productVariantDisplay.CatalogInventories)
             {

@@ -3,6 +3,7 @@
      * @name gravatarService
      * @description Deals with gravatar.
      **/
+    /* jshint ignore:start */
     angular.module('merchello.services').service('gravatarService',
         function() {
 
@@ -239,3 +240,4 @@
                 return gravatarUrl;
             }
     });
+    /* jshint ignore:end */
