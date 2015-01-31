@@ -132,6 +132,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkVariantChangePricesDialogData();
         }
 
+        // creates a dialog data module for bulk action update of product inventories
+        function createBulkEditInventoryCountsDialogData() {
+            return new BulkEditInventoryCountsDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -166,6 +171,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteCustomerAddressDialogData: createDeleteCustomerAddressDialogData,
             createDeleteProductDialogData: createDeleteProductDialogData,
             createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
+            createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
             createProductSelectorDialogData: createProductSelectorDialogData
         };
 }]);

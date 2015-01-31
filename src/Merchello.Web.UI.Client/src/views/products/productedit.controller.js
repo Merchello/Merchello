@@ -7,10 +7,10 @@
      * The controller for product edit view
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditController',
-        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
+        ['$scope', '$routeParams', '$location', '$timeout', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
             'serverValidationManager', 'productResource', 'warehouseResource', 'settingsResource',
             'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder', 'catalogInventoryDisplayBuilder',
-        function($scope, $routeParams, $location, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
+        function($scope, $routeParams, $location, $timeout, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
             serverValidationManager, productResource, warehouseResource, settingsResource,
             productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder, catalogInventoryDisplayBuilder) {
 
@@ -193,11 +193,14 @@
                 promise.then(function (product) {
                     notificationsService.success("Product Saved", "");
                     $scope.product = productDisplayBuilder.transform(product);
-                    if ($scope.product.hasVariants()) {
-                        $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
-                    } else {
-                        $location.url("/merchello/merchello/productedit/" + $scope.product.key, true);
-                    }
+                    // short pause to make sure examine index has a chance to update
+                    $timeout(function() {
+                        if ($scope.product.hasVariants()) {
+                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        } else {
+                            $location.url("/merchello/merchello/productedit/" + $scope.product.key, true);
+                        }
+                    }, 400);
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);
@@ -218,8 +221,12 @@
                     notificationsService.success("Product Saved", "");
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
+
                     if ($scope.product.hasVariants()) {
-                        $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        // short pause to make sure examine index has a chance to update
+                        $timeout(function() {
+                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        });
                     }
                     $scope.preValuesLoaded = true;
                 }, function (reason) {

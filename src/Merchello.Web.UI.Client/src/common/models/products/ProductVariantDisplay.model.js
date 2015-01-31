@@ -82,6 +82,20 @@
             this.catalogInventories = _.reject(this.catalogInventories, function(ci) { return ci.active === false; });
         }
 
+        // updates all inventory counts to the count passed as a parameter
+        function setAllInventoryCount(count) {
+            angular.forEach(this.catalogInventories, function(ci) {
+                ci.count = count;
+            });
+        }
+
+        // updates all inventory low count to the low count passed as a parameter
+        function setAllInventoryLowCount(lowCount) {
+            angular.forEach(this.catalogInventories, function(ci) {
+                ci.lowCount = lowCount;
+            });
+        }
+
         // TODO something like this could be used to copy productOptions from one product to another.
         // TODO: this method is not used
         function deepClone() {
@@ -106,6 +120,8 @@
             getProductForMasterVariant : getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
             removeInActiveInventories: removeInActiveInventories,
+            setAllInventoryCount: setAllInventoryCount,
+            setAllInventoryLowCount: setAllInventoryLowCount
             //deepClone: deepClone
         }
     }());

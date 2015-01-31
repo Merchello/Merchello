@@ -16,6 +16,7 @@
 
             // exposed methods
             $scope.selectProduct = selectProduct;
+            $scope.disableProduct = disableProduct;
 
             //--------------------------------------------------------------------------------------
             // Initialization methods
@@ -89,6 +90,11 @@
                     callback: selectedProductFromDialog,
                     dialogData: dialogData
                 });
+            }
+
+            function disableProduct() {
+                $scope.model.value = '';
+                $scope.product = {};
             }
 
     }]);

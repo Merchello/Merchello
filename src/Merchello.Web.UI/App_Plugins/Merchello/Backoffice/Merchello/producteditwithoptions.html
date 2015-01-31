@@ -46,15 +46,15 @@
                     <div class="merchello-controls row-fluid">
 
                         <!-- Appears when Reorder Variants is clicked -->
-                        <merchello-slide-open-panel is-open="reorderVariants" classes="'well row-fluid col-xs-10 span10'">
+                        <merchello-slide-open-panel is-open="reorderVariants" hide-close="hideClose" classes="'well row-fluid col-xs-10 span10'">
 
-                            <product-options-reorder is-open="reorderVariants" product="product"></product-options-reorder>
+                            <product-reorder-options is-open="reorderVariants" product="product" reload="init()"></product-reorder-options>
 
                         </merchello-slide-open-panel>
 
                         <product-option-attributes-select product="product" on-select-variants="selectVariants(attributeToSelect)"></product-option-attributes-select>
 
-                        <product-variants-view-table product="product" currency-symbol="currencySymbol"></product-variants-view-table>
+                        <product-variants-view-table product="product" currency-symbol="currencySymbol" reload="init()"></product-variants-view-table>
 
                     </div>
 

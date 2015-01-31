@@ -25,8 +25,16 @@
             this.choices.push(attribute);
         }
 
+        // resets the product options choice sort order
+        function resetChoiceSortOrders() {
+            for (var i = 0; i < this.choices.length; i++) {
+                this.choices[i].sortOrder = i + 1;
+            }
+        }
+
         return {
-            addAttributeChoice: addAttributeChoice
+            addAttributeChoice: addAttributeChoice,
+            resetChoiceSortOrders: resetChoiceSortOrders
         };
     }());
 
