@@ -1,0 +1,16 @@
+<div>
+    <button class="btn close" data-ng-click="close($event)"><i class="icon-delete"></i></button>
+    <h3><localize key="merchelloProductEdit_dragAndReorder"/></h3>
+    <p><localize key="merchelloProductEdit_dragAndReorderHelper" /></p>
+
+    <ul class="reorder" ui-sortable="sortableOptions" ng-model="product.productOptions">
+        <li data-ng-repeat="option in product.productOptions">
+            <span class="col-xs-3 span3">
+                <a class="btn btn-link variant"><i class="icon-thumbnail-list"></i> {{option.name}}</a>
+            </span>
+            <span class="options col-xs-9 span9" ui-sortable="sortableChoices" ng-model="option.choices">
+                <a class="btn btn-link option" data-ng-repeat="attribute in option.choices"><i class="icon-thumbnail-list"></i> {{attribute.name}}</a>
+            </span>
+        </li>
+    </ul>
+</div>

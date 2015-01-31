@@ -17,6 +17,7 @@
             $scope.product = productDisplayBuilder.createDefault();
             $scope.currencySymbol = '';
             $scope.reorderVariants = false;
+            $scope.hideClose = true;
 
             // exposed methods
             $scope.save = save;
