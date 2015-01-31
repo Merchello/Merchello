@@ -12,10 +12,36 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             }
 
             // creates tabs for the product editor page
+            function createNewProductEditorTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('createproduct', 'Product', '#/merchello/merchello/productedit/');
+                return tabs;
+            }
+
+            // creates tabs for the product editor page
             function createProductEditorTabs(productKey) {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'Product', '#/merchello/merchello/productedit/' + productKey);
+                return tabs;
+            }
+
+            // creates tabs for the product editor with options tabs
+            function createProductEditorWithOptionsTabs(productKey) {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('optionslist', 'Product Options', '#/merchello/merchello/productoptionseditor/' + productKey);
+                return tabs;
+            }
+
+            // creates tabs for the product variant editor
+            function createProductVariantEditorTabs(productKey, productVariantKey) {
+                var tabs = new Constructor();
+                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('varianteditor', 'Product Variant Editor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
                 return tabs;
             }
 
@@ -73,14 +99,17 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
 
             return {
+                createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
+                createProductEditorWithOptionsTabs: createProductEditorWithOptionsTabs,
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
                 createCustomerListTabs: createCustomerListTabs,
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
-                createReportsTabs: createReportsTabs
+                createReportsTabs: createReportsTabs,
+                createProductVariantEditorTabs: createProductVariantEditorTabs
             };
 
 }]);

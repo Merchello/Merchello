@@ -313,6 +313,55 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
         };
     }]);
 
+    /**
+     * @ngdoc directive
+     * @name tagsManager
+     * @function
+     *
+     * @description
+     * directive for a tags manager.
+     */
+    angular.module('merchello.directives').directive('tagManager', function() {
+        return {
+            restrict: 'E',
+            scope: { option: '=' },
+            template:
+            '<div class="tags">' +
+            '<a ng-repeat="(idx, choice) in option.choices" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
+            '</div>' +
+            '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName"></input> ' +
+            '<a class="btn btn-primary" ng-click="add()">Add</a>',
+            link: function ($scope, $element) {
+                // FIXME: this is lazy and error-prone
+                // this is the option name input
+                var input = angular.element($element.children()[1]);
+
+                // This adds the new tag to the tags array
+                $scope.add = function () {
+                    if ($scope.newChoiceName.length > 0) {
+                        $scope.option.addAttributeChoice($scope.newChoiceName);
+                        $scope.newChoiceName = "";
+                    }
+                };
+
+                // This is the ng-click handler to remove an item
+                $scope.remove = function (idx) {
+                    $scope.option.removeChoice(idx);
+                };
+
+                // Capture all keypresses
+                input.bind('keypress', function (event) {
+                    // But we only care when Enter was pressed
+                    if (event.keyCode == 13) {
+                        // There's probably a better way to handle this...
+                        $scope.add();
+                    }
+                });
+
+            }
+        };
+    });
+
 
     angular.module('merchello.directives').directive('notificationMethods', function() {
         return {
@@ -379,13 +428,14 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
             scope: {
                 product: '=',
                 parentForm: '=',
-                classes: '=',
-                'update': '&onUpdate'
+                classes: '='
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.optionsmanage.tpl.html',
 
             controller: function ($scope) {
                 $scope.rebuildVariants = false;
+                $scope.addOption = addOption;
+                $scope.removeOption = removeOption;
 
                 /**
                  * @ngdoc method
@@ -396,8 +446,7 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
                  * Called when the Add Option button is pressed.  Creates a new option ready to fill out.
                  */
                 function addOption() {
-                    $scope.rebuildVariants = true;
-                    $scope.product.addBlankOption();
+                    $scope.product.addEmptyOption();
                 }
 
                 /**
@@ -409,26 +458,91 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
                  * Called when the Trash can icon button is pressed next to an option. Removes the option from the product.
                  */
                 function removeOption (option) {
-                    $scope.rebuildVariants = true;
                     $scope.product.removeOption(option);
-                }
-
-                /**
-                 * @ngdoc method
-                 * @name updateOptions
-                 * @function
-                 *
-                 * @description
-                 * Called when the update options button is pressed
-                 */
-                function updateOptions() {
-                    $scope.update({ form: $scope.parentForm, rebuild: $scope.rebuildVariants });
-                    $scope.rebuildVariants = false;
                 }
             }
         };
 
     });
+
+/**
+ * @ngdoc controller
+ * @name productVariantsViewTable
+ * @function
+ *
+ * @description
+ * The productVariantsViewTable directive
+ */
+angular.module('merchello.directives').directive('productVariantsViewTable', function () {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            product: '=',
+            currencySymbol: '=',
+            reload: '&'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.productvariantsviewtable.tpl.html',
+        controller: 'Merchello.Directives.ProductVariantsViewTableDirectiveController'
+    };
+});
+
+
+    angular.module('merchello.directives').directive('productReorderOptions', [function() {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                isolateIsOpen: '=isOpen',
+                product: '=',
+                reload: '&'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/product.reorderoptions.tpl.html',
+            link: function ($scope, $element) {
+                /**
+                 * @ngdoc method
+                 * @name close
+                 * @function
+                 *
+                 * @description
+                 * Set the isOpen scope property to false to close the dialog
+                 */
+                $scope.close = function ($event) {
+                    $scope.isolateIsOpen = false;
+                };
+
+                // Settings for the sortable directive
+                $scope.sortableOptions = {
+                    stop: function (e, ui) {
+                        for (var i = 0; i < $scope.product.productOptions.length; i++) {
+                            $scope.product.productOptions[i].sortOrder(i + 1);
+                        }
+                        $scope.product.fixAttributeSortOrders();
+                    },
+                    axis: 'y',
+                    cursor: "move"
+                };
+
+                $scope.sortableChoices = {
+                    start: function (e, ui) {
+                        $(e.target).data("ui-sortable").floating = true;    // fix for jQui horizontal sorting issue https://github.com/angular-ui/ui-sortable/issues/19
+                    },
+                    stop: function (e, ui) {
+                        var attr = ui.item.scope().attribute;
+                        var attrOption = _.find($scope.product.productOptions, function(po) { return po.key === attr.optionKey; });
+                        attrOption.resetChoiceSortOrders();
+                    },
+                    update: function (e, ui) {
+                        var attr = ui.item.scope().attribute;
+                        var attrOption = _.find($scope.product.productOptions, function(po) { return po.key === attr.optionKey; });
+                        attrOption.resetChoiceSortOrders();
+                    },
+                    cursor: "move"
+                };
+            }
+        };
+    }]);
 
     /**
      * @ngdoc controller
@@ -511,20 +625,32 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
                 scope: {
                     product: '=',
                     productVariant: '=',
-                    creatingVariant: '=',
-                    editingVariant: '='
+                    context: '=',
+                    settings: '='
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.mainproperties.tpl.html',
-                controller: function ($scope, warehouseResource, warehouseDisplayBuilder) {
+                controller: function ($scope, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
 
                     // Get the default warehouse for the ensureCatalogInventory() function below
                     $scope.defaultWarehouse = {};
+                    $scope.defaultWarehouseCatalog = {};
 
                     function init() {
                         var promiseWarehouse = warehouseResource.getDefaultWarehouse();
                         promiseWarehouse.then(function (warehouse) {
                             $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);
-                        })
+                            $scope.defaultWarehouseCatalog = _.find($scope.defaultWarehouse.warehouseCatalogs, function (dwc) { return dwc.isDefault; });
+                            // set defaults in case of a createproduct
+                            if($scope.context === 'createproduct') {
+                                $scope.productVariant.shippable = $scope.settings.globalShippable;
+                                $scope.productVariant.taxable = $scope.settings.globalTaxable;
+                                $scope.productVariant.trackInventory = $scope.settings.globalTrackInventory;
+                                if($scope.productVariant.shippable || $scope.productVariant.trackInventory)
+                                {
+                                    $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouseCatalog.key);
+                                }
+                            }
+                        });
                     }
 
                     // Initialize the controller
@@ -549,7 +675,8 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
             scope: {
                 product: '=',
                 productVariant: '=',
-                settings: '='
+                settings: '=',
+                context: '@'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.shipping.tpl.html',
             controller: 'Merchello.Directives.ProductVariantShippingDirectiveController'

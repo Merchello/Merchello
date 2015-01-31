@@ -412,6 +412,7 @@
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
             $scope.invoiceTotals = [];
+            $scope.settings = {}
 
             // exposed methods
             $scope.getCurrency = getCurrency;
@@ -421,7 +422,6 @@
             $scope.saveCustomer = saveCustomer;
 
             // private properties
-            var settings = {};
             var defaultCurrency = {};
             var countries = [];
             var currencies = [];
@@ -484,7 +484,7 @@
                 // gets all of the settings
                 var promiseSettings = settingsResource.getAllSettings();
                 promiseSettings.then(function(settingsResponse) {
-                    settings = settingDisplayBuilder.transform(settingsResponse);
+                    $scope.settings = settingDisplayBuilder.transform(settingsResponse);
 
                     // we need all of the currencies since invoices may be billed in various currencies
                     var promiseCurrencies = settingsResource.getAllCurrencies();
@@ -494,7 +494,7 @@
                         // get the default currency from the settings in case we cannot determine
                         // the currency used in an invoice
                         defaultCurrency = _.find(currencies, function(c) {
-                            return c.currencyCode === settings.currencyCode;
+                            return c.currencyCode === $scope.settings.currencyCode;
                         });
                     });
                 });
@@ -1161,6 +1161,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
             $scope.allProviders = [];
             $scope.assignedProviders = [];
             $scope.availableProviders = [];
+
 
             // exposed methods
             $scope.deleteCountry = deleteCountry;
@@ -3006,17 +3007,390 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
+    /**
+     * @ngdoc controller
+     * @name Merchello.Product.Dialogs.ProductVariantBulkChangePricesController
+     * @function
+     *
+     * @description
+     * The controller for the adding / editing Notification messages on the Notifications page
+     */
+    angular.module('merchello').controller('Merchello.Product.Dialogs.ProductVariantBulkChangePricesController',
+        ['$scope',
+        function($scope) {
+
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.Product.Dialogs.ProductVariantBulkChangePricesController
+     * @function
+     *
+     * @description
+     * The controller for the adding / editing Notification messages on the Notifications page
+     */
+    angular.module('merchello').controller('Merchello.Product.Dialogs.ProductVariantBulkUpdateInventoryController',
+        ['$scope',
+        function($scope) {
+
+            function init() {
+                console.info($scope.dialogData);
+            }
+
+            // Initialize the controller
+            init();
+
+        }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Directives.ProductVariantsViewTableDirectiveController
+ * @function
+ *
+ * @description
+ * The controller for the product variant view table view directive
+ */
+angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
+    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, $timeout, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+
+        $scope.sortProperty = "sku";
+        $scope.sortOrder = "asc";
+        $scope.bulkAction = true;
+        $scope.allVariants = false;
+
+        // exposed methods
+        $scope.assertActiveShippingCatalog = assertActiveShippingCatalog;
+        $scope.selectedVariants = selectedVariants;
+        $scope.selectVariants = selectVariants;
+        $scope.checkBulkVariantsSelected = checkBulkVariantsSelected;
+        $scope.changeSortOrder = changeSortOrder;
+        $scope.toggleAVariant = toggleAVariant;
+        $scope.toggleAllVariants = toggleAllVariants;
+        $scope.changePrices = changePrices;
+        $scope.updateInventory = updateInventory;
+        $scope.toggleOnSale = toggleOnSale;
+        $scope.toggleAvailable = toggleAvailable;
+
+        function init() {
+            angular.forEach($scope.product.productVariants, function(pv) {
+                pv.selected = false;
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name selectVariants
+         * @function
+         *
+         * @description
+         * Called by the ProductOptionAttributesSelection directive when an attribute is selected.
+         * It will select the variants that have that option attribute and mark their selected property to true.
+         * All other variants will have selected set to false.
+         *
+         */
+        function selectVariants(attributeToSelect) {
+            // Reset the selected state to false for all variants
+            for (var i = 0; i < $scope.product.productVariants.length; i++) {
+                $scope.product.productVariants[i].selected = false;
+            }
+
+            // Build a list of variants to select
+            var filteredVariants = [];
+
+            if (attributeToSelect == "All") {
+                filteredVariants = $scope.product.productVariants;
+            } else if (attributeToSelect == "None") {
+            } else {
+                filteredVariants = _.filter($scope.product.productVariants,
+                    function (variant) {
+                        return _.where(variant.attributes, { name: attributeToSelect }).length > 0;
+                    });
+            }
+
+            // Set the selected state to true for all variants
+            for (var v = 0; v < filteredVariants.length; v++) {
+                filteredVariants[v].selected = true;
+            }
+
+            // Set the property to toggle in the bulk menu in the table header
+            checkBulkVariantsSelected();
+        }
+
+        /**
+         * @ngdoc method
+         * @name selectedVariants
+         * @function
+         *
+         * @description
+         * This is a helper method to get a collection of variants that are selected.
+         *
+         */
+        function selectedVariants() {
+            if ($scope.product !== undefined) {
+                return _.filter($scope.product.productVariants, function(v) {
+                    return v.selected;
+                });
+            } else {
+                return [];
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name checkBulkVariantsSelected
+         * @function
+         *
+         * @description
+         * This is a helper method to set the allVariants flag when one or more variants on selected
+         * in the Variant Information table on the Variant tab.
+         *
+         */
+        function checkBulkVariantsSelected() {
+            var v = selectedVariants();
+            if (v.length >= 1) {
+                $scope.allVariants = true;
+            } else {
+                $scope.allVariants = false;
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name changeSortOrder
+         * @function
+         *
+         * @description
+         * Event handler for changing the rows sort by column when a header column item is clicked
+         *
+         */
+        function changeSortOrder(propertyToSort) {
+
+            if ($scope.sortProperty == propertyToSort) {
+                if ($scope.sortOrder == "asc") {
+                    $scope.sortProperty = "-" + propertyToSort;
+                    $scope.sortOrder = "desc";
+                } else {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "asc";
+                }
+            } else {
+                $scope.sortProperty = propertyToSort;
+                $scope.sortOrder = "asc";
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name toggleAVariant
+         * @function
+         *
+         * @description
+         * Event handler toggling the variant's selected state
+         *
+         */
+        function toggleAVariant(variant) {
+            variant.selected = !variant.selected;
+            $scope.checkBulkVariantsSelected();
+        }
+
+        /**
+         * @ngdoc method
+         * @name toggleAllVariants
+         * @function
+         *
+         * @description
+         * Event handler toggling the all of the product variant's selected state
+         *
+         */
+        function toggleAllVariants(newstate) {
+            for (var i = 0; i < $scope.product.productVariants.length; i++) {
+                $scope.product.productVariants[i].selected = newstate;
+            }
+            $scope.allVariants = newstate;
+        }
+
+        /**
+         * @ngdoc method
+         * @name toggleAvailable
+         * @function
+         *
+         * @description
+         * Toggles the variant available setting
+         */
+        function toggleAvailable() {
+            var success = true;
+            var selected = $scope.selectedVariants();
+            for (var i = 0; i < selected.length; i++) {
+                selected[i].available = !selected[i].available;
+                var savepromise = productResource.saveVariant(selected[i]);
+                savepromise.then(function () {
+                    //notificationsService.success("Product Variant Saved", "");
+                }, function (reason) {
+                    success = false;
+                    //notificationsService.error("Product Variant Save Failed", reason.message);
+                });
+            }
+            if (success) {
+                notificationsService.success("Confirmed available update", "");
+                $timeout(function() {
+                    reload();
+                }, 400);
+            } else {
+                notificationsService.error("Failed to update available", "");
+            }
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Dialog Event Handlers
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name changePrices
+         * @function
+         *
+         * @description
+         * Opens the dialog for setting the new price
+         */
+        function changePrices() {
+            var dialogData = dialogDataFactory.createBulkVariantChangePricesDialogData();
+            dialogData.productVariants = $scope.selectedVariants();
+            dialogData.price = _.min(dialogData.productVariants, function(v) { return v.price;}).price;
+            dialogData.salePrice = _.min(dialogData.productVariants, function(v) { return v.salePrice; }).price;
+            dialogData.currencySymbol = $scope.currencySymbol;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.changeprice.html',
+                show: true,
+                callback: changePricesDialogConfirm,
+                dialogData: dialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name updateInventory
+         * @function
+         *
+         * @description
+         * Opens the dialog for setting the new inventory
+         */
+        function updateInventory() {
+            var dialogData = dialogDataFactory.createBulkEditInventoryCountsDialogData();
+            dialogData.warning = 'Note: This will update the inventory for all warehouses on all selected variants';
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productvariant.bulk.updateinventory.html',
+                show: true,
+                callback: updateInventoryDialogConfirm,
+                dialogData: dialogData
+            });
+        }
+
+
+        function toggleOnSale() {
+            var success = true;
+            var selected = $scope.selectedVariants();
+            for (var i = 0; i < selected.length; i++) {
+                selected[i].onSale = !selected[i].onSale;
+                var savepromise = productResource.saveVariant(selected[i]);
+                savepromise.then(function () {
+                    //notificationsService.success("Product Variant Saved", "");
+                }, function (reason) {
+                    success = false;
+                    //notificationsService.error("Product Variant Save Failed", reason.message);
+                });
+            }
+            if (success) {
+                notificationsService.success("Confirmed on sale update", "");
+                $timeout(function() {
+                    reload();
+                }, 400);
+            } else {
+                notificationsService.error("Failed to update on sale setting", "");
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name updateInventoryDialogConfirm
+         * @param {dialogData} contains the new inventory that is the price to adjust the variants price to.
+         * @function
+         *
+         * @description
+         * Handles the new inventory passed back from the dialog and sets the variants inventory and saves them.
+         */
+        function updateInventoryDialogConfirm(dialogData) {
+            console.info(dialogData);
+            var success = true;
+            var selected = $scope.selectedVariants();
+            for (var i = 0; i < selected.length; i++) {
+                selected[i].setAllInventoryCount(dialogData.count);
+                if(dialogData.includeLowCount) {
+                    selected[i].setAllInventoryLowCount(dialogData.lowCount);
+                }
+                var savepromise = productResource.saveVariant(selected[i]);
+                savepromise.then(function () {
+                    // don't reset success here
+                }, function (reason) {
+                    success = false;
+                });
+            }
+            if (success) {
+                notificationsService.success("Confirmed inventory update", "");
+                $timeout(function() {
+                    reload();
+                }, 400);
+
+            } else {
+                notificationsService.error("Failed to update inventory", "");
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name changePricesDialogConfirm
+         * @param {dialogData} contains the newPrice that is the price to adjust the variants price to.
+         * @function
+         *
+         * @description
+         * Handles the new price passed back from the dialog and sets the variants price and saves them.
+         */
+        function changePricesDialogConfirm(dialogData) {
+            angular.forEach(dialogData.productVariants, function(pv) {
+                pv.price = dialogData.price;
+                if(dialogData.includeSalePrice) {
+                    pv.salePrice = dialogData.salePrice;
+                }
+                productResource.saveVariant(pv);
+            })
+            notificationsService.success("Updated prices");
+        }
+
+        function assertActiveShippingCatalog() {
+            $scope.assertCatalog();
+        }
+
+        function reload() {
+            $scope.reload();
+        }
+
+        // initialize the controller
+        init();
+}]);
+
 
 angular.module('merchello').controller('Merchello.Directives.ProductVariantShippingDirectiveController',
-    ['$scope', '$q', 'notificationsService', 'dialogService', 'warehouseResource', 'warehouseDisplayBuilder', 'catalogInventoryDisplayBuilder',
-        function($scope, $q, notificationsService, dialogService, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
+    ['$scope', 'notificationsService', 'dialogService', 'warehouseResource', 'warehouseDisplayBuilder', 'catalogInventoryDisplayBuilder',
+        function($scope, notificationsService, dialogService, warehouseResource, warehouseDisplayBuilder, catalogInventoryDisplayBuilder) {
 
             $scope.warehouses = [];
             $scope.defaultWarehouse = {};
+            $scope.defaultWarehouseCatalog = {};
 
             // exposed methods
             $scope.getUnits = getUnits;
             $scope.mapToCatalog = mapToCatalog;
+            $scope.toggleCatalog = toggleCatalog;
 
             function init() {
                 loadAllWarehouses();
@@ -3031,18 +3405,14 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Loads in default warehouse and all other warehouses from server into the scope.  Called in init().
              */
             function loadAllWarehouses() {
-                var deferred = $q.defer();
                 var promiseWarehouse = warehouseResource.getDefaultWarehouse();
                 promiseWarehouse.then(function (warehouse) {
                     $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);
                     $scope.warehouses.push($scope.defaultWarehouse);
-                    deferred.resolve();
+                    $scope.defaultWarehouseCatalog = _.find($scope.defaultWarehouse.warehouseCatalogs, function (dc) { return dc.isDefault; });
                 }, function (reason) {
                     notificationsService.error("Default Warehouse Load Failed", reason.message);
-                    deferred.reject(reason);
                 });
-                // TODO: load other warehouses when implemented
-                return deferred.promise;
             }
 
             /**
@@ -3066,6 +3436,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 return mapped;
             }
 
+            function toggleCatalog() {
+                $scope.productVariant.ensureCatalogInventory($scope.defaultWarehouseCatalog.key);
+            }
+
             function getUnits(settings, type) {
                 if(settings.unitSystem === 'Imperial') {
                     return type === 'weight' ? '(pounds)' : '(inches)';
@@ -3087,12 +3461,12 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
      * The controller for product edit view
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditController',
-        ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
+        ['$scope', '$routeParams', '$location', '$timeout', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
             'serverValidationManager', 'productResource', 'warehouseResource', 'settingsResource',
-            'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder',
-        function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
+            'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder', 'catalogInventoryDisplayBuilder',
+        function($scope, $routeParams, $location, $timeout, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
             serverValidationManager, productResource, warehouseResource, settingsResource,
-            productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder) {
+            productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder, catalogInventoryDisplayBuilder) {
 
             //--------------------------------------------------------------------------------------
             // Declare and initialize key scope properties
@@ -3107,17 +3481,20 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             // settings - contains defaults for the checkboxes
             $scope.settings = {};
 
-            // These help manage state for the four possible states this page can be in:
-            //   * Editing a Product
-            $scope.creatingProduct = false;
-            $scope.creatingVariant = false;
-            $scope.editingVariant = false;
+            // this is for the slide panel directive to get rid of the close button since we'll
+            // be handling it in a different way in this case
             $scope.hideClose = true;
+
+            $scope.product = productDisplayBuilder.createDefault();
             $scope.productVariant = productVariantDisplayBuilder.createDefault();
+            $scope.warehouses = [];
+            $scope.defaultWarehouse = {};
+            $scope.context = 'createproduct';
 
             // Exposed methods
             $scope.save = save;
-
+            $scope.loadAllWarehouses = loadAllWarehouses;
+            $scope.deleteProductDialog = deleteProductDialog;
 
 
             //--------------------------------------------------------------------------------------
@@ -3134,9 +3511,28 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              */
             function init() {
                 var key = $routeParams.id;
-                loadProduct(key);
-                $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
-                $scope.tabs.setActive('productedit');
+                var productVariantKey = $routeParams.variantid;
+                loadSettings();
+                loadAllWarehouses(key, productVariantKey);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadAllWarehouses
+             * @function
+             *
+             * @description
+             * Loads in default warehouse and all other warehouses from server into the scope.  Called in init().
+             */
+            function loadAllWarehouses(key, productVariantKey) {
+                var promiseWarehouse = warehouseResource.getDefaultWarehouse();
+                promiseWarehouse.then(function (warehouse) {
+                    $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);
+                    $scope.warehouses.push($scope.defaultWarehouse);
+                    loadProduct(key, productVariantKey);
+                }, function (reason) {
+                    notificationsService.error("Default Warehouse Load Failed", reason.message);
+                });
             }
 
             /**
@@ -3147,14 +3543,31 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * @description
              * Load a product by the product key.
              */
-            function loadProduct(key) {
+            function loadProduct(key, productVariantKey) {
+                if (key === 'create' || key === '' || key === undefined) {
+                    $scope.context = 'createproduct';
+                    $scope.productVariant = $scope.product.getMasterVariant();
+                    $scope.tabs = merchelloTabsFactory.createNewProductEditorTabs();
+                    $scope.tabs.setActive($scope.context);
+                    return;
+                }
                 var promiseProduct = productResource.getByKey(key);
                 promiseProduct.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
-                    $scope.productVariant = $scope.product.getMasterVariant();
-                    loadSettings();
-                    console.info($scope.product);
-                    console.info($scope.productVariant);
+                    if(productVariantKey === '' || productVariantKey === undefined) {
+                        // this is a product edit.
+                        // we use the master variant context so that we can use directives associated with variants
+                        $scope.productVariant = $scope.product.getMasterVariant();
+                        $scope.context = 'productedit';
+                        $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+                    } else {
+                        // this is a product variant edit
+                        // in this case we need the specific variant
+                        $scope.productVariant = $scope.product.getProductVariant(productVariantKey);
+                        $scope.context = 'varianteditor';
+                        $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
+                    }
+                    $scope.tabs.setActive($scope.context);
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });
@@ -3192,32 +3605,109 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Called when the Save button is pressed.  See comments below.
              */
             function save(thisForm) {
-
+                // TODO we should unbind the return click event
+                // so that we can quickly add the options and remove the following
+                if(thisForm === undefined) {
+                    return;
+                }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
-                    // Copy from master variant
-                    $scope.product = $scope.productVariant.getProductForMasterVariant();
+                    switch ($scope.context) {
+                        case "productedit":
+                            // Copy from master variant
+                            var productOptions = $scope.product.productOptions;
+                            $scope.productVariant.ensureCatalogInventory();
+                            $scope.product = $scope.productVariant.getProductForMasterVariant();
+                            $scope.product.productOptions = productOptions;
+                            saveProduct();
+                            break;
+                        case "varianteditor":
+                            saveProductVariant();
+                            break;
+                        default:
+                            var productOptions = $scope.product.productOptions;
+                            $scope.product = $scope.productVariant.getProductForMasterVariant();
+                            $scope.product.productOptions = productOptions;
+                            createProduct();
+                            break;
+                    }
+                }
+            }
 
-                    console.info($scope.product);
-
-                    var promise = productResource.save($scope.product);
-
-                    promise.then(function (product) {
-                        notificationsService.success("Product Saved", "");
-
-                        $scope.product = productDisplayBuilder.transform(product);
-                        $scope.productVariant = $scope.product.getMasterVariant();
-
+            /**
+             * @ngdoc method
+             * @name createProduct
+             * @function
+             *
+             * @description
+             * Creates a product.  See comments below.
+             */
+            function createProduct() {
+                var promise = productResource.add($scope.product);
+                promise.then(function (product) {
+                    notificationsService.success("Product Saved", "");
+                    $scope.product = productDisplayBuilder.transform(product);
+                    // short pause to make sure examine index has a chance to update
+                    $timeout(function() {
                         if ($scope.product.hasVariants()) {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        } else {
+                            $location.url("/merchello/merchello/productedit/" + $scope.product.key, true);
                         }
+                    }, 400);
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Product Save Failed", reason.message);
+                });
+            }
 
-                        $scope.preValuesLoaded = true;
-                    }, function (reason) {
-                        notificationsService.error("Product Save Failed", reason.message);
-                    });
-                }
-            };
+            /**
+             * @ngdoc method
+             * @name saveProduct
+             * @function
+             *
+             * @description
+             * Saves a product.  See comments below.
+             */
+            function saveProduct() {
+                var promise = productResource.save($scope.product);
+                promise.then(function (product) {
+                    notificationsService.success("Product Saved", "");
+                    $scope.product = productDisplayBuilder.transform(product);
+                    $scope.productVariant = $scope.product.getMasterVariant();
+
+                    if ($scope.product.hasVariants()) {
+                        // short pause to make sure examine index has a chance to update
+                        $timeout(function() {
+                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        });
+                    }
+                    $scope.preValuesLoaded = true;
+                }, function (reason) {
+                    notificationsService.error("Product Save Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name saveProductVariant
+             * @function
+             *
+             * @description
+             * Saves a product variant.  See comments below.
+             */
+            function saveProductVariant() {
+                //var variant = $scope.productVariant.deepClone();
+                $scope.productVariant.removeInActiveInventories();
+                var variantPromise = productResource.saveVariant($scope.productVariant);
+                variantPromise.then(function(resultVariant) {
+                    notificationsService.success("Product Variant Saved");
+                    $scope.productVariant = productVariantDisplayBuilder.transform(resultVariant);
+                    $scope.preValuesLoaded = true;
+                }, function(reason) {
+                    notificationsService.error("Product Variant Save Failed", reason.message);
+                });
+            }
 
 
             /**
@@ -3229,17 +3719,14 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Called when the Delete Product button is pressed.
              */
             function deleteProductDialogConfirmation() {
-                var promiseDel = merchelloProductService.deleteProduct($scope.product);
-
+                var promiseDel = productResource.deleteProduct($scope.product);
                 promiseDel.then(function () {
                     notificationsService.success("Product Deleted", "");
-
-                    $location.url("/merchello/merchello/ProductList/manage", true);
-
+                    $location.url("/merchello/merchello/productlist/manage", true);
                 }, function (reason) {
                     notificationsService.error("Product Deletion Failed", reason.message);
                 });
-            };
+            }
 
             /**
              * @ngdoc method
@@ -3250,12 +3737,16 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Opens the delete confirmation dialog via the Umbraco dialogService.
              */
             function deleteProductDialog() {
+                var dialogData = dialogDataFactory.createDeleteProductDialogData();
+                dialogData.product = $scope.product;
+                dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
+                dialogData.warning = 'This action cannot be reversed.';
 
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Common/Js/Dialogs/deleteconfirmation.html',
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                     show: true,
-                    callback: $scope.deleteProductDialogConfirmation,
-                    dialogData: $scope.product
+                    callback: deleteProductDialogConfirmation,
+                    dialogData: dialogData
                 });
             }
 
@@ -3263,6 +3754,147 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             init();
     }]);
 
+    /**
+     * @ngdoc controller
+     * @name Merchello.Backoffice.ProductEditWithOptionsController
+     * @function
+     *
+     * @description
+     * The controller for product edit with options view
+     */
+    angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
+        ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
+            'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+        function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
+            merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.product = productDisplayBuilder.createDefault();
+            $scope.currencySymbol = '';
+            $scope.reorderVariants = false;
+            $scope.hideClose = true;
+
+            // exposed methods
+            $scope.save = save;
+            $scope.deleteProductDialog = deleteProductDialog;
+            $scope.init = init;
+
+            function init() {
+                var key = $routeParams.id;
+                $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
+                $scope.tabs.setActive('variantlist');
+                loadSettings();
+                loadProduct(key);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProduct
+             * @function
+             *
+             * @description
+             * Load a product by the product key.
+             */
+            function loadProduct(key) {
+                var promise = productResource.getByKey(key);
+                promise.then(function (product) {
+                    $scope.product = productDisplayBuilder.transform(product);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.error("Product Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function(currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Event Handlers
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description
+             * Saves the product - used for changing the master variant name
+             */
+            function save(thisForm) {
+                if (thisForm) {
+                    if (thisForm.$valid) {
+                        notificationsService.info("Saving Product...", "");
+                        var promise = productResource.save($scope.product);
+                        promise.then(function (product) {
+                            notificationsService.success("Product Saved", "");
+                            $scope.product = productDisplayBuilder.transform(product);
+                        }, function (reason) {
+                            notificationsService.error("Product Save Failed", reason.message);
+                        });
+                    }
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name deleteProductDialog
+             * @function
+             *
+             * @description
+             * Opens the delete confirmation dialog via the Umbraco dialogService.
+             */
+            function deleteProductDialog() {
+                var dialogData = dialogDataFactory.createDeleteProductDialogData();
+                dialogData.product = $scope.product;
+                dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
+                dialogData.warning = 'This action cannot be reversed.';
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: deleteProductDialogConfirmation,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name deleteProductDialogConfirmation
+             * @function
+             *
+             * @description
+             * Called when the Delete Product button is pressed.
+             */
+            function deleteProductDialogConfirmation() {
+                var promiseDel = productResource.deleteProduct($scope.product);
+                promiseDel.then(function () {
+                    notificationsService.success("Product Deleted", "");
+                    $location.url("/merchello/merchello/productlist/manage", true);
+                }, function (reason) {
+                    notificationsService.error("Product Deletion Failed", reason.message);
+                });
+            }
+
+            // Initialize the controller
+            init();
+    }]);
     /**
      * @ngdoc controller
      * @name Merchello.Backoffice.ProductListController
@@ -3332,11 +3964,8 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 query.itemsPerPage = perPage;
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
-                console.info($scope.filterText);
                 query.addFilterTermParam($scope.filterText);
                 $scope.currentFilters = query.parameters;
-
-                console.info(query);
 
                 var promise = productResource.searchProducts(query);
                 promise.then(function (response) {
@@ -3345,7 +3974,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.maxPages = queryResult.totalPages;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-
                 }, function(reason) {
                     notificationsService.success("Products Load Failed:", reason.message);
                 });
@@ -3480,6 +4108,461 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             function getEditUrl(product) {
                 return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
                     "#/merchello/merchello/productedit/" + product.key;
+            }
+
+            // Initialize the controller
+            init();
+
+        }]);
+
+
+    angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsEditorController',
+        ['$scope', '$routeParams', 'notificationsService', 'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+        function($scope, $routeParams, notificationsService, merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.product = productDisplayBuilder.createDefault();
+            $scope.currencySymbol = '';
+
+            // Exposed methods
+            $scope.save = save;
+            $scope.deleteProductDialog = deleteProductDialog;
+
+            function init() {
+                var key = $routeParams.id;
+                $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
+                $scope.tabs.setActive('optionslist');
+                loadSettings();
+                loadProduct(key);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProduct
+             * @function
+             *
+             * @description
+             * Load a product by the product key.
+             */
+            function loadProduct(key) {
+                var promise = productResource.getByKey(key);
+                promise.then(function (product) {
+                    $scope.product = productDisplayBuilder.transform(product);
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.error("Product Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function(currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description
+             * Saves the product - used for changing the master variant name
+             */
+            function save(thisForm) {
+                if (thisForm) {
+                    if (thisForm.$valid) {
+                        notificationsService.info("Saving Product...", "");
+                        var promise = productResource.save($scope.product);
+                        promise.then(function (product) {
+                            notificationsService.success("Product Saved", "");
+                            $scope.product = productDisplayBuilder.transform(product);
+                        }, function (reason) {
+                            notificationsService.error("Product Save Failed", reason.message);
+                        });
+                    }
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name deleteProductDialog
+             * @function
+             *
+             * @description
+             * Opens the delete confirmation dialog via the Umbraco dialogService.
+             */
+            function deleteProductDialog() {
+                var dialogData = dialogDataFactory.createDeleteProductDialogData();
+                dialogData.product = $scope.product;
+                dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
+                dialogData.warning = 'This action cannot be reversed.';
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: deleteProductDialogConfirmation,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name deleteProductDialogConfirmation
+             * @function
+             *
+             * @description
+             * Called when the Delete Product button is pressed.
+             */
+            function deleteProductDialogConfirmation() {
+                var promiseDel = productResource.deleteProduct($scope.product);
+                promiseDel.then(function () {
+                    notificationsService.success("Product Deleted", "");
+                    $location.url("/merchello/merchello/productlist/manage", true);
+                }, function (reason) {
+                    notificationsService.error("Product Deletion Failed", reason.message);
+                });
+            }
+
+
+            // Initializes the controller
+            init();
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.PropertyEditors.MerchelloProductSelectorController
+     * @function
+     *
+     * @description
+     * The controller for product product selector property editor view
+     */
+    angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProductSelectorController',
+        ['$scope', 'notificationsService', 'dialogService', 'assetsService', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+        function($scope, notificationsService, dialogService, assetsService, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
+
+            $scope.product = {};
+            $scope.currencySymbol = '';
+            $scope.loaded = false;
+
+            // exposed methods
+            $scope.selectProduct = selectProduct;
+            $scope.disableProduct = disableProduct;
+
+            //--------------------------------------------------------------------------------------
+            // Initialization methods
+            //--------------------------------------------------------------------------------------
+            // Load the product from the Guid key stored in the model.value
+            if (_.isString($scope.model.value)) {
+                loadSettings();
+                if ($scope.model.value.length > 0) {
+                    loadProduct($scope.model.value);
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProduct
+             * @function
+             *
+             * @description
+             * Load the product from the product service.
+             */
+            function loadProduct(key) {
+                var promise = productResource.getByKey(key);
+                promise.then(function (product) {
+                    $scope.product = productDisplayBuilder.transform(product);
+                    $scope.loaded = true;
+                }, function (reason) {
+                    notificationsService.error("Product Load Failed", reason.message);
+                });
+            }
+
+            function loadSettings() {
+                var promise = settingsResource.getCurrencySymbol();
+                promise.then(function(symbol) {
+                    $scope.currencySymbol = symbol;
+                }, function (reason) {
+                    notificationsService.error('Could not retrieve currency symbol', reason.message);
+                });
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Event Handlers
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name selectedProductFromDialog
+             * @function
+             *
+             * @description
+             * Handles the model update after recieving the product to add from the dialog view/controller
+             */
+            function selectedProductFromDialog(dialogData) {
+                $scope.model.value = dialogData.product.key;
+                $scope.product = dialogData.product;
+            }
+
+            /**
+             * @ngdoc method
+             * @name selectProduct
+             * @function
+             *
+             * @description
+             * Opens the product select dialog via the Umbraco dialogService.
+             */
+            function selectProduct() {
+                var dialogData = dialogDataFactory.createProductSelectorDialogData();
+                dialogData.product = $scope.product;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/propertyeditors/productpicker/merchello.productselector.dialog.html',
+                    show: true,
+                    callback: selectedProductFromDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            function disableProduct() {
+                $scope.model.value = '';
+                $scope.product = {};
+            }
+
+    }]);
+
+    /**
+     * @ngdoc controller
+     * @name Merchello.PropertyEditors.MerchelloProductSelectorDialogController
+     * @function
+     *
+     * @description
+     * The controller for product selector property editor dialog view
+     */
+    angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProductSelectorDialogController',
+        ['$scope', 'notificationsService', 'productResource', 'settingsResource', 'productDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+        function($scope, notificationsService, productResource, settingsResource, productDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
+
+            $scope.filterText = "";
+            $scope.products = [];
+            $scope.filteredproducts = [];
+            $scope.watchCount = 0;
+            $scope.sortProperty = "name";
+            $scope.sortOrder = "Ascending";
+            $scope.limitAmount = 10;
+            $scope.currentPage = 0;
+            $scope.maxPages = 0;
+
+            // exposed methods
+            $scope.changePage = changePage;
+            $scope.limitChanged = limitChanged;
+            $scope.changeSortOrder = changeSortOrder;
+            $scope.getFilteredProducts = getFilteredProducts;
+            $scope.numberOfPages = numberOfPages;
+            $scope.setProduct = setProduct;
+
+            //--------------------------------------------------------------------------------------
+            // Initialization methods
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Method called on intial page load.  Loads in data from server and sets up scope.
+             */
+            function init() {
+                loadProducts();
+                loadSettings();
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProducts
+             * @function
+             *
+             * @description
+             * Load the products from the product service, then wrap the results
+             * in Merchello models and add to the scope via the products collection.
+             */
+            function loadProducts() {
+
+                var page = $scope.currentPage;
+                var perPage = $scope.limitAmount;
+                var sortBy = $scope.sortProperty.replace("-", "");
+                var sortDirection = $scope.sortOrder;
+
+                var query = queryDisplayBuilder.createDefault();
+                query.currentPage = page;
+                query.itemsPerPage = perPage;
+                query.sortBy = sortBy;
+                query.sortDirection = sortDirection;
+                query.addFilterTermParam($scope.filterText);
+
+                var promise = productResource.searchProducts(query);
+                promise.then(function (response) {
+                    var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
+
+                    $scope.products = queryResult.items;
+
+                    selectProduct($scope.products);
+
+                    $scope.maxPages = queryResult.totalPages;
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.success("Products Load Failed:", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Events methods
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name limitChanged
+             * @function
+             *
+             * @description
+             * Helper function to set the amount of items to show per page for the paging filters and calculations
+             */
+            function limitChanged(newVal) {
+                $scope.limitAmount = newVal;
+                $scope.currentPage = 0;
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name changePage
+             * @function
+             *
+             * @description
+             * Helper function re-search the products after the page has changed
+             */
+            function changePage (newPage) {
+                $scope.currentPage = newPage;
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name changeSortOrder
+             * @function
+             *
+             * @description
+             * Helper function to set the current sort on the table and switch the
+             * direction if the property is already the current sort column.
+             */
+            function changeSortOrder(propertyToSort) {
+
+                if ($scope.sortProperty == propertyToSort) {
+                    if ($scope.sortOrder == "Ascending") {
+                        $scope.sortProperty = "-" + propertyToSort;
+                        $scope.sortOrder = "Descending";
+                    } else {
+                        $scope.sortProperty = propertyToSort;
+                        $scope.sortOrder = "Ascending";
+                    }
+                } else {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "Ascending";
+                }
+
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name getFilteredProducts
+             * @function
+             *
+             * @description
+             * Calls the product service to search for products via a string search
+             * param.  This searches the Examine index in the core.
+             */
+            function getFilteredProducts(filter) {
+                $scope.filterText = filter;
+                $scope.currentPage = 0;
+                loadProducts();
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Helper methods
+            //--------------------------------------------------------------------------------------
+
+
+            /**
+             * @ngdoc method
+             * @name selectProduct
+             * @function
+             *
+             * @description
+             * Helper to set the selected bool on a product if it is the currently selected product
+             */
+            function selectProduct(products) {
+                for (var i = 0; i < products.length; i++) {
+                    if (products[i].key == $scope.dialogData.product.key) {
+                        products[i].selected = true;
+                    } else {
+                        products[i].selected = false;
+                    }
+                }
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Calculations
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name numberOfPages
+             * @function
+             *
+             * @description
+             * Helper function to get the amount of items to show per page for the paging
+             */
+            function numberOfPages() {
+                return $scope.maxPages;
+            }
+
+            function setProduct(product) {
+                $scope.dialogData.product = product;
+                selectProduct($scope.products);;
+                $scope.submit($scope.dialogData);
             }
 
             // Initialize the controller
@@ -4406,9 +5489,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
     ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
-        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder',
+        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
         function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
-                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder)
+                 queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, settingDisplayBuilder)
         {
 
             // expose on scope
@@ -4630,18 +5713,26 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
+                // this is needed for the date format
+                var settingsPromise = settingsResource.getAllSettings();
+                settingsPromise.then(function(allSettings) {
+                    $scope.settings = settingDisplayBuilder.transform(allSettings);
+                }, function(reason) {
+                    notificationService.error('Failed to load all settings', reason.message);
+                });
+                // currency matching
                 var currenciesPromise = settingsResource.getAllCurrencies();
                 currenciesPromise.then(function(currencies) {
                     allCurrencies = currencies;
                 }, function(reason) {
-                    alert('Failed' + reason.message);
+                    notificationService.error('Failed to load all currencies', reason.message);
                 });
-
+                // default currency
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
                     globalCurrency = currencySymbol;
                 }, function (reason) {
-                    alert('Failed: ' + reason.message);
+                    notificationService.error('Failed to load the currency symbol', reason.message);
                 });
             };
 

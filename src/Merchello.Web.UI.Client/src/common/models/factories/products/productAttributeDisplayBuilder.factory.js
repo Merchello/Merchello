@@ -6,7 +6,7 @@
      * A utility service that builds ProductAttributeDisplay models
      */
     angular.module('merchello.models').factory('productAttributeDisplayBuilder',
-        ['genericModelBuilder',
+        ['genericModelBuilder', 'ProductAttributeDisplay',
         function(genericModelBuilder, ProductAttributeDisplay) {
 
             var Constructor = ProductAttributeDisplay;

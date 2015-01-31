@@ -20,6 +20,7 @@
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
             $scope.invoiceTotals = [];
+            $scope.settings = {}
 
             // exposed methods
             $scope.getCurrency = getCurrency;
@@ -29,7 +30,6 @@
             $scope.saveCustomer = saveCustomer;
 
             // private properties
-            var settings = {};
             var defaultCurrency = {};
             var countries = [];
             var currencies = [];
@@ -92,7 +92,7 @@
                 // gets all of the settings
                 var promiseSettings = settingsResource.getAllSettings();
                 promiseSettings.then(function(settingsResponse) {
-                    settings = settingDisplayBuilder.transform(settingsResponse);
+                    $scope.settings = settingDisplayBuilder.transform(settingsResponse);
 
                     // we need all of the currencies since invoices may be billed in various currencies
                     var promiseCurrencies = settingsResource.getAllCurrencies();
@@ -102,7 +102,7 @@
                         // get the default currency from the settings in case we cannot determine
                         // the currency used in an invoice
                         defaultCurrency = _.find(currencies, function(c) {
-                            return c.currencyCode === settings.currencyCode;
+                            return c.currencyCode === $scope.settings.currencyCode;
                         });
                     });
                 });

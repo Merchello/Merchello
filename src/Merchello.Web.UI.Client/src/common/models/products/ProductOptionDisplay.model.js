@@ -15,4 +15,27 @@
         self.choices = [];
     };
 
+    ProductOptionDisplay.prototype = (function() {
+
+        function addAttributeChoice(choiceName) {
+            var attribute = new ProductAttributeDisplay();
+            attribute.name = choiceName;
+            attribute.sortOrder = this.choices.length + 1;
+            // TODO skus
+            this.choices.push(attribute);
+        }
+
+        // resets the product options choice sort order
+        function resetChoiceSortOrders() {
+            for (var i = 0; i < this.choices.length; i++) {
+                this.choices[i].sortOrder = i + 1;
+            }
+        }
+
+        return {
+            addAttributeChoice: addAttributeChoice,
+            resetChoiceSortOrders: resetChoiceSortOrders
+        };
+    }());
+
     angular.module('merchello.models').constant('ProductOptionDisplay', ProductOptionDisplay);

@@ -6,7 +6,7 @@ describe('Merchello.Backoffice.SalesListController', function () {
     beforeEach(module('umbraco'));
 
     beforeEach(inject(function ($rootScope, $controller, $httpBackend, $log, angularHelper, assetsService, notificationsService, invoiceResource, merchelloTabsFactory,
-                                settingsResource, settingResourceMock, queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, invoiceResourceMock) {
+                                settingsResource, settingResourceMock, queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, invoiceResourceMock, settingDisplayBuilder) {
         httpBackend = $httpBackend;
 
         $controllerConstructor = $controller;
@@ -18,7 +18,7 @@ describe('Merchello.Backoffice.SalesListController', function () {
         controller = $controller('Merchello.Backoffice.SalesListController',
             { $scope: scope, $element: element, $log: $log, angularHelper: angularHelper, settingsResource: settingsResource, assetsService: assetsService, notificationsService: notificationsService,
                 merchelloTabsFactory: merchelloTabsFactory, invoiceResource: invoiceResource, queryDisplayBuilder: queryDisplayBuilder, queryResultDisplayBuilder: queryResultDisplayBuilder,
-                invoiceDisplayBuilder: invoiceDisplayBuilder});
+                invoiceDisplayBuilder: invoiceDisplayBuilder, settingDisplayBuilder: settingDisplayBuilder});
 
         //scope.$digest resolves the promise against the httpbackend
         scope.$digest();

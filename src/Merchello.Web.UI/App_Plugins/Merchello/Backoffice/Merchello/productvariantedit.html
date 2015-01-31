@@ -1,0 +1,62 @@
+<form novalidate name="productVariantForm"
+      data-ng-controller="Merchello.Backoffice.ProductVariantEditController"
+      data-ng-show="loaded"
+      data-ng-submit="save()">
+    <umb-panel val-show-validation>
+
+        <umb-header>
+
+            <div class="span4">
+                <umb-content-name ng-model="productVariant.name"
+                                  localize="placeholder" placeholder="@merchelloPlaceholders_enterProduct">
+                </umb-content-name>
+            </div>
+
+            <div class="col-xs-8 span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <!--<a data-ng-click="deleteVariantDialog()" class="btn"><localize key="merchelloVariant_deleteVariant" /></a>-->
+                        <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></a>
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+
+        <merchello-panel>
+            <div class="tab-content row-fluid">
+                <div class="merchello-pane">
+
+                    <!-- Property classes from Umbraco styles -->
+                    <div class="control-group umb-control-group">
+                        <label class="merchello-control-label">
+                            <localize key="merchelloVariant_variantInfo"/>
+                            <small><localize key="merchelloVariant_configVariant" /></small>
+                        </label>
+
+                        <div class="merchello-controls">
+
+                            <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
+                            <product-variant-main-properties product="product" product-variant="productVariant" creating-variant="creatingVariant" editing-variant="editingVariant"></product-variant-main-properties>
+
+                        </div>
+                    </div>
+
+                    <!-- Digital Downloads Picker -->
+                    <merchello-slide-open-panel is-open="productVariant.download">
+                        <product-digital-download-section product="product" product-variant="productVariant" ></product-digital-download-section>
+                    </merchello-slide-open-panel>
+
+                    <!-- Shipping settings for a product. -->
+                    <merchello-slide-open-panel is-open="productVariant.shippable">
+                        <product-variant-shipping product="product" product-variant="productVariant" settings="settings"></product-variant-shipping>
+                    </merchello-slide-open-panel>
+
+                </div>
+                <!-- /merchello-pane -->
+
+            </div>
+        </merchello-panel>
+
+    </umb-panel>
+</form>
