@@ -7,9 +7,9 @@
       <PropertyGroup>
         
         <VersionMajor>1</VersionMajor>
-        <VersionMinor>6</VersionMinor>
+        <VersionMinor>7</VersionMinor>
         <VersionPatch>0</VersionPatch>
-        <VersionSuffix>3</VersionSuffix>        
+        <VersionSuffix>1</VersionSuffix>        
         <BuildConfiguration>Release</BuildConfiguration>
         <ReleaseAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch)</ReleaseAssemblyInformationVersion>
         <DevAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)</DevAssemblyInformationVersion>
