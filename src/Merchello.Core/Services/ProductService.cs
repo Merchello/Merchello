@@ -583,23 +583,18 @@
         /// </param>
         private void EnsureVariants(IProduct product)
         {
-            // Create the product varaints
-            if (!product.ProductOptions.Any()) return;
-            
             var attributeLists = product.GetPossibleProductAttributeCombinations().ToArray();
 
-            if (attributeLists.Any())
-            {
-                // delete any variants that don't have the correct number of attributes
-                var attCount = attributeLists.First().Count();
+            // delete any variants that don't have the correct number of attributes
+            var attCount = attributeLists.Any() ? attributeLists.First().Count() : 0;
 
-                var removers = product.ProductVariants.Where(x => x.Attributes.Count() != attCount);
-                foreach (var remover in removers.ToArray())
-                {
-                    product.ProductVariants.Remove(remover.Sku);
-                    _productVariantService.Delete(remover);
-                }
+            var removers = product.ProductVariants.Where(x => x.Attributes.Count() != attCount);
+            foreach (var remover in removers.ToArray())
+            {
+                product.ProductVariants.Remove(remover.Sku);
+                _productVariantService.Delete(remover);
             }
+            
 
             foreach (var list in attributeLists)
             {

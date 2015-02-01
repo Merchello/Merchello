@@ -25,6 +25,14 @@
             this.choices.push(attribute);
         }
 
+        // removes the product options choice
+        function removeAttributeChoice(idx) {
+            console.info(idx);
+            if(idx >= 0) {
+                this.choices.splice(idx, 1);
+            }
+        }
+
         // resets the product options choice sort order
         function resetChoiceSortOrders() {
             for (var i = 0; i < this.choices.length; i++) {
@@ -34,6 +42,7 @@
 
         return {
             addAttributeChoice: addAttributeChoice,
+            removeAttributeChoice: removeAttributeChoice,
             resetChoiceSortOrders: resetChoiceSortOrders
         };
     }());

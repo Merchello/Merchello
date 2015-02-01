@@ -226,7 +226,7 @@
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
-                        });
+                        }, 400);
                     }
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
