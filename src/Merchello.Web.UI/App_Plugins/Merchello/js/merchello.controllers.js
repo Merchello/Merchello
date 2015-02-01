@@ -3548,6 +3548,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.productVariant = $scope.product.getMasterVariant();
                     $scope.tabs = merchelloTabsFactory.createNewProductEditorTabs();
                     $scope.tabs.setActive($scope.context);
+                    $scope.preValuesLoaded = true;
                     return;
                 }
                 var promiseProduct = productResource.getByKey(key);
@@ -3566,6 +3567,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                         $scope.context = 'varianteditor';
                         $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
                     }
+                    $scope.preValuesLoaded = true;
                     $scope.tabs.setActive($scope.context);
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
@@ -3585,7 +3587,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 promiseSettings.then(function(settings) {
                     $scope.settings = settingDisplayBuilder.transform(settings);
                     $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Settings Load Failed", reason.message);
                 });
