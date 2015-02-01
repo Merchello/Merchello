@@ -13,23 +13,37 @@
                 restrict: 'E',
                 replace: true,
                 scope: {
-                    product: '=',
-                    productVariant: '='
+                    productVariant: '=',
+                    preValuesLoaded: '='
                 },
                 templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/productvariant.digitaldownload.tpl.html',
-
+                link: function(scope, element, attributes) {
+                    scope.$watch(attributes.preValuesLoaded, function(value) {
+                        scope.initialize();
+                    });
+                },
                 controller: function ($scope, dialogService, mediaHelper, mediaResource) {
 
-                    $scope.id = $scope.productVariant.downloadMediaId;
-                    if ($scope.productVariant.download && $scope.id != -1) {
-                        mediaResource.getById($scope.id).then(function (media) {
-                            if (!media.thumbnail) {
-                                media.thumbnail = mediaHelper.resolveFile(media, true);
-                            }
+                    $scope.mediaItem = null;
+                    $scope.thumbnail = '';
+                    $scope.icon = '';
 
-                            $scope.mediaItem = media;
-                            $scope.mediaItem.umbracoFile = mediaHelper.resolveFile(media, false);
-                        });
+                    $scope.chooseMedia = chooseMedia;
+                    $scope.removeMedia = removeMedia;
+                    $scope.initialize = initialize;
+
+                    function init() {
+                        if ($scope.productVariant.download && $scope.productVariant.downloadMediaId != -1) {
+                            mediaResource.getById($scope.productVariant.downloadMediaId).then(function (media) {
+                                $scope.mediaItem = media;
+                                $scope.mediaItem.umbracoFile = mediaHelper.resolveFile(media, false);
+                                if(!media.thumbnail) {
+                                    $scope.thumbnail = mediaHelper.resolveFile(media, true);
+                                }
+                                $scope.icon = media.icon;
+                            });
+
+                        }
                     }
 
                     /**
@@ -40,24 +54,32 @@
                      * @description
                      * Called when the select media button is pressed for the digital download section.
                      *
-                     * TODO: make a media selection dialog that works with PDFs, etc
                      */
-                    $scope.chooseMedia = function () {
+                    function chooseMedia() {
 
                         dialogService.mediaPicker({
                             onlyImages: false,
                             callback: function (media) {
+                                $scope.thumbnail = '';
                                 if (!media.thumbnail) {
-                                    media.thumbnail = mediaHelper.resolveFile(media, true);
+                                    $scope.thumbnail = mediaHelper.resolveFile(media, true);
                                 }
                                 $scope.mediaItem = media;
                                 $scope.mediaItem.umbracoFile = mediaHelper.resolveFile(media, false);
-                                $scope.id = media.id;
                                 $scope.productVariant.downloadMediaId = media.id;
+                                $scope.icon = media.icon;
                             }
                         });
+                    }
 
-                    };
+                    function removeMedia() {
+                        $scope.productVariant.downloadMediaId = -1;
+                        $scope.mediaItem = null;
+                    }
+
+                    function initialize() {
+                        init();
+                    }
                 }
             };
     });
