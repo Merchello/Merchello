@@ -55,7 +55,8 @@
                         loadNotificationGatewayResources(provider.key);
                         loadNotificationMethods(provider.key);
                     });
-
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Available Notification Providers Load Failed", reason.message);
                 });
@@ -114,8 +115,6 @@
                 var promiseAllResources = notificationGatewayProviderResource.getNotificationProviderNotificationMethods(providerKey);
                 promiseAllResources.then(function (allMethods) {
                     provider.notificationMethods = notificationMethodDisplayBuilder.transform(allMethods);
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Notification Methods Load Failed", reason.message);
                 });
