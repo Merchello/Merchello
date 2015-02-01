@@ -1815,7 +1815,8 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                         loadNotificationGatewayResources(provider.key);
                         loadNotificationMethods(provider.key);
                     });
-
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Available Notification Providers Load Failed", reason.message);
                 });
@@ -1874,8 +1875,6 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 var promiseAllResources = notificationGatewayProviderResource.getNotificationProviderNotificationMethods(providerKey);
                 promiseAllResources.then(function (allMethods) {
                     provider.notificationMethods = notificationMethodDisplayBuilder.transform(allMethods);
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Notification Methods Load Failed", reason.message);
                 });
