@@ -3680,7 +3680,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
-                        });
+                        }, 400);
                     }
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -4117,8 +4117,8 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
 
 
     angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsEditorController',
-        ['$scope', '$routeParams', 'notificationsService', 'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, notificationsService, merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+        function($scope, $routeParams, $location, $timeout, notificationsService, merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -4183,17 +4183,27 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Saves the product - used for changing the master variant name
              */
             function save(thisForm) {
-                if (thisForm) {
-                    if (thisForm.$valid) {
-                        notificationsService.info("Saving Product...", "");
-                        var promise = productResource.save($scope.product);
-                        promise.then(function (product) {
-                            notificationsService.success("Product Saved", "");
-                            $scope.product = productDisplayBuilder.transform(product);
-                        }, function (reason) {
-                            notificationsService.error("Product Save Failed", reason.message);
-                        });
-                    }
+                // TODO we should unbind the return click event
+                // so that we can quickly add the options and remove the following
+                if(thisForm === undefined) {
+                    return;
+                }
+                if (thisForm.$valid) {
+                    notificationsService.info("Saving Product...", "");
+                    console.info($scope.product);
+                    var promise = productResource.save($scope.product);
+                    promise.then(function (product) {
+                        notificationsService.success("Product Saved", "");
+                        $scope.product = productDisplayBuilder.transform(product);
+                        if (!$scope.product.hasVariants()) {
+                            // short pause to make sure examine index has a chance to update
+                            $timeout(function() {
+                                $location.url("/merchello/merchello/productedit/" + $scope.product.key, true);
+                            }, 400);
+                        }
+                    }, function (reason) {
+                        notificationsService.error("Product Save Failed", reason.message);
+                    });
                 }
             }
 

@@ -31,7 +31,7 @@
 
                 // This is the ng-click handler to remove an item
                 $scope.remove = function (idx) {
-                    $scope.option.removeChoice(idx);
+                    $scope.option.removeAttributeChoice(idx);
                 };
 
                 // Capture all keypresses

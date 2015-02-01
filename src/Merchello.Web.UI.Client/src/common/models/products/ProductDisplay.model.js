@@ -100,6 +100,7 @@
             this.productOptions = _.reject(this.productOptions, function(opt) { return _.isEqual(opt, option); });
         }
 
+
         // finds the minimum variant price or sales price
         function variantsMinimumPrice(salePrice) {
             if (this.productVariants.length > 0) {
