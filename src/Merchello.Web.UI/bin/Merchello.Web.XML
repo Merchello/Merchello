@@ -280,6 +280,54 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.AuthorizeCapturePaymentDialogEditorViewResolver">
+            <summary>
+            Resolves the custom DialogEditorView property from the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> for AutoMapper mappings
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.AuthorizeCapturePaymentDialogEditorViewResolver.ResolveCore(Merchello.Core.Gateways.Payment.IPaymentGatewayMethod)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.RefundPaymentDialogEditorViewResolver">
+            <summary>
+            The refund payment dialog editor view resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.RefundPaymentDialogEditorViewResolver.ResolveCore(Merchello.Core.Gateways.Payment.IPaymentGatewayMethod)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.VoidPaymentDialogEditorViewResolver">
+            <summary>
+            The void payment dialog editor view resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.VoidPaymentDialogEditorViewResolver.ResolveCore(Merchello.Core.Gateways.Payment.IPaymentGatewayMethod)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay">
             <summary>
             API object for handling new shipment requests.
@@ -4386,6 +4434,17 @@
             The collection of payments.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.PaymentApiController.GetPaymentMethod(System.Guid)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.Payments.PaymentMethodDisplay"/> method.
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Payments.PaymentMethodDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.PaymentApiController.GetAppliedPaymentsByInvoice(System.Guid)">
             <summary>
             Returns a collection of applied payments given an Invoice id (key)
@@ -7363,6 +7422,21 @@
         <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.PaymentCode">
             <summary>
             Gets or sets the payment code.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.AuthorizeCaptureEditorView">
+            <summary>
+            Gets or sets the authorize capture editor view.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.VoidPaymentDialogEditorView">
+            <summary>
+            Gets or sets the void payment dialog editor view.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.RefundPaymentDialogEditorView">
+            <summary>
+            Gets or sets the refund payment dialog editor view.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.ShipFixedRateTableDisplay">

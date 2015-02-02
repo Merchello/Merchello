@@ -10,10 +10,10 @@
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
             'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
-            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
+            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
                  auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
-                 merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
@@ -27,6 +27,7 @@
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
+            $scope.paymentMethods = {};
             $scope.payments = [];
             $scope.billingAddress = {};
             $scope.hasShippingAddress = false;
@@ -37,7 +38,6 @@
             //  dialogs
             $scope.capturePayment = capturePayment;
             $scope.showFulfill = true;
-            $scope.capturePaymentDialogConfirm = capturePaymentDialogConfirm,
             $scope.openDeleteInvoiceDialog = openDeleteInvoiceDialog;
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
@@ -137,7 +137,6 @@
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
-
                var settingsPromise = settingsResource.getAllSettings();
                settingsPromise.then(function(settings) {
                    $scope.settings = settings;
@@ -169,7 +168,6 @@
                     $scope.payments = paymentDisplayBuilder.transform(payments);
                     $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
                     $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
-
                 }, function(reason) {
                     notificationsService.error('Failed to load payments for invoice', reason.message);
                 });
@@ -193,19 +191,28 @@
              * @description - Open the capture shipment dialog.
              */
             function capturePayment() {
-                var data = dialogDataFactory.createCapturePaymentDialogData();
-                data.setPaymentData($scope.payments[0]);
-                data.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
-                if (!data.isValid()) {
+                var dialogData = dialogDataFactory.createCapturePaymentDialogData();
+                dialogData.setPaymentData($scope.payments[0]);
+                dialogData.setInvoiceData($scope.payments, $scope.invoice, $scope.currencySymbol);
+                if (!dialogData.isValid()) {
                     return false;
                 }
-                // TODO inject the template for the capture payment dialog so that we can
-                // have different fields for other providers
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.capture.payment.html',
-                    show: true,
-                    callback: $scope.capturePaymentDialogConfirm,
-                    dialogData: data
+                var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
+                promise.then(function(paymentMethod) {
+                    console.info(paymentMethod);
+                    var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
+                    if (pm.authorizeCapturePaymentDialogEditorView !== '') {
+                        dialogData.authorizeCapturePaymentEditorView = pm.authorizeCapturePaymentEditorView.editorView;
+                    } else {
+                        dialogData.authorizeCapturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
+                    }
+                    console.info(pm);
+                    dialogService.open({
+                        template: dialogData.authorizeCapturePaymentEditorView,
+                        show: true,
+                        callback: capturePaymentDialogConfirm,
+                        dialogData: dialogData
+                    });
                 });
             }
 
@@ -218,6 +225,7 @@
              */
             function capturePaymentDialogConfirm(paymentRequest) {
                 $scope.preValuesLoaded = false;
+                console.info(paymentRequest);
                 var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
                     // added a timeout here to give the examine index

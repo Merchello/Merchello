@@ -590,6 +590,16 @@ angular.module('merchello.resources')
                     'Failed to get payment: ' + key);
             },
 
+            getPaymentMethod : function(key) {
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPaymentMethod'),
+                        method: "GET",
+                        params: { id: key }
+                    }),
+                    'Failed to get payment method: ' + key);
+            },
+
             getPaymentsByInvoice: function (invoiceKey) {
 
                 return umbRequestHelper.resourcePromise(

@@ -33,7 +33,26 @@ namespace Merchello.Web
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PaymentMethod.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.PaymentMethod.Description))
                 .ForMember(dest => dest.PaymentCode, opt => opt.MapFrom(src => src.PaymentMethod.PaymentCode))
-                .ForMember(dest => dest.DialogEditorView, opt => opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>().ConstructedBy(() => new GatewayMethodDialogEditorViewResolver()));
+                .ForMember(
+                    dest => dest.DialogEditorView,
+                    opt =>
+                    opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>()
+                        .ConstructedBy(() => new GatewayMethodDialogEditorViewResolver()))
+                .ForMember(
+                    dest => dest.AuthorizeCaptureEditorView,
+                    opt =>
+                    opt.ResolveUsing<AuthorizeCapturePaymentDialogEditorViewResolver>()
+                        .ConstructedBy(() => new AuthorizeCapturePaymentDialogEditorViewResolver()))
+                .ForMember(
+                    dest => dest.RefundPaymentDialogEditorView,
+                    opt =>
+                    opt.ResolveUsing<RefundPaymentDialogEditorViewResolver>()
+                        .ConstructedBy(() => new RefundPaymentDialogEditorViewResolver()))
+                .ForMember(
+                    dest => dest.VoidPaymentDialogEditorView,
+                    opt =>
+                    opt.ResolveUsing<VoidPaymentDialogEditorViewResolver>()
+                        .ConstructedBy(() => new VoidPaymentDialogEditorViewResolver()));
         }
     }
 }

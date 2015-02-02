@@ -14,6 +14,9 @@
         self.description = '';
         self.paymentCode = '';
         self.dialogEditorView = {};
+        self.authorizeCapturePaymentEditorView = {};
+        self.voidPaymentEditorView = {};
+        self.refundPaymentEditorView = {};
     };
 
     angular.module('merchello.models').constant('PaymentMethodDisplay', PaymentMethodDisplay);

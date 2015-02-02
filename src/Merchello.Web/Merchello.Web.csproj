@@ -229,6 +229,9 @@
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizeCapturePaymentDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\RefundPaymentDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\VoidPaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\Shipping\ShipmentRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodsQueryDisplay.cs" />
@@ -301,9 +304,9 @@
     <Compile Include="Models\ContentEditing\NotificationMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMonitorDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentOrderDisplay.cs" />
-    <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\GatewayProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />
-    <Compile Include="Models\MapperResolvers\GatewayMethodDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\GatewayMethodDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\WarehouseCatalogIsDefaultResolver.cs" />
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />

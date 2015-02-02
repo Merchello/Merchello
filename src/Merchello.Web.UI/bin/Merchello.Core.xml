@@ -1004,6 +1004,99 @@
             An additional list of contacts
             </param>
         </member>
+        <member name="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute">
+            <summary>
+            The payment gateway method attribute.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> class.
+            </summary>
+            <param name="title">
+            The title.
+            </param>
+            <param name="includeInShipmentQuotations">
+            The include in quotes.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> class.
+            </summary>
+            <param name="title">
+            The title.
+            </param>
+            <param name="authorizeCaptureEditorView">
+            The authorize capture editor view.
+            </param>
+            <param name="includeInShipmentQuotations">
+            The include in shipment quotations.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.#ctor(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> class.
+            </summary>
+            <param name="title">
+            The title.
+            </param>
+            <param name="authorizeCaptureEditorView">
+            The authorize capture editor view.
+            </param>
+            <param name="voidPaymentEditorView">
+            The void payment editor view.
+            </param>
+            <param name="includeInShipmentQuotations">
+            The include in shipment quotations.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.#ctor(System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> class.
+            </summary>
+            <param name="title">
+            The title.
+            </param>
+            <param name="authorizeCaptureEditorView">
+            The authorize capture editor view.
+            </param>
+            <param name="voidPaymentEditorView">
+            The void payment editor view.
+            </param>
+            <param name="refundPaymentEditorView">
+            The refund payment editor view.
+            </param>
+            <param name="includeInShipmentQuotations">
+            The include in shipment quotations.
+            </param>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.Title">
+            <summary>
+            Gets a title to be displayed in the back office if applicable.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.AuthorizeCaptureEditorView">
+            <summary>
+            Gets the authorize capture editor view.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.VoidPaymentEditorView">
+            <summary>
+            Gets the void payment editor view.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.RefundPaymentEditorView">
+            <summary>
+            Gets the refund payment editor view.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.IncludeInShipmentQuotations">
+            <summary>
+            Gets a value indicating whether or not the payment method should be used when quoting shipments.
+            If false, it is assumed that the payment method is to be used programmatically for some other purpose.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Models.AddressExtensions">
             <summary>
             Extension methods for IAddress
@@ -4355,7 +4448,7 @@
             Does the actual work of creating and processing the payment
             </summary>
             <param name="invoice">The <see cref="T:Merchello.Core.Models.IInvoice"/></param>
-            <param name="args">Any arguments required to process the payment. (Maybe a username, password or some Api Key)</param>
+            <param name="args">Any arguments required to process the payment. (Maybe a username, password or some API Key)</param>
             <returns>The <see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/></returns>
         </member>
         <member name="M:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayMethod.PerformAuthorizeCapturePayment(Merchello.Core.Models.IInvoice,System.Decimal,Merchello.Core.Gateways.Payment.ProcessorArgumentCollection)">
