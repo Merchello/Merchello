@@ -7424,17 +7424,17 @@
             Gets or sets the payment code.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.AuthorizeCaptureEditorView">
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.AuthorizeCapturePaymentEditorView">
             <summary>
             Gets or sets the authorize capture editor view.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.VoidPaymentDialogEditorView">
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.VoidPaymentEditorView">
             <summary>
             Gets or sets the void payment dialog editor view.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.RefundPaymentDialogEditorView">
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.RefundPaymentEditorView">
             <summary>
             Gets or sets the refund payment dialog editor view.
             </summary>

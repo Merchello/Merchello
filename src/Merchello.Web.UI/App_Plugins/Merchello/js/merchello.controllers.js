@@ -3823,7 +3823,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });
@@ -4817,7 +4816,18 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 var currency = _.find(symbols, function(symbol) {
                     return symbol.currencyCode === $scope.invoice.getCurrencyCode()
                 });
-                $scope.currencySymbol = currency.symbol;
+                if (currency !== undefined) {
+                    $scope.currencySymbol = currency.symbol;
+                } else {
+                    // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
+                    // default currency
+                    var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
+                    defaultCurrencyPromise.then(function (currencySymbol) {
+                        $scope.currencySymbol = currencySymbol;
+                    }, function (reason) {
+                        notificationService.error('Failed to load the default currency symbol', reason.message);
+                    });
+                }
             }, function (reason) {
                 alert('Failed: ' + reason.message);
             });
@@ -5228,7 +5238,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 promise.then(function (invoice) {
                     $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
-                    $scope.taxTotal = $scope.invoice.getTaxLineItem().price;
+                    var taxLineItem = $scope.invoice.getTaxLineItem();
+                    $scope.taxTotal = taxLineItem !== undefined ? taxLineItem.price : 0;
                     $scope.shippingTotal = $scope.invoice.shippingTotal();
                     loadSettings();
                     loadPayments(id);
@@ -5270,7 +5281,18 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     var currency = _.find(symbols, function(symbol) {
                         return symbol.currencyCode === $scope.invoice.getCurrencyCode()
                     });
+                    if (currency !== undefined) {
                     $scope.currencySymbol = currency.symbol;
+                    } else {
+                        // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
+                        // default currency
+                        var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
+                        defaultCurrencyPromise.then(function (currencySymbol) {
+                            $scope.currencySymbol = currencySymbol;
+                        }, function (reason) {
+                            notificationService.error('Failed to load the default currency symbol', reason.message);
+                        });
+                    }
                 }, function (reason) {
                     alert('Failed: ' + reason.message);
                 });

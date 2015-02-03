@@ -13,7 +13,7 @@
         <BuildConfiguration>Release</BuildConfiguration>
         <ReleaseAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch)</ReleaseAssemblyInformationVersion>
         <DevAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)</DevAssemblyInformationVersion>
-        <AssemblyInformationVersion>$(DevAssemblyInformationVersion)</AssemblyInformationVersion>
+        <AssemblyInformationVersion>$(ReleaseAssemblyInformationVersion)</AssemblyInformationVersion>
 
 
         <UmbracoVersionMajor>7</UmbracoVersionMajor>

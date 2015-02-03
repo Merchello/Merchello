@@ -73,7 +73,18 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 var currency = _.find(symbols, function(symbol) {
                     return symbol.currencyCode === $scope.invoice.getCurrencyCode()
                 });
-                $scope.currencySymbol = currency.symbol;
+                if (currency !== undefined) {
+                    $scope.currencySymbol = currency.symbol;
+                } else {
+                    // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
+                    // default currency
+                    var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
+                    defaultCurrencyPromise.then(function (currencySymbol) {
+                        $scope.currencySymbol = currencySymbol;
+                    }, function (reason) {
+                        notificationService.error('Failed to load the default currency symbol', reason.message);
+                    });
+                }
             }, function (reason) {
                 alert('Failed: ' + reason.message);
             });
