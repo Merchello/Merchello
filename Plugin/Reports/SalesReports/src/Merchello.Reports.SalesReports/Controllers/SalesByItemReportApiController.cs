@@ -17,8 +17,6 @@
     using Merchello.Web.Reporting;
     using Merchello.Web.Trees;
 
-    using ServiceStack.Text;
-
     using Umbraco.Core.IO;
     using Umbraco.Web.Mvc;
 
@@ -121,40 +119,40 @@
             return result;
         }
 
-        /// <summary>
-        /// Exports a search by date range.
-        /// </summary>
-        /// <param name="query">
-        /// The query.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        [HttpPost]
-        public QueryResultDisplay ExportByDateRange(QueryDisplay query)
-        {
-            var result = this.SearchByDateRange(query);
+        ///// <summary>
+        ///// Exports a search by date range.
+        ///// </summary>
+        ///// <param name="query">
+        ///// The query.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="QueryResultDisplay"/>.
+        ///// </returns>
+        //[HttpPost]
+        //public QueryResultDisplay ExportByDateRange(QueryDisplay query)
+        //{
+        //    var result = this.SearchByDateRange(query);
 
-            var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
-            var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
+        //    var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
+        //    var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
 
-            if (!result.Items.Any()) return result;
+        //    if (!result.Items.Any()) return result;
 
-            // check if the directory exists
-            var exportDir = IOHelper.MapPath("~/App_Data/TEMP/Merchello/");
-            if (!Directory.Exists(exportDir))
-                Directory.CreateDirectory(exportDir);
+        //    // check if the directory exists
+        //    var exportDir = IOHelper.MapPath("~/App_Data/TEMP/Merchello/");
+        //    if (!Directory.Exists(exportDir))
+        //        Directory.CreateDirectory(exportDir);
 
 
-            var dump = CsvSerializer.SerializeToCsv(result.Items);
+        //    var dump = CsvSerializer.SerializeToCsv(result.Items);
 
-            // write dump to export file
-            var exportFileName = string.Concat("SalesByItemReport_", DateTime.Parse(invoiceDateStart.Value).ToString("_yyyyMMdd"), "_", DateTime.Parse(invoiceDateEnd.Value).ToString("_yyyyMMdd"), ".csv");
-            var exportPath = string.Concat(exportDir, exportFileName);
-            File.WriteAllText(exportPath, dump);
+        //    // write dump to export file
+        //    var exportFileName = string.Concat("SalesByItemReport_", DateTime.Parse(invoiceDateStart.Value).ToString("_yyyyMMdd"), "_", DateTime.Parse(invoiceDateEnd.Value).ToString("_yyyyMMdd"), ".csv");
+        //    var exportPath = string.Concat(exportDir, exportFileName);
+        //    File.WriteAllText(exportPath, dump);
 
-            return result;
-        }
+        //    return result;
+        //}
 
         /// <summary>
         /// The get default report data.

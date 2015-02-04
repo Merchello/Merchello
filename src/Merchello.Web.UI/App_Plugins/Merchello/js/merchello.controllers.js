@@ -1410,8 +1410,9 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
             function editShippingMethodDialogOpen(gatewayMethod) {
                 var dialogData = dialogDataFactory.createEditShippingGatewayMethodDialogData();
                 dialogData.shippingGatewayMethod = gatewayMethod;
+                var editor = gatewayMethod.dialogEditorView.editorView;
                 dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.fixedrate.shipmethod.html',
+                    template: editor,
                     show: true,
                     callback: shippingMethodDialogConfirm,
                     dialogData: dialogData

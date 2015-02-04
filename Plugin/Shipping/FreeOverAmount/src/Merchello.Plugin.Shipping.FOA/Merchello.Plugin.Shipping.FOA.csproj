@@ -215,10 +215,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello.FOA\editor.html" />
-    <Content Include="App_Plugins\Merchello.FOA\merchello.foa.controller.js" />
-    <Content Include="App_Plugins\Merchello.FOA\merchello.foa.shippingmethod.controller.js" />
-    <Content Include="App_Plugins\Merchello.FOA\shippingmethod.html" />
+    <Content Include="App_Plugins\Merchello.FOA\shipping.foa.module.js" />
+    <Content Include="App_Plugins\Merchello.FOA\shipping.foa.shipmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello.FOA\shipping.foa.shipmethod.html" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

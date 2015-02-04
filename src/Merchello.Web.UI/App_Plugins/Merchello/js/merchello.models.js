@@ -1762,7 +1762,7 @@
 
         function addInvoiceDateParam(dateString, startOrEnd) {
             var param = new QueryParameterDisplay();
-            param.fieldName = startOrEnd === 'start' ? 'invoiceDateStart' : 'invoiceEndDate';
+            param.fieldName = startOrEnd === 'start' ? 'invoiceDateStart' : 'invoiceDateEnd';
             param.value = dateString;
             addParameter.call(this, param);
         }
