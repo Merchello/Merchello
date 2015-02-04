@@ -38,8 +38,8 @@
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Braintree-2.36.0">
-      <HintPath>..\packages\Braintree.2.36.0\lib\Braintree-2.36.0.dll</HintPath>
+    <Reference Include="Braintree-2.40.0">
+      <HintPath>..\packages\Braintree.2.40.0\lib\Braintree-2.40.0.dll</HintPath>
     </Reference>
     <Reference Include="businesslogic, Version=1.0.5462.37510, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -278,11 +278,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Plugins\Merchello.Braintree\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello.Braintree\payment.braintree.paymentmethod.controller.js" />
-    <Content Include="App_Plugins\Merchello.Braintree\payment.braintree.paymentmethod.html" />
+    <Content Include="App_Plugins\Merchello.Braintree\payment.braintree.module.js" />
     <Content Include="App_Plugins\Merchello.Braintree\payment.braintree.providersettings.controller.js" />
     <Content Include="App_Plugins\Merchello.Braintree\payment.braintree.providersettings.html" />
   </ItemGroup>
