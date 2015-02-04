@@ -211,7 +211,6 @@
                 }
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
-                    console.info(paymentMethod);
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
                     if (pm.authorizeCapturePaymentDialogEditorView !== '') {
                         dialogData.authorizeCapturePaymentEditorView = pm.authorizeCapturePaymentEditorView.editorView;

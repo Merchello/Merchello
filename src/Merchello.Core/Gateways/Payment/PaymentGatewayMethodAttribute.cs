@@ -57,7 +57,7 @@
         /// The include in shipment quotations.
         /// </param>
         public PaymentGatewayMethodAttribute(string title, string authorizeCaptureEditorView, string voidPaymentEditorView, bool includeInShipmentQuotations = true)
-            : this(title, authorizeCaptureEditorView, string.Empty, string.Empty, includeInShipmentQuotations)
+            : this(title, authorizeCaptureEditorView, voidPaymentEditorView, string.Empty, includeInShipmentQuotations)
         {
         }
 
