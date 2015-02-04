@@ -13,11 +13,11 @@
 
     <!-- PROPERTIES -->
     <PropertyGroup>
-        <VersionMajor>1</VersionMajor>
+        <VersionMajor>2</VersionMajor>
         <VersionMinor>0</VersionMinor>
-        <VersionPatch>8</VersionPatch>
+        <VersionPatch>0</VersionPatch>
         <VersionSuffix>0</VersionSuffix>
-        <UmbracoVersion>7.1.8</UmbracoVersion>
+        <UmbracoVersion>7.2.1</UmbracoVersion>
     </PropertyGroup>
 
 
@@ -25,7 +25,9 @@
         <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
         <BuildDir>$(MSBuildProjectDirectory)\Temp</BuildDir>
         <BuildBinariesFolder>$(BuildDir)\AllBinaries</BuildBinariesFolder>
+        <ArtifactsFolder>$(BuildDir)\Artifacts</ArtifactsFolder>
         <PackageDir>$(MSBuildProjectDirectory)</PackageDir>
+      
         <ProjectDir>$(RootDir)\src\Merchello.Plugin.Payments.Braintree</ProjectDir>
     </PropertyGroup>
 
@@ -94,22 +96,22 @@
     <Target Name="PrepairFiles" DependsOnTargets="NuGetPackage">
         <ItemGroup>
             <AppPluginFiles Include="$(ProjectDir)\App_Plugins\**\*.*" />
-            <BinFiles Include="$(ProjectDir)\bin\Release\Merchello.Plugin.Payments.Braintree.*" />
+            <BinFiles Include="$(ProjectDir)\bin\Release\*Braintree*.*" />
             <PackageFile Include="$(PackageDir)\package.xml" />
         </ItemGroup>
       
 
-        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildDir)\bin" />
-        <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildDir)\App_Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
-        <Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildDir)" />
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(ArtifactsFolder)\bin" />
+        <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(ArtifactsFolder)\App_Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
+        <Copy SourceFiles="@(PackageFile)" DestinationFolder="$(ArtifactsFolder)" />
     </Target>
 
     <!-- MANIFEST -->
     <Target Name="Manifest" DependsOnTargets="PrepairFiles">
         <ItemGroup>
-            <ManifestFiles Include="$(BuildDir)\**\*" Exclude="$(BuildDir)\package.xml" />
+            <ManifestFiles Include="$(ArtifactsFolder)\**\*" Exclude="$(ArtifactsFolder)\package.xml" />
         </ItemGroup>
-        <ManifestUpdate ManifestFile="$(BuildDir)\package.xml"
+        <ManifestUpdate ManifestFile="$(ArtifactsFolder)\package.xml"
 			WorkingDirectory="$(BuildDir)"
 			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
 			PackageVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
@@ -120,11 +122,11 @@
     <!-- PACKAGE -->
     <Target Name="Build" DependsOnTargets="Manifest">
         <ItemGroup>
-            <PackageFiles Include="$(BuildDir)\**\*.*" />
+            <PackageFiles Include="$(ArtifactsFolder)\**\*.*" />
         </ItemGroup>
-        <Package ManifestFile="$(BuildDir)\package.xml"
-			WorkingDirectory="$(BuildDir)"
-			OutputDirectory="$(PackageDir)"
+        <Package ManifestFile="$(ArtifactsFolder)\package.xml"
+			WorkingDirectory="$(ArtifactsFolder)"
+			OutputDirectory="$(BuildDir)"
 			Files="@(PackageFiles)" />
       <!--
         <RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />

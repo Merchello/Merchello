@@ -2,7 +2,7 @@
 <umbPackage>
 	<info>
 		<package>
-			<name>Merchello.AuthorizeNet.Payment</name>
+			<name>Merchello.Braintree.Payment</name>
 			<version>0.0.0</version>
             <license url="https://github.com/Merchello/Merchello/blob/master/License.md">MIT license</license>
             <url>http://our.umbraco.org/projects/website-utilities/merchello</url>
