@@ -25,7 +25,7 @@
                 $scope.currencySymbol = currencySymbol;
                 $scope.loaded = true;
             });
-
+            
             var settingsString = $scope.dialogData.provider.extendedData.getValue('processorSettings');
             $scope.providerSettings = JSON.parse(settingsString);
 
