@@ -46,7 +46,6 @@
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });

@@ -264,6 +264,7 @@
     <Compile Include="Gateways\Notification\Triggering\IShipmentResult.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
+    <Compile Include="Gateways\Payment\PaymentGatewayMethodAttribute.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\CustomerExtensions.cs" />

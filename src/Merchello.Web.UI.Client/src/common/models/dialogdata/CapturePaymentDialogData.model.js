@@ -18,6 +18,7 @@
         self.invoiceBalance = 0.0;
         self.amount = 0.0;
         self.processorArgs = [];
+        self.authorizeCaptureEditorView = '';
     };
 
     CapturePaymentDialogData.prototype = (function() {

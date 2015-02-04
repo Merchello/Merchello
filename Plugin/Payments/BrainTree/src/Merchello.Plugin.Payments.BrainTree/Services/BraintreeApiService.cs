@@ -4,6 +4,8 @@ namespace Merchello.Plugin.Payments.Braintree.Services
     using Core;
     using Models;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Represents a <see cref="BraintreeApiService"/>.
     /// </summary>

@@ -31,6 +31,22 @@
         /// <summary>
         /// Gets or sets the payment code.
         /// </summary>
-        public string PaymentCode { get; set; }        
+        public string PaymentCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the authorize capture editor view.
+        /// </summary>
+        public DialogEditorViewDisplay AuthorizeCapturePaymentEditorView { get; set; }
+
+        /// <summary>
+        /// Gets or sets the void payment dialog editor view.
+        /// </summary>
+        public DialogEditorViewDisplay VoidPaymentEditorView { get; set; }
+
+        /// <summary>
+        /// Gets or sets the refund payment dialog editor view.
+        /// </summary>
+        public DialogEditorViewDisplay RefundPaymentEditorView { get; set; }
+ 
     }
 }

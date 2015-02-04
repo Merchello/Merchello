@@ -699,6 +699,7 @@
         self.invoiceBalance = 0.0;
         self.amount = 0.0;
         self.processorArgs = [];
+        self.authorizeCaptureEditorView = '';
     };
 
     CapturePaymentDialogData.prototype = (function() {
@@ -1321,6 +1322,9 @@
         self.description = '';
         self.paymentCode = '';
         self.dialogEditorView = {};
+        self.authorizeCapturePaymentEditorView = {};
+        self.voidPaymentEditorView = {};
+        self.refundPaymentEditorView = {};
     };
 
     angular.module('merchello.models').constant('PaymentMethodDisplay', PaymentMethodDisplay);
@@ -1758,7 +1762,7 @@
 
         function addInvoiceDateParam(dateString, startOrEnd) {
             var param = new QueryParameterDisplay();
-            param.fieldName = startOrEnd === 'start' ? 'invoiceDateStart' : 'invoiceEndDate';
+            param.fieldName = startOrEnd === 'start' ? 'invoiceDateStart' : 'invoiceDateEnd';
             param.value = dateString;
             addParameter.call(this, param);
         }
@@ -3551,6 +3555,9 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                 createDefault: function() {
                     var paymentMethod = new Constructor();
                     paymentMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     return paymentMethod;
                 },
                 transform: function(jsonResult) {
@@ -3559,11 +3566,17 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         for(var i = 0; i < jsonResult.length; i++) {
                             var paymentMethod = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             paymentMethod.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                            paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].authorizeCapturePaymentEditorView);
+                            paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].voidPaymentEditorView);
+                            paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].refundPaymentEditorView);
                             paymentMethods.push(paymentMethod);
                         }
                     } else {
                         paymentMethods = genericModelBuilder.transform(jsonResult, Constructor);
                         paymentMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                        paymentMethods.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.authorizeCaptureEditorView);
+                        paymentMethods.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.voidPaymentEditorView);
+                        paymentMethods.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.refundPaymentEditorView);
                     }
                     return paymentMethods;
                 }

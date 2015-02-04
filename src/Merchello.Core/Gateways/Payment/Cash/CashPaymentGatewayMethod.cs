@@ -15,6 +15,10 @@
     /// </summary>    
     [GatewayMethodUi("CashPaymentMethod")]
     [GatewayMethodEditor("Cash Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
+    [PaymentGatewayMethod("Cash Payment Gateway Method Editors", 
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html", 
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.voidpayment.html", 
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.refundpayment.html")]
     public class CashPaymentGatewayMethod : PaymentGatewayMethodBase, ICashPaymentGatewayMethod
     {
         /// <summary>
@@ -35,7 +39,7 @@
         /// Does the actual work of creating and processing the payment
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/></param>
-        /// <param name="args">Any arguments required to process the payment. (Maybe a username, password or some Api Key)</param>
+        /// <param name="args">Any arguments required to process the payment. (Maybe a username, password or some API Key)</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {

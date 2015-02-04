@@ -6,7 +6,7 @@
         'umbraco.services',
         'merchello.filters',
         'merchello.directives',
-        'merchello.reports',
+        'merchello.plugins',
         'merchello.resources',
         'merchello.services'
     ]);
@@ -15,9 +15,22 @@
     angular.module('merchello.directives', []);
     angular.module('merchello.resources', []);
     angular.module('merchello.services', ['merchello.models']);
-    angular.module('merchello.reports', ['merchello.models', 'merchello.resources'])
+    angular.module('merchello.plugins', ['merchello.models', 'merchello.resources']);
     //// Assert our dependencies
     angular.module('umbraco.packages').requires.push('merchello');
 
 }());
+
+// LEGACY NAMESPACES - THESE SHOULD NO LONGER BY USED
+(function (merchello, undefined) {
+
+    // Global namespaces defined
+    merchello.Models = {};
+    merchello.Controllers = {};
+    merchello.Directives = {};
+    merchello.Filters = {};
+    merchello.Services = {};
+    merchello.Helpers = {};
+
+}(window.merchello = window.merchello || {}));
 
