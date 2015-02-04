@@ -23,43 +23,7 @@
     <favorites_list name="Merchello.SalesReports" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="salesreports.salesbyitem.controller.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SalesByItem/salesreports.salesbyitem.controller.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="651" max-vertical-offset="3410">
-              <caret line="27" column="12" selection-start-line="27" selection-start-column="12" selection-end-line="27" selection-end-column="40" />
-              <folding>
-                <element signature="e#1161#1362#0" expanded="false" />
-                <element signature="e#2339#2616#0" expanded="false" />
-                <element signature="e#2663#3185#0" expanded="false" />
-                <element signature="e#3689#3872#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="salesreports.salesovertime.controller.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/SalesOverTime/salesreports.salesovertime.controller.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.14957781" vertical-offset="2976" max-vertical-offset="4464">
-              <caret line="100" column="9" selection-start-line="100" selection-start-column="9" selection-end-line="100" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="salesovertime.resource.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SalesOverTime/salesovertime.resource.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="186" max-vertical-offset="1085">
-              <caret line="21" column="36" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -109,6 +73,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -171,7 +136,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -181,10 +145,14 @@
     <property name="FullScreen" value="false" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <method />
+    </configuration>
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
       <method />
     </configuration>
-    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -192,10 +160,6 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="Chrome" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
@@ -288,7 +252,6 @@
           <folding>
             <element signature="e#1161#1362#0" expanded="false" />
             <element signature="e#2339#2616#0" expanded="false" />
-            <element signature="e#2663#3185#0" expanded="false" />
             <element signature="e#3689#3872#0" expanded="false" />
           </folding>
         </state>
@@ -317,7 +280,6 @@
           <folding>
             <element signature="e#1161#1362#0" expanded="false" />
             <element signature="e#2339#2616#0" expanded="false" />
-            <element signature="e#2663#3185#0" expanded="false" />
             <element signature="e#3689#3872#0" expanded="false" />
           </folding>
         </state>
@@ -339,17 +301,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.manifest">
+    <entry file="file://$PROJECT_DIR$/SalesByItem/salesreports.salesbyitem.controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="465">
-          <caret line="6" column="60" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="651" max-vertical-offset="3410">
+          <caret line="27" column="12" selection-start-line="27" selection-start-column="12" selection-end-line="27" selection-end-column="40" />
+          <folding>
+            <element signature="e#1161#1362#0" expanded="false" />
+            <element signature="e#2339#2616#0" expanded="false" />
+            <element signature="e#3689#3872#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Common/merchello.salesreports.module.js">
+    <entry file="file://$PROJECT_DIR$/SalesOverTime/salesreports.salesovertime.controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4049881" vertical-offset="0" max-vertical-offset="842">
-          <caret line="11" column="77" selection-start-line="11" selection-start-column="77" selection-end-line="11" selection-end-column="77" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4464">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SalesOverTime/salesovertime.resource.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="186" max-vertical-offset="1085">
+          <caret line="21" column="36" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -360,13 +336,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SalesByItem/report.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35361215" vertical-offset="775" max-vertical-offset="2108">
-          <caret line="34" column="201" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="201" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SalesOverTime/report.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.43219265" vertical-offset="341" max-vertical-offset="1302">
@@ -374,31 +343,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Common/merchello.salesreports.models.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.55819476" vertical-offset="1328" max-vertical-offset="2170">
-          <caret line="58" column="30" selection-start-line="58" selection-start-column="30" selection-end-line="58" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SalesOverTime/salesovertime.resource.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="186" max-vertical-offset="1085">
+        <state vertical-scroll-proportion="0.5522565" vertical-offset="186" max-vertical-offset="1085">
           <caret line="21" column="36" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SalesByItem/salesreports.salesbyitem.controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="651" max-vertical-offset="3410">
-          <caret line="27" column="12" selection-start-line="27" selection-start-column="12" selection-end-line="27" selection-end-column="40" />
-          <folding>
-            <element signature="e#1161#1362#0" expanded="false" />
-            <element signature="e#2339#2616#0" expanded="false" />
-            <element signature="e#2663#3185#0" expanded="false" />
-            <element signature="e#3689#3872#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -406,6 +355,50 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.14957781" vertical-offset="2976" max-vertical-offset="4464">
           <caret line="100" column="9" selection-start-line="100" selection-start-column="9" selection-end-line="100" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Common/merchello.salesreports.module.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4049881" vertical-offset="0" max-vertical-offset="842">
+          <caret line="11" column="77" selection-start-line="11" selection-start-column="77" selection-end-line="11" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.manifest">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2209026" vertical-offset="0" max-vertical-offset="842">
+          <caret line="6" column="60" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SalesByItem/report.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35361215" vertical-offset="775" max-vertical-offset="2108">
+          <caret line="34" column="201" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="201" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SalesByItem/salesreports.salesbyitem.controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4038005" vertical-offset="1675" max-vertical-offset="3720">
+          <caret line="79" column="51" selection-start-line="79" selection-start-column="51" selection-end-line="79" selection-end-column="51" />
+          <folding>
+            <element signature="e#1161#1362#0" expanded="false" />
+            <element signature="e#2339#2616#0" expanded="false" />
+            <element signature="e#3689#3872#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Common/merchello.salesreports.models.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.95724463" vertical-offset="1209" max-vertical-offset="2170">
+          <caret line="13" column="56" selection-start-line="13" selection-start-column="56" selection-end-line="13" selection-end-column="56" />
           <folding />
         </state>
       </provider>
