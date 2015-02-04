@@ -112,7 +112,7 @@
             <ManifestFiles Include="$(ArtifactsFolder)\**\*" Exclude="$(ArtifactsFolder)\package.xml" />
         </ItemGroup>
         <ManifestUpdate ManifestFile="$(ArtifactsFolder)\package.xml"
-			WorkingDirectory="$(BuildDir)"
+			WorkingDirectory="$(ArtifactsFolder)"
 			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
 			PackageVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
 			Readme="$([System.IO.File]::ReadAllText(readme.txt))"
