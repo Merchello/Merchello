@@ -1,9 +1,12 @@
-﻿angular.module('merchello.plugins.foa').Controllers('Merchello.GatewayProviders.Dialogs.FixedOverAmountShipMethodController',
+﻿angular.module('merchello.plugins.foa')
+    .controller('Merchello.GatewayProviders.Dialogs.FixedOverAmountShippingProviderController',
     ['$scope', 'settingsResource',
     function ($scope, settingsResource) {
 
+        $scope.loaded = false;
         $scope.providerSettings = {};
         $scope.currencySymbol = '';
+        $scope.providerSettings = {};
 
         /**
         * @ngdoc method 
@@ -20,12 +23,13 @@
             var promise = settingsResource.getCurrencySymbol();
             promise.then(function (currencySymbol) {
                 $scope.currencySymbol = currencySymbol;
+                $scope.loaded = true;
             });
-             
+
             var settingsString = $scope.dialogData.provider.extendedData.getValue('processorSettings');
             $scope.providerSettings = JSON.parse(settingsString);
 
-
+            console.info($scope.providerSettings);
             // Watch with object equality to convert back to a string for the submit() call on the Save button
             $scope.$watch(function () {
                 return $scope.providerSettings;

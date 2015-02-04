@@ -1,20 +1,16 @@
-﻿<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.GatewayProviders.Dialogs.FixedOverAmountShipMethodController">
+﻿<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.GatewayProviders.Dialogs.FixedOverAmountShippingProviderController"
+        data-ng-show="loaded">
 
     <div class="umb-modalcolumn-header">
         <h4><strong>Free Over Amount Provider Configuration</strong></h4>
     </div>
 
     <div class="umb-panel-body with-header with-footer">
-        <!--div class="control-group row-fluid">
-            <p>Free Over Amount<br /></p>
-            <div class="col-xs-12 span12">
-                <input class="col-xs-12 span12" type="text" data-ng-model="providerSettings.Amount">
-            </div>
-        </div-->
-        <div class="input-prepend col-xs-12 span12">
-            <p>Free Over Amount<br /></p>
+
+        <div class="input-prepend col-xs-6 span6">
+            <h5>Free Over Amount</h5>
             <span class="add-on">{{currencySymbol}}</span>
-            <input class="col-xs-4 span4" type="text" data-ng-model="providerSettings.amount">
+            <input class="col-xs-3 span3" type="number" data-ng-model="providerSettings.Amount">
         </div>
     </div>
 

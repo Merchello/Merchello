@@ -1,6 +1,6 @@
-﻿               {
+﻿{
 	javascript : [
-		'~/App_Plugins/Merchello.FOA/merchello.foa.module.js',
-		'~/App_Plugins/Merchello.FOA/merchello.foa.shipmethod.controller'
+		'~/App_Plugins/Merchello.FOA/shipping.foa.module.js',
+		'~/App_Plugins/Merchello.FOA/shipping.foa.shippingprovider.controller.js'
 	]
 }
