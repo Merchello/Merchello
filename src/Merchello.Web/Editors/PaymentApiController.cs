@@ -142,7 +142,8 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return paymentMethod.ToPaymentMethodDisplay();
+            var display = paymentMethod.ToPaymentMethodDisplay();
+            return display;
         }
 
 		/// <summary>
