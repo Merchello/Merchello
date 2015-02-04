@@ -216,8 +216,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Merchello.FOA\shipping.foa.module.js" />
-    <Content Include="App_Plugins\Merchello.FOA\shipping.foa.shipmethod.controller.js" />
-    <Content Include="App_Plugins\Merchello.FOA\shipping.foa.shipmethod.html" />
+    <Content Include="App_Plugins\Merchello.FOA\shipping.foa.shippingprovider.controller.js" />
+    <Content Include="App_Plugins\Merchello.FOA\shipping.foa.shippingprovider.html" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

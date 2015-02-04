@@ -20,7 +20,7 @@ angular.module('merchello.directives', []);
 angular.module('merchello.resources', []);
 angular.module('merchello.services', ['merchello.models']);
 angular.module('merchello.mocks', ['merchello.models']);
-angular.module('merchello.plugins', ['merchello.models', 'merchello.resources'])
+angular.module('merchello.plugins', [])
 
 //// Assert our dependencies
 angular.module('umbraco.packages').requires.push('merchello');
