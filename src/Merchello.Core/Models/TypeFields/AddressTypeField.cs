@@ -24,6 +24,7 @@ namespace Merchello.Core.Models.TypeFields
         {
             AddUpdateCache(AddressType.Shipping, new TypeField("Shipping", "Shipping", Constants.TypeFieldKeys.Address.ShippingAddressKey));
             AddUpdateCache(AddressType.Billing,  new TypeField("Billing", "Billing", Constants.TypeFieldKeys.Address.BillingAddressKey));
+            AddUpdateCache(AddressType.Custom, NotFound);
         }
 
         public override IEnumerable<ITypeField> CustomTypeFields
