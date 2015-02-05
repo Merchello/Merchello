@@ -24,6 +24,7 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(ItemCacheType.Backoffice, new TypeField("Backoffice", "Standard Backoffice", Constants.TypeFieldKeys.ItemCache.BackofficeKey));
             AddUpdateCache(ItemCacheType.Wishlist, new TypeField("Wishlist", "Wishlist", Constants.TypeFieldKeys.ItemCache.WishlistKey));
             AddUpdateCache(ItemCacheType.Checkout, new TypeField("Checkout", "Checkout", Constants.TypeFieldKeys.ItemCache.CheckoutKey));
+            AddUpdateCache(ItemCacheType.Custom, NotFound);
         }
 
         public override IEnumerable<ITypeField> CustomTypeFields

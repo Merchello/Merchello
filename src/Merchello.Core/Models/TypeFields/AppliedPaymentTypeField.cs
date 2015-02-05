@@ -25,6 +25,7 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(AppliedPaymentType.Void, new TypeField("Void", "Void", Constants.TypeFieldKeys.AppliedPayment.VoidRecordKey));
             AddUpdateCache(AppliedPaymentType.Refund, new TypeField("Refund", "Refund", Constants.TypeFieldKeys.AppliedPayment.RefundRecordKey));
             AddUpdateCache(AppliedPaymentType.Denied, new TypeField("Denied", "Denied", Constants.TypeFieldKeys.AppliedPayment.DeniedRecordKey));
+            AddUpdateCache(AppliedPaymentType.Custom, NotFound);
         }
 
         public override IEnumerable<ITypeField> CustomTypeFields
