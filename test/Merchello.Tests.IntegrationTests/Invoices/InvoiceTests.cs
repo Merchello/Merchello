@@ -9,6 +9,7 @@ namespace Merchello.Tests.IntegrationTests.Invoices
     using Merchello.Core;
     using Merchello.Core.Gateways.Shipping.FixedRate;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Core.Strategies.Packaging;
     using Merchello.Tests.Base.DataMakers;
@@ -208,6 +209,32 @@ namespace Merchello.Tests.IntegrationTests.Invoices
             {
                 Assert.IsTrue(invoice.Items.Any(x => x.Sku == item.Sku), "No item exists for sku " + item.Sku);
             }
-        } 
+        }
+
+        [Test]
+        public void Can_Create_An_Invoice_With_A_CustomLineItem()
+        {
+            //// Arrange
+            var invoice = MockInvoiceDataMaker.GetMockInvoiceForTaxation();
+            Assert.NotNull(invoice, "Invoice is null");
+
+            var extendedData = new ExtendedDataCollection();
+            extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, false.ToString());
+
+            var typeField = EnumTypeFieldConverter.LineItemType.Custom("CcFee");
+
+            //// Act
+            var ccFee = new InvoiceLineItem(
+                typeField.TypeKey,
+                "CC Fee",
+                "ccfee",
+                1,
+                1.0m,
+                extendedData);
+
+            invoice.Items.Add(ccFee);
+                
+            Assert.IsTrue(invoice.CustomLineItems().Any());
+        }
     }
 }

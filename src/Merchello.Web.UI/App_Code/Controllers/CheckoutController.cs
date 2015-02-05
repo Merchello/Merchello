@@ -8,6 +8,7 @@ namespace Controllers
     using System.Linq;
     using System.Web.Mvc;
     using Merchello.Core;
+    using Merchello.Core.Gateways.Notification.Monitors;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Models.MonitorModels;
@@ -285,6 +286,7 @@ namespace Controllers
 
                 // trigger the order notification confirmation
                 Notification.Trigger("OrderConfirmation", attempt, new[] { customerEmail });
+
             }
 
 

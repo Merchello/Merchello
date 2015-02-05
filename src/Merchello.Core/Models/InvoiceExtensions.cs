@@ -714,6 +714,8 @@
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
         }
 
+        
+
     #endregion
 
 

@@ -6,7 +6,6 @@
         $scope.loaded = false;
         $scope.providerSettings = {};
         $scope.currencySymbol = '';
-        $scope.providerSettings = {};
 
         /**
         * @ngdoc method 

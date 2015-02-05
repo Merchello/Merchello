@@ -5,6 +5,9 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.TypeFields
 {
+    using System;
+
+    using Merchello.Core;
 
     [TestFixture]
     [Category("TypeField")]
@@ -79,5 +82,27 @@ namespace Merchello.Tests.UnitTests.TypeFields
             Assert.AreEqual(_mockDiscount.TypeKey, type.TypeKey);
         }
 
+
+        [Test]
+        public void Can_Retrieve_A_CustomLineItemTypeField()
+        {
+            var type = EnumTypeFieldConverter.LineItemType.Custom("CcFee");
+
+            Assert.AreNotEqual(Guid.Empty, type.TypeKey);
+        }
+
+        [Test]
+        public void Custom_LineItemTypes_Are_Associated_With_CustomInEnum()
+        {
+            //// Arrange
+            var type = EnumTypeFieldConverter.LineItemType.Custom("CcFee");
+            Assert.AreNotEqual(Guid.Empty, type.TypeKey);
+
+            //// Act
+            var lineItemType = EnumTypeFieldConverter.LineItemType.GetTypeField(type.TypeKey);
+
+            //// Assert
+            Assert.AreEqual(LineItemType.Custom, lineItemType);
+        }
     }
 }

@@ -19,6 +19,9 @@
         /// <param name="includeInShipmentQuotations">
         /// The include in quotes.
         /// </param>
+        /// <remarks>
+        /// TODO rename includeInShipmentQuotations ... these are payments!
+        /// </remarks>
         public PaymentGatewayMethodAttribute(string title, bool includeInShipmentQuotations = true)
             : this(title, string.Empty, includeInShipmentQuotations)
         {
