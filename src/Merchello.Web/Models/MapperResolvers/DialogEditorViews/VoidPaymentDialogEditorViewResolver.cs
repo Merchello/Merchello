@@ -13,7 +13,7 @@
     /// <summary>
     /// The void payment dialog editor view resolver.
     /// </summary>
-    public class VoidPaymentDialogEditorViewResolver : ValueResolver<IPaymentGatewayMethod, DialogEditorViewDisplay>
+    internal class VoidPaymentDialogEditorViewResolver : ValueResolver<IPaymentGatewayMethod, DialogEditorViewDisplay>
     {
         /// <summary>
         /// The resolve core.

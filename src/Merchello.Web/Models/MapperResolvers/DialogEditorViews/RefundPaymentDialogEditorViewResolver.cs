@@ -13,7 +13,7 @@
     /// <summary>
     /// The refund payment dialog editor view resolver.
     /// </summary>
-    public class RefundPaymentDialogEditorViewResolver : ValueResolver<IPaymentGatewayMethod, DialogEditorViewDisplay>
+    internal class RefundPaymentDialogEditorViewResolver : ValueResolver<IPaymentGatewayMethod, DialogEditorViewDisplay>
     {
         /// <summary>
         /// The resolve core.

@@ -10,7 +10,7 @@
     /// <summary>
     /// Resolves the custom DialogEditorView property from the <see cref="GatewayProviderEditorAttribute"/> for AutoMapper mappings
     /// </summary>
-    public class GatewayMethodDialogEditorViewResolver : ValueResolver<IGatewayMethod, DialogEditorViewDisplay>
+    internal class GatewayMethodDialogEditorViewResolver : ValueResolver<IGatewayMethod, DialogEditorViewDisplay>
     {
         /// <summary>
         /// The resolve core.

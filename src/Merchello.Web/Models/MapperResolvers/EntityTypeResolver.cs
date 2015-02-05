@@ -8,7 +8,7 @@
     /// <summary>
     /// The entity type resolver.
     /// </summary>
-    public class EntityTypeResolver : ValueResolver<IAuditLog, EntityType>
+    internal class EntityTypeResolver : ValueResolver<IAuditLog, EntityType>
     {
         /// <summary>
         /// Resolves the EntityType Enumeration

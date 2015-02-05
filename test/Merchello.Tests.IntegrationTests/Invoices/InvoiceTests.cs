@@ -14,6 +14,7 @@ namespace Merchello.Tests.IntegrationTests.Invoices
     using Merchello.Core.Strategies.Packaging;
     using Merchello.Tests.Base.DataMakers;
     using Merchello.Tests.IntegrationTests.TestHelpers;
+    using Merchello.Web.Models.ContentEditing;
 
     using NUnit.Framework;
 
@@ -210,7 +211,10 @@ namespace Merchello.Tests.IntegrationTests.Invoices
                 Assert.IsTrue(invoice.Items.Any(x => x.Sku == item.Sku), "No item exists for sku " + item.Sku);
             }
         }
-
+        
+        /// <summary>
+        /// Tests asserts custom line items in invoices
+        /// </summary>
         [Test]
         public void Can_Create_An_Invoice_With_A_CustomLineItem()
         {
@@ -235,6 +239,37 @@ namespace Merchello.Tests.IntegrationTests.Invoices
             invoice.Items.Add(ccFee);
                 
             Assert.IsTrue(invoice.CustomLineItems().Any());
+        }
+
+        [Test]
+        public void Can_Map_An_Invoice_With_A_Custom_LineItemType_To_InvoiceDisplay()
+        {
+            //// Arrange
+            var invoice = MockInvoiceDataMaker.GetMockInvoiceForTaxation();
+            Assert.NotNull(invoice, "Invoice is null");
+
+            var extendedData = new ExtendedDataCollection();
+            extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, false.ToString());
+
+            var typeField = EnumTypeFieldConverter.LineItemType.Custom("CcFee");
+
+            //// Act
+            var ccFee = new InvoiceLineItem(
+                typeField.TypeKey,
+                "CC Fee",
+                "ccfee",
+                1,
+                1.0m,
+                extendedData);
+
+            invoice.Items.Add(ccFee);
+
+            var display = invoice.ToInvoiceDisplay();
+
+            //// Assert
+            Assert.NotNull(display);
+            Assert.IsFalse(display.Items.Any(x => x.LineItemTypeField == null), "One or more of the LineItemTypeFields where null");
+
         }
     }
 }
