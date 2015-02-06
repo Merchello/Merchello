@@ -11,7 +11,10 @@
     using Builders;
     using Formatters;
     using Gateways.Payment;
-    using Gateways.Taxation;    
+    using Gateways.Taxation;
+
+    using Merchello.Core.Models.TypeFields;
+
     using Newtonsoft.Json;
     using Services;
 
@@ -825,6 +828,7 @@
                             name = x.Name,
                             lineItemTfKey = x.LineItemTfKey,
                             lineItemType = x.LineItemType.ToString(),
+                            lineItemTypeField = (TypeField)x.GetTypeField(),
                             sku = x.Sku,
                             price = x.Price,
                             quantity = x.Quantity,
