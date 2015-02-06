@@ -4,6 +4,8 @@
 
     using Merchello.Core.Configuration.Outline;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// Wrapper for the TypeFieldElement configuration class.
     /// </summary>
@@ -23,6 +25,14 @@
         /// The GUID key representing the type - generally "TfKey".
         /// </summary>
         private readonly Guid _typeKey;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeField"/> class.
+        /// </summary>
+        [JsonConstructor]
+        internal TypeField()
+        {
+        }
 
         public TypeField(string alias, string name, Guid typeKey)
         {

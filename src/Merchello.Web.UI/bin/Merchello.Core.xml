@@ -29030,6 +29030,11 @@
             The GUID key representing the type - generally "TfKey".
             </summary>
         </member>
+        <member name="M:Merchello.Core.Models.TypeFields.TypeField.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/> class.
+            </summary>
+        </member>
         <member name="P:Merchello.Core.Models.TypeFields.TypeField.Alias">
             <summary>
             Gets the alias.
