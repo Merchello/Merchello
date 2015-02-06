@@ -21,6 +21,7 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(GatewayProviderType.Notification, new TypeField("Notification", "Notification", Constants.TypeFieldKeys.GatewayProvider.NotificationProviderKey));
             AddUpdateCache(GatewayProviderType.Shipping, new TypeField("Shipping", "Shipping", Constants.TypeFieldKeys.GatewayProvider.ShippingProviderKey));
             AddUpdateCache(GatewayProviderType.Taxation, new TypeField("Taxation", "Taxation", Constants.TypeFieldKeys.GatewayProvider.TaxationProviderKey));
+            AddUpdateCache(GatewayProviderType.Custom, NotFound);
         }
 
         public override IEnumerable<ITypeField> CustomTypeFields

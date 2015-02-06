@@ -12,7 +12,7 @@
     /// <summary>
     /// Maps the ListResourcesOffered to an enumeration of <see cref="GatewayProviderDisplay"/>.
     /// </summary>
-    public class AvailableGatewayResourcesResolver : ValueResolver<GatewayProviderBase, IEnumerable<GatewayResourceDisplay>>
+    internal class AvailableGatewayResourcesResolver : ValueResolver<GatewayProviderBase, IEnumerable<GatewayResourceDisplay>>
     {
         /// <summary>
         /// The resolve core.

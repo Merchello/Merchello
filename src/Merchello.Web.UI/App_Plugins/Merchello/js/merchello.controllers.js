@@ -3341,7 +3341,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          * Handles the new inventory passed back from the dialog and sets the variants inventory and saves them.
          */
         function updateInventoryDialogConfirm(dialogData) {
-            console.info(dialogData);
             var success = true;
             var selected = $scope.selectedVariants();
             for (var i = 0; i < selected.length; i++) {

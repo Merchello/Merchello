@@ -328,6 +328,22 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.LineItemTypeFieldResolver">
+            <summary>
+            The line item type field resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.LineItemTypeFieldResolver.ResolveCore(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Resolves the line item type field.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay">
             <summary>
             API object for handling new shipment requests.

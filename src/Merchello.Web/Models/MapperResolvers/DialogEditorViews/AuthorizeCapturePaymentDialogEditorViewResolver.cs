@@ -13,7 +13,7 @@
     /// <summary>
     /// Resolves the custom DialogEditorView property from the <see cref="PaymentGatewayMethodAttribute"/> for AutoMapper mappings
     /// </summary>
-    public class AuthorizeCapturePaymentDialogEditorViewResolver : ValueResolver<IPaymentGatewayMethod, DialogEditorViewDisplay>
+    internal class AuthorizeCapturePaymentDialogEditorViewResolver : ValueResolver<IPaymentGatewayMethod, DialogEditorViewDisplay>
     {
         /// <summary>
         /// The resolve core.

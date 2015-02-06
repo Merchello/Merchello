@@ -232,6 +232,7 @@
     <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizeCapturePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\RefundPaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\VoidPaymentDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\LineItemTypeFieldResolver.cs" />
     <Compile Include="Models\Shipping\ShipmentRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodsQueryDisplay.cs" />

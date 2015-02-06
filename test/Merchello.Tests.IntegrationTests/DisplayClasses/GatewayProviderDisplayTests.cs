@@ -83,7 +83,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         public void Can_Map_CashPaymentGatewayMethod_To_PaymentMethodDisplay()
         {
             //// Arrange
-            const string editor = "/App_Plugins/Merchello/Modules/Settings/Payment/Dialogs/paymentmethod.html";
+            const string editor = "/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html";
             var provider =
                 MerchelloContext.Current.Gateways.Payment.CreateInstance(
                     Constants.ProviderKeys.Payment.CashPaymentProviderKey);

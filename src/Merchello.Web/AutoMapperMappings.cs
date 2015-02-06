@@ -60,21 +60,26 @@
                 .ForMember(dest => dest.DialogEditorView, opt => opt.ResolveUsing<GatewayProviderDialogEditorViewResolver>().ConstructedBy(() => new GatewayProviderDialogEditorViewResolver()));
 
             AutoMapper.Mapper.CreateMap<IGatewayResource, GatewayResourceDisplay>();
-            
+           
+
             // Invoice
             AutoMapper.Mapper.CreateMap<IInvoiceStatus, InvoiceStatusDisplay>();
             AutoMapper.Mapper.CreateMap<IInvoiceLineItem, InvoiceLineItemDisplay>()
-                .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()));
+                .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(dest => dest.LineItemTypeField, opt => opt.ResolveUsing<LineItemTypeFieldResolver>().ConstructedBy(() => new LineItemTypeFieldResolver()));
 
             AutoMapper.Mapper.CreateMap<IInvoice, InvoiceDisplay>();
 
             // Order
             AutoMapper.Mapper.CreateMap<IOrderStatus, OrderStatusDisplay>();
             AutoMapper.Mapper.CreateMap<IOrderLineItem, OrderLineItemDisplay>()
-                .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()));
+                .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(dest => dest.LineItemTypeField, opt => opt.ResolveUsing<LineItemTypeFieldResolver>().ConstructedBy(() => new LineItemTypeFieldResolver()));
 
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
             
+            
+
             // setup the other mappings
             CreateShippingMappings();
 

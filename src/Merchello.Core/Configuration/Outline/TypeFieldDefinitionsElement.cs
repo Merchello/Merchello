@@ -14,6 +14,7 @@
         /// <summary>
         /// Gets the dbTypeFields configuration collection for <see cref="ICustomerAddress"/>
         /// </summary>
+        [ConfigurationProperty("customerAddress", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection CustomerAddress
         {
             get { return (TypeFieldCollection)this["customerAddress"]; }
@@ -31,7 +32,7 @@
         /// <summary>
         /// Gets the dbTypeFields configuration collection for Entities
         /// </summary>
-        [ConfigurationProperty("entities", IsRequired =  false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        [ConfigurationProperty("entities", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
         public TypeFieldCollection Entities
         {
             get { return (TypeFieldCollection) this["entities"]; }

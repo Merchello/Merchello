@@ -5,4 +5,4 @@
         ]);
 
     angular.module('merchello.plugins').requires.push('merchello.plugins.braintree');
-});
+}());

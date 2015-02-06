@@ -6,7 +6,7 @@
     /// <summary>
     /// The warehouse catalog is default resolver.
     /// </summary>
-    public class WarehouseCatalogIsDefaultResolver : ValueResolver<IWarehouseCatalog, bool>
+    internal class WarehouseCatalogIsDefaultResolver : ValueResolver<IWarehouseCatalog, bool>
     {
         /// <summary>
         /// Executes the resolution of the value.

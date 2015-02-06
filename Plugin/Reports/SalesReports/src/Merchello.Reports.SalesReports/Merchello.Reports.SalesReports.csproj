@@ -215,15 +215,14 @@
     <Content Include="App_Plugins\Merchello.SalesReports\assets\css\styles.css">
       <DependentUpon>styles.scss</DependentUpon>
     </Content>
-    <Content Include="App_Plugins\Merchello.SalesReports\Common\salesReports.models.js" />
-    <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.controller.js" />
-    <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesByItem.service.js" />
-    <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesOverTime.controller.js" />
-    <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesOverTime.service.js" />
-    <Content Include="App_Plugins\Merchello.SalesReports\TaxesByDestination\taxesByDestination.controller.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\Common\merchello.salesreports.models.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\Common\merchello.salesreports.module.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesbyitem.resource.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\salesreports.salesbyitem.controller.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesovertime.resource.js" />
+    <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\salesreports.salesovertime.controller.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesByItem\report.html" />
     <Content Include="App_Plugins\Merchello.SalesReports\SalesOverTime\report.html" />
-    <Content Include="App_Plugins\Merchello.SalesReports\TaxesByDestination\report.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
