@@ -5245,6 +5245,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     loadPayments(id);
                     loadAuditLog(id);
                     loadShippingAddress(id);
+                    console.info($scope.invoice);
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;

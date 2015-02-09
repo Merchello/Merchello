@@ -1934,6 +1934,13 @@
             });
         }
 
+        // gets the custom line items
+        function getCustomLineItems() {
+            return _.find(this.items, function(item) {
+                return item.lineItemTypeField.alias === 'Custom';
+            });
+        }
+
         function shippingTotal() {
             var shippingLineItems = getShippingLineItems.call(this);
             var total = 0;
@@ -1978,6 +1985,7 @@
             getProductLineItems: getProductLineItems,
             getTaxLineItem: getTaxLineItem,
             getShippingLineItems: getShippingLineItems,
+            getCustomLineItems: getCustomLineItems,
             hasOrder: hasOrder,
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,
@@ -3924,6 +3932,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         return invoiceLineItem;
                     },
                     transform: function(jsonResult) {
+                        console.info(jsonResult);
                         var invoiceLineItems = genericModelBuilder.transform(jsonResult, Constructor);
                         if(angular.isArray(invoiceLineItems)) {
                             for(var i = 0; i < invoiceLineItems.length; i++) {

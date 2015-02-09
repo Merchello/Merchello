@@ -29,11 +29,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeField"/> class.
         /// </summary>
-        [JsonConstructor]
-        internal TypeField()
-        {
-        }
+       
 
+        [JsonConstructor]
         public TypeField(string alias, string name, Guid typeKey)
         {
             _alias = alias;

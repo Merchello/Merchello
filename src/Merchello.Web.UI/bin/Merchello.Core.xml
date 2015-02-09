@@ -1100,6 +1100,31 @@
             If false, it is assumed that the payment method is to be used programmatically for some other purpose.
             </summary>
         </member>
+        <member name="T:Merchello.Core.Gateways.Payment.PaymentOperationData">
+            <summary>
+            The payment operation event data.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentOperationData.Invoice">
+            <summary>
+            Gets or sets the invoice.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentOperationData.Payment">
+            <summary>
+            Gets or sets the payment.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentOperationData.Amount">
+            <summary>
+            Gets or sets the amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentOperationData.ProcessorArgumentCollection">
+            <summary>
+            Gets or sets the processor argument collection.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Models.AddressExtensions">
             <summary>
             Extension methods for IAddress
@@ -4410,6 +4435,26 @@
             <param name="invoice">
             The invoice.
             </param>
+        </member>
+        <member name="E:Merchello.Core.Gateways.Payment.PaymentGatewayMethodBase.Authorizing">
+            <summary>
+            The authorizing event handler.  Fires before an authorization attempt.
+            </summary>
+        </member>
+        <member name="E:Merchello.Core.Gateways.Payment.PaymentGatewayMethodBase.Capturing">
+            <summary>
+            The capturing event handler.  Fires before an authorize capture or capture attempt.
+            </summary>
+        </member>
+        <member name="E:Merchello.Core.Gateways.Payment.PaymentGatewayMethodBase.Voiding">
+            <summary>
+            The voiding event handler.  Fires before an void attempt.
+            </summary>
+        </member>
+        <member name="E:Merchello.Core.Gateways.Payment.PaymentGatewayMethodBase.Refunding">
+            <summary>
+            The refunding event handler.  Fires before an refund attempt.
+            </summary>
         </member>
         <member name="E:Merchello.Core.Gateways.Payment.PaymentGatewayMethodBase.AuthorizeAttempted">
             <summary>
@@ -29175,7 +29220,7 @@
             The GUID key representing the type - generally "TfKey".
             </summary>
         </member>
-        <member name="M:Merchello.Core.Models.TypeFields.TypeField.#ctor">
+        <member name="M:Merchello.Core.Models.TypeFields.TypeField.#ctor(System.String,System.String,System.Guid)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/> class.
             </summary>
