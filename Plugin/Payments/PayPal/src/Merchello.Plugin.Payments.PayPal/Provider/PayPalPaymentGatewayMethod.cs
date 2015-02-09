@@ -24,16 +24,30 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 
 		protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
 		{
+<<<<<<< HEAD
+			return InitializePayment(invoice, args, -1);
+		}
+
+        protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
+        {
+
+			return InitializePayment(invoice, args, amount);
+        }
+
+		private IPaymentResult InitializePayment(IInvoice invoice, ProcessorArgumentCollection args, decimal captureAmount)
+=======
 			return InitializePayment(invoice, args);
 		}
 
 		private IPaymentResult InitializePayment(IInvoice invoice, ProcessorArgumentCollection args)
+>>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
 		{
 			var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, invoice.Total, PaymentMethod.Key);
 			payment.CustomerKey = invoice.CustomerKey;
 			payment.Authorized = false;
 			payment.Collected = false;
-			payment.PaymentMethodName = "PayPal";
+            payment.PaymentMethodName = "PayPal";
+			payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CaptureAmount, captureAmount.ToString(System.Globalization.CultureInfo.InvariantCulture));
 			GatewayProviderService.Save(payment);
 
 			var result = _processor.InitializePayment(invoice, payment, args);
@@ -77,6 +91,8 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 			return result;
 		}
 
+<<<<<<< HEAD
+=======
 		protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
 		{
 			string token;
@@ -108,6 +124,7 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 			return result;
 		}
 
+>>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
 		protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
 		{
 			throw new System.NotImplementedException();

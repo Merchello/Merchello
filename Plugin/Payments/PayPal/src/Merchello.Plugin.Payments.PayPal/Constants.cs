@@ -19,6 +19,12 @@
 
 			public static string PaymentAuthorized = "paypalPaymentAuthorized";
 			public static string PaymentCaptured = "paypalPaymentCaptured";
+<<<<<<< HEAD
+
+			public static string CaptureAmount = "CaptureAmount";
+
+=======
+>>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
 			/*
 			public static string LoginId = "paypalLoginId";
 			public static string TransactionKey = "paypalTranKey";
