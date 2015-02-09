@@ -93,21 +93,15 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
 	        //var paymentGatewayMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(providerKeyGuid);
 
             // Authorize
-<<<<<<< HEAD
             var authorizeResult = _processor.AuthorizePayment(invoice, payment, token, payerId);
 	        /*
 			var authorizePaymentProcArgs = new ProcessorArgumentCollection();
-=======
-            //var authorizeResult = _processor.AuthorizePayment(invoice, payment, token, payerId);
-	        var authorizePaymentProcArgs = new ProcessorArgumentCollection();
->>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
 
 	        authorizePaymentProcArgs[Constants.ProcessorArgumentsKeys.internalTokenKey] = token;
 			authorizePaymentProcArgs[Constants.ProcessorArgumentsKeys.internalPayerIDKey] = payerId;
 			authorizePaymentProcArgs[Constants.ProcessorArgumentsKeys.internalPaymentKeyKey] = payment.Key.ToString();
 
 	        var authorizeResult = paymentGatewayMethod.AuthorizeCapturePayment(invoice, payment.Amount, authorizePaymentProcArgs);
-<<<<<<< HEAD
             */
             _merchelloContext.Services.GatewayProviderService.Save(payment);
             if (!authorizeResult.Payment.Success)
@@ -117,14 +111,6 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
                 return ShowError(authorizeResult.Payment.Exception.Message);
             }
 			_merchelloContext.Services.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal: capture authorized", 0);
-=======
-            //_merchelloContext.Services.GatewayProviderService.Save(payment);
-            if (!authorizeResult.Payment.Success)
-            {
-                LogHelper.Error<PayPalApiController>("Payment is not authorized.", authorizeResult.Payment.Exception);
-                return ShowError(authorizeResult.Payment.Exception.Message);
-            }
->>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
 
 			// The basket can be empty
             var customerContext = new Merchello.Web.CustomerContext(this.UmbracoContext);
@@ -135,16 +121,11 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
 	        }
 
             // Capture
-<<<<<<< HEAD
 	        decimal captureAmount;
 			Decimal.TryParse(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureAmount), out captureAmount);
 			if (captureAmount > 0)
 			{
 				var captureResult = paymentGatewayMethod.CapturePayment(invoice, payment, captureAmount, null);
-=======
-	        if (_processor.CaptureFundsImmediately) {
-				var captureResult = paymentGatewayMethod.CapturePayment(invoice, payment, payment.Amount, null);
->>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
 				if (!captureResult.Payment.Success)
 				{
 					LogHelper.Error<PayPalApiController>("Payment is not captured.", captureResult.Payment.Exception);

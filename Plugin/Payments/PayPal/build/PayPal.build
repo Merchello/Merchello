@@ -15,11 +15,7 @@
     <PropertyGroup>
         <VersionMajor>1</VersionMajor>
         <VersionMinor>0</VersionMinor>
-<<<<<<< HEAD
         <VersionPatch>3</VersionPatch>
-=======
-        <VersionPatch>2</VersionPatch>
->>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
         <VersionSuffix>0</VersionSuffix>
         <UmbracoVersion>7.1.4</UmbracoVersion>
     </PropertyGroup>

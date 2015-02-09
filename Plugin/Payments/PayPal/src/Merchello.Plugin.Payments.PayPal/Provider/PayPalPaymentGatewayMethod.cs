@@ -24,7 +24,6 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 
 		protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
 		{
-<<<<<<< HEAD
 			return InitializePayment(invoice, args, -1);
 		}
 
@@ -35,12 +34,6 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
         }
 
 		private IPaymentResult InitializePayment(IInvoice invoice, ProcessorArgumentCollection args, decimal captureAmount)
-=======
-			return InitializePayment(invoice, args);
-		}
-
-		private IPaymentResult InitializePayment(IInvoice invoice, ProcessorArgumentCollection args)
->>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
 		{
 			var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, invoice.Total, PaymentMethod.Key);
 			payment.CustomerKey = invoice.CustomerKey;
@@ -91,40 +84,6 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 			return result;
 		}
 
-<<<<<<< HEAD
-=======
-		protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
-		{
-			string token;
-			string payerId;
-			string paymentKey;
-			
-			args.TryGetValue(Constants.ProcessorArgumentsKeys.internalTokenKey, out token);
-			args.TryGetValue(Constants.ProcessorArgumentsKeys.internalPayerIDKey, out payerId);
-			args.TryGetValue(Constants.ProcessorArgumentsKeys.internalPaymentKeyKey, out paymentKey);
-
-			var paymentKeyGuid = new Guid(paymentKey);
-			var payment = invoice.Payments().First(item => item.Key == paymentKeyGuid);
-
-			var result = _processor.AuthorizePayment(invoice, payment, token, payerId);
-			//GatewayProviderService.Save(payment);
-
-			if (!result.Payment.Success)
-			{
-				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, "PayPal: request capture authorization error: " + result.Payment.Exception.Message, 0);
-			}
-			else
-			{
-				GatewayProviderService.Save(payment);
-				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal: capture authorized", 0);
-				//GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureTransactionResult), amount);
-			}
-			
-
-			return result;
-		}
-
->>>>>>> d2c22cd63ea00bc79c74f2a720da7a25499daa62
 		protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
 		{
 			throw new System.NotImplementedException();
