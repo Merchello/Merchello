@@ -1,10 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -14,19 +15,137 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class NotificationMessage : Entity, INotificationMessage
     {
-        private string _name;
-        private string _description;
-        private string _bodyText;
-        private string _fromAddress;
-        private string _replyTo;
-        private int _maxLength;
-        private bool _bodyTextIsFilePath;
-        private Guid? _monitorKey;
+        #region Fields
+
+        /// <summary>
+        /// The name selector.
+        /// </summary>
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Name);
+
+        /// <summary>
+        /// The description selector.
+        /// </summary>
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Description);
+
+        /// <summary>
+        /// The from selector.
+        /// </summary>
+        private static readonly PropertyInfo FromSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.FromAddress);
+
+        /// <summary>
+        /// The reply to selector.
+        /// </summary>
+        private static readonly PropertyInfo ReplyToSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.ReplyTo);
+
+        /// <summary>
+        /// The max length selector.
+        /// </summary>
+        private static readonly PropertyInfo MaxLengthSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, int>(x => x.MaxLength);
+
+        /// <summary>
+        /// The message selector.
+        /// </summary>
+        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.BodyText);
+
+        /// <summary>
+        /// The message is file path selector.
+        /// </summary>
+        private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.BodyTextIsFilePath);
+
+        /// <summary>
+        /// The monitor key selector.
+        /// </summary>
+        private static readonly PropertyInfo MonitorKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.MonitorKey);
+
+        /// <summary>
+        /// The recipients selector.
+        /// </summary>
+        private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
+
+        /// <summary>
+        /// The send to customer selector.
+        /// </summary>
+        private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
+
+        /// <summary>
+        /// The disabled selector.
+        /// </summary>
+        private static readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.Disabled);
+
+        /// <summary>
+        /// The notification method key.
+        /// </summary>
         private readonly Guid _methodKey;
+
+        /// <summary>
+        /// The name.
+        /// </summary>
+        private string _name;
+
+        /// <summary>
+        /// The description.
+        /// </summary>
+        private string _description;
+
+        /// <summary>
+        /// The body text.
+        /// </summary>
+        private string _bodyText;
+
+        /// <summary>
+        /// The from address.
+        /// </summary>
+        private string _fromAddress;
+
+        /// <summary>
+        /// The reply to.
+        /// </summary>
+        private string _replyTo;
+
+        /// <summary>
+        /// The max length.
+        /// </summary>
+        private int _maxLength;
+
+        /// <summary>
+        /// The body text is file path.
+        /// </summary>
+        private bool _bodyTextIsFilePath;
+
+        /// <summary>
+        /// The monitor key.
+        /// </summary>
+        private Guid? _monitorKey;
+
+        /// <summary>
+        /// The _recipients.
+        /// </summary>
         private string _recipients;
+
+        /// <summary>
+        /// The send to customer.
+        /// </summary>
         private bool _sendToCustomer;
+
+        /// <summary>
+        /// The disabled.
+        /// </summary>
         private bool _disabled;
 
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMessage"/> class.
+        /// </summary>
+        /// <param name="notificationMethodKey">
+        /// The notification method key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="fromAddress">
+        /// The from address.
+        /// </param>
         public NotificationMessage(Guid notificationMethodKey, string name, string fromAddress)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(notificationMethodKey), "notificationMethodKey");
@@ -39,17 +158,6 @@ namespace Merchello.Core.Models
             _maxLength = int.MaxValue;
         }
 
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Name);
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Description);
-        private static readonly PropertyInfo FromSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.FromAddress);
-        private static readonly PropertyInfo ReplyToSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.ReplyTo);
-        private static readonly PropertyInfo MaxLengthSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, int>(x => x.MaxLength);
-        private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.BodyText);
-        private static readonly PropertyInfo MessageIsFilePathSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.BodyTextIsFilePath);
-        private static readonly PropertyInfo MonitorKeySelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, Guid?>(x => x.MonitorKey);
-        private static readonly PropertyInfo RecipientsSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, string>(x => x.Recipients);
-        private static readonly PropertyInfo SendToCustomerSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.SendToCustomer);
-        private static readonly PropertyInfo DisabledSelector = ExpressionHelper.GetPropertyInfo<NotificationMessage, bool>(x => x.Disabled);
 
         /// <summary>
         /// The <see cref="INotificationMethod"/> key

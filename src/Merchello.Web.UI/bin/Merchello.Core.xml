@@ -1827,6 +1827,22 @@
             The sort order of the  status
             </summary>
         </member>
+        <member name="T:Merchello.Core.Models.NotificationExtensions">
+            <summary>
+            The notification extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.NotificationExtensions.MemberwiseClone(Merchello.Core.Models.INotificationMessage)">
+            <summary>
+            Performs a member wise clone of a notification message
+            </summary>
+            <param name="message">
+            The message to be cloned.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.INotificationMessage"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Core.Models.ShipmentStatus">
             <summary>
             The shipment status.
@@ -7158,62 +7174,62 @@
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.MonitorKey">
             <summary>
-            Optional key for Notification Monitor Rule
+            Gets or sets an optional key for Notification Monitor Rule
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.MethodKey">
             <summary>
-            The <see cref="T:Merchello.Core.Models.INotificationMethod"/> key
+            Gets the <see cref="T:Merchello.Core.Models.INotificationMethod"/> key
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.Name">
             <summary>
-            The name of the notification
+            Gets or sets the name of the notification
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.Description">
             <summary>
-            A brief description of the notification
+            Gets or sets the  a brief description of the notification
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.FromAddress">
             <summary>
-            The sender's "from" address
+            Gets the sender's "from" address
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.ReplyTo">
             <summary>
-            The Reply To address
+            Gets or sets the Reply To address
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.BodyText">
             <summary>
-            The path or text src
+            Gets or sets the path or text source
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.MaxLength">
             <summary>
-            The maximum length of the message to be sent
+            Gets or sets the  maximum length of the message to be sent
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.BodyTextIsFilePath">
             <summary>
-            True/false indicating whether or not the string value of Message is actually a path to a file to read
+            Gets or sets a value indicating whether or not the string value of Message is actually a path to a file to read
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.Recipients">
             <summary>
-            The recipients of the notification
+            Gets or sets the recipients of the notification
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.SendToCustomer">
             <summary>
-            True/false indicating whether or not this notification should be sent to the customer
+            Gets or sets a value indicating whether or not this notification should be sent to the customer
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.INotificationMessage.Disabled">
             <summary>
-            True/false indicating whether or not this notification is disabled
+            Gets or sets a value indicating whether or not this notification is disabled
             </summary>
         </member>
         <member name="T:Merchello.Core.Models.IOrder">
@@ -7767,6 +7783,135 @@
             <summary>
             Defines a notification message
             </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.NameSelector">
+            <summary>
+            The name selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.DescriptionSelector">
+            <summary>
+            The description selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.FromSelector">
+            <summary>
+            The from selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.ReplyToSelector">
+            <summary>
+            The reply to selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.MaxLengthSelector">
+            <summary>
+            The max length selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.MessageSelector">
+            <summary>
+            The message selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.MessageIsFilePathSelector">
+            <summary>
+            The message is file path selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.MonitorKeySelector">
+            <summary>
+            The monitor key selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.RecipientsSelector">
+            <summary>
+            The recipients selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.SendToCustomerSelector">
+            <summary>
+            The send to customer selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage.DisabledSelector">
+            <summary>
+            The disabled selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._methodKey">
+            <summary>
+            The notification method key.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._name">
+            <summary>
+            The name.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._description">
+            <summary>
+            The description.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._bodyText">
+            <summary>
+            The body text.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._fromAddress">
+            <summary>
+            The from address.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._replyTo">
+            <summary>
+            The reply to.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._maxLength">
+            <summary>
+            The max length.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._bodyTextIsFilePath">
+            <summary>
+            The body text is file path.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._monitorKey">
+            <summary>
+            The monitor key.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._recipients">
+            <summary>
+            The _recipients.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._sendToCustomer">
+            <summary>
+            The send to customer.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.NotificationMessage._disabled">
+            <summary>
+            The disabled.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.NotificationMessage.#ctor(System.Guid,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Models.NotificationMessage"/> class.
+            </summary>
+            <param name="notificationMethodKey">
+            The notification method key.
+            </param>
+            <param name="name">
+            The name.
+            </param>
+            <param name="fromAddress">
+            The from address.
+            </param>
         </member>
         <member name="P:Merchello.Core.Models.NotificationMessage.MethodKey">
             <summary>

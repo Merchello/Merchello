@@ -254,6 +254,7 @@
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
     <Compile Include="Invoices\InvoiceTests.cs" />
+    <Compile Include="Notifications\NotificationContextTests.cs" />
     <Compile Include="Notifications\NotificationObservationTests.cs" />
     <Compile Include="Notifications\SmtpNotificationProviderTests.cs" />
     <Compile Include="MigrationTests.cs" />

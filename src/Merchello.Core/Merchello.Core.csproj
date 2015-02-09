@@ -271,6 +271,7 @@
     <Compile Include="Models\Interfaces\IAuditLog.cs" />
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
+    <Compile Include="Models\NotificationExtensions.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
