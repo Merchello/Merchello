@@ -9578,6 +9578,11 @@
             </summary>
             <param name="shipmentRateQuote">The <see cref="T:Merchello.Core.Gateways.Shipping.IShipmentRateQuote"/> to be added as a <see cref="T:Merchello.Core.Models.ILineItem"/></param>
         </member>
+        <member name="E:Merchello.Core.Sales.SalePreparationBase.InvoicePrepared">
+            <summary>
+            Occurs after an invoice has been prepared.
+            </summary>
+        </member>
         <member name="E:Merchello.Core.Sales.SalePreparationBase.Finalizing">
             <summary>
             Occurs after a sale has been finalized.

@@ -64,6 +64,11 @@
         }
 
         /// <summary>
+        /// Occurs after an invoice has been prepared.
+        /// </summary>
+        public static event TypedEventHandler<SalePreparationBase, SalesPreparationEventArgs<IInvoice>> InvoicePrepared;
+
+        /// <summary>
         /// Occurs after a sale has been finalized.
         /// </summary>
         public static event TypedEventHandler<SalePreparationBase, SalesPreparationEventArgs<IPaymentResult>> Finalizing;
@@ -299,8 +304,13 @@
             if (!IsReadyToInvoice()) return null;
 
             var attempt = invoiceBuilder.Build();
-            
-            if (attempt.Success) return attempt.Result;
+
+            if (attempt.Success)
+            {
+                InvoicePrepared.RaiseEvent(new SalesPreparationEventArgs<IInvoice>(attempt.Result), this);
+
+                return attempt.Result;
+            }
 
             LogHelper.Error<SalePreparationBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
             

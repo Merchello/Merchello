@@ -217,22 +217,6 @@ namespace Controllers
         {
             var model = Basket.SalePreparation().PrepareInvoice();
 
-            var extendedData = new ExtendedDataCollection();
-            extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, false.ToString());
-
-            var typeField = EnumTypeFieldConverter.LineItemType.Custom("CcFee");
-
-            //// Act
-            var ccFee = new InvoiceLineItem(
-                typeField.TypeKey,
-                "CC Fee",
-                "ccfee",
-                1,
-                1.0m,
-                extendedData);
-
-            model.Items.Add(ccFee);
-
             return PartialView("InvoiceSummary", model);
         }
 

@@ -18,7 +18,6 @@
                         return invoiceLineItem;
                     },
                     transform: function(jsonResult) {
-                        console.info(jsonResult);
                         var invoiceLineItems = genericModelBuilder.transform(jsonResult, Constructor);
                         if(angular.isArray(invoiceLineItems)) {
                             for(var i = 0; i < invoiceLineItems.length; i++) {

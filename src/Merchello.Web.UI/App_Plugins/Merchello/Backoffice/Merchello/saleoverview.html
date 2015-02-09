@@ -53,6 +53,13 @@
                                 <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
                                 <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
                             </tr>
+                            <tr data-ng-repeat="lineItem in invoice.getCustomLineItems()">
+                                <td>{{lineItem.name}}</td>
+                                <td>{{lineItem.sku}}</td>
+                                <td class="text-center">{{lineItem.quantity}}</td>
+                                <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
+                                <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
+                            </tr>
                             <tr>
                                 <td colspan="4" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
                                 <td class="text-right">{{taxTotal | currency : currencySymbol}}</td>

@@ -6,6 +6,9 @@
     using Merchello.Core;
     using Merchello.Core.Models.TypeFields;
 
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// The line item display base.
     /// </summary>
@@ -54,6 +57,7 @@
         /// <summary>
         /// Gets or sets the line item type.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public LineItemType LineItemType { get; set; }
 
         /// <summary>
