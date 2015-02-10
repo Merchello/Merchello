@@ -1,0 +1,53 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "RosettaBasePage.cshtml";
+}
+
+
+<div class="container hero-spacer">
+    <h2>@CurrentPage.Name</h2>
+
+    @if (CurrentPage.Children.Any())
+{
+        <div class="row text-center">
+              
+        <!-- And here they are, each child page of the current page as a list. Pretty basic. -->
+        @foreach (IPublishedContent category in CurrentPage.Children.Where("Visible"))
+        {
+
+            <div class="col-lg-4 col-md-6 hero-feature">
+                <a href="@category.Url">
+                <div class="thumbnail">
+                    <!-- Category image is one of the Umbraco content-picker properties we assigned to the Category's document type. -->
+                    <!-- This is pretty much a hack for the sake of reference; we're restricting the image size to use it as a thumbnail. -->
+                    @if (category.HasProperty("categoryImage") && category.HasValue("categoryImage"))
+                    {
+                        IPublishedContent image = Umbraco.Media(category.GetPropertyValue("categoryImage"));
+                        <img src="@image.Url" alt="@image.Name" class="img-responsive"/>
+                    }
+                        
+                    <div class="caption">
+                        <h2>@category.Name</h2>
+                    </div>
+                </div>
+                </a>
+            </div>
+        }
+        </div>
+        
+}
+
+ </div>  
+
+
+<div class="content" style="clear:both;">
+    @CurrentPage.instruction
+</div>
+
+
+@section ViewList
+{
+
+    @RosettaHelper.GetViewBoxHtml("RosettaListOfCategories.cshtml","This view iterates through each category you've entered in Merchello back office and puts them in a list.")
+
+}

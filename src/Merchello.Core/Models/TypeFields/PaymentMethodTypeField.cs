@@ -18,6 +18,7 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(PaymentMethodType.Cash, new TypeField("Cash", "Cash", Constants.TypeFieldKeys.PaymentMethod.CashKey));
             AddUpdateCache(PaymentMethodType.CreditCard, new TypeField("CreditCard", "Credit Card", Constants.TypeFieldKeys.PaymentMethod.CreditCardKey));
             AddUpdateCache(PaymentMethodType.PurchaseOrder, new TypeField("PurchaseOrder", "Purchase Order", Constants.TypeFieldKeys.PaymentMethod.PurchaseOrderKey));
+            AddUpdateCache(PaymentMethodType.Custom, NotFound);
         }
 
         public override IEnumerable<ITypeField> CustomTypeFields

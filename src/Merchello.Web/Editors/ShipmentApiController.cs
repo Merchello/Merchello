@@ -16,6 +16,8 @@ namespace Merchello.Web.Editors
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Querying;
+    using Merchello.Web.Models.Shipping;
     using Merchello.Web.WebApi;
 
     using Umbraco.Web;
@@ -132,7 +134,7 @@ namespace Merchello.Web.Editors
 		        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
 		    }
 
-		    return shipments.Select(s => s.ToShipmentDisplay()).OrderByDescending(x => x.ShipmentNumber);
+		    return shipments.Where(s => s != null).Select(s => s.ToShipmentDisplay()).OrderByDescending(x => x.ShipmentNumber);
 		}
 
         /// <summary>
@@ -170,8 +172,45 @@ namespace Merchello.Web.Editors
 
                 return shipMethod.ToShipMethodDisplay();
             }
-
+            
             return new ShipMethodDisplay() { Name = "Not Found" };
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ShipMethodDisplay"/> by it's key and alternative <see cref="ShipMethodDisplay"/> 
+        /// for the same shipCountry.
+        /// </summary>
+        /// <param name="request">
+        /// The <see cref="ShipMethodRequestDisplay"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipMethodsQueryDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public ShipMethodsQueryDisplay SearchShipMethodAndAlternatives(ShipMethodRequestDisplay request)
+        {
+            // Get the invoice so we can get all available ship methods by requoting the shipment
+            var invoice = _invoiceService.GetByKey(request.InvoiceKey);
+            if (invoice == null) throw new NullReferenceException("Reference to invoice passed was null. It must have been deleted.");
+            
+            // find the particular line item
+            var shipmentLineItem = invoice.ShippingLineItems().FirstOrDefault(x => x.Key == request.LineItemKey);
+            if (shipmentLineItem == null) throw new NullReferenceException("Reference to invoice line item passed was null. It must have been deleted.");
+
+            // Reconstruct the shipment so that it can be quoted to find the available shipmethods
+            var shipment = shipmentLineItem.ExtendedData.GetShipment<InvoiceLineItem>();
+            var quotes = shipment.ShipmentRateQuotes(false).ToArray();
+            if (!quotes.Any()) throw new NullReferenceException("The shipment could no longer be quoted.  Are there any qualifying ship mehtods configured?");
+            
+            var allowed = new List<IShipMethod>();
+            allowed.AddRange(quotes.Select(x => x.ShipMethod));
+
+            var selected = allowed.FirstOrDefault(x => x.Key == request.ShipMethodKey);
+            return new ShipMethodsQueryDisplay()
+                {
+                    Selected = selected == null ? null : selected.ToShipMethodDisplay(),
+                    Alternatives = allowed.Select(x => x.ToShipMethodDisplay())
+                };
         }
 
         /// <summary>
@@ -179,7 +218,7 @@ namespace Merchello.Web.Editors
         ///
         /// POST /umbraco/Merchello/ShipmentApi/CreateShipment
         /// </summary>
-        /// <param name="order">POSTed <see cref="OrderDisplay"/> object</param>
+        /// <param name="shipmentRequest">POSTed <see cref="ShipmentRequestDisplay"/> object</param>
         /// <remarks>
         /// 
         /// Note:  This is a modified order that very likely has not been persisted.  The UI 
@@ -189,21 +228,22 @@ namespace Merchello.Web.Editors
         /// 
         /// </remarks>
         [HttpPost]
-        public ShipmentDisplay NewShipment(OrderDisplay order)
+        public ShipmentDisplay NewShipment(ShipmentRequestDisplay shipmentRequest)
         {
             try
             {
-                if (!order.Items.Any()) throw new InvalidOperationException("The shipment did not include any line items");
+                if (!shipmentRequest.Order.Items.Any()) throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "The shipment did not include any line items"));
                 
-                var merchOrder = _orderService.GetByKey(order.Key);
+                var merchOrder = _orderService.GetByKey(shipmentRequest.Order.Key);
 
-                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, order.Items.Select(x => x.Key), Constants.DefaultKeys.ShipmentStatus.Quoted);
+                var builder = new ShipmentBuilderChain(MerchelloContext, merchOrder, shipmentRequest.Order.Items.Select(x => x.Key), shipmentRequest.ShipMethodKey, shipmentRequest.ShipmentStatusKey, shipmentRequest.TrackingNumber);
 
                 var attempt = builder.Build();
                 
                 if (!attempt.Success)
                     throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
-                                                                     
+                
+                                  
                 return attempt.Result.ToShipmentDisplay();
 
             }
@@ -218,48 +258,91 @@ namespace Merchello.Web.Editors
         /// PUT /umbraco/Merchello/ShipmentApi/PutShipment
         /// </summary>
         /// <param name="shipment">ShipmentDisplay object serialized from WebApi</param>
-        /// <param name="order">The order.</param>
-        /// <returns></returns>
+        /// <returns>A <see cref="ShipmentDisplay"/></returns>
         [HttpPost, HttpPut]
-        public HttpResponseMessage PutShipment(ShipmentOrderDisplay shipmentOrder)
+        public ShipmentDisplay PutShipment(ShipmentDisplay shipment)
         {
-            var response = Request.CreateResponse(HttpStatusCode.OK);
+            var merchShipment = _shipmentService.GetByKey(shipment.Key);
+            var orderKeys = shipment.Items.Select(x => x.ContainerKey).Distinct();
 
-            var shipment = shipmentOrder.ShipmentDisplay;
-            var order = shipmentOrder.OrderDisplay;
-            try
+            if (merchShipment == null) throw new NullReferenceException("Shipment not found for key");
+
+            merchShipment = shipment.ToShipment(merchShipment);
+
+            _shipmentService.Save(merchShipment);
+
+            this.UpdateOrderStatus(orderKeys);
+
+            return merchShipment.ToShipmentDisplay();
+        }
+
+        /// <summary>
+        /// The update shipping address line item.
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage UpdateShippingAddressLineItem(ShipmentDisplay shipment)
+        {
+            var merchShipment = _shipmentService.GetByKey(shipment.Key);
+
+            // get the order keys from the shipment.  In general this will be a single
+            // order but it is possible for this to be an enumeration
+            var orderKeys = shipment.Items.Select(x => x.ContainerKey).Distinct();
+            var orders = _orderService.GetByKeys(orderKeys);
+
+            // get the collection of invoices assoicated with the orders.
+            // again, this is typically only one.
+            var invoiceKeys = orders.Select(x => x.InvoiceKey).Distinct();
+            var invoices = _invoiceService.GetByKeys(invoiceKeys);
+
+            foreach (var invoice in invoices)
             {
-                var merchShipment = _shipmentService.GetByKey(shipment.Key);
-
-                if (merchShipment == null)
+                // now we're going to update every shipment line item with the destination address
+                var shippingLineItems = invoice.ShippingLineItems().ToArray();
+                foreach (var lineItem in shippingLineItems)
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                    lineItem.ExtendedData.AddAddress(merchShipment.GetDestinationAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
                 }
-
-                merchShipment = shipment.ToShipment(merchShipment);
-
-
-                // TODO this needs to be refactored in 1.5.1
-                //if (order.Items.Count() == shipment.Items.Count())
-                //{
-                //    merchShipment.AuditCreated();
-                //    Notification.Trigger("OrderShipped", merchShipment, new[] {merchShipment.Email});
-                //}
-                //else
-                //{
-                //    merchShipment.AuditCreated();            
-                //    Notification.Trigger("PartialOrderShipped", merchShipment, new[] { merchShipment.Email });
-                //}
-
-                _shipmentService.Save(merchShipment);
-
+                _invoiceService.Save(invoice);
             }
-            catch (Exception ex)
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Deletes an existing shipment
+        /// 
+        /// DELETE /umbraco/Merchello/ShipmentApi/{guid}
+        /// </summary>
+        /// <param name="id">
+        /// The id of the shipment to delete
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost, HttpDelete, HttpGet]
+        public HttpResponseMessage DeleteShipment(Guid id)
+        {
+            var shipmentToDelete = _shipmentService.GetByKey(id);
+            
+            if (shipmentToDelete == null)
             {
-                response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
+                return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            return response;
+            var orderKeys = shipmentToDelete.Items.Select(x => x.ContainerKey).Distinct();
+            
+            _shipmentService.Delete(shipmentToDelete);
+
+            this.UpdateOrderStatus(orderKeys);
+
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -274,6 +357,67 @@ namespace Merchello.Web.Editors
             var statuses = _shipmentService.GetAllShipmentStatuses().OrderBy(x => x.SortOrder);
 
             return statuses.Select(x => x.ToShipmentStatusDisplay());
+        }
+
+        /// <summary>
+        /// Utility method to determine the current order status.
+        /// </summary>
+        /// <param name="orderKeys">
+        /// The order keys.
+        /// </param>
+        private void UpdateOrderStatus(IEnumerable<Guid> orderKeys)
+        {
+            // update the order status
+            var orders = _orderService.GetByKeys(orderKeys);
+            foreach (var order in orders)
+            {
+                Guid orderStatusKey;
+
+                // not fulfilled
+                if (order.ShippableItems().All(x => ((OrderLineItem)x).ShipmentKey == null))
+                {
+                    orderStatusKey = Constants.DefaultKeys.OrderStatus.NotFulfilled;
+                    this.SaveOrder(order, orderStatusKey);
+                    continue;
+                }
+
+                if (order.ShippableItems().Any(x => ((OrderLineItem)x).ShipmentKey == null))
+                {
+                    orderStatusKey = Constants.DefaultKeys.OrderStatus.Open;
+                    this.SaveOrder(order, orderStatusKey);
+                    continue;
+                }
+
+                // now we need to look at all of the shipments to make sure the shipment statuses are either
+                // shipped or delivered.  If either of those two, we will consider the shipment as 'Fulfilled',
+                // otherwise the shipment will remain in the open status
+                var shipmentKeys = order.ShippableItems().Select(x => ((OrderLineItem)x).ShipmentKey.GetValueOrDefault()).Distinct();
+                var shipments = _shipmentService.GetByKeys(shipmentKeys);
+                orderStatusKey =
+                    shipments.All(x => 
+                        x.ShipmentStatusKey.Equals(Constants.DefaultKeys.ShipmentStatus.Delivered)
+                        || x.ShipmentStatusKey.Equals(Constants.DefaultKeys.ShipmentStatus.Shipped)) ? 
+                            Constants.DefaultKeys.OrderStatus.Fulfilled :
+                            Constants.DefaultKeys.OrderStatus.Open;
+
+                this.SaveOrder(order, orderStatusKey);
+            }
+        }
+
+        /// <summary>
+        /// The save order.
+        /// </summary>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        private void SaveOrder(IOrder order, Guid orderStatusKey)
+        {
+            var orderStatus = _orderService.GetOrderStatusByKey(orderStatusKey);
+            order.OrderStatus = orderStatus;
+            _orderService.Save(order);
         }
     }
 }

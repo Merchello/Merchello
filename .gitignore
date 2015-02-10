@@ -16,7 +16,7 @@ x64/
 [Bb]uild/*.zip
 [Bb]uild/*.nupkg
 [Bb]uild/[Tt]emp/
-[Bb]in/
+#[Bb]in/
 [Oo]bj/
 [Pp]ackages/
 

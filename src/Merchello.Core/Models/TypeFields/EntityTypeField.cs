@@ -28,6 +28,7 @@ namespace Merchello.Core.Models.TypeFields
             AddUpdateCache(EntityType.Shipment, new TypeField("Shipment", "Shipment", Constants.TypeFieldKeys.Entity.ShipmentKey));
             AddUpdateCache(EntityType.Warehouse, new TypeField("Warehouse", "Warehouse", Constants.TypeFieldKeys.Entity.WarehouseKey));
             AddUpdateCache(EntityType.WarehouseCatalog, new TypeField("WarehouseCatalog", "WarehouseCatalog", Constants.TypeFieldKeys.Entity.WarehouseCatalogKey));
+            AddUpdateCache(EntityType.Custom, NotFound);
         }
 
         public override IEnumerable<ITypeField> CustomTypeFields

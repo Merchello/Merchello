@@ -82,6 +82,74 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
         }
 
+        [Test]
+        public void Can_Retrieve_A_Product_From_The_Index_By_Sku()
+        {
+            //// Arrange
+
+            var merchello = new MerchelloHelper(MerchelloContext.Services);
+
+            var productService = PreTestDataWorker.ProductService;
+
+            var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
+            product.Height = 11M;
+            product.Width = 11M;
+            product.Length = 11M;
+            product.CostOfGoods = 15M;
+            product.OnSale = true;
+            product.SalePrice = 18M;
+            productService.Save(product);
+
+
+            _provider.AddProductToIndex(product);
+
+            //// Act
+            var productDisplay = merchello.Query.Product.GetBySku(product.Sku);
+
+            //// Assert
+            Assert.NotNull(productDisplay);
+            Assert.AreEqual(product.Key, productDisplay.Key);
+        }
+
+        [Test]
+        public void Can_Retrieve_A_ProductVariant_From_The_Index()
+        {
+            //// Arrange
+
+            var merchello = new MerchelloHelper(MerchelloContext.Services);
+
+            var productService = PreTestDataWorker.ProductService;
+
+            var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
+            product.ProductOptions.Add(new ProductOption("Color"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Red", "Red"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Green"));
+            product.ProductOptions.Add(new ProductOption("Size"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Sm"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "Med"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Lg"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("X-Large", "XL"));
+            product.Height = 11M;
+            product.Width = 11M;
+            product.Length = 11M;
+            product.CostOfGoods = 15M;
+            product.OnSale = true;
+            product.SalePrice = 18M;
+            productService.Save(product);
+            _provider.AddProductToIndex(product);
+
+            Assert.IsTrue(product.ProductVariants.Any());
+            var variant = product.ProductVariants.First();
+
+            //// Act
+            var productVariantDisplay = merchello.Query.Product.GetProductVariantBySku(variant.Sku);
+
+            //// Assert
+            Assert.NotNull(productVariantDisplay);
+            Assert.AreEqual(variant.Key, productVariantDisplay.Key);
+        }
+
         //[Test]
         //public void Can_GetGetIguanas_From_Index()
         //{

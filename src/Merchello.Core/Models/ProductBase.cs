@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
     using EntityBase;
@@ -292,7 +293,8 @@
         public IEnumerable<ICatalogInventory> CatalogInventories
         {
             get { return _catalogInventoryCollection; }
-        }       
+        }
+
 
         /// <summary>
         /// Gets or sets sku associated with the Product

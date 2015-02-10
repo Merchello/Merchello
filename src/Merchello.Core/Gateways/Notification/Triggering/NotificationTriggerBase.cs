@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Gateways.Notification.Triggering
 {
     using System.Collections.Generic;
+    using System.Linq;
+
     using Observation;
     using Umbraco.Core.Logging;
 
@@ -41,6 +43,17 @@
             }
 
             LogHelper.Debug<NotificationTriggerBase<TInputModel, TMonitorModel>>(string.Format("Model passed to NotificationTriggerBase {0} does not match expected model {1}.  Notification trigger was skipped.", model.GetType(), typeof(TInputModel)));
+        }
+
+        /// <summary>
+        /// Value to pass to the notification monitors
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        protected virtual void Notify(TInputModel model)
+        {
+            this.Notify(model, Enumerable.Empty<string>());
         }
 
         /// <summary>

@@ -1,0 +1,16 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "RosettaBasePage.cshtml";
+}
+
+
+<section id="basket_page">
+
+    <p class="documentation"><strong>RosettaShoppingBasketPage.cshtml (view)</strong><br />
+    Display the shopping cart by calling "RenderBasket" in the BasketController.</p>
+
+    
+    @Html.Action("RenderBasket", "Basket", new { area = "Site" })
+
+</section>
+

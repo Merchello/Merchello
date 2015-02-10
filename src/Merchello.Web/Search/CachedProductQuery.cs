@@ -90,6 +90,33 @@
         }
 
         /// <summary>
+        /// Gets a <see cref="ProductDisplay"/> by it's SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public ProductDisplay GetBySku(string sku)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field("sku", sku).And().Field("master", "True");
+
+            var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
+
+            if (display != null) return display;
+
+            var entity = _productService.GetBySku(sku);
+
+            if (entity == null) return null;
+
+            ReindexEntity(entity);
+
+            return AutoMapper.Mapper.Map<ProductDisplay>(entity);
+        }
+
+        /// <summary>
         /// Gets a <see cref="ProductVariantDisplay"/> by it's key
         /// </summary>
         /// <param name="key">
@@ -114,6 +141,30 @@
             return variant.ToProductVariantDisplay();
         }
 
+        /// <summary>
+        /// Gets a <see cref="ProductVariantDisplay"/> by it's unique SKU
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        public ProductVariantDisplay GetProductVariantBySku(string sku)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field("sku", sku).Not().Field("master", "True");
+
+            var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
+
+            if (result != null) return result;
+
+            var variant = _productService.GetProductVariantBySku(sku);
+
+            if (variant != null) this.ReindexEntity(variant);
+
+            return variant.ToProductVariantDisplay();
+        }
 
         /// <summary>
         /// Searches all products

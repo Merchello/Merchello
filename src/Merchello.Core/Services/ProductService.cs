@@ -333,6 +333,25 @@
         }
 
         /// <summary>
+        /// Gets an <see cref="IProduct"/> by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The product SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
+        public IProduct GetBySku(string sku)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IProductVariant>.Builder.Where(x => x.Sku == sku && ((ProductVariant)x).Master);
+                var variant = repository.GetByQuery(query).FirstOrDefault();
+                return variant == null ? null : GetByKey(variant.ProductKey);
+            }
+        }
+
+        /// <summary>
         /// Gets a Product by its unique id - pk
         /// </summary>
         /// <param name="key">Guid key for the Product</param>
@@ -506,6 +525,20 @@
         }
 
         /// <summary>
+        /// Get's a <see cref="IProductVariant"/> by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        public IProductVariant GetProductVariantBySku(string sku)
+        {
+            return _productVariantService.GetBySku(sku);
+        }
+
+        /// <summary>
         /// The get product variants by product key.
         /// </summary>
         /// <param name="productKey">
@@ -583,23 +616,18 @@
         /// </param>
         private void EnsureVariants(IProduct product)
         {
-            // Create the product varaints
-            if (!product.ProductOptions.Any()) return;
-            
             var attributeLists = product.GetPossibleProductAttributeCombinations().ToArray();
 
-            if (attributeLists.Any())
-            {
-                // delete any variants that don't have the correct number of attributes
-                var attCount = attributeLists.First().Count();
+            // delete any variants that don't have the correct number of attributes
+            var attCount = attributeLists.Any() ? attributeLists.First().Count() : 0;
 
-                var removers = product.ProductVariants.Where(x => x.Attributes.Count() != attCount);
-                foreach (var remover in removers.ToArray())
-                {
-                    product.ProductVariants.Remove(remover.Sku);
-                    _productVariantService.Delete(remover);
-                }
+            var removers = product.ProductVariants.Where(x => x.Attributes.Count() != attCount);
+            foreach (var remover in removers.ToArray())
+            {
+                product.ProductVariants.Remove(remover.Sku);
+                _productVariantService.Delete(remover);
             }
+            
 
             foreach (var list in attributeLists)
             {

@@ -19,8 +19,6 @@ namespace Merchello.Core
     /// </summary>
     public static class ProductExtensions
     {
-
-
         /// <summary>
         /// Returns a collection of ProductOption given as list of attributes (choices)
         /// </summary>
@@ -139,9 +137,22 @@ namespace Merchello.Core
         /// </param>
         public static void AddToCatalogInventory(this IProductVariant productVariant, Guid catalogKey)
         {
-            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(new CatalogInventory(catalogKey, productVariant.Key));
+            productVariant.AddToCatalogInventory(new CatalogInventory(catalogKey, productVariant.Key));
         }
 
+        /// <summary>
+        /// The add to catalog inventory.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The <see cref="IProductVariant"/>
+        /// </param>
+        /// <param name="catalogInventory">
+        /// The <see cref="ICatalogInventory"/> to be added
+        /// </param>
+        public static void AddToCatalogInventory(this IProductVariant productVariant, ICatalogInventory catalogInventory)
+        {
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).Add(catalogInventory);
+        }
 
         /// <summary>
         /// Removes a product varaint from a catalog inventory.
@@ -156,7 +167,22 @@ namespace Merchello.Core
         {
             if (productVariant.CatalogInventories.All(inv => inv.CatalogKey != catalog.Key)) return;
 
-            ((CatalogInventoryCollection)productVariant.CatalogInventories).RemoveAt(productVariant.CatalogInventories.FindIndex(x => x.CatalogKey == catalog.Key));
+            productVariant.RemoveFromCatalogInventory(catalog.Key);
+        }
+
+        /// <summary>
+        /// Removes a product varaint from a catalog inventory.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <param name="catalogKey">
+        /// The catalog key
+        /// </param>
+        public static void RemoveFromCatalogInventory(this IProductVariant productVariant, Guid catalogKey)
+        {
+            if (productVariant.CatalogInventories.All(inv => inv.CatalogKey != catalogKey)) return;
+            ((CatalogInventoryCollection)productVariant.CatalogInventories).RemoveAt(productVariant.CatalogInventories.FindIndex(x => x.CatalogKey == catalogKey));
         }
 
         /// <summary>
@@ -283,7 +309,6 @@ namespace Merchello.Core
                     writer.WriteAttributeString("totalInventoryCount", productVariant.TotalInventoryCount.ToString());
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
-
                     writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
                     writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
@@ -356,6 +381,7 @@ namespace Merchello.Core
                 new
                 {   catalogKey = ch.CatalogKey,
                     productVariantKey = ch.ProductVariantKey,
+                    location = ch.Location,
                     count = ch.Count,
                     lowCount = ch.LowCount
                 },

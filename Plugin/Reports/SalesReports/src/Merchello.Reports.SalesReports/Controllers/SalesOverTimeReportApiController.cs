@@ -17,8 +17,6 @@
     using Merchello.Web.Reporting;
     using Merchello.Web.Trees;
 
-    using ServiceStack.Text;
-
     using Umbraco.Core.IO;
     using Umbraco.Web.Mvc;
 
@@ -75,7 +73,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        [HttpGet]
+        [HttpPost]
         public QueryResultDisplay SearchByDateRange(QueryDisplay query)
         {
             var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
@@ -107,34 +105,28 @@
             {
                 return result;
             }
-            else
-            {
-                //build list of items grouped by date. each item has "date", "salestotal", "salescount"
-                var source = from invoiceItem in invoices.Items.ToList().Cast<InvoiceDisplay>()
-                             where invoiceItem.InvoiceStatus.Name == "Paid"
-                             group invoiceItem by invoiceItem.InvoiceDate.Date
-                                 into g
-                                 orderby g.Key descending
-                                 select
-                                     new
-                                     {
-                                         date = g.Key.ToString("MMMM dd, yyyy"),
-                                         salestotal = g.Sum<InvoiceDisplay>((Func<InvoiceDisplay, decimal>)(item => item.Total)),
-                                         salescount = g.Count<InvoiceDisplay>()
 
+            ////build list of items grouped by date. each item has "date", "salestotal", "salescount"
+            var source = (from invoiceItem in invoices.Items.ToList().Cast<InvoiceDisplay>()
+                         where invoiceItem.InvoiceStatus.Name == "Paid"
+                         group invoiceItem by invoiceItem.InvoiceDate.Date
+                         into g
+                         orderby g.Key descending
+                         select
+                             new
+                                 {
+                                     date = g.Key.ToString("MMMM dd, yyyy"),
+                                     salestotal = g.Sum(item => item.Total),
+                                     salescount = g.Count()
+                                 }).ToArray();
 
-                                     };
+            result.Items = source;
+            result.TotalItems = source.Count();
+            result.ItemsPerPage = 10;
+            result.CurrentPage = 0;
+            result.TotalPages = result.TotalItems / result.ItemsPerPage;
 
-                result.Items = source;
-                result.TotalItems = source.Count();
-                result.ItemsPerPage = 10;
-                result.CurrentPage = 0;
-                result.TotalPages = result.TotalItems / result.ItemsPerPage;
-
-                return result;
-
-            }
-
+            return result;
         }
 
         /// <summary>

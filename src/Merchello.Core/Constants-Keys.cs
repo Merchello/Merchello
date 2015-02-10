@@ -94,6 +94,14 @@
                 }
 
                 /// <summary>
+                /// Gets the order status open key.
+                /// </summary>
+                public static Guid Open
+                {
+                    get { return new Guid("E67B414E-0E55-480D-9429-1204AD46ECDA"); }
+                }
+
+                /// <summary>
                 /// Gets the back order "back ordered" order status key
                 /// </summary>
                 public static Guid BackOrder

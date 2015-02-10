@@ -123,6 +123,28 @@ namespace Merchello.Web.Editors
             return payments.Select(x => x.ToPaymentDisplay());
         }
 
+        /// <summary>
+        /// Gets a <see cref="PaymentMethodDisplay"/> method.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PaymentMethodDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public PaymentMethodDisplay GetPaymentMethod(Guid id)
+        {
+            var paymentMethod = MerchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(id);
+
+            if (paymentMethod == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            var display = paymentMethod.ToPaymentMethodDisplay();
+            return display;
+        }
 
 		/// <summary>
 		/// Returns a collection of applied payments given an Invoice id (key)

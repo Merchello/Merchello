@@ -10,6 +10,7 @@ namespace Merchello.Plugin.Payments.Braintree.Controllers
     using Merchello.Core.Services;
     using Merchello.Plugin.Payments.Braintree.Provider;
 
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.WebApi;

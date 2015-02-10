@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Xml;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Globalization;
+    using System.IO;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+    using System.Xml;
+
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.TypeFields;
+
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
 
     using Constants = Merchello.Core.Constants;
 
@@ -21,38 +23,171 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public abstract class LineItemBase : Entity, ILineItem
     {
-        private Guid _containerKey;     
+        /// <summary>
+        /// The container key.
+        /// </summary>
+        private Guid _containerKey;
+
+        /// <summary>
+        /// The line item TypeField key.
+        /// </summary>
         private Guid _lineItemTfKey;
+
+        /// <summary>
+        /// The SKU.
+        /// </summary>
         private string _sku;
+
+        /// <summary>
+        /// The _name.
+        /// </summary>
         private string _name;
+
+        /// <summary>
+        /// The Quantity.
+        /// </summary>
         private int _quantity;
+
+        /// <summary>
+        /// The Price.
+        /// </summary>
         private decimal _price;
+
+        /// <summary>
+        /// The <see cref="ExtendedDataCollection"/>.
+        /// </summary>
         private ExtendedDataCollection _extendedData;
+
+        /// <summary>
+        /// The exported.
+        /// </summary>
         private bool _exported;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemBase"/> class.
+        /// </summary>
         internal LineItemBase()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemBase"/> class.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
         protected LineItemBase(string name, string sku, decimal amount)
             : this(name, sku, 1, amount)
-        { }
+        {
+        }
 
         protected LineItemBase(string name, string sku, int quantity, decimal amount)
             : this(LineItemType.Product, name, sku, quantity, amount)
-        { }
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemBase"/> class.
+        /// </summary>
+        /// <param name="lineItemType">
+        /// The line item type.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
         protected LineItemBase(LineItemType lineItemType, string name, string sku, int quantity, decimal price)
-            : this(EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, price, new ExtendedDataCollection())
-        { }
+            : this(
+                EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey,
+                name,
+                sku,
+                quantity,
+                price,
+                new ExtendedDataCollection())
+        {  
+        }
 
-        protected LineItemBase(LineItemType lineItemType, string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
-            : this(EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey, name, sku, quantity, price, extendedData)
-        { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemBase"/> class.
+        /// </summary>
+        /// <param name="lineItemType">
+        /// The line item type.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        protected LineItemBase(
+            LineItemType lineItemType,
+            string name,
+            string sku,
+            int quantity,
+            decimal price,
+            ExtendedDataCollection extendedData)
+            : this(
+                EnumTypeFieldConverter.LineItemType.GetTypeField(lineItemType).TypeKey,
+                name,
+                sku,
+                quantity,
+                price,
+                extendedData)
+        {
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemBase"/> class.
+        /// </summary>
+        /// <param name="lineItemTfKey">
+        /// The line item tf key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
         protected LineItemBase(Guid lineItemTfKey, string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)  
         {
-            
+            if (lineItemTfKey.Equals(Guid.Empty))
+            {
+                // This could be a custom type field
+                LogHelper.Debug<LineItemBase>("LineItemType.Custom cannot be added to a collection.  You need to pass the type field key directly.");
+            }
+
             Mandate.ParameterCondition(lineItemTfKey != Guid.Empty, "lineItemTfKey");
             Mandate.ParameterNotNull(extendedData, "extendedData");
             Mandate.ParameterNotNullOrEmpty(name, "name");

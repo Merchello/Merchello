@@ -80,6 +80,17 @@
         IProductVariant GetByKey(Guid key);
 
         /// <summary>
+        /// Gets an <see cref="IProductVariant"/> object by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        IProductVariant GetBySku(string sku); 
+
+        /// <summary>
         /// Gets list of <see cref="IProductVariant"/> objects given a list of Unique keys
         /// </summary>
         /// <param name="keys">List of keys for ProductVariant objects to retrieve</param>

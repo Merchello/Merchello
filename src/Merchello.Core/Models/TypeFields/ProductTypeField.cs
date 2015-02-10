@@ -34,6 +34,7 @@
         /// </summary>
         internal override void BuildCache()
         {
+            AddUpdateCache(ProductType.Custom, NotFound);
         }
 
         /// <summary>

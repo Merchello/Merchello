@@ -1,12 +1,12 @@
-﻿using Merchello.Web.Models.Payments;
-
-namespace Merchello.Web.Workflow
+﻿namespace Merchello.Web.Workflow
 {
     using System;
+
     using Merchello.Core;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
-    using Merchello.Web.Models;
+    using Merchello.Web.Models.Payments;
+
     using Umbraco.Core;
 
     //// TODO RSS - review this class

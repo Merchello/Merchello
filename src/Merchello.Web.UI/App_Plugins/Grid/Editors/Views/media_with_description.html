@@ -1,0 +1,32 @@
+<div ng-controller="Umbraco.PropertyEditors.Grid.MediaController">
+
+	<div class="usky-editor-placeholder" ng-click="setImage()" ng-if="control.value === null">
+		<i class="icon icon-picture"></i>
+		<div ng-id="!control.$inserted" class="help-text">Click to insert image</div>
+	</div>
+
+	<div ng-if="control.value">
+		<div style="width:49%;display:inline-block">
+			<img
+				ng-if="url"
+				ng-click="setImage()"
+				ng-src="{{url}}"
+				class="fullSizeImage" />
+		</div>
+		<div style="width:49%;display:inline-block;vertical-align:bottom;">
+			<textarea
+			rows="1"
+			umb-auto-resize
+			umb-auto-focus
+			class="textstring input-block-level" id="{{control.uniqueId}}_text"
+			ng-model="control.value.headline"
+			ng-attr-style="{{control.editor.config.style}}" style="font-weight:bold; font-size:17px;" placeholder="Image headline..."></textarea>
+			<textarea
+			rows="1"
+			umb-auto-resize
+			class="textstring input-block-level" id="{{control.uniqueId}}_text"
+			ng-model="control.value.paragraph"
+			ng-attr-style="{{control.editor.config.style}}" placeholder="Image description..."></textarea>
+		</div>
+ 	</div>
+</div>

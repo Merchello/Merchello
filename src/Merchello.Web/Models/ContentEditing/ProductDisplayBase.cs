@@ -108,6 +108,11 @@
         public int DownloadMediaId { get; set; }
 
         /// <summary>
+        /// Gets or sets the total inventory count.
+        /// </summary>
+        public int TotalInventoryCount { get; set; }
+
+        /// <summary>
         /// Gets or sets the catalog inventories.
         /// </summary>
         public IEnumerable<CatalogInventoryDisplay> CatalogInventories { get; set; }

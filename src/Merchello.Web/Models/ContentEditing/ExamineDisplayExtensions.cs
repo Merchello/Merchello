@@ -76,6 +76,7 @@
                 Available = FieldAsBoolean(result.Fields["available"]),
                 TrackInventory = FieldAsBoolean(result.Fields["trackInventory"]),
                 OutOfStockPurchase = FieldAsBoolean(result.Fields["outOfStockPurchase"]),
+                TotalInventoryCount = FieldAsInteger(result, "totalInventoryCount"),
                 Taxable = FieldAsBoolean(result.Fields["taxable"]),
                 Shippable = FieldAsBoolean(result.Fields["shippable"]),
                 Download = FieldAsBoolean(result.Fields["download"]),
@@ -84,7 +85,7 @@
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories")
             };
-
+  
             return pvd;
         }
 
@@ -128,16 +129,6 @@
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
                     Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
                 };
-
-            // TODO - this is sort of hacky and should be revisited.
-            foreach (var item in invoice.Items)
-            {
-                var tf = EnumTypeFieldConverter.LineItemType.GetTypeField(item.LineItemTfKey);
-                var lineTfKey = item.LineItemTfKey;
-                item.LineItemTypeField = tf == LineItemType.Custom ?
-                    (TypeField)EnumTypeFieldConverter.LineItemType.CustomTypeFields.FirstOrDefault(x => x.TypeKey == lineTfKey) :
-                    (TypeField)EnumTypeFieldConverter.LineItemType.GetTypeField(tf);
-            }
 
 
             invoice.Orders = getOrders(invoice.Key);

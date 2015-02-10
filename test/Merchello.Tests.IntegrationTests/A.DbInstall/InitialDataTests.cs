@@ -75,7 +75,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
             Assert.IsTrue(dtos.First().Name == "Not Fulfilled");
             Assert.IsTrue(dtos.First().SortOrder == 1);
             Assert.IsTrue(dtos.Last().Name == "Cancelled");
-            Assert.IsTrue(dtos.Last().SortOrder == 4);
+            Assert.IsTrue(dtos.Last().SortOrder == 5);
         }
 
         [Test]

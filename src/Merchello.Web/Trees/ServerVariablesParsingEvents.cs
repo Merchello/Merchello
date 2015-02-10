@@ -99,7 +99,7 @@
                 controller => controller.GetDefaultWarehouse()));
 
             umbracoUrls.Add(
-                "merchelloCatalogShippingApiBaseUrl", 
+                "merchelloShippingGatewayApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<ShippingGatewayApiController>(
                 controller => controller.GetShipCountry(Guid.NewGuid())));
             
@@ -139,7 +139,7 @@
                 controller => controller.GetShipment(Guid.NewGuid())));
 
             umbracoUrls.Add(
-                "merchelloRateTableApiBaseUrl",
+                "merchelloFixedRateShippingApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<FixedRateShippingApiController>(
                 controller => controller.GetShipFixedRateTable(new ShipMethodDisplay())));
 

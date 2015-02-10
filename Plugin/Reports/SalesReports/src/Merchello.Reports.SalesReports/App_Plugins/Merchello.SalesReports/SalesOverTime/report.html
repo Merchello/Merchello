@@ -1,4 +1,4 @@
-﻿<div data-ng-controller="Merchello.Plugins.Reports.SalesOverTimeController"
+﻿<div data-ng-controller="Merchello.Plugins.SalesReports.SalesOverTimeController"
      data-ng-show="loaded">
     <umb-panel>
         <umb-header>
@@ -12,28 +12,7 @@
             <div class="merchello-pane row-fluid">
                 <div class="well row-fluid col-xs-10 span10">
                     <p>Show sales between</p>
-                    <div class="form-inline">
-                        <div>
-                            Dates:
-                            <div class="input-append date datepicker" id="filterStartDate">
-                                <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
-                                       data-ng-model="filterStartDate" />
-                                <span class="add-on">
-                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                                </span>
-                            </div>
-                            -
-                            <div class="input-append date datepicker" id="filterEndDate">
-                                <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
-                                       data-ng-model="filterEndDate" />
-                                <span class="add-on">
-                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                                </span>
-                            </div>
-                            <button id="salesFilterDateGo" class="btn" data-ng-click="filterWithDates(filterStartDate,filterEndDate)"><localize key="merchelloGeneral_filter" /></button>
-                        </div>
-                    </div>
-
+                    <filter-by-date-range filter-start-date="filterStartDate" filter-end-date="filterEndDate" filter-with-dates="filterWithDates(filterStartDate, filterEndDate)"></filter-by-date-range>
                 </div>
 
                 <table class="table table-hover merchello-selectable-table sortable reports-table">
