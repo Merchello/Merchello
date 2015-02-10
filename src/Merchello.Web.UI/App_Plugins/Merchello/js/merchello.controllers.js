@@ -5164,7 +5164,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.hasShippingAddress = false;
             $scope.authorizedCapturedLabel = '';
             $scope.shipmentLineItems = [];
-
             $scope.customLineItems = [];
             $scope.discountLineItems = [];
 
@@ -5237,6 +5236,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              * @description - Load an invoice with the associated id.
              */
             function loadInvoice(id) {
+                // assert the collections are reset before populating
+                $scope.customLineItems = [];
+                $scope.discountLineItems = [];
+
                 var promise = invoiceResource.getByKey(id);
                 promise.then(function (invoice) {
                     $scope.invoice = invoiceDisplayBuilder.transform(invoice);
@@ -5251,7 +5254,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
-                    console.info($scope.discountLineItems);
+
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
@@ -5259,7 +5262,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     if (shipmentLineItem) {
                         $scope.shipmentLineItems.push(shipmentLineItem);
                     }
-
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
@@ -5356,7 +5358,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     } else {
                         dialogData.authorizeCapturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
                     }
-                    console.info(pm);
                     dialogService.open({
                         template: dialogData.authorizeCapturePaymentEditorView,
                         show: true,
