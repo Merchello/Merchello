@@ -2178,12 +2178,34 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetBySku(System.String)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> by it's SKU
+            </summary>
+            <param name="sku">
+            The SKU.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductVariantByKey(System.Guid)">
             <summary>
             Gets a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> by it's key
             </summary>
             <param name="key">
             The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductVariantBySku(System.String)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> by it's SKU
+            </summary>
+            <param name="sku">
+            The SKU.
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
@@ -2275,12 +2297,34 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetBySku(System.String)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> by it's SKU.
+            </summary>
+            <param name="sku">
+            The SKU.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductVariantByKey(System.Guid)">
             <summary>
             Gets a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> by it's key
             </summary>
             <param name="key">
             The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductVariantBySku(System.String)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> by it's unique SKU
+            </summary>
+            <param name="sku">
+            The SKU.
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.

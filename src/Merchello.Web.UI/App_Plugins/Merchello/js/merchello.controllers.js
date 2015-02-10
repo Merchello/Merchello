@@ -5237,6 +5237,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              */
             function loadInvoice(id) {
                 // assert the collections are reset before populating
+                $scope.shipmentLineItems = [];
                 $scope.customLineItems = [];
                 $scope.discountLineItems = [];
 

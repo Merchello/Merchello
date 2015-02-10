@@ -32,6 +32,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
 
         }
 
+        [Test]
         public void init()
         {
             DbPreTestDataWorker.DeleteAllAnonymousCustomers();

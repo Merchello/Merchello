@@ -333,6 +333,25 @@
         }
 
         /// <summary>
+        /// Gets an <see cref="IProduct"/> by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The product SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
+        public IProduct GetBySku(string sku)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IProductVariant>.Builder.Where(x => x.Sku == sku && ((ProductVariant)x).Master);
+                var variant = repository.GetByQuery(query).FirstOrDefault();
+                return variant == null ? null : GetByKey(variant.ProductKey);
+            }
+        }
+
+        /// <summary>
         /// Gets a Product by its unique id - pk
         /// </summary>
         /// <param name="key">Guid key for the Product</param>
@@ -503,6 +522,20 @@
         public IProductVariant GetProductVariantByKey(Guid productVariantKey)
         {
             return _productVariantService.GetByKey(productVariantKey);
+        }
+
+        /// <summary>
+        /// Get's a <see cref="IProductVariant"/> by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        public IProductVariant GetProductVariantBySku(string sku)
+        {
+            return _productVariantService.GetBySku(sku);
         }
 
         /// <summary>

@@ -14,6 +14,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Web.Models.TemplateQuery;
 
     /// <summary>
     /// Represents the ProductVariantService
@@ -389,6 +390,24 @@
             using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
+            }
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IProductVariant"/> object by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        public IProductVariant GetBySku(string sku)
+        {
+            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IProductVariant>.Builder.Where(x => x.Sku == sku);
+                return repository.GetByQuery(query).FirstOrDefault();
             }
         }
 
