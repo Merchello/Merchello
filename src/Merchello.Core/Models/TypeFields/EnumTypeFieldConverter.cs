@@ -8,7 +8,7 @@
         /// <summary>
         /// Creates an instance of an <see cref="IAddressTypeField"/> object
         /// </summary>
-        internal static IAddressTypeField Address
+        public static IAddressTypeField Address
         {
             get { return new AddressTypeField(); } 
         }
@@ -33,7 +33,7 @@
         /// Creates an instance of an <see cref="ILineItemTypeField"/> object
         /// </summary>
         /// <returns></returns>
-        internal static ILineItemTypeField LineItemType
+        public static ILineItemTypeField LineItemType
         {
             get { return new LineItemTypeField(); }
         }

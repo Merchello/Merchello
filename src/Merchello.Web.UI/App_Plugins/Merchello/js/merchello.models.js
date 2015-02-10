@@ -1934,6 +1934,20 @@
             });
         }
 
+        // gets the custom line items
+        function getCustomLineItems() {
+            return _.find(this.items, function(item) {
+                return item.lineItemType === 'Custom';
+            });
+        }
+
+        // gets a collection of discount line items
+        function getDiscountLineItems() {
+            return _.find(this.items, function(item) {
+                return item.lineItemTypeField.alias === 'Discount';
+            });
+        }
+
         function shippingTotal() {
             var shippingLineItems = getShippingLineItems.call(this);
             var total = 0;
@@ -1976,8 +1990,10 @@
             getFulfillmentStatus: getFulfillmentStatus,
             getCurrencyCode: getCurrencyCode,
             getProductLineItems: getProductLineItems,
+            getDiscountLineItems: getDiscountLineItems,
             getTaxLineItem: getTaxLineItem,
             getShippingLineItems: getShippingLineItems,
+            getCustomLineItems: getCustomLineItems,
             hasOrder: hasOrder,
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,

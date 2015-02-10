@@ -10,71 +10,71 @@ namespace Merchello.Core.Models
     public interface INotificationMessage : IEntity
     {
         /// <summary>
-        /// Optional key for Notification Monitor Rule
+        /// Gets or sets an optional key for Notification Monitor Rule
         /// </summary>
         [DataMember]
         Guid? MonitorKey { get; set; }
 
         /// <summary>
-        /// The <see cref="INotificationMethod"/> key
+        /// Gets the <see cref="INotificationMethod"/> key
         /// </summary>
         [DataMember]
         Guid MethodKey { get; }
 
         /// <summary>
-        /// The name of the notification
+        /// Gets or sets the name of the notification
         /// </summary>
         [DataMember]
         string Name { get; set; }
 
         /// <summary>
-        /// A brief description of the notification
+        /// Gets or sets the  a brief description of the notification
         /// </summary>
         [DataMember]
         string Description { get; set; }
 
         /// <summary>
-        /// The sender's "from" address
+        /// Gets the sender's "from" address
         /// </summary>
         [DataMember]
         string FromAddress { get; }
 
         /// <summary>
-        /// The Reply To address
+        /// Gets or sets the Reply To address
         /// </summary>
         [DataMember]
         string ReplyTo { get; set; }
 
         /// <summary>
-        /// The path or text src
+        /// Gets or sets the path or text source
         /// </summary>
         [DataMember]
         string BodyText { get; set; }
 
         /// <summary>
-        /// The maximum length of the message to be sent
+        /// Gets or sets the  maximum length of the message to be sent
         /// </summary>
         [DataMember]
         int MaxLength { get; set; }
 
         /// <summary>
-        /// True/false indicating whether or not the string value of Message is actually a path to a file to read
+        /// Gets or sets a value indicating whether or not the string value of Message is actually a path to a file to read
         /// </summary>
         [DataMember]
         bool BodyTextIsFilePath { get; set; }
 
         /// <summary>
-        /// The recipients of the notification
+        /// Gets or sets the recipients of the notification
         /// </summary>
         string Recipients { get; set; }
 
         /// <summary>
-        /// True/false indicating whether or not this notification should be sent to the customer
+        /// Gets or sets a value indicating whether or not this notification should be sent to the customer
         /// </summary>
         bool SendToCustomer { get; set; }
 
         /// <summary>
-        /// True/false indicating whether or not this notification is disabled
+        /// Gets or sets a value indicating whether or not this notification is disabled
         /// </summary>
         bool Disabled { get; set; }
 

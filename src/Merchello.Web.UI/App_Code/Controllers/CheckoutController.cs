@@ -12,10 +12,13 @@ namespace Controllers
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Models.MonitorModels;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Web;
     using Models;
     using Umbraco.Core;
     using Umbraco.Web.Mvc;
+
+    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// SurfaceController responsible for checkout workflow
@@ -212,7 +215,9 @@ namespace Controllers
         [ChildActionOnly]
         public ActionResult RenderInvoiceSummary()
         {
-            return PartialView("InvoiceSummary", Basket.SalePreparation().PrepareInvoice());
+            var model = Basket.SalePreparation().PrepareInvoice();
+
+            return PartialView("InvoiceSummary", model);
         }
 
 

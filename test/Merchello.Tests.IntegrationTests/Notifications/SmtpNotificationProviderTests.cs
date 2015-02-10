@@ -175,7 +175,7 @@ namespace Merchello.Tests.IntegrationTests.Notifications
 
             const string user = "[username]";
             const string password = "[password]";
-            var recipients = "dina@mindfly.com,rusty@mindfly.com";
+            var recipients = "rusty@mindfly.com";
 
 
             //// Arrange

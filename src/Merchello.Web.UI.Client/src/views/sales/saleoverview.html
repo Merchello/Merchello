@@ -53,6 +53,20 @@
                                 <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
                                 <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
                             </tr>
+                            <tr data-ng-repeat="customItem in customLineItems">
+                                <td>{{customItem.name}}</td>
+                                <td>{{customItem.sku}}</td>
+                                <td class="text-center">{{customItem.quantity}}</td>
+                                <td class="text-right">{{customItem.price | currency : currencySymbol}}</td>
+                                <td class="text-right">{{customItem.quantity * customItem.price | currency : currencySymbol}}</td>
+                            </tr>
+                            <tr data-ng-repeat="discountItem in discountLineItems">
+                                <td>{{discountItem.name}}</td>
+                                <td>{{discountItem.sku}}</td>
+                                <td class="text-center">{{discountItem.quantity}}</td>
+                                <td class="text-right">({{discountItem.price | currency : currencySymbol}})</td>
+                                <td class="text-right">({{discountItem.quantity * discountItem.price | currency : currencySymbol}})</td>
+                            </tr>
                             <tr>
                                 <td colspan="4" class="text-right"><localize key="merchelloOrderView_salesTax" /></td>
                                 <td class="text-right">{{taxTotal | currency : currencySymbol}}</td>

@@ -34,6 +34,9 @@
             $scope.authorizedCapturedLabel = '';
             $scope.shipmentLineItems = [];
 
+            $scope.customLineItems = [];
+            $scope.discountLineItems = [];
+
             // exposed methods
             //  dialogs
             $scope.capturePayment = capturePayment;
@@ -114,6 +117,10 @@
                     loadPayments(id);
                     loadAuditLog(id);
                     loadShippingAddress(id);
+
+                    aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
+                    aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
+                    console.info($scope.discountLineItems);
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
@@ -121,6 +128,7 @@
                     if (shipmentLineItem) {
                         $scope.shipmentLineItems.push(shipmentLineItem);
                     }
+
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
@@ -381,6 +389,17 @@
                 }
 
                 return found;
+            }
+
+            // utility method to assist in building scope line item collections
+            function aggregateScopeLineItemCollection(lineItems, collection) {
+                if(angular.isArray(lineItems)) {
+                    angular.forEach(lineItems, function(item) {
+                        collection.push(item);
+                    });
+                } else {
+                    collection.push(lineItems);
+                }
             }
 
             // initialize the controller

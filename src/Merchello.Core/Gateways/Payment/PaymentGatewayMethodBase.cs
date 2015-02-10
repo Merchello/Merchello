@@ -47,6 +47,26 @@
         #region Events       
 
         /// <summary>
+        /// The authorizing event handler.  Fires before an authorization attempt.
+        /// </summary>
+        public static event TypedEventHandler<PaymentGatewayMethodBase, SaveEventArgs<PaymentOperationData>> Authorizing;
+
+        /// <summary>
+        /// The capturing event handler.  Fires before an authorize capture or capture attempt.
+        /// </summary>
+        public static event TypedEventHandler<PaymentGatewayMethodBase, SaveEventArgs<PaymentOperationData>> Capturing;
+
+        /// <summary>
+        /// The voiding event handler.  Fires before an void attempt.
+        /// </summary>
+        public static event TypedEventHandler<PaymentGatewayMethodBase, SaveEventArgs<PaymentOperationData>> Voiding;
+
+        /// <summary>
+        /// The refunding event handler.  Fires before an refund attempt.
+        /// </summary>
+        public static event TypedEventHandler<PaymentGatewayMethodBase, SaveEventArgs<PaymentOperationData>> Refunding;
+
+        /// <summary>
         /// The authorize attempted event handler. Fires after an authorize attempt.
         /// </summary>
         public static event TypedEventHandler<PaymentGatewayMethodBase, PaymentAttemptEventArgs<IPaymentResult>> AuthorizeAttempted;
@@ -99,6 +119,13 @@
         {
             Mandate.ParameterNotNull(invoice, "invoice");
 
+            var operationData = new PaymentOperationData()
+            {
+                Invoice = invoice,
+                ProcessorArgumentCollection = args
+            };
+
+            Authorizing.RaiseEvent(new SaveEventArgs<PaymentOperationData>(operationData), this);
 
             // persist the invoice
             if (!invoice.HasIdentity)
@@ -132,6 +159,14 @@
         {
             Mandate.ParameterNotNull(invoice, "invoice");
 
+            var operationData = new PaymentOperationData()
+                                    {
+                                        Invoice = invoice, 
+                                        Amount = amount,
+                                        ProcessorArgumentCollection = args
+                                    };
+
+            Capturing.RaiseEvent(new SaveEventArgs<PaymentOperationData>(operationData), this);
 
             // persist the invoice
             if (!invoice.HasIdentity)
@@ -167,6 +202,16 @@
         public virtual IPaymentResult CapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
             Mandate.ParameterNotNull(invoice, "invoice");
+
+            var operationData = new PaymentOperationData()
+                                    {
+                                        Invoice = invoice,
+                                        Payment = payment,
+                                        Amount = amount,
+                                        ProcessorArgumentCollection = args
+                                    };
+
+            Capturing.RaiseEvent(new SaveEventArgs<PaymentOperationData>(operationData), this);
 
             // persist the invoice
             if (!invoice.HasIdentity)
@@ -204,6 +249,16 @@
             Mandate.ParameterNotNull(invoice, "invoice");
             if (!invoice.HasIdentity) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("Cannot refund a payment on an invoice that cannot have payments")), invoice, false);
 
+            var operationData = new PaymentOperationData()
+            {
+                Invoice = invoice,
+                Payment = payment,
+                Amount = amount,
+                ProcessorArgumentCollection = args
+            };
+
+            Refunding.RaiseEvent(new SaveEventArgs<PaymentOperationData>(operationData), this);
+
             var response = PerformRefundPayment(invoice, payment, amount, args);
 
             RefundAttempted.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(response), this);
@@ -239,6 +294,15 @@
         {
             Mandate.ParameterNotNull(invoice, "invoice");
             if (!invoice.HasIdentity) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("Cannot void a payment on an invoice that cannot have payments")), invoice, false);
+
+            var operationData = new PaymentOperationData()
+            {
+                Invoice = invoice,
+                Payment = payment,
+                ProcessorArgumentCollection = args
+            };
+
+            Voiding.RaiseEvent(new SaveEventArgs<PaymentOperationData>(operationData), this);
 
             var response = PerformVoidPayment(invoice, payment, args);
 
