@@ -109,7 +109,7 @@
                 var variant = variants.FirstOrDefault(x => x.Key.Equals(lineItem.ExtendedData.GetProductVariantKey()));
                 if (variant == null) throw new InvalidOperationException("This packaging strategy cannot handle null ProductVariants");
 
-                if (variant.CatalogInventories.FirstOrDefault() == null)
+                if (!variant.CatalogInventories.Any())
                 {
                     LogHelper.Error<ShippableProductVisitor>(
                         "ProductVariant marked as shippable was not assoicated with a WarehouseCatalog.  Product was: "
@@ -118,12 +118,16 @@
                 }
                 else
                 {
-                    // TODO this needs to be refactored to look at the entire shipment
-                    // since products could be in multiple catalogs which could have
-                    // opposing shippng rules and we have the destination address.
-                    lineItem.ExtendedData.SetValue(
-                        Constants.ExtendedDataKeys.WarehouseCatalogKey,
-                        variant.CatalogInventories.First().CatalogKey.ToString());
+                    if (lineItem.ExtendedData.GetWarehouseCatalogKey().Equals(Guid.Empty)) 
+                    {
+                        // TODO this needs to be refactored to look at the entire shipment
+                        // since products could be in multiple catalogs which could have
+                        // opposing shippng rules and we have the destination address.
+                        lineItem.ExtendedData.SetValue(
+                            Constants.ExtendedDataKeys.WarehouseCatalogKey,
+                            variant.CatalogInventories.First().CatalogKey.ToString());
+                    }
+
                     shipment.Items.Add(lineItem);
                 }
             }

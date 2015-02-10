@@ -12,7 +12,7 @@
     /// Fixes issue M-211 http://issues.merchello.com/youtrack/issue/M-211
     /// 
     /// </remarks>
-    public class ExtendedDataResolver : ValueResolver<IHasExtendedData, IEnumerable<KeyValuePair<string, string>>>
+    internal class ExtendedDataResolver : ValueResolver<IHasExtendedData, IEnumerable<KeyValuePair<string, string>>>
     {
         /// <summary>
         /// The resolve core.

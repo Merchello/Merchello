@@ -38,9 +38,49 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.UnitTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.IntegrationTests", "..\test\Merchello.Tests.IntegrationTests\Merchello.Tests.IntegrationTests.csproj", "{7EFA61BD-198A-4CD9-8176-C266FD1D4E1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web.UI", "Merchello.Web.UI\Merchello.Web.UI.csproj", "{E3A9764B-E9CE-496B-88B1-38103909F4A6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Examine", "Merchello.Examine\Merchello.Examine.csproj", "{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Web.UI.Client", "http://localhost:55729", "{37C148C6-04CB-4C12-973A-02714528E94B}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_55729"
+		Debug.AspNetCompiler.PhysicalPath = "Merchello.Web.UI.Client\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55729\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_55729"
+		Release.AspNetCompiler.PhysicalPath = "Merchello.Web.UI.Client\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55729\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "Merchello.Web.UI.Client\"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Web.UI", "http://localhost:58400", "{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_58400"
+		Debug.AspNetCompiler.PhysicalPath = "Merchello.Web.UI\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_58400\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_58400"
+		Release.AspNetCompiler.PhysicalPath = "Merchello.Web.UI\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_58400\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "Merchello.Web.UI\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,17 +156,6 @@ Global
 		{7EFA61BD-198A-4CD9-8176-C266FD1D4E1D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7EFA61BD-198A-4CD9-8176-C266FD1D4E1D}.Release|x64.ActiveCfg = Release|Any CPU
 		{7EFA61BD-198A-4CD9-8176-C266FD1D4E1D}.Release|x86.ActiveCfg = Release|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Release|x64.ActiveCfg = Release|Any CPU
-		{E3A9764B-E9CE-496B-88B1-38103909F4A6}.Release|x86.ActiveCfg = Release|Any CPU
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -139,6 +168,28 @@ Global
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|x64.ActiveCfg = Release|Any CPU
 		{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}.Release|x86.ActiveCfg = Release|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Release|x64.ActiveCfg = Debug|Any CPU
+		{37C148C6-04CB-4C12-973A-02714528E94B}.Release|x86.ActiveCfg = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|x64.ActiveCfg = Debug|Any CPU
+		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

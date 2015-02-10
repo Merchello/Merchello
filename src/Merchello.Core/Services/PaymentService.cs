@@ -466,5 +466,22 @@
 
             return payment;
         }
+
+        /// <summary>
+        /// Gets all payments.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IPayment}"/>.
+        /// </returns>
+        /// <remarks>
+        /// Used for testing
+        /// </remarks>
+        internal IEnumerable<IPayment> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
     }
 }

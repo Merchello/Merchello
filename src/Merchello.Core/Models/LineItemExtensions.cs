@@ -323,6 +323,35 @@
                    lineItem.ExtendedData.ContainsWarehouseCatalogKey();
         }
 
+        public static ITypeField GetTypeField(this ILineItem lineItem)
+        {
+            var type = EnumTypeFieldConverter.LineItemType.GetTypeField(lineItem.LineItemTfKey);
+            var typeField = EnumTypeFieldConverter.LineItemType.Product;
+            switch (type)
+            {
+                case LineItemType.Custom:
+                    typeField =
+                        EnumTypeFieldConverter.LineItemType.CustomTypeFields.FirstOrDefault(
+                            x => x.TypeKey.Equals(lineItem.LineItemTfKey));
+                    break;
+                case LineItemType.Discount:
+                    typeField = EnumTypeFieldConverter.LineItemType.Discount;
+                    break;
+                case LineItemType.Product:
+                    typeField = EnumTypeFieldConverter.LineItemType.Product;
+                    break;
+                case LineItemType.Tax:
+                    typeField = EnumTypeFieldConverter.LineItemType.Tax;
+                    break;
+                case LineItemType.Shipping:
+                    typeField = EnumTypeFieldConverter.LineItemType.Shipping;
+                    break;
+
+            }
+
+            return typeField;
+        }
+
 
         #region Formatter
 

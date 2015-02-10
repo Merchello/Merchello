@@ -1,0 +1,642 @@
+/*
+	TXT 2.0 by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/*********************************************************************************/
+/* Basic                                                                         */
+/*********************************************************************************/
+
+	*
+	{
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		-o-box-sizing: border-box;
+		-ms-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+	body
+	{
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 400;
+		background: #f2f5f3;
+		color: #6b7770;
+		font-size: 11.5pt;
+		line-height: 2em;
+	}
+	
+	h1, h2, h3, h4, h5, h6, h7
+	{
+		font-family: 'Open Sans Condensed', sans-serif;
+		font-weight: 700;
+		text-transform: uppercase;
+		color: #6b7770;
+	}
+
+	h1 a, h2 a, h3 a, h4 a, h5 a, h6 a, h7 a
+	{
+		text-decoration: none;
+		color: inherit;
+	}
+
+	
+	h2.major
+	{
+		position: relative;
+		border-top: solid 5px #e7eae8;
+	}
+
+		h2.major span
+		{
+			background: #fff;
+			position: relative;
+			display: inline-block;
+		}
+
+		#footer h2.major span
+		{
+			background: #f2f5f3;
+		}
+	
+	a
+	{
+		color: #006376;
+		text-decoration: underline;
+	}
+
+		a:hover
+		{
+			text-decoration: none;
+		}
+
+	form
+	{
+	}
+	
+		form input,
+		form select,
+		form textarea
+		{
+			-webkit-appearance: none;
+		}
+			
+	br.clear
+	{
+		clear: both;
+	}
+	
+	p, ul, ol, dl, table
+	{
+		margin-bottom: 3em;
+	}
+	
+	section,
+	article
+	{
+		margin-bottom: 6em;
+	}
+	
+	section > :last-child,
+	article > :last-child
+	{
+		margin-bottom: 0;
+	}
+
+	section:last-child,
+	article:last-child
+	{
+		margin-bottom: 0;
+	}
+
+	.byline
+	{
+		display: block;
+		font-family: 'Open Sans Condensed', sans-serif;
+		font-weight: 700;
+		text-transform: uppercase;
+		color: #c1cac5;
+	}
+
+	.image
+	{
+		position: relative;
+		display: inline-block;
+		border-radius: 8px;
+	}
+	
+		.image img
+		{
+			display: block;
+			width: 100%;
+			border-radius: 8px;
+		}
+		
+		/*
+			Note: The following style adds the textured/pixelated look to content
+			images. I added this to help mask the distortion introduced when a browser
+			resizes an image, but if you don't want this to happen just remove or comment
+			out the entire style.
+		*/
+		
+		.image:before
+		{
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background: url('images/overlay.png');
+			opacity: 0.2;
+			border-radius: 8px;
+		}
+
+	.image-full
+	{
+		display: block;
+		width: 100%;
+		margin: 0 0 2em 0;
+	}
+	
+	.image-left
+	{
+		float: left;
+		margin: 0 2em 2em 0;
+	}
+	
+	.image-centered
+	{
+		display: block;
+		margin: 0 0 2em 0;
+	}
+
+		.image-centered img
+		{
+			margin: 0 auto;
+			width: auto;
+		}
+		
+	.button
+	{
+		display: inline-block;
+		font-family: 'Open Sans Condensed', sans-serif;
+		font-weight: 700;
+		text-transform: uppercase;
+		text-decoration: none;
+		background: #e3daa8;
+		color: #fff;
+		border-radius: 8px;
+		outline: 0;
+		-moz-transition: background-color .2s ease-in-out;
+		-webkit-transition: background-color .2s ease-in-out;
+		-o-transition: background-color .2s ease-in-out;
+		-ms-transition: background-color .2s ease-in-out;
+		transition: background-color .2s ease-in-out;
+	}
+
+		.button:hover
+		{
+			background: #ebe3b2;
+		}
+	
+		.button-alt
+		{
+			background: #c1cac5;
+		}
+
+			.button-alt:hover
+			{
+				background: #ccd5d0;
+			}
+
+	.actions
+	{
+	}
+
+	ul.style1
+	{
+		list-style: disc;
+		padding-left: 1.5em;
+	}
+
+	ul.style2
+	{
+	}
+	
+		ul.style2 > li
+		{
+			border-top: solid 2px #e7eae8;
+			padding-top: 2.35em;
+			margin-top: 2.35em;
+		}
+		
+		ul.style2 > li:first-child
+		{
+			border-top: 0;
+			padding-top: 0;
+			margin-top: 0;
+		}
+
+	ul.contact
+	{
+	}
+	
+		ul.contact li
+		{
+			position: relative;
+			display: inline-block;
+			margin: 0 0.25em 0 0.25em;
+			top: 0;
+			-moz-transition: top .15s ease-in-out;
+			-webkit-transition: top .15s ease-in-out;
+			-o-transition: top .15s ease-in-out;
+			-ms-transition: top .15s ease-in-out;
+			transition: top .15s ease-in-out;
+		}
+
+			ul.contact li a
+			{
+				display: block;
+				position: relative;
+				background: #c1cac5 url('images/icons-contact.png');
+				width: 48px;
+				height: 48px;
+				text-indent: -9999px;
+				border-radius: 6px;
+				outline: 0;
+				-moz-transition: background-color .2s ease-in-out;
+				-webkit-transition: background-color .2s ease-in-out;
+				-o-transition: background-color .2s ease-in-out;
+				-ms-transition: background-color .2s ease-in-out;
+				transition: background-color .2s ease-in-out;
+			}
+			
+				ul.contact li a.facebook				{ background-position: 0px 0px; }
+					ul.contact li:hover a.facebook		{ background-color: #3C5A98; }
+				ul.contact li a.twitter					{ background-position: -48px 0px; }
+					ul.contact li:hover a.twitter		{ background-color: #2DAAE4; }
+				ul.contact li a.rss						{ background-position: -96px 0px; }
+					ul.contact li:hover a.rss			{ background-color: #F2600B; }
+				ul.contact li a.dribbble				{ background-position: -144px 0px; }
+					ul.contact li:hover a.dribbble		{ background-color: #C4376B; }
+				ul.contact li a.linkedin				{ background-position: -192px 0px; }
+					ul.contact li:hover a.linkedin		{ background-color: #006599; }
+				ul.contact li a.tumblr					{ background-position: -240px 0px; }
+					ul.contact li:hover a.tumblr		{ background-color: #31516A; }
+				ul.contact li a.googleplus				{ background-position: -288px 0px; }
+					ul.contact li:hover a.googleplus	{ background-color: #DA2713; }
+
+			ul.contact li:hover
+			{
+				top: -5px;
+			}
+
+			ul.contact li:active
+			{
+				top: 0;
+			}
+
+	ul.special
+	{
+	}
+	
+		ul.special li
+		{
+			position: relative;
+			display: inline-block;
+			margin: 0 1.5em 0 1.5em;
+			top: 0;
+			-moz-transition: top .15s ease-in-out;
+			-webkit-transition: top .15s ease-in-out;
+			-o-transition: top .15s ease-in-out;
+			-ms-transition: top .15s ease-in-out;
+			transition: top .15s ease-in-out;
+		}
+
+			ul.special li:hover
+			{
+				top: -10px;
+			}
+
+				ul.special li:hover a
+				{
+					background: #b9d2ce;
+				}
+
+			ul.special a
+			{
+				display: block;
+				position: relative;
+				background: #c1cac5;
+				width: 12em;
+				height: 12em;
+				border-radius: 6em;
+				text-indent: -9999px;
+				outline: 0;
+				-moz-transition: background-color .2s ease-in-out;
+				-webkit-transition: background-color .2s ease-in-out;
+				-o-transition: background-color .2s ease-in-out;
+				-ms-transition: background-color .2s ease-in-out;
+				transition: background-color .2s ease-in-out;
+			}
+
+				ul.special a:before
+				{
+					content: '';
+					position: absolute;
+					width: 128px;
+					height: 128px;
+					left: 50%;
+					top: 50%;
+					margin-top: -64px;
+					margin-left: -64px;
+					background: url('images/icons-special.png');
+				}
+				
+					ul.special a.battery:before
+					{
+						background-position: 0px 0px;
+					}
+				
+					ul.special a.tablet:before
+					{
+						background-position: -128px 0px;
+					}
+				
+					ul.special a.flask:before
+					{
+						background-position: -256px 0px;
+					}
+				
+					ul.special a.chart:before
+					{
+						background-position: -384px 0px;
+					}
+
+	ul.meta
+	{
+		font-size: 0.85em;
+		color: #a1aaa5;
+	}
+	
+		ul.meta li
+		{
+			position: relative;
+			display: inline-block;
+			padding-left: 24px;
+			margin-left: 1em;
+		}
+
+			ul.meta li a
+			{
+				color: inherit;
+				outline: 0;
+			}
+
+		ul.meta li:first-child
+		{
+			margin-left: 0;
+		}
+		
+		ul.meta li:before
+		{
+			content: '';
+			display: block;
+			position: absolute;
+			width: 16px;
+			height: 16px;
+			left: 0;
+			top: 50%;
+			margin-top: -8px;
+			background: url('images/icons-meta.png');
+		}
+		
+			ul.meta li.timestamp:before
+			{
+				background-position: 0px 0px;
+			}
+		
+			ul.meta li.comments:before
+			{
+				background-position: -16px 0px;
+			}
+
+/*********************************************************************************/
+/* Section + Article Types                                                       */
+/*********************************************************************************/
+
+	.is-highlight
+	{
+		text-align: center;
+	}
+
+	.is-features
+	{
+	}
+	
+	.is-feature
+	{
+	}
+
+	.is-blog
+	{
+	}
+
+	.is-post
+	{
+	}
+
+	.is-post-summary
+	{
+	}
+
+	.is-page-content
+	{
+	}
+
+/*********************************************************************************/
+/* Sidebar + Content                                                             */
+/*********************************************************************************/
+
+	.sidebar
+	{
+	}
+	
+	.content
+	{
+	}
+
+/*********************************************************************************/
+/* Wrappers                                                                      */
+/*********************************************************************************/
+
+	#banner-wrapper
+	{
+		position: relative;
+		background: url('../images/banner.jpg') center center no-repeat;
+		background-size: cover;
+		z-index: 1;
+	}
+
+		/*
+			Note: The following style adds the textured/pixelated look to the banner
+			image. I added this to help mask the distortion introduced when a browser
+			resizes an image, but if you don't want this to happen just remove or comment
+			out the entire style.
+		*/
+
+		#banner-wrapper:before
+		{
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background: url('images/overlay.png');
+			opacity: 0.175;
+		}
+	
+	#main-wrapper
+	{
+		background: #fff;
+		border-top: solid 5px #e3daa8;
+		border-bottom: solid 5px #c1cac5;
+	}
+	
+/*********************************************************************************/
+/* Header                                                                        */
+/*********************************************************************************/
+
+	#header
+	{
+	}
+
+/*********************************************************************************/
+/* Nav                                                                           */
+/*********************************************************************************/
+
+	#nav
+	{
+	}
+
+/*********************************************************************************/
+/* Banner                                                                        */
+/*********************************************************************************/
+
+	#banner
+	{
+		position: relative;
+		background: rgba(21, 28, 23, 0.95);
+		text-align: center;
+		z-index: 2;
+	}
+
+		#banner:before
+		{
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background: url('images/highlight.png') center center;
+			background-size: 100% 200%;
+		}
+
+		#banner:after
+		{
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background: url('images/overlay.png');
+			opacity: 0.25;
+		}
+	
+		#banner > *
+		{
+			position: relative;
+			z-index: 3;
+		}
+	
+		#banner h2
+		{
+			color: #fff;
+		}
+		
+		#banner .byline
+		{
+			color: #575d59;
+		}
+
+		#banner .button
+		{
+			color: #b4b7b5;
+			background: transparent !important;
+			border: solid 4px rgba(87, 93, 89, 0.35);
+			border-radius: 16px;
+			-moz-transition: border-color .2s ease-in-out, color .2s ease-in-out;
+			-webkit-transition: border-color .2s ease-in-out, color .2s ease-in-out;
+			-o-transition: border-color .2s ease-in-out, color .2s ease-in-out;
+			-ms-transition: border-color .2s ease-in-out, color .2s ease-in-out;
+			transition: border-color .2s ease-in-out, color .2s ease-in-out;
+		}
+
+			#banner .button:hover
+			{
+				color: #e4e7e5;
+				border-color: rgba(87, 93, 89, 0.75);
+			}
+
+			#banner .button:active
+			{
+				color: #fff;
+				border-color: rgba(97, 103, 99, 1.0);
+			}
+
+
+/*********************************************************************************/
+/* Main                                                                          */
+/*********************************************************************************/
+
+	#main
+	{
+	}
+
+/*********************************************************************************/
+/* Footer                                                                        */
+/*********************************************************************************/
+
+	#footer
+	{
+	}
+	
+		#footer a
+		{
+			color: inherit;
+		}
+
+/*********************************************************************************/
+/* Copyright                                                                     */
+/*********************************************************************************/
+
+	#copyright
+	{
+		display: inline-block;
+		background: #e7eae8;
+		padding: 0.75em 2em 0.75em 2em;
+		border-radius: 8px;
+		font-size: 0.85em;
+		color: #8b9790;
+	}
+	
+		#copyright a
+		{
+			color: inherit;
+		}
+/* EDITOR PROPERTIES - PLEASE DON'T DELETE THIS LINE TO AVOID DUPLICATE PROPERTIES */

@@ -158,6 +158,7 @@
         /// <returns>
         /// The <see cref="AddressDisplay"/>.
         /// </returns>
+        [HttpGet]
         public AddressDisplay GetShippingAddress(Guid id)
         {
             var invoice = _invoiceService.GetByKey(id);
@@ -171,20 +172,21 @@
 
             if (shipmentLineItem == null)
             {
-                throw new KeyNotFoundException("Shipment line item not found in the invoice");
+                return null;
             }
 
             var shipment = shipmentLineItem.ExtendedData.GetShipment<OrderLineItem>();
             if (shipment == null)
             {
-                throw new KeyNotFoundException("Shipment not found in shipment line item extended data collection");
+                return null;
             }
 
             return shipment.GetDestinationAddress().ToAddressDisplay();
         }
 
+
         /// <summary>
-        /// Adds items to the backoffice basket to calculate shipping and Sales tax
+        /// Adds items to the back office basket to calculate shipping and Sales tax
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>

@@ -7,9 +7,9 @@
     using Core.Models;
     using Core.Services;
     using Umbraco.Core.Cache;
-
+    
     [GatewayProviderActivation("9ACEE07C-94A7-4D28-8193-6BD7D221A902", "Free Over Amount Shipping Provider", "Free Over Amount Shipping Provider")]
-    [GatewayProviderEditor("Free Over Amount configuration", "~/App_Plugins/Merchello.FOA/editor.html")]
+    [GatewayProviderEditor("Free Over Amount Shipping Provider", "Configuration settings for the free over amount shipping provider", "~/App_Plugins/Merchello.FOA/shipping.foa.shippingprovider.html")]
     public class FoaShippingGatewayProvider : ShippingGatewayProviderBase, IFoaShippingGatewayProvider
     {
         private static readonly GatewayResource GatewayResource = new GatewayResource("01", "Free Shipping Over Amount");

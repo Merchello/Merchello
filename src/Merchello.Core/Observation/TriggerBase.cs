@@ -5,6 +5,8 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Defines an <see cref="TriggerBase{T}"/> base class
     /// </summary>
@@ -59,6 +61,11 @@
         internal virtual bool WillWork<TModel>(object model)
         {
             var type = typeof(TModel);
+            var isOfType = type.IsInstanceOfType(model);
+            if (isOfType == false)
+            {
+                LogHelper.Info<TriggerBase<T>>("Found model of an unexpected type.");
+            }
 
             return model == null || type.IsInstanceOfType(model); ////model.GetType().IsAssignableFrom(type);
         }

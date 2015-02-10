@@ -94,7 +94,7 @@ namespace Merchello.Tests.Base.TestHelpers
         }
 
         [TestFixtureTearDown]
-        public void TestFixtureTearDown()
+        public virtual void TestFixtureTearDown()
         {
             MerchelloContext.Current.Dispose();
 

@@ -73,8 +73,33 @@
 
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
-            
         }
+
+        ///// <summary>
+        ///// The get taxation countries.
+        ///// </summary>
+        ///// <returns>
+        ///// The <see cref="IEnumerable{CountryDisplay}"/>.
+        ///// </returns>
+        //public IEnumerable<CountryDisplay> GetDefaultTaxableCountries()
+        //{
+        //    try
+        //    {
+        //        // we only need countries that we are allow to ship to as there is no reason
+        //        var shipCountryService = (ShipCountryService)((ServiceContext)MerchelloContext.Services).ShipCountryService;
+        //        var distinctCodes = shipCountryService.GetAllShipCountries().Select(x => x.CountryCode).Distinct();
+        //        var settingsService = MerchelloContext.Services.StoreSettingService;
+        //        var countries = new List<ICountry>();
+        //        foreach (var countryCode in distinctCodes)
+        //        {
+                    
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
+        //    }
+        //} 
 
         /// <summary>
         /// Returns a list of all of GatewayProviders of GatewayProviderType Taxation

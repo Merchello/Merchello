@@ -16,6 +16,7 @@
     /// </typeparam>
     public abstract class TypeFieldMapper<T> : TypeFieldMapperBase, ITypeFieldMapper<T>
     {
+
         /// <summary>
         /// The cached type fields.
         /// </summary>
@@ -36,7 +37,9 @@
         /// </summary>
         public T GetTypeField(Guid key)
         {
-            return CachedTypeFields.Keys.FirstOrDefault(x => CachedTypeFields[x].TypeKey == key);
+            return this.CustomTypeFields.Any(x => x.TypeKey == key) ? 
+                CachedTypeFields.Keys.FirstOrDefault(x => CachedTypeFields[x].TypeKey == Guid.Empty) : 
+                CachedTypeFields.Keys.FirstOrDefault(x => CachedTypeFields[x].TypeKey == key);
         }
 
         /// <summary>

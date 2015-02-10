@@ -5,6 +5,10 @@
     using Core.Models;
     using Models;
 
+    using Umbraco.Core;
+
+    using Constants = Merchello.Plugin.Payments.Braintree.Constants;
+
     /// <summary>
     /// The <see cref="BraintreeApiRequestFactory"/>.
     /// </summary>

@@ -5,6 +5,11 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Mappers
 {
+    using Merchello.Core.Gateways.Payment.Cash;
+    using Merchello.Core.Services;
+
+    using Moq;
+
     [TestFixture]
     public class AutoMapperTests
     {
@@ -36,6 +41,23 @@ namespace Merchello.Tests.UnitTests.Mappers
 
             //// Assert
             Assert.NotNull(productOptionDisplay);
+        }
+
+        [Test]
+        public void Can_Map_CashPaymentMethod_To_PaymentMethodDisplay()
+        {
+            //// Arrange
+            var mockGatewayService = new Mock<IGatewayProviderService>();
+            var paymentMethod = new Mock<IPaymentMethod>();
+
+            var cash = new CashPaymentGatewayMethod(mockGatewayService.Object, paymentMethod.Object);
+
+            var display = cash.ToPaymentMethodDisplay();
+
+            Assert.NotNull(display);
+            Assert.IsNotNullOrEmpty(display.AuthorizeCapturePaymentEditorView.EditorView);
+            Assert.IsNotNullOrEmpty(display.VoidPaymentEditorView.EditorView);
+            Assert.IsNotNullOrEmpty(display.RefundPaymentEditorView.EditorView);
         }
 
     }

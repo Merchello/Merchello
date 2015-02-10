@@ -797,6 +797,7 @@
         {
             bool converted;
             return bool.TryParse(value, out converted) && converted;
+            ////return "true" == value.ToLowerInvariant() || "y" == value.ToLowerInvariant() || "yes" == value.ToLowerInvariant() || value == "1";
         }
 
         /// <summary>

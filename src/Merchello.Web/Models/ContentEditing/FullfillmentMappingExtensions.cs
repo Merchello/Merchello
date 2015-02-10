@@ -15,19 +15,6 @@ namespace Merchello.Web.Models.ContentEditing
 	internal static class FullfillmentMappingExtensions
 	{
 
-		#region Address
-
-		internal static AddressDisplay ToAddressDisplay(this IAddress address)
-		{
-			return AutoMapper.Mapper.Map<AddressDisplay>(address);
-		}
-
-		internal static IAddress ToAddress(this AddressDisplay addressDisplay)
-		{
-			return AutoMapper.Mapper.Map<Address>(addressDisplay);
-		}
-
-		#endregion
 
 		#region AppliedPayment
 
@@ -80,28 +67,6 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#endregion
 
-		#region GatewayProviderDisplay
-
-		internal static GatewayProviderDisplay ToGatewayProviderDisplay(this IGatewayProviderSettings gatewayProviderSettings)
-		{
-			return AutoMapper.Mapper.Map<GatewayProviderDisplay>(gatewayProviderSettings);
-		}
-
-		internal static IGatewayProviderSettings ToGatewayProvider(this GatewayProviderDisplay gatewayProvider, IGatewayProviderSettings destination)
-		{
-			if (gatewayProvider.Key != Guid.Empty) destination.Key = gatewayProvider.Key;
-			// type key and typeFullName should be handled by the resolver 
-			destination.Name = gatewayProvider.Name;
-			destination.Description = gatewayProvider.Description;
-			destination.EncryptExtendedData = gatewayProvider.EncryptExtendedData;
-			
-			((GatewayProviderSettings)destination).ExtendedData = gatewayProvider.ExtendedData.AsExtendedDataCollection();
-
-			return destination;
-		}
-
-
-		#endregion
 
 		#region GatewayResourceDisplay
 
@@ -160,7 +125,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipGatewayProviderDisplay
 
-		internal static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this IShippingGatewayProvider shipGatewayProvider)
+		internal static ShippingGatewayProviderDisplay ToShipGatewayProviderDisplay(this ShippingGatewayProviderBase shipGatewayProvider)
 		{
 			return AutoMapper.Mapper.Map<ShippingGatewayProviderDisplay>(shipGatewayProvider); 
 		}
@@ -169,15 +134,7 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#region ShipMethodDisplay
 
-		internal static ShipMethodDisplay ToShipMethodDisplay(this IShipMethod shipMethod)
-		{            
-			return AutoMapper.Mapper.Map<ShipMethodDisplay>(shipMethod);      
-		}
 
-		internal static ShipMethodDisplay ToShipMethodDisplay(this IShippingGatewayMethod shippingGatewayMethod)
-		{
-			return AutoMapper.Mapper.Map<ShipMethodDisplay>(shippingGatewayMethod);
-		}
 
 		#endregion
 
@@ -293,6 +250,7 @@ namespace Merchello.Web.Models.ContentEditing
 		internal static INotificationMessage ToNotificationMessage(this NotificationMessageDisplay notificationMessageDisplay, INotificationMessage destination)
 		{
 			if (notificationMessageDisplay.Key != Guid.Empty) destination.Key = notificationMessageDisplay.Key;
+		    destination.Name = notificationMessageDisplay.Name;
 			destination.Description = notificationMessageDisplay.Description;
 			destination.BodyText = notificationMessageDisplay.BodyText;
 			destination.MaxLength = notificationMessageDisplay.MaxLength;

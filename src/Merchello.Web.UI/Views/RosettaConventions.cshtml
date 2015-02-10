@@ -1,0 +1,59 @@
+﻿@using Umbraco.Web.Models
+@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "RosettaBasePage.cshtml";
+
+    var conventions = (IEnumerable<IPublishedContent>)CurrentPage.Children.Where("Visible");
+
+    // this is a bit hacky here and should be moved into a surface controller - but we are trying to limit those to being Merchello
+    // specific.
+    var categories = conventions
+        .Select(x => x.GetPropertyValue<string>("category")).Distinct()
+        .Select(x => new ConventCategory() { Id = int.Parse(x), Name = Umbraco.GetPreValueAsString(int.Parse(x))})
+        .OrderBy(x => x.Name);
+}
+
+<div class="container">
+    
+    <div class="row">
+        @foreach (var category in categories)
+        {
+            <h3>@category.Name</h3>
+            
+            <div class="bs-docs-example">
+            @foreach (var convention in conventions.Where(x => x.GetPropertyValue("category") == category.Id.ToString()))
+            {
+                @convention.Name
+
+               <p>Hello</p> 
+            }
+           </div>
+        }
+        
+    </div>
+
+</div>
+
+@section ViewList
+{
+    @RosettaHelper.GetViewBoxHtml("RosettaConventions.cshtml", "Standard Umbraco content for the Conventions page layout.")
+}
+
+
+@functions
+{
+
+    private class ConventCategory
+    {
+        /// <summary>
+        /// The id of the category
+        /// </summary>
+        public int Id { get; set; }
+        
+        /// <summary>
+        /// The Name of the category
+        /// </summary>
+        public string Name { get; set; }
+    }
+
+}

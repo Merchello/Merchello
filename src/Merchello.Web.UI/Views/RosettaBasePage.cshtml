@@ -1,0 +1,80 @@
+﻿@inherits UmbracoTemplatePage
+@{
+    Layout = null;
+    
+    var home = Umbraco.TypedContent(UmbracoContext.PageId).AncestorOrSelf(1);
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>@home.GetPropertyValue("pageTitle") | @CurrentPage.GetPropertyValue("pageTitle")</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-glyphicons.css" rel="stylesheet"/>
+    <!-- Custom CSS for the 'Heroic Features' Template -->
+    <link href="/css/heroic-features.css" rel="stylesheet">
+    <!-- font-awesome -->
+    <link href="/css/font-awesome.min.css"/>
+    <link href="/css/social-buttons.css"/>
+    <link href="/css/rosetta-stone-overrides.css" rel="stylesheet">
+</head>
+
+<body>
+   
+    <!-- Display partial view for navigation here, so it will show on every page -->
+    @Html.Partial("Navigation")
+
+    <div class="container">
+
+        @RenderBody()
+        
+       
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Views used in this page</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    
+                    @RenderSection("ViewList", false)
+                    
+                    @RosettaHelper.GetViewBoxHtml("Partials/Navigation.cshtml", "Partial view used to render the top navigation bar. Merchello code is used to show the basket count dynamically.", new string[] { RosettaHelper.InheritsMerchelloTemplatePage, RosettaHelper.UsingMerchelloWeb })
+                    @RosettaHelper.GetViewBoxHtml("RosettaBasePage.cshtml", "Our base page contains the basic setup for our site, such as CSS setup and placing the navigation and footer throughout the site.")
+                    
+                </div>
+            </div>
+        </div>
+        
+        <hr />
+
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p><a href="https://github.com/Merchello/RosettaStone/blob/master/README.md">The MIT License (MIT)</a></p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- JavaScript -->
+    <script src="/scripts/jquery-1.10.2.js"></script>
+    <script src="/scripts/bootstrap.js"></script>
+    <script src="/scripts/merch-functions.js"></script>
+    @RenderSection("AddJs", false)
+</body>
+
+</html>
+
+

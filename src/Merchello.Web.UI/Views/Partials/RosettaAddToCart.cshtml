@@ -1,0 +1,46 @@
+﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Models.AddItemModel>
+@using Controllers
+
+
+@{
+    var product = Merchello.Product(Model.ProductKey);
+
+    <!--- If there are option variants, display them as a drop down -->
+    using (Html.BeginUmbracoForm<BasketController>("AddToBasket", Model, new { @class = "bs-docs-example", role = "form" }))
+    {
+      
+        if (product.ProductOptions.Any())
+        {
+            var index = 0;
+            foreach (var option in product.ProductOptions)
+            {
+                var choices = option.Choices.OrderBy(x => x.SortOrder)
+                    .Select(choice => new SelectListItem()
+                    {
+                        Value = choice.Key.ToString(), Text = choice.Name
+                    }).ToList();
+                choices.First().Selected = true;
+                <div class="form-group">
+                @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class="control-label"})
+                
+                <div class="controls">
+                    @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), id = option.Key, @class = "form-control ProductVariants", OnChange = "merchello.Products.getUpdatedVariants(this)" })
+                    @Html.ValidationMessageFor(x => x.OptionChoices, "Please select one")
+                </div>
+                </div>
+                index = index + 1;
+            }
+        }
+        else
+        {
+  <p>This is an example of a product that does not define any options - Thus it does not define any "Product Variants"</p>
+        }
+        @Html.HiddenFor(x => x.ContentId)
+        @Html.HiddenFor(x => x.ProductKey)    
+        
+            <div class="text-right">
+            <input type="submit" value="Add to Basket" class="btn"/>
+              </div>
+ 
+    }
+}

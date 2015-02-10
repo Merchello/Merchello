@@ -154,7 +154,7 @@
             // TODO RSS : need to refactor this to remove the "UPDATE" this should be done in a Delete override
             var list = new List<string>
                 {
-                    "UPDATE merchOrderLineItem SET shipmentKey = NULL WHERE shipmentKey = @Key",
+                    "UPDATE merchOrderItem SET shipmentKey = NULL WHERE shipmentKey = @Key",
                     "DELETE FROM merchShipment WHERE pk = @Key",
                 };
 

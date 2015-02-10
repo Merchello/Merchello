@@ -223,9 +223,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Models\ContentEditing\GateProviderSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
+    <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
+    <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizeCapturePaymentDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\RefundPaymentDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\VoidPaymentDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\LineItemTypeFieldResolver.cs" />
+    <Compile Include="Models\Shipping\ShipmentRequestDisplay.cs" />
+    <Compile Include="Models\Shipping\ShipMethodRequestDisplay.cs" />
+    <Compile Include="Models\Shipping\ShipMethodsQueryDisplay.cs" />
     <Compile Include="Models\MapperResolvers\CustomerInvoicesResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityTypeResolver.cs" />
     <Compile Include="Models\Payments\PaymentResultDisplay.cs" />
@@ -295,9 +305,9 @@
     <Compile Include="Models\ContentEditing\NotificationMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\NotificationMonitorDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentOrderDisplay.cs" />
-    <Compile Include="Models\MapperResolvers\GatewayProviderDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\GatewayProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\ExtendedDataResolver.cs" />
-    <Compile Include="Models\MapperResolvers\GatewayMethodDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\GatewayMethodDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\WarehouseCatalogIsDefaultResolver.cs" />
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
@@ -406,6 +416,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /y "$(TargetDir)Merchello.*" "$(SolutionDir)Merchello.Web.UI\bin\Merchello.*"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

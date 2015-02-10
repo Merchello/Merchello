@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using Merchello.Core.Models.EntityBase;
+
+    /// <summary>
+    /// The Product interface.
+    /// </summary>
     public interface IProduct : IProductBase, IEntity
     {
 

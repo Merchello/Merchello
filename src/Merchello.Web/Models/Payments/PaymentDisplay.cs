@@ -1,9 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Web.Models.ContentEditing;
-
-namespace Merchello.Web.Models.Payments
+﻿namespace Merchello.Web.Models.Payments
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Merchello.Core;
+    using Merchello.Web.Models.ContentEditing;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// The payment display.
     /// </summary>
@@ -28,6 +33,12 @@ namespace Merchello.Web.Models.Payments
         /// Gets or sets the payment type field key.
         /// </summary>
         public Guid PaymentTypeFieldKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sort direction.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PaymentMethodType PaymentMethodType { get; set; } 
 
         /// <summary>
         /// Gets or sets the payment method name.

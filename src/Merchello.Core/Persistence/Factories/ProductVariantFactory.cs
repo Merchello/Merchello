@@ -1,15 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// A class responsible for building ProductVariant entities and DTO objects.
+    /// </summary>
     internal class ProductVariantFactory : IEntityFactory<IProductVariant, ProductVariantDto>
     {
+        /// <summary>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </summary>
         private readonly ProductAttributeCollection _productAttributeCollection;
+
+        /// <summary>
+        /// The <see cref="CatalogInventoryCollection"/>.
+        /// </summary>
         private readonly CatalogInventoryCollection _catalogInventories;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantFactory"/> class.
+        /// </summary>
+        /// <param name="productAttributes">
+        /// The product attributes.
+        /// </param>
+        /// <param name="catalogInventories">
+        /// The catalog inventories.
+        /// </param>
         public ProductVariantFactory(ProductAttributeCollection productAttributes,
             CatalogInventoryCollection catalogInventories)
         {
@@ -17,6 +34,15 @@ namespace Merchello.Core.Persistence.Factories
             _catalogInventories = catalogInventories;
         }
 
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
         public IProductVariant BuildEntity(ProductVariantDto dto)
         {
             var entity = new ProductVariant(dto.Name, dto.Sku, dto.Price)
@@ -41,7 +67,7 @@ namespace Merchello.Core.Persistence.Factories
                 Download = dto.Download,
                 DownloadMediaId = dto.DownloadMediaId,
                 Master = dto.Master,
-                ExamineId = dto.ProductVariantIndexDto.Id,   
+                ExamineId = dto.ProductVariantIndexDto.Id, 
                 CatalogInventoryCollection = _catalogInventories,
                 ProductAttributes = _productAttributeCollection,
                 VersionKey = dto.VersionKey,

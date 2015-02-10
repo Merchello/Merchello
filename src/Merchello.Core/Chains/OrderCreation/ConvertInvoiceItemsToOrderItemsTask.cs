@@ -30,8 +30,10 @@
         {
             var items = Invoice.Items.Where(
                         x =>
-                            x.LineItemType != LineItemType.Shipping && x.LineItemType != LineItemType.Tax &&
-                            x.LineItemType != LineItemType.Discount);
+                            (x.LineItemType != LineItemType.Shipping && 
+                            x.LineItemType != LineItemType.Tax &&
+                            x.LineItemType != LineItemType.Discount) &&
+                            !(x.LineItemType == LineItemType.Custom && !x.ExtendedData.GetShippableValue()));
             
             foreach (var item in items)                    
             {

@@ -10,7 +10,6 @@
     /// <summary>
     /// Represents a shipping gateway method returns free over a certain amount.
     /// </summary>
-    [GatewayMethodEditor("Free Over Amount Shipping Method Editor", "~/App_Plugins/Merchello.FOA/shippingmethod.html")]
     public class FoaShippingGatewayMethod : ShippingGatewayMethodBase, IFoaShippingGatewayMethod
     {
         /// <summary>

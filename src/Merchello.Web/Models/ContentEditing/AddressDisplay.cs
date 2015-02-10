@@ -1,5 +1,9 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    using Merchello.Core.Models;
+
     /// <summary>
     /// The address display.
     /// </summary>
@@ -59,5 +63,40 @@
         /// Gets or sets a value indicating whether the address is a commercial address.
         /// </summary>
         public bool IsCommercial { get; set; }
+    }
+
+    /// <summary>
+    /// Mapping extensions for <see cref="AddressDetails"/>
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    internal static class AddressDetailsMappingExtensions
+    {
+        /// <summary>
+        /// Maps <see cref="IAddress"/> to <see cref="AddressDisplay"/>
+        /// </summary>
+        /// <param name="address">
+        /// The address.
+        /// </param>
+        /// <returns>
+        /// The <see cref="AddressDisplay"/>.
+        /// </returns>
+        internal static AddressDisplay ToAddressDisplay(this IAddress address)
+        {
+            return AutoMapper.Mapper.Map<AddressDisplay>(address);
+        }
+
+        /// <summary>
+        /// Maps <see cref="AddressDisplay"/> to <see cref="IAddress"/>
+        /// </summary>
+        /// <param name="addressDisplay">
+        /// The address display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAddress"/>.
+        /// </returns>
+        internal static IAddress ToAddress(this AddressDisplay addressDisplay)
+        {
+            return AutoMapper.Mapper.Map<Address>(addressDisplay);
+        }
     }
 }

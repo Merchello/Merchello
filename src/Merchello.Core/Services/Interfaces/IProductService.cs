@@ -73,6 +73,17 @@
         void Delete(IEnumerable<IProduct> productList, bool raiseEvents = true);
 
         /// <summary>
+        /// Gets an <see cref="IProduct"/> by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The product SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
+        IProduct GetBySku(string sku);
+
+        /// <summary>
         /// Gets list of <see cref="IProduct"/> objects given a list of Unique keys
         /// </summary>
         /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
@@ -108,6 +119,17 @@
         /// The <see cref="IProductVariant"/>.
         /// </returns>
         IProductVariant GetProductVariantByKey(Guid productVariantKey);
+
+        /// <summary>
+        /// Get's a <see cref="IProductVariant"/> by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        IProductVariant GetProductVariantBySku(string sku);
 
         /// <summary>
         /// Returns the count of all products

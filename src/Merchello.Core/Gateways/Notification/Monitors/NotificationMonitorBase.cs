@@ -45,7 +45,11 @@
         /// </summary>
         protected IEnumerable<INotificationMessage> Messages
         {
-            get { return _messages.Value; }
+            get
+            {
+                ////http://issues.merchello.com/youtrack/issue/M-591
+                return _messages.Value.Select(x => x.MemberwiseClone());
+            }
         }
 
         /// <summary>

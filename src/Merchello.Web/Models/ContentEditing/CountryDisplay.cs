@@ -11,6 +11,7 @@
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
+        /// TODO is this required?
         public Guid Key { get; set; }
 
         /// <summary>

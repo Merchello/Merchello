@@ -9,6 +9,7 @@ using Formatting = System.Xml.Formatting;
 
 namespace Merchello.Core.Models
 {
+    using Merchello.Core.Models.TypeFields;
 
     /// <summary>
     /// Extension methods for <see cref="IOrder"/>
@@ -164,6 +165,7 @@ namespace Merchello.Core.Models
                         shipmentKey = x.ShipmentKey,
                         lineItemTfKey = x.LineItemTfKey,
                         lineItemType = x.LineItemType.ToString(),
+                        lineItemTypeField = (TypeField)x.GetTypeField(),
                         sku = x.Sku,
                         price = x.Price,
                         quantity = x.Quantity,

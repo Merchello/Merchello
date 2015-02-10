@@ -150,7 +150,7 @@
                         att.Title,
                         att.Icon,
                         false,
-                        string.Format("{0}{1}", "/merchello/merchello/ViewReport/", att.RoutePath)));
+                        string.Format("{0}{1}", "/merchello/merchello/reports.viewreport/", att.RoutePath)));
         }
     }
 }

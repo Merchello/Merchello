@@ -22,6 +22,17 @@
         ProductDisplay GetByKey(Guid key);
 
         /// <summary>
+        /// Gets a <see cref="ProductDisplay"/> by it's SKU
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        ProductDisplay GetBySku(string sku);
+
+        /// <summary>
         /// Gets a <see cref="ProductVariantDisplay"/> by it's key
         /// </summary>
         /// <param name="key">
@@ -31,6 +42,17 @@
         /// The <see cref="ProductVariantDisplay"/>.
         /// </returns>
         ProductVariantDisplay GetProductVariantByKey(Guid key);
+
+        /// <summary>
+        /// Gets a <see cref="ProductVariantDisplay"/> by it's SKU
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        ProductVariantDisplay GetProductVariantBySku(string sku);
 
         /// <summary>
         /// Searches all products

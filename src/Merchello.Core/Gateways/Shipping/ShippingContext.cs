@@ -111,7 +111,7 @@
         /// <returns>
         /// A collection of all active shipping gateway providers
         /// </returns>
-        public IEnumerable<IShippingGatewayProvider> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
+        public IEnumerable<ShippingGatewayProviderBase> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
         {
             var gatewayProviders = GatewayProviderService.GetGatewayProvidersByShipCountry(shipCountry);
 
