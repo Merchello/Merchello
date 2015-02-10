@@ -88,6 +88,10 @@
             <td>@Model.TotalTax().ToString("C")</td>
         </tr>
         <tr>
+            <td colspan="4" class="text-right"><b>Discounts:</b></td>
+            <td>@Model.TotalDiscounts().ToString("C")</td>
+        </tr>
+        <tr>
             <td colspan="3">All sales are final.</td>
             <td class="text-right"><b>Invoice Total:</b></td>
             <td>@Model.Total.ToString("C")</td>

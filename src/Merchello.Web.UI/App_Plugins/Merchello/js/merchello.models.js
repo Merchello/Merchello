@@ -1937,7 +1937,14 @@
         // gets the custom line items
         function getCustomLineItems() {
             return _.find(this.items, function(item) {
-                return item.lineItemTypeField.alias === 'Custom';
+                return item.lineItemType === 'Custom';
+            });
+        }
+
+        // gets a collection of discount line items
+        function getDiscountLineItems() {
+            return _.find(this.items, function(item) {
+                return item.lineItemTypeField.alias === 'Discount';
             });
         }
 
@@ -1983,6 +1990,7 @@
             getFulfillmentStatus: getFulfillmentStatus,
             getCurrencyCode: getCurrencyCode,
             getProductLineItems: getProductLineItems,
+            getDiscountLineItems: getDiscountLineItems,
             getTaxLineItem: getTaxLineItem,
             getShippingLineItems: getShippingLineItems,
             getCustomLineItems: getCustomLineItems,
