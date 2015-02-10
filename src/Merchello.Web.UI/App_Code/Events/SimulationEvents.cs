@@ -30,7 +30,9 @@ public class SimulationEvents : ApplicationEventHandler
     {
 
         // custom line items
-        var extendedData = new ExtendedDataCollection();
+        var ed1 = new ExtendedDataCollection();
+        ed1.SetValue(Merchello.Core.Constants.ExtendedDataKeys.Taxable, false.ToString());
+        ed1.SetValue(Merchello.Core.Constants.ExtendedDataKeys.Shippable, false.ToString());
 
         var typeField = EnumTypeFieldConverter.LineItemType.Custom("CcFee");
 
@@ -41,11 +43,12 @@ public class SimulationEvents : ApplicationEventHandler
             "ccfee",
             1,
             1.0m,
-            extendedData);
+            ed1);
 
         e.Entity.Items.Add(ccFee);
         e.Entity.Total += 1.0m;
 
+        var ed2 = new ExtendedDataCollection();
         var shippingLineItem = e.Entity.ShippingLineItems().FirstOrDefault();
         if (shippingLineItem != null)
         {
@@ -58,7 +61,7 @@ public class SimulationEvents : ApplicationEventHandler
                     "BreakOnShipping", 
                     1, 
                     10M, 
-                    extendedData);
+                    ed2);
                 e.Entity.Items.Add(shipping10Off);
                 e.Entity.Total -= 10M;
             }
