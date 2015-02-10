@@ -76,6 +76,24 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         }
 
         /// <summary>
+        /// Verifies that a product can be retreived by it's unique sku
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_Product_By_Sku()
+        {
+            //// Arrange
+            var expected = PreTestDataWorker.MakeExistingProduct();
+            var sku = expected.Sku;
+
+            //// Act
+            var retrieved = _productService.GetBySku(sku);
+
+            //// Assert
+            Assert.NotNull(retrieved);
+            Assert.AreEqual(sku, retrieved.Sku);
+        }
+
+        /// <summary>
         /// Test to verify a product can be retrieved with 3 options
         /// </summary>
         [Test]

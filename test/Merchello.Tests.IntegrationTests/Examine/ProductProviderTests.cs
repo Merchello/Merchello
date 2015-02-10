@@ -87,6 +87,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             product.CostOfGoods = 15M;
             product.OnSale = true;
             product.SalePrice = 18M;
+            product.Manufacturer = "Merchello";
             _productService.Save(product);
             
             provider.AddProductToIndex(product);
@@ -100,7 +101,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             Assert.IsTrue(results.Count() == 1);
             var result = results.First();
             Assert.NotNull(result.Fields["productOptions"]);
-
+            Assert.AreEqual("Merchello", result.Fields["manufacturer"]);
             provider.RebuildIndex();
             
         }

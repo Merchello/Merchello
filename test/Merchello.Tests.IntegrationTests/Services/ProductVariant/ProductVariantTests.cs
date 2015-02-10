@@ -140,6 +140,25 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         }
 
         /// <summary>
+        /// Test verifies that a variant can be retrieved by it's sku
+        /// </summary>
+        [Test]
+        public void Can_Retrieve_A_ProductVariant_By_Its_Sku()
+        {
+            //// Arrange
+            Assert.IsTrue(_product.ProductVariants.Any());
+            var expected = _product.ProductVariants.First();
+            var sku = expected.Sku;
+
+            //// Act
+            var retrieved = _productVariantService.GetBySku(sku);
+
+            //// Assert
+            Assert.NotNull(retrieved);
+            Assert.IsTrue(sku == retrieved.Sku);
+        }
+
+        /// <summary>
         /// Test verifies that product variants can be retrieved for a particular product
         /// </summary>
         [Test]

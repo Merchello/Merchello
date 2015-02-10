@@ -24376,6 +24376,17 @@
             <param name="productList">Collection of <see cref="T:Merchello.Core.Models.IProduct"/> to delete</param>
             <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         </member>
+        <member name="M:Merchello.Core.Services.IProductService.GetBySku(System.String)">
+            <summary>
+            Gets an <see cref="T:Merchello.Core.Models.IProduct"/> by it's unique SKU.
+            </summary>
+            <param name="sku">
+            The product SKU.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProduct"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Core.Services.IProductService.GetByKeys(System.Collections.Generic.IEnumerable{System.Guid})">
             <summary>
             Gets list of <see cref="T:Merchello.Core.Models.IProduct"/> objects given a list of Unique keys
@@ -24408,6 +24419,17 @@
             </summary>
             <param name="productVariantKey">
             The product variant key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProductVariant"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Services.IProductService.GetProductVariantBySku(System.String)">
+            <summary>
+            Get's a <see cref="T:Merchello.Core.Models.IProductVariant"/> by it's unique SKU.
+            </summary>
+            <param name="sku">
+            The SKU.
             </param>
             <returns>
             The <see cref="T:Merchello.Core.Models.IProductVariant"/>.
@@ -24500,6 +24522,17 @@
             </summary>
             <param name="key">key of the Product to retrieve</param>
             <returns><see cref="T:Merchello.Core.Models.IProductVariant"/></returns>
+        </member>
+        <member name="M:Merchello.Core.Services.IProductVariantService.GetBySku(System.String)">
+            <summary>
+            Gets an <see cref="T:Merchello.Core.Models.IProductVariant"/> object by it's unique SKU.
+            </summary>
+            <param name="sku">
+            The SKU.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProductVariant"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Core.Services.IProductVariantService.GetByKeys(System.Collections.Generic.IEnumerable{System.Guid})">
             <summary>
@@ -25792,6 +25825,17 @@
             <param name="productList">Collection of <see cref="T:Merchello.Core.Models.IProduct"/> to delete</param>
             <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         </member>
+        <member name="M:Merchello.Core.Services.ProductService.GetBySku(System.String)">
+            <summary>
+            Gets an <see cref="T:Merchello.Core.Models.IProduct"/> by it's unique SKU.
+            </summary>
+            <param name="sku">
+            The product SKU.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProduct"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Core.Services.ProductService.GetByKey(System.Guid)">
             <summary>
             Gets a Product by its unique id - pk
@@ -25912,6 +25956,17 @@
             </summary>
             <param name="productVariantKey">
             The product variant key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProductVariant"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Services.ProductService.GetProductVariantBySku(System.String)">
+            <summary>
+            Get's a <see cref="T:Merchello.Core.Models.IProductVariant"/> by it's unique SKU.
+            </summary>
+            <param name="sku">
+            The SKU.
             </param>
             <returns>
             The <see cref="T:Merchello.Core.Models.IProductVariant"/>.
@@ -26133,6 +26188,17 @@
             </summary>
             <param name="key">key of the Product to retrieve</param>
             <returns><see cref="T:Merchello.Core.Models.IProductVariant"/></returns>
+        </member>
+        <member name="M:Merchello.Core.Services.ProductVariantService.GetBySku(System.String)">
+            <summary>
+            Gets an <see cref="T:Merchello.Core.Models.IProductVariant"/> object by it's unique SKU.
+            </summary>
+            <param name="sku">
+            The SKU.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProductVariant"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Core.Services.ProductVariantService.GetByKeys(System.Collections.Generic.IEnumerable{System.Guid})">
             <summary>
