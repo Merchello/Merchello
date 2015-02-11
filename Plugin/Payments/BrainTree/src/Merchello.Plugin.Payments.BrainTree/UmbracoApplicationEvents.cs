@@ -34,7 +34,6 @@
         /// </param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
             LogHelper.Info<UmbracoApplicationEvents>("Initializing BrainTree Payment provider events");
@@ -134,7 +133,22 @@
 
             if (provider == null) return;
 
-            provider.ExtendedData.SaveProviderSettings(new BraintreeProviderSettings());
+            var settings = new BraintreeProviderSettings()
+                               {
+                                   PrivateKey = string.Empty,
+                                   PublicKey = string.Empty,
+                                   DefaultTransactionOption = TransactionOption.SubmitForSettlement,
+                                   MerchantDescriptor = new MerchantDescriptor()
+                                                            {
+                                                                Name = string.Empty,
+                                                                Phone = string.Empty,
+                                                                Url = string.Empty
+                                                            },
+                                   MerchantId = string.Empty,
+                                   Environment = EnvironmentType.Sandbox
+                               };
+
+            provider.ExtendedData.SaveProviderSettings(settings);
         }
     }
 }

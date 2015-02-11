@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree
 {
     using global::Braintree;
+
     using Models;
 
     /// <summary>
@@ -13,7 +14,6 @@
         /// </summary>
         public static void CreateMappings()
         {
-            AutoMapper.Mapper.CreateMap<BraintreeProviderSettings, BraintreeGateway>();
             AutoMapper.Mapper.CreateMap<MerchantDescriptor, DescriptorRequest>();
         }
     }
