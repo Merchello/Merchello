@@ -1,7 +1,5 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Models
 {
-    using global::Braintree;
-
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
@@ -14,7 +12,7 @@
         /// Gets or sets the environment.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public Environment Environment { get; set; }
+        public EnvironmentType Environment { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.
@@ -35,7 +33,6 @@
         /// Gets or sets the merchant descriptor.
         /// </summary>
         public MerchantDescriptor MerchantDescriptor { get; set; }
-
 
         /// <summary>
         /// Gets or sets the default transaction option.

@@ -239,6 +239,7 @@
   <ItemGroup>
     <Compile Include="BraintreeCustomerExtensions.cs" />
     <Compile Include="Controllers\BraintreeWebhooksController.cs" />
+    <Compile Include="EnvironmentType.cs" />
     <Compile Include="Provider\BraintreeVaultTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Provider\BraintreePaymentGatewayMethodBase.cs" />
     <Compile Include="Provider\IBraintreeVaultTransactionPaymentGatewayMethod.cs" />

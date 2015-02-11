@@ -9,6 +9,8 @@
 
     using Models;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
+
     using Umbraco.Core.Logging;
 
     /// <summary>
@@ -60,10 +62,12 @@
         /// </returns>
         public static BraintreeProviderSettings GetBrainTreeProviderSettings(this ExtendedDataCollection extendedData)
         {
-            return extendedData.ContainsKey(Constants.ExtendedDataKeys.BraintreeProviderSettings)
+            var settings = extendedData.ContainsKey(Constants.ExtendedDataKeys.BraintreeProviderSettings)
                        ? JsonConvert.DeserializeObject<BraintreeProviderSettings>(
                            extendedData.GetValue(Constants.ExtendedDataKeys.BraintreeProviderSettings))
                        : new BraintreeProviderSettings();
+
+            return settings;
         }
 
         /// <summary>
@@ -77,7 +81,8 @@
         /// </param>
         public static void SaveProviderSettings(this ExtendedDataCollection extendedData, BraintreeProviderSettings settings)
         {
-            var json = JsonConvert.SerializeObject(settings);
+            var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+            var json = JsonConvert.SerializeObject(settings, Formatting.None, jsonSerializerSettings);
             extendedData.SetValue(Constants.ExtendedDataKeys.BraintreeProviderSettings, json);
         }
 
@@ -92,7 +97,34 @@
         /// </returns>
         public static BraintreeGateway AsBraintreeGateway(this BraintreeProviderSettings settings)
         {
-            return Mapper.Map<BraintreeGateway>(settings);
+            return new BraintreeGateway(settings.Environment.AsEnvironment(), settings.MerchantId, settings.PublicKey, settings.PrivateKey);
+        }
+
+        /// <summary>
+        /// Maps an <see cref="EnvironmentType"/> to an <see cref="Environment"/>.
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Environment"/>.
+        /// </returns>
+        private static Environment AsEnvironment(this EnvironmentType type)
+        {
+            switch (type)
+            {
+                case EnvironmentType.Development:
+                    return Environment.DEVELOPMENT;
+
+                case EnvironmentType.Production:
+                    return Environment.PRODUCTION;
+
+                case EnvironmentType.Qa:
+                    return Environment.QA;
+
+                default:
+                    return Environment.SANDBOX;
+            }
         }
 
         #endregion

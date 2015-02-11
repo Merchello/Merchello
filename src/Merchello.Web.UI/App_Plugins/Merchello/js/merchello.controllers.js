@@ -1541,6 +1541,7 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 var promiseAllProviders = gatewayProviderResource.getResolvedPaymentGatewayProviders();
                 promiseAllProviders.then(function (allProviders) {
                     $scope.paymentGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    console.info($scope.paymentGatewayProviders);
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
