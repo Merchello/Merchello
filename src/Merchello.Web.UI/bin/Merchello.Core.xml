@@ -3395,6 +3395,11 @@
             Refreshes the <see cref="T:Merchello.Core.Gateways.GatewayProviderBase"/> cache
             </summary>
         </member>
+        <member name="F:Merchello.Core.Gateways.GatewayProviderResolver._lock">
+            <summary>
+            The lock.
+            </summary>
+        </member>
         <member name="F:Merchello.Core.Gateways.GatewayProviderResolver._activatedGatewayProviderCache">
             <summary>
             The activated gateway provider cache.
@@ -3482,6 +3487,12 @@
             <returns>
             Returns a <see cref="T:Merchello.Core.GatewayProviderType"/>
             </returns>
+        </member>
+        <member name="M:Merchello.Core.Gateways.GatewayProviderResolver.GetWriteLock">
+            <summary>
+            Returns a WriteLock to use when modifying collections
+            </summary>
+            <returns>Gets the write lock</returns>
         </member>
         <member name="M:Merchello.Core.Gateways.GatewayProviderResolver.BuildActivatedGatewayProviderCache">
             <summary>

@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e0c8517c-4cb8-4237-b0ab-5358043bdf8d" name="Default" comment="" />
+    <list default="true" id="e0c8517c-4cb8-4237-b0ab-5358043bdf8d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Core.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Core.dll" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Examine.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Examine.dll" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Plugin.Payments.Braintree.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Plugin.Payments.Braintree.dll" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.dll" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/Umbraco.sdf" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/Umbraco.sdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreePaymentGatewayProvider.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreePaymentGatewayProvider.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Editors/GatewayProviderApiController.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Editors/GatewayProviderApiController.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/GatewayProviderResolver.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/GatewayProviderResolver.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/IBraintreePaymentGatewayProvider.cs" afterPath="$PROJECT_DIR$/../../Provider/IBraintreePaymentGatewayProvider.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Core.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Core.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/ObjectResolution/MerchelloManyObjectsResolverBase.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/ObjectResolution/MerchelloManyObjectsResolverBase.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Models/TransactionOption.cs" afterPath="$PROJECT_DIR$/../../Models/TransactionOption.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/gatewayproviders/gatewayproviderlist.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/gatewayproviders/gatewayproviderlist.controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.models.js" afterPath="$PROJECT_DIR$/payment.braintree.models.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.models.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.models.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.html" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../Shipping/FreeOverAmount/src/Merchello.Plugin.Shipping.FOA/App_Plugins/Merchello.FOA/shipping.foa.shippingprovider.controller.js" afterPath="$PROJECT_DIR$/../../../../../../Shipping/FreeOverAmount/src/Merchello.Plugin.Shipping.FOA/App_Plugins/Merchello.FOA/shipping.foa.shippingprovider.controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../Shipping/FreeOverAmount/src/Merchello.Plugin.Shipping.FOA/App_Plugins/Merchello.FOA/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../../../../../Shipping/FreeOverAmount/src/Merchello.Plugin.Shipping.FOA/App_Plugins/Merchello.FOA/.idea/workspace.xml" />
+    </list>
     <ignored path="Merchello.Braintree.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,51 +49,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="payment.braintree.module.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/payment.braintree.module.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="403">
-              <caret line="1" column="20" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="payment.braintree.providersettings.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="payment.braintree.providersettings.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.325" vertical-offset="93" max-vertical-offset="1953">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5798005" vertical-offset="1395" max-vertical-offset="2232">
+              <caret line="60" column="77" selection-start-line="60" selection-start-column="77" selection-end-line="60" selection-end-column="77" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="payment.braintree.providersettings.controller.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="payment.braintree.providersettings.controller.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33135393" vertical-offset="0" max-vertical-offset="842">
-              <caret line="9" column="54" selection-start-line="9" selection-start-column="54" selection-end-line="9" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="payment.braintree.models.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/payment.braintree.models.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2139">
-              <caret line="49" column="53" selection-start-line="49" selection-start-column="53" selection-end-line="49" selection-end-column="53" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.manifest" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.manifest">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="372">
-              <caret line="3" column="70" selection-start-line="3" selection-start-column="70" selection-end-line="3" selection-end-column="70" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="837">
+              <caret line="14" column="95" selection-start-line="14" selection-start-column="95" selection-end-line="14" selection-end-column="95" />
               <folding />
             </state>
           </provider>
@@ -76,12 +71,16 @@
       </file>
     </leaf>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../../../.." />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/package.manifest" />
         <option value="$PROJECT_DIR$/payment.braintree.models.js" />
         <option value="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
+        <option value="$PROJECT_DIR$/payment.braintree.providersettings.html" />
       </list>
     </option>
   </component>
@@ -94,7 +93,7 @@
     <option name="width" value="1938" />
     <option name="height" value="1050" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -117,6 +116,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -137,7 +137,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -147,10 +146,14 @@
     <property name="FullScreen" value="false" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <method />
+    </configuration>
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
       <method />
     </configuration>
-    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -158,10 +161,6 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="Chrome" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
@@ -177,6 +176,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
       <method />
     </configuration>
     <list size="0" />
@@ -195,20 +200,20 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="0" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24960423" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -239,17 +244,49 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/payment.braintree.module.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="31" max-vertical-offset="403">
+          <caret line="1" column="20" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.325" vertical-offset="93" max-vertical-offset="1953">
+        <state vertical-scroll-proportion="0.0" vertical-offset="93" max-vertical-offset="1953">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="651">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment.braintree.models.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1519" max-vertical-offset="2139">
+          <caret line="49" column="53" selection-start-line="49" selection-start-column="53" selection-end-line="49" selection-end-column="53" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.manifest">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="372">
+        <state vertical-scroll-proportion="0.0" vertical-offset="93" max-vertical-offset="372">
+          <caret line="3" column="70" selection-start-line="3" selection-start-column="70" selection-end-line="3" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.manifest">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1104513" vertical-offset="0" max-vertical-offset="842">
           <caret line="3" column="70" selection-start-line="3" selection-start-column="70" selection-end-line="3" selection-end-column="70" />
           <folding />
         </state>
@@ -265,16 +302,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/payment.braintree.models.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2139">
-          <caret line="49" column="53" selection-start-line="49" selection-start-column="53" selection-end-line="49" selection-end-column="53" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="801" max-vertical-offset="2108">
+          <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33135393" vertical-offset="0" max-vertical-offset="842">
-          <caret line="9" column="54" selection-start-line="9" selection-start-column="54" selection-end-line="9" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="837">
+          <caret line="14" column="95" selection-start-line="14" selection-start-column="95" selection-end-line="14" selection-end-column="95" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5798005" vertical-offset="1395" max-vertical-offset="2232">
+          <caret line="60" column="77" selection-start-line="60" selection-start-column="77" selection-end-line="60" selection-end-column="77" />
           <folding />
         </state>
       </provider>
