@@ -4,10 +4,16 @@
 
             $scope.providerSettings = {};
 
+
             function init() {
                 var json = JSON.parse($scope.dialogData.provider.extendedData.getValue('braintreeProviderSettings'));
                 $scope.providerSettings = braintreeProviderSettingsBuilder.transform(json);
-                console.info($scope.providerSettings);
+
+                $scope.$watch(function () {
+                    return $scope.providerSettings;
+                }, function (newValue, oldValue) {
+                    $scope.dialogData.provider.extendedData.setValue('braintreeProviderSettings', angular.toJson(newValue));
+                }, true);
             }
 
             // initialize the controller

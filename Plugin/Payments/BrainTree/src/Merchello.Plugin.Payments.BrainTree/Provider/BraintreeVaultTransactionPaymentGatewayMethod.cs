@@ -20,7 +20,11 @@
     /// This method assumes that the invoice is associated with a customer
     /// </remarks>
     [GatewayMethodUi("BrainTree.CustomerTransaction")]
-    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello.BrainTree/paymentmethod.html")]
+    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello.BrainTree/payment.braintree.methodeditor.html")]
+    [PaymentGatewayMethod("Braintree Payment Gateway Method Editors",
+    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.authorizecapturepayment.html",
+    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.voidpayment.html",
+    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.refundpayment.html")]
     public class BraintreeVaultTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase,  IBraintreeVaultTransactionPaymentGatewayMethod
     {
         /// <summary>

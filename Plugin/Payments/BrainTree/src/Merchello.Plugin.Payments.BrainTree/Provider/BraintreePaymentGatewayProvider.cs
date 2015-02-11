@@ -24,15 +24,10 @@
         /// </summary>
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>
         {
-            new GatewayResource("Transaction", "Simple Transaction"),
-            new GatewayResource("VaultTransaction", "Braintree Vault Transaction")
+            new GatewayResource("Transaction", "Standard Transaction"),
+            new GatewayResource("VaultTransaction", "Vault Transaction")
         };
 
-
-        /// <summary>
-        /// The <see cref="IBraintreeApiService"/>
-        /// </summary>
-        private readonly IBraintreeApiService _braintreeApiService;
 
         #endregion
 
@@ -51,17 +46,8 @@
         public BraintreePaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, Umbraco.Core.Cache.IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
-            _braintreeApiService = new BraintreeApiService(gatewayProviderSettings.ExtendedData.GetBrainTreeProviderSettings());
         }
 
-
-        /// <summary>
-        /// Gets the <see cref="IBraintreeApiService"/>
-        /// </summary>
-        public IBraintreeApiService BraintreeApiService
-        {
-            get { return _braintreeApiService; }
-        }
 
         /// <summary>
         /// Returns a list of unassigned <see cref="IGatewayResource"/>.
@@ -107,10 +93,10 @@
             if (attempt.Success)
             {
                 PaymentMethods = null;
-
+                
                 return available.ServiceCode == "Transaction" ? 
-                    (IPaymentGatewayMethod)new BraintreeSimpleTransactionPaymentGatewayMethod(GatewayProviderService, attempt.Result, BraintreeApiService) :
-                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, attempt.Result, BraintreeApiService);
+                    (IPaymentGatewayMethod)new BraintreeStandardTransactionPaymentGatewayMethod(GatewayProviderService, attempt.Result, this.GetBraintreeApiService()) :
+                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
             }
 
             LogHelper.Error<BraintreePaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, available.ServiceCode), attempt.Exception);
@@ -119,7 +105,7 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="IBraintreeSimpleTransactionPaymentGatewayMethod"/> by it's unique key.
+        /// Gets a <see cref="IBraintreeStandardTransactionPaymentGatewayMethod"/> by it's unique key.
         /// </summary>
         /// <param name="paymentMethodKey">
         /// The payment method key.
@@ -133,9 +119,11 @@
 
             if (paymentMethod != null)
             {
+                var braintreeApiService = this.GetBraintreeApiService();
+
                 return paymentMethod.PaymentCode == "Transaction" ? 
-                    (IPaymentGatewayMethod) new BraintreeSimpleTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, BraintreeApiService) :
-                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, BraintreeApiService);
+                    (IPaymentGatewayMethod)new BraintreeStandardTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, braintreeApiService) :
+                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, braintreeApiService);
             }
 
             var error = new NullReferenceException("Failed to find BraintreePaymentGatewayMethod with key specified");
@@ -152,16 +140,23 @@
         {
             var paymentMethod = PaymentMethods.FirstOrDefault(x => x.PaymentCode == paymentCode);
 
+            var braintreeApiService = this.GetBraintreeApiService();
+
             if (paymentMethod != null)
             {
                 return paymentMethod.PaymentCode == "Transaction" ?
-                    (IPaymentGatewayMethod)new BraintreeSimpleTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, BraintreeApiService) :
-                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, BraintreeApiService);
+                    (IPaymentGatewayMethod)new BraintreeStandardTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, braintreeApiService) :
+                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, braintreeApiService);
             }
 
             var error = new NullReferenceException("Failed to find BraintreePaymentGatewayMethod with key specified");
             LogHelper.Error<BraintreePaymentGatewayProvider>("Failed to find BraintreePaymentGatewayMethod with key specified", error);
             throw error;  
+        }
+
+        private IBraintreeApiService GetBraintreeApiService()
+        {
+            return new BraintreeApiService(GatewayProviderSettings.ExtendedData.GetBrainTreeProviderSettings());
         }
     }
 }

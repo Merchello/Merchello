@@ -51,7 +51,7 @@
         /// Creates an instance of an <see cref="IAppliedPaymentTypeField"/>
         /// </summary>
         /// <returns></returns>
-        internal static IAppliedPaymentTypeField AppliedPayment
+        public static IAppliedPaymentTypeField AppliedPayment
         {
            get { return new AppliedPaymentTypeField(); }
         }

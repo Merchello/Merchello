@@ -1541,7 +1541,6 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 var promiseAllProviders = gatewayProviderResource.getResolvedPaymentGatewayProviders();
                 promiseAllProviders.then(function (allProviders) {
                     $scope.paymentGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
-                    console.info($scope.paymentGatewayProviders);
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -1665,9 +1664,11 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Handles the data passed back from the provider editor dialog and saves it to the database
              */
             function providerConfigDialogConfirm(data) {
+                $scope.preValuesLoaded = false;
                 var promise = gatewayProviderResource.saveGatewayProvider(data.provider);
                 promise.then(function (provider) {
                         notificationsService.success("Gateway Provider Saved", "");
+                        init();
                     },
                     function (reason) {
                         notificationsService.error("Gateway Provider Save Failed", reason.message);

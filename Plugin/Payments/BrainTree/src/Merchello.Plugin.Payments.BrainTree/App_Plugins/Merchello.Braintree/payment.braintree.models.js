@@ -34,7 +34,6 @@
         self.merchantId = '';
         self.merchantDescriptor = {};
         self.defaultTransactionOption = '';
-
     };
 
     angular.module('merchello.plugins.braintree').constant('BraintreeProviderSettings', BraintreeProviderSettings);

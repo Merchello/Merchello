@@ -16,14 +16,14 @@
         /// <param name="title">
         /// The title.
         /// </param>
-        /// <param name="includeInShipmentQuotations">
-        /// The include in quotes.
+        /// <param name="includeInPaymentSelection">
+        /// The include in payment selection.
         /// </param>
         /// <remarks>
-        /// TODO rename includeInShipmentQuotations ... these are payments!
+        /// TODO rename includeInPaymentSelection ... these are payments!
         /// </remarks>
-        public PaymentGatewayMethodAttribute(string title, bool includeInShipmentQuotations = true)
-            : this(title, string.Empty, includeInShipmentQuotations)
+        public PaymentGatewayMethodAttribute(string title, bool includeInPaymentSelection = true)
+            : this(title, string.Empty, includeInPaymentSelection)
         {
         }
 
@@ -36,11 +36,11 @@
         /// <param name="authorizeCaptureEditorView">
         /// The authorize capture editor view.
         /// </param>
-        /// <param name="includeInShipmentQuotations">
-        /// The include in shipment quotations.
+        /// <param name="includeInPaymentSelection">
+        /// The include in payment selection.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeCaptureEditorView, bool includeInShipmentQuotations = true)
-            : this(title, authorizeCaptureEditorView, string.Empty, includeInShipmentQuotations)
+        public PaymentGatewayMethodAttribute(string title, string authorizeCaptureEditorView, bool includeInPaymentSelection = true)
+            : this(title, authorizeCaptureEditorView, string.Empty, includeInPaymentSelection)
         {
         }
 
@@ -79,16 +79,16 @@
         /// <param name="refundPaymentEditorView">
         /// The refund payment editor view.
         /// </param>
-        /// <param name="includeInShipmentQuotations">
+        /// <param name="includeInPaymentSelection">
         /// The include in shipment quotations.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, bool includeInShipmentQuotations = true)
+        public PaymentGatewayMethodAttribute(string title, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, bool includeInPaymentSelection = true)
         {
             Mandate.ParameterNotNullOrEmpty(title, "title");
 
             Title = title;
             AuthorizeCaptureEditorView = authorizeCaptureEditorView;
-            IncludeInShipmentQuotations = includeInShipmentQuotations;
+            this.IncludeInPaymentSelection = includeInPaymentSelection;
             VoidPaymentEditorView = voidPaymentEditorView;
             RefundPaymentEditorView = refundPaymentEditorView;
         }
@@ -118,7 +118,7 @@
         /// Gets a value indicating whether or not the payment method should be used when quoting shipments.
         /// If false, it is assumed that the payment method is to be used programmatically for some other purpose.
         /// </summary>
-        public bool IncludeInShipmentQuotations { get; private set; }
+        public bool IncludeInPaymentSelection { get; private set; }
 
     }
 }

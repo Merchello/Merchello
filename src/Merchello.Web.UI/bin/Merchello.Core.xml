@@ -1016,11 +1016,11 @@
             <param name="title">
             The title.
             </param>
-            <param name="includeInShipmentQuotations">
-            The include in quotes.
+            <param name="includeInPaymentSelection">
+            The include in payment selection.
             </param>
             <remarks>
-            TODO rename includeInShipmentQuotations ... these are payments!
+            TODO rename includeInPaymentSelection ... these are payments!
             </remarks>
         </member>
         <member name="M:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.#ctor(System.String,System.String,System.Boolean)">
@@ -1033,8 +1033,8 @@
             <param name="authorizeCaptureEditorView">
             The authorize capture editor view.
             </param>
-            <param name="includeInShipmentQuotations">
-            The include in shipment quotations.
+            <param name="includeInPaymentSelection">
+            The include in payment selection.
             </param>
         </member>
         <member name="M:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.#ctor(System.String,System.String,System.String,System.Boolean)">
@@ -1070,7 +1070,7 @@
             <param name="refundPaymentEditorView">
             The refund payment editor view.
             </param>
-            <param name="includeInShipmentQuotations">
+            <param name="includeInPaymentSelection">
             The include in shipment quotations.
             </param>
         </member>
@@ -1094,7 +1094,7 @@
             Gets the refund payment editor view.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.IncludeInShipmentQuotations">
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.IncludeInPaymentSelection">
             <summary>
             Gets a value indicating whether or not the payment method should be used when quoting shipments.
             If false, it is assumed that the payment method is to be used programmatically for some other purpose.
@@ -3395,6 +3395,11 @@
             Refreshes the <see cref="T:Merchello.Core.Gateways.GatewayProviderBase"/> cache
             </summary>
         </member>
+        <member name="F:Merchello.Core.Gateways.GatewayProviderResolver._lock">
+            <summary>
+            The lock.
+            </summary>
+        </member>
         <member name="F:Merchello.Core.Gateways.GatewayProviderResolver._activatedGatewayProviderCache">
             <summary>
             The activated gateway provider cache.
@@ -3482,6 +3487,12 @@
             <returns>
             Returns a <see cref="T:Merchello.Core.GatewayProviderType"/>
             </returns>
+        </member>
+        <member name="M:Merchello.Core.Gateways.GatewayProviderResolver.GetWriteLock">
+            <summary>
+            Returns a WriteLock to use when modifying collections
+            </summary>
+            <returns>Gets the write lock</returns>
         </member>
         <member name="M:Merchello.Core.Gateways.GatewayProviderResolver.BuildActivatedGatewayProviderCache">
             <summary>
@@ -4668,6 +4679,25 @@
             <summary>
             Marker interface for a CashPaymentGatewayProvider
             </summary>
+        </member>
+        <member name="F:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider.AvailableResources">
+            <summary>
+            The available resources.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider.#ctor(Merchello.Core.Services.IGatewayProviderService,Merchello.Core.Models.IGatewayProviderSettings,Umbraco.Core.Cache.IRuntimeCacheProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider"/> class.
+            </summary>
+            <param name="gatewayProviderService">
+            The gateway provider service.
+            </param>
+            <param name="gatewayProviderSettings">
+            The gateway provider settings.
+            </param>
+            <param name="runtimeCacheProvider">
+            The runtime cache provider.
+            </param>
         </member>
         <member name="M:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider.CreatePaymentMethod(System.String,System.String)">
             <summary>
