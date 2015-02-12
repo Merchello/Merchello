@@ -5258,6 +5258,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
 
+                    console.info($scope.customLineItems);
+
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;

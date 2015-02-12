@@ -95,16 +95,24 @@
 
         // gets the custom line items
         function getCustomLineItems() {
-            return _.find(this.items, function(item) {
+            var custom =  _.find(this.items, function(item) {
                 return item.lineItemType === 'Custom';
             });
+            if (custom === undefined) {
+                custom = [];
+            }
+            return custom;
         }
 
         // gets a collection of discount line items
         function getDiscountLineItems() {
-            return _.find(this.items, function(item) {
+            var discounts = _.find(this.items, function(item) {
                 return item.lineItemTypeField.alias === 'Discount';
             });
+            if (discounts === undefined) {
+                discounts = [];
+            }
+            return discounts;
         }
 
         function shippingTotal() {
