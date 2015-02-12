@@ -20,7 +20,7 @@
     /// Represents the BraintreePaymentGatewayMethod
     /// </summary>
     [GatewayMethodUi("BrainTree.StandardTransaction")]
-    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello.BrainTree/payment.braintree.methodeditor.html")]
+    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
     [PaymentGatewayMethod("Braintree Payment Gateway Method Editors",
         "~/App_Plugins/Merchello.Braintree/standard/payment.standard.authorizecapturepayment.html",
         "~/App_Plugins/Merchello.Braintree/standard/payment.standard.voidpayment.html",

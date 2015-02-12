@@ -2,30 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0c8517c-4cb8-4237-b0ab-5358043bdf8d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Core.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Core.dll" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Examine.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Examine.dll" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Plugin.Payments.Braintree.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Plugin.Payments.Braintree.dll" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.dll" />
+      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello.Braintree\package.manifest" afterPath="" />
+      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello.Braintree\payment.braintree.module.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello.Braintree\payment.braintree.providersettings.controller.js" afterPath="" />
+      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello.Braintree\payment.braintree.providersettings.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\bin\Braintree-2.36.0.dll" afterPath="" />
+      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\bin\Braintree-2.40.0.dll" afterPath="" />
+      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\bin\Merchello.Plugin.Payments.Braintree.dll" afterPath="" />
+      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\bin\Merchello.Plugin.Payments.Braintree.dll.config" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/Umbraco.sdf" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/Umbraco.sdf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreePaymentGatewayProvider.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreePaymentGatewayProvider.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Editors/GatewayProviderApiController.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Editors/GatewayProviderApiController.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/GatewayProviderResolver.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/GatewayProviderResolver.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/IBraintreePaymentGatewayProvider.cs" afterPath="$PROJECT_DIR$/../../Provider/IBraintreePaymentGatewayProvider.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Core.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Core.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/ObjectResolution/MerchelloManyObjectsResolverBase.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/ObjectResolution/MerchelloManyObjectsResolverBase.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Models/TransactionOption.cs" afterPath="$PROJECT_DIR$/../../Models/TransactionOption.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/gatewayproviders/gatewayproviderlist.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/gatewayproviders/gatewayproviderlist.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.models.js" afterPath="$PROJECT_DIR$/payment.braintree.models.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.models.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.models.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.html" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../Shipping/FreeOverAmount/src/Merchello.Plugin.Shipping.FOA/App_Plugins/Merchello.FOA/shipping.foa.shippingprovider.controller.js" afterPath="$PROJECT_DIR$/../../../../../../Shipping/FreeOverAmount/src/Merchello.Plugin.Shipping.FOA/App_Plugins/Merchello.FOA/shipping.foa.shippingprovider.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../Shipping/FreeOverAmount/src/Merchello.Plugin.Shipping.FOA/App_Plugins/Merchello.FOA/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../../../../../Shipping/FreeOverAmount/src/Merchello.Plugin.Shipping.FOA/App_Plugins/Merchello.FOA/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreeStandardTransactionPaymentGatewayMethod.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreeStandardTransactionPaymentGatewayMethod.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreeSubscriptionRecordPaymentMethod.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreeSubscriptionRecordPaymentMethod.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreeVaultTransactionPaymentGatewayMethod.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreeVaultTransactionPaymentGatewayMethod.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../tests/Merchello.Tests.BrainTree.Integration/Merchello.Tests.BrainTree.Integration.csproj" afterPath="$PROJECT_DIR$/../../../../tests/Merchello.Tests.BrainTree.Integration/Merchello.Tests.BrainTree.Integration.csproj" />
     </list>
     <ignored path="Merchello.Braintree.iws" />
     <ignored path=".idea/workspace.xml" />

@@ -3,22 +3,39 @@
     using System;
     using System.Linq;
 
+    using global::Braintree;
+
     using Merchello.Core;
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
+    using Merchello.Plugin.Payments.Braintree.Services;
+
+    using Newtonsoft.Json;
 
     using Umbraco.Core;
+
+    using Constants = Merchello.Plugin.Payments.Braintree.Constants;
 
     /// <summary>
     /// The braintree subscription record payment method.
     /// </summary>
-    [GatewayMethodUi("BrainTree.StandardTransaction")]
-    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello.BrainTree/payment.braintree.methodeditor.html")]
+    [GatewayMethodUi("BrainTree.SubscriptionRecordTransaction")]
+    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
+    [PaymentGatewayMethod("Braintree Payment Gateway Method Editors",
+   "~/App_Plugins/Merchello.Braintree/vault/payment.vault.authorizecapturepayment.html",
+   "~/App_Plugins/Merchello.Braintree/vault/payment.vault.voidpayment.html",
+   "~/App_Plugins/Merchello.Braintree/vault/payment.vault.refundpayment.html", 
+   false)]
     public class BraintreeSubscriptionRecordPaymentMethod : PaymentGatewayMethodBase, IBraintreeSubscriptionRecordPaymentGatewayMethod
     {
+        /// <summary>
+        /// The _braintree api service.
+        /// </summary>
+        private IBraintreeApiService _braintreeApiService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreeSubscriptionRecordPaymentMethod"/> class.
         /// </summary>
@@ -28,9 +45,13 @@
         /// <param name="paymentMethod">
         /// The payment method.
         /// </param>
-        public BraintreeSubscriptionRecordPaymentMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod)
+        /// <param name="braintreeApiService">The <see cref="IBraintreeApiService"/></param>
+        public BraintreeSubscriptionRecordPaymentMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
             : base(gatewayProviderService, paymentMethod)
         {
+            Mandate.ParameterNotNull(braintreeApiService, "braintreeApiService");
+
+            _braintreeApiService = braintreeApiService;
         }
 
         /// <summary>
@@ -88,6 +109,12 @@
             payment.Collected = true;
             payment.Authorized = true;
 
+            string transaction;
+            if (args.TryGetValue(Constants.ExtendedDataKeys.BraintreeTransaction, out transaction))
+            {
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.BraintreeTransaction, transaction);
+            }
+
             GatewayProviderService.Save(payment);
 
             GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Braintree subscription payment", amount);
@@ -118,6 +145,12 @@
             payment.Collected = true;
             payment.Authorized = true;
 
+            string transaction;
+            if (args.TryGetValue(Constants.ExtendedDataKeys.BraintreeTransaction, out transaction))
+            {
+                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.BraintreeTransaction, transaction);
+            }
+
             GatewayProviderService.Save(payment);
 
             GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Braintree subscription payment", amount);
@@ -125,6 +158,24 @@
             return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
         }
 
+        /// <summary>
+        /// The perform refund payment.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
         protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
             foreach (var applied in payment.AppliedPayments())
@@ -147,9 +198,46 @@
             return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
         }
 
+        /// <summary>
+        /// The perform void payment.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
         protected override IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
         {
-            throw new NotImplementedException();
+            string transactionString;
+            if (args.TryGetValue(Constants.ExtendedDataKeys.BraintreeTransaction, out transactionString))
+            {
+                var transaction = JsonConvert.DeserializeObject<Transaction>(transactionString);
+                var result = _braintreeApiService.Transaction.Refund(transaction.Id);
+
+                if (!result.IsSuccess()) return new PaymentResult(Attempt<IPayment>.Fail(payment), invoice, false);  
+
+                foreach (var applied in payment.AppliedPayments())
+                {
+                    applied.TransactionType = AppliedPaymentType.Void;
+                    applied.Amount = 0;
+                    applied.Description += " - **Void**";
+                    GatewayProviderService.Save(applied);
+                }
+
+                payment.Voided = true;
+                GatewayProviderService.Save(payment);
+
+                return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
+            }
+            
+            return new PaymentResult(Attempt<IPayment>.Fail(payment), invoice, false);
         }
 
         /// <summary>
