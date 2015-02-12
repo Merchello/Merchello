@@ -62,11 +62,16 @@
         /// </returns>
         public static BraintreeProviderSettings GetBrainTreeProviderSettings(this ExtendedDataCollection extendedData)
         {
-            var settings = extendedData.ContainsKey(Constants.ExtendedDataKeys.BraintreeProviderSettings)
-                       ? JsonConvert.DeserializeObject<BraintreeProviderSettings>(
-                           extendedData.GetValue(Constants.ExtendedDataKeys.BraintreeProviderSettings))
-                       : new BraintreeProviderSettings();
-
+            BraintreeProviderSettings settings;
+            if (extendedData.ContainsKey(Constants.ExtendedDataKeys.BraintreeProviderSettings))
+            {
+                var json = extendedData.GetValue(Constants.ExtendedDataKeys.BraintreeProviderSettings);
+                settings = JsonConvert.DeserializeObject<BraintreeProviderSettings>(json);
+            }
+            else
+            {
+                settings = new BraintreeProviderSettings();
+            }
             return settings;
         }
 
