@@ -13,13 +13,13 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 	/// <summary>
 	/// Represents a PayPalPaymentGatewayProvider
 	/// </summary>
-	[GatewayProviderActivation("4E9D52B5-65A2-4F23-89D6-8E83500D4137", "PayPal Payment Provider", "PayPal Payment Provider")]
-    [GatewayProviderEditor("PayPal configuration", "~/App_Plugins/Merchello.PayPal/providerSettingsDialog.html")]
+	[GatewayProviderActivation(Constants.PayPalPaymentGatewayProviderKey, "PayPal Payment Provider", "PayPal Payment Provider")]
+	[GatewayProviderEditor("PayPal configuration", "~/App_Plugins/Merchello.PayPal/editor.html")]
 	public class PayPalPaymentGatewayProvider : PaymentGatewayProviderBase
 	{
 		#region AvailableResources
 
-		internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>
+		internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {
             new GatewayResource("PayPal", "PayPal")
         };

@@ -58,6 +58,12 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
+            // The Provider settings 
+            if (BraintreeApiService.BraintreeProviderSettings.DefaultTransactionOption == TransactionOption.SubmitForSettlement)
+            {
+                return this.PerformAuthorizeCapturePayment(invoice, invoice.Total, args);
+            }
+
             var paymentMethodNonce = args.GetPaymentMethodNonce();
 
             if (string.IsNullOrEmpty(paymentMethodNonce))
@@ -144,7 +150,7 @@
         /// <param name="amount">
         /// The amount.
         /// </param>
-        /// <param name="paymentMethodNonce">
+        /// <param name="token">
         /// The payment method nonce.
         /// </param>
         /// <returns>
@@ -153,7 +159,7 @@
         /// <remarks>
         /// This converts the <see cref="Result{T}"/> into Merchello's <see cref="IPaymentResult"/>
         /// </remarks>
-        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string paymentMethodNonce)
+        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token)
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, amount, PaymentMethod.Key);
 
@@ -161,9 +167,9 @@
             payment.Authorized = false;
             payment.Collected = false;
             payment.PaymentMethodName = "Braintree Transaction";
-            payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
+            payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, token);
 
-            var result = BraintreeApiService.Transaction.Sale(invoice, paymentMethodNonce, option: option);
+            var result = BraintreeApiService.Transaction.Sale(invoice, token, option: option);
 
             if (result.IsSuccess())
             {

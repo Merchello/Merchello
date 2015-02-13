@@ -9021,6 +9021,28 @@
             The umbraco context.
             </param>
         </member>
+        <member name="M:Merchello.Web.CustomerContext.SetValue(System.String,System.String)">
+            <summary>
+            Sets a value in the Customer Context Data.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <param name="value">
+            The value.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.CustomerContext.GetValue(System.String)">
+            <summary>
+            Gets a value from the Customer Context Data.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.CustomerContext.Initialize">
             <summary>
             Initializes this class with default values

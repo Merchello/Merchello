@@ -130,7 +130,36 @@ namespace Merchello.Web
         /// <summary>
         /// Gets the context data.
         /// </summary>
-        public CustomerContextData ContextData { get; private set; }
+        protected CustomerContextData ContextData { get; private set; }
+
+        /// <summary>
+        /// Sets a value in the Customer Context Data.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        public void SetValue(string key, string value)
+        {
+            ContextData.Values.Add(new KeyValuePair<string, string>(key, value));
+            this.CacheCustomer(CurrentCustomer);
+        }
+
+        /// <summary>
+        /// Gets a value from the Customer Context Data.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public string GetValue(string key)
+        {
+            return ContextData.Values.FirstOrDefault(x => x.Key == key).Value;
+        }
 
         /// <summary>
         /// Initializes this class with default values

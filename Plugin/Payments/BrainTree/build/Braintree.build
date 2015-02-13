@@ -16,7 +16,7 @@
         <VersionMajor>2</VersionMajor>
         <VersionMinor>0</VersionMinor>
         <VersionPatch>0</VersionPatch>
-        <VersionSuffix>2</VersionSuffix>
+        <VersionSuffix>7</VersionSuffix>
         <UmbracoVersion>7.2.1</UmbracoVersion>
     </PropertyGroup>
 
@@ -51,7 +51,7 @@
             <Output TaskParameter="Revision" PropertyName="Revision" />
         </Version>
         <AssemblyInfo CodeLanguage="CS"
-			OutputFile="$(ProjectDir)\Properties\VersionInfo.cs"
+			OutputFile="$(ProjectDir)\Properties\AssemblyInfo.cs"
 			AssemblyVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
 			AssemblyFileVersion="$(VersionMajor).$(VersionMinor).$(Build).$(Revision)"
 			AssemblyInformationalVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)"/>

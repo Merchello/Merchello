@@ -195,7 +195,7 @@
         /// <param name="amount">
         /// The amount.
         /// </param>
-        /// <param name="paymentMethodNonce">
+        /// <param name="token">
         /// The payment method nonce.
         /// </param>
         /// <returns>
@@ -204,7 +204,7 @@
         /// <remarks>
         /// This converts the <see cref="Result{Transaction}"/> into Merchello's <see cref="IPaymentResult"/>
         /// </remarks>
-        protected abstract IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string paymentMethodNonce);
+        protected abstract IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token);
         
     }
 }
