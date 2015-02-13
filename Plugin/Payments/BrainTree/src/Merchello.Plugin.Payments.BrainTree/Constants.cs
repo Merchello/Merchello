@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree
 {
     using System;
+    using System.Security;
+
     using global::Braintree;
 
     /// <summary>
@@ -22,6 +24,27 @@
         public static string TransactionChannel
         {
             get { return "MerchelloBraintreePaymentProvider"; }
+        }
+
+        /// <summary>
+        /// Braintree Provider PaymentCodes.
+        /// </summary>
+        public static class PaymentCodes
+        {
+            /// <summary>
+            /// Gets the transaction.
+            /// </summary>
+            public const string Transaction = "BraintreeTransaction";
+
+            /// <summary>
+            /// Gets the vault transaction.
+            /// </summary>
+            public const string VaultTransaction = "BraintreetVaultTransaction";
+
+            /// <summary>
+            /// Gets the record subscription transaction.
+            /// </summary>
+            public const string RecordSubscriptionTransaction = "BraintreeRecordSubscriptionTransaction";
         }
 
         /// <summary>

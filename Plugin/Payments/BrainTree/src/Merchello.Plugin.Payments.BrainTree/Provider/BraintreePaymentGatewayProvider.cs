@@ -24,9 +24,9 @@
         /// </summary>
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>
         {
-            new GatewayResource("Transaction", "Standard Transaction"),
-            new GatewayResource("VaultTransaction", "Vault Transaction"),
-            new GatewayResource("RecordSubscriptionTransaction", "Record of Subscription Transaction")
+            new GatewayResource(Constants.PaymentCodes.Transaction, "Standard Transaction"),
+            new GatewayResource(Constants.PaymentCodes.VaultTransaction, "Vault Transaction"),
+            new GatewayResource(Constants.PaymentCodes.RecordSubscriptionTransaction, "Record of Subscription Transaction")
         };
 
 
@@ -97,10 +97,10 @@
 
                 switch (available.ServiceCode)
                 {
-                    case "VaultTransaction":
+                    case Constants.PaymentCodes.VaultTransaction:
                         return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
                     
-                    case "RecordSubscriptionTransaction":
+                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
                         return new BraintreeSubscriptionRecordPaymentMethod(GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
 
                     default:
@@ -130,10 +130,10 @@
             {
                 switch (paymentMethod.PaymentCode)
                 {
-                    case "VaultTransaction":
+                    case Constants.PaymentCodes.VaultTransaction:
                         return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
-                    case "RecordSubscriptionTransaction":
+                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
                         return new BraintreeSubscriptionRecordPaymentMethod(GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
                     default:
@@ -159,10 +159,10 @@
             {
                 switch (paymentMethod.PaymentCode)
                 {
-                    case "VaultTransaction":
+                    case Constants.PaymentCodes.VaultTransaction:
                         return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
-                    case "RecordSubscriptionTransaction":
+                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
                         return new BraintreeSubscriptionRecordPaymentMethod(GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
                     default:

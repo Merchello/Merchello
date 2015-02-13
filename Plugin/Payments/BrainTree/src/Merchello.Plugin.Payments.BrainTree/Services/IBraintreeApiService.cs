@@ -1,10 +1,17 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Services
 {
+    using Merchello.Plugin.Payments.Braintree.Models;
+
     /// <summary>
     /// Defines the <see cref="BraintreeApiService"/>.
     /// </summary>
     public interface IBraintreeApiService
     {
+        /// <summary>
+        /// Gets the <see cref="BraintreeProviderSettings"/>.
+        /// </summary>
+        BraintreeProviderSettings BraintreeProviderSettings { get; }
+
         /// <summary>
         /// Gets the <see cref="IBraintreeCustomerApiService"/>.
         /// </summary>
