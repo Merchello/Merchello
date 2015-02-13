@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <!-- IMPORTS -->
+    <PropertyGroup>
+        <MSBuildCustomTasksPath>$(MSBuildProjectDirectory)..\..\..\..\..\Tools\MSBuildCommunityTasks</MSBuildCustomTasksPath>
+        <MSBuildCommunityTasksPath>$(MSBuildCustomTasksPath)</MSBuildCommunityTasksPath>
+        <MSBuildUmbracoTasksPath>$(MSBuildCustomTasksPath)</MSBuildUmbracoTasksPath>
+    </PropertyGroup>
+
+    <Import Project="$(MSBuildCustomTasksPath)\MSBuild.Community.Tasks.Targets" />
+    <Import Project="$(MSBuildCustomTasksPath)\MSBuild.Umbraco.Tasks.Targets" />
+
+    <!-- PROPERTIES -->
+    <PropertyGroup>
+        <VersionMajor>1</VersionMajor>
+        <VersionMinor>0</VersionMinor>
+        <VersionPatch>3</VersionPatch>
+        <VersionSuffix>0</VersionSuffix>
+        <UmbracoVersion>7.1.4</UmbracoVersion>
+    </PropertyGroup>
+
+
+    <PropertyGroup>
+        <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
+        <BuildDir>$(MSBuildProjectDirectory)\Temp</BuildDir>
+        <PackageDir>$(MSBuildProjectDirectory)</PackageDir>
+        <ProjectDir>$(RootDir)\src\Merchello.Plugin.Payments.PayPal</ProjectDir>
+    </PropertyGroup>
+
+    
+    <!-- 
+ ****************************************************
+ TARGETS 
+ *****************************************************
+ -->
+
+    <!-- CLEAN -->
+    <Target Name="Clean">
+        <RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
+        <MakeDir Directories="$(BuildDir)" />
+    </Target>
+
+    <!-- UPDATE ASSEMBLEY VERSION -->
+    <Target Name="UpdateAssemblyInfo" DependsOnTargets="Clean">
+        <Version Major="$(VersionMajor)" Minor="$(VersionMinor)" BuildType="Automatic" RevisionType="Automatic" StartDate="04/01/2014">
+            <Output TaskParameter="Build" PropertyName="Build" />
+            <Output TaskParameter="Revision" PropertyName="Revision" />
+        </Version>
+        <AssemblyInfo CodeLanguage="CS"
+			OutputFile="$(ProjectDir)\Properties\VersionInfo.cs"
+			AssemblyVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
+			AssemblyFileVersion="$(VersionMajor).$(VersionMinor).$(Build).$(Revision)"
+			AssemblyInformationalVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)"/>
+    </Target>
+
+    <!-- COMPILE -->
+    <Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
+        <MSBuild Projects="$(RootDir)\src\Merchello.Plugin.Payments.PayPal\Merchello.Plugin.Payments.PayPal.sln" Properties="Configuration=Release;Platform=Any CPU;" />
+    </Target>
+
+    <!-- PREPARE FILES -->
+    <Target Name="PrepairFiles" DependsOnTargets="Compile">
+        <ItemGroup>
+            <AppPluginFiles Include="$(ProjectDir)\App_Plugins\**\*.*" />
+            <BinFiles Include="$(ProjectDir)\bin\Release\*PayPal*" />
+            <PackageFile Include="$(PackageDir)\package.xml" />
+        </ItemGroup>
+      
+
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildDir)\bin" />
+        <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildDir)\App_Plugins\%(RecursiveDir)%(Filename)%(Extension)')" />
+        <Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildDir)" />
+    </Target>
+
+    <!-- MANIFEST -->
+    <Target Name="Manifest" DependsOnTargets="PrepairFiles">
+        <ItemGroup>
+            <ManifestFiles Include="$(BuildDir)\**\*" Exclude="$(BuildDir)\package.xml" />
+        </ItemGroup>
+        <ManifestUpdate ManifestFile="$(BuildDir)\package.xml"
+			WorkingDirectory="$(BuildDir)"
+			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
+			PackageVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
+			Readme="$([System.IO.File]::ReadAllText(readme.txt))"
+			Files="@(ManifestFiles)" />
+    </Target>
+
+    <!-- PACKAGE -->
+    <Target Name="Build" DependsOnTargets="Manifest">
+        <ItemGroup>
+            <PackageFiles Include="$(BuildDir)\**\*.*" />
+        </ItemGroup>
+        <Package ManifestFile="$(BuildDir)\package.xml"
+			WorkingDirectory="$(BuildDir)"
+			OutputDirectory="$(PackageDir)"
+			Files="@(PackageFiles)" />
+        <RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
+    </Target>
+ 
+
+</Project>
