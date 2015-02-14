@@ -534,16 +534,13 @@
         /// <param name="paymentMethodToken">
         /// The payment method token.
         /// </param>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
         /// <param name="transactionOption">
         /// The transaction option.
         /// </param>
         /// <returns>
         /// The <see cref="TransactionRequest"/>.
         /// </returns>
-        public TransactionRequest CreateVaultTransactionRequest(IInvoice invoice, string paymentMethodToken, ICustomer customer, TransactionOption transactionOption = TransactionOption.SubmitForSettlement)
+        public TransactionRequest CreateVaultTransactionRequest(IInvoice invoice, string paymentMethodToken, TransactionOption transactionOption = TransactionOption.SubmitForSettlement)
         {
             var request = new TransactionRequest()
             {
@@ -553,8 +550,6 @@
                 BillingAddress = CreateAddressRequest(invoice.GetBillingAddress()),
                 Channel = Constants.TransactionChannel
             };
-
-            if (customer != null) request.Customer = CreateCustomerRequest(customer);
 
             if (transactionOption == TransactionOption.SubmitForSettlement)
             {

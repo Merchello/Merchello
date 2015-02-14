@@ -172,7 +172,7 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, customerError), invoice, false);
             }
 
-            var result = BraintreeApiService.Transaction.VaultSale(invoice, token, merchCustomer, invoice.GetBillingAddress(), option);
+            var result = BraintreeApiService.Transaction.VaultSale(invoice, token, invoice.GetBillingAddress(), option);
 
             if (result.IsSuccess())
             {
