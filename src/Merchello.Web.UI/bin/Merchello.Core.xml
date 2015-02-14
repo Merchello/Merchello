@@ -9328,6 +9328,16 @@
             The line item.
             </param>
         </member>
+        <member name="P:Merchello.Core.Sales.ISalePreparationBase.RaiseCustomerEvents">
+            <summary>
+            Gets or sets a value indicating whether raise customer events when saving customer data.
+            </summary>
+            <remarks>
+            During certain checkout workflows, customer save events can fire often that can cause performance
+            problems if there are a lot of event handlers handling the CustomerService.Save events.  This
+            allows for a toggling the events on and off
+            </remarks>
+        </member>
         <member name="F:Merchello.Core.Sales.SalePreparationBase._itemCache">
             <summary>
             The item cache.
@@ -9566,7 +9576,7 @@
             The <see cref="T:System.String"/> cache key
             </returns>
         </member>
-        <member name="M:Merchello.Core.Sales.SalePreparationBase.SaveCustomer(Merchello.Core.IMerchelloContext,Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Core.Sales.SalePreparationBase.SaveCustomer(Merchello.Core.IMerchelloContext,Merchello.Core.Models.ICustomerBase,System.Boolean)">
             <summary>
             Saves the current customer
             </summary>
@@ -9576,8 +9586,11 @@
             <param name="customer">
             The customer.
             </param>
+            <param name="raiseEvents">
+            The raise Events.
+            </param>
         </member>
-        <member name="M:Merchello.Core.Sales.SalePreparationBase.Reset(Merchello.Core.IMerchelloContext,Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Core.Sales.SalePreparationBase.Reset(Merchello.Core.IMerchelloContext,Merchello.Core.Models.ICustomerBase,System.Boolean)">
             <summary>
             Purges persisted checkout information
             </summary>
@@ -9586,6 +9599,9 @@
             </param>
             <param name="customer">
             The customer.
+            </param>
+            <param name="raiseEvents">
+            The raise Events.
             </param>
         </member>
         <member name="M:Merchello.Core.Sales.SalePreparationBase.MakeCacheKey(Merchello.Core.Models.ICustomerBase,System.Guid)">
@@ -9616,6 +9632,11 @@
         <member name="E:Merchello.Core.Sales.SalePreparationBase.Finalizing">
             <summary>
             Occurs after a sale has been finalized.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Sales.SalePreparationBase.RaiseCustomerEvents">
+            <summary>
+            Gets or sets a value indicating whether raise customer events.
             </summary>
         </member>
         <member name="P:Merchello.Core.Sales.SalePreparationBase.Customer">
@@ -20312,11 +20333,16 @@
             </summary>
             <returns><see cref="T:Merchello.Core.Models.IAnonymousCustomer"/></returns>
         </member>
-        <member name="M:Merchello.Core.Services.IAnonymousCustomerService.Save(Merchello.Core.Models.IAnonymousCustomer)">
+        <member name="M:Merchello.Core.Services.IAnonymousCustomerService.Save(Merchello.Core.Models.IAnonymousCustomer,System.Boolean)">
             <summary>
             Saves a single <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>
             </summary>
-            <param name="anonymous">The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save</param>
+            <param name="anonymous">
+            The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save
+            </param>
+            <param name="raiseEvents">
+            Optional boolean indicating whether or not to raise events
+            </param>
         </member>
         <member name="M:Merchello.Core.Services.IAnonymousCustomerService.Delete(Merchello.Core.Models.IAnonymousCustomer)">
             <summary>
@@ -20388,12 +20414,15 @@
             The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Core.Services.AnonymousCustomerService.Save(Merchello.Core.Models.IAnonymousCustomer)">
+        <member name="M:Merchello.Core.Services.AnonymousCustomerService.Save(Merchello.Core.Models.IAnonymousCustomer,System.Boolean)">
             <summary>
             Saves the <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>
             </summary>
             <param name="anonymous">
             The anonymous customer
+            </param>
+            <param name="raiseEvents">
+            TOptional boolean indicating whether or not to raise events
             </param>
         </member>
         <member name="M:Merchello.Core.Services.AnonymousCustomerService.Delete(Merchello.Core.Models.IAnonymousCustomer)">
@@ -29894,11 +29923,16 @@
             </summary>
             <returns><see cref="T:Merchello.Core.Models.IAnonymousCustomer"/></returns>
         </member>
-        <member name="M:Merchello.Core.Services.ICustomerService.Save(Merchello.Core.Models.IAnonymousCustomer)">
+        <member name="M:Merchello.Core.Services.ICustomerService.Save(Merchello.Core.Models.IAnonymousCustomer,System.Boolean)">
             <summary>
             Saves a single <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>
             </summary>
-            <param name="anonymous">The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save</param>
+            <param name="anonymous">
+            The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save
+            </param>
+            <param name="raiseEvents">
+            Optional boolean indicating whether or not to raise events
+            </param>
         </member>
         <member name="M:Merchello.Core.Services.ICustomerService.Delete(Merchello.Core.Models.IAnonymousCustomer)">
             <summary>
@@ -30194,11 +30228,16 @@
             </summary>
             <returns><see cref="T:Merchello.Core.Models.IAnonymousCustomer"/></returns>
         </member>
-        <member name="M:Merchello.Core.Services.CustomerService.Save(Merchello.Core.Models.IAnonymousCustomer)">
+        <member name="M:Merchello.Core.Services.CustomerService.Save(Merchello.Core.Models.IAnonymousCustomer,System.Boolean)">
             <summary>
             Saves a single <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>
             </summary>
-            <param name="anonymous">The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save</param>
+            <param name="anonymous">
+            The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save
+            </param>
+            <param name="raiseEvents">
+            Optional boolean indicating whether or not to raise events
+            </param>
         </member>
         <member name="M:Merchello.Core.Services.CustomerService.Delete(Merchello.Core.Models.IAnonymousCustomer)">
             <summary>

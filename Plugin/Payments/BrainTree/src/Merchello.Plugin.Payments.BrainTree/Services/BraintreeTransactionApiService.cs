@@ -145,11 +145,10 @@
         public Result<Transaction> VaultSale(
             IInvoice invoice,
             string paymentMethodToken,
-            ICustomer customer,
             IAddress billingAddress,
             TransactionOption option = TransactionOption.SubmitForSettlement)
         {
-            return VaultSale(invoice, paymentMethodToken, customer, billingAddress, null, option);
+            return VaultSale(invoice, paymentMethodToken, billingAddress, option);
         }
 
         /// <summary>
@@ -179,12 +178,11 @@
         public Result<Transaction> VaultSale(
             IInvoice invoice,
             string paymentMethodToken,
-            ICustomer customer,
             IAddress billingAddress,
             IAddress shippingAddress,
             TransactionOption option = TransactionOption.SubmitForSettlement)
         {
-            var request = RequestFactory.CreateVaultTransactionRequest(invoice, paymentMethodToken, customer, option);
+            var request = RequestFactory.CreateVaultTransactionRequest(invoice, paymentMethodToken, option);
 
             if (billingAddress != null) request.BillingAddress = RequestFactory.CreateAddressRequest(billingAddress);
             if (shippingAddress != null) request.ShippingAddress = RequestFactory.CreateAddressRequest(shippingAddress);

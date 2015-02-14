@@ -61,6 +61,7 @@
             _customer = customer;
             _itemCache = itemCache;
             ApplyTaxesToInvoice = true;
+            RaiseCustomerEvents = true;
         }
 
         /// <summary>
@@ -73,6 +74,10 @@
         /// </summary>
         public static event TypedEventHandler<SalePreparationBase, SalesPreparationEventArgs<IPaymentResult>> Finalizing;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether raise customer events.
+        /// </summary>
+        public bool RaiseCustomerEvents { get; set; }
 
 
         /// <summary>
@@ -128,7 +133,7 @@
         public virtual void SaveBillToAddress(IAddress billToAddress)
         {           
             _customer.ExtendedData.AddAddress(billToAddress, AddressType.Billing);
-            SaveCustomer(_merchelloContext, _customer);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -138,7 +143,7 @@
         public virtual void SaveShipToAddress(IAddress shipToAddress)
         {
             _customer.ExtendedData.AddAddress(shipToAddress, AddressType.Shipping);
-            SaveCustomer(_merchelloContext, _customer);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -171,7 +176,7 @@
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
             _customer.ExtendedData.AddAddress(approvedShipmentRateQuote.Shipment.GetDestinationAddress(), AddressType.Shipping);
-            SaveCustomer(_merchelloContext, _customer);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -190,7 +195,7 @@
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
             _customer.ExtendedData.AddAddress(shipmentRateQuotes.First().Shipment.GetDestinationAddress(), AddressType.Shipping);
-            SaveCustomer(_merchelloContext, _customer);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -217,6 +222,7 @@
         public void SavePaymentMethod(IPaymentMethod paymentMethod)
         {
             _customer.ExtendedData.AddPaymentMethod(paymentMethod);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -449,13 +455,13 @@
         /// <param name="entityKey">
         /// The entity Key.
         /// </param>
-        internal static void Reset(IMerchelloContext merchelloContext, Guid entityKey)
+        internal void Reset(IMerchelloContext merchelloContext, Guid entityKey)
         {
             var customer = merchelloContext.Services.CustomerService.GetAnyByKey(entityKey);
 
             if (customer == null) return;
 
-            Reset(merchelloContext, customer);
+            Reset(merchelloContext, customer, RaiseCustomerEvents);
         }
         
         /// <summary>
@@ -520,15 +526,18 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer)
+        /// <param name="raiseEvents">
+        /// The raise Events.
+        /// </param>
+        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer, bool raiseEvents = true)
         {
             if (typeof(AnonymousCustomer) == customer.GetType())
             {
-                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer);
+                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer, raiseEvents);
             }
             else
             {
-                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer);
+                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer, raiseEvents);
             }
         }
 
@@ -541,11 +550,14 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer)
+        /// <param name="raiseEvents">
+        /// The raise Events.
+        /// </param>
+        private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer, bool raiseEvents = true)
         {
             customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.ShippingDestinationAddress);
             customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.BillingAddress);
-            SaveCustomer(merchelloContext, customer);
+            SaveCustomer(merchelloContext, customer, raiseEvents);
         }
 
         /// <summary>
