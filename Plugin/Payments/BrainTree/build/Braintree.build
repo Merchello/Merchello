@@ -16,7 +16,7 @@
         <VersionMajor>2</VersionMajor>
         <VersionMinor>0</VersionMinor>
         <VersionPatch>0</VersionPatch>
-        <VersionSuffix>8</VersionSuffix>
+        <VersionSuffix>14</VersionSuffix>
         <UmbracoVersion>7.2.1</UmbracoVersion>
     </PropertyGroup>
 

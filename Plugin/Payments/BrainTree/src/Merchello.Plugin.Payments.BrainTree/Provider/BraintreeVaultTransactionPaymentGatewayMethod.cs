@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Provider
 {
     using System;
+    using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Gateways;
@@ -118,7 +119,7 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
             }
 
-            var attempt = ProcessPayment(invoice, TransactionOption.Authorize, invoice.Total, paymentMethodToken);
+            var attempt = ProcessPayment(invoice, TransactionOption.SubmitForSettlement, invoice.Total, paymentMethodToken);
 
             var payment = attempt.Payment.Result;
 
@@ -130,7 +131,22 @@
             }
             else
             {
-                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "To show record of Braintree Authorization", 0);
+                var customerKey = invoice.CustomerKey.GetValueOrDefault();
+                var last4 = string.Empty;
+                if (!Guid.Empty.Equals(customerKey))
+                {
+                    var customer = BraintreeApiService.Customer.GetBraintreeCustomer(customerKey);
+                    if (customer.CreditCards.Any())
+                    {
+                        var cc = customer.CreditCards.FirstOrDefault(x => x.Token == paymentMethodToken);
+                        if (cc != null)
+                        {
+                            last4 += " - " + cc.CardType + " " + cc.LastFour;
+                        }
+                    }
+                }
+
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Braintree Vault Transaction" + last4, payment.Amount);
             }
 
             return attempt;
@@ -163,16 +179,8 @@
             payment.Collected = false;
             payment.PaymentMethodName = "Braintree Vault Transaction";
             payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, token);
-            
-            var merchCustomer = invoice.Customer();
 
-            if (merchCustomer == null)
-            {
-                var customerError = new NullReferenceException("A customer is not associated with the invoice.  Braintree vault transactions require a customer reference.");
-                return new PaymentResult(Attempt<IPayment>.Fail(payment, customerError), invoice, false);
-            }
-
-            var result = BraintreeApiService.Transaction.VaultSale(invoice, token, invoice.GetBillingAddress(), option);
+            var result = BraintreeApiService.Transaction.VaultSale(invoice, token, option);
 
             if (result.IsSuccess())
             {
