@@ -31,7 +31,7 @@
 @helper DisplayTheProduct(IPublishedContent productPage)
 {
     // is obsolete
-    var product = Merchello.Product(productPage.GetPropertyValue("merchelloProduct").ToString());  
+    var product = productPage.GetPropertyValue<ProductDisplay>("merchelloProduct");  
    
        
     <div class="col-lg-4 col-md-6 hero-feature resource">
@@ -55,7 +55,7 @@
             @if (productPage.HasProperty("merchelloProduct") && productPage.HasValue("merchelloProduct"))
             {
                 
-                var merchProduct = Merchello.Product(productPage.GetPropertyValue<string>("merchelloProduct"));
+                var merchProduct = productPage.GetPropertyValue<ProductDisplay>("merchelloProduct");
                 if (merchProduct != null)
                 { 
                     

@@ -1172,6 +1172,44 @@
             The collection of the report data aggregators resolved.
             </returns>
         </member>
+        <member name="T:Merchello.Web.PropertyConverters.ProductDisplayValueConverter">
+            <summary>
+            A property value converter for converting <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.PropertyConverters.ProductDisplayValueConverter.EditorAliases">
+            <summary>
+            The property editor aliases that to be associated with this converter
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.PropertyConverters.ProductDisplayValueConverter.IsConverter(Umbraco.Core.Models.PublishedContent.PublishedPropertyType)">
+            <summary>
+            Returns a value indication if this is a PropertyValue converter for the current property.
+            </summary>
+            <param name="propertyType">
+            The property type.
+            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.PropertyConverters.ProductDisplayValueConverter.ConvertDataToSource(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
+            <summary>
+            Converts property data to <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </summary>
+            <param name="propertyType">
+            The property type.
+            </param>
+            <param name="source">
+            The source.
+            </param>
+            <param name="preview">
+            The preview.
+            </param>
+            <returns>
+            The <see cref="T:System.Object"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Reporting.IReportApiController">
             <summary>
             Marker interface for reports
