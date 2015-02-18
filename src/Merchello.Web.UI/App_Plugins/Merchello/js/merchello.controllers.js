@@ -869,13 +869,10 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
             // exposed methods
             $scope.save = save;
 
-            console.info($scope.dialogData);
-
             function save() {
                 $scope.dialogData.notificationMessage.monitorKey = $scope.dialogData.selectedMonitor.monitorKey;
                 $scope.submit($scope.dialogData);
             }
-
     }]);
 
 angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.NotificationsMethodAddEditController',
@@ -5257,8 +5254,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
-
-                    console.info($scope.customLineItems);
 
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;

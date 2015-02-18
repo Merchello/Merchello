@@ -483,9 +483,12 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/notificationmethods.tpl.html',
             controller: function($scope) {
 
-                $scope.getMonitorName = function(key) {
+                // Exposed monitors
+                $scope.getMonitorName = getMonitorName;
+
+                function getMonitorName(key) {
                     var monitor = _.find($scope.notificationMonitors, function(monitor) {
-                        return monitor.key === key;
+                        return monitor.monitorKey === key;
                     });
                     if(monitor !== null || monitory !== undefined) {
                         return monitor.name;
@@ -493,7 +496,6 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
                         return 'Not found';
                     }
                 }
-
             }
         };
     });
