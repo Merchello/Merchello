@@ -1,0 +1,25 @@
+﻿ol, ul {
+    list-style: none;
+}
+
+#featured {
+    .product-list {
+        padding: 2.5em 16% 2.5em calc(274px + 4.4%);
+        margin: 1.5em 0 1.5em calc(-274px - 4.4%);
+        background: #fdf8e9;
+    }
+}
+
+.price {
+    font-size: 2em;
+    .on-sale {
+        text-decoration: line-through
+    }
+    .sale-price {
+        color: red;
+    }
+}
+
+td.align-right {
+    text-align: right;
+}

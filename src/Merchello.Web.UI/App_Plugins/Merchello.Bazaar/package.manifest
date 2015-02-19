@@ -1,0 +1,15 @@
+﻿{
+	propertyEditors: [
+    		{
+    			alias: "MerchelloBazaar.ThemePicker",
+    			name: "Merchello Bazaar Theme Picker",
+    			editor: {
+    				view: "~/App_Plugins/Merchello.Bazaar/BackOffice/PropertyEditors/theme.picker.html"
+    			}
+    		}
+    	],
+	javascript: [
+	    '~/App_Plugins/Merchello.Bazaar/BackOffice/merchello.bazaar.module.js',
+		'~/App_Plugins/Merchello.Bazaar/BackOffice/PropertyEditors/theme.picker.controller.js'
+	]
+}

@@ -266,6 +266,7 @@
     <Compile Include="Models\SaleHistory\SalesHistoryDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
+    <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
     <Compile Include="Reporting\ReportController.cs" />
