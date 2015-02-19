@@ -1,0 +1,50 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.CreateShipmentController" data-ng-show="loaded">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <h3><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h3>
+        <div class="control-group row-fluid">
+            <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" />:</label>
+            <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="col-xs-6 span6" />
+            <label for="provider"><localize key="merchelloGeneral_via" /></label>
+            <select name="shipmentStatus" class="col-xs-6 span6" data-ng-model="dialogData.shipMethods.selected" data-ng-options="option.name for option in dialogData.shipMethods.alternatives"></select>
+            <!--<select name="provider" disabled="disabled" class="col-xs-6 span6"><option>{{shipMethod}}</option></select>-->
+            <!--<label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>-->
+            <label>Shipment Status</label>
+            <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+        </div>
+        <table class="table table-striped merchello-striped-table order-items">
+            <tbody>
+            <tr>
+                <th><localize key="general_add" /></th>
+                <th><localize key="merchelloVariant_product" /></th>
+                <th><localize key="merchelloGeneral_quantity" /></th>
+                <th><localize key="merchelloGeneral_total" /></th>
+            </tr>
+            <tr data-ng-repeat="lineitem in dialogData.order.items">
+                <td><input type="checkbox" data-ng-disabled="lineitem.backOrder" data-ng-model="lineitem.selected" /></td>
+                <td>
+                    <h4>{{lineitem.name}}</h4>
+                    <span><localize key="merchelloGeneral_sku" />: {{lineitem.sku}}</span>
+                </td>
+                <td class="text-right">{{lineitem.quantity}} x <strong>{{lineitem.price | currency : currencySymbol}}</strong></td>
+                <td class="text-right">{{lineitem.quantity * lineitem.price | currency : currencySymbol}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+                <!-- ACTION: Save Button -->
+                <button class="btn btn-primary" data-ng-click="save()">
+                    <localize key="merchelloGeneral_fulfill" /> <localize key="merchelloGeneral_shipment" />
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

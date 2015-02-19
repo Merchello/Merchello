@@ -1,0 +1,27 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<MasterModel>
+@using Merchello.Bazaar.Models
+@using Merchello.Web
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container" style="width: auto;">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="@Model.StorePage.Url">@Model.StoreTitle</a>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    @foreach (var group in Model.ProductGroups)
+                    {
+                        <li><a href="@group.Url">@group.Name</a></li>
+                    }
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a href="@Model.BasketPage.Url">Basket (@Model.CurrentCustomer.Basket().TotalItemCount)</a></li>
+                </ul>
+            </div><!-- /.nav-collapse -->
+        </div>
+    </div><!-- /navbar-inner -->
+</div>

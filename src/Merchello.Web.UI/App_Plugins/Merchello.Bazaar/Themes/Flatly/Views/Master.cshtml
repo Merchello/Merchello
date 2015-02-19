@@ -1,0 +1,34 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<MasterModel>
+@using Merchello.Bazaar
+@using Merchello.Bazaar.Models
+@using ClientDependency.Core.Mvc
+@using Umbraco.Web
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Name</title>
+    @{  // Theme Assets references
+        Html.RequiresJs("http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js")
+           .RequiresCss("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css")
+           .RequiresCss("http://fonts.googleapis.com/css?family=Roboto:400,300,100,500")
+           .RequiresPackageCss(Model, "bootstrap.min.css")
+           .RequiresPackageCss(Model, "bootstrap-responsive.min.css")
+           .RequiresPackageCss(Model, "styles.min.css")
+           .RequiresPackageJs(Model, "bootstrap.min.js");
+
+    }
+    @Html.RenderCssHere()
+</head>
+<body class="@Model.DocumentTypeAlias" id="top">
+    @Html.ThemedPartial(Model, "NavBar")
+    <div class="container">
+        @RenderBody()
+    </div>
+    @Html.RenderJsHere()
+</body>
+</html>
