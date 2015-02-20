@@ -1,4 +1,4 @@
-﻿namespace Merchello.Bazaar.Models
+﻿namespace Merchello.Bazaar.Models.ViewModels
 {
     using Umbraco.Core.Models;
     using Umbraco.Web;

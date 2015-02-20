@@ -1,16 +1,17 @@
-﻿namespace Merchello.Bazaar.Models
+﻿namespace Merchello.Bazaar.Models.ViewModels
 {
-    using System.Collections.Generic;
-    using System.Linq;
+    using System.Web;
+
+    using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Core.Models;
     using Umbraco.Web;
     using Umbraco.Web.Models;
 
     /// <summary>
-    /// Represents a ProductGroup view model.
+    /// Represents a product model.
     /// </summary>
-    public class ProductGroupModel : MasterModel
+    public class ProductModel : MasterModel
     {
         /// <summary>
         /// The image.
@@ -23,19 +24,30 @@
         private string _brief;
 
         /// <summary>
-        /// Child products.
+        /// The description.
         /// </summary>
-        private IEnumerable<ProductModel> _childProducts; 
+        private IHtmlString _description;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductGroupModel"/> class.
+        /// Initializes a new instance of the <see cref="ProductModel"/> class.
         /// </summary>
         /// <param name="content">
         /// The content.
         /// </param>
-        public ProductGroupModel(IPublishedContent content)
+        public ProductModel(IPublishedContent content)
             : base(content)
         {
+        }
+
+        /// <summary>
+        /// Gets the product data.
+        /// </summary>
+        public ProductDisplay ProductData
+        {
+            get
+            {
+                return this.Content.GetPropertyValue<ProductDisplay>("merchelloProduct");
+            }
         }
 
         /// <summary>
@@ -55,7 +67,7 @@
         }
 
         /// <summary>
-        /// Gets the brief text for the product group.
+        /// Gets the brief.
         /// </summary>
         public string Brief
         {
@@ -66,19 +78,13 @@
         }
 
         /// <summary>
-        /// Gets the children.
+        /// Gets the description.
         /// </summary>
-        public override IEnumerable<IPublishedContent> Children
+        public IHtmlString Description
         {
             get
             {
-                if (this._childProducts != null) return this._childProducts;
-                this._childProducts = base.Children.Select(x => new ProductModel(x)
-                                                               {
-                                                                   CurrentCustomer = this.CurrentCustomer,
-                                                                   Currency = this.Currency
-                                                               });
-                return this._childProducts;
+                return this._description ?? this.Content.GetPropertyValue<IHtmlString>("description");
             }
         }
     }

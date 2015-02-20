@@ -1,4 +1,4 @@
-﻿namespace Merchello.Bazaar.Models
+﻿namespace Merchello.Bazaar.Models.ViewModels
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -24,7 +24,17 @@
         /// <summary>
         /// The basket page.
         /// </summary>
-        private IPublishedContent _basketPage;
+        private BasketModel _basketPage;
+
+        /// <summary>
+        /// The registration page.
+        /// </summary>
+        private RegistrationModel _registrationPage;
+
+        /// <summary>
+        /// The account page.
+        /// </summary>
+        private AccountModel _accountPage;
 
         /// <summary>
         /// The product groups or categories.
@@ -108,28 +118,62 @@
                                         };
                 }
 
-                return _storePage;
+                return this._storePage;
             } 
 
             protected set
             {
-                _storePage = value;
+                this._storePage = value;
             }
         }
 
         /// <summary>
         /// Gets or sets the basket page.
         /// </summary>
-        public IPublishedContent BasketPage
+        public BasketModel BasketPage
         {
             get
             {
-                return this._basketPage ?? this.StorePage.Children.FirstOrDefault(x => x.DocumentTypeAlias == "BazaarBasket");
+                return this._basketPage ?? new BasketModel(this.StorePage.Children.FirstOrDefault(x => x.DocumentTypeAlias == "BazaarBasket"))
+                                               {
+                                                   Currency = this.Currency,
+                                                   CurrentCustomer = this.CurrentCustomer
+                                               };
             }
 
             protected set
             {
                 this._basketPage = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the registration page.
+        /// </summary>
+        public RegistrationModel RegistrationPage
+        {
+            get
+            {
+                return this._registrationPage ?? new RegistrationModel(this.StorePage.Descendant("BazaarRegistration"))
+                                                {
+                                                    CurrentCustomer = this.CurrentCustomer,
+                                                    Currency = this.Currency
+                                                };
+            }
+        }
+
+        /// <summary>
+        /// Gets the account page.
+        /// </summary>
+        public AccountModel AccountPage
+        {
+            get
+            {
+                return _accountPage ?? new AccountModel(StorePage.Descendant("BazaarAccount"))
+                                           {
+                                             Currency  = Currency,
+                                             CurrentCustomer = CurrentCustomer
+                                           };
             }
         }
 
@@ -140,13 +184,35 @@
         {
             get
             {
-                return _productGroups
-                       ?? this.StorePage.Children.Where(x => x.DocumentTypeAlias == "BazaarProductGroup")
+                return this._productGroups
+                       ?? this.StorePage.Children.Where(x => x.DocumentTypeAlias == "BazaarProductGroup" && x.IsVisible())
                               .Select(x => new ProductGroupModel(x)
                                                {
                                                    CurrentCustomer = this.CurrentCustomer,
                                                    Currency = this.Currency
                                                });
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether show account.
+        /// </summary>
+        public bool ShowAccount 
+        {
+            get
+            {
+                return StorePage.GetPropertyValue<bool>("customerAccounts");
+            }
+        }
+
+        /// <summary>
+        /// Gets the customer member type name.
+        /// </summary>
+        public string CustomerMemberTypeName
+        {
+            get
+            {
+                return StorePage.GetPropertyValue<string>("customerMemberType");
             }
         }
 

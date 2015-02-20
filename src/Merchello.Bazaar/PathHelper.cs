@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Bazaar
 {
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.ViewModels;
 
     /// <summary>
     /// Helper class to assist in starter kit specific path resolution.
@@ -27,21 +28,18 @@
         }
 
         /// <summary>
-        /// Gets the theme view path.
+        /// The get theme account path.
         /// </summary>
         /// <param name="model">
-        /// The <see cref="IMasterModel"/>.
-        /// </param>
-        /// <param name="viewName">
-        /// The view name.
+        /// The model.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/> representation of the view path and name.
+        /// The <see cref="string"/>.
         /// </returns>
-        public static string ThemeViewPath(this IMasterModel model, string viewName)
+        public static string GetThemeAccountPath(IMasterModel model)
         {
-            const string Path = "{0}Views/{1}.cshtml";
-            return string.Format(Path, GetThemePath(model), viewName);
+            const string Path = "~/App_Plugins/Merchello.Bazaar/Themes/{0}/Account/";
+            return string.Format(Path, model.Theme);
         }
 
 

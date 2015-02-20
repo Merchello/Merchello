@@ -1,17 +1,16 @@
-﻿namespace Merchello.Bazaar.Models
+﻿namespace Merchello.Bazaar.Models.ViewModels
 {
-    using System.Web;
-
-    using Merchello.Web.Models.ContentEditing;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using Umbraco.Core.Models;
     using Umbraco.Web;
     using Umbraco.Web.Models;
 
     /// <summary>
-    /// Represents a product model.
+    /// Represents a ProductGroup view model.
     /// </summary>
-    public class ProductModel : MasterModel
+    public class ProductGroupModel : MasterModel
     {
         /// <summary>
         /// The image.
@@ -24,30 +23,19 @@
         private string _brief;
 
         /// <summary>
-        /// The description.
+        /// Child products.
         /// </summary>
-        private IHtmlString _description;
+        private IEnumerable<ProductModel> _childProducts; 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductModel"/> class.
+        /// Initializes a new instance of the <see cref="ProductGroupModel"/> class.
         /// </summary>
         /// <param name="content">
         /// The content.
         /// </param>
-        public ProductModel(IPublishedContent content)
+        public ProductGroupModel(IPublishedContent content)
             : base(content)
         {
-        }
-
-        /// <summary>
-        /// Gets the product data.
-        /// </summary>
-        public ProductDisplay ProductData
-        {
-            get
-            {
-                return this.Content.GetPropertyValue<ProductDisplay>("merchelloProduct");
-            }
         }
 
         /// <summary>
@@ -67,7 +55,7 @@
         }
 
         /// <summary>
-        /// Gets the brief.
+        /// Gets the brief text for the product group.
         /// </summary>
         public string Brief
         {
@@ -78,13 +66,19 @@
         }
 
         /// <summary>
-        /// Gets the description.
+        /// Gets the children.
         /// </summary>
-        public IHtmlString Description
+        public override IEnumerable<IPublishedContent> Children
         {
             get
             {
-                return this._description ?? this.Content.GetPropertyValue<IHtmlString>("description");
+                if (this._childProducts != null) return this._childProducts;
+                this._childProducts = base.Children.Select(x => new ProductModel(x)
+                                                               {
+                                                                   CurrentCustomer = this.CurrentCustomer,
+                                                                   Currency = this.Currency
+                                                               });
+                return this._childProducts;
             }
         }
     }

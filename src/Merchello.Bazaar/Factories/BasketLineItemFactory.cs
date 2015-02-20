@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Bazaar.Factories
 {
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core.Models;
 
     using Umbraco.Core;

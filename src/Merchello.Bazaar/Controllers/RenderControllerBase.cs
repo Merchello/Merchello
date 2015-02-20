@@ -3,6 +3,7 @@
     using System;
 
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Web;

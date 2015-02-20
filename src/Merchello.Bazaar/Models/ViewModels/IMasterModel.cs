@@ -1,10 +1,8 @@
-﻿namespace Merchello.Bazaar.Models
+﻿namespace Merchello.Bazaar.Models.ViewModels
 {
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
-
-    using Umbraco.Core.Models;
 
     /// <summary>
     /// Defines the master model.
@@ -39,11 +37,26 @@
         /// <summary>
         /// Gets the basket page.
         /// </summary>
-        IPublishedContent BasketPage { get; }
+        BasketModel BasketPage { get; }
+
+        /// <summary>
+        /// Gets the registration page.
+        /// </summary>
+        RegistrationModel RegistrationPage { get; }
 
         /// <summary>
         /// Gets the product groups.
         /// </summary>
-        IEnumerable<ProductGroupModel> ProductGroups { get; } 
+        IEnumerable<ProductGroupModel> ProductGroups { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether show account.
+        /// </summary>
+        bool ShowAccount { get; }
+
+        /// <summary>
+        /// Gets the customer member type name.
+        /// </summary>
+        string CustomerMemberTypeName { get; }
     }
 }

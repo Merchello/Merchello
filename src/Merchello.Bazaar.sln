@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Bazaar", "Merchello.Bazaar\Merchello.Bazaar.csproj", "{2B276787-0533-48A3-924E-DD0B3EAC0EF0}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Web.UI(1)", "http://localhost:51392", "{7B3FA64B-B5DB-4ECA-8CA1-CAA542271E89}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Web.UI", "http://localhost:51392", "{7B3FA64B-B5DB-4ECA-8CA1-CAA542271E89}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"

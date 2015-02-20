@@ -4,6 +4,7 @@
     using System.Linq;
 
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
@@ -26,6 +27,42 @@
         public static string ThemePartialViewPath(this IMasterModel model, string viewName)
         {
             return PathHelper.GetThemePartialViewPath(model, viewName);
+        }
+
+        /// <summary>
+        /// Gets the theme view path.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="IMasterModel"/>.
+        /// </param>
+        /// <param name="viewName">
+        /// The view name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/> representation of the view path and name.
+        /// </returns>
+        public static string ThemeViewPath(this IMasterModel model, string viewName)
+        {
+            const string Path = "{0}Views/{1}.cshtml";
+            return string.Format(Path, PathHelper.GetThemePath(model), viewName);
+        }
+
+        /// <summary>
+        /// The theme account path.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="viewName">
+        /// The view name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string ThemeAccountPath(this IMasterModel model, string viewName)
+        {
+            const string Path = "{0}Views/Account/{1}.cshtml";
+            return string.Format(Path, PathHelper.GetThemePath(model), viewName);
         }
 
         /// <summary>
@@ -132,7 +169,7 @@
         /// </returns>
         private static string FormatPrice(decimal price, string currencySymbol)
         {
-            return string.Format("{0}{1:0.00}", currencySymbol, price);
+            return String.Format("{0}{1:0.00}", currencySymbol, price);
         }
     }
 }

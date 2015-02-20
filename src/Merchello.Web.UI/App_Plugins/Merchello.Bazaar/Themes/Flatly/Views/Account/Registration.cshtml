@@ -1,0 +1,14 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<RegistrationModel>
+@using Merchello.Bazaar
+@using Merchello.Bazaar.Models.ViewModels
+@{
+    Layout = "../Master.cshtml";
+}
+
+<div class="row">
+    <div class="span6">
+        <h1>@Model.Name</h1>
+    </div>
+</div>
+
+@Html.ThemedPartial(Model, "SignInSignUp", Model.RegistrationLogin)
