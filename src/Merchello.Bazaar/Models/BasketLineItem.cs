@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Merchello.Bazaar.Models.ViewModels;
+
     /// <summary>
     /// The basket line item.
     /// </summary>

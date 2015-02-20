@@ -2,7 +2,9 @@
 {
     using System.Web.Mvc;
 
+    using Merchello.Bazaar.Attributes;
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.ViewModels;
 
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
@@ -11,6 +13,7 @@
     /// Controller to render the first page of the checkout.
     /// </summary>
     [PluginController("Bazaar")]
+    [RequireSsl("Bazaar:RequireSsl")]
     public class BazaarCheckoutController : RenderControllerBase
     {
         /// <summary>

@@ -5,6 +5,7 @@
 
     using Merchello.Bazaar.Factories;
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.ViewModels;
 
     using Umbraco.Core.Models;
     using Umbraco.Web;
