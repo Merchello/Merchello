@@ -3,6 +3,7 @@
 @using Merchello.Bazaar.Models
 @using Merchello.Core.Models
 @using Merchello.Web
+@using Umbraco.Web
 
 <div class="navbar">
     <div class="navbar-inner">
@@ -32,12 +33,21 @@
                                 }
                                 else
                                 {
-                                    <li><a href="#">My Profile</a></li>
-                                    <li><a href="#">Purchase History</a></li>
+                                    var purchaseHistory = Model.AccountPage.Descendant("BazaarAccountHistory");
+                                    
+                                    <li><a href="@Model.AccountPage.Url">My Profile</a></li>
+                                    if (purchaseHistory != null)
+                                     {
+                                        <li><a href="@purchaseHistory.Url">Purchase History</a></li>     
+                                     }
                                     <li>@Html.ActionLink("Logout", "HandleSignOut", "Membership", new { area = "Bazaar" }, null)</li>
                                 }
                             </ul>
                         </li>
+                    }
+                    @if (!Model.CurrentCustomer.IsAnonymous && Model.ShowWishList)
+                    {
+                        <li><a href="@Model.WishListPage.Url">Wish List (@(((ICustomer)Model.CurrentCustomer).WishList().TotalItemCount))</a></li>
                     }
                     <li><a href="@Model.BasketPage.Url">Basket (@Model.CurrentCustomer.Basket().TotalItemCount)</a></li>
                 </ul>

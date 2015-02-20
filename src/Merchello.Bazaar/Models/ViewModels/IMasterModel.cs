@@ -40,6 +40,11 @@
         BasketModel BasketPage { get; }
 
         /// <summary>
+        /// Gets the wish list page.
+        /// </summary>
+        WishListModel WishListPage { get; }
+
+        /// <summary>
         /// Gets the registration page.
         /// </summary>
         RegistrationModel RegistrationPage { get; }
@@ -53,6 +58,11 @@
         /// Gets a value indicating whether show account.
         /// </summary>
         bool ShowAccount { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether to show the wish list.
+        /// </summary>
+        bool ShowWishList { get; }
 
         /// <summary>
         /// Gets the customer member type name.
