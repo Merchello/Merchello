@@ -197,12 +197,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RequiresSslAttribute.cs" />
+    <Compile Include="Controllers\BazaarAccountController.cs" />
+    <Compile Include="Controllers\BazaarAccountHistoryController.cs" />
     <Compile Include="Controllers\BazaarBasketController.cs" />
     <Compile Include="Controllers\BazaarCheckoutController.cs" />
     <Compile Include="Controllers\BazaarRegistrationController.cs" />
     <Compile Include="Controllers\BazaarProductController.cs" />
     <Compile Include="Controllers\BazaarProductGroupController.cs" />
     <Compile Include="Controllers\BazaarStoreController.cs" />
+    <Compile Include="Controllers\BazaarWishListController.cs" />
     <Compile Include="Controllers\MembershipController.cs" />
     <Compile Include="Controllers\PropertyEditorsController.cs" />
     <Compile Include="Controllers\RenderControllerBase.cs" />
@@ -213,6 +216,7 @@
     <Compile Include="ModelExtensions.cs" />
     <Compile Include="Models\CombinedRegisterLoginModel.cs" />
     <Compile Include="Models\CustomerLoginModel.cs" />
+    <Compile Include="Models\ViewModels\AccountHistoryModel.cs" />
     <Compile Include="Models\ViewModels\AccountModel.cs" />
     <Compile Include="Models\AddItemModel.cs" />
     <Compile Include="Models\BasketLineItem.cs" />
@@ -227,6 +231,8 @@
     <Compile Include="Models\ViewModels\ProductModel.cs" />
     <Compile Include="Models\ViewModels\RegistrationModel.cs" />
     <Compile Include="Models\ViewModels\StoreModel.cs" />
+    <Compile Include="Models\ViewModels\WishListModel.cs" />
+    <Compile Include="Models\WishListTableModel.cs" />
     <Compile Include="PathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UmbracoEventHandler.cs" />

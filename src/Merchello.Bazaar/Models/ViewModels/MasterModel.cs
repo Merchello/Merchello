@@ -37,6 +37,11 @@
         private AccountModel _accountPage;
 
         /// <summary>
+        /// The wish list page.
+        /// </summary>
+        private WishListModel _wishListPage;
+
+        /// <summary>
         /// The product groups or categories.
         /// </summary>
         private IEnumerable<ProductGroupModel> _productGroups; 
@@ -178,6 +183,22 @@
         }
 
         /// <summary>
+        /// Gets the wish list page.
+        /// </summary>
+        public WishListModel WishListPage
+        {
+            get
+            {
+                return _wishListPage
+                       ?? new WishListModel(StorePage.Descendant("BazaarWishList"))
+                              {
+                                  CurrentCustomer = CurrentCustomer,
+                                  Currency = Currency
+                              };
+            }
+        }
+
+        /// <summary>
         /// Gets the product groups.
         /// </summary>
         public IEnumerable<ProductGroupModel> ProductGroups
@@ -203,6 +224,18 @@
             {
                 return StorePage.GetPropertyValue<bool>("customerAccounts");
             }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether to show the wish list.
+        /// </summary>
+        public bool ShowWishList
+        {
+            get
+            {
+                return StorePage.GetPropertyValue<bool>("enableWishList");
+            }
+            
         }
 
         /// <summary>

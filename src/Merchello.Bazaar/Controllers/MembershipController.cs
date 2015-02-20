@@ -86,7 +86,12 @@
                     // but have to resave to fire off the memberservice event to populate the Merchello customer
                     // correctly
                     var member = Services.MemberService.GetByEmail(model.Registration.EmailAddress);
-                    if (member != null) Services.MemberService.Save(member);
+                    if (member != null)
+                    {
+                        Services.MemberService.Save(member);
+                        Services.MemberService.AssignRole(member.Id, "MerchelloCustomers");
+                    }
+
                     break;
             }
 
