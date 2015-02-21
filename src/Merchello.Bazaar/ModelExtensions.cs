@@ -167,9 +167,9 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private static string FormatPrice(decimal price, string currencySymbol)
+        public static string FormatPrice(decimal price, string currencySymbol)
         {
-            return String.Format("{0}{1:0.00}", currencySymbol, price);
+            return string.Format("{0}{1:0.00}", currencySymbol, price);
         }
     }
 }

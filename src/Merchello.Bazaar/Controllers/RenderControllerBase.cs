@@ -17,18 +17,17 @@
     /// <summary>
     /// The base controller for the Merchello Starter Kit.
     /// </summary>
-    [PluginController("Bazaar")]
     public abstract class RenderControllerBase : RenderMvcController
     {
-        /// <summary>
-        /// The <see cref="IPublishedContent"/> that represents the store root.
-        /// </summary>
-        private Lazy<IPublishedContent> _shopPage;
-
         /// <summary>
         /// The <see cref="IMerchelloContext"/>.
         /// </summary>
         private readonly IMerchelloContext _merchelloContext;
+
+        /// <summary>
+        /// The <see cref="IPublishedContent"/> that represents the store root.
+        /// </summary>
+        private Lazy<IPublishedContent> _shopPage;
 
         #region Constructors
 

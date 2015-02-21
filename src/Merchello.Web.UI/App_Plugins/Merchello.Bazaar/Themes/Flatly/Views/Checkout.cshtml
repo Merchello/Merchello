@@ -1,10 +1,20 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutModel>
+@using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
 @{
     Layout = "Master.cshtml";
 }
-<div class="row">
-    <div class="span6">
+
+<div class="container-fluid">
+    <div class="row-fluid span12">
         <h1>@Model.Name</h1>
+    </div>
+    <div class="row-fluid">
+        <div class="span8">
+            @Html.ThemedPartial(Model, "CheckoutAddressForm", Model.BillingAddress)
+        </div>
+        <div class="span4">
+            @Html.ThemedPartial(Model, "SaleSummary", Model.SaleSummary)
+        </div>
     </div>
 </div>

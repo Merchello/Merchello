@@ -1,21 +1,18 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
-    using System;
-    using System.Data;
     using System.Web.Mvc;
     using System.Web.Security;
 
     using Merchello.Bazaar.Models;
 
     using Umbraco.Core;
-    using Umbraco.Core.Models;
     using Umbraco.Web.Mvc;
 
     /// <summary>
     /// The membership controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class MembershipController : SurfaceControllerBase
+    public class MembershipOperationsController : SurfaceControllerBase
     {
         /// <summary>
         /// Responsible for rendering the member registration form.

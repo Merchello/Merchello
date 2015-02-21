@@ -9,6 +9,7 @@
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core.Models;
+    using Merchello.Web.Workflow;
 
     using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
@@ -17,7 +18,7 @@
     /// A <see cref="SurfaceController"/> responsible for store workflow operations.
     /// </summary>
     [PluginController("Bazaar")]
-    public class WorkflowController : SurfaceControllerBase
+    public class BasketOperationsController : SurfaceControllerBase
     {
         /// <summary>
         /// Responsible for rendering the add to basket partial view.
@@ -35,7 +36,10 @@
             {
                 Product = model.ProductData,
                 ContentId = model.Id,
-                BasketPageId = model.BasketPage.Id
+                BasketPageId = model.BasketPage.Id,
+                ShowWishList = model.ShowWishList,
+                WishListPageId = model.WishListPage.Id,
+                Currency = model.Currency
             };
 
             return this.PartialView(model.ThemePartialViewPath("AddToCart"), addItemModel);
@@ -123,15 +127,7 @@
         [HttpGet]
         public ActionResult RemoveItemFromBasket(Guid lineItemKey, int basketPageId)
         {
-            if (this.Basket.Items.FirstOrDefault(x => x.Key == lineItemKey) == null)
-            {
-                var exception =
-                    new InvalidOperationException(
-                        "Attempt to delete an item from a basket that does not match the CurrentUser");
-                LogHelper.Error<WorkflowController>("RemoveItemFromBasket failed.", exception);
-
-                throw exception;
-            }
+            EnsureOwner(Basket.Items, lineItemKey);
 
             // remove the item by it's pk.  
             this.Basket.RemoveItem(lineItemKey);
@@ -139,6 +135,33 @@
             this.Basket.Save();
 
             return this.RedirectToUmbracoPage(basketPageId);
+        }
+
+        /// <summary>
+        /// Moves an item from the Basket to the WishList.
+        /// </summary>
+        /// <param name="lineItemKey">
+        /// The line item key.
+        /// </param>
+        /// <param name="basketPageId">
+        /// The basket page id.
+        /// </param>
+        /// <param name="wishListPageId">
+        /// The wish list page id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public ActionResult MoveItemToWishList(Guid lineItemKey, int basketPageId, int wishListPageId)
+        {
+            if (CurrentCustomer.IsAnonymous) return this.RedirectToUmbracoPage(basketPageId);
+
+            EnsureOwner(Basket.Items, lineItemKey);
+
+            Basket.MoveItemToWishList(lineItemKey);
+
+            return RedirectToUmbracoPage(wishListPageId);
         }
     }
 }

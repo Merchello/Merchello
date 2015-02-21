@@ -1,45 +1,60 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<AddItemModel>
 @using System.Web.Mvc.Html
+@using Merchello.Bazaar
 @using Merchello.Bazaar.Controllers
 @using Merchello.Bazaar.Models
 @using Umbraco.Web
 
-
 @{
-    using (Html.BeginUmbracoForm<WorkflowController>("AddToBasket", new { @class = "bs-docs-example", role = "form" }))
-    {
-
-        if (Model.Product.ProductOptions.Any())
-        {
-            var index = 0;
-            foreach (var option in Model.Product.ProductOptions)
-            {
-                var choices = option.Choices.OrderBy(x => x.SortOrder)
-                    .Select(choice => new System.Web.Mvc.SelectListItem()
-                    {
-                        Value = choice.Key.ToString(),
-                        Text = choice.Name
-                    }).ToList();
-                choices.First().Selected = true;
-                <div class="form-group">
-                    @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class = "control-label" })
-
-                    <div class="controls">
-                        @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), id = option.Key, @class = "form-control ProductVariants", OnChange = "merchello.Products.getUpdatedVariants(this)" })
-                        @Html.ValidationMessageFor(x => x.OptionChoices, "Please select one")
-                    </div>
-                </div>
-                index = index + 1;
-            }
-        }
-        
-        @Html.HiddenFor(x => x.ContentId)
-        @Html.HiddenFor(x => x.Product.Key)
-        @Html.HiddenFor(x => x.BasketPageId)
-
-        <div class="text-center">
-            <input type="submit" value="Add to Basket" class="btn" />
-        </div>
-
-    }
+    var hasVariants = Model.Product.ProductVariants.Any();
 }
+
+<div class="well span3 add-to-cart@(hasVariants ? " has-variants" : string.Empty)">
+    @if(hasVariants)
+    { 
+        <div class="price text-center span2 variant-pricing" id="@Model.Product.Key"></div>
+    }
+    <div class="form-group span3 add-button">
+        @{
+            using (Html.BeginUmbracoForm<BasketOperationsController>("AddToBasket", new { @class = "bs-docs-example", role = "form" }))
+            {
+
+                if (hasVariants)
+                {
+                    var index = 0;
+
+                    foreach (var option in Model.Product.ProductOptions)
+                    {
+
+                        var choices = option.Choices.OrderBy(x => x.SortOrder)
+                            .Select(choice => new System.Web.Mvc.SelectListItem()
+                                                  {
+                                                      Value = choice.Key.ToString(),
+                                                      Text = choice.Name
+                                                  }).ToList();
+                        choices.First().Selected = true;
+
+                        @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class = "control-label" })
+
+                        <div class="control-group">
+                            @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), id = option.Key, @class = "form-control ProductVariants"})
+                            @Html.ValidationMessageFor(x => x.OptionChoices, "Please select one")
+                        </div>
+
+                        index = index + 1;
+                    }
+
+                }
+
+                @Html.HiddenFor(x => x.ContentId)
+                @Html.HiddenFor(x => x.Product.Key)
+                @Html.HiddenFor(x => x.BasketPageId)
+                @Html.HiddenFor(x => x.WishListPageId)
+                <div class="control-group text-center">
+                    <input type="submit" value="Add to Basket" class="btn" />
+                </div>
+            }
+
+        }
+    </div>
+</div>
