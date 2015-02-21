@@ -49,7 +49,6 @@
                                                                     Value = x.CountryCode,
                                                                     Text = x.Name
                                                                 }),
-                                                Regions = Enumerable.Empty<SelectListItem>(),
                                                 ContinuePageId = viewModel.StorePage.Descendant("BazaarCheckoutShipping").Id,
                                                 AddressType = AddressType.Billing
                                            };

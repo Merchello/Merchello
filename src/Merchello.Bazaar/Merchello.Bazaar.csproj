@@ -202,6 +202,7 @@
   <ItemGroup>
     <Compile Include="Attributes\RequiresSslAttribute.cs" />
     <Compile Include="Controllers\Api\BazaarSiteApiController.cs" />
+    <Compile Include="Controllers\BazaarCheckoutShippingController.cs" />
     <Compile Include="Controllers\SalePreparationOperationsController.cs" />
     <Compile Include="Controllers\CheckoutRenderControllerBase.cs" />
     <Compile Include="Controllers\WishListOperationsController.cs" />

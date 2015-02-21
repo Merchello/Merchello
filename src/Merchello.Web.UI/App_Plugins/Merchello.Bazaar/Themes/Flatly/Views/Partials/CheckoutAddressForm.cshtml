@@ -67,6 +67,13 @@
                     @Html.DropDownListFor(x => x.CountryCode, Model.Countries, new { @class = "span8"})
                 </div>
             </div>
+            
+            <div class="control-group">
+                @Html.LabelFor(x => x.PostalCode, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.PostalCode, new { @placeholder = "Your postal code", @class = "span8" })
+                </div>
+            </div>
 
             <div class="control-group">
                 @Html.LabelFor(x => x.Phone, new { @class = "control-label" })

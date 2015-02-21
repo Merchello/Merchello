@@ -44,11 +44,6 @@
         /// <summary>
         /// Gets or sets the region.
         /// </summary>
-        public IEnumerable<SelectListItem> Regions { get; set; }
-
-        /// <summary>
-        /// Gets or sets the region.
-        /// </summary>
         [Display(Name = "Region")]
         public string Region { get; set; }
 

@@ -33,6 +33,9 @@
             var preparation = Basket.SalePreparation();
             preparation.RaiseCustomerEvents = false;
             preparation.SaveBillToAddress(model);
+
+            if (model.BillingIsShipping) preparation.SaveShipToAddress(model);
+
             return RedirectToUmbracoPage(model.ContinuePageId);
         }
     }
