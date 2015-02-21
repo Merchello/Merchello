@@ -11,6 +11,7 @@
     <AssemblyName>Merchello.Bazaar</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,14 +79,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.7.1.1\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.7.1.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.7.1.2\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.7.1.1\lib\net40\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.7.1.2\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web">
-      <HintPath>..\packages\Merchello.Core.1.7.1.1\lib\net40\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.7.1.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.7.1.2\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.2.1\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -197,6 +201,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RequiresSslAttribute.cs" />
+    <Compile Include="Controllers\Api\BazaarSiteApiController.cs" />
+    <Compile Include="Controllers\BazaarCheckoutShippingController.cs" />
+    <Compile Include="Controllers\SalePreparationOperationsController.cs" />
+    <Compile Include="Controllers\CheckoutRenderControllerBase.cs" />
+    <Compile Include="Controllers\WishListOperationsController.cs" />
     <Compile Include="Controllers\BazaarAccountController.cs" />
     <Compile Include="Controllers\BazaarAccountHistoryController.cs" />
     <Compile Include="Controllers\BazaarBasketController.cs" />
@@ -206,22 +215,28 @@
     <Compile Include="Controllers\BazaarProductGroupController.cs" />
     <Compile Include="Controllers\BazaarStoreController.cs" />
     <Compile Include="Controllers\BazaarWishListController.cs" />
-    <Compile Include="Controllers\MembershipController.cs" />
+    <Compile Include="Controllers\MembershipOperationsController.cs" />
     <Compile Include="Controllers\PropertyEditorsController.cs" />
     <Compile Include="Controllers\RenderControllerBase.cs" />
     <Compile Include="Controllers\SurfaceControllerBase.cs" />
-    <Compile Include="Controllers\WorkflowController.cs" />
+    <Compile Include="Controllers\BasketOperationsController.cs" />
     <Compile Include="Factories\BasketLineItemFactory.cs" />
+    <Compile Include="Factories\SalePreparationSummaryFactory.cs" />
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="ModelExtensions.cs" />
+    <Compile Include="Models\AddressFormModel.cs" />
     <Compile Include="Models\CombinedRegisterLoginModel.cs" />
+    <Compile Include="Models\SalePreparationSummary.cs" />
     <Compile Include="Models\CustomerLoginModel.cs" />
+    <Compile Include="Models\ItemCollectionTable.cs" />
     <Compile Include="Models\ViewModels\AccountHistoryModel.cs" />
     <Compile Include="Models\ViewModels\AccountModel.cs" />
     <Compile Include="Models\AddItemModel.cs" />
     <Compile Include="Models\BasketLineItem.cs" />
     <Compile Include="Models\ViewModels\BasketModel.cs" />
     <Compile Include="Models\BasketTableModel.cs" />
+    <Compile Include="Models\ViewModels\CheckoutModelBase.cs" />
+    <Compile Include="Models\ViewModels\CheckoutShippingModel.cs" />
     <Compile Include="Models\ViewModels\CheckoutModel.cs" />
     <Compile Include="Models\CustomerProfileModel.cs" />
     <Compile Include="Models\ViewModels\IMasterModel.cs" />
@@ -241,10 +256,18 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /y "$(TargetDir)Merchello.*" "$(SolutionDir)Merchello.Web.UI\bin\Merchello.*"</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

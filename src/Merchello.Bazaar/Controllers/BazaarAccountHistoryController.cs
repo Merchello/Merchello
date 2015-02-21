@@ -11,6 +11,7 @@
     /// The bazaar account history controller.
     /// </summary>
     [PluginController("Bazaar")]
+    [Authorize]
     public class BazaarAccountHistoryController : RenderControllerBase
     {
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<WishListModel>
+@using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
 @{
     Layout = "Master.cshtml";
@@ -9,4 +10,11 @@
     </div>
 </div>
 
-
+@if (Model.WishListTable.Items.Any())
+{
+    @Html.ThemedPartial(Model.Theme, "WishListTable", Model.WishListTable)
+}
+else
+{
+    <p><a href="@Model.WishListTable.ContinueShoppingPage.Url">There is currenly nothing in your wish list.</a></p>
+}

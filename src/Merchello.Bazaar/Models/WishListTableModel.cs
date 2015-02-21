@@ -5,7 +5,7 @@
     /// <summary>
     /// The wish list table model.
     /// </summary>
-    public class WishListTableModel
+    public class WishListTableModel : ItemCollectionTable
     {
         /// <summary>
         /// Gets or sets the currency.
@@ -16,10 +16,5 @@
         /// Gets or sets the basket line items.
         /// </summary>
         public BasketLineItem[] Items { get; set; }
-
-        /// <summary>
-        /// Gets the total price.
-        /// </summary>
-        public decimal TotalPrice { get; internal set; } 
     }
 }

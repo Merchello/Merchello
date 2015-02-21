@@ -15,6 +15,7 @@
     /// The bazaar account controller.
     /// </summary>
     [PluginController("Bazaar")]
+    [Authorize]
     public class BazaarAccountController : RenderControllerBase
     {
         /// <summary>

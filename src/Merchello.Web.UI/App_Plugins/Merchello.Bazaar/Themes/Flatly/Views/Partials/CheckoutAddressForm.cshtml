@@ -1,0 +1,100 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<AddressFormModel>
+@using System.Web.Mvc.Html
+@using Merchello.Bazaar.Controllers
+@using Merchello.Bazaar.Models
+@using Merchello.Core
+@using Umbraco.Web
+
+@{
+    using (Html.BeginUmbracoForm<SalePreparationOperationsController>(Model.PostAction, new { area = "Bazaar" }, new { @class = "form-horizontal" }))
+    {
+
+        <fieldset id="address-form">
+            <legend>@(Model.AddressType == AddressType.Billing ? "Billing Address" : "Shipping Address")</legend>
+
+            <div class="control-group">
+                @Html.LabelFor(x => x.Name, new { @class = "control-label" })
+                @Html.ValidationMessageFor(x => x.Name)
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.Name, new { @placeholder = "Your full name", @class = "span10" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(x => x.Email, new { @class = "control-label" })
+                @Html.ValidationMessageFor(x => x.Email)
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.Email, new { @placeholder = "Your email address", @class = "span10" })
+                </div>
+            </div>
+
+
+            <div class="control-group">
+                @Html.LabelFor(x => x.Address1, new { @class = "control-label" })
+                @Html.ValidationMessageFor(x => x.Address1)
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.Address1, new { @placeholder = "Address line 1", @class = "span10" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(x => x.Address2, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.Address2, new { @placeholder = "Your full name", @class = "span10" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(x => x.Locality, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.Locality, new { @placeholder = "Your locality or city", @class = "span8" })
+                </div>
+            </div>
+
+            <div class="control-group">
+              
+                @Html.LabelFor(x => x.Region, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.Region, new { @placeholder = "Your region or province", @class = "span8", @id = "province-entry" })
+                    <select name="provinces" id="province-select" class="span8"></select>
+                </div>
+  
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(x => x.Countries, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.DropDownListFor(x => x.CountryCode, Model.Countries, new { @class = "span8"})
+                </div>
+            </div>
+            
+            <div class="control-group">
+                @Html.LabelFor(x => x.PostalCode, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.PostalCode, new { @placeholder = "Your postal code", @class = "span8" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                @Html.LabelFor(x => x.Phone, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.Phone, new { @placeholder = "Your telephone number" })
+                </div>
+            </div>
+            @Html.HiddenFor(x => x.ContinuePageId)
+            
+            <div class="control-group">
+                @if (Model.AddressType == AddressType.Billing)
+                {
+                    <label class="checkbox">
+                        @Html.CheckBoxFor(x => x.BillingIsShipping) Ship to this address
+                    </label>
+                }
+                <button type="submit" class="btn btn-primary">Continue Checkout</button>
+               
+            </div>
+        </fieldset>
+
+    }
+
+}

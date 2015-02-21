@@ -5,7 +5,7 @@
     /// <summary>
     /// The checkout model.
     /// </summary>
-    public class CheckoutModel : MasterModel
+    public class CheckoutModel : CheckoutModelBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutModel"/> class.
@@ -17,5 +17,10 @@
             : base(content)
         {
         }
+
+        /// <summary>
+        /// Gets or sets the billing address.
+        /// </summary>
+        public AddressFormModel BillingAddress { get; set; }
     }
 }

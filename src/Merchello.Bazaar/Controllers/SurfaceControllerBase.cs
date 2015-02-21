@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Models;
@@ -9,6 +11,7 @@
     using Merchello.Web.Workflow;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
@@ -16,9 +19,13 @@
     /// <summary>
     /// The surface controller base.
     /// </summary>
-    [PluginController("Bazaar")]
     public abstract class SurfaceControllerBase : SurfaceController
     {
+        /// <summary>
+        /// The <see cref="IMerchelloContext"/>.
+        /// </summary>
+        private readonly IMerchelloContext _merchelloContext;
+
          /// <summary>
         /// The <see cref="IPublishedContent"/> that represents the store root.
         /// </summary>
@@ -29,8 +36,6 @@
         /// </summary>
         private Lazy<IPublishedContent> _checkoutPage;
 
-
-        private readonly IMerchelloContext _merchelloContext;
 
         #region Constructors
 
@@ -132,6 +137,29 @@
             {
                 return this._merchelloContext.Services;
             }
+        }
+
+        /// <summary>
+        /// Ensures the owner of the item cache.
+        /// </summary>
+        /// <param name="collection">
+        /// The <see cref="LineItemCollection"/>
+        /// </param>
+        /// <param name="lineItemKey">
+        /// The line item key.
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        /// Throws an exception if the line item does not belong to the current customer
+        /// </exception>
+        protected void EnsureOwner(IEnumerable<ILineItem> collection, Guid lineItemKey)
+        {
+            if (collection.FirstOrDefault(x => x.Key == lineItemKey) != null) return;
+            var exception =
+                new InvalidOperationException(
+                    "Attempt to delete an item from a collection that does not match the CurrentUser");
+            LogHelper.Error<BasketOperationsController>("Customer item cache operation failed.", exception);
+
+            throw exception;
         }
 
         /// <summary>

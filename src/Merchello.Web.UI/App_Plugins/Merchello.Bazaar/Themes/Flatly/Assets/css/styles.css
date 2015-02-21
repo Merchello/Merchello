@@ -6,12 +6,18 @@
   margin: 1.5em 0 1.5em calc(-274px - 4.4%);
   background: #fdf8e9; }
 
+#add-item-price {
+  margin-bottom: 1em; }
+
 .price {
   font-size: 2em; }
   .price .on-sale {
     text-decoration: line-through; }
   .price .sale-price {
     color: red; }
+
+div.price {
+  padding: 1em; }
 
 td.align-right {
   text-align: right; }

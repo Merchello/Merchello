@@ -7,13 +7,8 @@
     /// <summary>
     /// The basket table model.
     /// </summary>
-    public class BasketTableModel
+    public class BasketTableModel : ItemCollectionTable
     {
-        /// <summary>
-        /// Gets or sets the continue shopping page.
-        /// </summary>
-        public IPublishedContent ContinueShoppingPage { get; set; }
-
         /// <summary>
         /// Gets or sets the checkout page.
         /// </summary>
@@ -32,6 +27,11 @@
         /// <summary>
         /// Gets the total price.
         /// </summary>
-        public decimal TotalPrice { get; internal set; } 
+        public decimal TotalPrice { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show wish list buttons.
+        /// </summary>
+        public bool ShowWishList { get; set; }
     }
 }

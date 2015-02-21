@@ -1,0 +1,49 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SalePreparationSummary>
+@using Merchello.Bazaar
+@using Merchello.Bazaar.Models
+
+<div class="row">
+    <table class="table table-striped">
+        <caption>Order Summary</caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th class="text-right">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td class="text-right">@item.FormatTotalPrice(Model.Currency.Symbol)</td>
+                </tr>
+            }
+            @if (Model.ShippingTotal > 0)
+            {
+                <tr>
+                    <td>Shipping</td>
+                    <td>@ModelExtensions.FormatPrice(Model.ShippingTotal, Model.Currency.Symbol)</td>
+                </tr>
+            }
+            @if (Model.TaxTotal > 0)
+            {
+                <tr>
+                    <td>Taxes</td>
+                    <td>@ModelExtensions.FormatPrice(Model.TaxTotal, Model.Currency.Symbol)</td>
+                </tr>
+            }
+            @if (Model.DiscountsTotal > 0)
+            {
+                <tr>
+                    <td>Discounts</td>
+                    <td>@ModelExtensions.FormatPrice(Model.ShippingTotal, Model.Currency.Symbol)</td>
+                </tr>
+            }
+            <tr>
+                <td class="text-right"><strong>Estimated Total:</strong></td>
+                <td class="text-right">@ModelExtensions.FormatPrice(Model.InvoiceTotal, Model.Currency.Symbol)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -9,7 +9,7 @@
     <div class="span5">
         <h2>Current Customers</h2>
         @{
-            using (Html.BeginUmbracoForm<MembershipController>("HandleSignIn", new { area = "Bazaar" }, new { @class = "" }))
+            using (Html.BeginUmbracoForm<MembershipOperationsController>("HandleSignIn", new { area = "Bazaar" }, new { @class = "form-horizontal" }))
             {
                 <fieldset>
                     <legend>Login</legend>
@@ -46,7 +46,7 @@
         <h2>Create a new Account</h2>
 
         @{
-            using (Html.BeginUmbracoForm<MembershipController>("HandleSignUp", new { area = "Bazaar" }, new { @class = "form-horizontal" }))
+            using (Html.BeginUmbracoForm<MembershipOperationsController>("HandleSignUp", new { area = "Bazaar" }, new { @class = "form-horizontal" }))
             {
                 <fieldset>
                     <legend>Register</legend>

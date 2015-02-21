@@ -5,7 +5,7 @@
 @using Umbraco.Web
 
 @{
-    using (Html.BeginUmbracoForm<MembershipController>("HandleSignIn", new { area = "Bazaar" }, new { @class = "form-horizontal"}))
+    using (Html.BeginUmbracoForm<MembershipOperationsController>("HandleSignIn", new { area = "Bazaar" }, new { @class = "form-horizontal"}))
     {
         
         <div class="control-group">

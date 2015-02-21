@@ -40,7 +40,10 @@
                                             CheckoutPage = viewModel.StorePage.Descendant("BazaarCheckout"),
                                             ContinueShoppingPage = viewModel.ProductGroups.Any() ? 
                                                 (IPublishedContent)viewModel.ProductGroups.First() :
-                                                viewModel.StorePage
+                                                viewModel.StorePage,
+                                            ShowWishList = viewModel.ShowWishList,
+                                            WishListPageId = viewModel.WishListPage.Id,
+                                            BasketPageId = viewModel.BasketPage.Id
                                         };
             
             return View(viewModel.ThemeViewPath("Basket"), viewModel);

@@ -10,6 +10,10 @@
     }
 }
 
+#add-item-price {
+    margin-bottom: 1em;
+}
+
 .price {
     font-size: 2em;
     .on-sale {
@@ -18,6 +22,10 @@
     .sale-price {
         color: red;
     }
+}
+
+div.price {
+    padding: 1em;
 }
 
 td.align-right {
