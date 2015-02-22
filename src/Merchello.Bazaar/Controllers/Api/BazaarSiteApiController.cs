@@ -12,6 +12,7 @@
     using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.WebApi;
 
@@ -31,6 +32,11 @@
         /// The _store setting service.
         /// </summary>
         private readonly IStoreSettingService _storeSettingService;
+
+        /// <summary>
+        /// The <see cref="MerchelloHelper"/>.
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
 
         /// <summary>
         /// The <see cref="ICurrency"/>.
@@ -54,8 +60,12 @@
         public BazaarSiteApiController(IMerchelloContext merchelloContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            
             _merchelloContext = merchelloContext;
+            
             _storeSettingService = _merchelloContext.Services.StoreSettingService;
+
+            _merchello = new MerchelloHelper(_merchelloContext.Services);
 
             this.Initialize();
         }
@@ -99,8 +109,6 @@
         [HttpGet]
         public IEnumerable<ProductVariantDisplay> FilterOptionsBySelectedChoices(Guid productKey, string optionChoices)
         {
-            var merchello = new MerchelloHelper(_merchelloContext.Services);
-
             var optionsArray = string.IsNullOrEmpty(optionChoices) ? new string[] { } : optionChoices.Split(',');
             var guidOptionChoices = new List<Guid>();
 
@@ -111,12 +119,101 @@
                     guidOptionChoices.Add(new Guid(option));
                 }
             }
-
-            var variants = merchello.GetValidProductVariants(productKey, guidOptionChoices.ToArray());
+            var variants = _merchello.GetValidProductVariants(productKey, guidOptionChoices.ToArray());
             return variants.Where(x => x.Available);
         }
 
         /// <summary>
+        /// The filter option choices.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="productAttributeKey">
+        /// The product attribute key
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ProductOptionDisplay}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<ProductOptionDisplay> FilterOptionChoices(Guid productKey, Guid productAttributeKey)
+        {
+            var product = _merchello.Query.Product.GetByKey(productKey);
+
+            if (product == null)
+            {
+                var nullReference = new NullReferenceException("Product with key " + productKey + " returned null");
+                LogHelper.Error<BazaarSiteApiController>("MerchelloHelper failed to retrieve product.", nullReference);
+                throw nullReference;
+            }
+
+            // TODO move this to a service
+            
+            var returnOptions = new List<ProductOptionDisplay>();
+
+            // this is the option the was just used in a selection
+            var activeOption = product.ProductOptions.FirstOrDefault(po => po.Choices.Any(c => c.Key == productAttributeKey));
+
+            if (activeOption == null) return returnOptions;
+
+            returnOptions.Add(activeOption);
+
+            var variants = product.ProductVariants.Where(pv => pv.Available && pv.Attributes.Any(att => att.Key == productAttributeKey)).ToArray();
+
+            var otherOptions = product.ProductOptions.Where(x => !x.Key.Equals(activeOption.Key)).ToArray();
+
+            foreach (var option in otherOptions)
+            {
+                var addOption = new ProductOptionDisplay()
+                                    {
+                                        SortOrder = option.SortOrder,
+                                        Key = option.Key,
+                                        Name = option.Name
+                                    };
+
+                var optionChoices = new List<ProductAttributeDisplay>();
+
+                foreach (var choice in option.Choices)
+                {
+                    if (ValidateOptionChoice(variants, choice.Key))
+                    {
+                        optionChoices.Add(new ProductAttributeDisplay()
+                                            {
+                                                Key = choice.Key,
+                                                Name = choice.Name,
+                                                Sku = choice.Sku,
+                                                OptionKey = choice.OptionKey, 
+                                                SortOrder = choice.SortOrder 
+                                            });
+                    }
+                }
+
+                addOption.Choices = optionChoices;
+
+                returnOptions.Add(addOption);
+            }
+
+            return returnOptions;
+        }
+
+        /// <summary>
+        /// The validate option choice.
+        /// </summary>
+        /// <param name="variants">
+        /// The variants.
+        /// </param>
+        /// <param name="productAttributeKey">
+        /// The product attribute key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private static bool ValidateOptionChoice(IEnumerable<ProductVariantDisplay> variants, Guid productAttributeKey)
+        {
+            return variants.All(pv => pv.Attributes.Any(pa => pa.Key.Equals(productAttributeKey)));
+        }
+
+            /// <summary>
         /// Gets the collection of <see cref="IProvince"/> by country code.
         /// </summary>
         /// <param name="countryCode">

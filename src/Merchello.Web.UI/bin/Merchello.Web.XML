@@ -2510,7 +2510,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range
             </summary>
@@ -2536,7 +2536,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status
             </summary>
@@ -2561,11 +2561,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with an export value
             </summary>
@@ -2590,11 +2593,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status and export value
             </summary>
@@ -2621,6 +2627,9 @@
             </param>
             <param name="sortDirection">
             The sort direction.
+            </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
@@ -2840,7 +2849,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range
             </summary>
@@ -2862,11 +2871,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status
             </summary>
@@ -2891,11 +2903,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with an export value
             </summary>
@@ -2920,11 +2935,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status and export value
             </summary>
@@ -2951,6 +2969,9 @@
             </param>
             <param name="sortDirection">
             The sort direction.
+            </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
@@ -10264,6 +10285,22 @@
             <summary>
             Gets or sets the choices.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplayExtensions">
+            <summary>
+            Utility mapping extensions for <see cref="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay"/>
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductOptionDisplayExtensions.ToProductOptionDisplay(Merchello.Core.Models.IProductOption)">
+            <summary>
+            The to product option display.
+            </summary>
+            <param name="productOption">
+            The product option.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay">
             <summary>
