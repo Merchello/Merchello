@@ -1,0 +1,6 @@
+þÿÿÿorderKey
+invoiceKeyorderNumber__Sort_orderNumberprefixedOrderNumber	orderDate__Sort_orderDateorderStatusKey
+versionKeyexportedorderStatus
+orderItems
+createDate
+updateDateallDocs__NodeId__IndexType
