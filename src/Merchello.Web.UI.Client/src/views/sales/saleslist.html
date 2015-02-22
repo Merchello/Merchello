@@ -1,12 +1,12 @@
 ﻿<div ng-controller="Merchello.Backoffice.SalesListController" ng-show="loaded">
     <umb-panel>
         <umb-header>
-            <div class="span4">
+            <div class="span7">
                 <div class="umb-headline-editor-wrapper">
-                    <h1 class="umb-headline"><localize key="merchelloOrder_sales" /></h1>
+                    <h1><localize key="merchelloOrder_sales" /></h1>
                 </div>
             </div>
-            <div class="span8">
+            <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <!-- New Order Button
                         <div class="btn-group">
@@ -21,7 +21,7 @@
             <div class="merchello-pane">
                 <form class="form-horizontal row-fluid">
                     <!-- Number of Orders/Invoices Per Page -->
-                    <div class="controls pull-right" data-ng-show="invoices.length > 0">
+                    <div class="controls pull-right" style="margin-left: 0;" data-ng-show="invoices.length > 0">
                         <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
                         <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
                             <option value="10">10</option>
@@ -31,14 +31,13 @@
                         </select>
                     </div>
                     <!-- Order Filters -->
-                    <div class="form-group control-group">
-                        <div class="control-label">
-                            <a data-ng-click="filterAction = !filterAction" class="btn" data-ng-show="false"><localize key="merchelloOrder_filter" /></a>
-                        </div>
-                        <div class="col-xs-10 controls">
-                            <input id="salesFilter" class="form-control span6" name="salesFilter" data-ng-model="filterText" localize="placeholder" placeholder="Search by invoice number or customer name" />
+                    <div class="form-group control-group span10">
+                        <label class="control-label" for="salesFilter">Filter Orders:</label>
+                        <div class="controls">
+                            <input type="text" id="salesFilter" class="form-control span8" name="salesFilter" data-ng-model="filterText" localize="placeholder" placeholder="Search by invoice number or customer name" />
                             <!-- ACTION: Filter Sales  -->
                             <button id="salesFilterGo" class="btn" data-ng-click="filterWithWildcard(filterText)"><localize key="merchelloGeneral_filter" /></button>
+                            <a data-ng-click="filterAction = !filterAction" class="btn" data-ng-show="false"><localize key="merchelloOrder_filter" /></a>
                         </div>
                     </div>
                 </form>

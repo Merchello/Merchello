@@ -1,16 +1,12 @@
 <form novalidate name="productVariantForm" data-ng-controller="Merchello.Backoffice.ProductEditController"
       data-ng-show="loaded" data-ng-submit="save()">
     <umb-panel val-show-validation>
-
         <umb-header>
-
-            <div class="span4">
-                <umb-content-name ng-model="productVariant.name"
-                                  localize="placeholder" placeholder="@merchelloPlaceholders_enterProduct">
+            <div class="span7">
+                <umb-content-name ng-model="productVariant.name" localize="placeholder" placeholder="@merchelloPlaceholders_enterProduct">
                 </umb-content-name>
             </div>
-
-            <div class="col-xs-8 span8">
+            <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
                         <a data-ng-click="deleteProductDialog()" data-ng-show="context !== 'varianteditor' && context !== 'createproduct'" class="btn"><localize key="merchelloVariant_deleteProduct" /></a>
