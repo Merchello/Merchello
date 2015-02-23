@@ -1,4 +1,5 @@
-﻿using Merchello.Core.Models.EntityBase;
+﻿using System.Collections.Generic;
+using Merchello.Core.Models.EntityBase;
 
 namespace Merchello.Core.Persistence.UnitOfWork
 {

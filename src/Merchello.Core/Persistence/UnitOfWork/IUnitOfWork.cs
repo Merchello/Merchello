@@ -15,6 +15,7 @@ namespace Merchello.Core.Persistence.UnitOfWork
         void RegisterChanged(IEntity entity, IUnitOfWorkRepository repository);
         void RegisterRemoved(IEntity entity, IUnitOfWorkRepository repository);
         void Commit();
+        void CommitBulk();
         object Key { get; }
     }
 }
