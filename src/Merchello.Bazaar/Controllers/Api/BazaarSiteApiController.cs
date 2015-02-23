@@ -210,7 +210,7 @@
         /// </returns>
         private static bool ValidateOptionChoice(IEnumerable<ProductVariantDisplay> variants, Guid productAttributeKey)
         {
-            return variants.All(pv => pv.Attributes.Any(pa => pa.Key.Equals(productAttributeKey)));
+            return variants.Any(pv => pv.Attributes.Any(pa => pa.Key.Equals(productAttributeKey)) && pv.Available);
         }
 
             /// <summary>

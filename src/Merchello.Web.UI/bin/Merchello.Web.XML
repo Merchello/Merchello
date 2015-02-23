@@ -10286,22 +10286,6 @@
             Gets or sets the choices.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplayExtensions">
-            <summary>
-            Utility mapping extensions for <see cref="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay"/>
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.Models.ContentEditing.ProductOptionDisplayExtensions.ToProductOptionDisplay(Merchello.Core.Models.IProductOption)">
-            <summary>
-            The to product option display.
-            </summary>
-            <param name="productOption">
-            The product option.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay"/>.
-            </returns>
-        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay">
             <summary>
             The product variant display.
