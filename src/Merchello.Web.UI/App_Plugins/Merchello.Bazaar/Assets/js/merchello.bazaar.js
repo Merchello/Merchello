@@ -21,6 +21,7 @@
                     var variants = $(elem).find('.ProductVariants');
                     if (variants.length > 0) {
                         merchello.bazaar.products.getUpdatedVariants(elem, variants[0], key);
+                        // bind to the select element
                         $.each($(variants), function (idx, ddl) {
                             $(ddl).change(function () {
                                 merchello.bazaar.products.getUpdatedVariants(elem, ddl, key);
@@ -31,31 +32,26 @@
                 });
             },
 
-            updateAddToCartVariants: function(variants, changedElement) {
-                var allVariants = [];
-
-                $.each(variants, function(index, variant) {
-                    $.each(variant.attributes, function(i, el) {
-                        if (el.optionKey != changedElement.id) {
-                            allVariants.push(el.key);
+            updateOptionChoices: function (filteredOptions) {
+                $.each(filteredOptions, function (index, option) {
+                    var ddl = $('#' + option.key);
+                    var currentSelection = $(ddl).val();
+                    if (currentSelection === '' || currentSelection === null) {
+                        $(ddl).val($('#' + $(ddl).attr('id') + ' option:first').val());
+                    }
+                    $(ddl).find('option')
+                        .remove();
+                        $.each(option.choices, function (i, opt) {
+                            $(ddl).append('<option value=\'' + opt.key + '\'>' + opt.name + '</option>');
+                        });
+                        $(ddl).val(currentSelection);
+                        if ($(ddl).val() === '' || $(ddl).val() === null) {
+                            $(ddl).val($('#' + $(ddl).attr('id') + ' option:first').val());
                         }
-                    });
                 });
 
-                var uniqueVariants = $.unique(allVariants);
-
-                $.each($(".ProductVariants"), function(i, productVariant) {
-                    $.each(productVariant.options, function(j, option) {
-                        if (productVariant.id != changedElement.id) {
-                            if ($.inArray(option.value, uniqueVariants) >= 0) {
-                                $(option).show();
-                            } else {
-                                $(option).hide();
-                            }
-                        }
-                    });
-                });
             },
+
 
             getVariantPrice: function (elem, key) {
                 var options = "";
@@ -81,20 +77,20 @@
                 });
             },
 
-            getUpdatedVariants: function(root, variant, key) {
+            getUpdatedVariants: function(root, ddl, key) {
 
-                var options = variant.selectedOptions[0].value;
+                var productAttributeKey = ddl.selectedOptions[0].value;
 
-                var variantOptions = {};
-                variantOptions.productKey = key;
-                variantOptions.optionChoices = options;
+                var filter = {};
+                filter.productKey = key;
+                filter.productAttributeKey = productAttributeKey;
 
                 $.ajax({
                     type: "GET",
-                    url: "/umbraco/Bazaar/BazaarSiteApi/FilterOptionsBySelectedChoices",
-                    data: variantOptions,
-                    success: function(variants) {
-                        merchello.bazaar.products.updateAddToCartVariants(variants, variant);
+                    url: "/umbraco/Bazaar/BazaarSiteApi/FilterOptionChoices",
+                    data: filter,
+                    success: function (filteredOptions) {
+                        merchello.bazaar.products.updateOptionChoices(filteredOptions);
                         merchello.bazaar.products.getVariantPrice(root, key);
                     },
                     dataType: "json",
