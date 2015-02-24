@@ -202,10 +202,10 @@
   <ItemGroup>
     <Compile Include="Attributes\RequiresSslAttribute.cs" />
     <Compile Include="Controllers\Api\BazaarSiteApiController.cs" />
-    <Compile Include="Controllers\BazaarCheckoutShippingController.cs" />
-    <Compile Include="Controllers\SalePreparationOperationsController.cs" />
+    <Compile Include="Controllers\BazaarCheckoutConfirmController.cs" />
+    <Compile Include="Controllers\Surface\SalePreparationOperationsController.cs" />
     <Compile Include="Controllers\CheckoutRenderControllerBase.cs" />
-    <Compile Include="Controllers\WishListOperationsController.cs" />
+    <Compile Include="Controllers\Surface\WishListOperationsController.cs" />
     <Compile Include="Controllers\BazaarAccountController.cs" />
     <Compile Include="Controllers\BazaarAccountHistoryController.cs" />
     <Compile Include="Controllers\BazaarBasketController.cs" />
@@ -215,11 +215,11 @@
     <Compile Include="Controllers\BazaarProductGroupController.cs" />
     <Compile Include="Controllers\BazaarStoreController.cs" />
     <Compile Include="Controllers\BazaarWishListController.cs" />
-    <Compile Include="Controllers\MembershipOperationsController.cs" />
-    <Compile Include="Controllers\PropertyEditorsController.cs" />
+    <Compile Include="Controllers\Surface\MembershipOperationsController.cs" />
+    <Compile Include="Controllers\Api\PropertyEditorsController.cs" />
     <Compile Include="Controllers\RenderControllerBase.cs" />
-    <Compile Include="Controllers\SurfaceControllerBase.cs" />
-    <Compile Include="Controllers\BasketOperationsController.cs" />
+    <Compile Include="Controllers\Surface\SurfaceControllerBase.cs" />
+    <Compile Include="Controllers\Surface\BasketOperationsController.cs" />
     <Compile Include="Factories\BasketLineItemFactory.cs" />
     <Compile Include="Factories\IViewModelFactory.cs" />
     <Compile Include="Factories\SalePreparationSummaryFactory.cs" />
@@ -227,6 +227,7 @@
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="ModelExtensions.cs" />
     <Compile Include="Models\CheckoutAddressForm.cs" />
+    <Compile Include="Models\CheckoutConfirmationForm.cs" />
     <Compile Include="Models\CombinedRegisterLoginModel.cs" />
     <Compile Include="Models\SalePreparationSummary.cs" />
     <Compile Include="Models\CustomerLoginModel.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="Models\BasketLineItem.cs" />
     <Compile Include="Models\ViewModels\BasketModel.cs" />
     <Compile Include="Models\BasketTableModel.cs" />
+    <Compile Include="Models\ViewModels\CheckoutConfirmationModel.cs" />
     <Compile Include="Models\ViewModels\CheckoutModelBase.cs" />
     <Compile Include="Models\ViewModels\CheckoutModel.cs" />
     <Compile Include="Models\CustomerProfileModel.cs" />
