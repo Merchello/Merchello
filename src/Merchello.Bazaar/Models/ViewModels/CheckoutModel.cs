@@ -31,7 +31,7 @@
         {
             get
             {
-                return Content.Descendant("BazaarSale");
+                return Content.Descendant("BazaarCheckoutConfirm");
             } 
         }
     }

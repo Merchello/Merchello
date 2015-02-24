@@ -3,10 +3,11 @@
     using System.Collections.Generic;
 
     using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
+    using Merchello.Core.Sales;
     using Merchello.Web.Workflow;
 
-    using Umbraco.Core.Models;
     using Umbraco.Web.Models;
 
     /// <summary>
@@ -69,6 +70,26 @@
         /// The <see cref="CheckoutModel"/>.
         /// </returns>
         CheckoutModel CreateCheckout(RenderModel model, IBasket basket, IEnumerable<ICountry> allCountries, IEnumerable<ICountry> shipCountries);
+
+        /// <summary>
+        /// The create checkout confirmation.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="basket">
+        /// The basket.
+        /// </param>
+        /// <param name="shippingRateQuotes">
+        /// The shipping rate quotes.
+        /// </param>
+        /// <param name="paymentMethods">
+        /// The payment methods.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CheckoutModel"/>.
+        /// </returns>
+        CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods);
 
         /// <summary>
         /// Creates a <see cref="ProductGroupModel"/>.

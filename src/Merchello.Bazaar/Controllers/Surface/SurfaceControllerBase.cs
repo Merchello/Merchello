@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Gateways;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web;
@@ -136,6 +137,17 @@
             get
             {
                 return this._merchelloContext.Services;
+            }
+        }
+
+        /// <summary>
+        /// Gets the gateway context.
+        /// </summary>
+        protected IGatewayContext GatewayContext
+        {
+            get
+            {
+                return _merchelloContext.Gateways;
             }
         }
 

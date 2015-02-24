@@ -1,4 +1,4 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿namespace Merchello.Bazaar.Controllers.Api
 {
     using System.Collections.Generic;
     using System.IO;
@@ -40,7 +40,7 @@
         public IEnumerable<string> GetMemberTypes()
         {
             //// Get all of the Umbraco Member Types
-            var memberTypes = Services.MemberTypeService.GetAll();
+            var memberTypes = this.Services.MemberTypeService.GetAll();
 
             //// We need to filter by those configured in the merchello.config file
             var allowed = MerchelloConfiguration.Current.CustomerMemberTypes;

@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Bazaar.Factories
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -9,8 +8,9 @@
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
-    using Merchello.Core;
+    using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
+    using Merchello.Core.Sales;
     using Merchello.Web;
     using Merchello.Web.Workflow;
 
@@ -131,7 +131,7 @@
                 ContinueShoppingPage = viewModel.ProductGroups.Any() ?
                     (IPublishedContent)viewModel.ProductGroups.First() :
                     viewModel.StorePage,
-                ShowWishList = !_currentCustomer.IsAnonymous,
+                ShowWishList = viewModel.ShowWishList,
                 WishListPageId = viewModel.WishListPage.Id,
                 BasketPageId = viewModel.BasketPage.Id
             };
@@ -193,6 +193,48 @@
                     ThemeName = viewModel.Theme,
                     SaleSummary = viewModel.SaleSummary
                 };
+            return viewModel;
+        }
+
+        /// <summary>
+        /// The create checkout confirmation.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="basket">
+        /// The basket.
+        /// </param>
+        /// <param name="shippingRateQuotes">
+        /// The shipping rate quotes.
+        /// </param>
+        /// <param name="paymentMethods">
+        /// The payment methods.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CheckoutModel"/>.
+        /// </returns>
+        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods)
+        {
+            var viewModel = this.Build<CheckoutConfirmationModel>(model);
+
+            viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
+            {
+                ThemeName = viewModel.Theme,
+                SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation()),
+                ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
+                                                                    {
+                                                                        Value = x.ShipMethod.Key.ToString(),
+                                                                        Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency.Symbol))
+                                                                    }),
+                PaymentMethods = paymentMethods.Select(x => new SelectListItem()
+                                                                {
+                                                                    Value = x.Key.ToString(),
+                                                                    Text = x.Name
+                                                                }),
+                ReceiptPageId = viewModel.ReceiptPage.Id
+            };
+
             return viewModel;
         }
 
