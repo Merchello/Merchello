@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Bazaar.Models.ViewModels
 {
     using Umbraco.Core.Models;
+    using Umbraco.Web;
 
     /// <summary>
     /// The checkout model.
@@ -19,8 +20,19 @@
         }
 
         /// <summary>
-        /// Gets or sets the billing address.
+        /// Gets or sets the checkout address form.
         /// </summary>
-        public AddressFormModel BillingAddress { get; set; }
+        public CheckoutAddressForm CheckoutAddressForm { get; set; }
+
+        /// <summary>
+        /// Gets the continue checkout page
+        /// </summary>
+        public IPublishedContent ContinueCheckoutPage 
+        {
+            get
+            {
+                return Content.Descendant("BazaarSale");
+            } 
+        }
     }
 }

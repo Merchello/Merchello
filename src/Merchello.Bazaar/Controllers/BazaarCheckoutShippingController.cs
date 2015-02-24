@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
+    using System;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -33,36 +34,7 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-
-            var viewModel = (CheckoutShippingModel)Populate(new CheckoutShippingModel(model.Content));
-
-            var factory = new SalePreparationSummaryFactory(viewModel.Currency, new BasketLineItemFactory(Umbraco, viewModel.CurrentCustomer, viewModel.Currency));
-
-            var preparation = Basket.SalePreparation();
-            viewModel.SaleSummary = factory.Build(preparation);
-
-            //if (preparation.GetBillToAddress() != null)
-            //{
-
-            //} 
-            //else
-            //{ 
-            //    viewModel.BillingAddress = new AddressFormModel()
-            //    {
-            //        PostAction = "SaveShippingAddress",
-            //        Name = CurrentCustomer.IsAnonymous ? string.Empty : ((ICustomer)CurrentCustomer).FirstName + " " + ((ICustomer)CurrentCustomer).LastName,
-            //        Email = CurrentCustomer.IsAnonymous ? string.Empty : ((ICustomer)CurrentCustomer).Email,
-            //        Countries = AllCountries
-            //                         .Select(x => new SelectListItem()
-            //                         {
-            //                             Value = x.CountryCode,
-            //                             Text = x.Name
-            //                         }),
-            //        ContinuePageId = viewModel.StorePage.Descendant("BazaarSale").Id,
-            //        AddressType = AddressType.Billing
-            //    };
-            //}
-            return this.View(viewModel.ThemeViewPath("Checkout"), viewModel);
+            throw new NotImplementedException();
         }
     }
 }

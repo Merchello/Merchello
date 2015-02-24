@@ -3,9 +3,14 @@
 (function(merchello, undefined) {
 
     merchello.bazaar = {
+        settings: {
+            defaultBillingCountryCode: 'US',
+            defaultShippingCountryCode: 'US'
+        },
         init: function() {
             $(document).ready(function() {
                 merchello.bazaar.products.bind();
+                merchello.bazaar.checkout.bind();
             });
         },
 
@@ -98,6 +103,117 @@
                 }).fail(function(ex) {
                     $.error(ex);
                 });
+            }
+        },
+
+        checkout : {
+            bind: function () {
+                if ($('#addresses-form')) {
+                    // copy the billing address if needed
+                    $('#addresses-form').submit(function(event) {
+                        merchello.bazaar.checkout.copyBillingAddress(event);
+                    });
+                
+                    // bind the country dropdowns
+                    if ($('.country-selection').length > 0) {
+
+                        $('#billing-country-select').val(merchello.bazaar.settings.defaultBillingCountryCode);
+
+                        $('.country-selection').each(function (idx, ddl) {
+                            $(ddl).change(function () {
+                                merchello.bazaar.checkout.setProvinces(this);
+                                if ($(this).attr('data-addresstype') === 'billing') {
+                                    merchello.bazaar.checkout.validateShippingCountry(this);
+                                }
+                            });
+                            merchello.bazaar.checkout.setProvinces(ddl);
+                            
+                        });
+                        // set the province ddl to update the region textbox
+                        $('#billing-province-select').change(function () {
+                            $('#billing-province-entry').val($(this).val());
+                        });
+                    }
+
+                    // use billing checkbox
+                    if ($('#billing-is-shipping')) {
+                        $('#billing-is-shipping').click(function () {
+                            merchello.bazaar.checkout.toggleBillingIsShipping();
+                        });
+                        merchello.bazaar.checkout.toggleBillingIsShipping();
+                    }
+                }
+            },
+            validateShippingCountry: function(elem) {
+                if (0 === $('#shipping-country-select option[value=' + $(elem).val() + ']').length && $('#billing-is-shipping:checked').length > 0) {
+                    console.info('open it');
+                    merchello.bazaar.checkout.toggleBillingIsShipping();
+                    $('#billing-is-shipping').attr('checked', false);
+                    $('#billing-is-shipping').attr('disabled', true);
+                } else {
+                    $('#billing-is-shipping').removeAttr('disabled');
+                }
+            },
+            toggleBillingIsShipping: function () {
+                $('#shipping-address').toggle($('#billing-is-shipping').checked);
+            },
+            setProvinces: function (elem) {
+                var countryCode = $(elem).val();
+                var data = {};
+                data.countryCode = countryCode;
+                $.ajax({
+                    type: "GET",
+                    url: "/umbraco/Bazaar/BazaarSiteApi/GetProvincesForCountry",
+                    data: data,
+                    success: function (provinces) {
+                        if ($(elem).attr('data-addresstype') === 'billing') {
+                            
+                            if (provinces.length > 0) {
+                                $('#billing-province-select').show();
+                                $('#billing-province-select').find('option').remove();
+                                $.each(provinces, function(indexBilling, billingProvince) {
+                                    $('#billing-province-select').append('<option value=\'' + billingProvince.code + '\'>' + billingProvince.name + '</option>')
+                                });
+                                $('#billing-province-entry').hide();
+                            } else {
+                                $('#billing-province-select').hide();
+                                $('#billing-province-entry').show();
+                            }
+                        } else {
+
+                            if (provinces.length > 0) {
+                                $('#shipping-province-select').show();
+                                $('#shipping-province-select').find('option').remove();
+                                $.each(provinces, function (shippingBilling, shippingProvince) {
+                                    $('#shipping-province-select').append('<option value=\'' + shippingProvince.code + '\'>' + shippingProvince.name + '</option>')
+                                });
+                                $('#shipping-province-entry').hide();
+                            } else {
+                                $('#shipping-province-select').hide();
+                                $('#shipping-province-entry').show();
+                            }
+                        }
+                    },
+                    dataType: "json",
+                    traditional: true
+                }).fail(function (ex) {
+                    $.error(ex);
+                });
+                
+            },
+            copyBillingAddress: function(event) {
+                if ($('#billing-is-shipping').attr('checked') === 'checked') {
+                    $('#shipping-name').val($('#billing-name').val());
+                    $('#shipping-email').val($('#billing-email').val());
+                    $('#shipping-address1').val($('#billing-address1').val());
+                    $('#shipping-address2').val($('#billing-address2').val());
+                    $('#shipping-locality').val($('#billing-locality').val());
+                    $('#shipping-province-entry').val($('#billing-province-entry').val());
+                    $('#shipping-province-select').val($('#billing-province-select').val());
+                    $('#shipping-country-select').val($('#billing-country-select').val());
+                    $('#shipping-postalcode').val($('#billing-postalcode').val());
+                    $('#shipping-phone').val($('#billing-phone').val());
+                }
             }
         }
     }

@@ -33,27 +33,7 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            
-            var viewModel = (CheckoutModel)Populate(new CheckoutModel(model.Content));
-
-            var factory = new SalePreparationSummaryFactory(viewModel.Currency, new BasketLineItemFactory(Umbraco, viewModel.CurrentCustomer, viewModel.Currency));
-
-            viewModel.BillingAddress = new AddressFormModel()
-                                           {
-                                               PostAction = "SaveBillingAddress",
-                                               Name = CurrentCustomer.IsAnonymous ? string.Empty : ((ICustomer)CurrentCustomer).FirstName + " " + ((ICustomer)CurrentCustomer).LastName,
-                                               Email = CurrentCustomer.IsAnonymous ? string.Empty : ((ICustomer)CurrentCustomer).Email,
-                                               Countries = AllCountries
-                                                                .Select(x => new SelectListItem()
-                                                                {
-                                                                    Value = x.CountryCode,
-                                                                    Text = x.Name
-                                                                }),
-                                                ContinuePageId = viewModel.StorePage.Descendant("BazaarCheckoutShipping").Id,
-                                                AddressType = AddressType.Billing
-                                           };
-
-            viewModel.SaleSummary = factory.Build(Basket.SalePreparation()); 
+            var viewModel = ViewModelFactory.CreateCheckout(model, Basket, AllCountries, AllowedShipCountries);
 
             return this.View(viewModel.ThemeViewPath("Checkout"), viewModel);
         }

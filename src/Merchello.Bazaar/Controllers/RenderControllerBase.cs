@@ -2,8 +2,7 @@
 {
     using System;
 
-    using Merchello.Bazaar.Models;
-    using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Bazaar.Factories;
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Web;
@@ -23,6 +22,11 @@
         /// The <see cref="IMerchelloContext"/>.
         /// </summary>
         private readonly IMerchelloContext _merchelloContext;
+
+        /// <summary>
+        /// The <see cref="IViewModelFactory"/>.
+        /// </summary>
+        private Lazy<IViewModelFactory> _viewModelFactory;
 
         /// <summary>
         /// The <see cref="IPublishedContent"/> that represents the store root.
@@ -112,25 +116,20 @@
         }
 
         /// <summary>
+        /// Gets the view model factory.
+        /// </summary>
+        protected IViewModelFactory ViewModelFactory
+        {
+            get
+            {
+                return _viewModelFactory.Value;
+            }
+        }
+
+        /// <summary>
         /// Gets the currency.
         /// </summary>
         protected ICurrency Currency { get; private set; }
-
-        /// <summary>
-        /// Populates the view model.
-        /// </summary>
-        /// <param name="master">
-        /// The starter kit view model
-        /// </param>
-        /// <returns>
-        /// A populated view model.
-        /// </returns>
-        protected MasterModel Populate(MasterModel master)
-        {
-            master.CurrentCustomer = this.CurrentCustomer;
-            master.Currency = this.Currency;
-            return master;
-        }
 
         /// <summary>
         /// Initializes the controller.
@@ -143,6 +142,8 @@
             var storeSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey);
 
             this.Currency = storeSettingsService.GetCurrencyByCode(storeSetting.Value);
+
+            _viewModelFactory = new Lazy<IViewModelFactory>(() => new ViewModelFactory(Umbraco, CurrentCustomer, Currency));
         }
     }
 }

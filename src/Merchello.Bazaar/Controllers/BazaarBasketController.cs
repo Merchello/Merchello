@@ -29,25 +29,9 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            var factory = new BasketLineItemFactory(Umbraco, this.CurrentCustomer, this.Currency);
-
-            var viewModel = (BasketModel)this.Populate(new BasketModel(model.Content));
-            viewModel.BasketTable = new BasketTableModel
-                                        {
-                                            Items = this.Basket.Items.Select(factory.Build).ToArray(),
-                                            TotalPrice = this.Basket.Items.Sum(x => x.TotalPrice),
-                                            Currency = viewModel.Currency,
-                                            CheckoutPage = viewModel.StorePage.Descendant("BazaarCheckout"),
-                                            ContinueShoppingPage = viewModel.ProductGroups.Any() ? 
-                                                (IPublishedContent)viewModel.ProductGroups.First() :
-                                                viewModel.StorePage,
-                                            ShowWishList = viewModel.ShowWishList,
-                                            WishListPageId = viewModel.WishListPage.Id,
-                                            BasketPageId = viewModel.BasketPage.Id
-                                        };
-            
+            var viewModel = ViewModelFactory.CreateBasket(model, Basket);
+              
             return View(viewModel.ThemeViewPath("Basket"), viewModel);
         }
-
     }
 }

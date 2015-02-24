@@ -25,7 +25,7 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            var viewModel = this.Populate(new StoreModel(model.Content));
+            var viewModel = ViewModelFactory.CreateStore(model);
 
             return this.View(viewModel.ThemeViewPath("Store"), viewModel);
         }

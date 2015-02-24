@@ -12,10 +12,6 @@
     /// </summary>
     public class AddressFormModel : IAddress
     {
-        /// <summary>
-        /// Gets or sets the post action.
-        /// </summary>
-        public string PostAction { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -101,10 +97,5 @@
         /// Gets or sets the <see cref="AddressType"/>.
         /// </summary>
         public AddressType AddressType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the continue page id.
-        /// </summary>
-        public int ContinuePageId { get; set; }
     }
 }
