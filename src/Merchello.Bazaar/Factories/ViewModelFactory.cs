@@ -4,13 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Web.UI.WebControls;
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
-    using Merchello.Core.Sales;
     using Merchello.Web;
     using Merchello.Web.Workflow;
 
@@ -264,6 +262,21 @@
         public ProductModel CreateProduct(RenderModel model)
         {
             return this.Build<ProductModel>(model);
+        }
+
+        /// <summary>
+        /// The create receipt.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ReceiptModel"/>.
+        /// </returns>
+        public ReceiptModel CreateReceipt(RenderModel model)
+        {
+            var viewModel = this.Build<ReceiptModel>(model);
+            return viewModel;
         }
 
         /// <summary>

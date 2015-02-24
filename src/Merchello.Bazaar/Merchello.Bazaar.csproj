@@ -203,6 +203,7 @@
     <Compile Include="Attributes\RequiresSslAttribute.cs" />
     <Compile Include="Controllers\Api\BazaarSiteApiController.cs" />
     <Compile Include="Controllers\BazaarCheckoutConfirmController.cs" />
+    <Compile Include="Controllers\BazaarReceiptController.cs" />
     <Compile Include="Controllers\Surface\SalePreparationOperationsController.cs" />
     <Compile Include="Controllers\CheckoutRenderControllerBase.cs" />
     <Compile Include="Controllers\Surface\WishListOperationsController.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Models\CustomerRegistrationModel.cs" />
     <Compile Include="Models\ViewModels\ProductGroupModel.cs" />
     <Compile Include="Models\ViewModels\ProductModel.cs" />
+    <Compile Include="Models\ViewModels\ReceiptModel.cs" />
     <Compile Include="Models\ViewModels\RegistrationModel.cs" />
     <Compile Include="Models\ViewModels\StoreModel.cs" />
     <Compile Include="Models\ViewModels\WishListModel.cs" />

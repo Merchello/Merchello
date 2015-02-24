@@ -25,4 +25,8 @@ div.price {
 td.align-right {
   text-align: right; }
 
+span.field-validation-error {
+  margin-left: 1em;
+  color: red; }
+
 /*# sourceMappingURL=styles.css.map */

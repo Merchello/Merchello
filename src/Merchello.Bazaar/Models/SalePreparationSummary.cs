@@ -10,6 +10,11 @@
     public class SalePreparationSummary
     {
         /// <summary>
+        /// Gets or sets the total label.
+        /// </summary>
+        public string TotalLabel { get; set; }
+
+        /// <summary>
         /// Gets or sets the items.
         /// </summary>
         public IEnumerable<BasketLineItem> Items { get; set; }

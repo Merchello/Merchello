@@ -8,11 +8,11 @@
     using Umbraco.Web.Mvc;
 
     /// <summary>
-    /// Controller to render the first page of the checkout.
+    /// The bazaar receipt controller.
     /// </summary>
     [PluginController("Bazaar")]
     [RequireSsl("Bazaar:RequireSsl")]
-    public class BazaarCheckoutController : CheckoutRenderControllerBase
+    public class BazaarReceiptController : RenderControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.
@@ -25,9 +25,9 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            var viewModel = ViewModelFactory.CreateCheckout(model, Basket, AllCountries, AllowedShipCountries);
+            var viewModel = ViewModelFactory.CreateReceipt(model);
 
-            return this.View(viewModel.ThemeViewPath("Checkout"), viewModel);
+            return this.View(viewModel.ThemeViewPath("Receipt"), viewModel);
         }
     }
 }

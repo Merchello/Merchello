@@ -58,8 +58,9 @@
                 var invoice = preparation.PrepareInvoice();
                 return new SalePreparationSummary()
                            {
+                               TotalLabel = "Total",
                                Currency = _currency,
-                               Items = invoice.Items.Select(x => _basketLineItemFactory.Build(x)),
+                               Items = invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Select(x => _basketLineItemFactory.Build(x)),
                                ItemTotal = invoice.TotalItemPrice(),
                                ShippingTotal = invoice.TotalShipping(),
                                TaxTotal = invoice.TotalTax(),
@@ -70,6 +71,7 @@
             
             return new SalePreparationSummary()
                 {
+                    TotalLabel = "Sub Total",
                     Currency = _currency,
                     Items = preparation.ItemCache.Items.Select(x => _basketLineItemFactory.Build(x)),
                     ItemTotal = preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice),

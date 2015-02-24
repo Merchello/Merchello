@@ -114,6 +114,17 @@
         ProductModel CreateProduct(RenderModel model);
 
         /// <summary>
+        /// The create receipt.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ReceiptModel"/>.
+        /// </returns>
+        ReceiptModel CreateReceipt(RenderModel model);
+
+        /// <summary>
         /// Creates a <see cref="RegistrationModel"/>.
         /// </summary>
         /// <param name="model">

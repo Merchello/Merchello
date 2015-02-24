@@ -107,16 +107,16 @@
         [HttpPost]
         public ActionResult HandleSignIn(CombinedRegisterLoginModel model)
         {
+            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
+
             if (Members.Login(model.Login.Username, model.Login.Password))
             {
                 // successful login
                 return this.RedirectToUmbracoPage(model.AccountPageId);
             }
-            else
-            {
-                // unsuccessful login
-                return this.CurrentUmbracoPage();
-            }
+            
+            // unsuccessful login
+            return this.CurrentUmbracoPage();
         }
 
         /// <summary>
