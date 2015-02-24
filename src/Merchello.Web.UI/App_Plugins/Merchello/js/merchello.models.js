@@ -2595,8 +2595,14 @@
             this.rows.push(row);
         }
 
+        // removes an existing row from the rate table
+        function removeRow(row) {
+            this.rows = _.reject(this.rows, function(r) { return r.key == row.key; });
+        }
+
         return {
-            addRow: addRow
+            addRow: addRow,
+            removeRow: removeRow
         };
     }());
 
