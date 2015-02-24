@@ -32,7 +32,7 @@
                             @Html.LabelFor(x => x.BillingName, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.BillingName)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingName, new { @placeholder = "Your full name", @class="span10" })
+                                @Html.TextBoxFor(x => x.BillingName, new { @id="billing-name", @placeholder = "Your full name", @class="span10" })
                             </div>
                         </div>
 
@@ -40,7 +40,7 @@
                             @Html.LabelFor(x => x.BillingEmail, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.BillingEmail)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingEmail, new { @placeholder = "Your email address", @class = "span10" })
+                                @Html.TextBoxFor(x => x.BillingEmail, new { @id="billing-email", @placeholder = "Your email address", @class = "span10" })
                             </div>
                         </div>
 
@@ -49,21 +49,21 @@
                             @Html.LabelFor(x => x.BillingAddress1, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.BillingAddress1)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingAddress1, new { @placeholder = "Address line 1", @class = "span10" })
+                                @Html.TextBoxFor(x => x.BillingAddress1, new { @id="billing-address1", @placeholder = "Address line 1", @class = "span10" })
                             </div>
                         </div>
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingAddress2, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingAddress2, new { @placeholder = "Address line 2", @class = "span10" })
+                                @Html.TextBoxFor(x => x.BillingAddress2, new { @id = "billing-address2", @placeholder = "Address line 2", @class = "span10" })
                             </div>
                         </div>
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingLocality, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingLocality, new { @placeholder = "Your locality or city" })
+                                @Html.TextBoxFor(x => x.BillingLocality, new { @id = "billing-locality", @placeholder = "Your locality or city" })
                             </div>
                         </div>
 
@@ -87,14 +87,14 @@
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingPostalCode, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingPostalCode, new { @placeholder = "Your postal code" })
+                                @Html.TextBoxFor(x => x.BillingPostalCode, new { @id = "billing-postalcode", @placeholder = "Your postal code" })
                             </div>
                         </div>
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingPhone, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingPhone, new { @placeholder = "Your telephone number", @class = "span10" })
+                                @Html.TextBoxFor(x => x.BillingPhone, new { @id="billing-phone", @placeholder = "Your telephone number", @class = "span10" })
                             </div>
                         </div>
 
@@ -115,7 +115,7 @@
                             @Html.LabelFor(x => x.ShippingName, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.ShippingName)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingName, new { @placeholder = "Your full name", @class="span10" })
+                                @Html.TextBoxFor(x => x.ShippingName, new { @id="shipping-name", @placeholder = "Your full name", @class = "span10" })
                             </div>
                         </div>
 
@@ -123,7 +123,7 @@
                             @Html.LabelFor(x => x.ShippingEmail, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.ShippingEmail)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingEmail, new { @placeholder = "Your email address", @class = "span10" })
+                                @Html.TextBoxFor(x => x.ShippingEmail, new { @id = "shipping-email", @placeholder = "Your email address", @class = "span10" })
                             </div>
                         </div>
 
@@ -132,21 +132,21 @@
                             @Html.LabelFor(x => x.ShippingAddress1, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.ShippingAddress1)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingAddress1, new { @placeholder = "Address line 1", @class = "span10" })
+                                @Html.TextBoxFor(x => x.ShippingAddress1, new { @id = "shipping-address1", @placeholder = "Address line 1", @class = "span10" })
                             </div>
                         </div>
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingAddress2, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingAddress2, new { @placeholder = "Address line 2", @class = "span10" })
+                                @Html.TextBoxFor(x => x.ShippingAddress2, new { @id = "shipping-address2", @placeholder = "Address line 2", @class = "span10" })
                             </div>
                         </div>
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingLocality, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingLocality, new { @placeholder = "Your locality or city", @class = "span10" })
+                                @Html.TextBoxFor(x => x.ShippingLocality, new { @id = "shipping-locality", @placeholder = "Your locality or city", @class = "span10" })
                             </div>
                         </div>
 
@@ -163,21 +163,21 @@
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingCountries, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.DropDownListFor(x => x.ShippingCountryCode, Model.ShippingCountries, new { @class = "country-selection span10",  @data_addresstype="shipping" })
+                                @Html.DropDownListFor(x => x.ShippingCountryCode, Model.ShippingCountries, new { @id="shipping-country-select", @class = "country-selection span10",  @data_addresstype="shipping" })
                             </div>
                         </div>
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingPostalCode, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingPostalCode, new { @placeholder = "Your postal code" })
+                                @Html.TextBoxFor(x => x.ShippingPostalCode, new { @id = "shipping-postalcode", @placeholder = "Your postal code" })
                             </div>
                         </div>
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingPhone, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingPhone, new { @placeholder = "Your telephone number", @class = "span10" })
+                                @Html.TextBoxFor(x => x.ShippingPhone, new { @id = "shipping-phone", @placeholder = "Your telephone number", @class = "span10" })
                             </div>
                         </div>
 

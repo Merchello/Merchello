@@ -2,7 +2,11 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
 
     using Umbraco.Core.Models;
 
@@ -170,5 +174,64 @@
         /// Gets or sets the confirm sale page id.
         /// </summary>
         public int ConfirmSalePageId { get; set; }
+    }
+
+    /// <summary>
+    /// The checkout address form extensions.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    internal static class CheckoutAddressFormExtensions
+    {
+        /// <summary>
+        /// Gets the Billing Address from the model as an <see cref="IAddress"/>.
+        /// </summary>
+        /// <param name="form">
+        /// The form.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAddress"/>.
+        /// </returns>
+        public static IAddress GetBillingAddress(this CheckoutAddressForm form)
+        {
+            return new Address()
+                       {
+                           AddressType = AddressType.Billing,
+                           Name = form.BillingName,
+                           Address1 = form.BillingAddress1,
+                           Address2 = form.BillingAddress2,
+                           Locality = form.BillingLocality,
+                           Region = form.BillingRegion,
+                           CountryCode = form.BillingCountryCode,
+                           PostalCode = form.BillingPostalCode,
+                           Email = form.BillingEmail,
+                           Phone = form.BillingPhone
+                       };
+        }
+
+        /// <summary>
+        /// Gets the Billing Address from the model as an <see cref="IAddress"/>.
+        /// </summary>
+        /// <param name="form">
+        /// The form.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IAddress"/>.
+        /// </returns>
+        public static IAddress GetShippingAddress(this CheckoutAddressForm form)
+        {
+            return new Address()
+                       {
+                           AddressType = AddressType.Shipping,
+                           Name = form.ShippingName,
+                           Address1 = form.ShippingAddress1,
+                           Address2 = form.ShippingAddress2,
+                           Locality = form.ShippingLocality,
+                           Region = form.ShippingRegion,
+                           CountryCode = form.ShippingCountryCode,
+                           PostalCode = form.ShippingPostalCode,
+                           Email = form.ShippingEmail,
+                           Phone = form.ShippingPhone
+                       };
+        }
     }
 }

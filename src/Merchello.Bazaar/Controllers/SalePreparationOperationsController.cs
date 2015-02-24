@@ -30,6 +30,12 @@
         public ActionResult SaveAddresses(CheckoutAddressForm model)
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
+
+            var preparation = Basket.SalePreparation();
+            preparation.RaiseCustomerEvents = false;
+
+            preparation.SaveBillToAddress(model.GetBillingAddress());
+            preparation.SaveShipToAddress(model.GetShippingAddress());
             
             return RedirectToUmbracoPage(model.ConfirmSalePageId);
         }

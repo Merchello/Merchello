@@ -202,8 +202,18 @@
                 
             },
             copyBillingAddress: function(event) {
-                console.info('will copy the address');
-                event.preventDefault();
+                if ($('#billing-is-shipping').attr('checked') === 'checked') {
+                    $('#shipping-name').val($('#billing-name').val());
+                    $('#shipping-email').val($('#billing-email').val());
+                    $('#shipping-address1').val($('#billing-address1').val());
+                    $('#shipping-address2').val($('#billing-address2').val());
+                    $('#shipping-locality').val($('#billing-locality').val());
+                    $('#shipping-province-entry').val($('#billing-province-entry').val());
+                    $('#shipping-province-select').val($('#billing-province-select').val());
+                    $('#shipping-country-select').val($('#billing-country-select').val());
+                    $('#shipping-postalcode').val($('#billing-postalcode').val());
+                    $('#shipping-phone').val($('#billing-phone').val());
+                }
             }
         }
     }
