@@ -25,7 +25,7 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            var viewModel = this.Populate(new ProductGroupModel(model.Content));
+            var viewModel = ViewModelFactory.CreateProductGroup(model);
 
             return this.View(viewModel.ThemeViewPath("ProductGroup"), viewModel);
         }

@@ -32,24 +32,7 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            var factory = new BasketLineItemFactory(Umbraco, this.CurrentCustomer, this.Currency);
- 
-            var viewModel = (WishListModel)this.Populate(new WishListModel(model.Content));
-
-            //// this is a protected page - so the customer has to be an ICustomer
-            var customer = (ICustomer)viewModel.CurrentCustomer;
-            var wishList = customer.WishList();
-
-            viewModel.WishListTable = new WishListTableModel()
-                                          {
-                                              Items = wishList.Items.Select(factory.Build).ToArray(),
-                                              Currency = viewModel.Currency,
-                                              WishListPageId = viewModel.WishListPage.Id,
-                                              BasketPageId = viewModel.BasketPage.Id,
-                                              ContinueShoppingPage = viewModel.ProductGroups.Any() ?
-                                                (IPublishedContent)viewModel.ProductGroups.First() :
-                                                viewModel.StorePage
-                                          };
+            var viewModel = ViewModelFactory.CreateWishList(model); 
 
             return this.View(viewModel.ThemeViewPath("WishList"), viewModel);
         }

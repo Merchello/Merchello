@@ -25,7 +25,7 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            var viewModel = this.Populate(new AccountHistoryModel(model.Content));
+            var viewModel = ViewModelFactory.CreateAccountHistory(model);
 
             return this.View(viewModel.ThemeAccountPath("History"), viewModel);
         }

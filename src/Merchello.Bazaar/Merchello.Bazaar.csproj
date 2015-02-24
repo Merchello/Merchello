@@ -221,10 +221,12 @@
     <Compile Include="Controllers\SurfaceControllerBase.cs" />
     <Compile Include="Controllers\BasketOperationsController.cs" />
     <Compile Include="Factories\BasketLineItemFactory.cs" />
+    <Compile Include="Factories\IViewModelFactory.cs" />
     <Compile Include="Factories\SalePreparationSummaryFactory.cs" />
+    <Compile Include="Factories\ViewModelFactory.cs" />
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="ModelExtensions.cs" />
-    <Compile Include="Models\AddressFormModel.cs" />
+    <Compile Include="Models\CheckoutAddressForm.cs" />
     <Compile Include="Models\CombinedRegisterLoginModel.cs" />
     <Compile Include="Models\SalePreparationSummary.cs" />
     <Compile Include="Models\CustomerLoginModel.cs" />
@@ -236,7 +238,6 @@
     <Compile Include="Models\ViewModels\BasketModel.cs" />
     <Compile Include="Models\BasketTableModel.cs" />
     <Compile Include="Models\ViewModels\CheckoutModelBase.cs" />
-    <Compile Include="Models\ViewModels\CheckoutShippingModel.cs" />
     <Compile Include="Models\ViewModels\CheckoutModel.cs" />
     <Compile Include="Models\CustomerProfileModel.cs" />
     <Compile Include="Models\ViewModels\IMasterModel.cs" />

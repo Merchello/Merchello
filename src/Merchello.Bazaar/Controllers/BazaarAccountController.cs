@@ -29,22 +29,15 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            var viewModel = (AccountModel)this.Populate(new AccountModel(model.Content));
-            if (viewModel.CurrentCustomer.IsAnonymous)
+           
+            if (CurrentCustomer.IsAnonymous)
             {
                 var error = new Exception("Current customer cannot be Anonymous");
                 LogHelper.Error<BazaarAccountController>("Anonymous customers should not be allowed to access the Account section.", error);
                 throw error;
             }
 
-            var customer = (ICustomer)viewModel.CurrentCustomer;
-
-            viewModel.Profile = new CustomerProfileModel()
-            {
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                EmailAddress = customer.Email
-            };
+            var viewModel = ViewModelFactory.CreateAccount(model);
 
             return this.View(viewModel.ThemeAccountPath("Account"), viewModel);
         }

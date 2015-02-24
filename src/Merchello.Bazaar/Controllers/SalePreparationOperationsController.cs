@@ -3,6 +3,7 @@
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core.Sales;
     using Merchello.Web;
 
@@ -17,7 +18,7 @@
     public class SalePreparationOperationsController : SurfaceControllerBase
     {
         /// <summary>
-        /// The save billing address.
+        /// Saves addresses during the checkout process.
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -26,17 +27,11 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult SaveBillingAddress(AddressFormModel model)
+        public ActionResult SaveAddresses(CheckoutAddressForm model)
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
-
-            var preparation = Basket.SalePreparation();
-            preparation.RaiseCustomerEvents = false;
-            preparation.SaveBillToAddress(model);
-
-            if (model.BillingIsShipping) preparation.SaveShipToAddress(model);
-
-            return RedirectToUmbracoPage(model.ContinuePageId);
+            
+            return RedirectToUmbracoPage(model.ConfirmSalePageId);
         }
     }
 }

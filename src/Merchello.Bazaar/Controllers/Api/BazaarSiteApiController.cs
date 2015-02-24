@@ -95,35 +95,6 @@
         }
 
         /// <summary>
-        /// Filters available product variant options.
-        /// </summary>
-        /// <param name="productKey">
-        /// The product key.
-        /// </param>
-        /// <param name="optionChoices">
-        /// The option choices.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{ProductVariantDisplay}"/>.
-        /// </returns>
-        [HttpGet]
-        public IEnumerable<ProductVariantDisplay> FilterOptionsBySelectedChoices(Guid productKey, string optionChoices)
-        {
-            var optionsArray = string.IsNullOrEmpty(optionChoices) ? new string[] { } : optionChoices.Split(',');
-            var guidOptionChoices = new List<Guid>();
-
-            foreach (var option in optionsArray)
-            {
-                if (!string.IsNullOrEmpty(option))
-                {
-                    guidOptionChoices.Add(new Guid(option));
-                }
-            }
-            var variants = _merchello.GetValidProductVariants(productKey, guidOptionChoices.ToArray());
-            return variants.Where(x => x.Available);
-        }
-
-        /// <summary>
         /// The filter option choices.
         /// </summary>
         /// <param name="productKey">
@@ -197,6 +168,21 @@
         }
 
         /// <summary>
+        /// Gets the collection of <see cref="IProvince"/> by country code.
+        /// </summary>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProvince}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<IProvince> GetProvincesForCountry(string countryCode)
+        {
+            return _storeSettingService.GetCountryByCode(countryCode).Provinces;
+        }
+
+        /// <summary>
         /// The validate option choice.
         /// </summary>
         /// <param name="variants">
@@ -213,20 +199,6 @@
             return variants.Any(pv => pv.Attributes.Any(pa => pa.Key.Equals(productAttributeKey)) && pv.Available);
         }
 
-            /// <summary>
-        /// Gets the collection of <see cref="IProvince"/> by country code.
-        /// </summary>
-        /// <param name="countryCode">
-        /// The country code.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{IProvince}"/>.
-        /// </returns>
-        [HttpGet]
-        public IEnumerable<IProvince> GetProvincesForCountry(string countryCode)
-        {
-            return _storeSettingService.GetCountryByCode(countryCode).Provinces;
-        }
 
         /// <summary>
         /// The initialize.

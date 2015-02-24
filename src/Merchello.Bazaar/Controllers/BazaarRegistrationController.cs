@@ -26,17 +26,8 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-            var viewModel = (RegistrationModel)this.Populate(new RegistrationModel(model.Content));
-            viewModel.RegistrationLogin = new CombinedRegisterLoginModel()
-                {
-                    Login = new CustomerLoginModel(),
-                    Registration = new CustomerRegistrationModel
-                            {
-                                MemberTypeName = viewModel.CustomerMemberTypeName.EncryptWithMachineKey(),
-                            },
-                    AccountPageId = viewModel.AccountPage.Id
-                }; 
-                
+            var viewModel = ViewModelFactory.CreateRegistration(model);
+          
             return this.View(viewModel.ThemeAccountPath("Registration"), viewModel);
         }
     }
