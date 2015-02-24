@@ -992,6 +992,7 @@ angular.module('merchello')
             $scope.addRateTier = addRateTier;
             $scope.insertRateTier = insertRateTier;
             $scope.cancelRateTier = cancelRateTier;
+            $scope.removeRateTier = removeRateTier;
             $scope.save = save;
 
             /**
