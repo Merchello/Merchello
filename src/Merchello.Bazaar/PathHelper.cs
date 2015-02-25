@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Bazaar
 {
-    using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
 
     /// <summary>

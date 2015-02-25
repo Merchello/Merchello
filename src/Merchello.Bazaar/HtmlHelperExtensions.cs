@@ -7,7 +7,6 @@
 
     using ClientDependency.Core.Mvc;
 
-    using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
 
     /// <summary>

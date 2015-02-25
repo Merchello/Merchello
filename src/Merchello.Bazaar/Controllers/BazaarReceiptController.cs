@@ -4,7 +4,6 @@
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Attributes;
-    using Merchello.Web;
 
     using Umbraco.Core.Logging;
     using Umbraco.Web;

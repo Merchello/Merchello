@@ -62,6 +62,7 @@
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingLocality, new { @class = "control-label" })
+                            @Html.ValidationMessageFor(x => x.BillingLocality)
                             <div class="controls">
                                 @Html.TextBoxFor(x => x.BillingLocality, new { @id = "billing-locality", @placeholder = "Your locality or city" })
                             </div>
@@ -86,6 +87,7 @@
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingPostalCode, new { @class = "control-label" })
+                            @Html.ValidationMessageFor(x => x.BillingPostalCode)
                             <div class="controls">
                                 @Html.TextBoxFor(x => x.BillingPostalCode, new { @id = "billing-postalcode", @placeholder = "Your postal code" })
                             </div>
@@ -145,6 +147,7 @@
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingLocality, new { @class = "control-label" })
+                            @Html.ValidationMessageFor(x => x.ShippingLocality)
                             <div class="controls">
                                 @Html.TextBoxFor(x => x.ShippingLocality, new { @id = "shipping-locality", @placeholder = "Your locality or city", @class = "span10" })
                             </div>
@@ -169,6 +172,7 @@
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingPostalCode, new { @class = "control-label" })
+                            @Html.ValidationMessageFor(x => x.ShippingPostalCode)
                             <div class="controls">
                                 @Html.TextBoxFor(x => x.ShippingPostalCode, new { @id = "shipping-postalcode", @placeholder = "Your postal code" })
                             </div>

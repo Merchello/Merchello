@@ -4,13 +4,9 @@
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Models;
-    using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core;
     using Merchello.Core.Models;
-    using Merchello.Core.Sales;
     using Merchello.Web;
-
-    using umbraco.BusinessLogic.Actions;
 
     using Umbraco.Web.Mvc;
 
@@ -73,7 +69,7 @@
             // save the quote
             Basket.SalePreparation().SaveShipmentRateQuote(quote);
 
-            // This only works for cash payments - but is only for today's demo.
+            // TODO This only works for cash payments - but is only for today's demo.
             var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
             preparation.SavePaymentMethod(paymentMethod);
 
