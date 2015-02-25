@@ -86,7 +86,7 @@
 
             // total the invoice
             decimal converted;
-            attempt.Result.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);
+            attempt.Result.Total = Math.Round(decimal.TryParse((charges + discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);
                
             return attempt;
         }
