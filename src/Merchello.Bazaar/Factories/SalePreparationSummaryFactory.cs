@@ -58,25 +58,27 @@
                 var invoice = preparation.PrepareInvoice();
                 return new SalePreparationSummary()
                            {
-                               Currency = _currency,
-                               Items = invoice.Items.Select(x => _basketLineItemFactory.Build(x)),
-                               ItemTotal = invoice.TotalItemPrice(),
-                               ShippingTotal = invoice.TotalShipping(),
-                               TaxTotal = invoice.TotalTax(),
-                               DiscountsTotal = invoice.TotalDiscounts(),
-                               InvoiceTotal = invoice.Total
+                               TotalLabel = "Total",
+                               CurrencySymbol = _currency.Symbol,
+                               Items = invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Select(x => _basketLineItemFactory.Build(x)),
+                               ItemTotal = ModelExtensions.FormatPrice(invoice.TotalItemPrice(), _currency.Symbol),
+                               ShippingTotal = ModelExtensions.FormatPrice(invoice.TotalShipping(), _currency.Symbol),
+                               TaxTotal = ModelExtensions.FormatPrice(invoice.TotalTax(), _currency.Symbol),
+                               DiscountsTotal = ModelExtensions.FormatPrice(invoice.TotalDiscounts(), _currency.Symbol),
+                               InvoiceTotal = ModelExtensions.FormatPrice(invoice.Total, _currency.Symbol)
                            };
             }
             
             return new SalePreparationSummary()
                 {
-                    Currency = _currency,
+                    TotalLabel = "Sub Total",
+                    CurrencySymbol = _currency.Symbol,
                     Items = preparation.ItemCache.Items.Select(x => _basketLineItemFactory.Build(x)),
-                    ItemTotal = preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice),
-                    ShippingTotal = preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice),
-                    TaxTotal = preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice),
-                    DiscountsTotal = preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice),
-                    InvoiceTotal = preparation.ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice) - preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice)
+                    ItemTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice), _currency.Symbol),
+                    ShippingTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice), _currency.Symbol),
+                    TaxTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice), _currency.Symbol),
+                    DiscountsTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency.Symbol),
+                    InvoiceTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice) - preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency.Symbol)
                 };
         }
     }

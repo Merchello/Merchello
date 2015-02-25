@@ -5,6 +5,10 @@
     using System.Linq;
     using System.Web.Http;
 
+    using Lucene.Net.Analysis;
+
+    using Merchello.Bazaar.Factories;
+    using Merchello.Bazaar.Models;
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
@@ -180,6 +184,49 @@
         public IEnumerable<IProvince> GetProvincesForCountry(string countryCode)
         {
             return _storeSettingService.GetCountryByCode(countryCode).Provinces;
+        }
+
+        /// <summary>
+        /// The update ship rate quote.
+        /// </summary>
+        /// <param name="customerToken">
+        /// The customer token.
+        /// </param>
+        /// <param name="methodKey">
+        /// The ship method key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SalePreparationSummary"/>.
+        /// </returns>
+        [HttpGet]
+        public UpdatedSaleSummary UpdateShipRateQuote(string customerToken, string methodKey)
+        {
+            var tokenKey = customerToken.DecryptWithMachineKey();
+            var customerKey = new Guid(tokenKey);
+            var customerBase = _merchelloContext.Services.CustomerService.GetAnyByKey(customerKey);
+
+            var preparation = customerBase.Basket().SalePreparation();
+            preparation.RaiseCustomerEvents = false;
+
+            var shipment = customerBase.Basket().PackageBasket(preparation.GetShipToAddress()).FirstOrDefault();
+            var quote = shipment.ShipmentRateQuoteByShipMethod(methodKey);
+            if (quote != null)
+            {
+                preparation.ClearShipmentRateQuotes();
+                preparation.SaveShipmentRateQuote(quote);
+            }
+
+            var invoice = preparation.PrepareInvoice();
+
+            var summary = new UpdatedSaleSummary()
+                              {
+                                  TotalLabel = "Total",
+                                  InvoiceTotal = ModelExtensions.FormatPrice(invoice.Total, _currency.Symbol),
+                                  TaxTotal = ModelExtensions.FormatPrice(invoice.TaxLineItems().Sum(x => x.TotalPrice), _currency.Symbol),
+                                  DiscountsTotal = ModelExtensions.FormatPrice(invoice.DiscountLineItems().Sum(x => x.TotalPrice), _currency.Symbol),
+                                  ShippingTotal = ModelExtensions.FormatPrice(invoice.ShippingLineItems().Sum(x => x.TotalPrice), _currency.Symbol)
+                              };
+            return summary;
         }
 
         /// <summary>

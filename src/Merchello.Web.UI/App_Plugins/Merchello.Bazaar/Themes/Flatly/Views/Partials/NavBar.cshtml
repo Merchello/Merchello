@@ -34,8 +34,6 @@
                                 else
                                 {
                                     var purchaseHistory = Model.AccountPage.Descendant("BazaarAccountHistory");
-                                    
-                                    <li><a href="@Model.AccountPage.Url">My Profile</a></li>
                                     if (purchaseHistory != null)
                                      {
                                         <li><a href="@purchaseHistory.Url">Purchase History</a></li>     

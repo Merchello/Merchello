@@ -5,6 +5,7 @@
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
     using Merchello.Web;
@@ -83,6 +84,16 @@
             {
                 return this.CurrentUmbracoPage();   
             }
+
+            // Trigger the order confirmation notification
+            var billingAddress = attempt.Invoice.GetBillingAddress();
+            if (!string.IsNullOrEmpty(billingAddress.Email))
+            {
+                Notification.Trigger("OrderConfirmation", attempt.Payment, new[] { billingAddress.Email });
+            }
+            
+            // store the invoice key in the CustomerContext for use on the receipt page.
+            CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
 
             return RedirectToUmbracoPage(model.ReceiptPageId);
             

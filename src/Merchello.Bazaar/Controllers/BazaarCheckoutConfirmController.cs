@@ -1,13 +1,12 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
+    using Merchello.Bazaar.Attributes;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
-    using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
@@ -16,6 +15,7 @@
     /// The bazaar checkout confirm controller.
     /// </summary>
     [PluginController("Bazaar")]
+    [RequireSsl("Bazaar:RequireSsl")]
     public class BazaarCheckoutConfirmController : CheckoutRenderControllerBase
     {
         /// <summary>

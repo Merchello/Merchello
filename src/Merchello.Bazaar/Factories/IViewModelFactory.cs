@@ -6,6 +6,7 @@
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
+    using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Workflow;
 
     using Umbraco.Web.Models;
@@ -32,10 +33,13 @@
         /// <param name="model">
         /// The model.
         /// </param>
+        /// <param name="invoices">
+        /// The collection of <see cref="InvoiceDisplay"/>
+        /// </param>
         /// <returns>
         /// The <see cref="AccountHistoryModel"/>.
         /// </returns>
-        AccountHistoryModel CreateAccountHistory(RenderModel model);
+        AccountHistoryModel CreateAccountHistory(RenderModel model, IEnumerable<InvoiceDisplay> invoices);
 
         /// <summary>
         /// Creates a <see cref="BasketModel"/>.
@@ -112,6 +116,20 @@
         /// The <see cref="ProductModel"/>.
         /// </returns>
         ProductModel CreateProduct(RenderModel model);
+
+        /// <summary>
+        /// The create receipt.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="invoice">
+        /// The <see cref="IInvoice"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="ReceiptModel"/>.
+        /// </returns>
+        ReceiptModel CreateReceipt(RenderModel model, IInvoice invoice);
 
         /// <summary>
         /// Creates a <see cref="RegistrationModel"/>.

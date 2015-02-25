@@ -4,14 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Web.UI.WebControls;
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
-    using Merchello.Core.Sales;
     using Merchello.Web;
+    using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Workflow;
 
     using Umbraco.Core;
@@ -99,12 +98,15 @@
         /// <param name="model">
         /// The model.
         /// </param>
+        /// <param name="invoices">The collection of the <see cref="InvoiceDisplay"/></param>
         /// <returns>
         /// The <see cref="AccountHistoryModel"/>.
         /// </returns>
-        public AccountHistoryModel CreateAccountHistory(RenderModel model)
+        public AccountHistoryModel CreateAccountHistory(RenderModel model, IEnumerable<InvoiceDisplay> invoices)
         {
-            return this.Build<AccountHistoryModel>(model);
+            var viewModel = this.Build<AccountHistoryModel>(model);
+            viewModel.Invoices = invoices;
+            return viewModel;
         }
 
         /// <summary>
@@ -221,6 +223,7 @@
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
                 ThemeName = viewModel.Theme,
+                CustomerToken = basket.Customer.Key.ToString().EncryptWithMachineKey(),
                 SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation()),
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
                                                                     {
@@ -264,6 +267,32 @@
         public ProductModel CreateProduct(RenderModel model)
         {
             return this.Build<ProductModel>(model);
+        }
+
+        /// <summary>
+        /// The create receipt.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ReceiptModel"/>.
+        /// </returns>
+        public ReceiptModel CreateReceipt(RenderModel model, IInvoice invoice)
+        {
+            var viewModel = this.Build<ReceiptModel>(model);
+            viewModel.Invoice = invoice;
+            var shippingLineItem = invoice.ShippingLineItems().FirstOrDefault();
+            if (shippingLineItem != null)
+            {
+                var shipment = shippingLineItem.ExtendedData.GetShipment<InvoiceLineItem>();
+                viewModel.ShippingAddress = shipment.GetDestinationAddress();
+            }
+            viewModel.BillingAddress = invoice.GetBillingAddress();
+            return viewModel;
         }
 
         /// <summary>

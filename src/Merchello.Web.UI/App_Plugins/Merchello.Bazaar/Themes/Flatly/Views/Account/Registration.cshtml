@@ -1,8 +1,11 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<RegistrationModel>
+@using System.Web.Mvc
 @using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
 @{
     Layout = "../Master.cshtml";
+    System.Web.Mvc.HtmlHelper.ClientValidationEnabled = true;
+    System.Web.Mvc.HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
 }
 
 <div class="row">

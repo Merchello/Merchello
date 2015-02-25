@@ -43,7 +43,7 @@
         /// Initializes a new instance of the <see cref="CheckoutRenderControllerBase"/> class.
         /// </summary>
         protected CheckoutRenderControllerBase()
-            : this(MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current)
         {
         }
 
