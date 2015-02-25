@@ -131,11 +131,47 @@
 
             if (activeOption == null) return returnOptions;
 
-            returnOptions.Add(activeOption);
+            ProductVariantDisplay[] variants; 
 
-            var variants = product.ProductVariants.Where(pv => pv.Available && pv.Attributes.Any(att => att.Key == productAttributeKey)).ToArray();
+            // special case for a product with a single option
+            // TODO clean this up
+            if (1 == product.ProductOptions.Count())
+            {
+                variants = product.ProductVariants.Where(pv => pv.Available).ToArray();
+
+                var addOption = new ProductOptionDisplay()
+                                    {
+                                        SortOrder = activeOption.SortOrder,
+                                        Key = activeOption.Key,
+                                        Name = activeOption.Name
+                                    };
+                var optionChoices = new List<ProductAttributeDisplay>();
+
+                foreach (var choice in activeOption.Choices)
+                {
+                    if (ValidateOptionChoice(variants, choice.Key))
+                    {
+                        optionChoices.Add(new ProductAttributeDisplay()
+                        {
+                            Key = choice.Key,
+                            Name = choice.Name,
+                            Sku = choice.Sku,
+                            OptionKey = choice.OptionKey,
+                            SortOrder = choice.SortOrder
+                        });
+                    }
+                }
+                addOption.Choices = optionChoices;
+                returnOptions.Add(addOption);
+                return returnOptions;
+            }
+
+            returnOptions.Add(activeOption);
+            
 
             var otherOptions = product.ProductOptions.Where(x => !x.Key.Equals(activeOption.Key)).ToArray();
+
+            variants = product.ProductVariants.Where(pv => pv.Available && pv.Attributes.Any(att => att.Key == productAttributeKey)).ToArray();
 
             foreach (var option in otherOptions)
             {
