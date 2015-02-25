@@ -5,9 +5,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
-    using Merchello.Core.Gateways.Shipping;
-    using Merchello.Core.Models;
-
     /// <summary>
     /// The checkout confirmation form.
     /// </summary>
@@ -17,6 +14,11 @@
         /// Gets or sets the theme name.
         /// </summary>
         public string ThemeName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the customer token.
+        /// </summary>
+        public string CustomerToken { get; set; }
 
         /// <summary>
         /// Gets or sets the sale summary.

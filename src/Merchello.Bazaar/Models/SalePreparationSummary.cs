@@ -2,8 +2,6 @@
 {
     using System.Collections.Generic;
 
-    using Merchello.Core.Models;
-
     /// <summary>
     /// The confirmation pre sale summary.
     /// </summary>
@@ -22,31 +20,31 @@
         /// <summary>
         /// Gets or sets the item total.
         /// </summary>
-        public decimal ItemTotal { get; set; }
+        public string ItemTotal { get; set; }
 
         /// <summary>
         /// Gets or sets the shipping total.
         /// </summary>
-        public decimal ShippingTotal { get; set; }
+        public string ShippingTotal { get; set; }
 
         /// <summary>
         /// Gets or sets the tax total.
         /// </summary>
-        public decimal TaxTotal { get; set; }
+        public string TaxTotal { get; set; }
 
         /// <summary>
         /// Gets or sets the discounts total.
         /// </summary>
-        public decimal DiscountsTotal { get; set; }
+        public string DiscountsTotal { get; set; }
 
         /// <summary>
         /// Gets or sets the invoice total.
         /// </summary>
-        public decimal InvoiceTotal { get; set; }
+        public string InvoiceTotal { get; set; }
 
         /// <summary>
-        /// Gets or sets the currency.
+        /// Gets or sets the currency symbol.
         /// </summary>
-        public ICurrency Currency { get; set; }
+        public string CurrencySymbol { get; set; }
     }
 }

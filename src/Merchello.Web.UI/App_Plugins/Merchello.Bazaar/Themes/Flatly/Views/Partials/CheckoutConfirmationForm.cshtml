@@ -28,6 +28,7 @@
         
         <div class="span8 offset1">
             @Html.ThemedPartial(Model.ThemeName, "SaleSummary", Model.SaleSummary)
+            @Html.HiddenFor(x => x.CustomerToken, new { @id="customer-token" })
             @Html.HiddenFor(x => x.ReceiptPageId)
             <div class="control-group">
                 <button type="submit" class="btn btn-primary">Confirm Sale</button>

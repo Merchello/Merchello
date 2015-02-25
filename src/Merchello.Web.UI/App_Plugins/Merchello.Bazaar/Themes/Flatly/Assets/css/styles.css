@@ -29,4 +29,15 @@ span.field-validation-error {
   margin-left: 1em;
   color: red; }
 
+.vcard h5 {
+  font-size: 1.5em; }
+.vcard .fn {
+  display: block; }
+.vcard .adr {
+  display: block; }
+.vcard .street-address {
+  display: block; }
+.vcard .extended-address {
+  display: block; }
+
 /*# sourceMappingURL=styles.css.map */

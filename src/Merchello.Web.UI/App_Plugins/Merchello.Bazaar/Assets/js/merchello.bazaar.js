@@ -36,7 +36,6 @@
                    
                 });
             },
-
             updateOptionChoices: function (filteredOptions) {
                 $.each(filteredOptions, function (index, option) {
                     var ddl = $('#' + option.key);
@@ -56,8 +55,6 @@
                 });
 
             },
-
-
             getVariantPrice: function (elem, key) {
                 var options = "";
                 $.each($(elem).find(".ProductVariants"), function (index, element) {
@@ -81,7 +78,6 @@
                     $.error(ex);
                 });
             },
-
             getUpdatedVariants: function(root, ddl, key) {
 
                 var productAttributeKey = ddl.selectedOptions[0].value;
@@ -142,6 +138,14 @@
                         });
                         merchello.bazaar.checkout.toggleBillingIsShipping();
                     }
+
+                    // update ship rate quotes
+                    if ($('#shipping-quotes-select')) {
+                        $('#shipping-quotes-select').change(function () {
+                            console.info('got here');
+                            merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
+                        });
+                    }
                 }
             },
             validateShippingCountry: function(elem) {
@@ -200,6 +204,26 @@
                     $.error(ex);
                 });
                 
+            },
+            updateShipRateQuote: function (customerToken, methodKey) {
+                var data = {};
+                data.customerToken = customerToken;
+                data.methodKey = methodKey;
+                $.ajax({
+                    type: "GET",
+                    url: "/umbraco/Bazaar/BazaarSiteApi/UpdateShipRateQuote",
+                    data: data,
+                    success: function (summary) {
+                        console.info(summary);
+                        $('#shipping-total').text(summary.shippingTotal);
+                        $('#tax-total').text(summary.taxTotal);
+                        $('#invoice-total').text(summary.invoiceTotal);
+                    },
+                    dataType: "json",
+                    traditional: true
+                }).fail(function (ex) {
+                    $.error(ex);
+                });
             },
             copyBillingAddress: function(event) {
                 if ($('#billing-is-shipping').attr('checked') === 'checked') {

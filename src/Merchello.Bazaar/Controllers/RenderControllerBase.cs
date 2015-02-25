@@ -50,7 +50,7 @@
         /// The <see cref="UmbracoContext"/>
         /// </param>
         protected RenderControllerBase(UmbracoContext umbracoContext)
-            : this(umbracoContext, MerchelloContext.Current)
+            : this(umbracoContext, Core.MerchelloContext.Current)
         {
         }
 
@@ -91,6 +91,17 @@
             {
                 return this.CustomerContext.CurrentCustomer;
             } 
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IMerchelloContext"/>.
+        /// </summary>
+        protected IMerchelloContext MerchelloContext
+        {
+            get
+            {
+                return _merchelloContext;
+            }
         }
 
         /// <summary>

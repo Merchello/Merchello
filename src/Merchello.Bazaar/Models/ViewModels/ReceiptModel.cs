@@ -24,5 +24,15 @@
         /// Gets or sets the invoice.
         /// </summary>
         public IInvoice Invoice { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipping address.
+        /// </summary>
+        public IAddress ShippingAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the billing address.
+        /// </summary>
+        public IAddress BillingAddress { get; set; }
     }
 }

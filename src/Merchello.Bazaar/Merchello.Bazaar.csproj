@@ -79,17 +79,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.7.1.3, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Core, Version=1.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.7.1.3\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.7.1.6\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.7.1.3\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.7.1.6\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.7.1.3, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Web, Version=1.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.7.1.3\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.7.1.6\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.2.1\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -204,6 +204,7 @@
     <Compile Include="Controllers\Api\BazaarSiteApiController.cs" />
     <Compile Include="Controllers\BazaarCheckoutConfirmController.cs" />
     <Compile Include="Controllers\BazaarReceiptController.cs" />
+    <Compile Include="Controllers\Surface\AccountOperationsController.cs" />
     <Compile Include="Controllers\Surface\SalePreparationOperationsController.cs" />
     <Compile Include="Controllers\CheckoutRenderControllerBase.cs" />
     <Compile Include="Controllers\Surface\WishListOperationsController.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Models\SalePreparationSummary.cs" />
     <Compile Include="Models\CustomerLoginModel.cs" />
     <Compile Include="Models\ItemCollectionTable.cs" />
+    <Compile Include="Models\UpdatedSaleSummary.cs" />
     <Compile Include="Models\ViewModels\AccountHistoryModel.cs" />
     <Compile Include="Models\ViewModels\AccountModel.cs" />
     <Compile Include="Models\AddItemModel.cs" />

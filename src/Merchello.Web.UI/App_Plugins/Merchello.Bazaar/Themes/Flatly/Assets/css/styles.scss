@@ -40,3 +40,10 @@ span.field-validation-error {
         margin-left: 1em;
         color: red;
 }
+.vcard {
+    h5 { font-size: 1.5em; }
+    .fn { display: block; }
+    .adr { display: block; }
+    .street-address { display: block; }
+    .extended-address { display: block; }
+}
