@@ -40,16 +40,16 @@
         public string BillingAddress1 { get; set; }
 
         /// <summary>
-        /// Gets or sets the address 2.
-        /// </summary>
-        [Display(Name = "Address 2")]
-        public string BillingAddress2 { get; set; }
-
-        /// <summary>
         /// Gets or sets the locality.
         /// </summary>
         [Required(ErrorMessage = "Locality is required"), Display(Name = "Locality")]
         public string BillingLocality { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address 2.
+        /// </summary>
+        [Display(Name = "Address 2")]
+        public string BillingAddress2 { get; set; }
 
         /// <summary>
         /// Gets or sets the region.

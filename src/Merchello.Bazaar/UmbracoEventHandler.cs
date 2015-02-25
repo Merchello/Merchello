@@ -7,7 +7,6 @@
     using System.Web.Mvc;
     using System.Web.Routing;
 
-    using Merchello.Bazaar.Controllers;
     using Merchello.Bazaar.Controllers.Api;
     using Merchello.Core;
     using Merchello.Core.Configuration;

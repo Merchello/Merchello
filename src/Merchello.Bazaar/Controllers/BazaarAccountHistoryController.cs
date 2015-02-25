@@ -41,6 +41,7 @@
         public override ActionResult Index(RenderModel model)
         {
             var invoices = _merchello.Query.Invoice.GetByCustomerKey(CurrentCustomer.Key);
+            //// TODO currency codes need to be determined by invoice as they no longer should be assoicated with the global setting
             var viewModel = ViewModelFactory.CreateAccountHistory(model, invoices);
             
             return this.View(viewModel.ThemeAccountPath("History"), viewModel);
