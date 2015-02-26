@@ -10086,6 +10086,11 @@
             Gets or sets the product variants.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplay.TotalInventoryCount">
+            <summary>
+            Gets the total inventory count.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay">
             <summary>
             The product option display.

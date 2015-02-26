@@ -10,15 +10,20 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.IntegrationTests.Examine
 {
+    using Merchello.Core;
+
     [TestFixture]
     public class MerchelloHelperTests : DatabaseIntegrationTestBase
     {
         private ProductIndexer _provider;
+        private IWarehouse _warehouse;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
         {
             base.FixtureSetup();
+            var warehouseService = PreTestDataWorker.WarehouseService;
+            _warehouse = warehouseService.GetDefaultWarehouse();
 
             _provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
             _provider.RebuildIndex();
@@ -68,8 +73,20 @@ namespace Merchello.Tests.IntegrationTests.Examine
             product.CostOfGoods = 15M;
             product.OnSale = true;
             product.SalePrice = 18M;
+            product.TrackInventory = true;
+            product.AddToCatalogInventory(_warehouse.WarehouseCatalogs.First());
+            productService.Save(product);
+           
+            foreach (var variant in product.ProductVariants)
+            {
+                variant.CatalogInventories.First().Count = 1;
+            }
             productService.Save(product);
 
+            foreach (var p in product.ProductVariants)
+            {
+                Assert.AreEqual(1, p.TotalInventoryCount, "Preindexed product variant count");
+            }
 
             _provider.AddProductToIndex(product);
 
@@ -79,6 +96,13 @@ namespace Merchello.Tests.IntegrationTests.Examine
             //// Assert
             Assert.NotNull(productDisplay);
             Assert.IsTrue(productDisplay.ProductOptions.Any());
+
+            //http://issues.merchello.com/youtrack/issue/M-604
+            foreach (var variant in productDisplay.ProductVariants)
+            {
+                Assert.AreEqual(1, variant.TotalInventoryCount);
+            }
+            Assert.AreEqual(12, productDisplay.TotalInventoryCount, "Total inventory count failed");
 
         }
 
