@@ -75,8 +75,8 @@ namespace Merchello.Core.Persistence.Factories
                 DownloadMediaId = dto.DownloadMediaId,
                 Master = dto.Master,
                 ExamineId = dto.ProductVariantIndexDto.Id,
-                CatalogInventoryCollection = new CatalogInventoryCollection(),
-                ProductAttributes = new ProductAttributeCollection(),
+                CatalogInventoryCollection = _catalogInventories,
+                ProductAttributes = _productAttributeCollection,
                 VersionKey = dto.VersionKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
