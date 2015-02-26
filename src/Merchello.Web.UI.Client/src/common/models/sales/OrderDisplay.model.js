@@ -24,7 +24,7 @@
 
         function getUnShippedItems() {
             return _.filter(this.items, function(item) {
-                return item.shipmentKey === '' || item.shipmentKey === null;
+                return (item.shipmentKey === '' || item.shipmentKey === null) && item.extendedData.getValue('merchShippable').toLowerCase() === 'true';
             });
         }
 

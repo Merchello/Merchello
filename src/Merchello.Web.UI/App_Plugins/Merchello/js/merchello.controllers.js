@@ -5512,7 +5512,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var found = false;
                 while(i < $scope.invoice.orders.length && !found) {
                     var item = _.find($scope.invoice.orders[ i ].items, function(item) {
-                      return item.shipmentKey === '' || item.shipmentKey === null;
+                      return (item.shipmentKey === '' || item.shipmentKey === null) && item.extendedData.getValue('merchShippable').toLowerCase() === 'true';
                     });
                     if(item !== null && item !== undefined) {
                         found = true;

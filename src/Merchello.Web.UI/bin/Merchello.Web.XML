@@ -2472,7 +2472,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range
             </summary>
@@ -2498,7 +2498,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status
             </summary>
@@ -2527,7 +2527,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with an export value
             </summary>
@@ -2556,7 +2556,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status and export value
             </summary>
@@ -2802,7 +2802,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range
             </summary>
@@ -2828,7 +2828,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status
             </summary>
@@ -2857,7 +2857,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with an export value
             </summary>
@@ -2886,7 +2886,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status and export value
             </summary>
