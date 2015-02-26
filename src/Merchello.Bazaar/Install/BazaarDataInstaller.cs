@@ -1,28 +1,17 @@
 ﻿namespace Merchello.Bazaar.Install
 {
-    using System;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Mime;
-    using System.Web.Security;
-    using System.Web.UI;
-
     using Merchello.Core;
     using Merchello.Core.Models;
-
-    using umbraco;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
-    using Umbraco.Web;
-    using Umbraco.Web.Security;
 
     /// <summary>
     /// The bazaar data installer.
     /// </summary>
-    public class BazaarDataInstaller
+    internal class BazaarDataInstaller
     {
         /// <summary>
         /// The service context.
@@ -60,6 +49,7 @@
 
             // Default theme
             root.SetValue("themePicker", "Flatly");
+            root.SetValue("customerMemberType", "MerchelloCustomer");
             root.SetValue("storeTitle", "Merchello Bazaar");
             root.SetValue("tagLine", "Get Shopping");
 
@@ -79,6 +69,30 @@
             prod.SetValue("image", "{ 'focalPoint': { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1006/grpcpbar09.jpg', 'crops': [] }");
             _services.ContentService.SaveAndPublishWithStatus(prod);
 
+            LogHelper.Info<BazaarDataInstaller>("Adding example eCommerce workflow pages");
+            var basket = _services.ContentService.CreateContent("Basket", root.Id, "BazaarBasket");
+            _services.ContentService.SaveAndPublishWithStatus(basket);
+
+            var checkout = _services.ContentService.CreateContent("Checkout", root.Id, "BazaarCheckout");
+            _services.ContentService.SaveAndPublishWithStatus(checkout);
+
+            var checkoutConfirm = _services.ContentService.CreateContent("Confirm Sale", checkout.Id, "BazaarCheckoutConfirm");
+            _services.ContentService.SaveAndPublishWithStatus(checkoutConfirm);
+
+            var receipt = _services.ContentService.CreateContent("Receipt", checkout.Id, "BazaarReceipt");
+            _services.ContentService.SaveAndPublishWithStatus(receipt);
+
+            var registration = _services.ContentService.CreateContent("Registration / Login", root.Id, "BazaarRegistration");
+            _services.ContentService.SaveAndPublishWithStatus(registration);
+
+            var account = _services.ContentService.CreateContent("Account", root.Id, "BazaarAccount");
+            _services.ContentService.SaveAndPublishWithStatus(account);
+
+            var wishList = _services.ContentService.CreateContent("Wish List", account.Id, "BazaarWishList");
+            _services.ContentService.SaveAndPublishWithStatus(wishList);
+
+            var purchaseHistory = _services.ContentService.CreateContent("Purchase History", account.Id, "BazaarAccountHistory");
+            _services.ContentService.SaveAndPublishWithStatus(purchaseHistory);
 
             return root;
         }

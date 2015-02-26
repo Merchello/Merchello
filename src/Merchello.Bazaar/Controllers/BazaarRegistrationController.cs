@@ -2,10 +2,6 @@
 {
     using System.Web.Mvc;
 
-    using Merchello.Bazaar.Models;
-    using Merchello.Bazaar.Models.ViewModels;
-
-    using Umbraco.Core;
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
 
