@@ -10,14 +10,24 @@
     public class Installer : UmbracoUserControl
     {
         /// <summary>
-        /// The on init.
+        /// Gets the store url.
+        /// </summary>
+        public string StoreUrl { get; private set; }
+
+        /// <summary>
+        /// Handles the initialize event.
         /// </summary>
         /// <param name="e">
-        /// The e.
+        /// The <see cref="EventArgs"/>.
         /// </param>
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
+
+            var dataInstaller = new BazaarDataInstaller();
+            var root = dataInstaller.Execute();
+
+            StoreUrl = Umbraco.TypedContent(root.Id).Url;
         }
     }
 }
