@@ -4,6 +4,7 @@
 
 ol, ul {
     list-style: none;
+	padding:0px;
 }
 
 .second-form {
@@ -66,6 +67,13 @@ span.field-validation-error {
 		}
 	}
 } 
+
+.inventoryWrap {
+	margin:10px 0px;
+	border-top:1px solid #dcd4c6;
+	border-bottom:1px solid #dcd4c6;
+	padding:10px 0px;
+}
 
 
 
