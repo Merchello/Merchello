@@ -21,7 +21,7 @@
                     var key = $(elem).children('.variant-pricing').attr('id');
 
                     // initialize the price
-                    merchello.bazaar.products.getVariantPrice(elem, key);
+                    merchello.bazaar.products.getVariantPriceAndInventory(elem, key);
 
                     var variants = $(elem).find('.ProductVariants');
                     if (variants.length > 0) {
@@ -55,10 +55,9 @@
                 });
 
             },
-            getVariantPrice: function (elem, key) {
+            getVariantPriceAndInventory: function (elem, key) {
                 var options = "";
                 $.each($(elem).find(".ProductVariants"), function (index, element) {
-                    console.info($(element).val());
                     options = options + $(element).val() + ",";
                 });
 
@@ -68,10 +67,31 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "/umbraco/Bazaar/BazaarSiteApi/GetProductVariantPrice",
+                    url: "/umbraco/Bazaar/BazaarSiteApi/GetProductVariantPriceAndInventory",
                     data: variantOptions,
-                    success: function(price) {
-                        $("#" + key).text(price);
+                    success: function (data) {
+                        var price = $("#" + key);
+                        $(price).empty();
+                        if (data.onSale) {
+                            $(price).append('<span class="sale-price">' + data.salePrice + '</span><span class="original-price">' + data.price + '</span>');
+                        } else {
+                            $(price).append('<span>' + data.price + '</span>');
+                        }
+                        var inv = $('#inv-' + key);
+                        var btn = $('#btn-' + key);
+                        if (data.tracksInventory) {
+                            $(inv).show();
+                            $(inv).empty();
+                            if (data.totalInventoryCount > 0) {
+                                $(inv).append('<span class=\'inventory\'>In stock (' + data.totalInventoryCount + ')');
+                                $(btn).removeAttr('disabled');
+                                $(btn).show();
+                            } else {
+                                $(inv).append('<span class=\'inventory\'>Out of stock');
+                                $(btn).attr('disabled', 'disabled');
+                                $(btn).hide();
+                            }
+                        } 
                     },
                     dataType: "json",
                     traditional: true
@@ -94,7 +114,7 @@
                     data: filter,
                     success: function (filteredOptions) {
                         merchello.bazaar.products.updateOptionChoices(filteredOptions);
-                        merchello.bazaar.products.getVariantPrice(root, key);
+                        merchello.bazaar.products.getVariantPriceAndInventory(root, key);
                     },
                     dataType: "json",
                     traditional: true

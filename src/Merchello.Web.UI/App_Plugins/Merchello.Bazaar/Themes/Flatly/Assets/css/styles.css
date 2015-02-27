@@ -14,12 +14,19 @@
 
 .price {
   font-size: 2em; }
-  .price .on-sale {
-    text-decoration: line-through; }
   .price .sale-price {
-    color: red; }
+    color: red;
+    margin-right: 0.5em; }
+  .price .original-price {
+    text-decoration: line-through; }
 
-div.price {
+.add-to-cart div.inventory {
+  margin: 0 1em;
+  padding-bottom: 1em;
+  padding-left: 1em;
+  text-align: center;
+  padding-right: 1.25em; }
+.add-to-cart div.price {
   padding: 1em; }
 
 td.align-right {

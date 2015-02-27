@@ -5,9 +5,6 @@
     using System.Linq;
     using System.Web.Http;
 
-    using Lucene.Net.Analysis;
-
-    using Merchello.Bazaar.Factories;
     using Merchello.Bazaar.Models;
     using Merchello.Core;
     using Merchello.Core.Models;
@@ -87,7 +84,7 @@
         /// The <see cref="string"/> representation of the variant Price.
         /// </returns>
         [HttpGet]
-        public string GetProductVariantPrice(Guid productKey, string optionChoiceKeys)
+        public object GetProductVariantPriceAndInventory(Guid productKey, string optionChoiceKeys)
         {
             var optionsArray = optionChoiceKeys.Split(',').Where(x => !string.IsNullOrEmpty(x)).Select(x => new Guid(x)).ToArray();
 
@@ -95,7 +92,16 @@
             var product = _merchelloContext.Services.ProductService.GetByKey(productKey);
             var variant = _merchelloContext.Services.ProductVariantService.GetProductVariantWithAttributes(product, optionsArray);
 
-            return ModelExtensions.FormatPrice(variant.OnSale ? variant.SalePrice.GetValueOrDefault() : variant.Price, _currency.Symbol);
+            var data = new
+                           {
+                               variant.OnSale,
+                               SalePrice = ModelExtensions.FormatPrice(variant.SalePrice.GetValueOrDefault(), _currency.Symbol),
+                               Price = ModelExtensions.FormatPrice(variant.Price, _currency.Symbol),
+                               TracksInventory = variant.TrackInventory,
+                               variant.TotalInventoryCount
+                           };
+
+            return data;
         }
 
         /// <summary>
