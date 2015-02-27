@@ -20,16 +20,29 @@
 
 .price {
     font-size: 2em;
-    .on-sale {
-        text-decoration: line-through
-    }
     .sale-price {
         color: red;
+        margin-right: .5em;
+    }
+    .original-price {
+        text-decoration: line-through;
     }
 }
 
-div.price {
-    padding: 1em;
+.add-to-cart {
+
+    div.inventory {
+        margin: 0 1em;
+        padding-bottom: 1em;
+    padding-left: 1em;
+    text-align: center;
+    padding-right: 1.25em;
+    }
+
+    div.price {
+        padding: 1em;
+    }
+
 }
 
 td.align-right {

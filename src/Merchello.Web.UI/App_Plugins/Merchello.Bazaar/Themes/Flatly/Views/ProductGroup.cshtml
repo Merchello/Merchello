@@ -31,12 +31,8 @@
                         </div>
                         <div class="info span5">
                             <h2><a href="@p.Url">@p.Name</a></h2>
-                            @if (p.ProductData.OnSale)
-                            {
-                                <span class="price on-sale">@p.FormattedPrice()</span>
-                            }
-                            else
-                            {
+                            @if (p.ProductData.ProductVariants.Any())
+                            { 
                                 <span class="price">@p.FormattedPrice()</span>
                             }
                         

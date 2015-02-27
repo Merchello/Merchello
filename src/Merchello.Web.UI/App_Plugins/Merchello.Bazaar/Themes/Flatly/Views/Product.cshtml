@@ -14,8 +14,10 @@
 <div class="row">
     <div class="span8">
         <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias:"image", height: 300)" alt="@Model.ProductData.Name">
-
-        <h4 class="pull-right">@Model.FormattedPrice()</h4>
+        @if (Model.ProductData.ProductVariants.Any())
+        {
+            <h4 class="pull-right">@Model.FormattedPrice()</h4>
+        }
         <h4>
             <a href="#">@Model.Name</a>
         </h4>
@@ -23,6 +25,5 @@
     </div>
     <div class="span2 pull-right">
         @Html.Action("RenderAddToBasket", "BasketOperations", new { area = "Bazaar", model = Model })
-        <h3>Inventory: @Model.ProductData.TotalInventoryCount</h3>
     </div>
 </div>
