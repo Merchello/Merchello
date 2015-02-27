@@ -1,0 +1,21 @@
+<div>
+    <label class="merchello-control-label">
+        <localize key="merchelloVariant_downloads"/>
+        <small><localize key="merchelloVariant_addFile"/></small>
+    </label>
+
+    <div class="merchello-controls">
+        <input type="hidden" name="initialized" data-ng-model="preValuesLoaded" />
+        <div>
+            <a data-ng-click="chooseMedia()" class="btn btn-primary"><localize key="merchelloGeneral_chooseMedia"/></a>
+            <a data-ng-click="removeMedia()" class="btn btn-default"><localize key="general_cancel" /></a>
+        </div>
+
+        <span><a href="{{mediaItem.umbracoFile}}" target="_blank">
+            <img data-ng-src="{{thumbnail}}" data-ng-hide="mediaItem.contentTypeAlias !== 'Image'" />
+            <icon data-ng-show="mediaItem.contentTypeAlias !== 'Image'" class="icon large {{icon}}"></icon>
+            <span class="file-name">{{ mediaItem.name }}</span>
+        </a></span>
+    </div>
+</div>
+

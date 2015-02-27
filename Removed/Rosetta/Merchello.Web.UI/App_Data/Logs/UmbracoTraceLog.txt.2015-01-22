@@ -1,0 +1,830 @@
+﻿2015-01-22 09:55:09,595 [29] INFO  umbraco.BusinessLogic.Log - [Thread 1451] Log scrubbed.  Removed all items older than 2014-11-23 09:55:09
+2015-01-22 09:55:11,099 [29] ERROR Umbraco.Web.Scheduling.KeepAlive - [Thread 1492] Error in ping
+System.Net.WebException: The remote name could not be resolved: 'merchello.ui.local'
+   at System.Net.WebClient.DownloadDataInternal(Uri address, WebRequest& request)
+   at System.Net.WebClient.DownloadString(Uri address)
+   at Umbraco.Web.Scheduling.KeepAlive.Start(ApplicationContext appContext, IUmbracoSettingsSection settings)
+2015-01-22 09:55:11,557 [29] ERROR Umbraco.Web.Scheduling.ScheduledPublishing - [Thread 1553] An error occurred with the scheduled publishing
+System.Net.WebException: The remote name could not be resolved: 'merchello.ui.local'
+   at System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   at System.Net.WebClient.UploadString(Uri address, String method, String data)
+   at Umbraco.Web.Scheduling.ScheduledPublishing.Run()
+2015-01-22 09:56:35,978 [29] INFO  umbraco.BusinessLogic.Log - [Thread 1311] Log scrubbed.  Removed all items older than 2014-11-23 09:56:35
+2015-01-22 09:56:35,988 [1318] INFO  umbraco.BusinessLogic.Log - [Thread 1497] Log scrubbed.  Removed all items older than 2014-11-23 09:56:35
+2015-01-22 09:58:02,399 [29] INFO  umbraco.BusinessLogic.Log - [Thread 1308] Log scrubbed.  Removed all items older than 2014-11-23 09:58:02
+2015-01-22 09:58:02,414 [1318] INFO  umbraco.BusinessLogic.Log - [Thread 1311] Log scrubbed.  Removed all items older than 2014-11-23 09:58:02
+2015-01-22 10:40:55,165 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Determining hash of code files on disk
+2015-01-22 10:40:55,184 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Hash determined (took 11ms)
+2015-01-22 10:40:55,192 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 10:40:55,400 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 206ms)
+2015-01-22 10:40:55,504 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 10:40:55,505 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 1ms)
+2015-01-22 10:40:55,506 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 10:40:55,506 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 10:40:55,534 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 10:40:55,535 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 10:40:55,535 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 10:40:55,538 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 3ms)
+2015-01-22 10:40:55,599 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 10:40:55,599 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 10:40:55,600 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 10:40:55,600 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 10:41:11,907 [6] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 10:41:12,014 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 10:41:12,015 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 1ms)
+2015-01-22 10:41:12,372 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 10:41:12,373 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 10:41:12,378 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 10:41:12,378 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 0ms)
+2015-01-22 10:41:12,383 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 10:41:12,384 [6] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 10:41:12,385 [6] INFO  Merchello.Core.CoreBootManager - [Thread 1] Starting subscribing Monitors to Triggers
+2015-01-22 10:41:12,387 [6] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 10:41:12,388 [6] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 10:41:12,388 [6] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 10:41:12,388 [6] INFO  Umbraco.Core.CoreBootManager - [Thread 1] Finished subscribing Monitors to Triggers
+2015-01-22 10:41:12,763 [6] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 10:41:13,350 [6] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Initializing Examine and binding to business logic events
+2015-01-22 10:41:13,640 [6] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Adding examine event handlers for index providers: 3
+2015-01-22 10:41:13,644 [6] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 1] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 10:41:13,646 [6] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Initializing Merchello NotificationMonitor binding events
+2015-01-22 10:41:13,646 [6] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Completed Merchello NotificationMonitor binding events
+2015-01-22 10:41:13,646 [6] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 1] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 10:41:13,650 [6] INFO  Merchello.Web.Search.ExamineEvents - [Thread 1] Initializing Merchello ProductIndex binding events
+2015-01-22 10:41:13,655 [6] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 1] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 10:41:13,656 [6] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 1] Initializing Customer related events
+2015-01-22 10:41:15,497 [6] INFO  Umbraco.Web.UmbracoModule - [Thread 12] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 10:41:15,681 [6] INFO  umbraco.content - [Thread 10] Loading content from disk cache...
+2015-01-22 10:41:15,843 [6] INFO  Umbraco.Core.PluginManager - [Thread 10] Starting resolution types of Umbraco.Core.Persistence.Mappers.BaseMapper
+2015-01-22 10:41:15,844 [6] INFO  Umbraco.Core.PluginManager - [Thread 10] Completed resolution of types of Umbraco.Core.Persistence.Mappers.BaseMapper, found 23 (took 0ms)
+2015-01-22 10:41:16,638 [6] INFO  Umbraco.Core.PluginManager - [Thread 10] Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+2015-01-22 10:41:16,639 [6] INFO  Umbraco.Core.PluginManager - [Thread 10] Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 44 (took 0ms)
+2015-01-22 10:42:16,004 [6] INFO  umbraco.BusinessLogic.Log - [Thread 13] Log scrubbed.  Removed all items older than 2014-11-23 10:42:16
+2015-01-22 10:43:25,937 [6] INFO  Umbraco.Web.Security.WebSecurity - [Thread 8] User Id: 1 logged in
+2015-01-22 10:43:26,088 [6] INFO  Umbraco.Core.PluginManager - [Thread 15] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 10:43:26,089 [6] INFO  Umbraco.Core.PluginManager - [Thread 15] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 10:43:26,199 [6] INFO  Umbraco.Core.PluginManager - [Thread 7] Starting resolution types of umbraco.interfaces.IApplication
+2015-01-22 10:43:26,200 [6] INFO  Umbraco.Core.PluginManager - [Thread 7] Completed resolution of types of umbraco.interfaces.IApplication, found 8 (took 0ms)
+2015-01-22 10:43:26,308 [6] INFO  Umbraco.Core.PluginManager - [Thread 7] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 10:43:26,309 [6] INFO  Umbraco.Core.PluginManager - [Thread 7] Completed resolution of types of umbraco.interfaces.ITree, found 35 (took 0ms)
+2015-01-22 10:43:26,330 [6] INFO  Umbraco.Core.PluginManager - [Thread 7] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 10:43:26,330 [6] INFO  Umbraco.Core.PluginManager - [Thread 7] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 10:43:26,333 [6] INFO  Umbraco.Core.PluginManager - [Thread 7] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 10:43:26,333 [6] INFO  Umbraco.Core.PluginManager - [Thread 7] Completed resolution of types of umbraco.interfaces.ITree, found 19 (took 0ms)
+2015-01-22 10:43:36,975 [6] INFO  Umbraco.Core.PluginManager - [Thread 13] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 10:43:36,975 [6] INFO  Umbraco.Core.PluginManager - [Thread 13] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 10:43:42,402 [6] INFO  umbraco.BusinessLogic.Log - [Thread 30] Log scrubbed.  Removed all items older than 2014-11-23 10:43:42
+2015-01-22 10:45:08,814 [6] INFO  umbraco.BusinessLogic.Log - [Thread 37] Log scrubbed.  Removed all items older than 2014-11-23 10:45:08
+2015-01-22 10:45:33,467 [6] INFO  Umbraco.Core.PluginManager - [Thread 33] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 10:45:33,467 [6] INFO  Umbraco.Core.PluginManager - [Thread 33] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 10:46:35,217 [6] INFO  umbraco.BusinessLogic.Log - [Thread 35] Log scrubbed.  Removed all items older than 2014-11-23 10:46:35
+2015-01-22 10:48:01,629 [6] INFO  umbraco.BusinessLogic.Log - [Thread 30] Log scrubbed.  Removed all items older than 2014-11-23 10:48:01
+2015-01-22 10:49:28,037 [6] INFO  umbraco.BusinessLogic.Log - [Thread 63] Log scrubbed.  Removed all items older than 2014-11-23 10:49:28
+2015-01-22 10:50:54,446 [6] INFO  umbraco.BusinessLogic.Log - [Thread 72] Log scrubbed.  Removed all items older than 2014-11-23 10:50:54
+2015-01-22 10:52:20,859 [6] INFO  umbraco.BusinessLogic.Log - [Thread 77] Log scrubbed.  Removed all items older than 2014-11-23 10:52:20
+2015-01-22 10:53:47,277 [6] INFO  umbraco.BusinessLogic.Log - [Thread 50] Log scrubbed.  Removed all items older than 2014-11-23 10:53:47
+2015-01-22 10:55:13,674 [6] INFO  umbraco.BusinessLogic.Log - [Thread 45] Log scrubbed.  Removed all items older than 2014-11-23 10:55:13
+2015-01-22 10:56:40,085 [6] INFO  umbraco.BusinessLogic.Log - [Thread 42] Log scrubbed.  Removed all items older than 2014-11-23 10:56:40
+2015-01-22 10:58:06,501 [6] INFO  umbraco.BusinessLogic.Log - [Thread 103] Log scrubbed.  Removed all items older than 2014-11-23 10:58:06
+2015-01-22 10:59:32,911 [6] INFO  umbraco.BusinessLogic.Log - [Thread 109] Log scrubbed.  Removed all items older than 2014-11-23 10:59:32
+2015-01-22 11:00:59,320 [6] INFO  umbraco.BusinessLogic.Log - [Thread 112] Log scrubbed.  Removed all items older than 2014-11-23 11:00:59
+2015-01-22 11:02:25,729 [6] INFO  umbraco.BusinessLogic.Log - [Thread 98] Log scrubbed.  Removed all items older than 2014-11-23 11:02:25
+2015-01-22 11:03:52,129 [6] INFO  umbraco.BusinessLogic.Log - [Thread 132] Log scrubbed.  Removed all items older than 2014-11-23 11:03:52
+2015-01-22 11:05:18,547 [6] INFO  umbraco.BusinessLogic.Log - [Thread 119] Log scrubbed.  Removed all items older than 2014-11-23 11:05:18
+2015-01-22 11:06:44,954 [6] INFO  umbraco.BusinessLogic.Log - [Thread 166] Log scrubbed.  Removed all items older than 2014-11-23 11:06:44
+2015-01-22 11:07:43,995 [6] INFO  Umbraco.Web.Security.WebSecurity - [Thread 127] User Id: 1 logged in
+2015-01-22 11:08:11,359 [6] INFO  umbraco.BusinessLogic.Log - [Thread 105] Log scrubbed.  Removed all items older than 2014-11-23 11:08:11
+2015-01-22 11:09:37,774 [6] INFO  umbraco.BusinessLogic.Log - [Thread 105] Log scrubbed.  Removed all items older than 2014-11-23 11:09:37
+2015-01-22 11:11:04,183 [6] INFO  umbraco.BusinessLogic.Log - [Thread 136] Log scrubbed.  Removed all items older than 2014-11-23 11:11:04
+2015-01-22 11:11:32,616 [6] INFO  Umbraco.Core.Manifest.ManifestWatcher - [Thread 58] manifest has changed, app pool is restarting (C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\Package.manifest)
+2015-01-22 11:11:32,672 [6] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 105] Application shutdown. Reason: UnloadAppDomainCalled
+2015-01-22 11:11:45,175 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Determining hash of code files on disk
+2015-01-22 11:11:45,191 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Hash determined (took 8ms)
+2015-01-22 11:11:45,198 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 11:11:45,222 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 22ms)
+2015-01-22 11:11:45,303 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 11:11:45,305 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 1ms)
+2015-01-22 11:11:45,305 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 11:11:45,306 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 11:11:45,322 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 11:11:45,323 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 11:11:45,323 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 11:11:45,326 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 2ms)
+2015-01-22 11:11:45,361 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 11:11:45,362 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 11:11:45,362 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 11:11:45,363 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 11:12:01,170 [134] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 11:12:01,188 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 11:12:01,188 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 0ms)
+2015-01-22 11:12:01,335 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 11:12:01,336 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 11:12:01,340 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 11:12:01,341 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 0ms)
+2015-01-22 11:12:01,346 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 11:12:01,346 [134] INFO  Umbraco.Core.PluginManager - [Thread 113] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 11:12:01,348 [134] INFO  Merchello.Core.CoreBootManager - [Thread 113] Starting subscribing Monitors to Triggers
+2015-01-22 11:12:01,349 [134] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 113] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 11:12:01,350 [134] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 113] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 11:12:01,350 [134] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 113] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 11:12:01,350 [134] INFO  Umbraco.Core.CoreBootManager - [Thread 113] Finished subscribing Monitors to Triggers
+2015-01-22 11:12:01,691 [134] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 11:12:01,791 [134] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 113] Initializing Examine and binding to business logic events
+2015-01-22 11:12:01,922 [134] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 113] Adding examine event handlers for index providers: 3
+2015-01-22 11:12:01,928 [134] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 113] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 11:12:01,929 [134] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 113] Initializing Merchello NotificationMonitor binding events
+2015-01-22 11:12:01,930 [134] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 113] Completed Merchello NotificationMonitor binding events
+2015-01-22 11:12:01,930 [134] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 113] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 11:12:01,935 [134] INFO  Merchello.Web.Search.ExamineEvents - [Thread 113] Initializing Merchello ProductIndex binding events
+2015-01-22 11:12:01,941 [134] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 113] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 11:12:01,942 [134] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 113] Initializing Customer related events
+2015-01-22 11:12:02,291 [134] INFO  Umbraco.Web.UmbracoModule - [Thread 165] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 11:13:18,135 [134] INFO  umbraco.BusinessLogic.Log - [Thread 143] Log scrubbed.  Removed all items older than 2014-11-23 11:13:03
+2015-01-22 11:14:29,515 [134] INFO  umbraco.BusinessLogic.Log - [Thread 136] Log scrubbed.  Removed all items older than 2014-11-23 11:14:29
+2015-01-22 11:15:55,937 [134] INFO  umbraco.BusinessLogic.Log - [Thread 136] Log scrubbed.  Removed all items older than 2014-11-23 11:15:55
+2015-01-22 11:16:41,846 [134] INFO  Umbraco.Core.PluginManager - [Thread 144] Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+2015-01-22 11:16:41,847 [134] INFO  Umbraco.Core.PluginManager - [Thread 144] Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 44 (took 0ms)
+2015-01-22 11:17:05,083 [134] INFO  Umbraco.Core.Manifest.ManifestWatcher - [Thread 58] manifest has changed, app pool is restarting (C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\Package.manifest)
+2015-01-22 11:17:05,091 [134] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 133] Application shutdown. Reason: UnloadAppDomainCalled
+2015-01-22 11:17:10,130 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Determining hash of code files on disk
+2015-01-22 11:17:10,143 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Hash determined (took 4ms)
+2015-01-22 11:17:10,144 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 11:17:10,165 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 19ms)
+2015-01-22 11:17:10,248 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 11:17:10,249 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 0ms)
+2015-01-22 11:17:10,249 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 11:17:10,250 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 11:17:10,256 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 11:17:10,257 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 11:17:10,257 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 11:17:10,261 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 3ms)
+2015-01-22 11:17:10,308 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 11:17:10,310 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 1ms)
+2015-01-22 11:17:10,311 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 11:17:10,312 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 11:17:11,266 [35] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 11:17:11,285 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 11:17:11,287 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 1ms)
+2015-01-22 11:17:11,458 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 11:17:11,459 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 11:17:11,464 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 11:17:11,466 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 1ms)
+2015-01-22 11:17:11,468 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 11:17:11,469 [35] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 11:17:11,469 [35] INFO  Merchello.Core.CoreBootManager - [Thread 148] Starting subscribing Monitors to Triggers
+2015-01-22 11:17:11,470 [35] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 11:17:11,470 [35] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 11:17:11,470 [35] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 11:17:11,470 [35] INFO  Umbraco.Core.CoreBootManager - [Thread 148] Finished subscribing Monitors to Triggers
+2015-01-22 11:17:11,996 [35] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 11:17:12,036 [35] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 148] Initializing Examine and binding to business logic events
+2015-01-22 11:17:12,149 [35] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 148] Adding examine event handlers for index providers: 3
+2015-01-22 11:17:12,149 [35] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 148] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 11:17:12,149 [35] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 148] Initializing Merchello NotificationMonitor binding events
+2015-01-22 11:17:12,149 [35] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 148] Completed Merchello NotificationMonitor binding events
+2015-01-22 11:17:12,149 [35] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 148] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 11:17:12,149 [35] INFO  Merchello.Web.Search.ExamineEvents - [Thread 148] Initializing Merchello ProductIndex binding events
+2015-01-22 11:17:12,152 [35] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 148] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 11:17:12,152 [35] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 148] Initializing Customer related events
+2015-01-22 11:17:12,448 [35] INFO  Umbraco.Web.UmbracoModule - [Thread 135] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 11:17:13,093 [35] INFO  Umbraco.Core.PluginManager - [Thread 144] Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+2015-01-22 11:17:13,094 [35] INFO  Umbraco.Core.PluginManager - [Thread 144] Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 44 (took 0ms)
+2015-01-22 11:17:13,740 [35] INFO  Umbraco.Core.PluginManager - [Thread 135] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:17:13,741 [35] INFO  Umbraco.Core.PluginManager - [Thread 135] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:17:13,808 [35] INFO  Umbraco.Core.PluginManager - [Thread 143] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 11:17:13,809 [35] INFO  Umbraco.Core.PluginManager - [Thread 143] Completed resolution of types of umbraco.interfaces.ITree, found 35 (took 0ms)
+2015-01-22 11:17:13,828 [35] INFO  Umbraco.Core.PluginManager - [Thread 143] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:17:13,828 [35] INFO  Umbraco.Core.PluginManager - [Thread 143] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:17:13,831 [35] INFO  Umbraco.Core.PluginManager - [Thread 143] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 11:17:13,831 [35] INFO  Umbraco.Core.PluginManager - [Thread 143] Completed resolution of types of umbraco.interfaces.ITree, found 19 (took 0ms)
+2015-01-22 11:17:13,860 [35] INFO  Umbraco.Core.PluginManager - [Thread 143] Starting resolution types of umbraco.interfaces.IApplication
+2015-01-22 11:17:13,860 [35] INFO  Umbraco.Core.PluginManager - [Thread 143] Completed resolution of types of umbraco.interfaces.IApplication, found 8 (took 0ms)
+2015-01-22 11:18:12,898 [35] INFO  umbraco.BusinessLogic.Log - [Thread 86] Log scrubbed.  Removed all items older than 2014-11-23 11:18:12
+2015-01-22 11:19:39,259 [35] INFO  umbraco.BusinessLogic.Log - [Thread 136] Log scrubbed.  Removed all items older than 2014-11-23 11:19:39
+2015-01-22 11:21:05,663 [35] INFO  umbraco.BusinessLogic.Log - [Thread 133] Log scrubbed.  Removed all items older than 2014-11-23 11:21:05
+2015-01-22 11:22:32,072 [35] INFO  umbraco.BusinessLogic.Log - [Thread 137] Log scrubbed.  Removed all items older than 2014-11-23 11:22:32
+2015-01-22 11:23:58,486 [35] INFO  umbraco.BusinessLogic.Log - [Thread 116] Log scrubbed.  Removed all items older than 2014-11-23 11:23:58
+2015-01-22 11:25:24,895 [35] INFO  umbraco.BusinessLogic.Log - [Thread 110] Log scrubbed.  Removed all items older than 2014-11-23 11:25:24
+2015-01-22 11:26:51,299 [35] INFO  umbraco.BusinessLogic.Log - [Thread 145] Log scrubbed.  Removed all items older than 2014-11-23 11:26:51
+2015-01-22 11:28:17,713 [35] INFO  umbraco.BusinessLogic.Log - [Thread 85] Log scrubbed.  Removed all items older than 2014-11-23 11:28:17
+2015-01-22 11:29:44,125 [35] INFO  umbraco.BusinessLogic.Log - [Thread 85] Log scrubbed.  Removed all items older than 2014-11-23 11:29:44
+2015-01-22 11:31:10,535 [35] INFO  umbraco.BusinessLogic.Log - [Thread 97] Log scrubbed.  Removed all items older than 2014-11-23 11:31:10
+2015-01-22 11:32:36,946 [35] INFO  umbraco.BusinessLogic.Log - [Thread 94] Log scrubbed.  Removed all items older than 2014-11-23 11:32:36
+2015-01-22 11:34:03,353 [35] INFO  umbraco.BusinessLogic.Log - [Thread 118] Log scrubbed.  Removed all items older than 2014-11-23 11:34:03
+2015-01-22 11:35:29,752 [35] INFO  umbraco.BusinessLogic.Log - [Thread 83] Log scrubbed.  Removed all items older than 2014-11-23 11:35:29
+2015-01-22 11:36:56,166 [35] INFO  umbraco.BusinessLogic.Log - [Thread 104] Log scrubbed.  Removed all items older than 2014-11-23 11:36:56
+2015-01-22 11:38:22,581 [35] INFO  umbraco.BusinessLogic.Log - [Thread 108] Log scrubbed.  Removed all items older than 2014-11-23 11:38:22
+2015-01-22 11:39:48,989 [35] INFO  umbraco.BusinessLogic.Log - [Thread 106] Log scrubbed.  Removed all items older than 2014-11-23 11:39:48
+2015-01-22 11:40:49,596 [35] INFO  umbraco.content - [Thread 107] Loading content from disk cache...
+2015-01-22 11:40:49,666 [35] INFO  Umbraco.Core.PluginManager - [Thread 107] Starting resolution types of Umbraco.Core.Persistence.Mappers.BaseMapper
+2015-01-22 11:40:49,667 [35] INFO  Umbraco.Core.PluginManager - [Thread 107] Completed resolution of types of Umbraco.Core.Persistence.Mappers.BaseMapper, found 23 (took 1ms)
+2015-01-22 11:41:15,392 [35] INFO  umbraco.BusinessLogic.Log - [Thread 92] Log scrubbed.  Removed all items older than 2014-11-23 11:41:15
+2015-01-22 11:41:35,616 [35] INFO  Umbraco.Core.PluginManager - [Thread 97] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:41:35,616 [35] INFO  Umbraco.Core.PluginManager - [Thread 97] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:42:41,805 [35] INFO  umbraco.BusinessLogic.Log - [Thread 82] Log scrubbed.  Removed all items older than 2014-11-23 11:42:41
+2015-01-22 11:42:49,385 [35] INFO  Umbraco.Core.Manifest.ManifestWatcher - [Thread 83] manifest has changed, app pool is restarting (C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\Package.manifest)
+2015-01-22 11:42:49,388 [35] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 101] Application shutdown. Reason: UnloadAppDomainCalled
+2015-01-22 11:43:10,083 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Determining hash of code files on disk
+2015-01-22 11:43:10,097 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Hash determined (took 6ms)
+2015-01-22 11:43:10,104 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 11:43:10,127 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 21ms)
+2015-01-22 11:43:10,208 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 11:43:10,210 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 1ms)
+2015-01-22 11:43:10,210 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 11:43:10,210 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 11:43:10,228 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 11:43:10,228 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 11:43:10,228 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 11:43:10,231 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 2ms)
+2015-01-22 11:43:10,265 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 11:43:10,266 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 11:43:10,266 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 11:43:10,267 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 11:43:26,194 [93] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 11:43:26,219 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 11:43:26,220 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 0ms)
+2015-01-22 11:43:26,368 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 11:43:26,369 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 1ms)
+2015-01-22 11:43:26,375 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 11:43:26,376 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 0ms)
+2015-01-22 11:43:26,380 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 11:43:26,381 [93] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 11:43:26,382 [93] INFO  Merchello.Core.CoreBootManager - [Thread 1] Starting subscribing Monitors to Triggers
+2015-01-22 11:43:26,383 [93] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 11:43:26,384 [93] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 11:43:26,384 [93] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 11:43:26,384 [93] INFO  Umbraco.Core.CoreBootManager - [Thread 1] Finished subscribing Monitors to Triggers
+2015-01-22 11:43:26,750 [93] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 11:43:26,839 [93] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Initializing Examine and binding to business logic events
+2015-01-22 11:43:26,976 [93] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Adding examine event handlers for index providers: 3
+2015-01-22 11:43:26,981 [93] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 1] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 11:43:26,982 [93] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Initializing Merchello NotificationMonitor binding events
+2015-01-22 11:43:26,982 [93] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Completed Merchello NotificationMonitor binding events
+2015-01-22 11:43:26,982 [93] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 1] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 11:43:26,986 [93] INFO  Merchello.Web.Search.ExamineEvents - [Thread 1] Initializing Merchello ProductIndex binding events
+2015-01-22 11:43:26,992 [93] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 1] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 11:43:26,993 [93] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 1] Initializing Customer related events
+2015-01-22 11:43:27,303 [93] INFO  Umbraco.Web.UmbracoModule - [Thread 108] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 11:44:03,488 [93] INFO  Umbraco.Core.Manifest.ManifestWatcher - [Thread 81] manifest has changed, app pool is restarting (C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\Package.manifest)
+2015-01-22 11:44:03,499 [93] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 98] Application shutdown. Reason: UnloadAppDomainCalled
+2015-01-22 11:44:11,321 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Determining hash of code files on disk
+2015-01-22 11:44:11,336 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Hash determined (took 6ms)
+2015-01-22 11:44:11,344 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 11:44:11,366 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 20ms)
+2015-01-22 11:44:11,448 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 11:44:11,450 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 1ms)
+2015-01-22 11:44:11,450 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 11:44:11,451 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 11:44:11,468 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 11:44:11,468 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 11:44:11,469 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 11:44:11,471 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 2ms)
+2015-01-22 11:44:11,508 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 11:44:11,508 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 11:44:11,508 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 11:44:11,509 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 11:44:12,409 [89] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 11:44:12,447 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 11:44:12,448 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 1ms)
+2015-01-22 11:44:12,618 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 11:44:12,619 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 11:44:12,624 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 11:44:12,626 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 1ms)
+2015-01-22 11:44:12,631 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 11:44:12,632 [89] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 11:44:12,634 [89] INFO  Merchello.Core.CoreBootManager - [Thread 1] Starting subscribing Monitors to Triggers
+2015-01-22 11:44:12,635 [89] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 11:44:12,636 [89] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 11:44:12,636 [89] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 11:44:12,636 [89] INFO  Umbraco.Core.CoreBootManager - [Thread 1] Finished subscribing Monitors to Triggers
+2015-01-22 11:44:13,002 [89] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 11:44:13,095 [89] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Initializing Examine and binding to business logic events
+2015-01-22 11:44:13,226 [89] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Adding examine event handlers for index providers: 3
+2015-01-22 11:44:13,231 [89] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 1] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 11:44:13,232 [89] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Initializing Merchello NotificationMonitor binding events
+2015-01-22 11:44:13,233 [89] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Completed Merchello NotificationMonitor binding events
+2015-01-22 11:44:13,233 [89] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 1] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 11:44:13,237 [89] INFO  Merchello.Web.Search.ExamineEvents - [Thread 1] Initializing Merchello ProductIndex binding events
+2015-01-22 11:44:13,243 [89] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 1] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 11:44:13,244 [89] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 1] Initializing Customer related events
+2015-01-22 11:44:13,543 [89] INFO  Umbraco.Web.UmbracoModule - [Thread 92] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 11:44:14,293 [89] INFO  Umbraco.Core.PluginManager - [Thread 116] Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+2015-01-22 11:44:14,293 [89] INFO  Umbraco.Core.PluginManager - [Thread 116] Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 44 (took 0ms)
+2015-01-22 11:44:15,270 [89] INFO  Umbraco.Core.PluginManager - [Thread 107] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:44:15,270 [89] INFO  Umbraco.Core.PluginManager - [Thread 107] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:44:15,321 [89] INFO  Umbraco.Core.PluginManager - [Thread 91] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 11:44:15,321 [89] INFO  Umbraco.Core.PluginManager - [Thread 91] Completed resolution of types of umbraco.interfaces.ITree, found 35 (took 0ms)
+2015-01-22 11:44:15,338 [89] INFO  Umbraco.Core.PluginManager - [Thread 91] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:44:15,338 [89] INFO  Umbraco.Core.PluginManager - [Thread 91] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:44:15,341 [89] INFO  Umbraco.Core.PluginManager - [Thread 91] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 11:44:15,341 [89] INFO  Umbraco.Core.PluginManager - [Thread 91] Completed resolution of types of umbraco.interfaces.ITree, found 19 (took 0ms)
+2015-01-22 11:44:15,368 [89] INFO  Umbraco.Core.PluginManager - [Thread 91] Starting resolution types of umbraco.interfaces.IApplication
+2015-01-22 11:44:15,369 [89] INFO  Umbraco.Core.PluginManager - [Thread 91] Completed resolution of types of umbraco.interfaces.IApplication, found 8 (took 0ms)
+2015-01-22 11:44:29,986 [89] INFO  Umbraco.Core.Manifest.ManifestWatcher - [Thread 81] manifest has changed, app pool is restarting (C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\Package.manifest)
+2015-01-22 11:44:30,000 [89] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 115] Application shutdown. Reason: UnloadAppDomainCalled
+2015-01-22 11:44:44,388 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Determining hash of code files on disk
+2015-01-22 11:44:44,398 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Hash determined (took 4ms)
+2015-01-22 11:44:44,398 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 11:44:44,414 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 14ms)
+2015-01-22 11:44:44,469 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 11:44:44,469 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 0ms)
+2015-01-22 11:44:44,469 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 11:44:44,470 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 11:44:44,475 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 11:44:44,476 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 11:44:44,476 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 11:44:44,479 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 2ms)
+2015-01-22 11:44:44,510 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 11:44:44,510 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 11:44:44,510 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 11:44:44,511 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 11:44:45,145 [100] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 11:44:45,158 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 11:44:45,159 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 0ms)
+2015-01-22 11:44:45,246 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 11:44:45,247 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 11:44:45,248 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 11:44:45,248 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 0ms)
+2015-01-22 11:44:45,249 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 11:44:45,249 [100] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 11:44:45,249 [100] INFO  Merchello.Core.CoreBootManager - [Thread 148] Starting subscribing Monitors to Triggers
+2015-01-22 11:44:45,250 [100] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 11:44:45,250 [100] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 11:44:45,250 [100] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 11:44:45,250 [100] INFO  Umbraco.Core.CoreBootManager - [Thread 148] Finished subscribing Monitors to Triggers
+2015-01-22 11:44:45,578 [100] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 11:44:45,609 [100] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 148] Initializing Examine and binding to business logic events
+2015-01-22 11:44:45,718 [100] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 148] Adding examine event handlers for index providers: 3
+2015-01-22 11:44:45,718 [100] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 148] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 11:44:45,718 [100] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 148] Initializing Merchello NotificationMonitor binding events
+2015-01-22 11:44:45,718 [100] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 148] Completed Merchello NotificationMonitor binding events
+2015-01-22 11:44:45,718 [100] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 148] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 11:44:45,718 [100] INFO  Merchello.Web.Search.ExamineEvents - [Thread 148] Initializing Merchello ProductIndex binding events
+2015-01-22 11:44:45,721 [100] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 148] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 11:44:45,721 [100] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 148] Initializing Customer related events
+2015-01-22 11:44:46,035 [100] INFO  Umbraco.Web.UmbracoModule - [Thread 92] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 11:44:46,835 [100] INFO  Umbraco.Core.PluginManager - [Thread 83] Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+2015-01-22 11:44:46,835 [100] INFO  Umbraco.Core.PluginManager - [Thread 83] Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 44 (took 0ms)
+2015-01-22 11:44:47,712 [100] INFO  Umbraco.Core.PluginManager - [Thread 92] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:44:47,712 [100] INFO  Umbraco.Core.PluginManager - [Thread 92] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:44:47,762 [100] INFO  Umbraco.Core.PluginManager - [Thread 98] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 11:44:47,762 [100] INFO  Umbraco.Core.PluginManager - [Thread 98] Completed resolution of types of umbraco.interfaces.ITree, found 35 (took 0ms)
+2015-01-22 11:44:47,777 [100] INFO  Umbraco.Core.PluginManager - [Thread 98] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:44:47,777 [100] INFO  Umbraco.Core.PluginManager - [Thread 98] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:44:47,779 [100] INFO  Umbraco.Core.PluginManager - [Thread 98] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 11:44:47,779 [100] INFO  Umbraco.Core.PluginManager - [Thread 98] Completed resolution of types of umbraco.interfaces.ITree, found 19 (took 0ms)
+2015-01-22 11:44:47,804 [100] INFO  Umbraco.Core.PluginManager - [Thread 98] Starting resolution types of umbraco.interfaces.IApplication
+2015-01-22 11:44:47,804 [100] INFO  Umbraco.Core.PluginManager - [Thread 98] Completed resolution of types of umbraco.interfaces.IApplication, found 8 (took 0ms)
+2015-01-22 11:45:23,405 [100] INFO  Umbraco.Core.Manifest.ManifestWatcher - [Thread 102] manifest has changed, app pool is restarting (C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\Package.manifest)
+2015-01-22 11:45:23,416 [100] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 92] Application shutdown. Reason: UnloadAppDomainCalled
+2015-01-22 11:45:52,260 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Determining hash of code files on disk
+2015-01-22 11:45:52,273 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Hash determined (took 6ms)
+2015-01-22 11:45:52,281 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 11:45:52,303 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 21ms)
+2015-01-22 11:45:52,383 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 11:45:52,385 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 1ms)
+2015-01-22 11:45:52,385 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 11:45:52,386 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 11:45:52,402 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 11:45:52,403 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 11:45:52,403 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 11:45:52,406 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 2ms)
+2015-01-22 11:45:52,440 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 11:45:52,440 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 11:45:52,440 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 11:45:52,441 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 11:45:53,189 [146] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 11:45:53,213 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 11:45:53,214 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 0ms)
+2015-01-22 11:45:53,354 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 11:45:53,355 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 11:45:53,359 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 11:45:53,360 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 0ms)
+2015-01-22 11:45:53,364 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 11:45:53,364 [146] INFO  Umbraco.Core.PluginManager - [Thread 148] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 11:45:53,366 [146] INFO  Merchello.Core.CoreBootManager - [Thread 148] Starting subscribing Monitors to Triggers
+2015-01-22 11:45:53,367 [146] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 11:45:53,368 [146] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 11:45:53,368 [146] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 148] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 11:45:53,368 [146] INFO  Umbraco.Core.CoreBootManager - [Thread 148] Finished subscribing Monitors to Triggers
+2015-01-22 11:45:53,710 [146] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 11:45:53,793 [146] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 148] Initializing Examine and binding to business logic events
+2015-01-22 11:45:53,921 [146] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 148] Adding examine event handlers for index providers: 3
+2015-01-22 11:45:53,926 [146] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 148] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 11:45:53,927 [146] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 148] Initializing Merchello NotificationMonitor binding events
+2015-01-22 11:45:53,927 [146] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 148] Completed Merchello NotificationMonitor binding events
+2015-01-22 11:45:53,928 [146] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 148] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 11:45:53,932 [146] INFO  Merchello.Web.Search.ExamineEvents - [Thread 148] Initializing Merchello ProductIndex binding events
+2015-01-22 11:45:53,937 [146] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 148] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 11:45:53,937 [146] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 148] Initializing Customer related events
+2015-01-22 11:45:54,224 [146] INFO  Umbraco.Web.UmbracoModule - [Thread 106] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 11:46:55,077 [146] INFO  umbraco.BusinessLogic.Log - [Thread 108] Log scrubbed.  Removed all items older than 2014-11-23 11:46:55
+2015-01-22 11:48:21,433 [146] INFO  umbraco.BusinessLogic.Log - [Thread 98] Log scrubbed.  Removed all items older than 2014-11-23 11:48:21
+2015-01-22 11:49:32,736 [146] INFO  Umbraco.Core.PluginManager - [Thread 98] Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+2015-01-22 11:49:32,736 [146] INFO  Umbraco.Core.PluginManager - [Thread 98] Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 44 (took 0ms)
+2015-01-22 11:49:33,086 [146] INFO  Umbraco.Core.PluginManager - [Thread 111] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:49:33,086 [146] INFO  Umbraco.Core.PluginManager - [Thread 111] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:49:33,298 [146] INFO  Umbraco.Core.PluginManager - [Thread 81] Starting resolution types of umbraco.interfaces.IApplication
+2015-01-22 11:49:33,298 [146] INFO  Umbraco.Core.PluginManager - [Thread 81] Completed resolution of types of umbraco.interfaces.IApplication, found 8 (took 0ms)
+2015-01-22 11:49:33,365 [146] INFO  Umbraco.Core.PluginManager - [Thread 117] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 11:49:33,365 [146] INFO  Umbraco.Core.PluginManager - [Thread 117] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 11:49:33,367 [146] INFO  Umbraco.Core.PluginManager - [Thread 117] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 11:49:33,368 [146] INFO  Umbraco.Core.PluginManager - [Thread 117] Completed resolution of types of umbraco.interfaces.ITree, found 19 (took 0ms)
+2015-01-22 11:49:47,846 [146] INFO  umbraco.BusinessLogic.Log - [Thread 129] Log scrubbed.  Removed all items older than 2014-11-23 11:49:47
+2015-01-22 11:51:14,253 [146] INFO  umbraco.BusinessLogic.Log - [Thread 111] Log scrubbed.  Removed all items older than 2014-11-23 11:51:14
+2015-01-22 11:52:40,663 [146] INFO  umbraco.BusinessLogic.Log - [Thread 96] Log scrubbed.  Removed all items older than 2014-11-23 11:52:40
+2015-01-22 11:54:07,072 [146] INFO  umbraco.BusinessLogic.Log - [Thread 123] Log scrubbed.  Removed all items older than 2014-11-23 11:54:07
+2015-01-22 11:55:33,481 [146] INFO  umbraco.BusinessLogic.Log - [Thread 82] Log scrubbed.  Removed all items older than 2014-11-23 11:55:33
+2015-01-22 11:56:42,909 [146] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 85] Application shutdown. Reason: BinDirChangeOrDirectoryRename
+2015-01-22 11:57:11,318 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Determining hash of code files on disk
+2015-01-22 11:57:11,332 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Hash determined (took 6ms)
+2015-01-22 11:57:11,344 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 11:57:11,541 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 196ms)
+2015-01-22 11:57:11,623 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 11:57:11,628 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 5ms)
+2015-01-22 11:57:11,628 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 11:57:11,633 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 4ms)
+2015-01-22 11:57:11,650 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 11:57:11,654 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 4ms)
+2015-01-22 11:57:11,654 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 11:57:11,664 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 9ms)
+2015-01-22 11:57:11,699 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 11:57:11,703 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 4ms)
+2015-01-22 11:57:11,704 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 11:57:11,709 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 5ms)
+2015-01-22 11:57:27,469 [157] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 11:57:27,495 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 11:57:27,503 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 8ms)
+2015-01-22 11:57:27,645 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 11:57:27,654 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 8ms)
+2015-01-22 11:57:27,662 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 11:57:27,669 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 7ms)
+2015-01-22 11:57:27,673 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 11:57:27,678 [157] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 4ms)
+2015-01-22 11:57:27,680 [157] INFO  Merchello.Core.CoreBootManager - [Thread 137] Starting subscribing Monitors to Triggers
+2015-01-22 11:57:27,682 [157] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 137] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 11:57:27,683 [157] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 137] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 11:57:27,683 [157] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 137] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 11:57:27,683 [157] INFO  Umbraco.Core.CoreBootManager - [Thread 137] Finished subscribing Monitors to Triggers
+2015-01-22 11:57:28,085 [157] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 11:57:28,146 [157] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 137] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 11:57:28,148 [157] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 137] Initializing Merchello NotificationMonitor binding events
+2015-01-22 11:57:28,148 [157] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 137] Completed Merchello NotificationMonitor binding events
+2015-01-22 11:57:28,148 [157] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 137] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 11:57:28,152 [157] INFO  Merchello.Web.Search.ExamineEvents - [Thread 137] Initializing Merchello ProductIndex binding events
+2015-01-22 11:57:28,307 [157] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 137] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 11:57:28,308 [157] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 137] Initializing Customer related events
+2015-01-22 11:57:28,344 [157] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 137] Initializing Examine and binding to business logic events
+2015-01-22 11:57:28,344 [157] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 137] Adding examine event handlers for index providers: 3
+2015-01-22 11:57:28,508 [157] INFO  Umbraco.Web.UmbracoModule - [Thread 141] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 11:57:29,806 [157] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 84] Application shutdown. Reason: ConfigurationChange
+2015-01-22 11:57:30,060 [157] INFO  Umbraco.Web.Scheduling.BackgroundTaskRunner`1[[Umbraco.Web.Scheduling.ScheduledTasks, umbraco, Version=1.0.5462.37518, Culture=neutral, PublicKeyToken=null]] - [Thread 2] Application is shutting down immediately
+2015-01-22 11:57:30,060 [157] INFO  Umbraco.Web.Scheduling.BackgroundTaskRunner`1[[Umbraco.Web.Scheduling.ScheduledPublishing, umbraco, Version=1.0.5462.37518, Culture=neutral, PublicKeyToken=null]] - [Thread 2] Application is shutting down immediately
+2015-01-22 11:57:30,061 [157] INFO  Umbraco.Web.Scheduling.BackgroundTaskRunner`1[[Umbraco.Web.Scheduling.LogScrubber, umbraco, Version=1.0.5462.37518, Culture=neutral, PublicKeyToken=null]] - [Thread 2] Application is shutting down immediately
+2015-01-22 11:58:01,965 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Determining hash of code files on disk
+2015-01-22 11:58:01,980 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Hash determined (took 6ms)
+2015-01-22 11:58:01,987 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 11:58:02,009 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 21ms)
+2015-01-22 11:58:02,089 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 11:58:02,090 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 1ms)
+2015-01-22 11:58:02,090 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 11:58:02,091 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 11:58:02,108 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 11:58:02,108 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 11:58:02,108 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 11:58:02,112 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 3ms)
+2015-01-22 11:58:02,147 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 11:58:02,147 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 11:58:02,147 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 11:58:02,148 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 11:58:02,903 [99] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 11:58:02,928 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 11:58:02,929 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 0ms)
+2015-01-22 11:58:03,068 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 11:58:03,069 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 11:58:03,073 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 11:58:03,074 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 0ms)
+2015-01-22 11:58:03,079 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 11:58:03,079 [99] INFO  Umbraco.Core.PluginManager - [Thread 137] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 11:58:03,080 [99] INFO  Merchello.Core.CoreBootManager - [Thread 137] Starting subscribing Monitors to Triggers
+2015-01-22 11:58:03,082 [99] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 137] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 11:58:03,083 [99] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 137] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 11:58:03,083 [99] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 137] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 11:58:03,083 [99] INFO  Umbraco.Core.CoreBootManager - [Thread 137] Finished subscribing Monitors to Triggers
+2015-01-22 11:58:03,425 [99] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 11:58:03,479 [99] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 137] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 11:58:03,480 [99] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 137] Initializing Merchello NotificationMonitor binding events
+2015-01-22 11:58:03,480 [99] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 137] Completed Merchello NotificationMonitor binding events
+2015-01-22 11:58:03,481 [99] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 137] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 11:58:03,487 [99] INFO  Merchello.Web.Search.ExamineEvents - [Thread 137] Initializing Merchello ProductIndex binding events
+2015-01-22 11:58:03,623 [99] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 137] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 11:58:03,624 [99] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 137] Initializing Customer related events
+2015-01-22 11:58:03,660 [99] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 137] Initializing Examine and binding to business logic events
+2015-01-22 11:58:03,660 [99] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 137] Adding examine event handlers for index providers: 3
+2015-01-22 11:58:03,949 [99] INFO  Umbraco.Web.UmbracoModule - [Thread 96] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 11:59:04,810 [99] INFO  umbraco.BusinessLogic.Log - [Thread 44] Log scrubbed.  Removed all items older than 2014-11-23 11:59:04
+2015-01-22 12:00:31,162 [99] INFO  umbraco.BusinessLogic.Log - [Thread 123] Log scrubbed.  Removed all items older than 2014-11-23 12:00:31
+2015-01-22 12:01:57,574 [99] INFO  umbraco.BusinessLogic.Log - [Thread 153] Log scrubbed.  Removed all items older than 2014-11-23 12:01:57
+2015-01-22 12:03:23,972 [99] INFO  umbraco.BusinessLogic.Log - [Thread 111] Log scrubbed.  Removed all items older than 2014-11-23 12:03:23
+2015-01-22 12:04:50,380 [99] INFO  umbraco.BusinessLogic.Log - [Thread 129] Log scrubbed.  Removed all items older than 2014-11-23 12:04:50
+2015-01-22 12:06:16,789 [99] INFO  umbraco.BusinessLogic.Log - [Thread 35] Log scrubbed.  Removed all items older than 2014-11-23 12:06:16
+2015-01-22 12:07:43,198 [99] INFO  umbraco.BusinessLogic.Log - [Thread 89] Log scrubbed.  Removed all items older than 2014-11-23 12:07:43
+2015-01-22 12:09:09,606 [99] INFO  umbraco.BusinessLogic.Log - [Thread 88] Log scrubbed.  Removed all items older than 2014-11-23 12:09:09
+2015-01-22 12:10:36,015 [99] INFO  umbraco.BusinessLogic.Log - [Thread 107] Log scrubbed.  Removed all items older than 2014-11-23 12:10:36
+2015-01-22 12:12:02,423 [99] INFO  umbraco.BusinessLogic.Log - [Thread 101] Log scrubbed.  Removed all items older than 2014-11-23 12:12:02
+2015-01-22 12:13:28,847 [99] INFO  umbraco.BusinessLogic.Log - [Thread 92] Log scrubbed.  Removed all items older than 2014-11-23 12:13:28
+2015-01-22 12:14:55,256 [99] INFO  umbraco.BusinessLogic.Log - [Thread 109] Log scrubbed.  Removed all items older than 2014-11-23 12:14:55
+2015-01-22 12:16:21,664 [99] INFO  umbraco.BusinessLogic.Log - [Thread 129] Log scrubbed.  Removed all items older than 2014-11-23 12:16:21
+2015-01-22 12:17:48,073 [99] INFO  umbraco.BusinessLogic.Log - [Thread 88] Log scrubbed.  Removed all items older than 2014-11-23 12:17:48
+2015-01-22 12:19:14,482 [99] INFO  umbraco.BusinessLogic.Log - [Thread 44] Log scrubbed.  Removed all items older than 2014-11-23 12:19:14
+2015-01-22 12:20:24,994 [99] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 123] Application shutdown. Reason: HostingEnvironment
+2015-01-22 16:02:44,644 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Determining hash of code files on disk
+2015-01-22 16:02:44,674 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Hash determined (took 21ms)
+2015-01-22 16:02:44,674 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 16:02:45,234 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 559ms)
+2015-01-22 16:02:45,524 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 16:02:45,544 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 13ms)
+2015-01-22 16:02:45,544 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 16:02:45,544 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 16:02:45,574 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 16:02:45,574 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 16:02:45,574 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 16:02:45,594 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 22ms)
+2015-01-22 16:02:45,744 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 16:02:45,744 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 16:02:45,744 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 16:02:45,744 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 16:02:49,562 [14] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 16:02:49,842 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 16:02:49,842 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 2ms)
+2015-01-22 16:02:50,442 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 16:02:50,442 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 16:02:50,442 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 16:02:50,442 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 0ms)
+2015-01-22 16:02:50,452 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 16:02:50,452 [14] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 16:02:50,452 [14] INFO  Merchello.Core.CoreBootManager - [Thread 1] Starting subscribing Monitors to Triggers
+2015-01-22 16:02:50,452 [14] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 16:02:50,452 [14] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 16:02:50,452 [14] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 16:02:50,452 [14] INFO  Umbraco.Core.CoreBootManager - [Thread 1] Finished subscribing Monitors to Triggers
+2015-01-22 16:02:50,872 [14] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 16:02:51,202 [14] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 1] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 16:02:51,202 [14] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Initializing Merchello NotificationMonitor binding events
+2015-01-22 16:02:51,202 [14] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Completed Merchello NotificationMonitor binding events
+2015-01-22 16:02:51,202 [14] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 1] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 16:02:51,632 [14] INFO  Merchello.Web.Search.ExamineEvents - [Thread 1] Initializing Merchello ProductIndex binding events
+2015-01-22 16:02:52,772 [14] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 1] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 16:02:52,772 [14] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 1] Initializing Customer related events
+2015-01-22 16:02:52,812 [14] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Initializing Examine and binding to business logic events
+2015-01-22 16:02:52,812 [14] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Adding examine event handlers for index providers: 3
+2015-01-22 16:03:02,724 [14] INFO  Umbraco.Web.UmbracoModule - [Thread 11] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 16:03:03,544 [14] INFO  umbraco.content - [Thread 11] Loading content from disk cache...
+2015-01-22 16:03:20,279 [14] INFO  Umbraco.Core.PluginManager - [Thread 11] Starting resolution types of Umbraco.Core.Persistence.Mappers.BaseMapper
+2015-01-22 16:03:20,409 [14] INFO  Umbraco.Core.PluginManager - [Thread 11] Completed resolution of types of Umbraco.Core.Persistence.Mappers.BaseMapper, found 23 (took 132ms)
+2015-01-22 16:03:23,454 [14] INFO  Umbraco.Core.PluginManager - [Thread 11] Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+2015-01-22 16:03:23,474 [14] INFO  Umbraco.Core.PluginManager - [Thread 11] Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 44 (took 18ms)
+2015-01-22 16:04:34,893 [14] INFO  umbraco.BusinessLogic.Log - [Thread 6] Log scrubbed.  Removed all items older than 2014-11-23 16:04:34
+2015-01-22 16:06:01,062 [14] INFO  umbraco.BusinessLogic.Log - [Thread 21] Log scrubbed.  Removed all items older than 2014-11-23 16:06:01
+2015-01-22 16:07:27,483 [14] INFO  umbraco.BusinessLogic.Log - [Thread 29] Log scrubbed.  Removed all items older than 2014-11-23 16:07:27
+2015-01-22 16:08:53,886 [14] INFO  umbraco.BusinessLogic.Log - [Thread 33] Log scrubbed.  Removed all items older than 2014-11-23 16:08:53
+2015-01-22 16:10:20,294 [14] INFO  umbraco.BusinessLogic.Log - [Thread 45] Log scrubbed.  Removed all items older than 2014-11-23 16:10:20
+2015-01-22 16:11:46,706 [14] INFO  umbraco.BusinessLogic.Log - [Thread 9] Log scrubbed.  Removed all items older than 2014-11-23 16:11:46
+2015-01-22 16:13:13,114 [14] INFO  umbraco.BusinessLogic.Log - [Thread 47] Log scrubbed.  Removed all items older than 2014-11-23 16:13:13
+2015-01-22 16:14:39,525 [14] INFO  umbraco.BusinessLogic.Log - [Thread 60] Log scrubbed.  Removed all items older than 2014-11-23 16:14:39
+2015-01-22 16:16:05,933 [14] INFO  umbraco.BusinessLogic.Log - [Thread 70] Log scrubbed.  Removed all items older than 2014-11-23 16:16:05
+2015-01-22 16:17:32,333 [14] INFO  umbraco.BusinessLogic.Log - [Thread 71] Log scrubbed.  Removed all items older than 2014-11-23 16:17:32
+2015-01-22 16:18:58,748 [14] INFO  umbraco.BusinessLogic.Log - [Thread 66] Log scrubbed.  Removed all items older than 2014-11-23 16:18:58
+2015-01-22 16:20:25,159 [14] INFO  umbraco.BusinessLogic.Log - [Thread 82] Log scrubbed.  Removed all items older than 2014-11-23 16:20:25
+2015-01-22 16:21:51,567 [14] INFO  umbraco.BusinessLogic.Log - [Thread 88] Log scrubbed.  Removed all items older than 2014-11-23 16:21:51
+2015-01-22 16:23:17,984 [14] INFO  umbraco.BusinessLogic.Log - [Thread 81] Log scrubbed.  Removed all items older than 2014-11-23 16:23:17
+2015-01-22 16:24:44,380 [14] INFO  umbraco.BusinessLogic.Log - [Thread 66] Log scrubbed.  Removed all items older than 2014-11-23 16:24:44
+2015-01-22 16:26:10,795 [14] INFO  umbraco.BusinessLogic.Log - [Thread 88] Log scrubbed.  Removed all items older than 2014-11-23 16:26:10
+2015-01-22 16:27:37,205 [14] INFO  umbraco.BusinessLogic.Log - [Thread 96] Log scrubbed.  Removed all items older than 2014-11-23 16:27:37
+2015-01-22 16:29:03,610 [14] INFO  umbraco.BusinessLogic.Log - [Thread 94] Log scrubbed.  Removed all items older than 2014-11-23 16:29:03
+2015-01-22 16:30:30,018 [14] INFO  umbraco.BusinessLogic.Log - [Thread 87] Log scrubbed.  Removed all items older than 2014-11-23 16:30:30
+2015-01-22 16:31:56,428 [14] INFO  umbraco.BusinessLogic.Log - [Thread 105] Log scrubbed.  Removed all items older than 2014-11-23 16:31:56
+2015-01-22 16:33:22,840 [14] INFO  umbraco.BusinessLogic.Log - [Thread 109] Log scrubbed.  Removed all items older than 2014-11-23 16:33:22
+2015-01-22 16:34:49,242 [14] INFO  umbraco.BusinessLogic.Log - [Thread 116] Log scrubbed.  Removed all items older than 2014-11-23 16:34:49
+2015-01-22 16:36:15,657 [14] INFO  umbraco.BusinessLogic.Log - [Thread 121] Log scrubbed.  Removed all items older than 2014-11-23 16:36:15
+2015-01-22 16:37:42,067 [14] INFO  umbraco.BusinessLogic.Log - [Thread 121] Log scrubbed.  Removed all items older than 2014-11-23 16:37:42
+2015-01-22 16:39:08,478 [14] INFO  umbraco.BusinessLogic.Log - [Thread 121] Log scrubbed.  Removed all items older than 2014-11-23 16:39:08
+2015-01-22 16:40:34,878 [14] INFO  umbraco.BusinessLogic.Log - [Thread 103] Log scrubbed.  Removed all items older than 2014-11-23 16:40:34
+2015-01-22 16:42:01,288 [14] INFO  umbraco.BusinessLogic.Log - [Thread 135] Log scrubbed.  Removed all items older than 2014-11-23 16:42:01
+2015-01-22 16:43:27,696 [14] INFO  umbraco.BusinessLogic.Log - [Thread 65] Log scrubbed.  Removed all items older than 2014-11-23 16:43:27
+2015-01-22 16:44:54,106 [14] INFO  umbraco.BusinessLogic.Log - [Thread 141] Log scrubbed.  Removed all items older than 2014-11-23 16:44:54
+2015-01-22 16:46:20,523 [14] INFO  umbraco.BusinessLogic.Log - [Thread 138] Log scrubbed.  Removed all items older than 2014-11-23 16:46:20
+2015-01-22 16:47:46,923 [14] INFO  umbraco.BusinessLogic.Log - [Thread 65] Log scrubbed.  Removed all items older than 2014-11-23 16:47:46
+2015-01-22 16:49:13,339 [14] INFO  umbraco.BusinessLogic.Log - [Thread 141] Log scrubbed.  Removed all items older than 2014-11-23 16:49:13
+2015-01-22 16:50:39,751 [14] INFO  umbraco.BusinessLogic.Log - [Thread 150] Log scrubbed.  Removed all items older than 2014-11-23 16:50:39
+2015-01-22 16:50:51,010 [14] INFO  Umbraco.Web.Security.WebSecurity - [Thread 153] User Id: 1 logged in
+2015-01-22 16:50:51,274 [14] INFO  Umbraco.Core.PluginManager - [Thread 154] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 16:50:51,280 [14] INFO  Umbraco.Core.PluginManager - [Thread 154] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 5ms)
+2015-01-22 16:50:51,365 [14] INFO  Umbraco.Core.PluginManager - [Thread 153] Starting resolution types of umbraco.interfaces.IApplication
+2015-01-22 16:50:51,373 [14] INFO  Umbraco.Core.PluginManager - [Thread 153] Completed resolution of types of umbraco.interfaces.IApplication, found 8 (took 7ms)
+2015-01-22 16:50:51,463 [14] INFO  Umbraco.Core.PluginManager - [Thread 150] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 16:50:51,474 [14] INFO  Umbraco.Core.PluginManager - [Thread 150] Completed resolution of types of umbraco.interfaces.ITree, found 35 (took 10ms)
+2015-01-22 16:50:51,497 [14] INFO  Umbraco.Core.PluginManager - [Thread 150] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 16:50:51,497 [14] INFO  Umbraco.Core.PluginManager - [Thread 150] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 16:50:51,500 [14] INFO  Umbraco.Core.PluginManager - [Thread 150] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 16:50:51,509 [14] INFO  Umbraco.Core.PluginManager - [Thread 150] Completed resolution of types of umbraco.interfaces.ITree, found 19 (took 9ms)
+2015-01-22 16:51:02,428 [14] INFO  Umbraco.Core.PluginManager - [Thread 149] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 16:51:02,428 [14] INFO  Umbraco.Core.PluginManager - [Thread 149] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 16:52:06,157 [14] INFO  umbraco.BusinessLogic.Log - [Thread 154] Log scrubbed.  Removed all items older than 2014-11-23 16:52:06
+2015-01-22 16:53:32,563 [14] INFO  umbraco.BusinessLogic.Log - [Thread 149] Log scrubbed.  Removed all items older than 2014-11-23 16:53:32
+2015-01-22 16:54:58,973 [14] INFO  umbraco.BusinessLogic.Log - [Thread 154] Log scrubbed.  Removed all items older than 2014-11-23 16:54:58
+2015-01-22 16:56:25,384 [14] INFO  umbraco.BusinessLogic.Log - [Thread 149] Log scrubbed.  Removed all items older than 2014-11-23 16:56:25
+2015-01-22 16:57:51,789 [14] INFO  umbraco.BusinessLogic.Log - [Thread 136] Log scrubbed.  Removed all items older than 2014-11-23 16:57:51
+2015-01-22 16:59:18,200 [14] INFO  umbraco.BusinessLogic.Log - [Thread 162] Log scrubbed.  Removed all items older than 2014-11-23 16:59:18
+2015-01-22 17:00:44,613 [14] INFO  umbraco.BusinessLogic.Log - [Thread 146] Log scrubbed.  Removed all items older than 2014-11-23 17:00:44
+2015-01-22 17:02:11,019 [14] INFO  umbraco.BusinessLogic.Log - [Thread 143] Log scrubbed.  Removed all items older than 2014-11-23 17:02:11
+2015-01-22 17:03:12,548 [14] INFO  Umbraco.Core.Manifest.ManifestWatcher - [Thread 126] manifest has changed, app pool is restarting (C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\Package.manifest)
+2015-01-22 17:03:12,812 [14] INFO  Umbraco.Core.UmbracoApplicationBase - [Thread 113] Application shutdown. Reason: UnloadAppDomainCalled
+2015-01-22 17:44:06,010 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Determining hash of code files on disk
+2015-01-22 17:44:06,025 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Hash determined (took 12ms)
+2015-01-22 17:44:06,035 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+2015-01-22 17:44:06,043 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 43 (took 6ms)
+2015-01-22 17:44:06,107 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+2015-01-22 17:44:06,107 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 0ms)
+2015-01-22 17:44:06,107 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+2015-01-22 17:44:06,108 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 16 (took 0ms)
+2015-01-22 17:44:06,122 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+2015-01-22 17:44:06,123 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 7 (took 0ms)
+2015-01-22 17:44:06,123 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+2015-01-22 17:44:06,126 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 53 (took 2ms)
+2015-01-22 17:44:06,188 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+2015-01-22 17:44:06,188 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 3 (took 0ms)
+2015-01-22 17:44:06,188 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+2015-01-22 17:44:06,188 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 1 (took 0ms)
+2015-01-22 17:44:07,093 [7] INFO  Merchello.Web.UmbracoApplicationEventHandler - Attempting to initialize Merchello
+2015-01-22 17:44:07,116 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Gateways.GatewayProviderBase
+2015-01-22 17:44:07,116 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Gateways.GatewayProviderBase, found 4 (took 0ms)
+2015-01-22 17:44:07,295 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.ITrigger
+2015-01-22 17:44:07,296 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.ITrigger, found 3 (took 0ms)
+2015-01-22 17:44:07,300 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Core.Observation.IMonitor
+2015-01-22 17:44:07,301 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Core.Observation.IMonitor, found 3 (took 0ms)
+2015-01-22 17:44:07,305 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Starting resolution types of Merchello.Web.Reporting.ReportController
+2015-01-22 17:44:07,305 [7] INFO  Umbraco.Core.PluginManager - [Thread 1] Completed resolution of types of Merchello.Web.Reporting.ReportController, found 0 (took 0ms)
+2015-01-22 17:44:07,307 [7] INFO  Merchello.Core.CoreBootManager - [Thread 1] Starting subscribing Monitors to Triggers
+2015-01-22 17:44:07,308 [7] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderConfirmationMonitor subscribing to OrderConfirmationTrigger
+2015-01-22 17:44:07,309 [7] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] OrderShippedMonitor subscribing to OrderShippedTrigger
+2015-01-22 17:44:07,309 [7] INFO  Merchello.Core.Observation.MonitorBase`1[[Merchello.Core.Models.IShipment, Merchello.Core, Version=1.6.0.3, Culture=neutral, PublicKeyToken=null]] - [Thread 1] PartialOrderShippedMonitor subscribing to PartialOrderShippedTrigger
+2015-01-22 17:44:07,309 [7] INFO  Umbraco.Core.CoreBootManager - [Thread 1] Finished subscribing Monitors to Triggers
+2015-01-22 17:44:07,634 [7] INFO  Merchello.Web.UmbracoApplicationEventHandler - Initialization of Merchello complete
+2015-01-22 17:44:07,640 [7] INFO  Merchello.Core.Gateways.GatewayEvents - [Thread 1] Initializing Merchello Warehouse Catalog binding events
+2015-01-22 17:44:07,640 [7] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Initializing Merchello NotificationMonitor binding events
+2015-01-22 17:44:07,640 [7] INFO  Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents - [Thread 1] Completed Merchello NotificationMonitor binding events
+2015-01-22 17:44:07,640 [7] INFO  Merchello.Core.Gateways.Notification.Smtp.SmtpProviderEvents - [Thread 1] Initializing SMTP notification gateway provider registration binding events
+2015-01-22 17:44:07,646 [7] INFO  Merchello.Web.Search.ExamineEvents - [Thread 1] Initializing Merchello ProductIndex binding events
+2015-01-22 17:44:07,738 [7] INFO  Merchello.Web.Trees.ServerVariablesParsingEvents - [Thread 1] Initializing Merchello ServerVariablesParsingEvents
+2015-01-22 17:44:07,738 [7] INFO  Merchello.Web.UmbracoApplicationEventHandler - [Thread 1] Initializing Customer related events
+2015-01-22 17:44:07,748 [7] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Initializing Examine and binding to business logic events
+2015-01-22 17:44:07,749 [7] INFO  Umbraco.Web.Search.ExamineEvents - [Thread 1] Adding examine event handlers for index providers: 3
+2015-01-22 17:44:08,525 [7] INFO  Umbraco.Web.UmbracoModule - [Thread 9] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 17:44:08,622 [7] INFO  Umbraco.Web.UmbracoModule - [Thread 8] Setting OriginalRequestUrl: merchello.ui.local:80/umbraco
+2015-01-22 17:44:08,740 [7] INFO  umbraco.content - [Thread 8] Loading content from disk cache...
+2015-01-22 17:44:08,892 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Starting resolution types of Umbraco.Core.Persistence.Mappers.BaseMapper
+2015-01-22 17:44:08,893 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Completed resolution of types of Umbraco.Core.Persistence.Mappers.BaseMapper, found 23 (took 0ms)
+2015-01-22 17:44:09,730 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+2015-01-22 17:44:09,731 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 44 (took 0ms)
+2015-01-22 17:44:14,143 [7] INFO  Umbraco.Web.Security.WebSecurity - [Thread 9] User Id: 1 logged in
+2015-01-22 17:44:14,309 [7] INFO  Umbraco.Core.PluginManager - [Thread 15] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 17:44:14,310 [7] INFO  Umbraco.Core.PluginManager - [Thread 15] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 17:44:14,394 [7] INFO  Umbraco.Core.PluginManager - [Thread 10] Starting resolution types of umbraco.interfaces.IApplication
+2015-01-22 17:44:14,394 [7] INFO  Umbraco.Core.PluginManager - [Thread 10] Completed resolution of types of umbraco.interfaces.IApplication, found 8 (took 0ms)
+2015-01-22 17:44:14,431 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 17:44:14,432 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Completed resolution of types of umbraco.interfaces.ITree, found 35 (took 0ms)
+2015-01-22 17:44:14,448 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 17:44:14,449 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 17:44:14,450 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Starting resolution types of umbraco.interfaces.ITree
+2015-01-22 17:44:14,451 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Completed resolution of types of umbraco.interfaces.ITree, found 19 (took 0ms)
+2015-01-22 17:44:21,175 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Starting resolution types of Umbraco.Web.Trees.TreeController
+2015-01-22 17:44:21,175 [7] INFO  Umbraco.Core.PluginManager - [Thread 8] Completed resolution of types of Umbraco.Web.Trees.TreeController, found 5 (took 0ms)
+2015-01-22 17:45:09,455 [7] INFO  umbraco.BusinessLogic.Log - [Thread 9] Log scrubbed.  Removed all items older than 2014-11-23 17:45:09
+2015-01-22 17:46:35,825 [7] INFO  umbraco.BusinessLogic.Log - [Thread 15] Log scrubbed.  Removed all items older than 2014-11-23 17:46:35
+2015-01-22 17:48:02,237 [7] INFO  umbraco.BusinessLogic.Log - [Thread 33] Log scrubbed.  Removed all items older than 2014-11-23 17:48:02
+2015-01-22 17:49:28,644 [7] INFO  umbraco.BusinessLogic.Log - [Thread 21] Log scrubbed.  Removed all items older than 2014-11-23 17:49:28
+2015-01-22 17:50:55,055 [7] INFO  umbraco.BusinessLogic.Log - [Thread 28] Log scrubbed.  Removed all items older than 2014-11-23 17:50:55
+2015-01-22 17:52:21,465 [7] INFO  umbraco.BusinessLogic.Log - [Thread 43] Log scrubbed.  Removed all items older than 2014-11-23 17:52:21
+2015-01-22 17:53:47,870 [7] INFO  umbraco.BusinessLogic.Log - [Thread 69] Log scrubbed.  Removed all items older than 2014-11-23 17:53:47
+2015-01-22 17:55:14,278 [7] INFO  umbraco.BusinessLogic.Log - [Thread 52] Log scrubbed.  Removed all items older than 2014-11-23 17:55:14
+2015-01-22 17:56:40,683 [7] INFO  umbraco.BusinessLogic.Log - [Thread 25] Log scrubbed.  Removed all items older than 2014-11-23 17:56:40
+2015-01-22 17:58:07,095 [7] INFO  umbraco.BusinessLogic.Log - [Thread 71] Log scrubbed.  Removed all items older than 2014-11-23 17:58:07
+2015-01-22 19:58:17,510 [7] INFO  umbraco.BusinessLogic.Log - [Thread 80] Log scrubbed.  Removed all items older than 2014-11-23 19:58:17
+2015-01-22 21:26:13,530 [7] INFO  umbraco.BusinessLogic.Log - [Thread 91] Log scrubbed.  Removed all items older than 2014-11-23 21:26:13
+2015-01-22 21:26:16,320 [7] ERROR Umbraco.Web.Scheduling.ScheduledPublishing - [Thread 74] An error occurred with the scheduled publishing
+System.Net.WebException: The remote name could not be resolved: 'merchello.ui.local'
+   at System.Net.WebClient.UploadDataInternal(Uri address, String method, Byte[] data, WebRequest& request)
+   at System.Net.WebClient.UploadString(Uri address, String method, String data)
+   at Umbraco.Web.Scheduling.ScheduledPublishing.Run()
+2015-01-22 21:26:16,320 [7] ERROR Umbraco.Web.Scheduling.KeepAlive - [Thread 81] Error in ping
+System.Net.WebException: The remote name could not be resolved: 'merchello.ui.local'
+   at System.Net.WebClient.DownloadDataInternal(Uri address, WebRequest& request)
+   at System.Net.WebClient.DownloadString(Uri address)
+   at Umbraco.Web.Scheduling.KeepAlive.Start(ApplicationContext appContext, IUmbracoSettingsSection settings)
+2015-01-22 21:27:39,921 [7] INFO  umbraco.BusinessLogic.Log - [Thread 103] Log scrubbed.  Removed all items older than 2014-11-23 21:27:39
+2015-01-22 21:29:06,334 [7] INFO  umbraco.BusinessLogic.Log - [Thread 102] Log scrubbed.  Removed all items older than 2014-11-23 21:29:06
+2015-01-22 21:30:32,740 [7] INFO  umbraco.BusinessLogic.Log - [Thread 109] Log scrubbed.  Removed all items older than 2014-11-23 21:30:32
+2015-01-22 21:31:59,147 [7] INFO  umbraco.BusinessLogic.Log - [Thread 111] Log scrubbed.  Removed all items older than 2014-11-23 21:31:59
+2015-01-22 21:33:25,554 [7] INFO  umbraco.BusinessLogic.Log - [Thread 147] Log scrubbed.  Removed all items older than 2014-11-23 21:33:25
+2015-01-22 21:34:51,968 [7] INFO  umbraco.BusinessLogic.Log - [Thread 142] Log scrubbed.  Removed all items older than 2014-11-23 21:34:51
+2015-01-22 21:36:18,373 [7] INFO  umbraco.BusinessLogic.Log - [Thread 156] Log scrubbed.  Removed all items older than 2014-11-23 21:36:18
+2015-01-22 21:37:44,785 [7] INFO  umbraco.BusinessLogic.Log - [Thread 156] Log scrubbed.  Removed all items older than 2014-11-23 21:37:44
+2015-01-22 21:39:11,191 [7] INFO  umbraco.BusinessLogic.Log - [Thread 179] Log scrubbed.  Removed all items older than 2014-11-23 21:39:11
+2015-01-22 21:40:37,603 [7] INFO  umbraco.BusinessLogic.Log - [Thread 182] Log scrubbed.  Removed all items older than 2014-11-23 21:40:37
+2015-01-22 21:42:04,004 [7] INFO  umbraco.BusinessLogic.Log - [Thread 199] Log scrubbed.  Removed all items older than 2014-11-23 21:42:04
+2015-01-22 21:43:30,423 [7] INFO  umbraco.BusinessLogic.Log - [Thread 205] Log scrubbed.  Removed all items older than 2014-11-23 21:43:30
+2015-01-22 21:44:56,829 [7] INFO  umbraco.BusinessLogic.Log - [Thread 217] Log scrubbed.  Removed all items older than 2014-11-23 21:44:56
+2015-01-22 21:46:23,238 [7] INFO  umbraco.BusinessLogic.Log - [Thread 226] Log scrubbed.  Removed all items older than 2014-11-23 21:46:23
+2015-01-22 21:47:49,641 [7] INFO  umbraco.BusinessLogic.Log - [Thread 198] Log scrubbed.  Removed all items older than 2014-11-23 21:47:49
+2015-01-22 21:49:16,058 [7] INFO  umbraco.BusinessLogic.Log - [Thread 241] Log scrubbed.  Removed all items older than 2014-11-23 21:49:16
+2015-01-22 21:50:42,462 [7] INFO  umbraco.BusinessLogic.Log - [Thread 221] Log scrubbed.  Removed all items older than 2014-11-23 21:50:42
+2015-01-22 21:52:08,869 [7] INFO  umbraco.BusinessLogic.Log - [Thread 256] Log scrubbed.  Removed all items older than 2014-11-23 21:52:08
+2015-01-22 21:53:35,281 [7] INFO  umbraco.BusinessLogic.Log - [Thread 266] Log scrubbed.  Removed all items older than 2014-11-23 21:53:35
+2015-01-22 21:55:01,686 [7] INFO  umbraco.BusinessLogic.Log - [Thread 271] Log scrubbed.  Removed all items older than 2014-11-23 21:55:01
+2015-01-22 21:56:28,098 [7] INFO  umbraco.BusinessLogic.Log - [Thread 282] Log scrubbed.  Removed all items older than 2014-11-23 21:56:28
+2015-01-22 21:57:54,512 [7] INFO  umbraco.BusinessLogic.Log - [Thread 270] Log scrubbed.  Removed all items older than 2014-11-23 21:57:54
+2015-01-22 21:59:20,915 [7] INFO  umbraco.BusinessLogic.Log - [Thread 293] Log scrubbed.  Removed all items older than 2014-11-23 21:59:20
+2015-01-22 22:00:47,329 [7] INFO  umbraco.BusinessLogic.Log - [Thread 299] Log scrubbed.  Removed all items older than 2014-11-23 22:00:47
+2015-01-22 22:02:13,732 [7] INFO  umbraco.BusinessLogic.Log - [Thread 299] Log scrubbed.  Removed all items older than 2014-11-23 22:02:13
+2015-01-22 22:03:40,146 [7] INFO  umbraco.BusinessLogic.Log - [Thread 311] Log scrubbed.  Removed all items older than 2014-11-23 22:03:40
+2015-01-22 22:05:06,552 [7] INFO  umbraco.BusinessLogic.Log - [Thread 320] Log scrubbed.  Removed all items older than 2014-11-23 22:05:06
+2015-01-22 22:06:32,960 [7] INFO  umbraco.BusinessLogic.Log - [Thread 312] Log scrubbed.  Removed all items older than 2014-11-23 22:06:32
+2015-01-22 22:07:59,367 [7] INFO  umbraco.BusinessLogic.Log - [Thread 334] Log scrubbed.  Removed all items older than 2014-11-23 22:07:59
+2015-01-22 22:09:25,783 [7] INFO  umbraco.BusinessLogic.Log - [Thread 341] Log scrubbed.  Removed all items older than 2014-11-23 22:09:25
+2015-01-22 22:10:52,189 [7] INFO  umbraco.BusinessLogic.Log - [Thread 348] Log scrubbed.  Removed all items older than 2014-11-23 22:10:52
+2015-01-22 22:12:18,596 [7] INFO  umbraco.BusinessLogic.Log - [Thread 333] Log scrubbed.  Removed all items older than 2014-11-23 22:12:18
+2015-01-22 22:13:45,005 [7] INFO  umbraco.BusinessLogic.Log - [Thread 361] Log scrubbed.  Removed all items older than 2014-11-23 22:13:45
+2015-01-22 22:15:11,422 [7] INFO  umbraco.BusinessLogic.Log - [Thread 378] Log scrubbed.  Removed all items older than 2014-11-23 22:15:11
+2015-01-22 22:16:37,830 [7] INFO  umbraco.BusinessLogic.Log - [Thread 374] Log scrubbed.  Removed all items older than 2014-11-23 22:16:37
+2015-01-22 22:18:04,231 [7] INFO  umbraco.BusinessLogic.Log - [Thread 384] Log scrubbed.  Removed all items older than 2014-11-23 22:18:04
+2015-01-22 22:19:30,650 [7] INFO  umbraco.BusinessLogic.Log - [Thread 391] Log scrubbed.  Removed all items older than 2014-11-23 22:19:30
+2015-01-22 22:20:57,053 [7] INFO  umbraco.BusinessLogic.Log - [Thread 402] Log scrubbed.  Removed all items older than 2014-11-23 22:20:57
+2015-01-22 22:22:23,460 [7] INFO  umbraco.BusinessLogic.Log - [Thread 419] Log scrubbed.  Removed all items older than 2014-11-23 22:22:23
+2015-01-22 22:23:49,878 [7] INFO  umbraco.BusinessLogic.Log - [Thread 435] Log scrubbed.  Removed all items older than 2014-11-23 22:23:49
+2015-01-22 22:25:16,278 [7] INFO  umbraco.BusinessLogic.Log - [Thread 432] Log scrubbed.  Removed all items older than 2014-11-23 22:25:16
+2015-01-22 22:26:42,684 [7] INFO  umbraco.BusinessLogic.Log - [Thread 436] Log scrubbed.  Removed all items older than 2014-11-23 22:26:42
+2015-01-22 22:28:09,094 [7] INFO  umbraco.BusinessLogic.Log - [Thread 445] Log scrubbed.  Removed all items older than 2014-11-23 22:28:09
+2015-01-22 22:29:35,505 [7] INFO  umbraco.BusinessLogic.Log - [Thread 430] Log scrubbed.  Removed all items older than 2014-11-23 22:29:35
+2015-01-22 22:31:01,908 [7] INFO  umbraco.BusinessLogic.Log - [Thread 459] Log scrubbed.  Removed all items older than 2014-11-23 22:31:01
+2015-01-22 22:32:28,326 [7] INFO  umbraco.BusinessLogic.Log - [Thread 461] Log scrubbed.  Removed all items older than 2014-11-23 22:32:28
+2015-01-22 22:33:54,734 [7] INFO  umbraco.BusinessLogic.Log - [Thread 469] Log scrubbed.  Removed all items older than 2014-11-23 22:33:54
+2015-01-22 22:35:21,140 [7] INFO  umbraco.BusinessLogic.Log - [Thread 470] Log scrubbed.  Removed all items older than 2014-11-23 22:35:21
+2015-01-22 22:36:47,546 [7] INFO  umbraco.BusinessLogic.Log - [Thread 479] Log scrubbed.  Removed all items older than 2014-11-23 22:36:47
+2015-01-22 22:38:13,953 [7] INFO  umbraco.BusinessLogic.Log - [Thread 462] Log scrubbed.  Removed all items older than 2014-11-23 22:38:13
+2015-01-22 22:39:40,368 [7] INFO  umbraco.BusinessLogic.Log - [Thread 462] Log scrubbed.  Removed all items older than 2014-11-23 22:39:40
+2015-01-22 22:41:06,777 [7] INFO  umbraco.BusinessLogic.Log - [Thread 472] Log scrubbed.  Removed all items older than 2014-11-23 22:41:06
+2015-01-22 22:42:33,183 [7] INFO  umbraco.BusinessLogic.Log - [Thread 504] Log scrubbed.  Removed all items older than 2014-11-23 22:42:33
+2015-01-22 22:43:59,597 [7] INFO  umbraco.BusinessLogic.Log - [Thread 502] Log scrubbed.  Removed all items older than 2014-11-23 22:43:59
+2015-01-22 22:45:26,008 [7] INFO  umbraco.BusinessLogic.Log - [Thread 503] Log scrubbed.  Removed all items older than 2014-11-23 22:45:26
+2015-01-22 22:46:52,418 [7] INFO  umbraco.BusinessLogic.Log - [Thread 478] Log scrubbed.  Removed all items older than 2014-11-23 22:46:52
+2015-01-22 22:48:18,820 [7] INFO  umbraco.BusinessLogic.Log - [Thread 506] Log scrubbed.  Removed all items older than 2014-11-23 22:48:18
+2015-01-22 22:49:45,228 [7] INFO  umbraco.BusinessLogic.Log - [Thread 518] Log scrubbed.  Removed all items older than 2014-11-23 22:49:45
+2015-01-22 22:51:11,638 [7] INFO  umbraco.BusinessLogic.Log - [Thread 525] Log scrubbed.  Removed all items older than 2014-11-23 22:51:11
+2015-01-22 22:52:38,044 [7] INFO  umbraco.BusinessLogic.Log - [Thread 538] Log scrubbed.  Removed all items older than 2014-11-23 22:52:38
+2015-01-22 22:54:04,457 [7] INFO  umbraco.BusinessLogic.Log - [Thread 518] Log scrubbed.  Removed all items older than 2014-11-23 22:54:04
+2015-01-22 22:55:30,865 [7] INFO  umbraco.BusinessLogic.Log - [Thread 543] Log scrubbed.  Removed all items older than 2014-11-23 22:55:30
+2015-01-22 22:56:57,276 [7] INFO  umbraco.BusinessLogic.Log - [Thread 550] Log scrubbed.  Removed all items older than 2014-11-23 22:56:57
+2015-01-22 22:58:23,688 [7] INFO  umbraco.BusinessLogic.Log - [Thread 548] Log scrubbed.  Removed all items older than 2014-11-23 22:58:23
+2015-01-22 22:59:50,097 [7] INFO  umbraco.BusinessLogic.Log - [Thread 552] Log scrubbed.  Removed all items older than 2014-11-23 22:59:50
+2015-01-22 23:01:16,503 [7] INFO  umbraco.BusinessLogic.Log - [Thread 547] Log scrubbed.  Removed all items older than 2014-11-23 23:01:16
+2015-01-22 23:02:42,913 [7] INFO  umbraco.BusinessLogic.Log - [Thread 560] Log scrubbed.  Removed all items older than 2014-11-23 23:02:42
+2015-01-22 23:04:09,321 [7] INFO  umbraco.BusinessLogic.Log - [Thread 547] Log scrubbed.  Removed all items older than 2014-11-23 23:04:09
+2015-01-22 23:05:35,729 [7] INFO  umbraco.BusinessLogic.Log - [Thread 583] Log scrubbed.  Removed all items older than 2014-11-23 23:05:35
+2015-01-22 23:07:02,138 [7] INFO  umbraco.BusinessLogic.Log - [Thread 573] Log scrubbed.  Removed all items older than 2014-11-23 23:07:02
+2015-01-22 23:08:28,550 [7] INFO  umbraco.BusinessLogic.Log - [Thread 583] Log scrubbed.  Removed all items older than 2014-11-23 23:08:28
+2015-01-22 23:09:54,958 [7] INFO  umbraco.BusinessLogic.Log - [Thread 566] Log scrubbed.  Removed all items older than 2014-11-23 23:09:54
+2015-01-22 23:11:21,363 [7] INFO  umbraco.BusinessLogic.Log - [Thread 594] Log scrubbed.  Removed all items older than 2014-11-23 23:11:21
+2015-01-22 23:12:47,771 [7] INFO  umbraco.BusinessLogic.Log - [Thread 595] Log scrubbed.  Removed all items older than 2014-11-23 23:12:47
+2015-01-22 23:14:14,179 [7] INFO  umbraco.BusinessLogic.Log - [Thread 599] Log scrubbed.  Removed all items older than 2014-11-23 23:14:14
+2015-01-22 23:15:40,594 [7] INFO  umbraco.BusinessLogic.Log - [Thread 599] Log scrubbed.  Removed all items older than 2014-11-23 23:15:40
+2015-01-22 23:17:07,002 [7] INFO  umbraco.BusinessLogic.Log - [Thread 607] Log scrubbed.  Removed all items older than 2014-11-23 23:17:06
+2015-01-22 23:18:33,407 [7] INFO  umbraco.BusinessLogic.Log - [Thread 601] Log scrubbed.  Removed all items older than 2014-11-23 23:18:33
+2015-01-22 23:19:59,815 [7] INFO  umbraco.BusinessLogic.Log - [Thread 614] Log scrubbed.  Removed all items older than 2014-11-23 23:19:59
+2015-01-22 23:21:26,228 [7] INFO  umbraco.BusinessLogic.Log - [Thread 601] Log scrubbed.  Removed all items older than 2014-11-23 23:21:26
+2015-01-22 23:22:52,639 [7] INFO  umbraco.BusinessLogic.Log - [Thread 613] Log scrubbed.  Removed all items older than 2014-11-23 23:22:52
+2015-01-22 23:24:19,044 [7] INFO  umbraco.BusinessLogic.Log - [Thread 631] Log scrubbed.  Removed all items older than 2014-11-23 23:24:19
+2015-01-22 23:25:45,457 [7] INFO  umbraco.BusinessLogic.Log - [Thread 633] Log scrubbed.  Removed all items older than 2014-11-23 23:25:45
+2015-01-22 23:27:11,869 [7] INFO  umbraco.BusinessLogic.Log - [Thread 620] Log scrubbed.  Removed all items older than 2014-11-23 23:27:11
+2015-01-22 23:28:38,279 [7] INFO  umbraco.BusinessLogic.Log - [Thread 639] Log scrubbed.  Removed all items older than 2014-11-23 23:28:38
+2015-01-22 23:30:04,678 [7] INFO  umbraco.BusinessLogic.Log - [Thread 635] Log scrubbed.  Removed all items older than 2014-11-23 23:30:04
+2015-01-22 23:31:31,088 [7] INFO  umbraco.BusinessLogic.Log - [Thread 652] Log scrubbed.  Removed all items older than 2014-11-23 23:31:31
+2015-01-22 23:32:57,496 [7] INFO  umbraco.BusinessLogic.Log - [Thread 646] Log scrubbed.  Removed all items older than 2014-11-23 23:32:57
+2015-01-22 23:34:23,915 [7] INFO  umbraco.BusinessLogic.Log - [Thread 657] Log scrubbed.  Removed all items older than 2014-11-23 23:34:23
+2015-01-22 23:35:50,312 [7] INFO  umbraco.BusinessLogic.Log - [Thread 664] Log scrubbed.  Removed all items older than 2014-11-23 23:35:50
+2015-01-22 23:37:16,726 [7] INFO  umbraco.BusinessLogic.Log - [Thread 663] Log scrubbed.  Removed all items older than 2014-11-23 23:37:16
+2015-01-22 23:38:43,134 [7] INFO  umbraco.BusinessLogic.Log - [Thread 662] Log scrubbed.  Removed all items older than 2014-11-23 23:38:43
+2015-01-22 23:40:09,543 [7] INFO  umbraco.BusinessLogic.Log - [Thread 679] Log scrubbed.  Removed all items older than 2014-11-23 23:40:09
+2015-01-22 23:41:35,955 [7] INFO  umbraco.BusinessLogic.Log - [Thread 667] Log scrubbed.  Removed all items older than 2014-11-23 23:41:35
+2015-01-22 23:43:02,367 [7] INFO  umbraco.BusinessLogic.Log - [Thread 662] Log scrubbed.  Removed all items older than 2014-11-23 23:43:02
+2015-01-22 23:44:28,771 [7] INFO  umbraco.BusinessLogic.Log - [Thread 667] Log scrubbed.  Removed all items older than 2014-11-23 23:44:28
+2015-01-22 23:45:55,183 [7] INFO  umbraco.BusinessLogic.Log - [Thread 657] Log scrubbed.  Removed all items older than 2014-11-23 23:45:55
+2015-01-22 23:47:21,585 [7] INFO  umbraco.BusinessLogic.Log - [Thread 681] Log scrubbed.  Removed all items older than 2014-11-23 23:47:21
+2015-01-22 23:48:47,993 [7] INFO  umbraco.BusinessLogic.Log - [Thread 690] Log scrubbed.  Removed all items older than 2014-11-23 23:48:47
+2015-01-22 23:50:14,406 [7] INFO  umbraco.BusinessLogic.Log - [Thread 698] Log scrubbed.  Removed all items older than 2014-11-23 23:50:14
+2015-01-22 23:51:40,819 [7] INFO  umbraco.BusinessLogic.Log - [Thread 683] Log scrubbed.  Removed all items older than 2014-11-23 23:51:40
+2015-01-22 23:53:07,228 [7] INFO  umbraco.BusinessLogic.Log - [Thread 704] Log scrubbed.  Removed all items older than 2014-11-23 23:53:07
+2015-01-22 23:54:33,631 [7] INFO  umbraco.BusinessLogic.Log - [Thread 701] Log scrubbed.  Removed all items older than 2014-11-23 23:54:33
+2015-01-22 23:56:00,044 [7] INFO  umbraco.BusinessLogic.Log - [Thread 704] Log scrubbed.  Removed all items older than 2014-11-23 23:56:00
+2015-01-22 23:57:26,446 [7] INFO  umbraco.BusinessLogic.Log - [Thread 716] Log scrubbed.  Removed all items older than 2014-11-23 23:57:26
+2015-01-22 23:58:52,855 [7] INFO  umbraco.BusinessLogic.Log - [Thread 722] Log scrubbed.  Removed all items older than 2014-11-23 23:58:52

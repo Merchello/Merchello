@@ -116,6 +116,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="customerOnly">
+        /// Restricts search to only invoices associated with a customer
+        /// </param>
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
@@ -144,6 +147,9 @@
         /// </param>
         /// <param name="sortDirection">
         /// The sort direction.
+        /// </param>
+        /// <param name="customerOnly">
+        /// Restricts search to only invoices associated with a customer
         /// </param>
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
@@ -176,6 +182,9 @@
         /// </param>
         /// <param name="sortDirection">
         /// The sort direction.
+        /// </param>
+        /// <param name="customerOnly">
+        /// Restricts search to only invoices associated with a customer
         /// </param>
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.

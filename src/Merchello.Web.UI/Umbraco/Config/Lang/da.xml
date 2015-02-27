@@ -855,7 +855,10 @@ Mange hilsner fra Umbraco robotten
     <key alias="yourHistory">Din historik</key>
     <key alias="sessionExpires">Session udløber</key>
   </area>
-<area alias="merchelloHeadline">
+<area alias="merchelloButtons">
+    <key alias="void">Void</key>
+    <key alias="refund">Refund</key>
+  </area><area alias="merchelloHeadline">
     <key alias="catalog">Katalog</key>
   </area><area alias="merchelloVariant">
     <!-- things -->
@@ -866,7 +869,7 @@ Mange hilsner fra Umbraco robotten
     <key alias="barcode">Stregkode</key>
     <key alias="manufacturer">Forhandler</key>
     <key alias="manufacturerModel">Forhandler model nr.</key>
-    <key alias="variantInfo">Variant Information</key>
+    <key alias="variantInfo">Product Information</key>
     <key alias="variantOptions">Varianter</key>  <!-- TODO: Figure out context - is it right? -->
     <key alias="downloads">Digitale Downloads</key>
     <key alias="optionName">Mulighed navn</key>  <!-- TODO: Figure out context - is it right? -->
@@ -939,12 +942,14 @@ Mange hilsner fra Umbraco robotten
     <key alias="captureUpTo">Indløs op til</key>
     <key alias="salesTax">Moms</key>
     <key alias="authorized"> Autoriseret</key>
+    <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Betalingshistorik</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key> <!-- TODO: Figure out context - is it right? -->
     <key alias="paymentProcessedBy">Betaling gennemført af:</key>
   </area><area alias="merchelloFulfillShipment">
     <!-- phrases -->
     <key alias="fulfillManually">Udfyld manuelt</key>
+    <key alias="createShipment">Create Shipment</key>
   </area><area alias="merchelloWarehouse">
     <!-- things -->
     <key alias="warehouse">Lager</key>
@@ -957,8 +962,8 @@ Mange hilsner fra Umbraco robotten
     <!-- things -->
     <key alias="shipping">Forsendelse</key>
     <key alias="info">Forsendelses information</key>
-    <key alias="weight"><![CDATA[Vægt <small>(i pound)</small>]]></key>
-    <key alias="dimensions"><![CDATA[Dimensioner <small>(inches)</small>]]></key>
+    <key alias="weight">Vægt&gt;</key>
+    <key alias="dimensions">Dimensioner</key>
     <!-- actions -->
     <key alias="setVars">Opsæt forsendelses variabler: Vægt, og dimensioner</key>
     <!-- phrases -->
@@ -1090,6 +1095,7 @@ Mange hilsner fra Umbraco robotten
   </area><area alias="merchelloNotificationsDelete">
     <key alias="merchelloNotificationsDelete_deleteNotification">Slet en notifikations metode</key>
   </area><area alias="merchelloNotificationsMessage">
+    <add alias="replyTo">Reply to</add>
     <key alias="addEditMessage">Tilføj/Redigér notifikations besked</key>
     <key alias="attachedEvent">Vedhæftet begivenhed</key>
     <key alias="fromEmail"><![CDATA[Fra e-mail adresse<small>(i.e. confirmation@yourdomain.com)</small>]]></key>

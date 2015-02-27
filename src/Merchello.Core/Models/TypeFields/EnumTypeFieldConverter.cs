@@ -24,7 +24,7 @@
         /// <summary>
         /// Creates an instance of an <see cref="IItemCacheTypeField"/> object
         /// </summary>
-        internal static IItemCacheTypeField ItemItemCache
+        public static IItemCacheTypeField ItemItemCache
         {
             get { return new ItemCacheTypeField(); }            
         }
@@ -51,7 +51,7 @@
         /// Creates an instance of an <see cref="IAppliedPaymentTypeField"/>
         /// </summary>
         /// <returns></returns>
-        public static IAppliedPaymentTypeField AppliedPayment
+        internal static IAppliedPaymentTypeField AppliedPayment
         {
            get { return new AppliedPaymentTypeField(); }
         }

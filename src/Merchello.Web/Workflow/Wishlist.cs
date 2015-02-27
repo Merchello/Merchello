@@ -342,6 +342,18 @@
             _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
         }
 
+        /// <summary>
+        /// Adds a line item to the wish list.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The <see cref="IItemCacheLineItem"/>.
+        /// </param>
+        public void AddItem(IItemCacheLineItem lineItem)
+        {
+            if (lineItem.Quantity <= 0) lineItem.Quantity = 1;
+            if (lineItem.Price < 0) lineItem.Price = 0;
+            _itemCache.AddItem(lineItem);
+        }
 
         /// <summary>
         /// Updates a wish list item's quantity
@@ -496,11 +508,7 @@
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
 
             var customer = merchelloContext.Services.CustomerService.GetByKey(customerKey);
-            if (customer == null)
-            {
-                return null;
-            }
-            return GetWishList(merchelloContext, customer);
+            return customer == null ? null : GetWishList(merchelloContext, customer);
         }
 
         /// <summary>
@@ -529,7 +537,6 @@
             return wishlist;
         }
 
-        //// used for testing
         /// <summary>
         /// Gets the wish list.
         /// </summary>
@@ -590,12 +597,6 @@
         {
             // the version key here is not important since there can only ever be one wishlist
             return CacheKeys.ItemCacheCacheKey(customer.Key, EnumTypeFieldConverter.ItemItemCache.Wishlist.TypeKey, Guid.Empty);
-        }
-
-
-        public void MoveToBasket()
-        {
-            throw new NotImplementedException();
         }
     }
 }
