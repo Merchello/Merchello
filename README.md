@@ -23,7 +23,7 @@ You can download releases of Merchello via our package on [our.umbraco.org](http
 
 ## Documentation
 
-Merchello's documentation is started and an active work in progress [http://merchello.com/documentaion](http://merchello.com/documentaion)
+Merchello's documentation is started and an active work in progress [http://merchello.com/documentation](http://merchello.com/documentation)
 
 ## Forums
 

@@ -17,6 +17,8 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
 
     using Moq;
 
+    using Umbraco.Core;
+
     [TestFixture]
     public class ProductDisplayTests : DatabaseIntegrationTestBase
     {
@@ -53,6 +55,15 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             product.ManufacturerModelNumber = "N01-012021-A";
             product.TrackInventory = true;
             product.AddToCatalogInventory(_warehouse.WarehouseCatalogs.First());
+            productService.Save(product);
+
+            foreach (var variant in product.ProductVariants)
+            {
+                foreach (var inv in variant.CatalogInventories)
+                {
+                    inv.Count = 1;
+                }
+            }
             productService.Save(product);
 
             _productKey = product.Key;

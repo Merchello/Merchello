@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
 
     /// <summary>
@@ -72,6 +73,18 @@
         /// Gets or sets the product variants.
         /// </summary>
         public IEnumerable<ProductVariantDisplay> ProductVariants { get; set; }
-      
+
+        /// <summary>
+        /// Gets the total inventory count.
+        /// </summary>
+        public override int TotalInventoryCount
+        {
+            get
+            {
+                return this.ProductVariants.Any() ? 
+                    this.ProductVariants.Sum(x => x.TotalInventoryCount) : 
+                    this.CatalogInventories.Sum(x => x.Count);
+            }
+        }
     }
 }
