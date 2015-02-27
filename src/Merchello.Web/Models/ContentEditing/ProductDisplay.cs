@@ -14,6 +14,9 @@
         /// </summary>
         public ProductDisplay()
         {
+            ProductOptions = Enumerable.Empty<ProductOptionDisplay>();
+            ProductVariants = Enumerable.Empty<ProductVariantDisplay>();
+            CatalogInventories = Enumerable.Empty<CatalogInventoryDisplay>();
         }
 
         /// <summary>
