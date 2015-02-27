@@ -1,4 +1,4 @@
-img {
+﻿img {
   max-width: 100%; }
 
 ol, ul {
@@ -17,10 +17,20 @@ ol, ul {
 
 .price {
   font-size: 2em; }
-  .price .on-sale {
-    text-decoration: line-through; }
   .price .sale-price {
-    color: red; }
+    color: red;
+    margin-right: 0.5em; }
+  .price .original-price {
+    text-decoration: line-through; }
+
+.add-to-cart div.inventory {
+  margin: 1em;
+  padding-bottom: 1em;
+  padding-left: 1em;
+  text-align: center;
+  padding-right: 1.25em; }
+.add-to-cart div.price {
+  padding: 1em; }
 
 div.price {
   padding: 1em; }
@@ -49,10 +59,15 @@ span.field-validation-error {
   float: none !important; }
 
 /* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) { }
+
 /* Medium devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .useBillingLabel {
     position: absolute;
     top: -10px; } }
-/* Large devices (large desktops, 1200px and up) */
 
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { }
+
+/*# sourceMappingURL=styles.css.map */
