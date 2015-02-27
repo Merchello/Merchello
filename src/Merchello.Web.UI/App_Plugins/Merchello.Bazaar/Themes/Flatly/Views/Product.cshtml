@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="row">
-    <span class="span8">
+    <div class="span8">
         <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias:"image", height: 300)" alt="@Model.ProductData.Name">
 
         <h4 class="pull-right">@Model.FormattedPrice()</h4>
@@ -20,8 +20,9 @@
             <a href="#">@Model.Name</a>
         </h4>
         @Model.Description
-    </span>
-    <span class="span2 pull-right">
+    </div>
+    <div class="span2 pull-right">
         @Html.Action("RenderAddToBasket", "BasketOperations", new { area = "Bazaar", model = Model })
-    </span>
+        <h3>Inventory: @Model.ProductData.TotalInventoryCount</h3>
+    </div>
 </div>
