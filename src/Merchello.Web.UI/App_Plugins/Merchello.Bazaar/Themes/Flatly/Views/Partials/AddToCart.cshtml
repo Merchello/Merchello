@@ -46,7 +46,7 @@
 
                 }
 
-                @Html.HiddenFor(x => x.ContentId)
+                @Html.HiddenFor(x => x.ContentId, new { @id = "cid" + Model.Product.Key })
                 @Html.HiddenFor(x => x.Product.Key)
                 @Html.HiddenFor(x => x.BasketPageId)
                 @Html.HiddenFor(x => x.WishListPageId)

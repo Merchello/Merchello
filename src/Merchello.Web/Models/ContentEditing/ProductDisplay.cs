@@ -1,8 +1,8 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The product display.
@@ -14,9 +14,6 @@
         /// </summary>
         public ProductDisplay()
         {
-            ProductOptions = Enumerable.Empty<ProductOptionDisplay>();
-            ProductVariants = Enumerable.Empty<ProductVariantDisplay>();
-            CatalogInventories = Enumerable.Empty<CatalogInventoryDisplay>();
         }
 
         /// <summary>
@@ -84,9 +81,11 @@
         {
             get
             {
-                return ProductVariants.Any() ? 
-                    this.ProductVariants.Sum(x => x.TotalInventoryCount) : 
-                    this.CatalogInventories.Sum(x => x.Count);
+                return this.ProductVariants != null
+                           ? this.ProductVariants.Any()
+                                 ? this.ProductVariants.Sum(x => x.TotalInventoryCount)
+                                 : this.CatalogInventories.Sum(x => x.Count)
+                           : 0;
             }
         }
     }
