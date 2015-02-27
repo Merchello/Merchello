@@ -119,9 +119,11 @@ namespace Merchello.Tests.IntegrationTests.Workflow
             #endregion
 
 
-            #region Settings -> Payments
-
-                        
+            #region Settings
+            //// http://issues.merchello.com/youtrack/issue/M-608
+            var storeSetting = DbPreTestDataWorker.StoreSettingService.GetByKey(Core.Constants.StoreSettingKeys.GlobalShippingIsTaxableKey);
+            storeSetting.Value = true.ToString();
+            DbPreTestDataWorker.StoreSettingService.Save(storeSetting);
 
             #endregion
 

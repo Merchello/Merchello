@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
 
     using Merchello.Core.Builders;
@@ -39,6 +40,14 @@
         private readonly IMerchelloContext _merchelloContext;
 
         /// <summary>
+        /// A value indicating whether or not shipping charges are taxable.
+        /// </summary>
+        /// <remarks>
+        /// Determined by the global back office setting.
+        /// </remarks>
+        private Lazy<bool> _shippingTaxable;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SalePreparationBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
@@ -62,6 +71,8 @@
             _itemCache = itemCache;
             ApplyTaxesToInvoice = true;
             RaiseCustomerEvents = true;
+
+            Initialize();
         }
 
         /// <summary>
@@ -584,7 +595,19 @@
         /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> to be added as a <see cref="ILineItem"/></param>
         private void AddShipmentRateQuoteLineItem(IShipmentRateQuote shipmentRateQuote)
         {
-            _itemCache.AddItem(shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>());
+            var lineItem = shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>();
+            if (_shippingTaxable.Value) lineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.Taxable, true.ToString());
+            _itemCache.AddItem(lineItem);
+        }
+
+        /// <summary>
+        /// Class initialization.
+        /// </summary>
+        private void Initialize()
+        {
+            var storeSettingsService = _merchelloContext.Services.StoreSettingService;
+            var shippingTaxSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.GlobalShippingIsTaxableKey);
+            _shippingTaxable = new Lazy<bool>(() => Convert.ToBoolean(shippingTaxSetting.Value));
         }
     }
 }

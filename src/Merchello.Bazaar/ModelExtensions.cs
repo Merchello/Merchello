@@ -82,8 +82,17 @@
             }
 
             var variants = model.ProductData.ProductVariants.ToArray();
-            var low = variants.Min(x => x.Price);
-            var max = variants.Max(x => x.Price);
+            var onsaleLow = variants.Any(x => x.OnSale) ? variants.Where(x => x.OnSale).Min(x => x.SalePrice) : 0;
+            var low = variants.Any(x => !x.OnSale) ? variants.Where(x => !x.OnSale).Min(x => x.Price) : 0;
+            var onSaleHigh = variants.Any(x => x.OnSale) ? variants.Where(x => x.OnSale).Max(x => x.SalePrice) : 0;
+            var max = variants.Any(x => !x.OnSale) ? variants.Where(x => !x.OnSale).Max(x => x.Price) : 0;
+
+            if (variants.Any(x => x.OnSale))
+            {
+                low = onsaleLow < low ? onsaleLow : low;
+                max = max > onSaleHigh ? max : onSaleHigh;
+            }
+
             if (low != max)
                 return String.Format(
                     "{0} - {1}",

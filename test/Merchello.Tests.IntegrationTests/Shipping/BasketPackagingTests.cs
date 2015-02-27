@@ -37,13 +37,18 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             Basket.Save(MerchelloContext, _basket);
         }
 
+
         /// <summary>
         /// Test verifies that the <see cref="ShippableProductVisitor"/> returns only shippable products
         /// </summary>
         [Test]
         public void ShippableProductVisitor_Returns_Only_Shippable_Products()
         {
+            
             //// Arrange
+            var notShippable = PreTestDataWorker.MakeExistingProduct(false);
+            _basket.AddItem(notShippable);
+            
             const int expected = 4;
             var visitor = new ShippableProductVisitor();
 
@@ -61,6 +66,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Default_BasketPackagingStrategy_Returns_A_Shipment()
         {
             //// Arrange
+            var notShippable = PreTestDataWorker.MakeExistingProduct(false);
+            _basket.AddItem(notShippable);
+
             var destination = new Address()
             {
                 Name = "San Diego Zoo",
@@ -70,6 +78,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
                 PostalCode = "92101",
                 CountryCode = "US"
             };
+
+            _basket.AddItem(notShippable);
             
             //// Act
             var strategy = new DefaultWarehousePackagingStrategy(MerchelloContext, _basket.Items, destination, Guid.NewGuid());
@@ -78,6 +88,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Assert
             Assert.NotNull(shipments);
             Assert.AreEqual(1, shipments.Count());
+            Assert.AreEqual(4, shipments.First().Items.Count);
 
         }
 
@@ -88,6 +99,9 @@ namespace Merchello.Tests.IntegrationTests.Shipping
         public void Can_Package_A_Basket_Using_Basket_ExtensionMethod()
         {
             //// Arrange
+            var notShippable = PreTestDataWorker.MakeExistingProduct(false);
+            _basket.AddItem(notShippable);
+
             var destination = new Address()
             {
                 Name = "San Diego Zoo",
@@ -104,6 +118,8 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             //// Assert
             Assert.NotNull(shipments);
             Assert.AreEqual(1, shipments.Count());
+
+            Assert.AreEqual(4, shipments.First().Items.Count);
         }
 
     }

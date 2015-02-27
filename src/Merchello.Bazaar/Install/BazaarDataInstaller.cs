@@ -1,7 +1,12 @@
 ﻿namespace Merchello.Bazaar.Install
 {
+    using System.Linq;
+
     using Merchello.Core;
+    using Merchello.Core.Gateways.Shipping.FixedRate;
     using Merchello.Core.Models;
+
+    using umbraco.cms.businesslogic.web;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -94,6 +99,11 @@
             var purchaseHistory = _services.ContentService.CreateContent("Purchase History", account.Id, "BazaarAccountHistory");
             _services.ContentService.SaveAndPublishWithStatus(purchaseHistory);
 
+            // TODO look for a V6 method
+            // This uses the old API
+            Access.ProtectPage(false, account.Id, registration.Id, registration.Id);
+            Access.AddMembershipRoleToDocument(account.Id, "MerchelloCustomers");
+
             return root;
         }
 
@@ -148,6 +158,12 @@
             return mg;
         }
 
+        /// <summary>
+        /// The add merchello data.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         private IProduct AddMerchelloData()
         {
             var merchelloServices = MerchelloContext.Current.Services;
@@ -163,13 +179,46 @@
             warehouse.CountryCode = "US";
             merchelloServices.WarehouseService.Save(warehouse);
 
+            LogHelper.Info<BazaarDataInstaller>("Adding example shipping data");
+            var catalog = warehouse.WarehouseCatalogs.FirstOrDefault(x => x.Key == Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey);
+            var country = merchelloServices.StoreSettingService.GetCountryByCode("US");
+
+            // The follow is internal to Merchello and not exposed in the public API
+          
+            // Add the ship country
+            var shipCountry = new ShipCountry(catalog.Key, country);
+            ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.Save(shipCountry);
+
+            // Associate the fixed rate Shipping Provider to the ShipCountry
+            var key = Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.GetProviderByKey(key);
+            var gatewayShipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, shipCountry, "Ground");
+
+            // Add rate adjustments for Hawaii and Alaska
+            gatewayShipMethod.ShipMethod.Provinces["HI"].RateAdjustmentType = RateAdjustmentType.Numeric;
+            gatewayShipMethod.ShipMethod.Provinces["HI"].RateAdjustment = 3M;
+            gatewayShipMethod.ShipMethod.Provinces["AK"].RateAdjustmentType = RateAdjustmentType.Numeric;
+            gatewayShipMethod.ShipMethod.Provinces["AK"].RateAdjustment = 2.5M;
+
+            // Add a few of rate tiers to the rate table.
+            gatewayShipMethod.RateTable.AddRow(0, 10, 5);
+            gatewayShipMethod.RateTable.AddRow(10, 15, 10);
+            gatewayShipMethod.RateTable.AddRow(15, 25, 25);
+            gatewayShipMethod.RateTable.AddRow(25, 10000, 100);
+            rateTableProvider.SaveShippingGatewayMethod(gatewayShipMethod);
+
             LogHelper.Info<BazaarDataInstaller>("Adding an example product");
             var product = merchelloServices.ProductService.CreateProduct("Bar of Soap", "soapbar", 5M);
             product.Shippable = true;
             product.Taxable = true;
             product.TrackInventory = true;
             product.Available = true;
-            merchelloServices.ProductService.Save(product);
+            product.Weight = 1M;
+            product.AddToCatalogInventory(catalog);
+            merchelloServices.ProductService.Save(product, false);
+
+            product.CatalogInventories.FirstOrDefault().Count = 10;
+            merchelloServices.ProductService.Save(product, false);
 
             return product;
         }

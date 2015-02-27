@@ -58,7 +58,8 @@
             getVariantPrice: function (elem, key) {
                 var options = "";
                 $.each($(elem).find(".ProductVariants"), function (index, element) {
-                    options = options + element.selectedOptions[0].value + ",";
+                    console.info($(element).val());
+                    options = options + $(element).val() + ",";
                 });
 
                 var variantOptions = {};
@@ -80,7 +81,8 @@
             },
             getUpdatedVariants: function(root, ddl, key) {
 
-                var productAttributeKey = ddl.selectedOptions[0].value;
+                //var productAttributeKey = ddl.selectedOptions[0].value;
+                var productAttributeKey = $(ddl).val();
 
                 var filter = {};
                 filter.productKey = key;
