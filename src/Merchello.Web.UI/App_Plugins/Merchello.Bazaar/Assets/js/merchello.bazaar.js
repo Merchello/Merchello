@@ -58,6 +58,7 @@
             getVariantPrice: function (elem, key) {
                 var options = "";
                 $.each($(elem).find(".ProductVariants"), function (index, element) {
+                    console.info(element);
                     options = options + element.selectedOptions[0].value + ",";
                 });
 
