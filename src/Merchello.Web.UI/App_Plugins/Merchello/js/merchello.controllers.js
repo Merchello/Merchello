@@ -988,6 +988,7 @@ angular.module('merchello')
             $scope.rateTable = {}; //shipFixedRateTableDisplayBuilder.createDefault();
             $scope.rateTable.shipMethodKey = ''; //$scope.dialogData.method.key;
 
+
             // exposed methods
             $scope.addRateTier = addRateTier;
             $scope.insertRateTier = insertRateTier;
@@ -1169,10 +1170,10 @@ angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.Wareh
     }]);
 
 angular.module('merchello').controller('Merchello.Directives.ShipCountryGatewaysProviderDirectiveController',
-    ['$scope', 'notificationsService', 'dialogService',
+    ['$scope', 'notificationsService', 'dialogService', 'settingsResource',
         'shippingGatewayProviderResource', 'shippingGatewayProviderDisplayBuilder', 'shipMethodDisplayBuilder',
         'shippingGatewayMethodDisplayBuilder', 'gatewayResourceDisplayBuilder', 'dialogDataFactory',
-        function($scope, notificationsService, dialogService,
+        function($scope, notificationsService, dialogService, settingsResource,
                  shippingGatewayProviderResource, shippingGatewayProviderDisplayBuilder, shipMethodDisplayBuilder,
                  shippingGatewayMethodDisplayBuilder, gatewayResourceDisplayBuilder, dialogDataFactory) {
 
@@ -1180,7 +1181,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
             $scope.allProviders = [];
             $scope.assignedProviders = [];
             $scope.availableProviders = [];
-
+            $scope.currencySymbol = '';
 
             // exposed methods
             $scope.deleteCountry = deleteCountry;
@@ -1199,7 +1200,25 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
              * Initializes the controller
              */
             function init() {
+                loadSettings();
                 loadCountryProviders();
+            }
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Loads the currency settings
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function(currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
             }
 
             /**
@@ -1324,6 +1343,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
             function editShippingMethodRegionsOpen(gatewayMethod) {
                 var dialogData = dialogDataFactory.createEditShippingGatewayMethodDialogData();
                 dialogData.shippingGatewayMethod = gatewayMethod;
+                dialogData.currencySymbol = $scope.currencySymbol;
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.shipmethod.regions.html',
                     show: true,
@@ -1408,6 +1428,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
             function editShippingMethodDialogOpen(gatewayMethod) {
                 var dialogData = dialogDataFactory.createEditShippingGatewayMethodDialogData();
                 dialogData.shippingGatewayMethod = gatewayMethod;
+                dialogData.currencySymbol = $scope.currencySymbol;
                 var editor = gatewayMethod.dialogEditorView.editorView;
                 dialogService.open({
                     template: editor,
