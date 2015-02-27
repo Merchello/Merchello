@@ -9353,6 +9353,14 @@
             The merchello context.
             </summary>
         </member>
+        <member name="F:Merchello.Core.Sales.SalePreparationBase._shippingTaxable">
+            <summary>
+            A value indicating whether or not shipping charges are taxable.
+            </summary>
+            <remarks>
+            Determined by the global back office setting.
+            </remarks>
+        </member>
         <member name="M:Merchello.Core.Sales.SalePreparationBase.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IItemCache,Merchello.Core.Models.ICustomerBase)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Core.Sales.SalePreparationBase"/> class.
@@ -9623,6 +9631,11 @@
             Maps the <see cref="T:Merchello.Core.Gateways.Shipping.IShipmentRateQuote"/> to a <see cref="T:Merchello.Core.Models.ILineItem"/> 
             </summary>
             <param name="shipmentRateQuote">The <see cref="T:Merchello.Core.Gateways.Shipping.IShipmentRateQuote"/> to be added as a <see cref="T:Merchello.Core.Models.ILineItem"/></param>
+        </member>
+        <member name="M:Merchello.Core.Sales.SalePreparationBase.Initialize">
+            <summary>
+            Class initialization.
+            </summary>
         </member>
         <member name="E:Merchello.Core.Sales.SalePreparationBase.InvoicePrepared">
             <summary>
