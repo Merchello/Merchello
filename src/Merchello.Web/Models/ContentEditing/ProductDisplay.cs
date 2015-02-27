@@ -81,7 +81,7 @@
         {
             get
             {
-                return ProductVariants != null && ProductVariants.Any() ? 
+                return ProductVariants.Any() ? 
                     this.ProductVariants.Sum(x => x.TotalInventoryCount) : 
                     this.CatalogInventories.Sum(x => x.Count);
             }
