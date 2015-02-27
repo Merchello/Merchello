@@ -2,7 +2,8 @@ img {
   max-width: 100%; }
 
 ol, ul {
-  list-style: none; }
+  list-style: none;
+  padding: 0px; }
 
 .second-form {
   border: 1px solid #ccc; }
@@ -47,6 +48,12 @@ span.field-validation-error {
   float: none !important; }
 .navbar-collapse.collapse.in ul.pull-right {
   float: none !important; }
+
+.inventoryWrap {
+  margin: 10px 0px;
+  border-top: 1px solid #dcd4c6;
+  border-bottom: 1px solid #dcd4c6;
+  padding: 10px 0px; }
 
 /* Small devices (tablets, 768px and up) */
 /* Medium devices (desktops, 992px and up) */

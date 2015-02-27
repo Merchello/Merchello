@@ -26,9 +26,6 @@
                 {
                     <li class="row">
                         <a href="@p.Url"><img src="@p.Image" class="col-md-3"></a>
-                        <div class="pull-right col-md-3">
-                            @Html.Action("RenderAddToBasket", "BasketOperations", new { area = "Bazaar", model = p })
-                        </div>
                         <div class="info col-md-5">
                             <h2><a href="@p.Url">@p.Name</a></h2>
                             @if (p.ProductData.OnSale)
@@ -41,6 +38,9 @@
                             }
                         
                             <p>@p.Brief</p>
+                        </div>
+						<div class="col-md-4">
+                            @Html.Action("RenderAddToBasket", "BasketOperations", new { area = "Bazaar", model = p })
                         </div>
                     </li>
                 }

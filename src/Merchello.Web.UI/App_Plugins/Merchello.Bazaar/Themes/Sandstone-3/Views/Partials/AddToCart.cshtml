@@ -26,13 +26,8 @@
                     foreach (var option in Model.Product.ProductOptions)
                     {
 
-                        var choices = option.Choices.OrderBy(x => x.SortOrder)
-                            .Select(choice => new System.Web.Mvc.SelectListItem()
-                                                  {
-                                                      Value = choice.Key.ToString(),
-                                                      Text = choice.Name
-                                                  }).ToList();
-                        choices.First().Selected = true;
+						var choices = option.Choices.OrderBy(x => x.SortOrder).Select(choice => new System.Web.Mvc.SelectListItem() { Value = choice.Key.ToString(), Text = choice.Name }).ToList();
+						choices.First().Selected = true;
 
                         @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class = "control-label" })
 
@@ -45,14 +40,32 @@
                     }
 
                 }
-
-                @Html.HiddenFor(x => x.ContentId)
-                @Html.HiddenFor(x => x.Product.Key)
-                @Html.HiddenFor(x => x.BasketPageId)
-                @Html.HiddenFor(x => x.WishListPageId)
-                <div class="form-group text-center">
-                    <input type="submit" value="Add to Basket" class="btn btn-default" />
+				
+				
+				<div id="inv-@Model.Product.Key" class="inventoryWrap">
+                    @if (!hasVariants && Model.Product.TrackInventory)
+                    {
+                        if (Model.Product.TotalInventoryCount > 0)
+                        {
+                            <span>In Stock (@Model.Product.TotalInventoryCount)</span>
+                        }
+                        else
+                        {
+                            <span>Out of stock</span>
+                        }
+                    }
                 </div>
+
+                @Html.HiddenFor(x => x.ContentId, new { @id = "cid-" + Model.Product.Key })
+                @Html.HiddenFor(x => x.Product.Key, new { @id = "pkey-" + Model.Product.Key })
+                @Html.HiddenFor(x => x.BasketPageId, new { @id = "bid-" + Model.Product.Key })
+                @Html.HiddenFor(x => x.WishListPageId, new { @id = "wlid-" + Model.Product.Key })
+                if (Model.Product.ProductVariants.Any() || (!Model.Product.ProductVariants.Any() && Model.Product.TrackInventory && Model.Product.TotalInventoryCount > 0))
+                {
+                <div class="control-group text-center">
+                    <input type="submit" value="Add to Basket" class="btn btn-default" id="btn-@Model.Product.Key" />
+                </div>
+                }
             }
 
         }
