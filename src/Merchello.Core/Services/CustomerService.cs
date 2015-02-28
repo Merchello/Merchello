@@ -1,15 +1,12 @@
-﻿using System.Web.UI;
-using Merchello.Core.Persistence.Repositories;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using System.Web.UI;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
@@ -559,6 +556,11 @@ namespace Merchello.Core.Services
         public void Save(ICustomerAddress address)
         {
             _customerAddressService.Save(address);
+        }
+
+        public void Save(IEnumerable<ICustomerAddress> addresses)
+        {
+            _customerAddressService.Save(addresses);
         }
 
         /// <summary>

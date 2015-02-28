@@ -109,6 +109,9 @@
 
             viewModel.CustomerAddressModel = new CustomerAddressModel()
                                                  {
+                                                     Theme = viewModel.Theme,
+                                                     CustomerKey = viewModel.CurrentCustomer.Key,
+                                                     AccountPageId =  viewModel.Id,
                                                      ShipCountries = shipCountries.Select(x => new SelectListItem()
                                                                                                    {
                                                                                                        Value = x.CountryCode,

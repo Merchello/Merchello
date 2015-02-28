@@ -72,11 +72,14 @@ span.field-validation-error {
 .account {
     h2 { font-size: 1.25em; }
     #profile-form { display: none; }
+
+    table tr.default-address {
+        background-color: #eeeeee;
+    }
 }
 
 .customer-addresses {
     tr { 
-        background-color: #eee;
     }
 
     caption {  

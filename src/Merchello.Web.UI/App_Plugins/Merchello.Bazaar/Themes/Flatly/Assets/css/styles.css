@@ -56,9 +56,9 @@ span.field-validation-error {
   font-size: 1.25em; }
 .account #profile-form {
   display: none; }
+.account table tr.default-address {
+  background-color: #eeeeee; }
 
-.customer-addresses tr {
-  background-color: #eee; }
 .customer-addresses caption {
   line-height: 2em; }
 

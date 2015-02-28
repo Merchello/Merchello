@@ -18,7 +18,8 @@
         account: {
             bind: function() {
                 merchello.bazaar.account.resetViews();
-                
+
+                // profile forms
                 $('#btn-profile-open').click(function() {
                     $('#profile-form').show();
                     $('#address-view').hide();
@@ -28,21 +29,125 @@
                     merchello.bazaar.account.resetViews();
                 });
                 $('#chk-change-password').click(function () {
-                    console.info('clicked');
                     if (this.checked) {
                         $('#change-password-form').show();
                     } else {
                         $('#change-password-form').hide();
                     }
                 });
+
+                // address edit buttons
+                $('#btn-add-address-billing').click(function() {
+                    merchello.bazaar.account.customerAddressForm.init('billing');
+                });
+                $('#btn-add-address-shipping').click(function () {
+                    merchello.bazaar.account.customerAddressForm.init('shipping');
+                });
+                $.each($('.address-edit-link'), function(index, btn) {
+                    $(btn).click(function() {
+                        merchello.bazaar.account.customerAddressForm.init($(this).attr('data-adddresstype'), $(this).attr('data-addresskey'));
+                    });
+                });
+                $('#btn-address-form-cancel').click(function () {
+                    merchello.bazaar.account.resetViews();
+                });
+
+                // adddress country drop downs
+                $.each($('.country-selection'), function(index, ddl) {
+                    $(ddl).change(function() {
+                        merchello.bazaar.account.setProvinces(this);
+                    });
+                });
+
+                $('#address-province-select').change(function() {
+                    $('address-province-entry').text($(this).val());
+                });
+                $('address-province-entry').text($('#address-province-select').val());
+
             },
             toggleProfileForm: function() {
                 $('#btn-profile-open').attr('disabled', 'disabled');
+            },
+            customerAddressForm: {
+                init: function (type, addressKey) {
+                    $('#address-form').show();
+                    $('#address-view').hide();
+                    var label = (type === 'shipping' ? ' Shipping ' : ' Billing ') + 'Address';
+                    var countryDdl = ('#address-countrycode-' + type);
+                    $(countryDdl).show();
+                    merchello.bazaar.account.setProvinces(countryDdl);
+                    $('#address-countrycode-' + (type === 'shipping' ? 'billing' : 'shipping')).hide();
+                    $('#address-addresstype').val(type);
+                    if (addressKey) {
+                        // this is an update
+                        var data = {};
+                        data.customerAddressKey = addressKey;
+                        $.ajax({
+                            type: "GET",
+                            url: "/umbraco/Bazaar/BazaarSiteApi/GetCustomerAddress",
+                            data: data,
+                            success: function (adr) {
+                                $('#address-caption').text('Edit Your ' + label);
+                                $('#address-label').val(adr.label);
+                                $('#address-fullname').val(adr.fullName);
+                                $('#address-address1').val(adr.address1);
+                                $('#address-address2').val(adr.address2);
+                                $('#address-locality').val(adr.locality);
+                                $('#address-region-entry').val(adr.region);
+                                $('#address-province-select').val(adr.region);
+                                if (adr.addressType === 'shipping') {
+                                    $('#address-countrycode-shipping').val(adr.countryCode);
+                                } else {
+                                    $('#address-countrycode-billing').val(adr.countryCode);
+                                }
+                                $('#address-postalcode').val(adr.postalCode);
+                                $('#address-phone').val(adr.phone);
+                                $('#address-key').val(adr.key);
+                            },
+                            dataType: "json",
+                            traditional: true
+                        }).fail(function (ex) {
+                            $.error(ex);
+                        });
+
+                    } else {
+                        $('#address-caption').text('Add a New ' + label);
+                    }
+                }  
+            },
+            setProvinces: function (elem) {
+                var countryCode = $(elem).val();
+                var data = {};
+                data.countryCode = countryCode;
+                $.ajax({
+                    type: "GET",
+                    url: "/umbraco/Bazaar/BazaarSiteApi/GetProvincesForCountry",
+                    data: data,
+                    success: function (provinces) {
+                        if (provinces.length > 0) {
+                            $('#address-province-select').show();
+                            $('#address-province-select').find('option').remove();
+                            $.each(provinces, function (idx, province) {
+                                $('#address-province-select').append('<option value=\'' + province.code + '\'>' + province.name + '</option>')
+                            });
+                            $('#address-province-entry').hide();
+                        } else {
+                            $('#address-province-select').hide();
+                            $('#address-province-entry').show();
+                        }
+                    },
+                    dataType: "json",
+                    traditional: true
+                }).fail(function (ex) {
+                    $.error(ex);
+                });
+
             },
             resetViews: function () {
                 if (window.location.hash === '#success') {
                     $('#message').show();
                     $('#message').delay(2000).fadeOut(1000);
+                    window.location.hash = '';
                 } else {
                     $('#message').hide();
                 }
@@ -50,9 +155,30 @@
                 $('#address-view').show();
                 $('#btn-add-address-billing').removeAttr('disabled');
                 $('#btn-add-address-shipping').removeAttr('disabled');
+                $('#address-countrycode-billing').val('US');
                 $('#address-form').hide();
                 $('#profile-form').hide();
                 $('#btn-profile-form').attr('disabled', 'disabled');
+                // address
+                $('#address-label').val('');
+                $('#address-fullname').val('');
+                $('#address-address1').val('');
+                $('#address-address2').val('');
+                $('#address-locality').val('');
+                $('#address-region-entry').val('');
+                $('#address-province-select').val('');
+                $('#address-postalcode').val('');
+                $('#address-phone').val('');
+                $('#address-key').val('');
+
+                // reset form validations
+                $('.field-validation-error')
+                    .empty()
+                    .removeClass('field-validation-error')
+                    .addClass('field-validation-valid');
+                $('.input-validation-error')
+                    .removeClass('input-validation-error')
+                    .addClass('valid');
             }
         },
 

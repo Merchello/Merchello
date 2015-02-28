@@ -12,7 +12,7 @@
         /// <summary>
         /// The version.
         /// </summary>
-        private static readonly Version Version = new Version("1.7.1.9");
+        private static readonly Version Version = new Version("1.7.1.12");
 
         /// <summary>
         /// Gets the current version of Merchello.
