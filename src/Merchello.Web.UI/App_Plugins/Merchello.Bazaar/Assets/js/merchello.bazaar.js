@@ -11,7 +11,49 @@
             $(document).ready(function() {
                 merchello.bazaar.products.bind();
                 merchello.bazaar.checkout.bind();
+                merchello.bazaar.account.bind();
             });
+        },
+
+        account: {
+            bind: function() {
+                merchello.bazaar.account.resetViews();
+                
+                $('#btn-profile-open').click(function() {
+                    $('#profile-form').show();
+                    $('#address-view').hide();
+                    
+                });
+                $('#btn-profile-form-cancel').click(function() {
+                    merchello.bazaar.account.resetViews();
+                });
+                $('#chk-change-password').click(function () {
+                    console.info('clicked');
+                    if (this.checked) {
+                        $('#change-password-form').show();
+                    } else {
+                        $('#change-password-form').hide();
+                    }
+                });
+            },
+            toggleProfileForm: function() {
+                $('#btn-profile-open').attr('disabled', 'disabled');
+            },
+            resetViews: function () {
+                if (window.location.hash === '#success') {
+                    $('#message').show();
+                    $('#message').delay(2000).fadeOut(1000);
+                } else {
+                    $('#message').hide();
+                }
+                $('#btn-profile-open').removeAttr('disabled');
+                $('#address-view').show();
+                $('#btn-add-address-billing').removeAttr('disabled');
+                $('#btn-add-address-shipping').removeAttr('disabled');
+                $('#address-form').hide();
+                $('#profile-form').hide();
+                $('#btn-profile-form').attr('disabled', 'disabled');
+            }
         },
 
         products: {

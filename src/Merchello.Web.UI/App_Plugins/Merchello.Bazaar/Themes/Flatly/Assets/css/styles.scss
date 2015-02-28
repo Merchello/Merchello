@@ -45,6 +45,7 @@
 
 }
 
+
 td.align-right {
     text-align: right;
 }
@@ -54,9 +55,35 @@ span.field-validation-error {
         color: red;
 }
 .vcard {
-    h5 { font-size: 1.5em; }
+    h5, h4, h3, h2 { font-size: 1.5em; }
     .fn { display: block; }
     .adr { display: block; }
     .street-address { display: block; }
     .extended-address { display: block; }
+    .email { display: block; }
+}
+
+// ------------------------------------
+// Account pages 
+// ------------------------------------
+
+#btn-profile-open { margin-top: 1em;}
+
+.account {
+    h2 { font-size: 1.25em; }
+    #profile-form { display: none; }
+}
+
+.customer-addresses {
+    tr { 
+        background-color: #eee;
+    }
+
+    caption {  
+        line-height: 2em;
+    }
+}
+
+#update-account-form {
+    #change-password-form { display: none; }
 }

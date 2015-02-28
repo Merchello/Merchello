@@ -16,7 +16,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [Authorize]
-    public class BazaarAccountController : RenderControllerBase
+    public class BazaarAccountController : CheckoutRenderControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.
@@ -37,9 +37,10 @@
                 throw error;
             }
 
-            var viewModel = ViewModelFactory.CreateAccount(model);
+            var viewModel = ViewModelFactory.CreateAccount(model, AllCountries, AllowedShipCountries);
 
             return this.View(viewModel.ThemeAccountPath("Account"), viewModel);
         }
+
     }
 }

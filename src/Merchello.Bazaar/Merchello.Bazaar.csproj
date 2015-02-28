@@ -206,6 +206,8 @@
     <Compile Include="Controllers\BazaarCheckoutConfirmController.cs" />
     <Compile Include="Controllers\BazaarReceiptController.cs" />
     <Compile Include="Controllers\Surface\AccountOperationsController.cs" />
+    <Compile Include="Models\Account\AccountProfileModel.cs" />
+    <Compile Include="Models\Account\CustomerAddressModel.cs" />
     <Compile Include="Controllers\Surface\SalePreparationOperationsController.cs" />
     <Compile Include="Controllers\CheckoutRenderControllerBase.cs" />
     <Compile Include="Controllers\Surface\WishListOperationsController.cs" />

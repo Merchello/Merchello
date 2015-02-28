@@ -22,10 +22,16 @@
         /// <param name="model">
         /// The model.
         /// </param>
+        /// <param name="allCountries">
+        /// The all Countries.
+        /// </param>
+        /// <param name="shipCountries">
+        /// The ship Countries.
+        /// </param>
         /// <returns>
         /// The <see cref="AccountModel"/>.
         /// </returns>
-        AccountModel CreateAccount(RenderModel model);
+        AccountModel CreateAccount(RenderModel model, IEnumerable<ICountry> allCountries, IEnumerable<ICountry> shipCountries);
 
         /// <summary>
         /// Creates an <see cref="AccountHistoryModel"/>.

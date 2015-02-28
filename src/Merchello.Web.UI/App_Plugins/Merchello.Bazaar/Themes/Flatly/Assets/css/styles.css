@@ -36,7 +36,7 @@ span.field-validation-error {
   margin-left: 1em;
   color: red; }
 
-.vcard h5 {
+.vcard h5, .vcard h4, .vcard h3, .vcard h2 {
   font-size: 1.5em; }
 .vcard .fn {
   display: block; }
@@ -46,5 +46,23 @@ span.field-validation-error {
   display: block; }
 .vcard .extended-address {
   display: block; }
+.vcard .email {
+  display: block; }
+
+#btn-profile-open {
+  margin-top: 1em; }
+
+.account h2 {
+  font-size: 1.25em; }
+.account #profile-form {
+  display: none; }
+
+.customer-addresses tr {
+  background-color: #eee; }
+.customer-addresses caption {
+  line-height: 2em; }
+
+#update-account-form #change-password-form {
+  display: none; }
 
 /*# sourceMappingURL=styles.css.map */
