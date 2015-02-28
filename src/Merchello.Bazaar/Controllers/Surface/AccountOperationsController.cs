@@ -1,8 +1,16 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
+    using System.Web.Security;
+    using System.Web.UI;
 
+    using Merchello.Bazaar.Models.Account;
+    using Merchello.Core.Models;
+
+    using Umbraco.Core.Logging;
+    using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -29,6 +37,125 @@
         {
             CustomerContext.SetValue("invoiceKey", invoiceKey.ToString());
             return RedirectToUmbracoPage(receiptContentId);
+        }
+
+        /// <summary>
+        /// The render account profile form.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        public ActionResult RenderAccountProfileForm(AccountProfileModel model)
+        {
+
+            return this.PartialView(PathHelper.GetThemePartialViewPath(model.Theme, "ProfileForm"), model);
+        }
+
+        /// <summary>
+        /// The update account profile.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult UpdateAccountProfile(AccountProfileModel model)
+        {
+            if (model.SetPassword && !ModelState.IsValid) return this.CurrentUmbracoPage();
+
+            if (!(ModelState.IsValidField("firstName") && ModelState.IsValidField("lastName"))) return this.CurrentUmbracoPage();
+
+            var customer = (ICustomer)CurrentCustomer;
+            customer.FirstName = model.FirstName;
+            customer.LastName = model.LastName;
+
+            MerchelloServices.CustomerService.Save(customer);
+
+            if (model.SetPassword)
+            {
+                var member = Membership.GetUser();
+                if (member == null)
+                {
+                    var nullReference = new NullReferenceException("Current member was null in change password operation");
+                    LogHelper.Error<AccountOperationsController>("Attempt to change password failed", nullReference);
+                    throw nullReference;
+                }
+
+                member.ChangePassword(model.OldPassword, model.Password); 
+            }
+
+            return this.SuccessfulRedirect(model.AccountPageId);
+        }
+
+        [ChildActionOnly]
+        public ActionResult RenderCustomerAddressForm(CustomerAddressModel model)
+        {
+            return this.PartialView(PathHelper.GetThemePartialViewPath(model.Theme, "ProfileForm"), model);   
+        }
+
+        /// <summary>
+        /// The save customer address.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult SaveCustomerAddress(CustomerAddressModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The delete customer address.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="customerAddressKey">
+        /// The customer address key.
+        /// </param>
+        /// <param name="accountPageId">
+        /// The account page id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public ActionResult DeleteCustomerAddress(Guid customerKey, Guid customerAddressKey, int accountPageId)
+        {
+            var customer = MerchelloServices.CustomerService.GetByKey(customerKey);
+            var address = customer.Addresses.FirstOrDefault(x => x.Key == customerAddressKey);
+            if (address != null)
+            {
+                customer.DeleteCustomerAddress(address);  
+            }
+
+            return this.SuccessfulRedirect(accountPageId);
+        }
+
+        /// <summary>
+        /// The successful redirect.
+        /// </summary>
+        /// <param name="accountPageId">
+        /// The account page id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        private ActionResult SuccessfulRedirect(int accountPageId)
+        {
+            var accountPage = Umbraco.TypedContent(accountPageId);
+
+            return this.Redirect(accountPage.Url + "#success");
         }
     }
 }

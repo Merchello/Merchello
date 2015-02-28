@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.UI.WebControls;
 
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.Account;
     using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
@@ -74,20 +76,50 @@
         /// <param name="model">
         /// The model.
         /// </param>
+        /// <param name="allCountries">
+        /// The all Countries.
+        /// </param>
+        /// <param name="shipCountries">
+        /// The ship Countries.
+        /// </param>
         /// <returns>
         /// The <see cref="AccountModel"/>.
         /// </returns>
-        public AccountModel CreateAccount(RenderModel model)
+        public AccountModel CreateAccount(RenderModel model, IEnumerable<ICountry> allCountries, IEnumerable<ICountry> shipCountries)
         {
             var viewModel = Build<AccountModel>(model);
             var customer = (ICustomer)viewModel.CurrentCustomer;
 
             viewModel.Profile = new CustomerProfileModel()
-            {
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                EmailAddress = customer.Email
-            };
+                {
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    EmailAddress = customer.Email
+                };
+
+            viewModel.AccountProfileModel = new AccountProfileModel()
+                {
+                    Theme = viewModel.Theme,
+                    AccountPageId = viewModel.Id,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    EmailAddress = customer.Email,
+                    SetPassword = false
+                };
+
+            viewModel.CustomerAddressModel = new CustomerAddressModel()
+                                                 {
+                                                     ShipCountries = shipCountries.Select(x => new SelectListItem()
+                                                                                                   {
+                                                                                                       Value = x.CountryCode,
+                                                                                                       Text = x.Name
+                                                                                                   }),
+                                                     AllCountries = allCountries.Select(x => new SelectListItem()
+                                                                                                 {
+                                                                                                    Value  = x.CountryCode,
+                                                                                                    Text = x.Name
+                                                                                                 })
+                                                 };
 
             return viewModel;
         }
