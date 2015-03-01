@@ -21530,6 +21530,15 @@
             </param>
             <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         </member>
+        <member name="M:Merchello.Core.Services.ICustomerAddressService.Save(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ICustomerAddress},System.Boolean)">
+            <summary>
+            The save.
+            </summary>
+            <param name="addresses">
+            The addresses.
+            </param>
+            <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        </member>
         <member name="M:Merchello.Core.Services.ICustomerAddressService.Delete(Merchello.Core.Models.ICustomerAddress,System.Boolean)">
             <summary>
             The delete.
@@ -21647,6 +21656,20 @@
             Optional boolean indicating whether or not to raise events
             </param>
         </member>
+        <member name="M:Merchello.Core.Services.CustomerAddressService.Save(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ICustomerAddress},System.Boolean)">
+            <summary>
+            Saves a collection of <see cref="T:Merchello.Core.Models.ICustomerAddress"/>
+            </summary>
+            <param name="addresses">
+            The addresses.
+            </param>
+            <param name="raiseEvents">
+            The raise events.
+            </param>
+            <remarks>
+            TODO - come up with a validation strategy on batch saves that protects default address settings
+            </remarks>
+        </member>
         <member name="M:Merchello.Core.Services.CustomerAddressService.Delete(Merchello.Core.Models.ICustomerAddress,System.Boolean)">
             <summary>
             Deletes a single <see cref="T:Merchello.Core.Models.ICustomerAddress"/>
@@ -21743,20 +21766,6 @@
             <returns>
             The count
             </returns>
-        </member>
-        <member name="M:Merchello.Core.Services.CustomerAddressService.Save(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ICustomerAddress},System.Boolean)">
-            <summary>
-            Saves a collection of <see cref="T:Merchello.Core.Models.ICustomerAddress"/>
-            </summary>
-            <param name="addresses">
-            The addresses.
-            </param>
-            <param name="raiseEvents">
-            The raise events.
-            </param>
-            <remarks>
-            TODO - come up with a validation strategy on batch saves that protects default address settings
-            </remarks>
         </member>
         <member name="M:Merchello.Core.Services.CustomerAddressService.Delete(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ICustomerAddress},System.Boolean)">
             <summary>
@@ -29965,6 +29974,14 @@
             </summary>
             <param name="address">
             The address.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Services.ICustomerService.Save(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ICustomerAddress})">
+            <summary>
+            Saves a single <see cref="T:Merchello.Core.Models.ICustomerAddress"/>
+            </summary>
+            <param name="addresses">
+            The collection of addresses to be saved.
             </param>
         </member>
         <member name="M:Merchello.Core.Services.ICustomerService.Delete(Merchello.Core.Models.ICustomerAddress)">

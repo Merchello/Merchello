@@ -6,6 +6,7 @@
     using System.Web.Http;
 
     using Merchello.Bazaar.Models;
+    using Merchello.Bazaar.Models.Account;
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
@@ -272,6 +273,37 @@
         }
 
         /// <summary>
+        /// The get customer address.
+        /// </summary>
+        /// <param name="customerAddressKey">
+        /// The customer address key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerAddressDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public object GetCustomerAddress(Guid customerAddressKey)
+        {
+            var adr = _merchelloContext.Services.CustomerService.GetAddressByKey(customerAddressKey);
+            return new 
+                       { 
+                           adr.Key,
+                           AddressType = adr.AddressType.ToString().ToLowerInvariant(), 
+                           adr.Label,
+                           adr.FullName,
+                           adr.Address1,
+                           adr.Address2,
+                           adr.Locality,
+                           adr.Region,
+                           adr.PostalCode,
+                           adr.CountryCode,
+                           adr.Company,
+                           adr.Phone,
+                           adr.IsDefault
+                       };
+        }
+
+        /// <summary>
         /// The validate option choice.
         /// </summary>
         /// <param name="variants">
@@ -287,7 +319,6 @@
         {
             return variants.Any(pv => pv.Attributes.Any(pa => pa.Key.Equals(productAttributeKey)) && pv.Available);
         }
-
 
         /// <summary>
         /// The initialize.

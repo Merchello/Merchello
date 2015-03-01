@@ -19,14 +19,14 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(ICustomerAddress address, bool raiseEvents = true);
 
-        /////// <summary>
-        /////// The save.
-        /////// </summary>
-        /////// <param name="addresses">
-        /////// The addresses.
-        /////// </param>
-        /////// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        ////void Save(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true);
+        /// <summary>
+        /// The save.
+        /// </summary>
+        /// <param name="addresses">
+        /// The addresses.
+        /// </param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        void Save(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true);
 
         /// <summary>
         /// The delete.

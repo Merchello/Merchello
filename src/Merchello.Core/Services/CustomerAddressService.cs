@@ -144,6 +144,40 @@
         }
 
         /// <summary>
+        /// Saves a collection of <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="addresses">
+        /// The addresses.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <remarks>
+        /// TODO - come up with a validation strategy on batch saves that protects default address settings
+        /// </remarks>
+        public void Save(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true)
+        {
+            var addressArray = addresses as ICustomerAddress[] ?? addresses.ToArray();
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerAddress>(addressArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
+                {
+                    foreach (var address in addressArray)
+                    {
+                        repository.AddOrUpdate(address);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerAddress>(addressArray), this);
+        }
+
+        /// <summary>
         /// Deletes a single <see cref="ICustomerAddress"/>
         /// </summary>
         /// <param name="address">
@@ -319,40 +353,6 @@
 
                 return repostitory.Count(query);
             }
-        }
-
-        /// <summary>
-        /// Saves a collection of <see cref="ICustomerAddress"/>
-        /// </summary>
-        /// <param name="addresses">
-        /// The addresses.
-        /// </param>
-        /// <param name="raiseEvents">
-        /// The raise events.
-        /// </param>
-        /// <remarks>
-        /// TODO - come up with a validation strategy on batch saves that protects default address settings
-        /// </remarks>
-        internal void Save(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true)
-        {
-            var addressArray = addresses as ICustomerAddress[] ?? addresses.ToArray();
-            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ICustomerAddress>(addressArray), this);
-
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
-                {
-                    foreach (var address in addressArray)
-                    {
-                        repository.AddOrUpdate(address);
-                    }
-
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ICustomerAddress>(addressArray), this);
         }
 
         /// <summary>

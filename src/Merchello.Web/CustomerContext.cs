@@ -169,6 +169,31 @@ namespace Merchello.Web
         }
 
         /// <summary>
+        /// Invalidates the current initialization and starts over
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        public void Reinitialize(ICustomerBase customer)
+        {
+            // customer has logged out, so we need to go back to an anonymous customer
+            var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
+
+            if (cookie == null)
+            {
+                this.Initialize();
+                return;
+            }
+
+            cookie.Expires = DateTime.Now.AddDays(-1);
+
+            _cache.RequestCache.ClearCacheItem(CustomerCookieName);
+            _cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key));
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Initializes this class with default values
         /// </summary>
         private void Initialize()
@@ -283,31 +308,6 @@ namespace Merchello.Web
         }
 
         /// <summary>
-        /// Invalidates the current initialization and starts over
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        private void Reinitialize(ICustomerBase customer)
-        {
-            // customer has logged out, so we need to go back to an anonymous customer
-            var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
-
-            if (cookie == null)
-            {
-                this.Initialize();
-                return;
-            }
-
-            cookie.Expires = DateTime.Now.AddDays(-1);
-
-            _cache.RequestCache.ClearCacheItem(CustomerCookieName);
-            _cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key));
-
-            Initialize();      
-        }
-
-        /// <summary>
         /// Provides an assertion that the customer cookie is associated with the correct customer Umbraco member relation.
         /// </summary>
         /// <param name="customer">
@@ -393,6 +393,7 @@ namespace Merchello.Web
             };
 
             // Ensure a session cookie for Anonymous customers
+            // TODO - on persisted authenticcation, we need to synch the cookie expiration
             if (customer.IsAnonymous) cookie.Expires = DateTime.MinValue;
 
             _umbracoContext.HttpContext.Response.Cookies.Add(cookie);

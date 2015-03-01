@@ -283,14 +283,15 @@
         {
             Mandate.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
 
-            ((ServiceContext)merchelloContext.Services).CustomerAddressService.Delete(address);
-
             var addresses = customer.Addresses.ToList();
 
             if (addresses.Any(x => x.Key == address.Key))
             {
                 addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
             }
+
+            ((ServiceContext)merchelloContext.Services).CustomerAddressService.Delete(address);
+
 
             ((Customer)customer).Addresses = addresses;
         }

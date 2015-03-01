@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="12.0">
+ <Targets>
+  <Target Name="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web\bin\Debug\Merchello.Web.dll">
+   <Modules>
+    <Module Name="merchello.web.dll">
+     <Namespaces>
+      <Namespace Name="Merchello.Web">
+       <Types>
+        <Type Name="UmbracoApplicationEventHandler" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'UmbracoApplicationEventHandler' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'ApplicationEventHandler'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="Merchello.Web.Editors">
+       <Types>
+        <Type Name="AuditLogApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'AuditLogApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="CustomerApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'CustomerApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="FixedRateShippingApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'FixedRateShippingApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="GatewayProviderApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'GatewayProviderApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="InvoiceApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'InvoiceApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="NotificationGatewayApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'NotificationGatewayApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="OrderApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'OrderApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PaymentApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'PaymentApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="PaymentGatewayApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'PaymentGatewayApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ProductApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ProductApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="SettingsApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'SettingsApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ShipmentApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ShipmentApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ShippingGatewayApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ShippingGatewayApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="TaxationGatewayApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'TaxationGatewayApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="WarehouseApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'WarehouseApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="Merchello.Web.Models.ContentEditing">
+       <Types>
+        <Type Name="InvoiceDisplay" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'InvoiceDisplay' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'LineItemDisplayCollectionBase&lt;InvoiceLineItemDisplay&gt;'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="OrderDisplay" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'OrderDisplay' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'LineItemDisplayCollectionBase&lt;OrderLineItemDisplay&gt;'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ShipmentDisplay" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ShipmentDisplay' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'LineItemDisplayCollectionBase&lt;OrderLineItemDisplay&gt;'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="Merchello.Web.Mvc">
+       <Types>
+        <Type Name="MerchelloTemplatePage" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'MerchelloTemplatePage' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoTemplatePage', 'UmbracoViewPage&lt;RenderModel&gt;', 'WebViewPage&lt;RenderModel&gt;', 'WebViewPage', 'WebPageBase', 'WebPageRenderingBase', 'WebPageExecutingBase'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="Merchello.Web.PropertyConverters">
+       <Types>
+        <Type Name="ProductDisplayValueConverter" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ProductDisplayValueConverter' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'PropertyValueConverterBase'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="Merchello.Web.Reporting">
+       <Types>
+        <Type Name="ReportController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ReportController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="Merchello.Web.Search">
+       <Types>
+        <Type Name="ExamineEvents" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ExamineEvents' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'ApplicationEventHandler'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="Merchello.Web.Trees">
+       <Types>
+        <Type Name="MerchelloTreeController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'MerchelloTreeController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'TreeController', 'TreeControllerBase', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ServerVariablesParsingEvents" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ServerVariablesParsingEvents' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'ApplicationEventHandler'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="Merchello.Web.WebApi">
+       <Types>
+        <Type Name="MerchelloApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'MerchelloApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoAuthorizedJsonController', 'UmbracoAuthorizedApiController', 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+        <Type Name="ScheduledTasksApiController" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Status="Active" Created="2015-02-28 21:43:44Z" FixCategory="DependsOnFix">
+           <Issue Certainty="90" Level="Error">'ScheduledTasksApiController' is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: 'UmbracoApiController', 'ApiController'</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405">
+   <Name>COM visible type base types should be COM visible</Name>
+   <Description>COM visible types should have an object hierarchy that is uniformly COM visible.</Description>
+   <Resolution Name="Default">{0} is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: {1}</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182202.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="90">Error</MessageLevel>
+   <File Name="interoperabilityrules.dll" Version="12.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="Certainty">Certainty</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="ExpandAll">Expand All</String>
+  <String Key="Help">Help</String>
+  <String Key="Line">Line</String>
+  <String Key="Messages">message(s)</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Resolution">Resolution</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleFile">Rule File</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Status">Status</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+</FxCopReport>

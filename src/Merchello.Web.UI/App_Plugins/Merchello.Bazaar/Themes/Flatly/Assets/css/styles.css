@@ -29,6 +29,15 @@
 .add-to-cart div.price {
   padding: 1em; }
 
+#addresses-form h2 {
+  font-size: 1.25em; }
+#addresses-form .vcard {
+  display: none; }
+#addresses-form #shipping-address {
+  display: none; }
+#addresses-form #customer-address-labels {
+  display: none; }
+
 td.align-right {
   text-align: right; }
 
@@ -54,11 +63,15 @@ span.field-validation-error {
 
 .account h2 {
   font-size: 1.25em; }
+.account #message {
+  display: none; }
 .account #profile-form {
   display: none; }
+.account #address-form {
+  display: none; }
+.account table tr.default-address {
+  background-color: #eeeeee; }
 
-.customer-addresses tr {
-  background-color: #eee; }
 .customer-addresses caption {
   line-height: 2em; }
 

@@ -218,6 +218,9 @@
             ((Customer)entity).ExamineId = dto.CustomerIndexDto.Id;
 
             entity.ResetDirtyProperties();
+
+            // customer context cache
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>
@@ -236,6 +239,9 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            // customer context cache
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>
@@ -251,6 +257,9 @@
             {
                 Database.Execute(delete, new { Key = entity.Key });
             }
+
+            // customer context cache
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.CustomerCacheKey(entity.Key));
         }
 
         /// <summary>

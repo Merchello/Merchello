@@ -14,11 +14,11 @@
                 merchello.bazaar.account.bind();
             });
         },
-
         account: {
             bind: function() {
                 merchello.bazaar.account.resetViews();
-                
+
+                // profile forms
                 $('#btn-profile-open').click(function() {
                     $('#profile-form').show();
                     $('#address-view').hide();
@@ -28,21 +28,125 @@
                     merchello.bazaar.account.resetViews();
                 });
                 $('#chk-change-password').click(function () {
-                    console.info('clicked');
                     if (this.checked) {
                         $('#change-password-form').show();
                     } else {
                         $('#change-password-form').hide();
                     }
                 });
+
+                // address edit buttons
+                $('#btn-add-address-billing').click(function() {
+                    merchello.bazaar.account.customerAddressForm.init('billing');
+                });
+                $('#btn-add-address-shipping').click(function () {
+                    merchello.bazaar.account.customerAddressForm.init('shipping');
+                });
+                $.each($('.address-edit-link'), function(index, btn) {
+                    $(btn).click(function() {
+                        merchello.bazaar.account.customerAddressForm.init($(this).attr('data-adddresstype'), $(this).attr('data-addresskey'));
+                    });
+                });
+                $('#btn-address-form-cancel').click(function () {
+                    merchello.bazaar.account.resetViews();
+                });
+
+                // adddress country drop downs
+                $.each($('.country-selection'), function(index, ddl) {
+                    $(ddl).change(function() {
+                        merchello.bazaar.account.setProvinces(this);
+                    });
+                });
+
+                $('#address-province-select').change(function() {
+                    $('address-province-entry').text($(this).val());
+                });
+                $('address-province-entry').text($('#address-province-select').val());
+
             },
             toggleProfileForm: function() {
                 $('#btn-profile-open').attr('disabled', 'disabled');
+            },
+            customerAddressForm: {
+                init: function (type, addressKey) {
+                    $('#address-form').show();
+                    $('#address-view').hide();
+                    var label = (type === 'shipping' ? ' Shipping ' : ' Billing ') + 'Address';
+                    var countryDdl = ('#address-countrycode-' + type);
+                    $(countryDdl).show();
+                    merchello.bazaar.account.setProvinces(countryDdl);
+                    $('#address-countrycode-' + (type === 'shipping' ? 'billing' : 'shipping')).hide();
+                    $('#address-addresstype').val(type);
+                    if (addressKey) {
+                        // this is an update
+                        var data = {};
+                        data.customerAddressKey = addressKey;
+                        $.ajax({
+                            type: "GET",
+                            url: "/umbraco/Bazaar/BazaarSiteApi/GetCustomerAddress",
+                            data: data,
+                            success: function (adr) {
+                                $('#address-caption').text('Edit Your ' + label);
+                                $('#address-label').val(adr.label);
+                                $('#address-fullname').val(adr.fullName);
+                                $('#address-address1').val(adr.address1);
+                                $('#address-address2').val(adr.address2);
+                                $('#address-locality').val(adr.locality);
+                                $('#address-region-entry').val(adr.region);
+                                $('#address-province-select').val(adr.region);
+                                if (adr.addressType === 'shipping') {
+                                    $('#address-countrycode-shipping').val(adr.countryCode);
+                                } else {
+                                    $('#address-countrycode-billing').val(adr.countryCode);
+                                }
+                                $('#address-postalcode').val(adr.postalCode);
+                                $('#address-phone').val(adr.phone);
+                                $('#address-key').val(adr.key);
+                            },
+                            dataType: "json",
+                            traditional: true
+                        }).fail(function (ex) {
+                            $.error(ex);
+                        });
+
+                    } else {
+                        $('#address-caption').text('Add a New ' + label);
+                    }
+                }  
+            },
+            setProvinces: function (elem) {
+                var countryCode = $(elem).val();
+                var data = {};
+                data.countryCode = countryCode;
+                $.ajax({
+                    type: "GET",
+                    url: "/umbraco/Bazaar/BazaarSiteApi/GetProvincesForCountry",
+                    data: data,
+                    success: function (provinces) {
+                        if (provinces.length > 0) {
+                            $('#address-province-select').show();
+                            $('#address-province-select').find('option').remove();
+                            $.each(provinces, function (idx, province) {
+                                $('#address-province-select').append('<option value=\'' + province.code + '\'>' + province.name + '</option>')
+                            });
+                            $('#address-province-entry').hide();
+                        } else {
+                            $('#address-province-select').hide();
+                            $('#address-province-entry').show();
+                        }
+                    },
+                    dataType: "json",
+                    traditional: true
+                }).fail(function (ex) {
+                    $.error(ex);
+                });
+
             },
             resetViews: function () {
                 if (window.location.hash === '#success') {
                     $('#message').show();
                     $('#message').delay(2000).fadeOut(1000);
+                    window.location.hash = '';
                 } else {
                     $('#message').hide();
                 }
@@ -50,9 +154,30 @@
                 $('#address-view').show();
                 $('#btn-add-address-billing').removeAttr('disabled');
                 $('#btn-add-address-shipping').removeAttr('disabled');
+                $('#address-countrycode-billing').val('US');
                 $('#address-form').hide();
                 $('#profile-form').hide();
                 $('#btn-profile-form').attr('disabled', 'disabled');
+                // address
+                $('#address-label').val('');
+                $('#address-fullname').val('');
+                $('#address-address1').val('');
+                $('#address-address2').val('');
+                $('#address-locality').val('');
+                $('#address-region-entry').val('');
+                $('#address-province-select').val('');
+                $('#address-postalcode').val('');
+                $('#address-phone').val('');
+                $('#address-key').val('');
+
+                // reset form validations
+                $('.field-validation-error')
+                    .empty()
+                    .removeClass('field-validation-error')
+                    .addClass('field-validation-valid');
+                $('.input-validation-error')
+                    .removeClass('input-validation-error')
+                    .addClass('valid');
             }
         },
 
@@ -200,14 +325,47 @@
                         $('#billing-is-shipping').click(function () {
                             merchello.bazaar.checkout.toggleBillingIsShipping();
                         });
-                        merchello.bazaar.checkout.toggleBillingIsShipping();
                     }
 
                     // update ship rate quotes
                     if ($('#shipping-quotes-select')) {
                         $('#shipping-quotes-select').change(function () {
-                            console.info('got here');
                             merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
+                        });
+                    }
+
+                    // bind the customer address drop downs
+                    if ($('#billing-address-select')) {
+                        $('#billing-address-select').change(function() {
+                            if ($(this).val() !== '') {
+                                $('#billing-address').hide();
+                                $('#billing-vcard').show();
+                                merchello.bazaar.checkout.setCustomerAddress('billing', $(this).val(), $('#billing-vcard'));
+                            } else {
+                                $('#billing-address').show();
+                                $('#billing-vcard').hide();
+                            }
+                            merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
+                        });
+                    }
+                    if ($('shipping-address-select')) {
+                        $('#shipping-address-select').change(function() {
+                            if ($(this).val() !== '') {
+                                $('#billing-is-shipping-check').hide();
+                                $('#shipping-address').hide();
+                            } else {
+                                $('#billing-is-shipping-check').show();
+                                if (!$('#billing-is-shipping').is(':checked')) {
+                                    $('#shipping-address').show();
+                                }
+                            }
+                            merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
+                        });
+                    }
+
+                    if ($('#save-addresses-check')) {
+                        $('#save-addresses-check').click(function() {
+                            merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
                     }
                 }
@@ -224,6 +382,66 @@
             },
             toggleBillingIsShipping: function () {
                 $('#shipping-address').toggle($('#billing-is-shipping').checked);
+                merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
+            },
+            refreshCustomerAddressViewSettings: function () {
+                // drop downs
+                if ($('#shipping-address-select')) {
+                    if ($('#billing-is-shipping').is(':checked')) {
+                        if ($('#billing-address-select')) {
+                            if ($('#billing-address-select').val() !== '') {
+                                $('#shipping-address-select option:nth(0)').text('Use a copy of \'' + $("#billing-address-select option:selected").text() + '\'');
+                            } else {
+                                $('#shipping-address-select option:nth(0)').text('Enter a new address');
+                            }
+                        }
+                    } else {
+                        $('#shipping-address-select option:nth(0)').text('Enter a new address');
+                    }
+                }
+                // save info options
+                if ($('#shipping-address-select') || $('#billing-address-select')) {
+                    // if either of the drop downs has an empty key we need to show one or both label
+                    // boxes.
+                    var showBillingLabel = false;
+                    var showShippingLabel = false;
+                    var showCheckbox = false;
+                    if ($('#shipping-address-select')) {
+                        if ($('#shipping-address-select').val() === '') {
+                            showShippingLabel = true;
+                        }
+                    }
+                    if ($('#billing-address-select')) {
+                        if ($('#billing-address-select').val() === '') {
+                            showBillingLabel = true;
+                        }
+                    }
+                    showCheckbox = showBillingLabel || showShippingLabel;
+                    if (showCheckbox) {
+                        $('#save-addresses-options').show();
+                        if ($('#save-addresses-check').is(':checked')) {
+                            $('#customer-address-labels').show();
+                            if (showBillingLabel) {
+                                $('#billing-address-label-save').show();
+                            } else {
+                                $('#billing-address-label-save').hide();
+                            }
+                            if (showShippingLabel) {
+                                $('#shipping-address-label-save').show();
+                            } else {
+                                $('#shipping-address-label-save').hide();
+                            }
+                        } else {
+                            $('#customer-address-labels').hide();
+                        }
+                        
+                    } else {
+                        $('#save-addresses-options').hide();
+                    }
+                
+                } else {
+                    $('#save-addresses-options').hide();
+                }
             },
             setProvinces: function (elem) {
                 var countryCode = $(elem).val();
@@ -302,6 +520,9 @@
                     $('#shipping-postalcode').val($('#billing-postalcode').val());
                     $('#shipping-phone').val($('#billing-phone').val());
                 }
+            },
+            setCustomerAddress : function(type, key, vcard) {
+                
             }
         }
     }

@@ -1,15 +1,15 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<AccountModel>
 @using System.Web.Mvc.Html
-@using System.Web.Routing
+@using Merchello.Bazaar.Controllers
 @using Merchello.Bazaar.Models.ViewModels
 @using Merchello.Core
 @using Merchello.Core.Models
 @{
     Layout = "../Master.cshtml";
-    
+
     System.Web.Mvc.HtmlHelper.ClientValidationEnabled = true;
     System.Web.Mvc.HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
-    
+
     var customer = (ICustomer)Model.CurrentCustomer;
 }
 
@@ -33,18 +33,19 @@
             Success
         </div>
         <div id="address-view">
-            <h2>Addresses</h2>
+            <h2>Saved Addresses</h2>
             @BuildAddressTable(AddressType.Billing, customer.Addresses.Where(x => x.AddressType == AddressType.Billing))
             @BuildAddressTable(AddressType.Shipping, customer.Addresses.Where(x => x.AddressType == AddressType.Shipping))
         </div>
         <div id="address-form">
-            
+            @Html.Action("RenderCustomerAddressForm", "AccountOperations", new { area = "Bazaar", model = Model.CustomerAddressModel })
         </div>
         <div id="profile-form">
             @Html.Action("RenderAccountProfileForm", "AccountOperations", new { area = "Bazaar", model = Model.AccountProfileModel })
         </div>
     </div>
 </div>
+
 
 @helper BuildAddressTable(AddressType addressType, IEnumerable<ICustomerAddress> addressesCollection)
 {
@@ -73,7 +74,7 @@
             </tr>
             foreach (var adr in addresses)
             {
-                <tr @(adr.IsDefault ? "class=info" : "")>
+                <tr @(adr.IsDefault ? "class=default-address" : "")>
                     <td>@adr.Label</td>
                     <td>@adr.FullName</td>
                     <td>@adr.Address1</td>
@@ -83,18 +84,19 @@
                     <td>@adr.PostalCode</td>
                     <td>@adr.CountryCode</td>
                     <td class="dropdown">
-                        <button class="dropdown-toggle btn btn-default btn-addresses" data-toggle="dropdown">Actions</button>
+                        <button class="dropdown-toggle btn btn-default" data-toggle="dropdown">Actions</button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Edit</a></li>
+                            <li><a href="#" class="address-edit-link" data-adddresstype="@adr.AddressType.ToString().ToLowerInvariant()" data-addresskey="@adr.Key">Edit</a></li>
                             @if (!adr.IsDefault)
                             {
-                                <li><a href="#">Make Default</a></li>
+                                <li>@Html.ActionLink("Make Default", "SetDefaultAddress", "AccountOperations", new { area = "Bazaar", customerKey = adr.CustomerKey, customerAddressKey = adr.Key, accountPageId = Model.Id }, new { @class = "address-setdefault" })</li>
                             }
                             <li>
-                                @Html.ActionLink("Delete", "DeleteCustomerAddress", "AccountOperations", new  { customerKey = adr.CustomerKey, customerAddressKey = adr.Key, accountPageId = Model.Id }, null)
+                                @Html.ActionLink("Delete", "DeleteCustomerAddress", "AccountOperations", new { area = "Bazaar", customerKey = adr.CustomerKey, customerAddressKey = adr.Key, accountPageId = Model.Id }, new { @class = "address-delete" })
                             </li>
                         </ul>
                     </td>
+
                 </tr>
             }
         }

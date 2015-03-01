@@ -1,16 +1,15 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Security;
-    using System.Web.UI;
 
     using Merchello.Bazaar.Models.Account;
     using Merchello.Core.Models;
 
     using Umbraco.Core.Logging;
-    using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -93,10 +92,19 @@
             return this.SuccessfulRedirect(model.AccountPageId);
         }
 
+        /// <summary>
+        /// The render customer address form.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [ChildActionOnly]
         public ActionResult RenderCustomerAddressForm(CustomerAddressModel model)
         {
-            return this.PartialView(PathHelper.GetThemePartialViewPath(model.Theme, "ProfileForm"), model);   
+            return this.PartialView(PathHelper.GetThemePartialViewPath(model.Theme, "CustomerAddressForm"), model);   
         }
 
         /// <summary>
@@ -111,7 +119,21 @@
         [HttpPost]
         public ActionResult SaveCustomerAddress(CustomerAddressModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
+            ICustomerAddress customerAddress;
+            if (!model.Key.Equals(Guid.Empty))
+            {
+                var existing = MerchelloServices.CustomerService.GetAddressByKey(model.Key);
+                customerAddress = model.AsCustomerAddress(existing);
+            }
+            else
+            {
+                customerAddress = model.AsCustomerAddress();
+            }
+
+            MerchelloServices.CustomerService.Save(customerAddress);
+            CustomerContext.Reinitialize(CurrentCustomer);
+            return this.SuccessfulRedirect(model.AccountPageId);
         }
 
         /// <summary>
@@ -136,7 +158,45 @@
             var address = customer.Addresses.FirstOrDefault(x => x.Key == customerAddressKey);
             if (address != null)
             {
-                customer.DeleteCustomerAddress(address);  
+                customer.DeleteCustomerAddress(address);
+                CustomerContext.Reinitialize(customer);
+            }
+
+            return this.SuccessfulRedirect(accountPageId);
+        }
+
+        /// <summary>
+        /// The set default address.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="customerAddressKey">
+        /// The customer address key.
+        /// </param>
+        /// <param name="accountPageId">
+        /// The account page id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public ActionResult SetDefaultAddress(Guid customerKey, Guid customerAddressKey, int accountPageId)
+        {
+            var customer = MerchelloServices.CustomerService.GetByKey(customerKey);
+            var address = customer.Addresses.FirstOrDefault(x => x.Key == customerAddressKey);
+            if (address != null)
+            {
+                var addresses = new List<ICustomerAddress>();
+                foreach (var adr in customer.Addresses.Where(x => x.AddressType == address.AddressType && x.Key != address.Key))
+                {
+                    adr.IsDefault = false;
+                    addresses.Add(adr);
+                }
+
+                address.IsDefault = true;
+                MerchelloServices.CustomerService.Save(addresses);
+                CustomerContext.Reinitialize(customer);
             }
 
             return this.SuccessfulRedirect(accountPageId);

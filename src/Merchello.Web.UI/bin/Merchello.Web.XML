@@ -9197,6 +9197,14 @@
             The <see cref="T:System.String"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.CustomerContext.Reinitialize(Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Invalidates the current initialization and starts over
+            </summary>
+            <param name="customer">
+            The customer.
+            </param>
+        </member>
         <member name="M:Merchello.Web.CustomerContext.Initialize">
             <summary>
             Initializes this class with default values
@@ -9207,14 +9215,6 @@
             Attempts to either retrieve an anonymous customer or an existing customer
             </summary>
             <param name="key">The key of the customer to retrieve</param>
-        </member>
-        <member name="M:Merchello.Web.CustomerContext.Reinitialize(Merchello.Core.Models.ICustomerBase)">
-            <summary>
-            Invalidates the current initialization and starts over
-            </summary>
-            <param name="customer">
-            The customer.
-            </param>
         </member>
         <member name="M:Merchello.Web.CustomerContext.EnsureIsLoggedInCustomer(Merchello.Core.Models.ICustomerBase)">
             <summary>
