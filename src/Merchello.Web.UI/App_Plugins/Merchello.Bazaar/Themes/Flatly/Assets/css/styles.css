@@ -57,6 +57,8 @@ span.field-validation-error {
   display: block; }
 .vcard .email {
   display: block; }
+.vcard .country-name {
+  display: block; }
 
 #btn-profile-open {
   margin-top: 1em; }

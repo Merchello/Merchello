@@ -1,4 +1,8 @@
-﻿ol, ul {
+﻿img {
+	max-width:100%;
+}
+
+ol, ul {
     list-style: none;
 }
 
@@ -32,7 +36,7 @@
 .add-to-cart {
 
     div.inventory {
-        margin: 0 1em;
+        margin: 1em;
         padding-bottom: 1em;
     padding-left: 1em;
     text-align: center;
@@ -67,6 +71,7 @@ span.field-validation-error {
     .street-address { display: block; }
     .extended-address { display: block; }
     .email { display: block; }
+    .country-name { display: block; }
 }
 
 // ------------------------------------

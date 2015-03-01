@@ -49,6 +49,14 @@ ol, ul {
 
 }
 
+// checkout addresses form
+#addresses-form {
+    h2 { font-size: 1.25em; }
+    .vcard { display: none; }
+    #shipping-address { display: none; }
+    #customer-address-labels { display: none; }
+}
+
 div.price {
     padding: 1em;
 }
@@ -62,29 +70,39 @@ span.field-validation-error {
         color: red;
 }
 .vcard {
-    h5 { font-size: 1.5em; }
+    h5, h4, h3, h2 { font-size: 1.5em; }
     .fn { display: block; }
     .adr { display: block; }
     .street-address { display: block; }
     .extended-address { display: block; }
+    .email { display: block; }
+    .country-name { display: block; }
 }
 
-.navbar-collapse {
-	&.collapsing {
-		ul.pull-right {
-				float:none !important;
-			}
-	}
-	&.collapse {
-		&.in {
-			ul.pull-right {
-				float:none !important;
-			}
-		}
-	}
-} 
+// ------------------------------------
+// Account pages 
+// ------------------------------------
 
+#btn-profile-open { margin-top: 1em;}
 
+.account {
+    h2 { font-size: 1.25em; }
+    #message { display: none; }
+    #profile-form { display: none; }
+    #address-form { display: none; }
+    table tr.default-address {
+        background-color: #eeeeee;
+    }
+}
+
+.customer-addresses {
+    tr { 
+    }
+
+    caption {  
+        line-height: 2em;
+    }
+}
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) { 
@@ -101,3 +119,7 @@ span.field-validation-error {
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) { 
  }
+ 
+ #update-account-form {
+    #change-password-form { display: none; }
+}
