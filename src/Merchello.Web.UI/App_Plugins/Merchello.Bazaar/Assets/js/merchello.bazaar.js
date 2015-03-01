@@ -14,7 +14,6 @@
                 merchello.bazaar.account.bind();
             });
         },
-
         account: {
             bind: function() {
                 merchello.bazaar.account.resetViews();
@@ -326,14 +325,47 @@
                         $('#billing-is-shipping').click(function () {
                             merchello.bazaar.checkout.toggleBillingIsShipping();
                         });
-                        merchello.bazaar.checkout.toggleBillingIsShipping();
                     }
 
                     // update ship rate quotes
                     if ($('#shipping-quotes-select')) {
                         $('#shipping-quotes-select').change(function () {
-                            console.info('got here');
                             merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
+                        });
+                    }
+
+                    // bind the customer address drop downs
+                    if ($('#billing-address-select')) {
+                        $('#billing-address-select').change(function() {
+                            if ($(this).val() !== '') {
+                                $('#billing-address').hide();
+                                $('#billing-vcard').show();
+                                merchello.bazaar.checkout.setCustomerAddress('billing', $(this).val(), $('#billing-vcard'));
+                            } else {
+                                $('#billing-address').show();
+                                $('#billing-vcard').hide();
+                            }
+                            merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
+                        });
+                    }
+                    if ($('shipping-address-select')) {
+                        $('#shipping-address-select').change(function() {
+                            if ($(this).val() !== '') {
+                                $('#billing-is-shipping-check').hide();
+                                $('#shipping-address').hide();
+                            } else {
+                                $('#billing-is-shipping-check').show();
+                                if (!$('#billing-is-shipping').is(':checked')) {
+                                    $('#shipping-address').show();
+                                }
+                            }
+                            merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
+                        });
+                    }
+
+                    if ($('#save-addresses-check')) {
+                        $('#save-addresses-check').click(function() {
+                            merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
                     }
                 }
@@ -350,6 +382,66 @@
             },
             toggleBillingIsShipping: function () {
                 $('#shipping-address').toggle($('#billing-is-shipping').checked);
+                merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
+            },
+            refreshCustomerAddressViewSettings: function () {
+                // drop downs
+                if ($('#shipping-address-select')) {
+                    if ($('#billing-is-shipping').is(':checked')) {
+                        if ($('#billing-address-select')) {
+                            if ($('#billing-address-select').val() !== '') {
+                                $('#shipping-address-select option:nth(0)').text('Use a copy of \'' + $("#billing-address-select option:selected").text() + '\'');
+                            } else {
+                                $('#shipping-address-select option:nth(0)').text('Enter a new address');
+                            }
+                        }
+                    } else {
+                        $('#shipping-address-select option:nth(0)').text('Enter a new address');
+                    }
+                }
+                // save info options
+                if ($('#shipping-address-select') || $('#billing-address-select')) {
+                    // if either of the drop downs has an empty key we need to show one or both label
+                    // boxes.
+                    var showBillingLabel = false;
+                    var showShippingLabel = false;
+                    var showCheckbox = false;
+                    if ($('#shipping-address-select')) {
+                        if ($('#shipping-address-select').val() === '') {
+                            showShippingLabel = true;
+                        }
+                    }
+                    if ($('#billing-address-select')) {
+                        if ($('#billing-address-select').val() === '') {
+                            showBillingLabel = true;
+                        }
+                    }
+                    showCheckbox = showBillingLabel || showShippingLabel;
+                    if (showCheckbox) {
+                        $('#save-addresses-options').show();
+                        if ($('#save-addresses-check').is(':checked')) {
+                            $('#customer-address-labels').show();
+                            if (showBillingLabel) {
+                                $('#billing-address-label-save').show();
+                            } else {
+                                $('#billing-address-label-save').hide();
+                            }
+                            if (showShippingLabel) {
+                                $('#shipping-address-label-save').show();
+                            } else {
+                                $('#shipping-address-label-save').hide();
+                            }
+                        } else {
+                            $('#customer-address-labels').hide();
+                        }
+                        
+                    } else {
+                        $('#save-addresses-options').hide();
+                    }
+                
+                } else {
+                    $('#save-addresses-options').hide();
+                }
             },
             setProvinces: function (elem) {
                 var countryCode = $(elem).val();
@@ -428,6 +520,9 @@
                     $('#shipping-postalcode').val($('#billing-postalcode').val());
                     $('#shipping-phone').val($('#billing-phone').val());
                 }
+            },
+            setCustomerAddress : function(type, key, vcard) {
+                
             }
         }
     }

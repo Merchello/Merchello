@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Bazaar.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.CodeAnalysis;
@@ -21,6 +22,16 @@
         public string ThemeName { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether save customer address.
+        /// </summary>
+        public bool SaveCustomerAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is anonymous.
+        /// </summary>
+        public bool IsAnonymous { get; set; }
+
+        /// <summary>
         /// Gets or sets the sale summary.
         /// </summary>
         public SalePreparationSummary SaleSummary { get; set; }
@@ -28,6 +39,23 @@
         #region Billing address
 
         /// <summary>
+        /// Gets or sets the billing address key.
+        /// </summary>
+        public Guid BillingAddressKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the billing address label.
+        /// </summary>
+        [Required(ErrorMessage = "Required"), Display(Name = "Billing Address Label")]
+        public string BillingAddressLabel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the billing addresses.
+        /// </summary>
+        [Display(Name = "Select Saved Billing Address")]
+        public IEnumerable<SelectListItem> BillingAddresses { get; set; }
+
+            /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [Required(ErrorMessage = "Name is reqired"), Display(Name = "Name")]
@@ -103,6 +131,23 @@
         public bool BillingIsShipping { get; set; }
 
         /// <summary>
+        /// Gets or sets the shipping address key.
+        /// </summary>
+        public Guid ShippingAddressKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipping address label.
+        /// </summary>
+        [Required(ErrorMessage = "Required"), Display(Name = "Shipping Address Label")]
+        public string ShippingAddressLabel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shipping addresses.
+        /// </summary>
+        [Display(Name = "Select Saved Shipping Address")]
+        public IEnumerable<SelectListItem> ShippingAddresses { get; set; }
+
+            /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [Required(ErrorMessage = "Name is reqired"), Display(Name = "Name")]

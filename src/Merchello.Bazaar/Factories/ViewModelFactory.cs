@@ -9,6 +9,7 @@
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.Account;
     using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Core;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
@@ -20,6 +21,8 @@
     using Umbraco.Core.Models;
     using Umbraco.Web;
     using Umbraco.Web.Models;
+
+    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// Represents a view model factory.
@@ -200,17 +203,25 @@
 
             var fullName = string.Empty;
             var emailAddress = string.Empty;
+            var shippingAddresses = new List<SelectListItem>();
+            var billingAddresses = new List<SelectListItem>();
             if (!_currentCustomer.IsAnonymous)
             {
                 var customer = (ICustomer)_currentCustomer;
                 fullName = customer.FullName;
                 emailAddress = customer.Email;
+                if (customer.Addresses.Any())
+                {
+                    shippingAddresses.AddRange(customer.Addresses.Where(x => x.AddressType == AddressType.Shipping).Select(shipAdr => new SelectListItem() { Value = shipAdr.Key.ToString(), Text = shipAdr.Label }));
+                    billingAddresses.AddRange(customer.Addresses.Where(x => x.AddressType == AddressType.Billing).Select(shipAdr => new SelectListItem() { Value = shipAdr.Key.ToString(), Text = shipAdr.Label }));
+                }
             }
 
             viewModel.SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation());
             viewModel.CheckoutAddressForm = new CheckoutAddressForm()
                 {
-                                                   
+                    IsAnonymous = viewModel.CurrentCustomer.IsAnonymous,
+                    BillingAddresses = billingAddresses,
                     BillingName = fullName,
                     BillingEmail = emailAddress,
                     BillingCountries = allCountries.Select(x => new SelectListItem()
@@ -219,6 +230,7 @@
                                                                 Text = x.Name
                                                             }),                                                                  
                     BillingIsShipping = true,
+                    ShippingAddresses = shippingAddresses,
                     ShippingName = fullName,
                     ShippingEmail = emailAddress,
                     ShippingCountries = shipCountries.Select(x => new SelectListItem()
@@ -230,6 +242,7 @@
                     ThemeName = viewModel.Theme,
                     SaleSummary = viewModel.SaleSummary
                 };
+           
             return viewModel;
         }
 

@@ -44,7 +44,13 @@
     }
 
 }
-
+// checkout addresses form
+#addresses-form {
+    h2 { font-size: 1.25em; }
+    .vcard { display: none; }
+    #shipping-address { display: none; }
+    #customer-address-labels { display: none; }
+}
 
 td.align-right {
     text-align: right;
@@ -71,8 +77,9 @@ span.field-validation-error {
 
 .account {
     h2 { font-size: 1.25em; }
+    #message { display: none; }
     #profile-form { display: none; }
-
+    #address-form { display: none; }
     table tr.default-address {
         background-color: #eeeeee;
     }

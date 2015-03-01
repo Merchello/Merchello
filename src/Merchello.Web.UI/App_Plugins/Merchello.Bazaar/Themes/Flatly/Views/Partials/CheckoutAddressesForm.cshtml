@@ -5,34 +5,32 @@
 @using Merchello.Bazaar
 @using Umbraco.Web
 
-<div class="row-fluid">
-    <div class="span8">
-        <div class="span6 text-center">
-            <h2>Billing Address</h2>
-        </div>
-        <div class="span6 text-center">
-            <h2>Shipping Address</h2>
-        </div>
-    </div>
-</div>
 
 <div class="row-fluid">
 
-
-
-    @using (Html.BeginUmbracoForm<SalePreparationOperationsController>("SaveAddresses", null, new { @id="addresses-form"}))
+    @using (Html.BeginUmbracoForm<SalePreparationOperationsController>("SaveAddresses", null, new { @id = "addresses-form" }))
     {
         <div class="span8">
 
             <div class="row-fluid">
                 <div class="span6">
+                    <h2>Billing Address</h2>
+                    @if (!Model.IsAnonymous && Model.BillingAddresses.Any())
+                    {
+                        <div class="control-group">
+                            @Html.LabelFor(x => x.BillingAddresses, new { @classs = "control-label" })
+                            <div class="controls">
+                                @Html.DropDownListFor(x => x.BillingAddressKey, Model.BillingAddresses, "Enter a new address", new { @id = "billing-address-select", @class = "span10" })
+                            </div>
+                        </div>
+                    }
                     <fieldset id="billing-address">
 
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingName, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.BillingName)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingName, new { @id="billing-name", @placeholder = "Your full name", @class="span10" })
+                                @Html.TextBoxFor(x => x.BillingName, new { @id = "billing-name", @placeholder = "Your full name", @class = "span10" })
                             </div>
                         </div>
 
@@ -40,7 +38,7 @@
                             @Html.LabelFor(x => x.BillingEmail, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.BillingEmail)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingEmail, new { @id="billing-email", @placeholder = "Your email address", @class = "span10" })
+                                @Html.TextBoxFor(x => x.BillingEmail, new { @id = "billing-email", @placeholder = "Your email address", @class = "span10" })
                             </div>
                         </div>
 
@@ -49,7 +47,7 @@
                             @Html.LabelFor(x => x.BillingAddress1, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.BillingAddress1)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingAddress1, new { @id="billing-address1", @placeholder = "Address line 1", @class = "span10" })
+                                @Html.TextBoxFor(x => x.BillingAddress1, new { @id = "billing-address1", @placeholder = "Address line 1", @class = "span10" })
                             </div>
                         </div>
 
@@ -72,7 +70,7 @@
 
                             @Html.LabelFor(x => x.BillingRegion, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingRegion, new { @placeholder = "Your region or province", @id="billing-province-entry", @data_addresstype="billing" })
+                                @Html.TextBoxFor(x => x.BillingRegion, new { @placeholder = "Your region or province", @id = "billing-province-entry", @data_addresstype = "billing" })
                                 <select id="billing-province-select" class="span8" data-addresstype="billing"></select>
                             </div>
 
@@ -81,7 +79,7 @@
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingCountries, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.DropDownListFor(x => x.BillingCountryCode, Model.BillingCountries, new { @id="billing-country-select", @class = "country-selection span10",  @data_addresstype="billing" })
+                                @Html.DropDownListFor(x => x.BillingCountryCode, Model.BillingCountries, new { @id = "billing-country-select", @class = "country-selection span10", @data_addresstype = "billing" })
                             </div>
                         </div>
 
@@ -96,20 +94,34 @@
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingPhone, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.BillingPhone, new { @id="billing-phone", @placeholder = "Your telephone number", @class = "span10" })
+                                @Html.TextBoxFor(x => x.BillingPhone, new { @id = "billing-phone", @placeholder = "Your telephone number", @class = "span10" })
                             </div>
                         </div>
 
                     </fieldset>
 
+                    <div id="billing-vcard" class="vcard">
+                        <span class="fn" id="billing-vcard-fn"></span>
+                        <span class="adr">
+                            <span class="street-address" id="billing-vcard-address1"></span>
+                            <span class="extended-address" id="billing-vcard-address2"></span>
+                            <span class="locality" id="billing-vcard-locality"></span>, <span class="region" id="billing-vcard-region"></span> <span class="postal-code" id="billing-vcard-postalcode"></span>
+                            <span class="country-name" id="billing-vcard-country"></span>
+                        </span>
+                    </div>
+
                 </div>
                 <div class="span6">
-                    <div class="control-group">
-                            <label class="checkbox pull-right">
-                                @Html.CheckBoxFor(x => x.BillingIsShipping, new { @id = "billing-is-shipping" }) Use billing address
-                            </label>
-                       </div>
-
+                    <h2>Shipping Address</h2>
+                    @if (!Model.IsAnonymous && Model.ShippingAddresses.Any())
+                    {
+                        <div class="control-group">
+                            @Html.LabelFor(x => x.ShippingAddresses, new { @classs = "control-label" })
+                            <div class="controls">
+                                @Html.DropDownListFor(x => x.ShippingAddressKey, Model.ShippingAddresses, "Enter a new address", new { @id = "shipping-address-select", @class = "span10" })
+                            </div>
+                        </div>
+                    }
                     <fieldset id="shipping-address">
 
 
@@ -117,7 +129,7 @@
                             @Html.LabelFor(x => x.ShippingName, new { @class = "control-label" })
                             @Html.ValidationMessageFor(x => x.ShippingName)
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingName, new { @id="shipping-name", @placeholder = "Your full name", @class = "span10" })
+                                @Html.TextBoxFor(x => x.ShippingName, new { @id = "shipping-name", @placeholder = "Your full name", @class = "span10" })
                             </div>
                         </div>
 
@@ -157,7 +169,7 @@
 
                             @Html.LabelFor(x => x.ShippingRegion, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.TextBoxFor(x => x.ShippingRegion, new { @placeholder = "Your region or province", @id = "shipping-province-entry",  @data_addresstype="shipping" })
+                                @Html.TextBoxFor(x => x.ShippingRegion, new { @placeholder = "Your region or province", @id = "shipping-province-entry", @data_addresstype = "shipping" })
                                 <select name="shippingRegionSelect" id="shipping-province-select" class="span8" data-addresstype="shipping"></select>
                             </div>
 
@@ -166,7 +178,7 @@
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingCountries, new { @class = "control-label" })
                             <div class="controls">
-                                @Html.DropDownListFor(x => x.ShippingCountryCode, Model.ShippingCountries, new { @id="shipping-country-select", @class = "country-selection span10",  @data_addresstype="shipping" })
+                                @Html.DropDownListFor(x => x.ShippingCountryCode, Model.ShippingCountries, new { @id = "shipping-country-select", @class = "country-selection span10", @data_addresstype = "shipping" })
                             </div>
                         </div>
 
@@ -186,6 +198,11 @@
                         </div>
 
                     </fieldset>
+                    <div class="control-group" id="billing-is-shipping-check">
+                        <label class="checkbox">
+                            @Html.CheckBoxFor(x => x.BillingIsShipping, new { @id = "billing-is-shipping" }) Use billing address
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -193,6 +210,35 @@
         <div class="span3 offset1">
             @Html.ThemedPartial(Model.ThemeName, "SaleSummary", Model.SaleSummary)
             @Html.HiddenFor(x => x.ConfirmSalePageId)
+            @if (!Model.IsAnonymous)
+            {
+                <div id="save-addresses-options">
+                    <div class="control-group">
+                        <label class="checkbox">
+                            @Html.CheckBoxFor(x => x.SaveCustomerAddress, new { @id = "save-addresses-check" }) Save my addresses to my account for use again.
+                        </label>
+                    </div>
+                    <div id="customer-address-labels">
+                        <div class="text-info alert">
+                            We use these labels to help you select your saved addresses in the future.
+                        </div>
+                        <div class=" control-group" id="billing-address-label-save">
+                            @Html.LabelFor(x => x.BillingAddressLabel, new { @class = "control-label" })
+                            @Html.ValidationMessageFor(x => x.BillingAddressLabel)
+                            <div class="controls">
+                                @Html.TextBoxFor(x => x.BillingAddressLabel, new { @id = "billing-address-label", @placeholder = "My House" })
+                            </div>
+                        </div>
+                        <div class="control-group" id="shipping-address-label-save">
+                            @Html.LabelFor(x => x.ShippingAddressLabel, new { @class = "control-label" })
+                            @Html.ValidationMessageFor(x => x.ShippingAddressLabel)
+                            <div class="controls">
+                                @Html.TextBoxFor(x => x.ShippingAddressLabel, new { @id = "shipping-address-label", @placeholder = "My House" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
             <div class="control-group">
                 <button type="submit" class="btn btn-primary">Continue Checkout</button>
             </div>
