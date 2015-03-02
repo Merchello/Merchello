@@ -143,7 +143,14 @@ namespace Merchello.Web
         /// </param>
         public void SetValue(string key, string value)
         {
+            if (ContextData.Values.Any(x => x.Key == key))
+            {
+                var idx = ContextData.Values.FindIndex(x => x.Key == key);
+                ContextData.Values.RemoveAt(idx);
+            }
+
             ContextData.Values.Add(new KeyValuePair<string, string>(key, value));
+           
             this.CacheCustomer(CurrentCustomer);
         }
 

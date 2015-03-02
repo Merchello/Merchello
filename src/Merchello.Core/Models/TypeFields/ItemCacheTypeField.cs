@@ -82,7 +82,7 @@ namespace Merchello.Core.Models.TypeFields
 
         internal static TypeFieldCollection ItemCaches
         {
-            get { return Fields.CustomerItemCache; }
+            get { return Fields.ItemCache; }
         }
     }
 }

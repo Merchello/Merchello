@@ -266,6 +266,7 @@
     <Compile Include="Models\SaleHistory\SalesHistoryDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
+    <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
     <Compile Include="Reporting\ReportController.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="Workflow\BasketConversionBase.cs" />
     <Compile Include="Workflow\BasketConversionByCombiningAnonymousBasket.cs" />
     <Compile Include="Workflow\BasketConversionByDiscardingPreviousCustomerBasket.cs" />
+    <Compile Include="Workflow\BasketWishListExtensions.cs" />
     <Compile Include="Workflow\IBackoffice.cs" />
     <Compile Include="Workflow\IBackofficeSalePreparation.cs" />
     <Compile Include="Workflow\IBasketConversionBase.cs" />

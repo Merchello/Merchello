@@ -28232,7 +28232,7 @@
             Gets the dbTypeFields configuration collection for <see cref="T:Merchello.Core.Models.ICustomerAddress"/>
             </summary>
         </member>
-        <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.CustomerItemCache">
+        <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.ItemCache">
             <summary>
             Gets the dbTypeFields configuration collection for <see cref="T:Merchello.Core.Models.IItemCache"/>
             </summary>
