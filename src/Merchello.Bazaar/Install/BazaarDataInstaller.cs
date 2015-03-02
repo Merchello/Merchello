@@ -216,8 +216,6 @@
             product.Weight = 1M;
             product.AddToCatalogInventory(catalog);
             merchelloServices.ProductService.Save(product, false);
-            product.CatalogInventories.FirstOrDefault().Count = 10;
-            merchelloServices.ProductService.Save(product, false);
             return product;
         }
 
