@@ -30,8 +30,12 @@
 <!-- Helper function that accepts Umbraco content item as parameter. Returns a visual display for each individual product in the list. -->
 @helper DisplayTheProduct(IPublishedContent productPage)
 {
-    // is obsolete
-    var product = productPage.GetPropertyValue<ProductDisplay>("merchelloProduct");  
+    // in 1.8.0 the following will need to change 
+    var key = new Guid(productPage.GetPropertyValue<string>("merchelloProduct"));
+    var product = Merchello.Query.Product.GetByKey(key);
+
+    // to 
+    //var product = productPage.GetPropertyValue<ProductDisplay>("merchelloProduct");  
    
        
     <div class="col-lg-4 col-md-6 hero-feature resource">
