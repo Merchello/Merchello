@@ -966,7 +966,6 @@
     var EditShippingGatewayMethodDialogData = function() {
         var self = this;
         self.shippingGatewayMethod = {};
-        self.currencySymbol = '';
     };
 
     angular.module('merchello.models').constant('EditShippingGatewayMethodDialogData', EditShippingGatewayMethodDialogData);
@@ -2059,7 +2058,7 @@
 
         function getUnShippedItems() {
             return _.filter(this.items, function(item) {
-                return (item.shipmentKey === '' || item.shipmentKey === null) && item.extendedData.getValue('merchShippable').toLowerCase() === 'true';
+                return item.shipmentKey === '' || item.shipmentKey === null;
             });
         }
 
@@ -2596,14 +2595,8 @@
             this.rows.push(row);
         }
 
-        // removes an existing row from the rate table
-        function removeRow(row) {
-            this.rows = _.reject(this.rows, function(r) { return r.key == row.key; });
-        }
-
         return {
-            addRow: addRow,
-            removeRow: removeRow
+            addRow: addRow
         };
     }());
 

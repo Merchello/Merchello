@@ -1034,10 +1034,11 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="yourHistory" version="7.0">Your recent history</key>
     <key alias="sessionExpires" version="7.0">Session expires in</key>
   </area>
-<area alias="merchelloButtons">
+  <area alias="merchelloButtons">
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
-  </area><area alias="merchelloHeadline">
+  </area>
+<area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
   </area><area alias="merchelloVariant">
     <!-- things -->
@@ -1089,7 +1090,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="mustUniqueSku">Must have a unique SKU</key>
     <key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
-    <key alias="productOnSale">On sale</key>
+    <key alias="productOnSale">Product on sale</key>
   </area><area alias="merchelloOrder">
     <!-- things -->
     <key alias="invoice">Invoice</key>
@@ -1128,8 +1129,8 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="orderInformationHelper"><![CDATA[Line items & costs]]></key>
     <key alias="captureUpTo">Capture Up To</key>
     <key alias="salesTax">Sales Tax</key>
-    <key alias="authorized">Authorized</key>
-    <key alias="captured">Captured</key>
+    <key alias="authorized"> Authorized</key>
+        <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Payment History</key>
     <key alias="saleHistory">Sale History</key>
     <key alias="paymentHistoryHelper">Status records for one or more payments</key>
@@ -1138,7 +1139,6 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area><area alias="merchelloFulfillShipment">
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
-    <key alias="createShipment">Create Shipment</key>
   </area><area alias="merchelloWarehouse">
     <!-- things -->
     <key alias="warehouse">Warehouse</key>
@@ -1275,7 +1275,6 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="notificationSettingsHelper">Set who to send your notification to and when</key>
     <key alias="description">Description</key>
     <key alias="attachedEvent">Attached Event</key>
-    <key alas="resourceType" />
     <key alias="eventAlias">Event Alias:</key>
     <key alias="sendTo"><![CDATA[Send To <small>(i.e. orders@yourdomain.com)</small>]]></key>
     <key alias="replyTo"><![CDATA[Reply To <small>(i.e. reply@yourdomain.com)</small>]]></key>
@@ -1287,7 +1286,7 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area><area alias="merchelloNotificationsDelete">
     <key alias="merchelloNotificationsDelete_deleteNotification">Delete a Notification Method</key>
   </area><area alias="merchelloNotificationsMessage">
-    <add alias="replyTo">Reply to</add>
+    <key alias="replyTo">Reply to</key>
     <key alias="addEditMessage">Add/Edit a Notification Message</key>
     <key alias="attachedEvent">Attached Event</key>
     <key alias="fromEmail"><![CDATA[From Email Address<small>(i.e. confirmation@yourdomain.com)</small>]]></key>
@@ -1322,7 +1321,6 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="addPaymentMethod">Add a Method</key>
     <key alias="resourceType">Resource Type:</key>
     <key alias="deletePayment">Delete a Payment Method</key>
-
   </area><area alias="merchelloPaymentMethod">
     <key alias="addEditPayment">Add/Edit a Payment Method</key>
   </area><area alias="merchelloMethodDelete">

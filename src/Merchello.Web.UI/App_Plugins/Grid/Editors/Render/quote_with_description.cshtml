@@ -1,0 +1,34 @@
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<dynamic>
+
+@if (Model.editor.config.markup != null)
+{
+    string markup = Model.editor.config.markup.ToString();
+
+    markup = markup.Replace("#value#", Model.value.ToString());
+    markup = markup.Replace("#style#", Model.editor.config.style.ToString());
+
+    <text>
+        @Html.Raw(markup)
+    </text>
+}
+else
+{
+    <text>
+        <div class="equalizer">
+        	<div class="col-sm-8">
+        		<div class="equal center">
+        			<blockquote>@Model.value.quote</blockquote>
+        		</div>
+        	</div>
+        	<div class="col-sm-4">
+        		<div class="equal">
+        			<p class="small vcenter">
+        				<strong>@Model.value.headline</strong>
+        				<br>
+        				@Model.value.description
+        			</p>
+        		</div>
+        	</div>
+        </div>
+    </text>
+}

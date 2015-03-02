@@ -1,0 +1,21 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "RosettaBasePage.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        
+        <h1>@CurrentPage.Name</h1>
+   
+        
+        <p>@CurrentPage.bodyText</p>
+    </div>
+
+</div>
+
+
+@section ViewList
+{
+     @RosettaHelper.GetViewBoxHtml("RosettaTextPage.cshtml", "UmbracoTemplatePage view to render the <i>Rosetta Text Page</i> document type content.")
+}

@@ -1,0 +1,28 @@
+﻿@inherits UmbracoTemplatePage
+@{
+    // Model.Content is the current page that we're on
+    // AncestorsOrSelf is all of the ancestors this page has in the tree
+    // (1) means: go up to level 1 and stop looking for more ancestors when you get there
+    // First() gets the first ancestor found (the home page, on level 1)
+    var homePage = CurrentPage.AncestorsOrSelf(1).First();
+
+    // The menu items we want are all of the children of the homepage
+    // We also check if "Hide in navigation" is on in the menu, we shouldn't show hidden items
+    var menuItems = homePage.Children.Where("UmbracoNaviHide == false");
+}
+<!-- Nav -->
+<nav id="nav" class="skel-panels-fixed">
+    <ul>
+        @* If the Url of the current page is "/" then we want to add the class "current_page_item" *@
+        @* Otherwise, we set the class to null, that way it will not even be added to the <li> element *@
+        <li class="@(CurrentPage.Url == "/" ? "current_page_item" : null)"><a href="/">Home</a></li>
+
+        @foreach (var item in menuItems)
+        {
+            @* If the Id of the item is the same as the Id of the current page then we want to add the class "current_page_item" *@
+            @* Otherwise, we set the class to null, that way it will not even be added to the <li> element *@
+            <li class="@(CurrentPage.Id == item.Id ? "current_page_item" : null)"><a href="@item.Url">@item.Name</a></li>
+        }
+    </ul>
+</nav>
+<!-- /Nav -->

@@ -1,0 +1,89 @@
+﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Controllers
+@using Merchello.Core.Gateways.Shipping
+@using Merchello.Core.Models
+@using Merchello.Web
+@{
+    Layout = "RosettaBasePage.cshtml";
+
+    // from the previous step we can get the shipping address
+    var shippingAddress = CurrentCustomer.Basket().SalePreparation().GetShipToAddress();
+
+    // For version 1.x there will only ever be a single shipment here.
+    var shipment = CurrentCustomer.Basket().PackageBasket(shippingAddress).FirstOrDefault();
+    
+    
+}
+
+@if (CurrentPage.HasValue("instructionHeading"))
+{
+    <h2>@CurrentPage.instructionHeading<br /><small>@CurrentPage.instructionTagLine</small></h2>
+}
+
+<!-- If there are no shippable items in the basket, show our 'RenderCanNotShip' section, otherwise display shipping settings -->
+@(shipment == null ? @RenderCanNotShip() : @RenderSelectShippingOption(shipment))
+
+@helper RenderCanNotShip()
+{
+    <p>The current basket does not have shippable items</p>
+}
+
+<!-- this helper function is passed the Merchello model IShipment created from the current basket's shippable items -->
+@helper RenderSelectShippingOption(IShipment shipment)
+{
+
+    var quotes = shipment.ShipmentRateQuotes();
+
+    var shipmentRateQuotes = quotes as IShipmentRateQuote[] ?? quotes.ToArray();
+    if (!shipmentRateQuotes.Any())
+    {
+        // the destination address is not configured to be an "allowed" ship to address in the Merchello Back Office
+        <p>Our store cannot ship to your address</p>
+    }
+    else
+    {
+        var quoteItems = shipmentRateQuotes.Select(x => new SelectListItem()
+            {
+                Value = x.ShipMethod.Key.ToString(),
+                Text = string.Format("{0} ({1})", x.ShipMethod.Name, x.Rate.ToString("C")) 
+            });
+        
+        <div class="bs-docs-example">
+            <div class="row">
+                <div class="col-lg-4">
+                    
+                    @using (Html.BeginUmbracoForm<CheckoutController>("SaveApprovedShipmentRateQuote", new { @class = "form form-horizontal", role = "form" }))
+                    {
+                     
+                        <div class="control-group">
+                            @Html.Label("Select your shipment method", new { @class = "control-label"})
+                            <div class="controls">
+                                @Html.DropDownList("shipMethodKey", quoteItems, new { @class="form-control"})
+                            </div>
+                       </div>
+
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Proceed to Step 3 (Payment Method Selection)"/>
+                        </div>
+
+                    }
+                </div>
+                <div class="col-lg-8">
+                    @Html.Action("RenderShipmentSummary", "Shipment", new { area = "RosettaStone", shipment = shipment })
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+<div class="hero-spacer">
+
+@CurrentPage.instruction
+    
+</div>
+
+@section ViewList
+{
+    @RosettaHelper.GetViewBoxHtml("RosettaCheckout2Shipping.cshtml", "This view takes into account the shipping address and basket items, and renders the available shipping options and price quotes.", new string[] { RosettaHelper.InheritsMerchelloTemplatePage, RosettaHelper.UsingControllers, RosettaHelper.UsingShippingGateway, RosettaHelper.UsingModels, RosettaHelper.UsingMerchelloWeb })
+}
