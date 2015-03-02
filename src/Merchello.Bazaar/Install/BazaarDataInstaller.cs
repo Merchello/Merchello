@@ -63,7 +63,7 @@
 
             LogHelper.Info<BazaarDataInstaller>("Adding Example ProductGroup and Products");
             var pg = _services.ContentService.CreateContent("Soap", root.Id, "BazaarProductGroup");
-            pg.SetValue("image", @"{  'focalPoint': { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1005/soapcategory.jpg', 'crops': [] }'");
+            pg.SetValue("image", "{ 'focalPoint' : { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1005/soapcategory.jpg', 'crops': [] }");
             pg.SetValue("brief", "Avocado Moisturizing Bar is great for dry skin.");
             _services.ContentService.SaveAndPublishWithStatus(pg);
 
@@ -105,57 +105,6 @@
             Access.AddMembershipRoleToDocument(account.Id, "MerchelloCustomers");
 
             return root;
-        }
-
-
-
-        /// <summary>
-        /// The add merchello customer member type.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="MemberType"/>.
-        /// </returns>
-        private MemberType AddMerchelloCustomerMemberType()
-        {
-            var dtd = _services.DataTypeService.GetDataTypeDefinitionById(-88);
-
-            // Create the MerchelloCustomer MemberType
-            var mt = new MemberType(-1)
-            {
-                Alias = "MerchelloCustomer",
-                Name = "MerchelloCustomer",
-                AllowedAsRoot = true
-            };
-
-            var fn = new PropertyType(dtd) { Alias = "firstName", Name = "First name" };
-            var ln = new PropertyType(dtd) { Alias = "lastName", Name = "Last name" };
-
-            mt.AddPropertyType(fn);
-            mt.AddPropertyType(ln);
-
-            mt.SetMemberCanEditProperty("firstName", true);
-            mt.SetMemberCanEditProperty("lastName", true);
-            mt.SetMemberCanViewProperty("firstName", true);
-            mt.SetMemberCanViewProperty("lastName", true);
-
-            _services.MemberTypeService.Save(mt);
-
-            return mt;
-        }
-
-        /// <summary>
-        /// Ads the MerchelloCustomers MemberGroup.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="MemberGroup"/>.
-        /// </returns>
-        private MemberGroup AddMerchelloCustomersMemberGroup()
-        {
-            var mg = new MemberGroup() { Name = "MerchelloCustomers" };
-
-            _services.MemberGroupService.Save(mg);
-
-            return mg;
         }
 
         /// <summary>

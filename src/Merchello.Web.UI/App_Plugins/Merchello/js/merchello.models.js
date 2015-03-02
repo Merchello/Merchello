@@ -1453,7 +1453,7 @@
                         inventoryCount += ci.count;
                     });
                 } else {
-                    inventoryCount = "n/a"
+                    inventoryCount = "n/a";
                 }
             }
             return inventoryCount;
@@ -1479,7 +1479,7 @@
                 } else {
                     var onSaleVariants = _.filter(this.productVariants, function(osv) { return osv.onSale; });
                     if(onSaleVariants.length > 0) {
-                        var salePrice = _.min(onSaleVariants,
+                        salePrice = _.min(onSaleVariants,
                             function(v) { return v.salePrice; }
                         ).salePrice;
                         return salePrice;
@@ -1702,7 +1702,7 @@
             variant = angular.extend(variant, this);
             variant.attributes = [];
             angular.forEach(this.attributes, function(att) {
-                var attribute = new ProductAttributeDisplay()
+                var attribute = new ProductAttributeDisplay();
                 angular.extend(attribute, att);
                 variant.attributes.push(attribute);
             });
@@ -1721,7 +1721,6 @@
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,
             setAllInventoryLowCount: setAllInventoryLowCount
-            //deepClone: deepClone
         }
     }());
 
@@ -2598,7 +2597,7 @@
 
         // removes an existing row from the rate table
         function removeRow(row) {
-            this.rows = _.reject(this.rows, function(r) { return r.key == row.key; });
+            this.rows = _.reject(this.rows, function(r) { return r.key === row.key; });
         }
 
         return {

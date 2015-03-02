@@ -37,8 +37,9 @@ namespace Merchello.Web.PackageActions
 			var appName = this.GetAttributeValue(xmlData, "appName");
 			var userLogin = this.GetAttributeValue(xmlData, "userLogin");
 
-			if (string.Equals(userLogin, "$currentUser", StringComparison.OrdinalIgnoreCase))
-				userLogin = UmbracoContext.Current.UmbracoUser.LoginName;
+		    if (string.Equals(userLogin, "$currentUser", StringComparison.OrdinalIgnoreCase)) 
+                userLogin = UmbracoContext.Current.Security.CurrentUser.Username;
+                    //UmbracoContext.Current.UmbracoUser.LoginName;
 
 			var sql = new Sql();
 			sql.Select("*")
@@ -59,14 +60,24 @@ namespace Merchello.Web.PackageActions
 
 			var user = GetUserDto(xmlData);
 
+            // Fix for starter kit installs
+		    var rootPackage = packageName.IndexOf('.') > 0
+		                          ? packageName.Substring(0, packageName.IndexOf('.'))
+		                          : packageName;
+
+
 			Revoke(packageName, xmlData, user);
-			return Grant(packageName, xmlData, user);
+			return Grant(rootPackage, xmlData, user);
 		}
 
 		public bool Undo(string packageName, XmlNode xmlData)
 		{
+            var rootPackage = packageName.IndexOf('.') > 0
+                                  ? packageName.Substring(0, packageName.IndexOf('.'))
+                                  : packageName;
+
 			var user = GetUserDto(xmlData);
-			return Revoke(packageName, xmlData, user);
+			return Revoke(rootPackage, xmlData, user);
 		}
 
 		public XmlNode SampleXml()
