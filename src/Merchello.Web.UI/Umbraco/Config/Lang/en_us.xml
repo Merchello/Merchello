@@ -751,7 +751,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="statistics">Statistics</key>
     <key alias="translation">Translation</key>
     <key alias="users">Users</key>
-
+    <key alias="merchello">Merchello</key>
     <key alias="help" version="7.0">Help</key>
     <key alias="analytics">Analytics</key>
   </area>
@@ -1042,10 +1042,11 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="yourHistory" version="7.0">Your recent history</key>
     <key alias="sessionExpires" version="7.0">Session expires in</key>
   </area>
-<area alias="merchelloButtons">
+  <area alias="merchelloButtons">
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
-  </area><area alias="merchelloHeadline">
+  </area>
+<area alias="merchelloHeadline">
 		<key alias="catalog">Catalog</key>
   </area><area alias="merchelloVariant">
 		<!-- things -->
@@ -1056,7 +1057,7 @@ To manage your website, simply open the Umbraco back office and start adding con
 		<key alias="barcode">Barcode</key>sel
 		<key alias="manufacturer">Manufacturer</key>
 		<key alias="manufacturerModel">Manufacturer's Model No.</key>
-		<key alias="variantInfo">Variant Information</key>
+		<key alias="variantInfo">Product Information</key>
 		<key alias="variantOptions">Variant Options</key>
 		<key alias="downloads">Digital Downloads</key>
 		<key alias="optionName">Option Name</key>
@@ -1097,7 +1098,7 @@ To manage your website, simply open the Umbraco back office and start adding con
 		<key alias="mustUniqueSku">Must have a unique SKU</key>
 		<key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
 		<key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
-    <key alias="productOnSale">On sale</key>
+    <key alias="productOnSale">Product on sale</key>
   </area><area alias="merchelloOrder">
 		<!-- things -->
     <key alias="invoice">Invoice</key>
@@ -1148,7 +1149,6 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area><area alias="merchelloFulfillShipment">
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
-    <key alias="createShipment">Create Shipment</key>
   </area><area alias="merchelloWarehouse">
     <!-- things -->
     <key alias="warehouse">Warehouse</key>
@@ -1162,8 +1162,8 @@ To manage your website, simply open the Umbraco back office and start adding con
 		<!-- things -->
 		<key alias="shipping">Shipping</key>
 		<key alias="info">Shipping Information</key>
-      <key alias="weight">Weight</key>
-      <key alias="dimensions">Dimensions</key>
+    <key alias="weight">Weight</key>
+    <key alias="dimensions">Dimensions</key>
 		<!-- actions -->
 		<key alias="setVars">Set shipping variables: Weight, and dimensions</key>
 		<!-- phrases -->
@@ -1178,7 +1178,12 @@ To manage your website, simply open the Umbraco back office and start adding con
 		<key alias="enterProduct">Enter a product name</key>
 		<key alias="enterOrder">Start typing an order number or name...</key>to
 		<key alias="addStyle">Add a style...</key>
-  </area><area alias="merchelloGeneral">
+  </area>
+  <area alias="merchelloDelete">
+    <key alias="deleteConfirmation">Delete Confirmation</key>
+    <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+  </area>
+  <area alias="merchelloGeneral">
 		<key alias="apply">Apply</key>
 		<key alias="price">Price</key>
 		<key alias="customer">Customer</key>
@@ -1213,6 +1218,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="timeFormat">Time Format</key>
     <key alias="startingInvoiceNumber">Starting Invoice No.</key>
     <key alias="startingShipmentNumber">Starting Shipment No.</key>
+    <key alias="unitSystem">Unit System</key>
     <key alias="catalogDefaults">Catalog Defaults</key>
     <key alias="catalogDefaultsHelper">Set the default catalog item (product) options. Can be changed later on a per item basis.</key>
     <key alias="globalTaxable">All items are taxable</key>
@@ -1294,7 +1300,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     </area><area alias="merchelloNotificationsDelete">
     <key alias="merchelloNotificationsDelete_deleteNotification">Delete a Notification Method</key>
   </area><area alias="merchelloNotificationsMessage">
-      <add alias="replyTo">Reply to</add>
+    <key alias="replyTo">Reply to</key>
       <key alias="addEditMessage">Add/Edit a Notification Message</key>
       <key alias="attachedEvent">Attached Event</key>
       <key alias="fromEmail"><![CDATA[From Email Address<small>(i.e. confirmation@yourdomain.com)</small>]]></key>
@@ -1352,7 +1358,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="optionValueHelper">(e.g. red, green, blue)</key>
     <key alias="addStyle">Add a style...</key>
     <key alias="addAnotherOption">Add Another Option</key>
-    <key alias="variantInformation">Product Information</key>
+    <key alias="variantInformation">Variant Information</key>
     <key alias="variantInformationHelper">Edit the variants for this product.</key>
     <key alias="selectProduct">Select Product...</key>
     <key alias="selectMerchelloProduct">Select Merchello Product</key>
