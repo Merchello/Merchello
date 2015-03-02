@@ -7,9 +7,5 @@
     /// </summary>
     public interface IBraintreePaymentGatewayProvider
     {
-        /// <summary>
-        /// Gets the <see cref="IBraintreeApiService"/>.
-        /// </summary>
-        IBraintreeApiService BraintreeApiService { get; }
     }
 }

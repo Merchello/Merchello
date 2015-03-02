@@ -98,7 +98,7 @@ namespace Merchello.Tests.Braintree.Integration.Api
         {
             //// Arrange
             var factory = new BraintreeApiRequestFactory(BraintreeProviderSettings);
-
+            BraintreeApiService.Customer.Create(TestCustomer);
             var request = factory.CreateClientTokenRequest(TestCustomer.Key);
 
             //// Act

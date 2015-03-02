@@ -37,7 +37,7 @@
             <tr data-ng-repeat="message in notificationMethods.notificationMessages">
                 <td>{{message.name}}</td>
                 <td>{{message.description}}</td>
-                <td>{{ getMonitorName(message.monitoryKey) }}</td>
+                <td>{{ getMonitorName(message.monitorKey) }}</td>
                 <td><a href="{{message.fromAddress}}">{{message.fromAddress}}</a></td>
                 <td nowrap>
                     <a class="btn btn-default btn-xs btn-mini" href="#/merchello/merchello/notification.messageeditor/{{message.key}}/"><i class="icon-edit"></i></a>

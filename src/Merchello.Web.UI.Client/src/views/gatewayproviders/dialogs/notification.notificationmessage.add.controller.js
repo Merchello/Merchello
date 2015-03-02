@@ -13,11 +13,8 @@
             // exposed methods
             $scope.save = save;
 
-            console.info($scope.dialogData);
-
             function save() {
                 $scope.dialogData.notificationMessage.monitorKey = $scope.dialogData.selectedMonitor.monitorKey;
                 $scope.submit($scope.dialogData);
             }
-
     }]);

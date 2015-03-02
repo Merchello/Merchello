@@ -1,14 +1,12 @@
 <div ng-controller="Merchello.Backoffice.ProductListController" ng-show="loaded">
-
     <umb-panel>
         <umb-header>
-            <div class="span4">
+            <div class="span7">
                 <div class="umb-headline-editor-wrapper">
-                    <h1 class="umb-headline"><localize key="merchelloHeadline_catalog" /></h1>
+                    <h1><localize key="merchelloHeadline_catalog" /></h1>
                 </div>
             </div>
-
-            <div class="span8">
+            <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
                         <a href="#/merchello/merchello/productedit/create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
@@ -21,26 +19,22 @@
         <merchello-panel>
             <div class="merchello-pane">
                 <form class="form-horizontal row-fluid">
-
-                        <div class="controls pull-right" data-ng-show="products.length > 0">
-                            <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
-                            <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                        </div>
-
-
-                    <div class="form-group control-group">
-                        <div class="control-label">
-                            <a data-ng-click="filterAction = !filterAction" class="btn" data-ng-show="false"><localize key="merchelloOrder_filter" /></a>
-                        </div>
-                        <div class="col-xs-10 controls">
-                            <input id="productFilter" class="form-control span6" name="productFilter" data-ng-model="filterText" localize="placeholder" placeholder="@placeholders_filter" />
+                    <div class="controls pull-right" style="margin-left: 0;" data-ng-show="products.length > 0">
+                        <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
+                        <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <div class="form-group control-group span10">
+                        <label class="control-label" for="productFilter">Filter Products:</label>
+                        <div class="controls">
+                            <input type="text" id="productFilter" class="form-control span8" name="productFilter" data-ng-model="filterText" localize="placeholder" placeholder="@placeholders_filter" />
                             <!-- ACTION: Filter Sales  -->
-                            <button id="salesFilterGo" class="btn" data-ng-click="getFilteredProducts(filterText)"><localize key="merchelloGeneral_filter" /></button>
+                            <button type="submit" id="productsFilterGo" class="btn" data-ng-click="getFilteredProducts(filterText)"><localize key="merchelloGeneral_filter" /></button>
+                            <a data-ng-click="filterAction = !filterAction" class="btn" data-ng-show="false"><localize key="merchelloOrder_filter" /></a>
                         </div>
                     </div>
                 </form>

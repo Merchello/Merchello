@@ -518,10 +518,15 @@ namespace Merchello.Core.Services
         /// <summary>
         /// Saves a single <see cref="IAnonymousCustomer"/>
         /// </summary>
-        /// <param name="anonymous">The <see cref="IAnonymousCustomer"/> to save</param>
-        public void Save(IAnonymousCustomer anonymous)
+        /// <param name="anonymous">
+        /// The <see cref="IAnonymousCustomer"/> to save
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        public void Save(IAnonymousCustomer anonymous, bool raiseEvents = true)
         {
-            _anonymousCustomerService.Save(anonymous);
+            _anonymousCustomerService.Save(anonymous, raiseEvents);
         }
 
 

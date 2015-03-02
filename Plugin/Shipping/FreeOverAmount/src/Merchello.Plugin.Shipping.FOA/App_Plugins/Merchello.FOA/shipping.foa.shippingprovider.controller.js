@@ -28,7 +28,6 @@
             var settingsString = $scope.dialogData.provider.extendedData.getValue('processorSettings');
             $scope.providerSettings = JSON.parse(settingsString);
 
-            console.info($scope.providerSettings);
             // Watch with object equality to convert back to a string for the submit() call on the Save button
             $scope.$watch(function () {
                 return $scope.providerSettings;

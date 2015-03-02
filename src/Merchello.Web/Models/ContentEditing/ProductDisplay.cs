@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The product display.
@@ -72,6 +73,20 @@
         /// Gets or sets the product variants.
         /// </summary>
         public IEnumerable<ProductVariantDisplay> ProductVariants { get; set; }
-      
+
+        /// <summary>
+        /// Gets the total inventory count.
+        /// </summary>
+        public override int TotalInventoryCount
+        {
+            get
+            {
+                return this.ProductVariants != null
+                           ? this.ProductVariants.Any()
+                                 ? this.ProductVariants.Sum(x => x.TotalInventoryCount)
+                                 : this.CatalogInventories.Sum(x => x.Count)
+                           : 0;
+            }
+        }
     }
 }

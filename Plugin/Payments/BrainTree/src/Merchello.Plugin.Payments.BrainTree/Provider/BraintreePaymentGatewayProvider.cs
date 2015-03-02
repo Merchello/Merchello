@@ -14,7 +14,7 @@
     /// The BrainTree Payment Gateway Provider.
     /// </summary>
     [GatewayProviderActivation("D143E0F6-98BB-4E0A-8B8C-CE9AD91B0969", "BrainTree Payment Provider", "BrainTree Payment Provider")]
-    [GatewayProviderEditor("BrainTree Configuration", "~/App_Plugins/Merchello.BrainTree/providerSettingsDialog.html")]
+    [GatewayProviderEditor("BrainTree Configuration", "~/App_Plugins/Merchello.BrainTree/payment.braintree.providersettings.html")]
     public class BraintreePaymentGatewayProvider : PaymentGatewayProviderBase, IBraintreePaymentGatewayProvider
     {
         #region AvailableResources
@@ -24,15 +24,11 @@
         /// </summary>
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>
         {
-            new GatewayResource("Transaction", "Simple Transaction"),
-            new GatewayResource("VaultTransaction", "Braintree Vault Transaction")
+            new GatewayResource(Constants.PaymentCodes.Transaction, "Standard Transaction"),
+            new GatewayResource(Constants.PaymentCodes.VaultTransaction, "Vault Transaction"),
+            new GatewayResource(Constants.PaymentCodes.RecordSubscriptionTransaction, "Record of Subscription Transaction")
         };
 
-
-        /// <summary>
-        /// The <see cref="IBraintreeApiService"/>
-        /// </summary>
-        private readonly IBraintreeApiService _braintreeApiService;
 
         #endregion
 
@@ -51,17 +47,8 @@
         public BraintreePaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, Umbraco.Core.Cache.IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
         {
-            _braintreeApiService = new BraintreeApiService(gatewayProviderSettings.ExtendedData.GetBrainTreeProviderSettings());
         }
 
-
-        /// <summary>
-        /// Gets the <see cref="IBraintreeApiService"/>
-        /// </summary>
-        public IBraintreeApiService BraintreeApiService
-        {
-            get { return _braintreeApiService; }
-        }
 
         /// <summary>
         /// Returns a list of unassigned <see cref="IGatewayResource"/>.
@@ -108,9 +95,17 @@
             {
                 PaymentMethods = null;
 
-                return available.ServiceCode == "Transaction" ? 
-                    (IPaymentGatewayMethod)new BraintreeSimpleTransactionPaymentGatewayMethod(GatewayProviderService, attempt.Result, BraintreeApiService) :
-                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, attempt.Result, BraintreeApiService);
+                switch (available.ServiceCode)
+                {
+                    case Constants.PaymentCodes.VaultTransaction:
+                        return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
+                    
+                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
+                        return new BraintreeSubscriptionRecordPaymentMethod(GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
+
+                    default:
+                        return new BraintreeStandardTransactionPaymentGatewayMethod(GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
+                }   
             }
 
             LogHelper.Error<BraintreePaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, available.ServiceCode), attempt.Exception);
@@ -119,7 +114,7 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="IBraintreeSimpleTransactionPaymentGatewayMethod"/> by it's unique key.
+        /// Gets a <see cref="IBraintreeStandardTransactionPaymentGatewayMethod"/> by it's unique key.
         /// </summary>
         /// <param name="paymentMethodKey">
         /// The payment method key.
@@ -133,9 +128,17 @@
 
             if (paymentMethod != null)
             {
-                return paymentMethod.PaymentCode == "Transaction" ? 
-                    (IPaymentGatewayMethod) new BraintreeSimpleTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, BraintreeApiService) :
-                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, BraintreeApiService);
+                switch (paymentMethod.PaymentCode)
+                {
+                    case Constants.PaymentCodes.VaultTransaction:
+                        return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
+
+                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
+                        return new BraintreeSubscriptionRecordPaymentMethod(GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
+
+                    default:
+                        return new BraintreeStandardTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
+                }
             }
 
             var error = new NullReferenceException("Failed to find BraintreePaymentGatewayMethod with key specified");
@@ -154,14 +157,27 @@
 
             if (paymentMethod != null)
             {
-                return paymentMethod.PaymentCode == "Transaction" ?
-                    (IPaymentGatewayMethod)new BraintreeSimpleTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, BraintreeApiService) :
-                    new BraintreeVaultTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, BraintreeApiService);
+                switch (paymentMethod.PaymentCode)
+                {
+                    case Constants.PaymentCodes.VaultTransaction:
+                        return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
+
+                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
+                        return new BraintreeSubscriptionRecordPaymentMethod(GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
+
+                    default:
+                        return new BraintreeStandardTransactionPaymentGatewayMethod(GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
+                }
             }
 
             var error = new NullReferenceException("Failed to find BraintreePaymentGatewayMethod with key specified");
             LogHelper.Error<BraintreePaymentGatewayProvider>("Failed to find BraintreePaymentGatewayMethod with key specified", error);
             throw error;  
+        }
+
+        private IBraintreeApiService GetBraintreeApiService()
+        {
+            return new BraintreeApiService(GatewayProviderSettings.ExtendedData.GetBrainTreeProviderSettings());
         }
     }
 }

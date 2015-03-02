@@ -1016,11 +1016,11 @@
             <param name="title">
             The title.
             </param>
-            <param name="includeInShipmentQuotations">
-            The include in quotes.
+            <param name="includeInPaymentSelection">
+            The include in payment selection.
             </param>
             <remarks>
-            TODO rename includeInShipmentQuotations ... these are payments!
+            TODO rename includeInPaymentSelection ... these are payments!
             </remarks>
         </member>
         <member name="M:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.#ctor(System.String,System.String,System.Boolean)">
@@ -1033,8 +1033,8 @@
             <param name="authorizeCaptureEditorView">
             The authorize capture editor view.
             </param>
-            <param name="includeInShipmentQuotations">
-            The include in shipment quotations.
+            <param name="includeInPaymentSelection">
+            The include in payment selection.
             </param>
         </member>
         <member name="M:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.#ctor(System.String,System.String,System.String,System.Boolean)">
@@ -1070,7 +1070,7 @@
             <param name="refundPaymentEditorView">
             The refund payment editor view.
             </param>
-            <param name="includeInShipmentQuotations">
+            <param name="includeInPaymentSelection">
             The include in shipment quotations.
             </param>
         </member>
@@ -1094,7 +1094,7 @@
             Gets the refund payment editor view.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.IncludeInShipmentQuotations">
+        <member name="P:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute.IncludeInPaymentSelection">
             <summary>
             Gets a value indicating whether or not the payment method should be used when quoting shipments.
             If false, it is assumed that the payment method is to be used programmatically for some other purpose.
@@ -3395,6 +3395,11 @@
             Refreshes the <see cref="T:Merchello.Core.Gateways.GatewayProviderBase"/> cache
             </summary>
         </member>
+        <member name="F:Merchello.Core.Gateways.GatewayProviderResolver._lock">
+            <summary>
+            The lock.
+            </summary>
+        </member>
         <member name="F:Merchello.Core.Gateways.GatewayProviderResolver._activatedGatewayProviderCache">
             <summary>
             The activated gateway provider cache.
@@ -3482,6 +3487,12 @@
             <returns>
             Returns a <see cref="T:Merchello.Core.GatewayProviderType"/>
             </returns>
+        </member>
+        <member name="M:Merchello.Core.Gateways.GatewayProviderResolver.GetWriteLock">
+            <summary>
+            Returns a WriteLock to use when modifying collections
+            </summary>
+            <returns>Gets the write lock</returns>
         </member>
         <member name="M:Merchello.Core.Gateways.GatewayProviderResolver.BuildActivatedGatewayProviderCache">
             <summary>
@@ -4668,6 +4679,25 @@
             <summary>
             Marker interface for a CashPaymentGatewayProvider
             </summary>
+        </member>
+        <member name="F:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider.AvailableResources">
+            <summary>
+            The available resources.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider.#ctor(Merchello.Core.Services.IGatewayProviderService,Merchello.Core.Models.IGatewayProviderSettings,Umbraco.Core.Cache.IRuntimeCacheProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider"/> class.
+            </summary>
+            <param name="gatewayProviderService">
+            The gateway provider service.
+            </param>
+            <param name="gatewayProviderSettings">
+            The gateway provider settings.
+            </param>
+            <param name="runtimeCacheProvider">
+            The runtime cache provider.
+            </param>
         </member>
         <member name="M:Merchello.Core.Gateways.Payment.Cash.CashPaymentGatewayProvider.CreatePaymentMethod(System.String,System.String)">
             <summary>
@@ -9298,6 +9328,16 @@
             The line item.
             </param>
         </member>
+        <member name="P:Merchello.Core.Sales.ISalePreparationBase.RaiseCustomerEvents">
+            <summary>
+            Gets or sets a value indicating whether raise customer events when saving customer data.
+            </summary>
+            <remarks>
+            During certain checkout workflows, customer save events can fire often that can cause performance
+            problems if there are a lot of event handlers handling the CustomerService.Save events.  This
+            allows for a toggling the events on and off
+            </remarks>
+        </member>
         <member name="F:Merchello.Core.Sales.SalePreparationBase._itemCache">
             <summary>
             The item cache.
@@ -9312,6 +9352,14 @@
             <summary>
             The merchello context.
             </summary>
+        </member>
+        <member name="F:Merchello.Core.Sales.SalePreparationBase._shippingTaxable">
+            <summary>
+            A value indicating whether or not shipping charges are taxable.
+            </summary>
+            <remarks>
+            Determined by the global back office setting.
+            </remarks>
         </member>
         <member name="M:Merchello.Core.Sales.SalePreparationBase.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IItemCache,Merchello.Core.Models.ICustomerBase)">
             <summary>
@@ -9536,7 +9584,7 @@
             The <see cref="T:System.String"/> cache key
             </returns>
         </member>
-        <member name="M:Merchello.Core.Sales.SalePreparationBase.SaveCustomer(Merchello.Core.IMerchelloContext,Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Core.Sales.SalePreparationBase.SaveCustomer(Merchello.Core.IMerchelloContext,Merchello.Core.Models.ICustomerBase,System.Boolean)">
             <summary>
             Saves the current customer
             </summary>
@@ -9546,8 +9594,11 @@
             <param name="customer">
             The customer.
             </param>
+            <param name="raiseEvents">
+            The raise Events.
+            </param>
         </member>
-        <member name="M:Merchello.Core.Sales.SalePreparationBase.Reset(Merchello.Core.IMerchelloContext,Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Core.Sales.SalePreparationBase.Reset(Merchello.Core.IMerchelloContext,Merchello.Core.Models.ICustomerBase,System.Boolean)">
             <summary>
             Purges persisted checkout information
             </summary>
@@ -9556,6 +9607,9 @@
             </param>
             <param name="customer">
             The customer.
+            </param>
+            <param name="raiseEvents">
+            The raise Events.
             </param>
         </member>
         <member name="M:Merchello.Core.Sales.SalePreparationBase.MakeCacheKey(Merchello.Core.Models.ICustomerBase,System.Guid)">
@@ -9578,6 +9632,11 @@
             </summary>
             <param name="shipmentRateQuote">The <see cref="T:Merchello.Core.Gateways.Shipping.IShipmentRateQuote"/> to be added as a <see cref="T:Merchello.Core.Models.ILineItem"/></param>
         </member>
+        <member name="M:Merchello.Core.Sales.SalePreparationBase.Initialize">
+            <summary>
+            Class initialization.
+            </summary>
+        </member>
         <member name="E:Merchello.Core.Sales.SalePreparationBase.InvoicePrepared">
             <summary>
             Occurs after an invoice has been prepared.
@@ -9586,6 +9645,11 @@
         <member name="E:Merchello.Core.Sales.SalePreparationBase.Finalizing">
             <summary>
             Occurs after a sale has been finalized.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Sales.SalePreparationBase.RaiseCustomerEvents">
+            <summary>
+            Gets or sets a value indicating whether raise customer events.
             </summary>
         </member>
         <member name="P:Merchello.Core.Sales.SalePreparationBase.Customer">
@@ -20282,11 +20346,16 @@
             </summary>
             <returns><see cref="T:Merchello.Core.Models.IAnonymousCustomer"/></returns>
         </member>
-        <member name="M:Merchello.Core.Services.IAnonymousCustomerService.Save(Merchello.Core.Models.IAnonymousCustomer)">
+        <member name="M:Merchello.Core.Services.IAnonymousCustomerService.Save(Merchello.Core.Models.IAnonymousCustomer,System.Boolean)">
             <summary>
             Saves a single <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>
             </summary>
-            <param name="anonymous">The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save</param>
+            <param name="anonymous">
+            The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save
+            </param>
+            <param name="raiseEvents">
+            Optional boolean indicating whether or not to raise events
+            </param>
         </member>
         <member name="M:Merchello.Core.Services.IAnonymousCustomerService.Delete(Merchello.Core.Models.IAnonymousCustomer)">
             <summary>
@@ -20358,12 +20427,15 @@
             The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Core.Services.AnonymousCustomerService.Save(Merchello.Core.Models.IAnonymousCustomer)">
+        <member name="M:Merchello.Core.Services.AnonymousCustomerService.Save(Merchello.Core.Models.IAnonymousCustomer,System.Boolean)">
             <summary>
             Saves the <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>
             </summary>
             <param name="anonymous">
             The anonymous customer
+            </param>
+            <param name="raiseEvents">
+            TOptional boolean indicating whether or not to raise events
             </param>
         </member>
         <member name="M:Merchello.Core.Services.AnonymousCustomerService.Delete(Merchello.Core.Models.IAnonymousCustomer)">
@@ -28160,7 +28232,7 @@
             Gets the dbTypeFields configuration collection for <see cref="T:Merchello.Core.Models.ICustomerAddress"/>
             </summary>
         </member>
-        <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.CustomerItemCache">
+        <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.ItemCache">
             <summary>
             Gets the dbTypeFields configuration collection for <see cref="T:Merchello.Core.Models.IItemCache"/>
             </summary>
@@ -29864,11 +29936,16 @@
             </summary>
             <returns><see cref="T:Merchello.Core.Models.IAnonymousCustomer"/></returns>
         </member>
-        <member name="M:Merchello.Core.Services.ICustomerService.Save(Merchello.Core.Models.IAnonymousCustomer)">
+        <member name="M:Merchello.Core.Services.ICustomerService.Save(Merchello.Core.Models.IAnonymousCustomer,System.Boolean)">
             <summary>
             Saves a single <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>
             </summary>
-            <param name="anonymous">The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save</param>
+            <param name="anonymous">
+            The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save
+            </param>
+            <param name="raiseEvents">
+            Optional boolean indicating whether or not to raise events
+            </param>
         </member>
         <member name="M:Merchello.Core.Services.ICustomerService.Delete(Merchello.Core.Models.IAnonymousCustomer)">
             <summary>
@@ -30164,11 +30241,16 @@
             </summary>
             <returns><see cref="T:Merchello.Core.Models.IAnonymousCustomer"/></returns>
         </member>
-        <member name="M:Merchello.Core.Services.CustomerService.Save(Merchello.Core.Models.IAnonymousCustomer)">
+        <member name="M:Merchello.Core.Services.CustomerService.Save(Merchello.Core.Models.IAnonymousCustomer,System.Boolean)">
             <summary>
             Saves a single <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/>
             </summary>
-            <param name="anonymous">The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save</param>
+            <param name="anonymous">
+            The <see cref="T:Merchello.Core.Models.IAnonymousCustomer"/> to save
+            </param>
+            <param name="raiseEvents">
+            Optional boolean indicating whether or not to raise events
+            </param>
         </member>
         <member name="M:Merchello.Core.Services.CustomerService.Delete(Merchello.Core.Models.IAnonymousCustomer)">
             <summary>

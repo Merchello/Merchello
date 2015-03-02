@@ -187,25 +187,8 @@
             merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
 
-            //// special case where a catalog was associated before the creation of the product
-            //if (product.CatalogInventories.Any())
-            //{
-            //    foreach (var cat in product.CatalogInventories)
-            //    {
-            //        ((Product)merchProduct).MasterVariant.AddToCatalogInventory(cat.CatalogKey);
-            //    }
-            //}
 
             _productService.Save(merchProduct);
-
-            //if (!merchProduct.ProductOptions.Any()) return merchProduct.ToProductDisplay();
-
-            //var attributeLists = merchProduct.GetPossibleProductAttributeCombinations();
-
-            //foreach (var list in attributeLists)
-            //{
-            //    _productVariantService.CreateProductVariantWithKey(merchProduct, list.ToProductAttributeCollection());
-            //}
 
             return merchProduct.ToProductDisplay();
         }
@@ -224,27 +207,14 @@
         [HttpPost, HttpPut]
         public ProductDisplay PutProduct(ProductDisplay product)
         {            
-            var merchProduct = _productService.GetByKey(product.Key);         
+            var merchProduct = _productService.GetByKey(product.Key);  
+       
             merchProduct = product.ToProduct(merchProduct);
+
             _productService.Save(merchProduct);
-
-            //if (!merchProduct.ProductOptions.Any()) return merchProduct.ToProductDisplay();
-
-            //// verify that all attributes have been created
-            //var attributeLists = merchProduct.GetPossibleProductAttributeCombinations().ToArray();
-            //foreach (var list in from list in attributeLists let variant = merchProduct.GetProductVariantForPurchase(list) where variant == null select list)
-            //{
-            //    _productVariantService.CreateProductVariantWithKey(merchProduct, list.ToProductAttributeCollection());
-            //}
 
             return merchProduct.ToProductDisplay();
         }
-
-        //[HttpPost]
-        //public ProductVariantDisplay AddProductVariant(ProductVariantDisplay productVariant)
-        //{
-
-        //}
 
         /// <summary>
         /// The put product variant.

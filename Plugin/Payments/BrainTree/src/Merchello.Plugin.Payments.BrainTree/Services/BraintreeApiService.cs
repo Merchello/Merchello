@@ -130,6 +130,17 @@ namespace Merchello.Plugin.Payments.Braintree.Services
         }
 
         /// <summary>
+        /// Gets the <see cref="BraintreeProviderSettings"/>.
+        /// </summary>
+        public BraintreeProviderSettings BraintreeProviderSettings
+        {
+            get
+            {
+                return _settings;
+            }
+        }
+
+        /// <summary>
         /// Initializes the provider
         /// </summary>
         /// <param name="merchelloContext">

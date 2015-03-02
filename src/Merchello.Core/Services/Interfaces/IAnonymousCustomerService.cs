@@ -19,8 +19,13 @@
         /// <summary>
         /// Saves a single <see cref="IAnonymousCustomer"/>
         /// </summary>
-        /// <param name="anonymous">The <see cref="IAnonymousCustomer"/> to save</param>
-        void Save(IAnonymousCustomer anonymous);
+        /// <param name="anonymous">
+        /// The <see cref="IAnonymousCustomer"/> to save
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        void Save(IAnonymousCustomer anonymous, bool raiseEvents = true);
 
 
         /// <summary>

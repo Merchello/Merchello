@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
 
     using Merchello.Core.Gateways.Notification;
     using Merchello.Core.Gateways.Payment;
@@ -22,6 +23,11 @@
     /// </summary>
     internal class GatewayProviderResolver : MerchelloManyObjectsResolverBase<GatewayProviderResolver, GatewayProviderBase>,  IGatewayProviderResolver
     {
+        /// <summary>
+        /// The lock.
+        /// </summary>
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
         /// <summary>
         /// The activated gateway provider cache.
         /// </summary>
@@ -194,12 +200,23 @@
         }
 
         /// <summary>
+        /// Returns a WriteLock to use when modifying collections
+        /// </summary>
+        /// <returns>Gets the write lock</returns>
+        protected override WriteLock GetWriteLock()
+        {
+            return new WriteLock(_lock);
+        }
+
+
+        /// <summary>
         /// The build activated gateway provider cache.
         /// </summary>
         private void BuildActivatedGatewayProviderCache()
         {
             // this will cache the list of all providers that have been "Activated"
-            foreach (var provider in _gatewayProviderService.GetAllGatewayProviders())
+            var allActivated = _gatewayProviderService.GetAllGatewayProviders().ToArray();
+            foreach (var provider in allActivated)
             {
                 var attempt = CreateInstance(provider);
                 if (attempt.Success)
@@ -211,6 +228,7 @@
             }
         }
 
+
         /// <summary>
         /// The add or update cache.
         /// </summary>
@@ -221,6 +239,7 @@
         {
             _activatedGatewayProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
         }
+
 
         /// <summary>
         /// The create instance.

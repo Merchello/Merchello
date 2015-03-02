@@ -230,14 +230,15 @@
                 this.EnsureVariants(product);
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
-
             // verify that all variants of this product still have attributes - or delete them
             _productVariantService.EnsureProductVariantsHaveAttributes(product);
 
             // save any remaining variants changes in the variants collection
             if (product.ProductVariants.Any())
             _productVariantService.Save(product.ProductVariants);
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
+
         }
 
         /// <summary>

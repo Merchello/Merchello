@@ -1,14 +1,12 @@
 <form novalidate name="orderForm" data-ng-controller="Merchello.Backoffice.SalesOverviewController" data-ng-show="loaded">
     <umb-panel val-show-validation>
         <umb-header>
-            <div class="span4">
+            <div class="span7">
                 <div class="umb-headline-editor-wrapper">
-                    <h1 class="umb-headline"><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}<br />
-
-                    </h1>
+                    <h1><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
                 </div>
             </div>
-            <div class="span8">
+            <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <!-- ACTION: Refund -->
                     <span class="btn">{{invoice.invoiceDateString() | date : settings.dateFormat }}</span>
@@ -53,14 +51,14 @@
                                 <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
                                 <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
                             </tr>
-                            <tr data-ng-repeat="customItem in customLineItems">
+                            <tr data-ng-show="customLineItems.length > 0" data-ng-repeat="customItem in customLineItems">
                                 <td>{{customItem.name}}</td>
                                 <td>{{customItem.sku}}</td>
                                 <td class="text-center">{{customItem.quantity}}</td>
                                 <td class="text-right">{{customItem.price | currency : currencySymbol}}</td>
                                 <td class="text-right">{{customItem.quantity * customItem.price | currency : currencySymbol}}</td>
                             </tr>
-                            <tr data-ng-repeat="discountItem in discountLineItems">
+                            <tr data-ng-show="discountLineItems.length > 0" data-ng-repeat="discountItem in discountLineItems">
                                 <td>{{discountItem.name}}</td>
                                 <td>{{discountItem.sku}}</td>
                                 <td class="text-center">{{discountItem.quantity}}</td>

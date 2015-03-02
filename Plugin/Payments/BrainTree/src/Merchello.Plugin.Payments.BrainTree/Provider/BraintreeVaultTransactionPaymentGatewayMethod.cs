@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree.Provider
 {
     using System;
+    using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Gateways;
@@ -12,6 +13,7 @@
     using Merchello.Plugin.Payments.Braintree.Services;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents a BraintreeVaultTransactionPaymentGatewayMethod
@@ -20,7 +22,11 @@
     /// This method assumes that the invoice is associated with a customer
     /// </remarks>
     [GatewayMethodUi("BrainTree.CustomerTransaction")]
-    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello.BrainTree/paymentmethod.html")]
+    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
+    [PaymentGatewayMethod("Braintree Payment Gateway Method Editors",
+    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.authorizecapturepayment.html",
+    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.voidpayment.html",
+    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.refundpayment.html")]
     public class BraintreeVaultTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase,  IBraintreeVaultTransactionPaymentGatewayMethod
     {
         /// <summary>
@@ -54,33 +60,127 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            throw new NotImplementedException();
+            // The Provider settings 
+            if (BraintreeApiService.BraintreeProviderSettings.DefaultTransactionOption == TransactionOption.SubmitForSettlement)
+            {
+                return this.PerformAuthorizeCapturePayment(invoice, invoice.Total, args);
+            }
+
+            var paymentMethodToken = args.GetPaymentMethodToken();
+
+            if (string.IsNullOrEmpty(paymentMethodToken))
+            {
+                var error = new InvalidOperationException("No payment method token was found in the ProcessorArgumentCollection");
+                LogHelper.Debug<BraintreeStandardTransactionPaymentGatewayMethod>(error.Message);
+                return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
+            }
+
+            var attempt = ProcessPayment(invoice, TransactionOption.Authorize, invoice.Total, paymentMethodToken);
+
+            var payment = attempt.Payment.Result;
+
+            GatewayProviderService.Save(payment);
+
+            if (!attempt.Payment.Success)
+            {
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, attempt.Payment.Exception.Message, 0);
+            }
+            else
+            {
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "To show record of Braintree Authorization", 0);
+            }
+
+            return attempt;
         }
 
+        /// <summary>
+        /// The perform authorize capture payment.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
         protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
         {
-            throw new NotImplementedException();
+            var paymentMethodToken = args.GetPaymentMethodToken();
+
+            if (string.IsNullOrEmpty(paymentMethodToken))
+            {
+                var error = new InvalidOperationException("No payment method token was found in the ProcessorArgumentCollection");
+                LogHelper.Debug<BraintreeStandardTransactionPaymentGatewayMethod>(error.Message);
+                return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
+            }
+
+            var attempt = ProcessPayment(invoice, TransactionOption.SubmitForSettlement, invoice.Total, paymentMethodToken);
+
+            var payment = attempt.Payment.Result;
+
+            GatewayProviderService.Save(payment);
+
+            if (!attempt.Payment.Success)
+            {
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, attempt.Payment.Exception.Message, 0);
+            }
+            else
+            {
+                var customerKey = invoice.CustomerKey.GetValueOrDefault();
+                var last4 = string.Empty;
+                if (!Guid.Empty.Equals(customerKey))
+                {
+                    var customer = BraintreeApiService.Customer.GetBraintreeCustomer(customerKey);
+                    if (customer.CreditCards.Any())
+                    {
+                        var cc = customer.CreditCards.FirstOrDefault(x => x.Token == paymentMethodToken);
+                        if (cc != null)
+                        {
+                            last4 += " - " + cc.CardType + " " + cc.LastFour;
+                        }
+                    }
+                }
+
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Braintree Vault Transaction" + last4, payment.Amount);
+            }
+
+            return attempt;
         }
 
-        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string paymentMethodNonce)
+        /// <summary>
+        /// Processes the payment.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
+        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token)
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, amount, PaymentMethod.Key);
 
             payment.CustomerKey = invoice.CustomerKey;
             payment.Authorized = false;
             payment.Collected = false;
-            payment.PaymentMethodName = "Braintree Transaction";
-            payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
-            
-            var merchCustomer = invoice.Customer();
+            payment.PaymentMethodName = "Braintree Vault Transaction";
+            payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, token);
 
-            if (merchCustomer == null)
-            {
-                var customerError = new NullReferenceException("A customer is not associated with the invoice.  Braintree vault transactions require a customer reference.");
-                return new PaymentResult(Attempt<IPayment>.Fail(payment, customerError), invoice, false);
-            }
-
-            var result = BraintreeApiService.Transaction.Sale(invoice, paymentMethodNonce, merchCustomer, invoice.GetBillingAddress(), option);
+            var result = BraintreeApiService.Transaction.VaultSale(invoice, token, option);
 
             if (result.IsSuccess())
             {
@@ -92,7 +192,6 @@
                     payment.Authorized = true;
                     payment.Collected = true;
                 }
-
 
                 return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
             }

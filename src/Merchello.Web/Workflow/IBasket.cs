@@ -175,6 +175,14 @@
         void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);
 
         /// <summary>
+        /// Adds a line item to the basket.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The <see cref="IItemCacheLineItem"/>.
+        /// </param>
+        void AddItem(IItemCacheLineItem lineItem);
+
+        /// <summary>
         /// Updates the quantity of an item in the basket
         /// </summary>
         /// <param name="key">

@@ -15,7 +15,7 @@
         /// Gets the dbTypeFields configuration collection for <see cref="ICustomerAddress"/>
         /// </summary>
         [ConfigurationProperty("customerAddress", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection CustomerAddress
+        internal TypeFieldCollection CustomerAddress
         {
             get { return (TypeFieldCollection)this["customerAddress"]; }
         }
@@ -23,17 +23,17 @@
         /// <summary>
         /// Gets the dbTypeFields configuration collection for <see cref="IItemCache"/>
         /// </summary>
-        [ConfigurationProperty("customerItemCache", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection CustomerItemCache
+        [ConfigurationProperty("itemCache", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection ItemCache
         {
-            get { return (TypeFieldCollection)this["customerItemCache"]; }
+            get { return (TypeFieldCollection)this["itemCache"]; }
         }
 
         /// <summary>
         /// Gets the dbTypeFields configuration collection for Entities
         /// </summary>
         [ConfigurationProperty("entities", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection Entities
+        internal TypeFieldCollection Entities
         {
             get { return (TypeFieldCollection) this["entities"]; }
         }
@@ -42,7 +42,7 @@
         /// Gets the dbTypeFields configuration collection for <see cref="IShipMethod"/>
         /// </summary>
         [ConfigurationProperty("shipMethod", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection ShipMethod
+        internal TypeFieldCollection ShipMethod
         {
             get { return (TypeFieldCollection)this["shipMethod"]; }
         }
@@ -51,7 +51,7 @@
         /// Gets the dbTypeFields configuration collection for <see cref="IInvoiceLineItem"/>
         /// </summary>
         [ConfigurationProperty("invoiceItem", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection InvoiceItem
+        internal TypeFieldCollection InvoiceItem
         {
             get { return (TypeFieldCollection)this["invoiceItem"]; }
         }
@@ -60,7 +60,7 @@
         /// Gets the dbTypeFields configuration collection for <see cref="IPayment"/>
         /// </summary>
         [ConfigurationProperty("paymentMethod", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection PaymentMethod
+        internal TypeFieldCollection PaymentMethod
         {
             get { return (TypeFieldCollection)this["paymentMethod"]; }
         }
@@ -78,7 +78,7 @@
         /// Gets the dbTypeFields configuration collection for <see cref="IAppliedPayment"/>
         /// </summary>
         [ConfigurationProperty("appliedPayment", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection AppliedPayment
+        internal TypeFieldCollection AppliedPayment
         {
             get { return (TypeFieldCollection)this["appliedPayment"]; }
         }
@@ -87,7 +87,7 @@
         /// Gets the dbTypeFields configuration collection for <see cref="IGatewayProviderSettings"/>
         /// </summary>
         [ConfigurationProperty("gatewayProvider", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection GatewayProvider
+        internal TypeFieldCollection GatewayProvider
         {
             get { return (TypeFieldCollection)this["gatewayProvider"]; }
         }

@@ -148,8 +148,12 @@
         /// <param name="anonymous">
         /// The anonymous customer
         /// </param>
-        public void Save(IAnonymousCustomer anonymous)
+        /// <param name="raiseEvents">
+        /// TOptional boolean indicating whether or not to raise events
+        /// </param>
+        public void Save(IAnonymousCustomer anonymous, bool raiseEvents = true)
         {
+            if (raiseEvents)
             if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IAnonymousCustomer>(anonymous), this))
             {
                 return;
@@ -165,6 +169,7 @@
                 }
             }
 
+            if (raiseEvents)
             Saved.RaiseEvent(new SaveEventArgs<IAnonymousCustomer>(anonymous), this);
         }
 

@@ -1,4 +1,6 @@
-﻿using Merchello.Core.Models;
+﻿using System.Runtime.CompilerServices;
+using Merchello.Core.Gateways.Payment;
+using Merchello.Core.Models;
 using Merchello.Plugin.Payments.PayPal.Models;
 using Newtonsoft.Json;
 
@@ -34,5 +36,6 @@ namespace Merchello.Plugin.Payments.PayPal
 				JsonConvert.DeserializeObject<PayPalProcessorSettings>(
 					extendedData.GetValue(Constants.ExtendedDataKeys.ProcessorSettings));
 		}
+
 	}
 }

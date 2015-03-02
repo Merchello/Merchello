@@ -12,7 +12,16 @@
     /// </summary>
     public interface ISalePreparationBase
     {
-        
+        /// <summary>
+        /// Gets or sets a value indicating whether raise customer events when saving customer data.
+        /// </summary>
+        /// <remarks>
+        /// During certain checkout workflows, customer save events can fire often that can cause performance
+        /// problems if there are a lot of event handlers handling the CustomerService.Save events.  This
+        /// allows for a toggling the events on and off
+        /// </remarks>
+        bool RaiseCustomerEvents { get; set; }
+
         /// <summary>
         /// Restarts the checkout process, deleting all persisted data
         /// </summary>

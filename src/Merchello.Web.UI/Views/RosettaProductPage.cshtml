@@ -2,7 +2,13 @@
 
 @{
     Layout = "RosettaBasePage.cshtml";
-    var product = Merchello.Query.Product.GetByKey(new Guid(CurrentPage.merchelloProduct));
+    
+    // in 1.8.0 the following will need to change 
+    var key = new Guid(CurrentPage.merchelloProduct);
+    var product = Merchello.Query.Product.GetByKey(key);
+    
+    // to
+    // var product = CurrentPage.merchelloProduct;
     
 }
 

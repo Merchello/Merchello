@@ -53,14 +53,14 @@
                                 <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
                                 <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
                             </tr>
-                            <tr data-ng-repeat="customItem in customLineItems">
+                            <tr data-ng-show="customLineItems.length > 0" data-ng-repeat="customItem in customLineItems">
                                 <td>{{customItem.name}}</td>
                                 <td>{{customItem.sku}}</td>
                                 <td class="text-center">{{customItem.quantity}}</td>
                                 <td class="text-right">{{customItem.price | currency : currencySymbol}}</td>
                                 <td class="text-right">{{customItem.quantity * customItem.price | currency : currencySymbol}}</td>
                             </tr>
-                            <tr data-ng-repeat="discountItem in discountLineItems">
+                            <tr data-ng-show="discountLineItems.length > 0" data-ng-repeat="discountItem in discountLineItems">
                                 <td>{{discountItem.name}}</td>
                                 <td>{{discountItem.sku}}</td>
                                 <td class="text-center">{{discountItem.quantity}}</td>
