@@ -4,6 +4,7 @@
     using System.Configuration;
 
     using Merchello.Core;
+    using Merchello.Plugin.Payments.Braintree;
     using Merchello.Plugin.Payments.Braintree.Models;
     using Merchello.Plugin.Payments.Braintree.Services;
 
@@ -15,7 +16,7 @@
         {
             return new BraintreeProviderSettings()
                             {
-                                Environment = Environment.SANDBOX,
+                                Environment = EnvironmentType.Sandbox,
                                 PublicKey = ConfigurationManager.AppSettings["publicKey"],
                                 PrivateKey = ConfigurationManager.AppSettings["privateKey"],
                                 MerchantId = ConfigurationManager.AppSettings["merchantId"],

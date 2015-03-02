@@ -2472,7 +2472,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range
             </summary>
@@ -2498,7 +2498,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status
             </summary>
@@ -2523,11 +2523,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with an export value
             </summary>
@@ -2552,11 +2555,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status and export value
             </summary>
@@ -2583,6 +2589,9 @@
             </param>
             <param name="sortDirection">
             The sort direction.
+            </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
@@ -2802,7 +2811,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range
             </summary>
@@ -2824,11 +2833,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status
             </summary>
@@ -2853,11 +2865,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with an export value
             </summary>
@@ -2882,11 +2897,14 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.DateTime,System.DateTime,System.Guid,System.Boolean,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
             <summary>
             Searches invoices that have invoice dates within a specified date range with a particular invoice status and export value
             </summary>
@@ -2913,6 +2931,9 @@
             </param>
             <param name="sortDirection">
             The sort direction.
+            </param>
+            <param name="customerOnly">
+            Restricts search to only invoices associated with a customer
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
@@ -5823,9 +5844,101 @@
             The <see cref="T:Merchello.Web.Workflow.IBasket"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Workflow.BasketWishListExtensions">
+            <summary>
+            Extension methods for the <see cref="T:Merchello.Web.Workflow.IBasket"/> and <see cref="T:Merchello.Web.Workflow.IWishList"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketWishListExtensions.SaveToWishList(Merchello.Web.Workflow.IBasket)">
+            <summary>
+            Saves the entire basket to the wish list and then clears the basket.
+            </summary>
+            <param name="basket">
+            The <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketWishListExtensions.MoveItemToWishList(Merchello.Web.Workflow.IBasket,System.String)">
+            <summary>
+            Moves a item to the wish list.
+            </summary>
+            <param name="basket">
+            The basket.
+            </param>
+            <param name="sku">
+            The SKU.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketWishListExtensions.MoveItemToWishList(Merchello.Web.Workflow.IBasket,System.Guid)">
+            <summary>
+            Moves a item to the wish list.
+            </summary>
+            <param name="basket">
+            The basket.
+            </param>
+            <param name="lineItemKey">
+            The line item key.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketWishListExtensions.MoveItemToWishList(Merchello.Web.Workflow.IBasket,Merchello.Core.Models.ILineItem)">
+            <summary>
+            Moves a item to the wish list.
+            </summary>
+            <param name="basket">
+            The basket.
+            </param>
+            <param name="item">
+            The item.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketWishListExtensions.MoveToBasket(Merchello.Web.Workflow.IWishList)">
+            <summary>
+            Moves the wish list to the basket.
+            </summary>
+            <param name="wishList">
+            The wish list.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketWishListExtensions.MoveItemToBasket(Merchello.Web.Workflow.IWishList,System.String)">
+            <summary>
+            Moves the wish list to the basket.
+            </summary>
+            <param name="wishList">
+            The wish list.
+            </param>
+            <param name="sku">
+            The SKU.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketWishListExtensions.MoveItemToBasket(Merchello.Web.Workflow.IWishList,System.Guid)">
+            <summary>
+            Moves the wish list to the basket.
+            </summary>
+            <param name="wishList">
+            The wish list.
+            </param>
+            <param name="lineItemKey">
+            The line Item Key.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketWishListExtensions.MoveItemToBasket(Merchello.Web.Workflow.IWishList,Merchello.Core.Models.ILineItem)">
+            <summary>
+            Moves the wish list to the basket.
+            </summary>
+            <param name="wishList">
+            The wish list.
+            </param>
+            <param name="lineItem">
+            The line Item.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Workflow.IWishList">
+            <summary>
+            Defines a wish list.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IProduct)">
             <summary>
-            Adds a <see cref="T:Merchello.Core.Models.IProduct"/> to the basket
+            Adds a <see cref="T:Merchello.Core.Models.IProduct"/> to the wish list
             </summary>
             <param name="product">The <see cref="T:Merchello.Core.Models.IProduct"/> to be added</param>
             <remarks>
@@ -5834,7 +5947,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IProduct,System.Int32)">
             <summary>
-            Adds a <see cref="T:Merchello.Core.Models.IProduct"/> to the basket
+            Adds a <see cref="T:Merchello.Core.Models.IProduct"/> to the wish list
             </summary>
             <param name="product">The <see cref="T:Merchello.Core.Models.IProduct"/> to be added</param>
             <param name="quantity">The quantity to be represented</param>
@@ -5844,7 +5957,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IProduct,System.String,System.Int32)">
             <summary>
-            Adds a <see cref="T:Merchello.Core.Models.IProduct"/> to the basket
+            Adds a <see cref="T:Merchello.Core.Models.IProduct"/> to the wish list
             </summary>
             <param name="product">The <see cref="T:Merchello.Core.Models.IProduct"/> to be added</param>
             <param name="name">Override for the name of the product in the line item</param>
@@ -5855,7 +5968,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IProduct,System.String,System.Int32,Merchello.Core.Models.ExtendedDataCollection)">
             <summary>
-            Adds a <see cref="T:Merchello.Core.Models.IProduct"/> to the basket
+            Adds a <see cref="T:Merchello.Core.Models.IProduct"/> to the wish list
             </summary>
             <param name="product">
             The <see cref="T:Merchello.Core.Models.IProduct"/> to be added
@@ -5875,20 +5988,20 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IProductVariant)">
             <summary>
-            Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the basket
+            Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the wish list
             </summary>
             <param name="productVariant">The product variant to be added</param>
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IProductVariant,System.Int32)">
             <summary>
-            Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the basket
+            Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the wish list
             </summary>
             <param name="productVariant">The product variant to be added</param>
             <param name="quantity">The quantity to be represented</param>
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IProductVariant,System.String,System.Int32)">
             <summary>
-            Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the basket
+            Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the wish list
             </summary>
             <param name="productVariant">
             The product variant to be added
@@ -5902,7 +6015,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IProductVariant,System.String,System.Int32,Merchello.Core.Models.ExtendedDataCollection)">
             <summary>
-            Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the basket
+            Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the wish list
             </summary>
             <param name="productVariant">
             The product variant to be added
@@ -5919,7 +6032,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(System.String,System.String,System.Decimal)">
             <summary>
-            Adds a item to the basket
+            Adds a item to the wish list
             </summary>
             <param name="name">The name of the item</param>
             <param name="sku">The SKU of the item</param>
@@ -5927,7 +6040,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(System.String,System.String,System.Int32,System.Decimal)">
             <summary>
-            Adds a item to the basket
+            Adds a item to the wish list
             </summary>
             <param name="name">The name of the item</param>
             <param name="sku">The SKU of the item</param>
@@ -5936,7 +6049,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.AddItem(System.String,System.String,System.Int32,System.Decimal,Merchello.Core.Models.ExtendedDataCollection)">
             <summary>
-            Adds a item to the basket
+            Adds a item to the wish list
             </summary>
             <param name="name">
             The name of the item
@@ -5954,9 +6067,17 @@
             The extended Data.
             </param>
         </member>
+        <member name="M:Merchello.Web.Workflow.IWishList.AddItem(Merchello.Core.Models.IItemCacheLineItem)">
+            <summary>
+            Adds a line item to the wish list.
+            </summary>
+            <param name="lineItem">
+            The <see cref="T:Merchello.Core.Models.IItemCacheLineItem"/>.
+            </param>
+        </member>
         <member name="M:Merchello.Web.Workflow.IWishList.UpdateQuantity(System.Guid,System.Int32)">
             <summary>
-            Updates the quantity of an item in the basket
+            Updates the quantity of an item in the wish list
             </summary>
             <param name="key">
             The line item key
@@ -5967,7 +6088,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.UpdateQuantity(System.String,System.Int32)">
             <summary>
-            Updates the quantity of an item in the basket
+            Updates the quantity of an item in the wish list
             </summary>
             <param name="sku">
             The sku.
@@ -5978,7 +6099,7 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.UpdateQuantity(Merchello.Core.Models.IProductVariant,System.Int32)">
             <summary>
-            Updates the quantity of an item in the basket
+            Updates the quantity of an item in the wish list
             </summary>
             <param name="productVariant">
             The product Variant.
@@ -5989,25 +6110,25 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.RemoveItem(System.Guid)">
             <summary>
-            Removes an item from the basket  
+            Removes an item from the wish list  
             </summary>
             <param name="itemKey">The key of the line item to be removed</param>    
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.RemoveItem(System.String)">
             <summary>
-            Removes an item from the basket
+            Removes an item from the wish list
             </summary>
             <param name="sku">The SKU of the line item to be removed</param>
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.RemoveItem(Merchello.Core.Models.IProductVariant)">
             <summary>
-            Removes a product variant from the basket
+            Removes a product variant from the wish list
             </summary>
             <param name="productVariant">The product variant to be removed</param>
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.Empty">
             <summary>
-            Empties the basket
+            Empties the wish list
             </summary>
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.Refresh">
@@ -6017,53 +6138,48 @@
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.Save">
             <summary>
-            Saves the basket
+            Saves the wish list
             </summary>
         </member>
         <member name="M:Merchello.Web.Workflow.IWishList.Accept(Merchello.Core.Models.ILineItemVisitor)">
             <summary>
-            Accepts visitor class to visit basket items
+            Accepts visitor class to visit wish list items
             </summary>
             <param name="visitor">The <see cref="T:Merchello.Core.Models.ILineItemVisitor"/> class</param>
         </member>
-        <member name="M:Merchello.Web.Workflow.IWishList.MoveToBasket">
-            <summary>
-            Moves the wishlist into a basket
-            </summary>
-        </member>
         <member name="P:Merchello.Web.Workflow.IWishList.VersionKey">
             <summary>
-            Gets the Wishlist version key
+            Gets the Wish list version key
             </summary>
         </member>
         <member name="P:Merchello.Web.Workflow.IWishList.Customer">
             <summary>
-            Gets the customer associated with the basket
+            Gets the customer associated with the wish list
             </summary>
         </member>
         <member name="P:Merchello.Web.Workflow.IWishList.Items">
             <summary>
-            Gets the basket line items
+            Gets the wish list line items
             </summary>
         </member>
         <member name="P:Merchello.Web.Workflow.IWishList.TotalItemCount">
             <summary>
-            Gets the basket's item count
+            Gets the wish list's item count
             </summary>
         </member>
         <member name="P:Merchello.Web.Workflow.IWishList.TotalQuantityCount">
             <summary>
-            Gets the sum of all basket item quantities
+            Gets the sum of all wish list item quantities
             </summary>
         </member>
         <member name="P:Merchello.Web.Workflow.IWishList.TotalWishListPrice">
             <summary>
-            Gets the sum of all basket item "amount" multiplied by quantity (price)
+            Gets the sum of all wish list item "amount" multiplied by quantity (price)
             </summary>
         </member>
         <member name="P:Merchello.Web.Workflow.IWishList.IsEmpty">
             <summary>
-            Gets a value indicating whether or not the basket contains any items
+            Gets a value indicating whether or not the wish list contains any items
             </summary>
         </member>
         <member name="T:Merchello.Web.Workflow.PaymentProcessor">
@@ -9021,6 +9137,28 @@
             The umbraco context.
             </param>
         </member>
+        <member name="M:Merchello.Web.CustomerContext.SetValue(System.String,System.String)">
+            <summary>
+            Sets a value in the Customer Context Data.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <param name="value">
+            The value.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.CustomerContext.GetValue(System.String)">
+            <summary>
+            Gets a value from the Customer Context Data.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.CustomerContext.Initialize">
             <summary>
             Initializes this class with default values
@@ -9240,6 +9378,14 @@
             </param>
             <param name="extendedData">
             The extended Data.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.IBasket.AddItem(Merchello.Core.Models.IItemCacheLineItem)">
+            <summary>
+            Adds a line item to the basket.
+            </summary>
+            <param name="lineItem">
+            The <see cref="T:Merchello.Core.Models.IItemCacheLineItem"/>.
             </param>
         </member>
         <member name="M:Merchello.Web.Workflow.IBasket.UpdateQuantity(System.Guid,System.Int32)">
@@ -9521,6 +9667,14 @@
             </param>
             <param name="extendedData">
             The extended Data.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.Basket.AddItem(Merchello.Core.Models.IItemCacheLineItem)">
+            <summary>
+            Adds a line item to the basket.
+            </summary>
+            <param name="lineItem">
+            The <see cref="T:Merchello.Core.Models.IItemCacheLineItem"/>.
             </param>
         </member>
         <member name="M:Merchello.Web.Workflow.Basket.UpdateQuantity(Merchello.Core.Models.IProductVariant,System.Int32)">
@@ -10062,6 +10216,11 @@
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplay.ProductVariants">
             <summary>
             Gets or sets the product variants.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplay.TotalInventoryCount">
+            <summary>
+            Gets the total inventory count.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay">
@@ -10933,6 +11092,14 @@
             </param>
             <param name="extendedData">
             The extended Data.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.WishList.AddItem(Merchello.Core.Models.IItemCacheLineItem)">
+            <summary>
+            Adds a line item to the wish list.
+            </summary>
+            <param name="lineItem">
+            The <see cref="T:Merchello.Core.Models.IItemCacheLineItem"/>.
             </param>
         </member>
         <member name="M:Merchello.Web.Workflow.WishList.UpdateQuantity(Merchello.Core.Models.IProductVariant,System.Int32)">

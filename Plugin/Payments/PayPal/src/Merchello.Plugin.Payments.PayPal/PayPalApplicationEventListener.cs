@@ -21,7 +21,7 @@ namespace Merchello.Plugin.Payments.PayPal
 
 			GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> args)
 			{
-				var key = new Guid("4E9D52B5-65A2-4F23-89D6-8E83500D4137");
+				var key = new Guid(Constants.PayPalPaymentGatewayProviderKey);
 				var provider = args.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
 				if (provider == null) return;
 

@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Gateways.Payment.Cash
+﻿namespace Merchello.Core.Gateways.Payment.Cash
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Represents a CashPaymentGatewayProvider
     /// </summary>
@@ -16,6 +18,9 @@ namespace Merchello.Core.Gateways.Payment.Cash
     {
         #region AvailableResources
 
+        /// <summary>
+        /// The available resources.
+        /// </summary>
         private static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>()
         {
             new GatewayResource("Cash", "Cash")
@@ -23,9 +28,25 @@ namespace Merchello.Core.Gateways.Payment.Cash
 
         #endregion
 
-        public CashPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CashPaymentGatewayProvider"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="gatewayProviderSettings">
+        /// The gateway provider settings.
+        /// </param>
+        /// <param name="runtimeCacheProvider">
+        /// The runtime cache provider.
+        /// </param>
+        public CashPaymentGatewayProvider(
+            IGatewayProviderService gatewayProviderService,
+            IGatewayProviderSettings gatewayProviderSettings,
+            IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
-        { }
+        {
+        }
 
         /// <summary>
         /// Creates a <see cref="IPaymentGatewayMethod"/>

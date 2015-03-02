@@ -171,7 +171,7 @@
         /// Returns a WriteLock to use when modifying collections
         /// </summary>
         /// <returns>Gets the write lock</returns>
-        protected WriteLock GetWriteLock()
+        protected virtual WriteLock GetWriteLock()
         {
             return new WriteLock(_lock);
         }

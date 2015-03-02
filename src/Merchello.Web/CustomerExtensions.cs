@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="customer">The customer.</param>
         /// <returns></returns>
-        public static IBackoffice Backoffice(this ICustomerBase customer)
+        internal static IBackoffice Backoffice(this ICustomerBase customer)
         {
             return Workflow.Backoffice.GetBackoffice(customer);
         }

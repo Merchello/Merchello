@@ -1,15 +1,11 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
-using Merchello.Core;
-using Merchello.Core.Models;
-using System;
-using System.Collections.Generic;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
-    using System.Security.Cryptography;
+    using System;
+    using System.Linq;
+    using System.Text.RegularExpressions;
 
-    using umbraco.presentation.actions;
+    using Merchello.Core;
+    using Merchello.Core.Models;
 
     internal static class ProductMappingExtensions
     {
@@ -109,13 +105,6 @@ namespace Merchello.Web.Models.ContentEditing
 
                 destination.ProductOptions.Add(destinationProductOption);
             }
-
-            //var existingVariants = destination.ProductVariants.ToArray();
-            //destination.ProductVariants.Clear();
-            //foreach (var variant in productDisplay.ProductVariants.Where(variant => existingVariants.Any(x => x.Key == variant.Key)))
-            //{
-            //    destination.ProductVariants.Add(variant.ToProductVariant(existingVariants.FirstOrDefault(x => x.Key == variant.Key)));
-            //}
             
             return destination;
         }

@@ -16,7 +16,7 @@
         <VersionMajor>2</VersionMajor>
         <VersionMinor>0</VersionMinor>
         <VersionPatch>0</VersionPatch>
-        <VersionSuffix>0</VersionSuffix>
+        <VersionSuffix>14</VersionSuffix>
         <UmbracoVersion>7.2.1</UmbracoVersion>
     </PropertyGroup>
 
@@ -51,7 +51,7 @@
             <Output TaskParameter="Revision" PropertyName="Revision" />
         </Version>
         <AssemblyInfo CodeLanguage="CS"
-			OutputFile="$(ProjectDir)\Properties\VersionInfo.cs"
+			OutputFile="$(ProjectDir)\Properties\AssemblyInfo.cs"
 			AssemblyVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch)"
 			AssemblyFileVersion="$(VersionMajor).$(VersionMinor).$(Build).$(Revision)"
 			AssemblyInformationalVersion="$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)"/>
@@ -60,7 +60,7 @@
 							 namespace="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
 							 XmlFileName="$(MSBuildProjectDirectory)\nuspec\Merchello.Plugin.Braintree.nuspec"
 							 XPath="nu:package/nu:metadata/nu:version"
-							 Value="$(VersionMajor).$(VersionMinor).$(VersionPatch)" />
+							 Value="$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)" />
       
     </Target>
 

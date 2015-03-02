@@ -80,6 +80,23 @@
         Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce, ICustomer customer, IAddress billingAddress, IAddress shippingAddress, TransactionOption option = TransactionOption.SubmitForSettlement);
 
         /// <summary>
+        /// Performs a Braintree Transaction using a vaulted credit card.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="paymentMethodToken">
+        /// The payment method token.
+        /// </param>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Result{Transaction}"/>.
+        /// </returns>
+        Result<Transaction> VaultSale(IInvoice invoice, string paymentMethodToken, TransactionOption option = TransactionOption.SubmitForSettlement);
+
+        /// <summary>
         /// Performs a Braintree submit for settlement transaction
         /// </summary>
         /// <param name="transactionId">

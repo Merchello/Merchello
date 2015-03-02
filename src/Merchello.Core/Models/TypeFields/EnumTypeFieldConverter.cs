@@ -24,7 +24,7 @@
         /// <summary>
         /// Creates an instance of an <see cref="IItemCacheTypeField"/> object
         /// </summary>
-        internal static IItemCacheTypeField ItemItemCache
+        public static IItemCacheTypeField ItemItemCache
         {
             get { return new ItemCacheTypeField(); }            
         }

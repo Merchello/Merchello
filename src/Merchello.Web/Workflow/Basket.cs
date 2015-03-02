@@ -323,6 +323,19 @@
         }
 
         /// <summary>
+        /// Adds a line item to the basket.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The <see cref="IItemCacheLineItem"/>.
+        /// </param>
+        public void AddItem(IItemCacheLineItem lineItem)
+        {
+            if (lineItem.Quantity <= 0) lineItem.Quantity = 1;
+            if (lineItem.Price < 0) lineItem.Price = 0;
+            _itemCache.AddItem(lineItem);
+        }
+
+        /// <summary>
         /// Updates a basket item's quantity
         /// </summary>
         /// <param name="productVariant">

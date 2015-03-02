@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
 
     using Merchello.Core.Builders;
@@ -39,6 +40,14 @@
         private readonly IMerchelloContext _merchelloContext;
 
         /// <summary>
+        /// A value indicating whether or not shipping charges are taxable.
+        /// </summary>
+        /// <remarks>
+        /// Determined by the global back office setting.
+        /// </remarks>
+        private Lazy<bool> _shippingTaxable;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SalePreparationBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
@@ -61,6 +70,9 @@
             _customer = customer;
             _itemCache = itemCache;
             ApplyTaxesToInvoice = true;
+            RaiseCustomerEvents = true;
+
+            Initialize();
         }
 
         /// <summary>
@@ -73,6 +85,10 @@
         /// </summary>
         public static event TypedEventHandler<SalePreparationBase, SalesPreparationEventArgs<IPaymentResult>> Finalizing;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether raise customer events.
+        /// </summary>
+        public bool RaiseCustomerEvents { get; set; }
 
 
         /// <summary>
@@ -128,7 +144,7 @@
         public virtual void SaveBillToAddress(IAddress billToAddress)
         {           
             _customer.ExtendedData.AddAddress(billToAddress, AddressType.Billing);
-            SaveCustomer(_merchelloContext, _customer);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -138,7 +154,7 @@
         public virtual void SaveShipToAddress(IAddress shipToAddress)
         {
             _customer.ExtendedData.AddAddress(shipToAddress, AddressType.Shipping);
-            SaveCustomer(_merchelloContext, _customer);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -171,7 +187,7 @@
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
             _customer.ExtendedData.AddAddress(approvedShipmentRateQuote.Shipment.GetDestinationAddress(), AddressType.Shipping);
-            SaveCustomer(_merchelloContext, _customer);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -190,7 +206,7 @@
             _merchelloContext.Services.ItemCacheService.Save(_itemCache);
 
             _customer.ExtendedData.AddAddress(shipmentRateQuotes.First().Shipment.GetDestinationAddress(), AddressType.Shipping);
-            SaveCustomer(_merchelloContext, _customer);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -217,6 +233,7 @@
         public void SavePaymentMethod(IPaymentMethod paymentMethod)
         {
             _customer.ExtendedData.AddPaymentMethod(paymentMethod);
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
         /// <summary>
@@ -449,13 +466,13 @@
         /// <param name="entityKey">
         /// The entity Key.
         /// </param>
-        internal static void Reset(IMerchelloContext merchelloContext, Guid entityKey)
+        internal void Reset(IMerchelloContext merchelloContext, Guid entityKey)
         {
             var customer = merchelloContext.Services.CustomerService.GetAnyByKey(entityKey);
 
             if (customer == null) return;
 
-            Reset(merchelloContext, customer);
+            Reset(merchelloContext, customer, RaiseCustomerEvents);
         }
         
         /// <summary>
@@ -520,15 +537,18 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer)
+        /// <param name="raiseEvents">
+        /// The raise Events.
+        /// </param>
+        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer, bool raiseEvents = true)
         {
             if (typeof(AnonymousCustomer) == customer.GetType())
             {
-                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer);
+                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer, raiseEvents);
             }
             else
             {
-                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer);
+                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer, raiseEvents);
             }
         }
 
@@ -541,11 +561,14 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer)
+        /// <param name="raiseEvents">
+        /// The raise Events.
+        /// </param>
+        private static void Reset(IMerchelloContext merchelloContext, ICustomerBase customer, bool raiseEvents = true)
         {
             customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.ShippingDestinationAddress);
             customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.BillingAddress);
-            SaveCustomer(merchelloContext, customer);
+            SaveCustomer(merchelloContext, customer, raiseEvents);
         }
 
         /// <summary>
@@ -572,7 +595,19 @@
         /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> to be added as a <see cref="ILineItem"/></param>
         private void AddShipmentRateQuoteLineItem(IShipmentRateQuote shipmentRateQuote)
         {
-            _itemCache.AddItem(shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>());
+            var lineItem = shipmentRateQuote.AsLineItemOf<ItemCacheLineItem>();
+            if (_shippingTaxable.Value) lineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.Taxable, true.ToString());
+            _itemCache.AddItem(lineItem);
+        }
+
+        /// <summary>
+        /// Class initialization.
+        /// </summary>
+        private void Initialize()
+        {
+            var storeSettingsService = _merchelloContext.Services.StoreSettingService;
+            var shippingTaxSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.GlobalShippingIsTaxableKey);
+            _shippingTaxable = new Lazy<bool>(() => Convert.ToBoolean(shippingTaxSetting.Value));
         }
     }
 }

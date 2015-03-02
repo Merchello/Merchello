@@ -197,9 +197,11 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Handles the data passed back from the provider editor dialog and saves it to the database
              */
             function providerConfigDialogConfirm(data) {
+                $scope.preValuesLoaded = false;
                 var promise = gatewayProviderResource.saveGatewayProvider(data.provider);
                 promise.then(function (provider) {
                         notificationsService.success("Gateway Provider Saved", "");
+                        init();
                     },
                     function (reason) {
                         notificationsService.error("Gateway Provider Save Failed", reason.message);

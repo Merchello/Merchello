@@ -10,6 +10,7 @@
     var EditShippingGatewayMethodDialogData = function() {
         var self = this;
         self.shippingGatewayMethod = {};
+        self.currencySymbol = '';
     };
 
     angular.module('merchello.models').constant('EditShippingGatewayMethodDialogData', EditShippingGatewayMethodDialogData);

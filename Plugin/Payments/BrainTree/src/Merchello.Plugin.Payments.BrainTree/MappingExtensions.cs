@@ -9,6 +9,8 @@
 
     using Models;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
+
     using Umbraco.Core.Logging;
 
     /// <summary>
@@ -60,10 +62,17 @@
         /// </returns>
         public static BraintreeProviderSettings GetBrainTreeProviderSettings(this ExtendedDataCollection extendedData)
         {
-            return extendedData.ContainsKey(Constants.ExtendedDataKeys.BraintreeProviderSettings)
-                       ? JsonConvert.DeserializeObject<BraintreeProviderSettings>(
-                           extendedData.GetValue(Constants.ExtendedDataKeys.BraintreeProviderSettings))
-                       : new BraintreeProviderSettings();
+            BraintreeProviderSettings settings;
+            if (extendedData.ContainsKey(Constants.ExtendedDataKeys.BraintreeProviderSettings))
+            {
+                var json = extendedData.GetValue(Constants.ExtendedDataKeys.BraintreeProviderSettings);
+                settings = JsonConvert.DeserializeObject<BraintreeProviderSettings>(json);
+            }
+            else
+            {
+                settings = new BraintreeProviderSettings();
+            }
+            return settings;
         }
 
         /// <summary>
@@ -77,7 +86,8 @@
         /// </param>
         public static void SaveProviderSettings(this ExtendedDataCollection extendedData, BraintreeProviderSettings settings)
         {
-            var json = JsonConvert.SerializeObject(settings);
+            var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+            var json = JsonConvert.SerializeObject(settings, Formatting.None, jsonSerializerSettings);
             extendedData.SetValue(Constants.ExtendedDataKeys.BraintreeProviderSettings, json);
         }
 
@@ -92,7 +102,34 @@
         /// </returns>
         public static BraintreeGateway AsBraintreeGateway(this BraintreeProviderSettings settings)
         {
-            return Mapper.Map<BraintreeGateway>(settings);
+            return new BraintreeGateway(settings.Environment.AsEnvironment(), settings.MerchantId, settings.PublicKey, settings.PrivateKey);
+        }
+
+        /// <summary>
+        /// Maps an <see cref="EnvironmentType"/> to an <see cref="Environment"/>.
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Environment"/>.
+        /// </returns>
+        private static Environment AsEnvironment(this EnvironmentType type)
+        {
+            switch (type)
+            {
+                case EnvironmentType.Development:
+                    return Environment.DEVELOPMENT;
+
+                case EnvironmentType.Production:
+                    return Environment.PRODUCTION;
+
+                case EnvironmentType.Qa:
+                    return Environment.QA;
+
+                default:
+                    return Environment.SANDBOX;
+            }
         }
 
         #endregion
@@ -199,6 +236,20 @@
         #region ProcessorArguments
 
         /// <summary>
+        /// Sets the payment method nonce.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <param name="paymentMethodNonce">
+        /// The payment method nonce.
+        /// </param>
+        public static void SetPaymentMethodNonce(this ProcessorArgumentCollection args, string paymentMethodNonce)
+        {
+            args.Add(Constants.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
+        }
+
+        /// <summary>
         /// Gets the payment method nonce from the <see cref="ProcessorArgumentCollection"/>
         /// </summary>
         /// <param name="args">
@@ -212,6 +263,38 @@
             if (args.ContainsKey(Constants.ProcessorArguments.PaymentMethodNonce)) return args[Constants.ProcessorArguments.PaymentMethodNonce];
 
             LogHelper.Debug(typeof(MappingExtensions), "Payment Method Nonce not found in process argument collection");
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// The set payment method token.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <param name="paymentMethodToken">
+        /// The payment method token.
+        /// </param>
+        public static void SetPaymentMethodToken(this ProcessorArgumentCollection args, string paymentMethodToken)
+        {
+            args.Add(Constants.ProcessorArguments.PaymentMethodToken, paymentMethodToken);
+        }
+
+        /// <summary>
+        /// The get payment method token.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetPaymentMethodToken(this ProcessorArgumentCollection args)
+        {
+            if (args.ContainsKey(Constants.ProcessorArguments.PaymentMethodToken)) return args[Constants.ProcessorArguments.PaymentMethodToken];
+
+            LogHelper.Debug(typeof(MappingExtensions), "Payment Method Token not found in process argument collection");
 
             return string.Empty;
         }

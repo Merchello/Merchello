@@ -14,7 +14,7 @@ namespace Merchello.Tests.Braintree.Integration.Subscriptions
         public void Can_Get_A_List_Of_All_Plans()
         {
             //// Arrange
-            var planid = "Box1Month";
+            var planid = "1MONTH";
 
             //// Act
             var plans = BraintreeApiService.Subscription.GetAllPlans().ToArray();
@@ -80,11 +80,14 @@ namespace Merchello.Tests.Braintree.Integration.Subscriptions
 
             var subscription = subscriptionAttempt.Result;
 
-            var trans = subscription.Transactions.FirstOrDefault();
+            if (subscription.Status == SubscriptionStatus.ACTIVE)
+            { 
+                var trans = subscription.Transactions.FirstOrDefault();
 
-            var cs = trans.Customer;
+                var cs = trans.Customer;
 
-            Assert.NotNull(cs);
+                Assert.NotNull(cs);
+            }
         }
     }
 }

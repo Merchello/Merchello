@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Merchello.Core.Models;
 
     /// <summary>
     /// The product option display.

@@ -3,45 +3,48 @@
     using System;
     using Core.Models;
 
+    /// <summary>
+    /// Defines a wish list.
+    /// </summary>
     public interface IWishList
     {
         /// <summary>
-        /// Gets the Wishlist version key
+        /// Gets the Wish list version key
         /// </summary>
         Guid VersionKey { get; }
 
         /// <summary>
-        /// Gets the customer associated with the basket
+        /// Gets the customer associated with the wish list
         /// </summary>
         ICustomerBase Customer { get; }
 
         /// <summary>
-        /// Gets the basket line items
+        /// Gets the wish list line items
         /// </summary>
         LineItemCollection Items { get; }
 
         /// <summary>
-        /// Gets the basket's item count
+        /// Gets the wish list's item count
         /// </summary>
         int TotalItemCount { get; }
 
         /// <summary>
-        /// Gets the sum of all basket item quantities
+        /// Gets the sum of all wish list item quantities
         /// </summary>
         int TotalQuantityCount { get; }
 
         /// <summary>
-        /// Gets the sum of all basket item "amount" multiplied by quantity (price)
+        /// Gets the sum of all wish list item "amount" multiplied by quantity (price)
         /// </summary>
         decimal TotalWishListPrice { get; }
 
         /// <summary>
-        /// Gets a value indicating whether or not the basket contains any items
+        /// Gets a value indicating whether or not the wish list contains any items
         /// </summary>
         bool IsEmpty { get; }
 
         /// <summary>
-        /// Adds a <see cref="IProduct"/> to the basket
+        /// Adds a <see cref="IProduct"/> to the wish list
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/> to be added</param>
         /// <remarks>
@@ -50,7 +53,7 @@
         void AddItem(IProduct product);
 
         /// <summary>
-        /// Adds a <see cref="IProduct"/> to the basket
+        /// Adds a <see cref="IProduct"/> to the wish list
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/> to be added</param>
         /// <param name="quantity">The quantity to be represented</param>
@@ -60,7 +63,7 @@
         void AddItem(IProduct product, int quantity);
         
         /// <summary>
-        /// Adds a <see cref="IProduct"/> to the basket
+        /// Adds a <see cref="IProduct"/> to the wish list
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/> to be added</param>
         /// <param name="name">Override for the name of the product in the line item</param>
@@ -71,7 +74,7 @@
         void AddItem(IProduct product, string name, int quantity);
 
         /// <summary>
-        /// Adds a <see cref="IProduct"/> to the basket
+        /// Adds a <see cref="IProduct"/> to the wish list
         /// </summary>
         /// <param name="product">
         /// The <see cref="IProduct"/> to be added
@@ -91,20 +94,20 @@
         void AddItem(IProduct product, string name, int quantity, ExtendedDataCollection extendedData);
         
         /// <summary>
-        /// Adds a <see cref="IProductVariant"/> to the basket
+        /// Adds a <see cref="IProductVariant"/> to the wish list
         /// </summary>
         /// <param name="productVariant">The product variant to be added</param>
         void AddItem(IProductVariant productVariant);
 
         /// <summary>
-        /// Adds a <see cref="IProductVariant"/> to the basket
+        /// Adds a <see cref="IProductVariant"/> to the wish list
         /// </summary>
         /// <param name="productVariant">The product variant to be added</param>
         /// <param name="quantity">The quantity to be represented</param>
         void AddItem(IProductVariant productVariant, int quantity);
 
         /// <summary>
-        /// Adds a <see cref="IProductVariant"/> to the basket
+        /// Adds a <see cref="IProductVariant"/> to the wish list
         /// </summary>
         /// <param name="productVariant">
         /// The product variant to be added
@@ -118,7 +121,7 @@
         void AddItem(IProductVariant productVariant, string name, int quantity);
 
         /// <summary>
-        /// Adds a <see cref="IProductVariant"/> to the basket
+        /// Adds a <see cref="IProductVariant"/> to the wish list
         /// </summary>
         /// <param name="productVariant">
         /// The product variant to be added
@@ -135,7 +138,7 @@
         void AddItem(IProductVariant productVariant, string name, int quantity, ExtendedDataCollection extendedData);
         
         /// <summary>
-        /// Adds a item to the basket
+        /// Adds a item to the wish list
         /// </summary>
         /// <param name="name">The name of the item</param>
         /// <param name="sku">The SKU of the item</param>
@@ -143,7 +146,7 @@
         void AddItem(string name, string sku, decimal price);
 
         /// <summary>
-        /// Adds a item to the basket
+        /// Adds a item to the wish list
         /// </summary>
         /// <param name="name">The name of the item</param>
         /// <param name="sku">The SKU of the item</param>
@@ -152,7 +155,7 @@
         void AddItem(string name, string sku, int quantity, decimal price);
 
         /// <summary>
-        /// Adds a item to the basket
+        /// Adds a item to the wish list
         /// </summary>
         /// <param name="name">
         /// The name of the item
@@ -172,7 +175,15 @@
         void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);
 
         /// <summary>
-        /// Updates the quantity of an item in the basket
+        /// Adds a line item to the wish list.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The <see cref="IItemCacheLineItem"/>.
+        /// </param>
+        void AddItem(IItemCacheLineItem lineItem);
+
+        /// <summary>
+        /// Updates the quantity of an item in the wish list
         /// </summary>
         /// <param name="key">
         /// The line item key
@@ -183,7 +194,7 @@
         void UpdateQuantity(Guid key, int quantity);
 
         /// <summary>
-        /// Updates the quantity of an item in the basket
+        /// Updates the quantity of an item in the wish list
         /// </summary>
         /// <param name="sku">
         /// The sku.
@@ -194,7 +205,7 @@
         void UpdateQuantity(string sku, int quantity);
 
         /// <summary>
-        /// Updates the quantity of an item in the basket
+        /// Updates the quantity of an item in the wish list
         /// </summary>
         /// <param name="productVariant">
         /// The product Variant.
@@ -205,25 +216,25 @@
         void UpdateQuantity(IProductVariant productVariant, int quantity);
       
         /// <summary>
-        /// Removes an item from the basket  
+        /// Removes an item from the wish list  
         /// </summary>
         /// <param name="itemKey">The key of the line item to be removed</param>    
         void RemoveItem(Guid itemKey);     
         
         /// <summary>
-        /// Removes an item from the basket
+        /// Removes an item from the wish list
         /// </summary>
         /// <param name="sku">The SKU of the line item to be removed</param>
         void RemoveItem(string sku);        
         
         /// <summary>
-        /// Removes a product variant from the basket
+        /// Removes a product variant from the wish list
         /// </summary>
         /// <param name="productVariant">The product variant to be removed</param>
         void RemoveItem(IProductVariant productVariant);
 
         /// <summary>
-        /// Empties the basket
+        /// Empties the wish list
         /// </summary>
         void Empty();
 
@@ -233,19 +244,14 @@
         void Refresh();
 
         /// <summary>
-        /// Saves the basket
+        /// Saves the wish list
         /// </summary>
         void Save();
 
         /// <summary>
-        /// Accepts visitor class to visit basket items
+        /// Accepts visitor class to visit wish list items
         /// </summary>
         /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
         void Accept(ILineItemVisitor visitor);
-
-        /// <summary>
-        /// Moves the wishlist into a basket
-        /// </summary>
-        void MoveToBasket();
     }
 }

@@ -82,6 +82,7 @@
         /// <returns>
         /// The <see cref="GatewayProviderDisplay"/>.
         /// </returns>
+        [HttpGet]
         public GatewayProviderDisplay GetGatewayProvider(Guid id)
         {
             var provider = _gatewayProviderService.GetGatewayProviderByKey(id) as Core.Models.GatewayProviderSettings;
@@ -102,6 +103,7 @@
         /// <returns>
         /// The collection of <see cref="GatewayProviderDisplay"/>.
         /// </returns>
+        [HttpGet]
         public IEnumerable<GatewayProviderDisplay> GetResolvedNotificationGatewayProviders()
         {
             return _gatewayContext.Notification.GetAllProviders().Select(x => x.GatewayProviderSettings.ToGatewayProviderDisplay());
@@ -115,6 +117,7 @@
         /// <returns>
         /// The collection of <see cref="GatewayProviderDisplay"/>.
         /// </returns>
+        [HttpGet]
         public IEnumerable<GatewayProviderDisplay> GetResolvedPaymentGatewayProviders()
         {
             return _gatewayContext.Payment.GetAllProviders().Select(x => x.GatewayProviderSettings.ToGatewayProviderDisplay());
@@ -128,6 +131,7 @@
         /// <returns>
         /// The collection of <see cref="GatewayProviderDisplay"/>.
         /// </returns>
+        [HttpGet]
         public IEnumerable<GatewayProviderDisplay> GetResolvedShippingGatewayProviders()
         {
             return _gatewayContext.Shipping.GetAllProviders().Select(x => x.GatewayProviderSettings.ToGatewayProviderDisplay());
@@ -142,6 +146,7 @@
         /// <returns>
         /// The collection of <see cref="GatewayProviderDisplay"/>.
         /// </returns>
+        [HttpGet]
         public IEnumerable<GatewayProviderDisplay> GetResolvedTaxationGatewayProviders()
         {
             return _gatewayContext.Taxation.GetAllProviders().Select(x => x.GatewayProviderSettings.ToGatewayProviderDisplay());
@@ -245,7 +250,7 @@
             {
                 var provider = _gatewayProviderService.GetGatewayProviderByKey(gatewayProviderDisplay.Key);
                 _gatewayProviderService.Save(gatewayProviderDisplay.ToGatewayProvider(provider));
-
+                GatewayProviderResolver.Current.RefreshCache();
             }
             catch (Exception ex)
             {
@@ -253,7 +258,6 @@
             }
 
             return response;
-
         }
 
 
