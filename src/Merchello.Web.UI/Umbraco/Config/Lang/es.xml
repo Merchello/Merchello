@@ -848,7 +848,10 @@
     <key alias="yourHistory" version="7.0">Tu historial reciente</key>
     <key alias="sessionExpires" version="7.0">La sesión caduca en</key>
   </area>
-<area alias="merchelloHeadline">
+<area alias="merchelloButtons">
+    <key alias="void">Void</key>
+    <key alias="refund">Refund</key>
+  </area><area alias="merchelloHeadline">
 		<key alias="catalog">Catálogo</key>
 	</area><area alias="merchelloVariant">
 		<!-- things -->
@@ -859,7 +862,7 @@
 		<key alias="barcode">Código de barras</key>sel
 		<key alias="manufacturer">Fabricante</key>
 		<key alias="manufacturerModel">Num. Modelo de Fabricante</key>
-		<key alias="variantInfo">Información de variante</key>
+		<key alias="variantInfo">Información de producto</key>
 		<key alias="variantOptions">Opciones de la variante</key>
 		<key alias="downloads">Descargas digitales</key>
 		<key alias="optionName">Nombre de la opción</key>
@@ -932,6 +935,7 @@
     <key alias="captureUpTo">Capture Up To</key>
     <key alias="salesTax">Impuesto de venta</key>
     <key alias="authorized"> Autorizado</key>
+    <key alias="captured">Captured</key>
     <key alias="paymentHistory"> Histórico de pagos</key>
     <key alias="paymentHistoryHelper">Registros de estado para uno o más pagos</key>
   </area><area alias="merchelloWarehouse">
@@ -946,8 +950,8 @@
 		<!-- things -->
 		<key alias="shipping">Envío</key>
 		<key alias="info">Información de envío</key>
-		<key alias="weight"><![CDATA[Peso <small>(en gramos)</small>]]></key>
-		<key alias="dimensions"><![CDATA[Dimensiones <small>(en cm)</small>]]></key>
+		<key alias="weight">Peso&gt;</key>
+		<key alias="dimensions">Dimensiones&gt;</key>
 		<!-- actions -->
 		<key alias="setVars"> Configura las variables de envío: Peso y dimensiones</key>
 		<!-- phrases -->
@@ -1077,6 +1081,7 @@
     </area><area alias="merchelloNotificationsDelete">
     <key alias="merchelloNotificationsDelete_deleteNotification">Borrar un método de notificación</key>
   </area><area alias="merchelloNotificationsMessage">
+      <add alias="replyTo">Reply to</add>
       <key alias="addEditMessage">Añadir/Editar un mensaje de notificación</key>
       <key alias="attachedEvent">Evento asociado</key>
       <key alias="fromEmail"><![CDATA[Desde la dirección<small>(ej. confirmacion@tudominio.com)</small>]]></key>
