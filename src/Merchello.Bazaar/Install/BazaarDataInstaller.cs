@@ -41,12 +41,6 @@
         {
             var product = this.AddMerchelloData();
 
-            LogHelper.Info<BazaarDataInstaller>("Adding the MerchelloCustomer MemberType");
-            var memberType = AddMerchelloCustomerMemberType();
-
-            LogHelper.Info<BazaarDataInstaller>("Adding the MerchelloCustomers MemberGroup");
-            var memberGroup = AddMerchelloCustomersMemberGroup();
-
             LogHelper.Info<BazaarDataInstaller>("Adding Example Merchello Data");
 
             LogHelper.Info<BazaarDataInstaller>("Installing store root node");
@@ -133,10 +127,13 @@
             var country = merchelloServices.StoreSettingService.GetCountryByCode("US");
 
             // The follow is internal to Merchello and not exposed in the public API
-          
+            var shipCountry = ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.GetShipCountryByCountryCode(catalog.Key, "US");
             // Add the ship country
-            var shipCountry = new ShipCountry(catalog.Key, country);
-            ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.Save(shipCountry);
+            if (shipCountry == null || shipCountry.CountryCode == "ELSE")
+            {
+                shipCountry = new ShipCountry(catalog.Key, country);
+                ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.Save(shipCountry);
+            }
 
             // Associate the fixed rate Shipping Provider to the ShipCountry
             var key = Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
