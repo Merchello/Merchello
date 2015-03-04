@@ -59,9 +59,9 @@
                 });
 
                 $('#address-province-select').change(function() {
-                    $('address-province-entry').text($(this).val());
+                    $('#address-province-entry').val($(this).val());
                 });
-                $('address-province-entry').text($('#address-province-select').val());
+                $('#address-province-entry').val($('#address-province-select').val());
 
             },
             toggleProfileForm: function() {
@@ -183,6 +183,7 @@
 
         products: {
             bind: function () {
+                
                 $.each($('.add-to-cart.has-variants'), function(index, elem) {
 
                     var key = $(elem).children('.variant-pricing').attr('id');
@@ -200,8 +201,8 @@
                             });
                         });
                     }
-                   
                 });
+
             },
             updateOptionChoices: function (filteredOptions) {
                 $.each(filteredOptions, function (index, option) {
@@ -258,6 +259,9 @@
                                 $(btn).attr('disabled', 'disabled');
                                 $(btn).hide();
                             }
+                        } else {
+                            $(btn).show();
+                            $(btn).removeAttr('disabled');
                         } 
                     },
                     dataType: "json",
@@ -291,7 +295,7 @@
             }
         },
 
-        checkout : {
+        checkout: {
             bind: function () {
                 if ($('#addresses-form')) {
                     // copy the billing address if needed
@@ -331,16 +335,21 @@
                     if ($('#shipping-quotes-select')) {
                         $('#shipping-quotes-select').change(function () {
                             merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
+                            merchello.bazaar.checkout.setShipMethod();
                         });
+                        merchello.bazaar.checkout.setShipMethod();
                     }
 
                     // bind the customer address drop downs
                     if ($('#billing-address-select')) {
+                        // TODO this should not be necessary
+                        $('#billing-address-select').removeAttr('data-val').removeAttr('data-val-required');
+
                         $('#billing-address-select').change(function() {
-                            if ($(this).val() !== '') {
+                            if ($(this).val() !== '00000000-0000-0000-0000-000000000000') {
                                 $('#billing-address').hide();
                                 $('#billing-vcard').show();
-                                merchello.bazaar.checkout.setCustomerAddress('billing', $(this).val(), $('#billing-vcard'));
+                                merchello.bazaar.checkout.setCustomerAddress('billing', $(this).val());
                             } else {
                                 $('#billing-address').show();
                                 $('#billing-vcard').hide();
@@ -349,15 +358,20 @@
                         });
                     }
                     if ($('shipping-address-select')) {
+                        $('#shipping-address-select').removeAttr('data-val').removeAttr('data-val-required');
                         $('#shipping-address-select').change(function() {
-                            if ($(this).val() !== '') {
+                            if ($(this).val() !== '00000000-0000-0000-0000-000000000000') {
                                 $('#billing-is-shipping-check').hide();
+                                $('#shipping-vcard').show();
+                                merchello.bazaar.checkout.setCustomerAddress('shipping', $(this).val());
                                 $('#shipping-address').hide();
                             } else {
                                 $('#billing-is-shipping-check').show();
                                 if (!$('#billing-is-shipping').is(':checked')) {
                                     $('#shipping-address').show();
                                 }
+                                $('#shipping-vcard').hide();
+
                             }
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
@@ -367,6 +381,13 @@
                         $('#save-addresses-check').click(function() {
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
+                    }
+
+                    if ($('#payment-method-select')) {
+                        $('#payment-method-select').change(function () {
+                            merchello.bazaar.checkout.setPaymentMethod();
+                        });
+                        merchello.bazaar.checkout.setPaymentMethod();
                     }
                 }
             },
@@ -389,7 +410,7 @@
                 if ($('#shipping-address-select')) {
                     if ($('#billing-is-shipping').is(':checked')) {
                         if ($('#billing-address-select')) {
-                            if ($('#billing-address-select').val() !== '') {
+                            if ($('#billing-address-select').val() !== '00000000-0000-0000-0000-000000000000') {
                                 $('#shipping-address-select option:nth(0)').text('Use a copy of \'' + $("#billing-address-select option:selected").text() + '\'');
                             } else {
                                 $('#shipping-address-select option:nth(0)').text('Enter a new address');
@@ -400,21 +421,25 @@
                     }
                 }
                 // save info options
-                if ($('#shipping-address-select') || $('#billing-address-select')) {
+                if ($('#IsAnonymous').val().toLowerCase() === "false") {
                     // if either of the drop downs has an empty key we need to show one or both label
                     // boxes.
                     var showBillingLabel = false;
                     var showShippingLabel = false;
                     var showCheckbox = false;
-                    if ($('#shipping-address-select')) {
-                        if ($('#shipping-address-select').val() === '') {
+                    if ($('#shipping-address-select').is(':visible')) {
+                        if ($('#shipping-address-select').val() === '00000000-0000-0000-0000-000000000000') {
                             showShippingLabel = true;
                         }
+                    } else {
+                        showShippingLabel = true;
                     }
-                    if ($('#billing-address-select')) {
-                        if ($('#billing-address-select').val() === '') {
+                    if ($('#billing-address-select').is(':visible')) {
+                        if ($('#billing-address-select').val() === '00000000-0000-0000-0000-000000000000') {
                             showBillingLabel = true;
                         }
+                    } else {
+                        showBillingLabel = true;
                     }
                     showCheckbox = showBillingLabel || showShippingLabel;
                     if (showCheckbox) {
@@ -427,7 +452,11 @@
                                 $('#billing-address-label-save').hide();
                             }
                             if (showShippingLabel) {
-                                $('#shipping-address-label-save').show();
+                                if ($('#billing-is-shipping').is(':checked') && $('#billing-is-shipping').is(':visible') && ($('#billing-address-select').val() === '00000000-0000-0000-0000-000000000000') || $('#billing-address-select').length === 0) {
+                                    $('#shipping-address-label-save').hide();
+                                } else {
+                                    $('#shipping-address-label-save').show();
+                                }
                             } else {
                                 $('#shipping-address-label-save').hide();
                             }
@@ -507,8 +536,9 @@
                     $.error(ex);
                 });
             },
-            copyBillingAddress: function(event) {
-                if ($('#billing-is-shipping').attr('checked') === 'checked') {
+            copyBillingAddress: function (event) {
+                console.info('should be copying');
+                if ($('#billing-is-shipping').is(':checked')) {
                     $('#shipping-name').val($('#billing-name').val());
                     $('#shipping-email').val($('#billing-email').val());
                     $('#shipping-address1').val($('#billing-address1').val());
@@ -521,8 +551,73 @@
                     $('#shipping-phone').val($('#billing-phone').val());
                 }
             },
-            setCustomerAddress : function(type, key, vcard) {
-                
+            setCustomerAddress : function(type, key) {
+                var data = {};
+                data.customerAddressKey = key;
+                $.ajax({
+                    type: "GET",
+                    url: "/umbraco/Bazaar/BazaarSiteApi/GetCustomerAddress",
+                    data: data,
+                    success: function (adr) {
+                        $('#' + type + '-name').val(adr.fullName);
+                        $('#' + type + '-address1').val(adr.address1);
+                        $('#' + type + '-address2').val(adr.address2);
+                        $('#' + type + '-locality').val(adr.locality);
+                        $('#' + type + '-province-entry').val(adr.region);
+                        $('#' + type + '-province-select').val(adr.region);
+                        $('#' + type + '-country-select').val(adr.countryCode);
+                        $('#' + type + '-postalcode').val(adr.postalCode);
+                        $('#' + type + '-phone').val(adr.phone);
+                        if (type === 'billing') {
+                            $('#shipping-address-label').val(adr.label);
+                            $('#billing-address-label').val(adr.label);
+                        }
+                        
+                        $('#' + type + '-vcard-fn').text(adr.fullName);
+                        $('#' + type + '-vcard-address1').text(adr.address1);
+                        $('#' + type + '-vcard-address2').text(adr.address2);
+                        $('#' + type + '-vcard-locality').text(adr.locality);
+                        $('#' + type + '-vcard-region').text(adr.region);
+                        $('#' + type + '-vcard-country').text(adr.countryCode);
+                        $('#' + type + '-vcard-postalcode').text(adr.postalCode);
+                        if (type === 'billing') {
+                            merchello.bazaar.checkout.copyBillingAddress();
+                        }
+                    },
+                    dataType: "json",
+                    traditional: true
+                }).fail(function (ex) {
+                    $.error(ex);
+                });
+            },
+            setShipMethod: function() {
+                $.each($('.selected-shipmethod-key'), function(idx, elem) {
+                    $(elem).val($('#shipping-quotes-select').val());
+                });
+            },
+            setPaymentMethod: function () {
+                var forms = $('.payment-method-form');
+                $.each(forms, function(index, frm) {
+                    $(frm).hide();
+                });
+                var paymentMethodKey = $('#payment-method-select').val();
+                console.info(paymentMethodKey);
+
+                var data = {};
+                data.paymentMethodKey = paymentMethodKey;
+                $.ajax({
+                    type: "GET",
+                    url: "/umbraco/Bazaar/BazaarSiteApi/GetPaymentMethodUi",
+                    data: data,
+                    success: function (info) {
+                        $('#' + info.alias).show();
+                        $('#' + info.alias).find('.selected-paymentmethod-key').val(paymentMethodKey);
+                    },
+                    dataType: "json",
+                    traditional: true
+                }).fail(function (ex) {
+                    $.error(ex);
+                });
             }
         }
     }

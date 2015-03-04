@@ -212,8 +212,23 @@
                 emailAddress = customer.Email;
                 if (customer.Addresses.Any())
                 {
+                    // note: we have to add the initial values to these collections so validation works correctly
+                    // since Guids are not nullable types
                     shippingAddresses.AddRange(customer.Addresses.Where(x => x.AddressType == AddressType.Shipping).Select(shipAdr => new SelectListItem() { Value = shipAdr.Key.ToString(), Text = shipAdr.Label }));
+                    if (shippingAddresses.Any())
+                    {
+                        shippingAddresses.Insert(
+                            0,
+                            new SelectListItem() { Value = Guid.Empty.ToString(), Text = "Enter a new address" });
+                    }
+
                     billingAddresses.AddRange(customer.Addresses.Where(x => x.AddressType == AddressType.Billing).Select(shipAdr => new SelectListItem() { Value = shipAdr.Key.ToString(), Text = shipAdr.Label }));
+                    if (billingAddresses.Any())
+                    {
+                        billingAddresses.Insert(
+                            0,
+                            new SelectListItem() { Value = Guid.Empty.ToString(), Text = "Enter a new address" });
+                    }
                 }
             }
 
@@ -261,12 +276,17 @@
         /// <param name="paymentMethods">
         /// The payment methods.
         /// </param>
+        /// <param name="paymentMethodUiInfos">
+        /// The payment Method UI information.
+        /// </param>
         /// <returns>
         /// The <see cref="CheckoutModel"/>.
         /// </returns>
-        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods)
+        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods, IEnumerable<PaymentMethodUiInfo> paymentMethodUiInfos)
         {
             var viewModel = this.Build<CheckoutConfirmationModel>(model);
+
+
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
@@ -283,6 +303,7 @@
                                                                     Value = x.Key.ToString(),
                                                                     Text = x.Name
                                                                 }),
+                PaymentMethodUiInfo = paymentMethodUiInfos,
                 ReceiptPageId = viewModel.ReceiptPage.Id
             };
 

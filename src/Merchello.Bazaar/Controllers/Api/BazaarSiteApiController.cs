@@ -8,6 +8,7 @@
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.Account;
     using Merchello.Core;
+    using Merchello.Core.Gateways;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web;
@@ -301,6 +302,32 @@
                            adr.Phone,
                            adr.IsDefault
                        };
+        }
+
+        /// <summary>
+        /// Gets the payment method UI definition for the selected payment method.
+        /// </summary>
+        /// <param name="paymentMethodKey">
+        /// The payment method key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="object"/>.
+        /// </returns>
+        [HttpGet]
+        public PaymentMethodUiInfo GetPaymentMethodUi(Guid paymentMethodKey)
+        {
+            var paymentGatewayMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
+
+            var info = new PaymentMethodUiInfo() { PaymentMethodKey = paymentMethodKey };
+
+            if (paymentGatewayMethod == null) return info;
+            var type = paymentGatewayMethod.GetType();
+            var att = type.GetCustomAttribute<GatewayMethodUiAttribute>(false);
+            if (att == null) return info;
+
+            info.Alias = att.Alias.Replace(".", string.Empty);
+
+            return info;
         }
 
         /// <summary>

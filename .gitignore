@@ -171,6 +171,6 @@ src/Merchello.Web.UI/App_Data/Logs/
 src/Merchello.Web.UI/App_Data/TEMP/ExamineIndexes/
 src/Merchello.Web.UI/App_Data/TEMP/ClientDependency/MINDFLYMOBILE1-3b9488478dc7f22ce2213cf0813d1160-map.xml
 src/Merchello.Web.UI/App_Data/Umbraco.sdf
-
-src/.sass-cache
-src/Merchello.Web.UI/App_Data/cache
+Removed/Rosetta/Merchello.Web.UI/App_Data/
+src/Merchello.Web.UI/App_Data/cache/e/e/8/b/a/b/ee8bab6d0f878b5b98ba3ff100b1718b8afb0a8d.jpg
+src/Merchello.Web.UI/App_Data/cache/

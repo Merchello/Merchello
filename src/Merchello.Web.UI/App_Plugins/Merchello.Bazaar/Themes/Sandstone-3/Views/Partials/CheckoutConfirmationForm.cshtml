@@ -15,13 +15,13 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.ShippingQuotes)
                 <div class="controls">
-                    @Html.DropDownListFor(x => x.ShipMethodKey, Model.ShippingQuotes, new { @id = "shipping-quotes-select" })
+                    @Html.DropDownListFor(x => x.ShipMethodKey, Model.ShippingQuotes, new { @id = "shipping-quotes-select", @class = "form-control" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(x => x.PaymentMethods)
                 <div class="controls">
-                    @Html.DropDownListFor(x => x.PaymentMethodKey, Model.PaymentMethods, new { @id="payment-method-select"})
+                    @Html.DropDownListFor(x => x.PaymentMethodKey, Model.PaymentMethods, new { @id = "payment-method-select", @class = "form-control" })
                 </div>
             </div>
         </div>

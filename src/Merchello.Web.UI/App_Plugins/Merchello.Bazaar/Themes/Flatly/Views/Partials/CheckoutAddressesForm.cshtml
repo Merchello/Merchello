@@ -20,7 +20,7 @@
                         <div class="control-group">
                             @Html.LabelFor(x => x.BillingAddresses, new { @classs = "control-label" })
                             <div class="controls">
-                                @Html.DropDownListFor(x => x.BillingAddressKey, Model.BillingAddresses, "Enter a new address", new { @id = "billing-address-select", @class = "span10" })
+                                @Html.DropDownListFor(x => x.BillingAddressKey, Model.BillingAddresses, new { @id = "billing-address-select", @class = "span10" })
                             </div>
                         </div>
                     }
@@ -118,7 +118,7 @@
                         <div class="control-group">
                             @Html.LabelFor(x => x.ShippingAddresses, new { @classs = "control-label" })
                             <div class="controls">
-                                @Html.DropDownListFor(x => x.ShippingAddressKey, Model.ShippingAddresses, "Enter a new address", new { @id = "shipping-address-select", @class = "span10" })
+                                @Html.DropDownListFor(x => x.ShippingAddressKey, Model.ShippingAddresses, new { @id = "shipping-address-select", @class = "span10" })
                             </div>
                         </div>
                     }
@@ -198,6 +198,15 @@
                         </div>
 
                     </fieldset>
+                    <div id="shipping-vcard" class="vcard">
+                        <span class="fn" id="shipping-vcard-fn"></span>
+                        <span class="adr">
+                            <span class="street-address" id="shipping-vcard-address1"></span>
+                            <span class="extended-address" id="shipping-vcard-address2"></span>
+                            <span class="locality" id="shipping-vcard-locality"></span>, <span class="region" id="shipping-vcard-region"></span> <span class="postal-code" id="shipping-vcard-postalcode"></span>
+                            <span class="country-name" id="shipping-vcard-country"></span>
+                        </span>
+                    </div>
                     <div class="control-group" id="billing-is-shipping-check">
                         <label class="checkbox">
                             @Html.CheckBoxFor(x => x.BillingIsShipping, new { @id = "billing-is-shipping" }) Use billing address
@@ -210,6 +219,7 @@
         <div class="span3 offset1">
             @Html.ThemedPartial(Model.ThemeName, "SaleSummary", Model.SaleSummary)
             @Html.HiddenFor(x => x.ConfirmSalePageId)
+            @Html.HiddenFor(x => x.IsAnonymous)
             @if (!Model.IsAnonymous)
             {
                 <div id="save-addresses-options">

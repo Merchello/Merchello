@@ -1,13 +1,17 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Attributes;
+    using Merchello.Bazaar.Models;
+    using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
 
+    using Umbraco.Core;
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
 
@@ -53,9 +57,21 @@
                 }
             }
 
-            var paymentMethods = GatewayContext.Payment.GetPaymentGatewayMethods();
+            var paymentMethods = GatewayContext.Payment.GetPaymentGatewayMethods().ToArray();
 
-            var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods.Select(x => x.PaymentMethod));
+            var paymentMethodInfos = new List<PaymentMethodUiInfo>();
+            foreach (var method in paymentMethods)
+            {
+                var att = method.GetType().GetCustomAttribute<GatewayMethodUiAttribute>(false);
+
+                paymentMethodInfos.Add(new PaymentMethodUiInfo()
+                                           {
+                                               Alias = att == null ? string.Empty : att.Alias.Replace(".", string.Empty),
+                                               PaymentMethodKey = method.PaymentMethod.Key
+                                           });
+            }
+
+            var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods.Select(x => x.PaymentMethod), paymentMethodInfos);
 
             return this.View(viewModel.ThemeViewPath("CheckoutConfirmation"), viewModel);
         }

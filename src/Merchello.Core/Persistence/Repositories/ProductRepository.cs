@@ -232,10 +232,10 @@
             var list = new List<string>
                 {                    
                     @"DELETE FROM merchProductVariant2ProductAttribute WHERE optionKey IN 
-                        (SELECT optionKey FROM merchProductOption WHERE pk IN 
+                        (SELECT pk FROM merchProductOption WHERE pk IN 
                         (SELECT optionKey FROM merchProduct2ProductOption WHERE productKey = @Key))",                    
                     @"DELETE FROM merchProductAttribute WHERE optionKey IN 
-                        (SELECT optionKey FROM merchProductOption WHERE pk IN 
+                        (SELECT pk FROM merchProductOption WHERE pk IN 
                         (SELECT optionKey FROM merchProduct2ProductOption WHERE productKey = @Key))",
                     "DELETE FROM merchProduct2ProductOption WHERE productKey = @Key",
                     "DELETE FROM merchCatalogInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",

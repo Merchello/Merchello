@@ -46,7 +46,7 @@
         /// <summary>
         /// Gets or sets the billing address label.
         /// </summary>
-        [Required(ErrorMessage = "Required"), Display(Name = "Billing Address Label")]
+        [Display(Name = "Billing Address Label")]
         public string BillingAddressLabel { get; set; }
 
         /// <summary>
@@ -138,7 +138,7 @@
         /// <summary>
         /// Gets or sets the shipping address label.
         /// </summary>
-        [Required(ErrorMessage = "Required"), Display(Name = "Shipping Address Label")]
+        [Display(Name = "Shipping Address Label")]
         public string ShippingAddressLabel { get; set; }
 
         /// <summary>
@@ -203,7 +203,7 @@
         /// <summary>
         /// Gets or sets the email.
         /// </summary>
-        [Required(ErrorMessage = "Email address is required"), Display(Name = "Email Address")]
+        [Display(Name = "Email Address")]
         [EmailAddress]
         public string ShippingEmail { get; set; }
 

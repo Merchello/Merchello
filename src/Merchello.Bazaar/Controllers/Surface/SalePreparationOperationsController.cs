@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
+    using System;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -28,13 +29,79 @@
         [HttpPost]
         public ActionResult SaveAddresses(CheckoutAddressForm model)
         {
-            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
+            // we have to do custom validation here since there are so many 
+            // different variations of the submitted model
+            var isValid = true;
+            if (model.BillingAddressKey.Equals(Guid.Empty))
+            {
+                isValid = ModelState.IsValidField("BillingName") && ModelState.IsValidField("BillingEmail")
+                          && ModelState.IsValidField("BillingAddress1") && ModelState.IsValidField("BillingLocality")
+                          && ModelState.IsValidField("BillingPostalCode");
+            }
+            if (!isValid) return this.CurrentUmbracoPage();
+
+            if (model.ShippingAddressKey.Equals(Guid.Empty))
+            {
+                isValid = ModelState.IsValidField("ShippingName") && ModelState.IsValidField("ShippingEmail")
+                          && ModelState.IsValidField("ShippingAddress1") && ModelState.IsValidField("ShippingLocality")
+                          && ModelState.IsValidField("ShippingPostalCode");
+            }
+
+            if (!isValid) return this.CurrentUmbracoPage();
 
             var preparation = Basket.SalePreparation();
             preparation.RaiseCustomerEvents = false;
 
-            preparation.SaveBillToAddress(model.GetBillingAddress());
-            preparation.SaveShipToAddress(model.GetShippingAddress());
+            var saveBilling = false;
+            var saveShipping = false;
+
+            IAddress billingAddress;
+            if (!model.BillingAddressKey.Equals(Guid.Empty))
+            {
+                var billing = MerchelloServices.CustomerService.GetAddressByKey(model.BillingAddressKey);
+                billingAddress = billing.AsAddress(billing.FullName);
+            }
+            else
+            {
+                billingAddress = model.GetBillingAddress();
+                saveBilling = true;
+            }
+
+            IAddress shippingAddress;
+            if (!model.ShippingAddressKey.Equals(Guid.Empty))
+            {
+                var shipping = MerchelloServices.CustomerService.GetAddressByKey(model.ShippingAddressKey);
+                shippingAddress = shipping.AsAddress(shipping.FullName);
+            }
+            else
+            {
+                shippingAddress = model.GetShippingAddress();
+                saveShipping = true;
+            }
+
+            if (model.SaveCustomerAddress)
+            {
+                var redirect = (saveBilling && !this.ModelState.IsValidField("BillingAddressLabel")) || 
+                    (saveShipping && (!this.ModelState.IsValidField("ShippingAddressLabel") && !model.BillingIsShipping));
+                if (redirect) return this.CurrentUmbracoPage();
+                
+                //// at this point we know the customer is an ICustomer 
+                var customer = (ICustomer)CurrentCustomer;
+                
+                if (saveBilling)
+                {
+                    customer.CreateCustomerAddress(billingAddress, model.BillingAddressLabel, AddressType.Billing);
+                }
+
+                if (saveShipping)
+                {
+                    if (model.BillingIsShipping) model.ShippingAddressLabel = model.BillingAddressLabel;
+                    customer.CreateCustomerAddress(shippingAddress, model.ShippingAddressLabel, AddressType.Shipping);
+                }
+            }
+
+            preparation.SaveBillToAddress(billingAddress);
+            preparation.SaveShipToAddress(shippingAddress);
             
             return RedirectToUmbracoPage(model.ConfirmSalePageId);
         }
@@ -69,7 +136,6 @@
             // save the quote
             Basket.SalePreparation().SaveShipmentRateQuote(quote);
 
-            // TODO This only works for cash payments - but is only for today's demo.
             var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
             preparation.SavePaymentMethod(paymentMethod);
 

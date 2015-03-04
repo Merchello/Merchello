@@ -252,7 +252,7 @@ namespace Merchello.Web
                     {                        
                         var memberId = _membershipHelper.GetCurrentMemberId();
                         var member = _memberService.GetById(memberId);
-
+                       
                         if (MerchelloConfiguration.Current.CustomerMemberTypes.Any(x => x == member.ContentTypeAlias))
                         {                          
                             var anonymousBasket = Basket.GetBasket(_merchelloContext, customer);

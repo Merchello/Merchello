@@ -41,12 +41,6 @@
         {
             var product = this.AddMerchelloData();
 
-            LogHelper.Info<BazaarDataInstaller>("Adding the MerchelloCustomer MemberType");
-            var memberType = AddMerchelloCustomerMemberType();
-
-            LogHelper.Info<BazaarDataInstaller>("Adding the MerchelloCustomers MemberGroup");
-            var memberGroup = AddMerchelloCustomersMemberGroup();
-
             LogHelper.Info<BazaarDataInstaller>("Adding Example Merchello Data");
 
             LogHelper.Info<BazaarDataInstaller>("Installing store root node");
@@ -63,15 +57,15 @@
 
             LogHelper.Info<BazaarDataInstaller>("Adding Example ProductGroup and Products");
             var pg = _services.ContentService.CreateContent("Soap", root.Id, "BazaarProductGroup");
-            pg.SetValue("image", @"{  'focalPoint': { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1005/greengoggles1.jpg', 'crops': [] }'");
-            pg.SetValue("brief", "Green goggles are not really soap - so this is a placeholder.");
+            pg.SetValue("image", "{ 'focalPoint' : { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1005/soapcategory.jpg', 'crops': [] }");
+            pg.SetValue("brief", "Avocado Moisturizing Bar is great for dry skin.");
             _services.ContentService.SaveAndPublishWithStatus(pg);
 
             var prod = _services.ContentService.CreateContent("Bar of Soap", pg.Id, "BazaarProduct");
             prod.SetValue("merchelloProduct", product.Key.ToString());
-            prod.SetValue("description", "<p>Vice Truffaut normcore, Portland narwhal High Life direct trade DIY swag viral 90's health goth gluten-free. Austin drinking vinegar Truffaut small batch selfies bicycle rights. Blog forage taxidermy, chia Truffaut pug selfies deep v post-ironic. Scenester Schlitz church-key taxidermy Shoreditch biodiesel. Pug raw denim bitters, health goth DIY Carles meggings pop-up chia ugh. Aesthetic Portland mustache vegan you probably haven't heard of them retro fap hoodie before they sold out cliche tote bag next level. Hoodie raw denim selvage farm-to-table, Thundercats chia mumblecore distillery.</p><p>Tilde letterpress brunch gluten-free lumbersexual sartorial. Intelligentsia lomo lumbersexual hoodie, craft beer XOXO Godard tote bag. Meh seitan photo booth, gentrify normcore hella sartorial salvia letterpress bespoke yr viral freegan. Neutra cardigan vegan, butcher twee raw denim plaid. Post-ironic locavore next level, mustache meggings polaroid fashion axe. Odd Future disrupt hoodie, Williamsburg cornhole Intelligentsia banjo McSweeney's leggings mlkshk. Salvia gluten-free cold-pressed narwhal Kickstarter kitsch, mlkshk photo booth cronut paleo.</p>");
-            prod.SetValue("brief", "This is bar soap.");
-            prod.SetValue("image", "{ 'focalPoint': { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1006/grpcpbar09.jpg', 'crops': [] }");
+            prod.SetValue("description", "<p><span>Made with real avocados, this Avocado Moisturizing Bar is great for dry skin. Layers of color are achieved by using oxide colorants. Scented with Wasabi Fragrance Oil, this soap smells slightly spicy, making it a great choice for both men and women. To ensure this soap does not overheat, place in the freezer to keep cool and prevent gel phase.</span></p>");
+            prod.SetValue("brief", "Avocado Moisturizing Bar is great for dry skin.");
+            prod.SetValue("image", "{ 'focalPoint': { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1009/avocadobars.jpg', 'crops': [] }");
             _services.ContentService.SaveAndPublishWithStatus(prod);
 
             LogHelper.Info<BazaarDataInstaller>("Adding example eCommerce workflow pages");
@@ -107,57 +101,6 @@
             return root;
         }
 
-
-
-        /// <summary>
-        /// The add merchello customer member type.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="MemberType"/>.
-        /// </returns>
-        private MemberType AddMerchelloCustomerMemberType()
-        {
-            var dtd = _services.DataTypeService.GetDataTypeDefinitionById(-88);
-
-            // Create the MerchelloCustomer MemberType
-            var mt = new MemberType(-1)
-            {
-                Alias = "MerchelloCustomer",
-                Name = "MerchelloCustomer",
-                AllowedAsRoot = true
-            };
-
-            var fn = new PropertyType(dtd) { Alias = "firstName", Name = "First name" };
-            var ln = new PropertyType(dtd) { Alias = "lastName", Name = "Last name" };
-
-            mt.AddPropertyType(fn);
-            mt.AddPropertyType(ln);
-
-            mt.SetMemberCanEditProperty("firstName", true);
-            mt.SetMemberCanEditProperty("lastName", true);
-            mt.SetMemberCanViewProperty("firstName", true);
-            mt.SetMemberCanViewProperty("lastName", true);
-
-            _services.MemberTypeService.Save(mt);
-
-            return mt;
-        }
-
-        /// <summary>
-        /// Ads the MerchelloCustomers MemberGroup.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="MemberGroup"/>.
-        /// </returns>
-        private MemberGroup AddMerchelloCustomersMemberGroup()
-        {
-            var mg = new MemberGroup() { Name = "MerchelloCustomers" };
-
-            _services.MemberGroupService.Save(mg);
-
-            return mg;
-        }
-
         /// <summary>
         /// The add merchello data.
         /// </summary>
@@ -184,10 +127,13 @@
             var country = merchelloServices.StoreSettingService.GetCountryByCode("US");
 
             // The follow is internal to Merchello and not exposed in the public API
-          
+            var shipCountry = ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.GetShipCountryByCountryCode(catalog.Key, "US");
             // Add the ship country
-            var shipCountry = new ShipCountry(catalog.Key, country);
-            ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.Save(shipCountry);
+            if (shipCountry == null || shipCountry.CountryCode == "ELSE")
+            {
+                shipCountry = new ShipCountry(catalog.Key, country);
+                ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.Save(shipCountry);
+            }
 
             // Associate the fixed rate Shipping Provider to the ShipCountry
             var key = Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
@@ -211,15 +157,11 @@
             var product = merchelloServices.ProductService.CreateProduct("Bar of Soap", "soapbar", 5M);
             product.Shippable = true;
             product.Taxable = true;
-            product.TrackInventory = true;
+            product.TrackInventory = false;
             product.Available = true;
             product.Weight = 1M;
             product.AddToCatalogInventory(catalog);
             merchelloServices.ProductService.Save(product, false);
-
-            product.CatalogInventories.FirstOrDefault().Count = 10;
-            merchelloServices.ProductService.Save(product, false);
-
             return product;
         }
 
