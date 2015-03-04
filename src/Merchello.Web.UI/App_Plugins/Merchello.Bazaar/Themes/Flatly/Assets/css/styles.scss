@@ -74,6 +74,12 @@ span.field-validation-error {
     .country-name { display: block; }
 }
 
+// Checkout Confirmation
+#checkout-confirmation {
+    .payment-method-form {
+        display: none;
+    }
+}
 // ------------------------------------
 // Account pages 
 // ------------------------------------

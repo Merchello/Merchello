@@ -335,7 +335,9 @@
                     if ($('#shipping-quotes-select')) {
                         $('#shipping-quotes-select').change(function () {
                             merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
+                            merchello.bazaar.checkout.setShipMethod();
                         });
+                        merchello.bazaar.checkout.setShipMethod();
                     }
 
                     // bind the customer address drop downs
@@ -379,6 +381,13 @@
                         $('#save-addresses-check').click(function() {
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
+                    }
+
+                    if ($('#payment-method-select')) {
+                        $('#payment-method-select').change(function () {
+                            merchello.bazaar.checkout.setPaymentMethod();
+                        });
+                        merchello.bazaar.checkout.setPaymentMethod();
                     }
                 }
             },
@@ -574,6 +583,35 @@
                         if (type === 'billing') {
                             merchello.bazaar.checkout.copyBillingAddress();
                         }
+                    },
+                    dataType: "json",
+                    traditional: true
+                }).fail(function (ex) {
+                    $.error(ex);
+                });
+            },
+            setShipMethod: function() {
+                $.each($('.selected-shipmethod-key'), function(idx, elem) {
+                    $(elem).val($('#shipping-quotes-select').val());
+                });
+            },
+            setPaymentMethod: function () {
+                var forms = $('.payment-method-form');
+                $.each(forms, function(index, frm) {
+                    $(frm).hide();
+                });
+                var paymentMethodKey = $('#payment-method-select').val();
+                console.info(paymentMethodKey);
+
+                var data = {};
+                data.paymentMethodKey = paymentMethodKey;
+                $.ajax({
+                    type: "GET",
+                    url: "/umbraco/Bazaar/BazaarSiteApi/GetPaymentMethodUi",
+                    data: data,
+                    success: function (info) {
+                        $('#' + info.alias).show();
+                        $('#' + info.alias).find('.selected-paymentmethod-key').val(paymentMethodKey);
                     },
                     dataType: "json",
                     traditional: true

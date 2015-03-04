@@ -5,6 +5,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
+    using Merchello.Web.Models.Payments;
+
     /// <summary>
     /// The checkout confirmation form.
     /// </summary>
@@ -51,6 +53,11 @@
         /// </summary>
         [Display(Name = "Method of payment")]
         public IEnumerable<SelectListItem> PaymentMethods { get; set; }
+
+        /// <summary>
+        /// Gets or sets the payment method forms.
+        /// </summary>
+        public IEnumerable<PaymentMethodUiInfo> PaymentMethodUiInfo { get; set; } 
 
         /// <summary>
         /// Gets or sets the receipt page id.

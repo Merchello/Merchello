@@ -276,12 +276,17 @@
         /// <param name="paymentMethods">
         /// The payment methods.
         /// </param>
+        /// <param name="paymentMethodUiInfos">
+        /// The payment Method UI information.
+        /// </param>
         /// <returns>
         /// The <see cref="CheckoutModel"/>.
         /// </returns>
-        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods)
+        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods, IEnumerable<PaymentMethodUiInfo> paymentMethodUiInfos)
         {
             var viewModel = this.Build<CheckoutConfirmationModel>(model);
+
+
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
@@ -298,6 +303,7 @@
                                                                     Value = x.Key.ToString(),
                                                                     Text = x.Name
                                                                 }),
+                PaymentMethodUiInfo = paymentMethodUiInfos,
                 ReceiptPageId = viewModel.ReceiptPage.Id
             };
 

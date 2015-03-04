@@ -136,7 +136,6 @@
             // save the quote
             Basket.SalePreparation().SaveShipmentRateQuote(quote);
 
-            // TODO This only works for cash payments - but is only for today's demo.
             var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
             preparation.SavePaymentMethod(paymentMethod);
 

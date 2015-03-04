@@ -42,7 +42,7 @@
         /// Creates an instance of an <see cref="IPaymentMethodTypeField"/> object
         /// </summary>
         /// <returns></returns>
-        internal static IPaymentMethodTypeField PaymentMethod
+        public static IPaymentMethodTypeField PaymentMethod
         {
             get { return new PaymentMethodTypeField(); }
         }
@@ -51,7 +51,7 @@
         /// Creates an instance of an <see cref="IAppliedPaymentTypeField"/>
         /// </summary>
         /// <returns></returns>
-        internal static IAppliedPaymentTypeField AppliedPayment
+        public static IAppliedPaymentTypeField AppliedPayment
         {
            get { return new AppliedPaymentTypeField(); }
         }

@@ -257,6 +257,7 @@
     <Compile Include="Models\CheckoutAddressForm.cs" />
     <Compile Include="Models\CheckoutConfirmationForm.cs" />
     <Compile Include="Models\CombinedRegisterLoginModel.cs" />
+    <Compile Include="Models\PaymentMethodUiInfo.cs" />
     <Compile Include="Models\SalePreparationSummary.cs" />
     <Compile Include="Models\CustomerLoginModel.cs" />
     <Compile Include="Models\ItemCollectionTable.cs" />
