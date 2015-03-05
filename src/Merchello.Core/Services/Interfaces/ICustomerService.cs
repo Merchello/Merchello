@@ -170,6 +170,14 @@
 
 
         /// <summary>
+        /// Saves a single <see cref="ICustomerAddress"/>
+        /// </summary>
+        /// <param name="addresses">
+        /// The collection of addresses to be saved.
+        /// </param>
+        void Save(IEnumerable<ICustomerAddress> addresses);
+
+        /// <summary>
         /// Deletes a single instance of the <see cref="ICustomerAddress"/>
         /// </summary>
         /// <param name="address">

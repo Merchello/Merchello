@@ -83,7 +83,7 @@
                         inventoryCount += ci.count;
                     });
                 } else {
-                    inventoryCount = "n/a"
+                    inventoryCount = "n/a";
                 }
             }
             return inventoryCount;
@@ -109,7 +109,7 @@
                 } else {
                     var onSaleVariants = _.filter(this.productVariants, function(osv) { return osv.onSale; });
                     if(onSaleVariants.length > 0) {
-                        var salePrice = _.min(onSaleVariants,
+                        salePrice = _.min(onSaleVariants,
                             function(v) { return v.salePrice; }
                         ).salePrice;
                         return salePrice;

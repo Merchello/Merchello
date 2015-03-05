@@ -103,7 +103,7 @@
             variant = angular.extend(variant, this);
             variant.attributes = [];
             angular.forEach(this.attributes, function(att) {
-                var attribute = new ProductAttributeDisplay()
+                var attribute = new ProductAttributeDisplay();
                 angular.extend(attribute, att);
                 variant.attributes.push(attribute);
             });
@@ -122,7 +122,6 @@
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,
             setAllInventoryLowCount: setAllInventoryLowCount
-            //deepClone: deepClone
         }
     }());
 

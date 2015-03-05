@@ -3,9 +3,10 @@
      * @name gravatarService
      * @description Deals with gravatar.
      **/
-    /* jshint ignore:start */
     angular.module('merchello.services').service('gravatarService',
         function() {
+
+            /* jshint ignore:start */
 
             /**
              * @ngdoc method
@@ -239,5 +240,5 @@
                 gravatarUrl += '?size=' + size + '&d=' + defaultImage;
                 return gravatarUrl;
             }
+            /* jshint ignore:end */
     });
-    /* jshint ignore:end */

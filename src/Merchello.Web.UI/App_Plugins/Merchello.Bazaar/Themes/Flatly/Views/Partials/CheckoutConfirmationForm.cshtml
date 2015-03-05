@@ -1,0 +1,59 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationForm>
+@using System.Globalization
+@using System.Web.Mvc.Html
+@using Merchello.Bazaar.Controllers
+@using Merchello.Bazaar.Models
+@using Merchello.Bazaar
+@using Umbraco.Web
+
+
+<div class="row-fluid" id="checkout-confirmation">
+
+    <div class="span3">
+        <form>
+            <div class="control-group">
+                @Html.LabelFor(x => x.ShippingQuotes)
+                <div class="controls">
+                    <select id="shipping-quotes-select">
+                        @foreach (var quote in Model.ShippingQuotes)
+                        {
+                            <option value="@quote.Value">@quote.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(x => x.PaymentMethods)
+                <div class="controls">
+                    <select id="payment-method-select">
+                        @foreach (var method in Model.PaymentMethods)
+                        {
+                            <option value="@method.Value">@method.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+        
+        <!-- Cash Payment Method -->
+        <div id="CashPaymentMethod" class="payment-method-form">
+            @using (Html.BeginUmbracoForm<SalePreparationOperationsController>("ConfirmSale", null, new { @id = "ConfirmSale" }))
+            {
+                @Html.HiddenFor(x => x.ShipMethodKey, new { @class = "selected-shipmethod-key" })
+                @Html.HiddenFor(x => x.PaymentMethodKey, new { @class = "selected-paymentmethod-key" })
+                @Html.HiddenFor(x => x.CustomerToken, new { @id = "customer-token" })
+                @Html.HiddenFor(x => x.ReceiptPageId)
+                <div class="control-group">
+                    <button type="submit" class="btn btn-primary">Confirm Sale</button>
+                </div>
+            }
+        </div>
+        
+        <!-- Merchello Introduction Course - Braintree Exercise -->
+
+    </div>
+        
+    <div class="span8 offset1">
+        @Html.ThemedPartial(Model.ThemeName, "SaleSummary", Model.SaleSummary)
+    </div>
+</div>
