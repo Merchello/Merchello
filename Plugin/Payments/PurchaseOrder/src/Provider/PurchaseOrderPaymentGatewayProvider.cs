@@ -14,7 +14,7 @@ namespace Merchello.Plugin.Payments.PurchaseOrder.Provider
     /// The authorize net payment gateway provider.
     /// </summary>
     [GatewayProviderActivation("A5C2BFE1-CC2E-4809-9334-2C215E9E20E0", "Purchase Order Payment Provider", "Purchase Order Payment Provider")]
-    [GatewayProviderEditor("Purchase Order configuration", "~/App_Plugins/Merchello.PurchaseOrder/editor.html")]
+    [GatewayProviderEditor("Purchase Order configuration", "~/App_Plugins/Merchello.PurchaseOrder/payment.purchaseorder.providersettings.html")]
     public class PurchaseOrderPaymentGatewayProvider : PaymentGatewayProviderBase, IPurchaseOrderPaymentGatewayProvider
     {
         #region AvailableResources
