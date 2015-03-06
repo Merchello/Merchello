@@ -14,7 +14,7 @@
     /// The authorize net payment gateway provider.
     /// </summary>
     [GatewayProviderActivation("C6BF6743-3565-401F-911A-33B68CACB11B", "AuthorizeNet Payment Provider", "AuthorizeNet Payment Provider")]
-    [GatewayProviderEditor("AuthorizeNet configuration", "~/App_Plugins/Merchello.AuthorizeNet/editor.html")]
+    [GatewayProviderEditor("AuthorizeNet configuration", "~/App_Plugins/Merchello.AuthorizeNet/payment.authorizenet.providersettings.html")]
     public class AuthorizeNetPaymentGatewayProvider : PaymentGatewayProviderBase, IAuthorizeNetPaymentGatewayProvider
     {
         #region AvailableResources

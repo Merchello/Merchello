@@ -13,7 +13,7 @@
     /// Represents an AuthorizeNet Payment Method
     /// </summary>
     [GatewayMethodUi("AuthorizeNet.CreditCard")]
-    [GatewayMethodEditor("Authorize.Net Payment Method Editor", "~/App_Plugins/Merchello.AuthorizeNet/paymentmethod.html")]
+    [GatewayMethodEditor("Authorize.Net Payment Method Editor", "~/App_Plugins/Merchello.AuthorizeNet/payment.authorizenet.paymentmethod.html")]
     public class AuthorizeNetPaymentGatewayMethod : PaymentGatewayMethodBase, IAuthorizeNetPaymentGatewayMethod
     {
         /// <summary>
