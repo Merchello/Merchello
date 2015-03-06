@@ -12,7 +12,7 @@ namespace Merchello.Plugin.Payments.PurchaseOrder.Provider
     /// Represents an PurchaseOrder Payment Method
     /// </summary>
     [GatewayMethodUi("PurchaseOrder.PurchaseOrder")]
-    [GatewayMethodEditor("Purchase Order Payment Method Editor", "~/App_Plugins/Merchello.PurchaseOrder/paymentmethod.html")]
+    [GatewayMethodEditor("Purchase Order Payment Method Editor", "~/App_Plugins/Merchello.PurchaseOrder/payment.purchaseorder.paymentmethoddialog.html")]
     public class PurchaseOrderPaymentGatewayMethod : PaymentGatewayMethodBase, IPurchaseOrderPaymentGatewayMethod
     {
         /// <summary>
