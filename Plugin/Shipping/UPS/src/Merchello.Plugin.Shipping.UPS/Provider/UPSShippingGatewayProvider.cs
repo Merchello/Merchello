@@ -12,8 +12,8 @@ using Umbraco.Core.Cache;
 namespace Merchello.Plugin.Shipping.UPS.Provider
 {
     [GatewayProviderActivation("AEB14625-B9DE-4DE8-9C92-99204D340342", "UPS Shipping Provider", "UPS Shipping Provider")]
-    
-    [GatewayProviderEditor("UPS configuration", "~/App_Plugins/Merchello.UPS/editor.html")]
+
+    [GatewayProviderEditor("UPS configuration", "~/App_Plugins/Merchello.UPS/shipping.ups.shippingprovider.html")]
     public class UPSShippingGatewayProvider : ShippingGatewayProviderBase, IUPSShippingGatewayProvider
     {
         public const string UPSNextDayAir = "01";
