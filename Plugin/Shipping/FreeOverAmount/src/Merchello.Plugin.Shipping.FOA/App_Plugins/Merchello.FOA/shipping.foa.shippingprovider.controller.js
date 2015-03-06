@@ -18,7 +18,7 @@
         function init() {
 
             // We are going to collect a currency amount in this provider, so we need the default currency symbol
-            // to indicate what currecy the amount should be provided.
+            // to indicate what currency the amount should be provided.
             var promise = settingsResource.getCurrencySymbol();
             promise.then(function (currencySymbol) {
                 $scope.currencySymbol = currencySymbol;
