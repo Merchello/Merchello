@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using Merchello.Core.Models;
 using Microsoft.Web.Infrastructure;
 using Umbraco.Core.IO;
+using Umbraco.Web.Mvc;
 
 namespace Merchello.Plugin.Reports.ExportOrders
 {
@@ -25,8 +26,8 @@ namespace Merchello.Plugin.Reports.ExportOrders
     /// <summary>
     /// The sales over time report controller.
     /// </summary>
-    [BackOfficeTree("exportOrders", "reports", "Export Orders", "icon-download", "/merchello/merchello/ViewReport/Merchello.ExportOrders|ExportOrders", 10)]
-    public class ExportOrdersReportApiController :  ReportController
+    [BackOfficeTree("exportOrders", "reports", "Export Orders", "icon-download", "Merchello.ExportOrders\\ExportOrders", 100)]
+    public class ExportOrdersReportApiController : ReportController
     {
         /// <summary>
         /// The <see cref="IInvoiceService"/>.
