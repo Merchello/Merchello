@@ -66,7 +66,7 @@
         /// The <see cref="SubscriptionRequest"/>.
         /// </returns>
         Attempt<Subscription> Create(string paymentMethodToken, string planId, DateTime firstBillingDate);
-            
+
         /// <summary>
         /// Creates a <see cref="Subscription"/>.
         /// </summary>
