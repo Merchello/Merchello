@@ -290,7 +290,6 @@ namespace Merchello.Web.Editors
 
             try
             {
-                message.FromAddress = "wesley@proworks.com";
 
                 var provider = _notificationContext.GetProviderByMethodKey(message.MethodKey);
                 
