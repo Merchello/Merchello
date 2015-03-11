@@ -13,6 +13,7 @@
     using Gateways.Payment;
     using Gateways.Taxation;
 
+    using Merchello.Core.Cache;
     using Merchello.Core.Models.TypeFields;
 
     using Newtonsoft.Json;
@@ -679,10 +680,29 @@
         /// <summary>
         /// Sums the total price of invoice items
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
         public static decimal TotalItemPrice(this IInvoice invoice)
         {                                                                 
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice);
+        }
+
+        /// <summary>
+        /// Sums the total prices of custom line items.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal TotalCustomItemPrice(this IInvoice invoice)
+        {
+            return invoice.Items.Where(x => x.LineItemType == LineItemType.Custom).Sum(x => x.TotalPrice);
         }
 
         /// <summary>

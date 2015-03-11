@@ -7793,7 +7793,23 @@
             <summary>
             Sums the total price of invoice items
             </summary>
-            <param name="invoice">The <see cref="T:Merchello.Core.Models.IInvoice"/></param>
+            <param name="invoice">
+            The invoice.
+            </param>
+            <returns>
+            The <see cref="T:System.Decimal"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Models.InvoiceExtensions.TotalCustomItemPrice(Merchello.Core.Models.IInvoice)">
+            <summary>
+            Sums the total prices of custom line items.
+            </summary>
+            <param name="invoice">
+            The invoice.
+            </param>
+            <returns>
+            The <see cref="T:System.Decimal"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Core.Models.InvoiceExtensions.TotalShipping(Merchello.Core.Models.IInvoice)">
             <summary>
