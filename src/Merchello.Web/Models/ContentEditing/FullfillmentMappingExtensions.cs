@@ -254,6 +254,7 @@ namespace Merchello.Web.Models.ContentEditing
 			destination.Description = notificationMessageDisplay.Description;
 			destination.BodyText = notificationMessageDisplay.BodyText;
 			destination.MaxLength = notificationMessageDisplay.MaxLength;
+		    ((NotificationMessage)destination).FromAddress = notificationMessageDisplay.FromAddress;
 			destination.BodyTextIsFilePath = notificationMessageDisplay.BodyTextIsFilePath;
             destination.MonitorKey = notificationMessageDisplay.MonitorKey;
 			destination.Recipients = notificationMessageDisplay.Recipients;
