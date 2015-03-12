@@ -1,7 +1,19 @@
 angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardController',
-    ['assetsService',
-    function(assetsService) {
+    ['$scope', 'settingsResource',
+    function($scope, settingsResource) {
 
-        assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
+        $scope.loaded = false;
+        $scope.merchelloVersion = '';
 
+        function init() {
+            var promise = settingsResource.getMerchelloVersion();
+            promise.then(function(version) {
+                console.info(version);
+              $scope.merchelloVersion = version.replace(/['"]+/g, '');
+                $scope.loaded = true;
+            });
+        }
+
+        // initialize the controller
+        init();
     }]);

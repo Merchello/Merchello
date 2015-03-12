@@ -918,6 +918,21 @@ angular.module('merchello.resources')
 
             /**
              * @ngdoc method
+             * @name getMerchelloVersion
+             * @methodOf settingsResource
+             * @function
+             *
+             * @description
+             * Gets the current Merchello Version
+             *
+             * @returns {object} an angularjs promise object
+             */
+            getMerchelloVersion: function() {
+                return getCachedOrApi("MerchelloVersion", "GetMerchelloVersion", "merchelloversion");
+            },
+
+            /**
+             * @ngdoc method
              * @name merchello.services.merchelloSettingsService#getAllCountries
              * @methodOf merchello.services.merchelloSettingsService
              * @function
