@@ -7,6 +7,9 @@
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
   </area>
+    <area alias="merchelloMarketing">
+        <key alias="campaigns">Marketing Campaigns</key>
+    </area>
   <area alias="merchelloVariant">
     <!-- things -->
     <key alias="product">Product</key>
