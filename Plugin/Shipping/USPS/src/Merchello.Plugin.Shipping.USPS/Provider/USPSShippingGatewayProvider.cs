@@ -10,7 +10,7 @@ using Umbraco.Core.Cache;
 namespace Merchello.Plugin.Shipping.USPS.Provider
 {
     [GatewayProviderActivation("94BD59AE-0FA8-45E4-BD9A-3577C964851F", "USPS Shipping Provider", "USPS Shipping Provider")]
-    [GatewayProviderEditor("USPS configuration", "~/App_Plugins/Merchello.USPS/editor.html")]
+    [GatewayProviderEditor("USPS configuration", "~/App_Plugins/Merchello.USPS/shipping.usps.shippingprovider.html")]
     public class UspsShippingGatewayProvider : ShippingGatewayProviderBase, IUspsShippingGatewayProvider
     {
         #region GatewayResources

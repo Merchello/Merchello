@@ -16,7 +16,7 @@ using Umbraco.Core.Cache;
 namespace Merchello.Plugin.Shipping.USPS.Provider
 {
 
-    [GatewayMethodEditor("USPS Shipping Method Editor", "~/App_Plugins/Merchello.USPS/shippingmethod.html")]
+    [GatewayMethodEditor("USPS Shipping Method Editor", "~/App_Plugins/Merchello.USPS/shipping.usps.shippingmethod.html")]
     public class UspsShippingGatewayMethod : ShippingGatewayMethodBase, IUspsShippingGatewayMethod
     {
         private IShipMethod _shipMethod;

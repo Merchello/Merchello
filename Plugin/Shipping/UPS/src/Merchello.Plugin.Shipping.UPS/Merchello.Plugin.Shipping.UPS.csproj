@@ -240,10 +240,12 @@
     <Compile Include="UPSShippingProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello.UPS\editor.html" />
-    <Content Include="App_Plugins\Merchello.UPS\merchello.ups.controller.js" />
-    <Content Include="App_Plugins\Merchello.UPS\merchello.ups.shippingmethod.controller.js" />
-    <Content Include="App_Plugins\Merchello.UPS\shippingmethod.html" />
+    <Content Include="App_Plugins\Merchello.UPS\shipping.ups.models.js" />
+    <Content Include="App_Plugins\Merchello.UPS\shipping.ups.module.js" />
+    <Content Include="App_Plugins\Merchello.UPS\shipping.ups.shippingprovider.html" />
+    <Content Include="App_Plugins\Merchello.UPS\shipping.ups.shippingprovider.controller.js" />
+    <Content Include="App_Plugins\Merchello.UPS\shipping.ups.shippingmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello.UPS\shipping.ups.shippingmethod.html" />
     <Content Include="bin\Debug\AutoMapper.dll" />
     <Content Include="bin\Debug\AutoMapper.xml" />
     <Content Include="bin\Debug\businesslogic.dll" />

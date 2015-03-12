@@ -149,9 +149,19 @@
 
             // Trigger the order confirmation notification
             var billingAddress = attempt.Invoice.GetBillingAddress();
-            if (!string.IsNullOrEmpty(billingAddress.Email))
+            string contactEmail;
+            if (string.IsNullOrEmpty(billingAddress.Email) && !CurrentCustomer.IsAnonymous)
             {
-                Notification.Trigger("OrderConfirmation", attempt.Payment, new[] { billingAddress.Email });
+                contactEmail = ((ICustomer)CurrentCustomer).Email;
+            }
+            else
+            {
+                contactEmail = billingAddress.Email;
+            }
+
+            if (!string.IsNullOrEmpty(contactEmail))
+            {
+                Notification.Trigger("OrderConfirmation", attempt, new[] { contactEmail });
             }
             
             // store the invoice key in the CustomerContext for use on the receipt page.
