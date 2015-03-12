@@ -151,6 +151,8 @@ namespace Merchello.Plugin.Shipping.UPS.Provider
         public override IEnumerable<IGatewayResource> ListResourcesOffered()
         {
             // PaymentMethods is created in PaymentGatewayProviderBase.  It is a list of all previously saved payment methods
+            // TODO: Filter out any service codes already used in a country
+            //return AvailableResources.Where(x => ShipMethods.All(y => y.ServiceCode != x.ServiceCode));
             return AvailableResources;
         }
 
