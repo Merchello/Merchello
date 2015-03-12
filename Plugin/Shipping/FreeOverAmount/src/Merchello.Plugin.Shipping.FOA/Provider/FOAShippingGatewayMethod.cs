@@ -57,11 +57,9 @@
                 {
                     return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, ShipMethod) { Rate = 0 });
                 }
-                else
-                {
-                    // TODO shouldn't this just fail so that a different method is selected or have a configurable default rate. 
-                    return Attempt<IShipmentRateQuote>.Succeed(new ShipmentRateQuote(shipment, ShipMethod) { Rate = 100 });
-                }
+
+                // TODO shouldn't this just fail so that a different method is selected or have a configurable default rate. 
+                return Attempt<IShipmentRateQuote>.Fail(new ShipmentRateQuote(shipment, ShipMethod) { Rate = 0 });
             }
             catch (Exception ex)
             {

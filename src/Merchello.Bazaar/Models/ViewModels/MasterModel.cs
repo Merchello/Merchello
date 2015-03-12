@@ -235,7 +235,6 @@
             {
                 return StorePage.GetPropertyValue<bool>("enableWishList");
             }
-            
         }
 
         /// <summary>

@@ -94,14 +94,17 @@
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core">
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine">
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web">
-      <HintPath>..\..\..\..\..\src\Merchello.Web\bin\Debug\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -246,10 +249,12 @@
     <Compile Include="USPSEvents.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello.USPS\editor.html" />
-    <Content Include="App_Plugins\Merchello.USPS\merchello.usps.controller.js" />
-    <Content Include="App_Plugins\Merchello.USPS\merchello.usps.shippingmethod.controller.js" />
-    <Content Include="App_Plugins\Merchello.USPS\shippingmethod.html" />
+    <Content Include="App_Plugins\Merchello.USPS\shipping.usps.models.js" />
+    <Content Include="App_Plugins\Merchello.USPS\shipping.usps.module.js" />
+    <Content Include="App_Plugins\Merchello.USPS\shipping.usps.shippingprovider.html" />
+    <Content Include="App_Plugins\Merchello.USPS\shipping.usps.shippingprovider.controller.js" />
+    <Content Include="App_Plugins\Merchello.USPS\shipping.usps.shippingmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello.USPS\shipping.usps.shippingmethod.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

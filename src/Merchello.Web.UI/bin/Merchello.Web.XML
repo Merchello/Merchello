@@ -6383,6 +6383,14 @@
             </summary>
             <returns>Next Invoice Number and Next Order Number</returns>
         </member>
+        <member name="M:Merchello.Web.Editors.SettingsApiController.GetMerchelloVersion">
+            <summary>
+            The get merchello version.
+            </summary>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.SettingsApiController.PutSettings(Merchello.Web.Models.ContentEditing.SettingDisplay)">
              <summary>
              Updates existing global settings
