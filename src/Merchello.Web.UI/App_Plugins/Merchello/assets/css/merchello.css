@@ -492,6 +492,9 @@
     .ninety .merchello-panel-body li {
       margin-right: .3%; } }
 
+.merchello-settings .merchello-panel-body {
+  top: 0px; }
+
 .merchello-side-panel .umb-panel-body {
   top: 120px; }
 .merchello-side-panel h4 {

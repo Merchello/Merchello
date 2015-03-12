@@ -2,8 +2,6 @@
 {
     public class UspsProcessorSettings
     {
-        private readonly UspsProcessorSettings _settings;
-
         public bool UseSandbox { get; set; }
 
         public UspsProcessorSettings()

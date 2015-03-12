@@ -10,6 +10,9 @@
     using Core.Models;
     using Core.Models.TypeFields;
     using Core.Services;
+
+    using Merchello.Core.Configuration;
+
     using Models.ContentEditing;    
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
@@ -186,6 +189,18 @@
             };
             
             return settingDisplay;
+        }
+
+        /// <summary>
+        /// The get merchello version.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        [HttpGet]
+        public string GetMerchelloVersion()
+        {
+            return MerchelloVersion.Current.ToString();
         }
 
 		/// <summary>

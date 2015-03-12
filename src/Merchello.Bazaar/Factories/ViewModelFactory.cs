@@ -171,7 +171,7 @@
                 ContinueShoppingPage = viewModel.ProductGroups.Any() ?
                     (IPublishedContent)viewModel.ProductGroups.First() :
                     viewModel.StorePage,
-                ShowWishList = viewModel.ShowWishList,
+                ShowWishList = viewModel.ShowWishList && !_currentCustomer.IsAnonymous,
                 WishListPageId = viewModel.WishListPage.Id,
                 BasketPageId = viewModel.BasketPage.Id
             };

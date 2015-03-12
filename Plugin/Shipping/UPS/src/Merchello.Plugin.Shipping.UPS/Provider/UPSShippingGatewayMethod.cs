@@ -14,7 +14,7 @@ using Umbraco.Core.Cache;
 
 namespace Merchello.Plugin.Shipping.UPS.Provider
 {
-    [GatewayMethodEditor("UPS Shipping Method Editor", "~/App_Plugins/Merchello.UPS/shippingmethod.html")]
+    [GatewayMethodEditor("UPS Shipping Method Editor", "~/App_Plugins/Merchello.UPS/shipping.ups.shippingmethod.html")]
     public class UPSShippingGatewayMethod : ShippingGatewayMethodBase, IUPSShippingGatewayMethod
     {
         private UPSProcessorSettings _processorSettings;
