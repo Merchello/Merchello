@@ -136,6 +136,49 @@ namespace Merchello.Core.Persistence.UnitOfWork
             _key = Guid.NewGuid();
         }
 
+        public void CommitBulk()
+        {
+            CommitBulk(null);
+        }
+
+        internal void CommitBulk(Action<UmbracoDatabase> transactionCompleting)
+        {
+            if (_operations.Any(o => !(o.Repository is Merchello.Core.Persistence.Repositories.ProductVariantRepository))) Commit(transactionCompleting);
+            using (var transaction = Database.GetTransaction())
+            {
+                var operations = _operations.ToList();
+                foreach (var operationGroup in operations.GroupBy(o => new { o.Repository, o.Type }))
+                {
+                    switch (operationGroup.Key.Type)
+                    {
+                        case TransactionType.Insert:
+                            ((Merchello.Core.Persistence.Repositories.ProductVariantRepository)operationGroup.Key.Repository).PersistNewItems(operationGroup.Select(o => (Merchello.Core.Models.IProductVariant)o.Entity));
+                            break;
+                        case TransactionType.Delete:
+                            ((Merchello.Core.Persistence.Repositories.ProductVariantRepository)operationGroup.Key.Repository).PersistDeletedItems(operationGroup.Select(o => (Merchello.Core.Models.IProductVariant)o.Entity));
+                            break;
+                        case TransactionType.Update:
+                            ((Merchello.Core.Persistence.Repositories.ProductVariantRepository)operationGroup.Key.Repository).PersistUpdatedItems(operationGroup.Select(o => (Merchello.Core.Models.IProductVariant)o.Entity));
+                            break;
+                    }
+                }
+
+                _operations.Clear();
+
+                //Execute the callback if there is one
+                if (transactionCompleting != null)
+                {
+                    transactionCompleting(Database);
+                }
+
+                transaction.Complete();
+            }
+
+            // Clear everything
+            _operations.Clear();
+            _key = Guid.NewGuid();
+        }
+
 		public object Key
 		{
 			get { return _key; }

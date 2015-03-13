@@ -149,25 +149,25 @@
         {
             var productVariant = CreateProductVariant(product, name, sku, price, attributes);
 
-            if(raiseEvents)
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IProductVariant>(productVariant), this))
-            {
-                ((ProductVariant)productVariant).WasCancelled = true;
-                return productVariant;
-            }
+            //if(raiseEvents)
+            //if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IProductVariant>(productVariant), this))
+            //{
+            //    ((ProductVariant)productVariant).WasCancelled = true;
+            //    return productVariant;
+            //}
 
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductVariantRepository(uow))
-                {
-                    repository.AddOrUpdate(productVariant);
-                    uow.Commit();
-                }
-            }
+            //using (new WriteLock(Locker))
+            //{
+            //    var uow = _uowProvider.GetUnitOfWork();
+            //    using (var repository = _repositoryFactory.CreateProductVariantRepository(uow))
+            //    {
+            //        repository.AddOrUpdate(productVariant);
+            //        uow.Commit();
+            //    }
+            //}
 
-            if (raiseEvents)
-            Created.RaiseEvent(new Events.NewEventArgs<IProductVariant>(productVariant), this);
+            //if (raiseEvents)
+            //Created.RaiseEvent(new Events.NewEventArgs<IProductVariant>(productVariant), this);
 
             product.ProductVariants.Add(productVariant);
 
@@ -290,7 +290,7 @@
                     {
                         repository.AddOrUpdate(variant);
                     }
-                    uow.Commit();
+                    uow.CommitBulk();
                 }
             }
 

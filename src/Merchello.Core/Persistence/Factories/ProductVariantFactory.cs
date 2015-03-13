@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Persistence.Factories
+﻿using System.Collections.Generic;
+
+namespace Merchello.Core.Persistence.Factories
 {
     using Merchello.Core.Models;
     using Merchello.Core.Models.Rdbms;
@@ -17,6 +19,12 @@
         /// The <see cref="CatalogInventoryCollection"/>.
         /// </summary>
         private readonly CatalogInventoryCollection _catalogInventories;
+        
+        public ProductVariantFactory()
+        {
+            _productAttributeCollection = new ProductAttributeCollection();
+            _catalogInventories = new CatalogInventoryCollection();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductVariantFactory"/> class.
@@ -33,7 +41,6 @@
             _productAttributeCollection = productAttributes;
             _catalogInventories = catalogInventories;
         }
-
         /// <summary>
         /// The build entity.
         /// </summary>
@@ -67,7 +74,7 @@
                 Download = dto.Download,
                 DownloadMediaId = dto.DownloadMediaId,
                 Master = dto.Master,
-                ExamineId = dto.ProductVariantIndexDto.Id, 
+                ExamineId = dto.ProductVariantIndexDto.Id,
                 CatalogInventoryCollection = _catalogInventories,
                 ProductAttributes = _productAttributeCollection,
                 VersionKey = dto.VersionKey,
@@ -76,6 +83,34 @@
             };
 
             entity.ResetDirtyProperties();
+
+            return entity;
+        }
+
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        public IProductVariant BuildEntity(ProductVariantDto dto, IEnumerable<ProductAttributeDto> attributeDtos, IEnumerable<CatalogInventoryDto> inventoryDtos)
+        {
+            var entity = (ProductVariant)BuildEntity(dto);
+
+            var attrFactory = new ProductAttributeFactory();
+            foreach (var attributeDto in attributeDtos)
+            {
+                entity.ProductAttributes.Add(attrFactory.BuildEntity(attributeDto));
+            }
+            var invFactory = new CatalogInventoryFactory();
+            foreach (var invDto in inventoryDtos)
+            {
+                entity.CatalogInventoryCollection.Add(invFactory.BuildEntity(invDto));
+            }
+
             return entity;
         }
 

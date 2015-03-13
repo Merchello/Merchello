@@ -628,8 +628,8 @@
                 product.ProductVariants.Remove(remover.Sku);
                 _productVariantService.Delete(remover);
             }
-            
 
+            var variants = new List<IProductVariant>();
             foreach (var list in attributeLists)
             {
                 // Check to see if the variant exists
@@ -641,9 +641,10 @@
                 foreach (var inv in product.CatalogInventories)
                 {
                     variant.AddToCatalogInventory(inv.CatalogKey);
-                    _productVariantService.Save(variant, false);
                 }
+                variants.Add(variant);
             }
+            _productVariantService.Save(variants, false);
         }
     }
 }
