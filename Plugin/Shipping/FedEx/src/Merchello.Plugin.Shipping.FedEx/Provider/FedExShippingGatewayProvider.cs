@@ -12,7 +12,7 @@ using Umbraco.Core.Cache;
 namespace Merchello.Plugin.Shipping.FedEx.Provider
 {
     [GatewayProviderActivation("646d3ea7-3b31-45c1-9488-7c0449a564a6", "FedEx Shipping Provider", "FedEx Shipping Provider")]
-    [GatewayProviderEditor("FedEx configuration", "~/App_Plugins/Merchello.FedEx/editor.html")]
+    [GatewayProviderEditor("FedEx configuration", "~/App_Plugins/Merchello.FedEx/shipping.fedex.shippingprovider.html")]
     public class FedExShippingGatewayProvider : ShippingGatewayProviderBase, IFedExShippingGatewayProvider
     {
         private FedExProcessorSettings _settings;
