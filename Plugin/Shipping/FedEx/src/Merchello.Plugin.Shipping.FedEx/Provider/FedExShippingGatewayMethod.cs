@@ -13,7 +13,7 @@ using Notification = RateAvailableServiceWebServiceClient.RateServiceWebReferenc
 
 namespace Merchello.Plugin.Shipping.FedEx.Provider
 {
-    [GatewayMethodEditor("FedEx Shipping Method Editor", "~/App_Plugins/Merchello.FedEx/shippingmethod.html")]
+    [GatewayMethodEditor("FedEx Shipping Method Editor", "~/App_Plugins/Merchello.FedEx/shipping.fedex.shippingmethod.html")]
     public class FedExShippingGatewayMethod : ShippingGatewayMethodBase, IFedExShippingGatewayMethod
     {
         private FedExShippingProcessor _processor;
