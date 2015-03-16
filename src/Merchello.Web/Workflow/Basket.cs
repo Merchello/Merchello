@@ -91,7 +91,12 @@
         /// </summary>
         public decimal TotalBasketPrice
         {
-            get { return Items.Sum(x => (x.Quantity * x.Price)); }
+            get
+            {
+                var charges = Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => (x.Quantity * x.Price));
+                var discounts = Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => (x.Quantity * x.Price));
+                return charges - discounts;
+            }
         }
 
         /// <summary>
