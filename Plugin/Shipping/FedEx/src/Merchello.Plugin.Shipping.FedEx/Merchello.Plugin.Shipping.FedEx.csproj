@@ -55,13 +55,14 @@
     <Reference Include="log4net">
       <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.3.5\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core">
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.3.5\lib\net40\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine">
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="Merchello.Web">
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.1.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -128,10 +129,12 @@
     <Compile Include="RateServiceWebReference\Reference.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello.FedEx\editor.html" />
-    <Content Include="App_Plugins\Merchello.FedEx\merchello.fedex.controller.js" />
-    <Content Include="App_Plugins\Merchello.FedEx\merchello.fedex.shippingmethod.controller.js" />
-    <Content Include="App_Plugins\Merchello.FedEx\shippingmethod.html" />
+    <Content Include="App_Plugins\Merchello.FedEx\shipping.fedex.shippingprovider.html" />
+    <Content Include="App_Plugins\Merchello.FedEx\shipping.fedex.shippingprovider.controller.js" />
+    <Content Include="App_Plugins\Merchello.FedEx\shipping.fedex.shippingmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello.FedEx\shipping.fedex.models.js" />
+    <Content Include="App_Plugins\Merchello.FedEx\shipping.fedex.module.js" />
+    <Content Include="App_Plugins\Merchello.FedEx\shipping.fedex.shippingmethod.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

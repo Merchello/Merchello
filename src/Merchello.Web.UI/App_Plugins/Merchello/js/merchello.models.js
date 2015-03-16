@@ -1647,18 +1647,20 @@
             delete product['productKey'];
             delete product['attributes'];
             // remove catalog inventories that are not active
-            product.catalogInventories = _.reject(product.catalogInventories, function(ci) { return ci.active === false; });
+            product.catalogInventories = _.reject(product.catalogInventories, function (ci) {
+                return ci.active === false;
+            });
             return product;
         }
 
         // ensures a catalog is selected if the variant is marked shippable
         function ensureCatalogInventory(defaultCatalogKey) {
-            if(!this.shippable && !this.trackInventory) {
+            if (!this.shippable && !this.trackInventory) {
                 return;
             }
             // if this product is not associated with any catalogs we need to add the default catalog
             // so that we can associate shipping information
-            if(this.catalogInventories.length === 0) {
+            if (this.catalogInventories.length === 0) {
                 var inv = new CatalogInventoryDisplay();
                 inv.productVariantKey = this.key;
                 inv.catalogKey = defaultCatalogKey;
@@ -1666,9 +1668,13 @@
                 this.catalogInventories.push(inv);
             } else {
                 // if there are catalogs and none are selected we need to force the default catalog to be selected.
-                var activeInventories = _.filter(this.catalogInventories, function(ci) { return ci.active; });
-                if(activeInventories.length === 0) {
-                    var defaultInv = _.find(this.catalogInventories, function(dci) { return dci.catalogKey === defaultCatalogKey; });
+                var activeInventories = _.filter(this.catalogInventories, function (ci) {
+                    return ci.active;
+                });
+                if (activeInventories.length === 0) {
+                    var defaultInv = _.find(this.catalogInventories, function (dci) {
+                        return dci.catalogKey === defaultCatalogKey;
+                    });
                     if (defaultInv !== undefined) {
                         defaultInv.active = true;
                     }
@@ -1678,19 +1684,21 @@
 
         // removes inactive catalog inventories from a variant before save
         function removeInActiveInventories() {
-            this.catalogInventories = _.reject(this.catalogInventories, function(ci) { return ci.active === false; });
+            this.catalogInventories = _.reject(this.catalogInventories, function (ci) {
+                return ci.active === false;
+            });
         }
 
         // updates all inventory counts to the count passed as a parameter
         function setAllInventoryCount(count) {
-            angular.forEach(this.catalogInventories, function(ci) {
+            angular.forEach(this.catalogInventories, function (ci) {
                 ci.count = count;
             });
         }
 
         // updates all inventory low count to the low count passed as a parameter
         function setAllInventoryLowCount(lowCount) {
-            angular.forEach(this.catalogInventories, function(ci) {
+            angular.forEach(this.catalogInventories, function (ci) {
                 ci.lowCount = lowCount;
             });
         }
@@ -1701,13 +1709,13 @@
             var variant = new ProductVariantDisplay();
             variant = angular.extend(variant, this);
             variant.attributes = [];
-            angular.forEach(this.attributes, function(att) {
+            angular.forEach(this.attributes, function (att) {
                 var attribute = new ProductAttributeDisplay();
                 angular.extend(attribute, att);
                 variant.attributes.push(attribute);
             });
             variant.catalogInventories = [];
-            angular.forEach(this.catalogInventories, function(ci) {
+            angular.forEach(this.catalogInventories, function (ci) {
                 var inv = new CatalogInventoryDisplay();
                 angular.extend(inv, ci);
                 variant.catalogInventories.push(ci);
@@ -1716,7 +1724,7 @@
         }
 
         return {
-            getProductForMasterVariant : getProductForMasterVariant,
+            getProductForMasterVariant: getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,

@@ -7,6 +7,9 @@
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
   </area>
+    <area alias="merchelloMarketing">
+        <key alias="campaigns">Marketing Campaigns</key>
+    </area>
   <area alias="merchelloVariant">
     <!-- things -->
     <key alias="product">Product</key>
@@ -84,6 +87,7 @@
     <key alias="attentionRequired">You Have Orders That Require Attention</key>
     <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
     <key alias="processedBy">Processed by</key>
+    <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->

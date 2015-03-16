@@ -14,8 +14,6 @@
     angular.module('merchello.services').service('gravatarService',
         function() {
 
-            /* jshint ignore:start */
-
             /**
              * @ngdoc method
              * @name getAvatarUrl
@@ -248,7 +246,6 @@
                 gravatarUrl += '?size=' + size + '&d=' + defaultImage;
                 return gravatarUrl;
             }
-            /* jshint ignore:end */
     });
 
     angular.module('merchello.services').service('invoiceHelper',
