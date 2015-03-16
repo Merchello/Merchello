@@ -1643,9 +1643,9 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 promiseActivate.then(function () {
                     provider.activated = true;
                     init();
-                    notificationsService.success("Payment Method Activated");
+                    notificationsService.success(provider.name + " Method Activated");
                 }, function (reason) {
-                    notificationsService.error("Payment Method Activate Failed", reason.message);
+                    notificationsService.error(provider.name + " Activate Failed", reason.message);
                 });
             }
 
@@ -1662,9 +1662,9 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 var promiseDeactivate = gatewayProviderResource.deactivateGatewayProvider(provider);
                 promiseDeactivate.then(function () {
                     provider.activated = false;
-                    notificationsService.success("Payment Method Deactivated");
+                    notificationsService.success(provider.name + " Deactivated");
                 }, function (reason) {
-                    notificationsService.error("Payment Method Deactivate Failed", reason.message);
+                    notificationsService.error(provider.name + " Deactivate Failed", reason.message);
                 });
             }
 
