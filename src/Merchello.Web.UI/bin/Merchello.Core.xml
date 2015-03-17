@@ -1868,6 +1868,117 @@
             The <see cref="T:Merchello.Core.Models.INotificationMessage"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Core.Models.Rdbms.CampaignDto">
+            <summary>
+            The campaign dto.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Alias">
+            <summary>
+            Gets or sets the alias.
+            </summary>
+            <remarks>
+            Used for easy JS referencing?
+            </remarks>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Active">
+            <summary>
+            Gets or sets a value indicating whether active.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.UpdateDate">
+            <summary>
+            Gets or sets the update date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.CreateDate">
+            <summary>
+            Gets or sets the create date.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.Rdbms.CampaignOfferDto">
+            <summary>
+            A marketing campaign offer.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.CampaignKey">
+            <summary>
+            Gets or sets the customer key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Alias">
+            <summary>
+            Gets or sets the alias.
+            </summary>
+            <remarks>
+            Used for easy JS referencing?
+            </remarks>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.CampaignOfferTfKey">
+            <summary>
+            Gets or sets the offer type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.StartDate">
+            <summary>
+            Gets or sets start date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.EndDate">
+            <summary>
+            Gets or sets the end date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.ExtendedData">
+            <summary>
+            Gets or sets the extended data.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Active">
+            <summary>
+            Gets or sets a value indicating whether active.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.UpdateDate">
+            <summary>
+            Gets or sets the update date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.CreateDate">
+            <summary>
+            Gets or sets the create date.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Models.ShipmentStatus">
             <summary>
             The shipment status.
@@ -2221,6 +2332,162 @@
         <member name="P:Merchello.Core.Models.Rdbms.ShipmentStatusDto.CreateDate">
             <summary>
             Gets or sets the create date.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.TypeFields.CampaignOfferTypeField">
+            <summary>
+            The campaign offer type field.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.TypeFields.TypeFieldMapper`1">
+            <summary>
+            The type field mapper.
+            </summary>
+            <typeparam name="T">
+            The type of TypeField
+            </typeparam>
+        </member>
+        <member name="T:Merchello.Core.Models.TypeFields.TypeFieldMapperBase">
+            <summary>
+            The type field mapper base.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.TypeFieldMapperBase.NotFound">
+            <summary>
+            Gets the not found.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.TypeFields.ITypeFieldMapper`1">
+            <summary>
+            Defines a TypeFieldMapper
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.ITypeFieldMapper`1.GetTypeField(System.Guid)">
+            <summary>
+            Returns the enumerated value from the TypeKey
+            </summary>
+            <param name="key"><see cref="T:System.Guid"/></param>        
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.ITypeFieldMapper`1.GetTypeField(`0)">
+            <summary>
+            Returns a <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/> from an enumerated value
+            </summary>        
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.ITypeFieldMapper`1.CustomTypeFields">
+            <summary>
+            Gets the collection of custom type fields.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.CachedTypeFields">
+            <summary>
+            The cached type fields.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.BuildCache">
+            <summary>
+            Builds the TypeField cache for the respective type
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.GetTypeField(System.Guid)">
+            <summary>
+            Returns the respective enum value for a given <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/> TypeKey
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.GetTypeField(`0)">
+            <summary>
+            Returns a typefield for a given key
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.AddUpdateCache(`0,Merchello.Core.Models.TypeFields.ITypeField)">
+            <summary>
+            Adds a key value pair to the dictionary
+            </summary>
+            <param name="key"></param>
+            <param name="typeField"></param>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.GetTypeField(Merchello.Core.Configuration.Outline.TypeFieldElement)">
+            <summary>
+            Creates a <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/> from a configuration file element
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.GetCustom(System.String)">
+            <summary>
+            The get custom.
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.Custom(System.String)">
+            <summary>
+            Returns a custom <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/> from the Merchello configuration section
+            </summary>
+            <param name="alias"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.CustomTypeFields">
+            <summary>
+            Gets the custom type fields.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.Fields">
+            <summary>
+            A collection of custom typefields from the configuration file
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.TypeFields.ICampaignOfferTypeField">
+            <summary>
+            The CampaignOfferTypeField interface.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.ICampaignOfferTypeField.Sale">
+            <summary>
+            Gets the campaign sale.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.ICampaignOfferTypeField.Discount">
+            <summary>
+            Gets the discount.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.BuildCache">
+            <summary>
+            The build cache.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.GetCustom(System.String)">
+            <summary>
+            Gets a custom type field from the configuration file.
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.CampaignOffers">
+            <summary>
+            Gets the campaign offers.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.CustomTypeFields">
+            <summary>
+            Gets the custom type fields.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.Sale">
+            <summary>
+            Gets the sale type field.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.Discount">
+            <summary>
+            Gets the discount type field.
             </summary>
         </member>
         <member name="T:Merchello.Core.Notification">
@@ -8599,106 +8866,6 @@
             Type fields for Merchello entities
             </summary>
         </member>
-        <member name="T:Merchello.Core.Models.TypeFields.TypeFieldMapper`1">
-            <summary>
-            The type field mapper.
-            </summary>
-            <typeparam name="T">
-            The type of TypeField
-            </typeparam>
-        </member>
-        <member name="T:Merchello.Core.Models.TypeFields.TypeFieldMapperBase">
-            <summary>
-            The type field mapper base.
-            </summary>
-        </member>
-        <member name="P:Merchello.Core.Models.TypeFields.TypeFieldMapperBase.NotFound">
-            <summary>
-            Gets the not found.
-            </summary>
-        </member>
-        <member name="T:Merchello.Core.Models.TypeFields.ITypeFieldMapper`1">
-            <summary>
-            Defines a TypeFieldMapper
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.ITypeFieldMapper`1.GetTypeField(System.Guid)">
-            <summary>
-            Returns the enumerated value from the TypeKey
-            </summary>
-            <param name="key"><see cref="T:System.Guid"/></param>        
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.ITypeFieldMapper`1.GetTypeField(`0)">
-            <summary>
-            Returns a <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/> from an enumerated value
-            </summary>        
-        </member>
-        <member name="P:Merchello.Core.Models.TypeFields.ITypeFieldMapper`1.CustomTypeFields">
-            <summary>
-            Gets the collection of custom type fields.
-            </summary>
-        </member>
-        <member name="F:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.CachedTypeFields">
-            <summary>
-            The cached type fields.
-            </summary>
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.BuildCache">
-            <summary>
-            Builds the TypeField cache for the respective type
-            </summary>
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.GetTypeField(System.Guid)">
-            <summary>
-            Returns the respective enum value for a given <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/> TypeKey
-            </summary>
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.GetTypeField(`0)">
-            <summary>
-            Returns a typefield for a given key
-            </summary>
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.AddUpdateCache(`0,Merchello.Core.Models.TypeFields.ITypeField)">
-            <summary>
-            Adds a key value pair to the dictionary
-            </summary>
-            <param name="key"></param>
-            <param name="typeField"></param>
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.GetTypeField(Merchello.Core.Configuration.Outline.TypeFieldElement)">
-            <summary>
-            Creates a <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/> from a configuration file element
-            </summary>
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.GetCustom(System.String)">
-            <summary>
-            The get custom.
-            </summary>
-            <param name="alias">
-            The alias.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.Custom(System.String)">
-            <summary>
-            Returns a custom <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/> from the Merchello configuration section
-            </summary>
-            <param name="alias"></param>
-            <returns></returns>
-        </member>
-        <member name="P:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.CustomTypeFields">
-            <summary>
-            Gets the custom type fields.
-            </summary>
-        </member>
-        <member name="P:Merchello.Core.Models.TypeFields.TypeFieldMapper`1.Fields">
-            <summary>
-            A collection of custom typefields from the configuration file
-            </summary>
-        </member>
         <member name="P:Merchello.Core.Models.TypeFields.IEntityTypeField.Customer">
             <summary>
             The customer entity type
@@ -8755,6 +8922,11 @@
             </summary>
             <param name="alias">The alias of the custom entitie</param>
             <returns>An object of <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/></returns>
+        </member>
+        <member name="P:Merchello.Core.Models.TypeFields.EntityTypeField.CampaignOffer">
+            <summary>
+            Gets the campaign offer.
+            </summary>
         </member>
         <member name="P:Merchello.Core.Models.TypeFields.EntityTypeField.Customer">
             <summary>
@@ -10330,9 +10502,29 @@
             Gets the billing address key.
             </summary>
         </member>
+        <member name="T:Merchello.Core.Constants.TypeFieldKeys.CampaignOffer">
+            <summary>
+            The campaign offer key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Constants.TypeFieldKeys.CampaignOffer.SaleKey">
+            <summary>
+            Gets the key representing a sale type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Constants.TypeFieldKeys.CampaignOffer.DiscountKey">
+            <summary>
+            Gets the key representing a discount type.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Constants.TypeFieldKeys.Entity">
             <summary>
             Entity related keys
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Constants.TypeFieldKeys.Entity.CampaignOfferKey">
+            <summary>
+            Gets the campaign offer key.
             </summary>
         </member>
         <member name="P:Merchello.Core.Constants.TypeFieldKeys.Entity.CustomerKey">
@@ -28058,6 +28250,11 @@
             The address type type field enumeration
             </summary>
         </member>
+        <member name="T:Merchello.Core.CampaignOfferType">
+            <summary>
+            The campaign offer type.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.ItemCacheType">
             <summary>
             The item cache type.
@@ -28255,6 +28452,11 @@
         <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.CustomerAddress">
             <summary>
             Gets the dbTypeFields configuration collection for <see cref="T:Merchello.Core.Models.ICustomerAddress"/>
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.CampaignOffers">
+            <summary>
+            Gets the campaign offers.
             </summary>
         </member>
         <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.ItemCache">

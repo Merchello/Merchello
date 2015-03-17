@@ -16,6 +16,17 @@
     }
 
     /// <summary>
+    /// The campaign offer type.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
+    public enum CampaignOfferType
+    {
+        Sale,
+        Discount,
+        Custom
+    }
+
+    /// <summary>
     /// The item cache type.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
@@ -73,6 +84,7 @@
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
     public enum EntityType
     {
+        CampaignOffer,
         Customer,
         GatewayProvider,
         Invoice,

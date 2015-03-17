@@ -274,6 +274,8 @@
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />
+    <Compile Include="Models\Rdbms\CampaignDto.cs" />
+    <Compile Include="Models\Rdbms\CampaignOfferDto.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
@@ -291,6 +293,8 @@
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />
+    <Compile Include="Models\TypeFields\CampaignOfferTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ICampaignOfferTypeField.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />
