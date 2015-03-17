@@ -1715,7 +1715,7 @@
             Gets or sets a value indicating whether active.
             </summary>
         </member>
-        <member name="T:Merchello.Core.Models.Interfaces.ICampaignSettings">
+        <member name="T:Merchello.Core.Models.ICampaignSettings">
             <summary>
             Marker interface for a Marketing Campaign Settings
             </summary>
@@ -5422,10 +5422,10 @@
             The dto.
             </param>
             <returns>
-            The <see cref="T:Merchello.Core.Models.Interfaces.ICampaignSettings"/>.
+            The <see cref="T:Merchello.Core.Models.ICampaignSettings"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Core.Persistence.Factories.CampaignSettingsFactory.BuildDto(Merchello.Core.Models.Interfaces.ICampaignSettings)">
+        <member name="M:Merchello.Core.Persistence.Factories.CampaignSettingsFactory.BuildDto(Merchello.Core.Models.ICampaignSettings)">
             <summary>
             The build dto.
             </summary>
@@ -5510,7 +5510,7 @@
         </member>
         <member name="M:Merchello.Core.Persistence.Mappers.CampaignSettingsMapper.BuildMap">
             <summary>
-            Maps the <see cref="T:Merchello.Core.Models.Interfaces.ICampaignSettings"/> to the <see cref="T:Merchello.Core.Models.Rdbms.CampaignSettingsDto"/>.
+            Maps the <see cref="T:Merchello.Core.Models.ICampaignSettings"/> to the <see cref="T:Merchello.Core.Models.Rdbms.CampaignSettingsDto"/>.
             </summary>
         </member>
         <member name="T:Merchello.Core.Persistence.Mappers.ShipmentStatusMapper">
@@ -6238,6 +6238,103 @@
         <member name="M:Merchello.Core.Persistence.Repositories.AuditLogRepository.PersistUpdatedItem(Merchello.Core.Models.Interfaces.IAuditLog)">
             <summary>
             Updates an audit log
+            </summary>
+            <param name="entity">
+            The entity.
+            </param>
+        </member>
+        <member name="T:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository">
+            <summary>
+            Represents a CampaignSettingsRepository.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Persistence.Repositories.ICampaignSettingsRepository">
+            <summary>
+            Marker interface for the CampaignSettingsRepository.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.#ctor(Merchello.Core.Persistence.UnitOfWork.IDatabaseUnitOfWork,Umbraco.Core.Cache.IRuntimeCacheProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository"/> class.
+            </summary>
+            <param name="work">
+            The work.
+            </param>
+            <param name="cache">
+            The cache.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.PerformGet(System.Guid)">
+            <summary>
+            The perform get.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.ICampaignSettings"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.PerformGetAll(System.Guid[])">
+            <summary>
+            The perform get all.
+            </summary>
+            <param name="keys">
+            The keys.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.PerformGetByQuery(Umbraco.Core.Persistence.Querying.IQuery{Merchello.Core.Models.ICampaignSettings})">
+            <summary>
+            The perform get by query.
+            </summary>
+            <param name="query">
+            The query.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.GetBaseQuery(System.Boolean)">
+            <summary>
+            The get base query.
+            </summary>
+            <param name="isCount">
+            The is count.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Persistence.Sql"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.GetBaseWhereClause">
+            <summary>
+            The get base where clause.
+            </summary>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.GetDeleteClauses">
+            <summary>
+            The get delete clauses.
+            </summary>
+            <returns>
+            The collection of SQL delete clauses.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.PersistNewItem(Merchello.Core.Models.ICampaignSettings)">
+            <summary>
+            The persist new item.
+            </summary>
+            <param name="entity">
+            The entity.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Repositories.CampaignSettingsRepository.PersistUpdatedItem(Merchello.Core.Models.ICampaignSettings)">
+            <summary>
+            The persist updated item.
             </summary>
             <param name="entity">
             The entity.
@@ -30123,6 +30220,17 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Core.Persistence.Repositories.ICustomerAddressRepository"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Persistence.RepositoryFactory.CreateCampaignSettingsRepository(Merchello.Core.Persistence.UnitOfWork.IDatabaseUnitOfWork)">
+            <summary>
+            The create campaign settings repository.
+            </summary>
+            <param name="uow">
+            The <see cref="T:Merchello.Core.Persistence.UnitOfWork.IDatabaseUnitOfWork"/>.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Persistence.Repositories.ICampaignSettingsRepository"/>.
             </returns>
         </member>
         <member name="M:Merchello.Core.Persistence.RepositoryFactory.CreateItemCacheRepository(Merchello.Core.Persistence.UnitOfWork.IDatabaseUnitOfWork)">

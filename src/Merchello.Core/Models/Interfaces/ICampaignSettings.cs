@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Models.Interfaces
+﻿namespace Merchello.Core.Models
 {
     using Merchello.Core.Models.EntityBase;
 

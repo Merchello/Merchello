@@ -138,6 +138,20 @@
         }
 
         /// <summary>
+        /// The create campaign settings repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The <see cref="IDatabaseUnitOfWork"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICampaignSettingsRepository"/>.
+        /// </returns>
+        internal virtual ICampaignSettingsRepository CreateCampaignSettingsRepository(IDatabaseUnitOfWork uow)
+        {
+            return new CampaignSettingsRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="IItemCacheRepository"/>
         /// </summary>
         /// <param name="uow">The <see cref="IDatabaseUnitOfWork"/></param>
