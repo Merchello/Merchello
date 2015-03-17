@@ -8,10 +8,10 @@
     /// <summary>
     /// The campaign dto.
     /// </summary>
-    [TableName("merchCampaign")]
+    [TableName("merchCampaignSettings")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class CampaignDto
+    internal class CampaignSettingsDto
     {
         /// <summary>
         /// Gets or sets the key.

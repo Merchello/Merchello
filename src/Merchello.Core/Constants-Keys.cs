@@ -360,7 +360,7 @@
             /// <summary>
             /// The campaign offer key.
             /// </summary>
-            public static class CampaignOffer
+            public static class CampaignActivity
             {
                 /// <summary>
                 /// Gets the key representing a sale type.

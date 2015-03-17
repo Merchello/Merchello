@@ -23,12 +23,12 @@
         /// <summary>
         /// Gets the campaign offers.
         /// </summary>
-        [ConfigurationProperty("campaignOffers", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
-        public TypeFieldCollection CampaignOffers
+        [ConfigurationProperty("campaignActivities", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection CampaignActivities
         {
             get
             {
-                return (TypeFieldCollection)this["campaignOffers"];
+                return (TypeFieldCollection)this["campaignActivities"];
             }
         }
 

@@ -267,15 +267,23 @@
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
     <Compile Include="Gateways\Payment\PaymentGatewayMethodAttribute.cs" />
     <Compile Include="Gateways\Payment\PaymentOperationData.cs" />
+    <Compile Include="Marketing\CampaignActivityAttribute.cs" />
+    <Compile Include="Models\CampaignActivityBase.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
     <Compile Include="Models\AuditLog.cs" />
+    <Compile Include="Models\CampaignSettings.cs" />
+    <Compile Include="Models\CampaignActivitySettings.cs" />
+    <Compile Include="Models\CampaignBase.cs" />
     <Compile Include="Models\CustomerExtensions.cs" />
     <Compile Include="Models\Interfaces\IAuditLog.cs" />
+    <Compile Include="Models\Interfaces\ICampaignSettings.cs" />
+    <Compile Include="Models\Interfaces\ICampaignActivitySettings.cs" />
+    <Compile Include="Models\Interfaces\ICampaignBase.cs" />
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />
-    <Compile Include="Models\Rdbms\CampaignDto.cs" />
-    <Compile Include="Models\Rdbms\CampaignOfferDto.cs" />
+    <Compile Include="Models\Rdbms\CampaignSettingsDto.cs" />
+    <Compile Include="Models\Rdbms\CampaignActivitySettingsDto.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
@@ -293,8 +301,8 @@
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />
-    <Compile Include="Models\TypeFields\CampaignOfferTypeField.cs" />
-    <Compile Include="Models\TypeFields\Interfaces\ICampaignOfferTypeField.cs" />
+    <Compile Include="Models\TypeFields\CampaignActivityTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ICampaignActivityTypeField.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />
@@ -356,8 +364,10 @@
     <Compile Include="Observation\MonitorForAttribute.cs" />
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
+    <Compile Include="Persistence\Factories\CampaignSettingsFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
+    <Compile Include="Persistence\Mappers\CampaignSettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
@@ -1026,7 +1036,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,9 +1,9 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
     /// <summary>
-    /// The CampaignOfferTypeField interface.
+    /// The CampaignActivityTypeField interface.
     /// </summary>
-    public interface ICampaignOfferTypeField : ITypeFieldMapper<CampaignOfferType>
+    public interface ICampaignActivityTypeField : ITypeFieldMapper<CampaignActivityType>
     {
         /// <summary>
         /// Gets the campaign sale.
@@ -13,6 +13,6 @@
         /// <summary>
         /// Gets the discount.
         /// </summary>
-        ITypeField Discount { get;}
+        ITypeField Discount { get; }
     }
 }

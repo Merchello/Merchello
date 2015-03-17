@@ -18,7 +18,7 @@ namespace Merchello.Core.Models.TypeFields
 
         internal override void BuildCache()
         {
-            AddUpdateCache(EntityType.CampaignOffer, new TypeField("CampaignOffer", "CampaignOffer", Constants.TypeFieldKeys.Entity.CampaignOfferKey));
+            AddUpdateCache(EntityType.CampaignOffer, new TypeField("CampaignActivity", "CampaignActivity", Constants.TypeFieldKeys.Entity.CampaignOfferKey));
             AddUpdateCache(EntityType.Customer, new TypeField("Customer", "Customer", Constants.TypeFieldKeys.Entity.CustomerKey));
             AddUpdateCache(EntityType.GatewayProvider, new TypeField("GatewayProvider", "GatewayProvider", Constants.TypeFieldKeys.Entity.GatewayProviderKey));
             AddUpdateCache(EntityType.Invoice, new TypeField("Invoice", "Invoice", Constants.TypeFieldKeys.Entity.InvoiceKey));

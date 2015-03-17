@@ -8,14 +8,22 @@
     /// <summary>
     /// The campaign offer type field.
     /// </summary>
-    public class CampaignOfferTypeField : TypeFieldMapper<CampaignOfferType>, ICampaignOfferTypeField
+    internal sealed class CampaignActivityTypeField : TypeFieldMapper<CampaignActivityType>, ICampaignActivityTypeField
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CampaignActivityTypeField"/> class.
+        /// </summary>
+        internal CampaignActivityTypeField()
+        {
+            if (CachedTypeFields.IsEmpty) BuildCache();
+        }
+
         /// <summary>
         /// Gets the campaign offers.
         /// </summary>
-        public static TypeFieldCollection CampaignOffers
+        public static TypeFieldCollection CampaignActivities
         {
-            get { return Fields.CampaignOffers; }
+            get { return Fields.CampaignActivities; }
         }
 
         /// <summary>
@@ -25,7 +33,7 @@
         {
             get
             {
-                return CampaignOffers.GetTypeFields().Select(GetTypeField);
+                return CampaignActivities.GetTypeFields().Select(GetTypeField);
             }
         }
 
@@ -34,7 +42,7 @@
         /// </summary>
         public ITypeField Sale
         {
-            get { return GetTypeField(CampaignOfferType.Sale); }
+            get { return GetTypeField(CampaignActivityType.Sale); }
         }
 
         /// <summary>
@@ -44,7 +52,7 @@
         {
             get
             {
-                return GetTypeField(CampaignOfferType.Discount);
+                return GetTypeField(CampaignActivityType.Discount);
             }
         }
 
@@ -53,9 +61,9 @@
         /// </summary>
         internal override void BuildCache()
         {
-            AddUpdateCache(CampaignOfferType.Sale, new TypeField("Sale", "Sale", Constants.TypeFieldKeys.CampaignOffer.SaleKey));
-            AddUpdateCache(CampaignOfferType.Sale, new TypeField("Discount", "Discount", Constants.TypeFieldKeys.CampaignOffer.DiscountKey));
-            AddUpdateCache(CampaignOfferType.Custom, NotFound);
+            AddUpdateCache(CampaignActivityType.Sale, new TypeField("Sale", "Sale", Constants.TypeFieldKeys.CampaignActivity.SaleKey));
+            AddUpdateCache(CampaignActivityType.Discount, new TypeField("Discount", "Discount", Constants.TypeFieldKeys.CampaignActivity.DiscountKey));
+            AddUpdateCache(CampaignActivityType.Custom, NotFound);
         }
 
         /// <summary>
@@ -69,7 +77,7 @@
         /// </returns>
         protected override ITypeField GetCustom(string alias)
         {
-            return GetTypeField(CampaignOffers[alias]);
+            return GetTypeField(CampaignActivities[alias]);
         }
     }
 }

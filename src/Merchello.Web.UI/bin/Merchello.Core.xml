@@ -1125,6 +1125,66 @@
             Gets or sets the processor argument collection.
             </summary>
         </member>
+        <member name="T:Merchello.Core.Marketing.CampaignActivityAttribute">
+            <summary>
+            An attribute to decorate a campaign activity class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Marketing.CampaignActivityAttribute.#ctor(System.Guid,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Marketing.CampaignActivityAttribute"/> class.
+            </summary>
+            <param name="typeKey">
+            The type key.
+            </param>
+            <param name="title">
+            The title.
+            </param>
+            <param name="description">
+            The description.
+            </param>
+            <param name="editorView">
+            The editor view.
+            </param>
+        </member>
+        <member name="P:Merchello.Core.Marketing.CampaignActivityAttribute.TypeKey">
+            <summary>
+            Gets the type key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Marketing.CampaignActivityAttribute.Title">
+            <summary>
+            Gets the title.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Marketing.CampaignActivityAttribute.Description">
+            <summary>
+            Gets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Marketing.CampaignActivityAttribute.EditorView">
+            <summary>
+            Gets the editor view.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.CampaignActivityBase">
+            <summary>
+            The campaign activity base.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.CampaignActivityBase.#ctor(Merchello.Core.Models.CampaignActivitySettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Models.CampaignActivityBase"/> class.
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignActivityBase.Settings">
+            <summary>
+            Gets the settings.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Models.AddressExtensions">
             <summary>
             Extension methods for IAddress
@@ -1560,6 +1620,239 @@
             Gets or sets a value indicating whether this is a record of an error.
             </summary>
         </member>
+        <member name="T:Merchello.Core.Models.CampaignSettings">
+            <summary>
+            Represents a campaign
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.CampaignBase">
+            <summary>
+            The campaign base.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.ICampaignBase">
+            <summary>
+            Define a Marketing CampaignSettings Base Class.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignBase.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignBase.Alias">
+            <summary>
+            Gets or sets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignBase.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignBase.Active">
+            <summary>
+            Gets or sets a value indicating whether active.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignBase.NameSelector">
+            <summary>
+            The name selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignBase.AliasSelector">
+            <summary>
+            The alias selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignBase.DescriptionSelector">
+            <summary>
+            The description selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignBase.ActiveSelector">
+            <summary>
+            The active selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignBase._name">
+            <summary>
+            The name.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignBase._alias">
+            <summary>
+            The alias.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignBase._description">
+            <summary>
+            The description.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignBase._active">
+            <summary>
+            The active.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignBase.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignBase.Alias">
+            <summary>
+            Gets or sets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignBase.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignBase.Active">
+            <summary>
+            Gets or sets a value indicating whether active.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.Interfaces.ICampaignSettings">
+            <summary>
+            Marker interface for a Marketing Campaign Settings
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.CampaignActivitySettings">
+            <summary>
+            The campaign activity base.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.ICampaignActivitySettings">
+            <summary>
+            The CampaignActivity interface.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignActivitySettings.CampaignKey">
+            <summary>
+            Gets the campaign key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignActivitySettings.CampaignActivityTfKey">
+            <summary>
+            Gets the campaign activity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignActivitySettings.CampaignActivityType">
+            <summary>
+            Gets the campaign activity type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignActivitySettings.StartDate">
+            <summary>
+            Gets or sets the start date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignActivitySettings.EndDate">
+            <summary>
+            Gets or sets the end date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.ICampaignActivitySettings.ExtendedData">
+            <summary>
+            Gets the extended data.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignActivitySettings.ExtendedDataChangedSelector">
+            <summary>
+            The extended data changed selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignActivitySettings.StartDateSelector">
+            <summary>
+            The start date selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignActivitySettings.EndDateSelector">
+            <summary>
+            The end date selector.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignActivitySettings._startDate">
+            <summary>
+            The start date.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignActivitySettings._endDate">
+            <summary>
+            The end date.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Models.CampaignActivitySettings._extendedData">
+            <summary>
+            The <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.CampaignActivitySettings.#ctor(System.Guid,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Models.CampaignActivitySettings"/> class.
+            </summary>
+            <param name="campaignKey">
+            The campaign key.
+            </param>
+            <param name="campaignActivityTfKey">
+            The campaign activity type field key.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Models.CampaignActivitySettings.#ctor(System.Guid,Merchello.Core.CampaignActivityType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Models.CampaignActivitySettings"/> class.
+            </summary>
+            <param name="campaignKey">
+            The campaign key.
+            </param>
+            <param name="campaignActivityType">
+            The campaign activity type.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Models.CampaignActivitySettings.ExtendedDataChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            The extended data changed.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="e">
+            The event args e
+            </param>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignActivitySettings.CampaignKey">
+            <summary>
+            Gets the campaign key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignActivitySettings.CampaignActivityTfKey">
+            <summary>
+            Gets the campaign activity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignActivitySettings.CampaignActivityType">
+            <summary>
+            Gets the campaign activity type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignActivitySettings.StartDate">
+            <summary>
+            Gets or sets the start date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignActivitySettings.EndDate">
+            <summary>
+            Gets or sets the end date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Models.CampaignActivitySettings.ExtendedData">
+            <summary>
+            Gets the extended data.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Models.CustomerExtensions">
             <summary>
             The customer extensions.
@@ -1868,22 +2161,22 @@
             The <see cref="T:Merchello.Core.Models.INotificationMessage"/>.
             </returns>
         </member>
-        <member name="T:Merchello.Core.Models.Rdbms.CampaignDto">
+        <member name="T:Merchello.Core.Models.Rdbms.CampaignSettingsDto">
             <summary>
             The campaign dto.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Key">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignSettingsDto.Key">
             <summary>
             Gets or sets the key.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Name">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignSettingsDto.Name">
             <summary>
             Gets or sets the name.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Alias">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignSettingsDto.Alias">
             <summary>
             Gets or sets the alias.
             </summary>
@@ -1891,47 +2184,47 @@
             Used for easy JS referencing?
             </remarks>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Description">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignSettingsDto.Description">
             <summary>
             Gets or sets the description.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.Active">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignSettingsDto.Active">
             <summary>
             Gets or sets a value indicating whether active.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.UpdateDate">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignSettingsDto.UpdateDate">
             <summary>
             Gets or sets the update date.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignDto.CreateDate">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignSettingsDto.CreateDate">
             <summary>
             Gets or sets the create date.
             </summary>
         </member>
-        <member name="T:Merchello.Core.Models.Rdbms.CampaignOfferDto">
+        <member name="T:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto">
             <summary>
             A marketing campaign offer.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Key">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.Key">
             <summary>
             Gets or sets the key.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.CampaignKey">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.CampaignKey">
             <summary>
             Gets or sets the customer key.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Name">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.Name">
             <summary>
             Gets or sets the name.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Alias">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.Alias">
             <summary>
             Gets or sets the alias.
             </summary>
@@ -1939,42 +2232,42 @@
             Used for easy JS referencing?
             </remarks>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Description">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.Description">
             <summary>
             Gets or sets the description.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.CampaignOfferTfKey">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.CampaignActivityTfKey">
             <summary>
             Gets or sets the offer type field key.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.StartDate">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.StartDate">
             <summary>
             Gets or sets start date.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.EndDate">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.EndDate">
             <summary>
             Gets or sets the end date.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.ExtendedData">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.ExtendedData">
             <summary>
             Gets or sets the extended data.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.Active">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.Active">
             <summary>
             Gets or sets a value indicating whether active.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.UpdateDate">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.UpdateDate">
             <summary>
             Gets or sets the update date.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.Rdbms.CampaignOfferDto.CreateDate">
+        <member name="P:Merchello.Core.Models.Rdbms.CampaignActivitySettingsDto.CreateDate">
             <summary>
             Gets or sets the create date.
             </summary>
@@ -2334,7 +2627,7 @@
             Gets or sets the create date.
             </summary>
         </member>
-        <member name="T:Merchello.Core.Models.TypeFields.CampaignOfferTypeField">
+        <member name="T:Merchello.Core.Models.TypeFields.CampaignActivityTypeField">
             <summary>
             The campaign offer type field.
             </summary>
@@ -2439,27 +2732,32 @@
             A collection of custom typefields from the configuration file
             </summary>
         </member>
-        <member name="T:Merchello.Core.Models.TypeFields.ICampaignOfferTypeField">
+        <member name="T:Merchello.Core.Models.TypeFields.ICampaignActivityTypeField">
             <summary>
-            The CampaignOfferTypeField interface.
+            The CampaignActivityTypeField interface.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.TypeFields.ICampaignOfferTypeField.Sale">
+        <member name="P:Merchello.Core.Models.TypeFields.ICampaignActivityTypeField.Sale">
             <summary>
             Gets the campaign sale.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.TypeFields.ICampaignOfferTypeField.Discount">
+        <member name="P:Merchello.Core.Models.TypeFields.ICampaignActivityTypeField.Discount">
             <summary>
             Gets the discount.
             </summary>
         </member>
-        <member name="M:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.BuildCache">
+        <member name="M:Merchello.Core.Models.TypeFields.CampaignActivityTypeField.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Models.TypeFields.CampaignActivityTypeField"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.TypeFields.CampaignActivityTypeField.BuildCache">
             <summary>
             The build cache.
             </summary>
         </member>
-        <member name="M:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.GetCustom(System.String)">
+        <member name="M:Merchello.Core.Models.TypeFields.CampaignActivityTypeField.GetCustom(System.String)">
             <summary>
             Gets a custom type field from the configuration file.
             </summary>
@@ -2470,22 +2768,22 @@
             The <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/>.
             </returns>
         </member>
-        <member name="P:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.CampaignOffers">
+        <member name="P:Merchello.Core.Models.TypeFields.CampaignActivityTypeField.CampaignActivities">
             <summary>
             Gets the campaign offers.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.CustomTypeFields">
+        <member name="P:Merchello.Core.Models.TypeFields.CampaignActivityTypeField.CustomTypeFields">
             <summary>
             Gets the custom type fields.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.Sale">
+        <member name="P:Merchello.Core.Models.TypeFields.CampaignActivityTypeField.Sale">
             <summary>
             Gets the sale type field.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.TypeFields.CampaignOfferTypeField.Discount">
+        <member name="P:Merchello.Core.Models.TypeFields.CampaignActivityTypeField.Discount">
             <summary>
             Gets the discount type field.
             </summary>
@@ -5111,6 +5409,33 @@
             The <see cref="T:Merchello.Core.Models.Rdbms.AuditLogDto"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Core.Persistence.Factories.CampaignSettingsFactory">
+            <summary>
+            The campaign settings factory.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Factories.CampaignSettingsFactory.BuildEntity(Merchello.Core.Models.Rdbms.CampaignSettingsDto)">
+            <summary>
+            The build entity.
+            </summary>
+            <param name="dto">
+            The dto.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.Interfaces.ICampaignSettings"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Factories.CampaignSettingsFactory.BuildDto(Merchello.Core.Models.Interfaces.ICampaignSettings)">
+            <summary>
+            The build dto.
+            </summary>
+            <param name="entity">
+            The entity.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.Rdbms.CampaignSettingsDto"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Core.Persistence.Factories.ShipmentStatusFactory">
             <summary>
             The shipment status factory.
@@ -5171,6 +5496,21 @@
         <member name="M:Merchello.Core.Persistence.Mappers.AuditLogMapper.BuildMap">
             <summary>
             The build map.
+            </summary>
+        </member>
+        <member name="T:Merchello.Core.Persistence.Mappers.CampaignSettingsMapper">
+            <summary>
+            The campaign settings mapper.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Mappers.CampaignSettingsMapper.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Persistence.Mappers.CampaignSettingsMapper"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Mappers.CampaignSettingsMapper.BuildMap">
+            <summary>
+            Maps the <see cref="T:Merchello.Core.Models.Interfaces.ICampaignSettings"/> to the <see cref="T:Merchello.Core.Models.Rdbms.CampaignSettingsDto"/>.
             </summary>
         </member>
         <member name="T:Merchello.Core.Persistence.Mappers.ShipmentStatusMapper">
@@ -10502,17 +10842,17 @@
             Gets the billing address key.
             </summary>
         </member>
-        <member name="T:Merchello.Core.Constants.TypeFieldKeys.CampaignOffer">
+        <member name="T:Merchello.Core.Constants.TypeFieldKeys.CampaignActivity">
             <summary>
             The campaign offer key.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Constants.TypeFieldKeys.CampaignOffer.SaleKey">
+        <member name="P:Merchello.Core.Constants.TypeFieldKeys.CampaignActivity.SaleKey">
             <summary>
             Gets the key representing a sale type.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Constants.TypeFieldKeys.CampaignOffer.DiscountKey">
+        <member name="P:Merchello.Core.Constants.TypeFieldKeys.CampaignActivity.DiscountKey">
             <summary>
             Gets the key representing a discount type.
             </summary>
@@ -20032,47 +20372,49 @@
         </member>
         <member name="T:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter">
             <summary>
-            The enum type field converter.
+            Utility class to for converting type fields.
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.Address">
             <summary>
-            Creates an instance of an <see cref="T:Merchello.Core.Models.TypeFields.IAddressTypeField"/> object
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.IAddressTypeField"/>
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.EntityType">
+        <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.CampaignActivity">
             <summary>
-            Creates an instance of an <see cref="T:Merchello.Core.Models.TypeFields.IEntityTypeField"/> object
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.ICampaignActivityTypeField"/>.
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.ItemItemCache">
             <summary>
-            Creates an instance of an <see cref="T:Merchello.Core.Models.TypeFields.IItemCacheTypeField"/> object
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.IItemCacheTypeField"/>
             </summary>
         </member>
         <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.LineItemType">
             <summary>
-            Creates an instance of an <see cref="T:Merchello.Core.Models.TypeFields.ILineItemTypeField"/> object
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.ILineItemTypeField"/>
             </summary>
-            <returns></returns>
         </member>
         <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.PaymentMethod">
             <summary>
-            Creates an instance of an <see cref="T:Merchello.Core.Models.TypeFields.IPaymentMethodTypeField"/> object
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.IPaymentMethodTypeField"/>
             </summary>
-            <returns></returns>
         </member>
         <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.AppliedPayment">
             <summary>
-            Creates an instance of an <see cref="T:Merchello.Core.Models.TypeFields.IAppliedPaymentTypeField"/>
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.IAppliedPaymentTypeField"/>
             </summary>
             <returns></returns>
         </member>
+        <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.EntityType">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.IEntityTypeField"/>
+            </summary>
+        </member>
         <member name="P:Merchello.Core.Models.TypeFields.EnumTypeFieldConverter.GatewayProvider">
             <summary>
-            Creates an instance of an <see cref="T:Merchello.Core.Models.TypeFields.IGatewayProviderTypeField"/>
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.IGatewayProviderTypeField"/>
             </summary>
-            <returns></returns>
         </member>
         <member name="T:Merchello.Core.Cache.ObjectCacheRuntimeCacheProvider">
             <summary>
@@ -28250,9 +28592,9 @@
             The address type type field enumeration
             </summary>
         </member>
-        <member name="T:Merchello.Core.CampaignOfferType">
+        <member name="T:Merchello.Core.CampaignActivityType">
             <summary>
-            The campaign offer type.
+            The campaign activity type.
             </summary>
         </member>
         <member name="T:Merchello.Core.ItemCacheType">
@@ -28454,7 +28796,7 @@
             Gets the dbTypeFields configuration collection for <see cref="T:Merchello.Core.Models.ICustomerAddress"/>
             </summary>
         </member>
-        <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.CampaignOffers">
+        <member name="P:Merchello.Core.Configuration.Outline.TypeFieldDefinitionsElement.CampaignActivities">
             <summary>
             Gets the campaign offers.
             </summary>

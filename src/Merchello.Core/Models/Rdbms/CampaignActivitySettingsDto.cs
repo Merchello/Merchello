@@ -8,10 +8,10 @@
     /// <summary>
     /// A marketing campaign offer.
     /// </summary>
-    [TableName("merchCampaignOffer")]
+    [TableName("merchCampaignActivitySettings")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class CampaignOfferDto
+    internal class CampaignActivitySettingsDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -25,8 +25,8 @@
         /// Gets or sets the customer key.
         /// </summary>
         [Column("campaignKey")]
-        [ForeignKey(typeof(CustomerDto), Name = "FK_merchCampaignOffer_merchCampaign", Column = "pk")]
-        [Index(IndexTypes.UniqueNonClustered, Name = "IX_merchCampgaignOffer")]
+        [ForeignKey(typeof(CampaignSettingsDto), Name = "FK_merchCampaignActivitySettings_merchCampaignSettings", Column = "pk")]
+        [Index(IndexTypes.UniqueNonClustered, Name = "IX_merchCampgaignActivitySettings")]
         public Guid CampaignKey { get; set; }
 
         /// <summary>
@@ -55,8 +55,8 @@
         /// <summary>
         /// Gets or sets the offer type field key.
         /// </summary>
-        [Column("campaignOfferTfKey")]
-        public Guid CampaignOfferTfKey { get; set; }
+        [Column("campaignActivityTfKey")]
+        public Guid CampaignActivityTfKey { get; set; }
 
         /// <summary>
         /// Gets or sets start date.
