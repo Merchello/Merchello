@@ -3,6 +3,7 @@ using Merchello.Core.Models;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    using System.Linq;
     using System.Runtime.CompilerServices;
 
     using Merchello.Core.Gateways.Shipping;
@@ -60,7 +61,7 @@ namespace Merchello.Tests.Base.DataMakers
 
             invoice.SetBillingAddress(billToShipTo);
 
-            invoice.Total = 106.22M;
+            
             var extendedData = new ExtendedDataCollection();
 
             // this is typically added automatically in the checkout workflow
@@ -80,6 +81,8 @@ namespace Merchello.Tests.Base.DataMakers
 
             var quote = new ShipmentRateQuote(shipment, shipmethod) { Rate = 16.22M };
             invoice.Items.Add(quote.AsLineItemOf<InvoiceLineItem>());
+
+            invoice.Total = invoice.Items.Sum(x => x.TotalPrice);
 
             return invoice;
         }

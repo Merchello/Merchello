@@ -244,6 +244,17 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="IAppliedPaymentService"/>.
+        /// </summary>
+        internal IAppliedPaymentService AppliedPaymentService
+        {
+            get
+            {
+                return _appliedPaymentService.Value;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="IAnonymousCustomerService"/>.
         /// </summary>
         internal IAnonymousCustomerService AnonymousCustomerService

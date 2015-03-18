@@ -26580,6 +26580,11 @@
             Gets the <see cref="T:Merchello.Core.Services.IWarehouseService"/>
             </summary>
         </member>
+        <member name="P:Merchello.Core.Services.ServiceContext.AppliedPaymentService">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.Services.IAppliedPaymentService"/>.
+            </summary>
+        </member>
         <member name="P:Merchello.Core.Services.ServiceContext.AnonymousCustomerService">
             <summary>
             Gets the <see cref="T:Merchello.Core.Services.IAnonymousCustomerService"/>.
