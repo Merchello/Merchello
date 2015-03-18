@@ -14,7 +14,7 @@
     /// The authorize net payment gateway provider.
     /// </summary>
     [GatewayProviderActivation("D584F356-454B-4D14-BE44-13D9D25D6A74", "Chase Payment Provider", "Chase Payment Provider")]
-    [GatewayProviderEditor("Chase configuration", "~/App_Plugins/Merchello.Chase/editor.html")]
+    [GatewayProviderEditor("Chase configuration", "~/App_Plugins/Merchello.Chase/payment.chase.providersettings.html")]
     public class ChasePaymentGatewayProvider : PaymentGatewayProviderBase, IChasePaymentGatewayProvider
     {
         #region AvailableResources
