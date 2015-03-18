@@ -137,7 +137,7 @@ namespace Merchello.Plugin.Payments.PayPal
 							Phone = address.Phone
 						};
 					}
-				} else if (item.LineItemTfKey == Merchello.Core.Constants.TypeFieldKeys.LineItem.ProductKey) {
+				} else {
 					var paymentItem = new PaymentDetailsItemType {
 						Name = item.Name,
 						ItemURL = (articleBySkuPath.IsEmpty() ? null : articleBySkuPath + item.Sku),

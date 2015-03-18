@@ -87,6 +87,7 @@
     <key alias="attentionRequired">You Have Orders That Require Attention</key>
     <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
     <key alias="processedBy">Processed by</key>
+    <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
