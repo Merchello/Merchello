@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.Models
 {
+    using System.Collections.Generic;
+
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
@@ -7,5 +9,9 @@
     /// </summary>
     public interface ICampaignSettings : ICampaignBase, IEntity
     {
+        /// <summary>
+        /// Gets the collection campaign activities settings.
+        /// </summary>
+        IEnumerable<ICampaignActivitySettings> ActivitySettings { get; }
     }
 }

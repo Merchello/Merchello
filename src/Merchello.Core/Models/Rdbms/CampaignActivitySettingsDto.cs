@@ -26,7 +26,7 @@
         /// </summary>
         [Column("campaignKey")]
         [ForeignKey(typeof(CampaignSettingsDto), Name = "FK_merchCampaignActivitySettings_merchCampaignSettings", Column = "pk")]
-        [Index(IndexTypes.UniqueNonClustered, Name = "IX_merchCampgaignActivitySettings")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchCampgaignActivitySettings_campaignKey")]
         public Guid CampaignKey { get; set; }
 
         /// <summary>
@@ -42,6 +42,7 @@
         /// Used for easy JS referencing?
         /// </remarks>
         [Column("alias")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchCampgaignActivitySettings_alias")]
         public string Alias { get; set; }
 
         /// <summary>

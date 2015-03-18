@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Persistence.Mappers
 {
     using Merchello.Core.Models;
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
 
     /// <summary>
@@ -24,13 +23,13 @@
         {
             if (!PropertyInfoCache.IsEmpty) return;
 
-            CacheMap<CampaignSettings, CampaignSettingsDto>(src => src.Key, dto => dto.Key);
-            CacheMap<CampaignSettings, CampaignSettingsDto>(src => src.Name, dto => dto.Name);
-            CacheMap<CampaignSettings, CampaignSettingsDto>(src => src.Alias, dto => dto.Alias);
-            CacheMap<CampaignSettings, CampaignSettingsDto>(src => src.Description, dto => dto.Description);
-            CacheMap<CampaignSettings, CampaignSettingsDto>(src => src.Active, dto => dto.Active);
-            CacheMap<CampaignSettings, CampaignSettingsDto>(src => src.UpdateDate, dto => dto.UpdateDate);
-            CacheMap<CampaignSettings, CampaignSettingsDto>(src => src.CreateDate, dto => dto.CreateDate);
+            CacheMap<ICampaignSettings, CampaignSettingsDto>(src => src.Key, dto => dto.Key);
+            CacheMap<ICampaignSettings, CampaignSettingsDto>(src => src.Name, dto => dto.Name);
+            CacheMap<ICampaignSettings, CampaignSettingsDto>(src => src.Alias, dto => dto.Alias);
+            CacheMap<ICampaignSettings, CampaignSettingsDto>(src => src.Description, dto => dto.Description);
+            CacheMap<ICampaignSettings, CampaignSettingsDto>(src => src.Active, dto => dto.Active);
+            CacheMap<ICampaignSettings, CampaignSettingsDto>(src => src.UpdateDate, dto => dto.UpdateDate);
+            CacheMap<ICampaignSettings, CampaignSettingsDto>(src => src.CreateDate, dto => dto.CreateDate);
         }
     }
 }

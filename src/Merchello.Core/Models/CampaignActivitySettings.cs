@@ -59,7 +59,7 @@
         /// <param name="campaignActivityTfKey">
         /// The campaign activity type field key.
         /// </param>
-        public CampaignActivitySettings(Guid campaignKey, Guid campaignActivityTfKey)
+        internal CampaignActivitySettings(Guid campaignKey, Guid campaignActivityTfKey)
         {
             Mandate.ParameterCondition(!campaignKey.Equals(Guid.Empty), "campaignKey");
             Mandate.ParameterCondition(!campaignActivityTfKey.Equals(Guid.Empty), "campaignActivityTfKey");

@@ -10,24 +10,19 @@
     using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
-    
+
     using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
 
     /// <summary>
-    /// Represents a CampaignSettingsRepository.
+    /// Represents a CampaignActivitySettingsRepository.
     /// </summary>
-    internal class CampaignSettingsRepository : MerchelloPetaPocoRepositoryBase<ICampaignSettings>, ICampaignSettingsRepository
+    internal class CampaignActivitySettingsRepository : MerchelloPetaPocoRepositoryBase<ICampaignActivitySettings>, ICampaignActivitySettingsRepository
     {
         /// <summary>
-        /// The <see cref="ICampaignActivitySettingsRepository"/>.
-        /// </summary>
-        private readonly ICampaignActivitySettingsRepository _campaignActivitySettingsRepository;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CampaignSettingsRepository"/> class.
+        /// Initializes a new instance of the <see cref="CampaignActivitySettingsRepository"/> class.
         /// </summary>
         /// <param name="work">
         /// The work.
@@ -35,15 +30,24 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        /// <param name="campaignActivitySettingsRepository">
-        /// The <see cref="ICampaignActivitySettingsRepository"/>.
-        /// </param>
-        public CampaignSettingsRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ICampaignActivitySettingsRepository campaignActivitySettingsRepository)
+        public CampaignActivitySettingsRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {
-            Mandate.ParameterNotNull(campaignActivitySettingsRepository, "campaignActivitySettingsRepository");
+        }
 
-            _campaignActivitySettingsRepository = campaignActivitySettingsRepository;
+        /// <summary>
+        /// Returns a collection of <see cref="ICampaignActivitySettings"/> for a given campaign.
+        /// </summary>
+        /// <param name="campaignKey">
+        /// The campaign key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ICampaignActivitySettings}"/>.
+        /// </returns>
+        public IEnumerable<ICampaignActivitySettings> GetByCampaignKey(Guid campaignKey)
+        {
+            var query = Querying.Query<ICampaignActivitySettings>.Builder.Where(x => x.CampaignKey == campaignKey);
+            return this.GetByQuery(query);
         }
 
         /// <summary>
@@ -53,21 +57,19 @@
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="ICampaignSettings"/>.
+        /// The <see cref="ICampaignActivitySettings"/>.
         /// </returns>
-        protected override ICampaignSettings PerformGet(Guid key)
+        protected override ICampaignActivitySettings PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
                 .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<CampaignSettingsDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<CampaignActivitySettingsDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var activitySettings = _campaignActivitySettingsRepository.GetByCampaignKey(key).OrderBy(x => x.StartDate);
-
-            var factory = new CampaignSettingsFactory(activitySettings);
+            var factory = new CampaignActivitySettingsFactory();
 
             var settings = factory.BuildEntity(dto);
 
@@ -81,9 +83,9 @@
         /// The keys.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{ICampaignSettings}"/>.
+        /// The <see cref="IEnumerable{ICampaignActivitySettings}"/>.
         /// </returns>
-        protected override IEnumerable<ICampaignSettings> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<ICampaignActivitySettings> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
             {
@@ -94,10 +96,11 @@
             }
             else
             {
-                var dtos = Database.Fetch<CampaignSettingsDto>(GetBaseQuery(false));
+                var factory = new CampaignActivitySettingsFactory();
+                var dtos = Database.Fetch<CampaignActivitySettingsDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
-                    yield return Get(dto.Key);
+                    yield return factory.BuildEntity(dto);
                 }
             }
         }
@@ -109,15 +112,15 @@
         /// The query.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{ICampaignSettings}"/>.
+        /// The <see cref="IEnumerable{ICampaignActivitySettings}"/>.
         /// </returns>
-        protected override IEnumerable<ICampaignSettings> PerformGetByQuery(IQuery<ICampaignSettings> query)
+        protected override IEnumerable<ICampaignActivitySettings> PerformGetByQuery(IQuery<ICampaignActivitySettings> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<ICampaignSettings>(sqlClause, query);
+            var translator = new SqlTranslator<ICampaignActivitySettings>(sqlClause, query);
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<CampaignSettingsDto>(sql);
+            var dtos = Database.Fetch<CampaignActivitySettingsDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
@@ -135,7 +138,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From("merchCampaignSettings");
+               .From("merchCampaignActivitySettings");
 
             return sql;
         }
@@ -148,7 +151,7 @@
         /// </returns>
         protected override string GetBaseWhereClause()
         {
-            return "merchCampaignSettings.pk = @Key";
+            return "merchCampaignActivitySettings.pk = @Key";
         }
 
         /// <summary>
@@ -161,8 +164,7 @@
         {
             var list = new List<string>
                 {
-                    "DELETE FROM merchCampaignActivitySettings WHERE campaignKey = @Key",
-                    "DELETE FROM merchCampaignSettings WHERE pk = @Key",
+                    "DELETE FROM merchCampaignActivitySettings WHERE pk = @Key",
                 };
 
             return list;
@@ -174,16 +176,18 @@
         /// <param name="entity">
         /// The entity.
         /// </param>
-        protected override void PersistNewItem(ICampaignSettings entity)
+        protected override void PersistNewItem(ICampaignActivitySettings entity)
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new CampaignSettingsFactory();
+            var factory = new CampaignActivitySettingsFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICampaignSettings>(entity.CampaignKey));
         }
 
         /// <summary>
@@ -192,16 +196,31 @@
         /// <param name="entity">
         /// The entity.
         /// </param>
-        protected override void PersistUpdatedItem(ICampaignSettings entity)
+        protected override void PersistUpdatedItem(ICampaignActivitySettings entity)
         {
             ((Entity)entity).UpdatingEntity();
 
-            var factory = new CampaignSettingsFactory();
+            var factory = new CampaignActivitySettingsFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICampaignSettings>(entity.CampaignKey));
+        }
+
+        /// <summary>
+        /// The persist deleted item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        protected override void PersistDeletedItem(ICampaignActivitySettings entity)
+        {
+            base.PersistDeletedItem(entity);
+
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<ICampaignSettings>(entity.CampaignKey));
         }
     }
 }

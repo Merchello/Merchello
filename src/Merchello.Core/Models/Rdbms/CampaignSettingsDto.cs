@@ -34,6 +34,7 @@
         /// Used for easy JS referencing?
         /// </remarks>
         [Column("alias")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchCampgaignSettings_alias")]
         public string Alias { get; set; }
 
         /// <summary>

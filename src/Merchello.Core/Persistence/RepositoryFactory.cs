@@ -148,7 +148,24 @@
         /// </returns>
         internal virtual ICampaignSettingsRepository CreateCampaignSettingsRepository(IDatabaseUnitOfWork uow)
         {
-            return new CampaignSettingsRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+            return new CampaignSettingsRepository(
+                uow, 
+                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
+                this.CreateCampaignActivitySettingsRepository(uow));
+        }
+
+        /// <summary>
+        /// The create campaign activity settings repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The <see cref="IDatabaseUnitOfWork"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICampaignActivitySettingsRepository"/>.
+        /// </returns>
+        internal virtual ICampaignActivitySettingsRepository CreateCampaignActivitySettingsRepository(IDatabaseUnitOfWork uow)
+        {
+            return new CampaignActivitySettingsRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>
