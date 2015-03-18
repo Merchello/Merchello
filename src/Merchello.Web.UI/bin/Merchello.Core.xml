@@ -26608,6 +26608,11 @@
             Gets the <see cref="T:Merchello.Core.Services.ICustomerService"/>
             </summary>
         </member>
+        <member name="P:Merchello.Core.Services.IServiceContext.CampaignSettingsService">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.Services.ICampaignSettingsService"/>.
+            </summary>
+        </member>
         <member name="P:Merchello.Core.Services.IServiceContext.GatewayProviderService">
             <summary>
             Gets the <see cref="T:Merchello.Core.Services.IGatewayProviderService"/>
@@ -28317,6 +28322,16 @@
             The audit log service.
             </summary>
         </member>
+        <member name="F:Merchello.Core.Services.ServiceContext._campaignSettingsService">
+            <summary>
+            The campaign settings service.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Services.ServiceContext._campaignActivitySettingsService">
+            <summary>
+            The campaign activity settings service.
+            </summary>
+        </member>
         <member name="F:Merchello.Core.Services.ServiceContext._countryTaxRateService">
             <summary>
             The country tax rate service.
@@ -28437,6 +28452,11 @@
             Gets the <see cref="T:Merchello.Core.Services.IAuditLogService"/>
             </summary>
         </member>
+        <member name="P:Merchello.Core.Services.ServiceContext.CampaignSettingsService">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.Services.ICampaignSettingsService"/>.
+            </summary>
+        </member>
         <member name="P:Merchello.Core.Services.ServiceContext.CustomerService">
             <summary>
             Gets the <see cref="T:Merchello.Core.Services.ICustomerService"/>
@@ -28495,6 +28515,11 @@
         <member name="P:Merchello.Core.Services.ServiceContext.AnonymousCustomerService">
             <summary>
             Gets the <see cref="T:Merchello.Core.Services.IAnonymousCustomerService"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Services.ServiceContext.CampaignActivitySettingsService">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.Services.ICampaignActivitySettingsService"/>.
             </summary>
         </member>
         <member name="P:Merchello.Core.Services.ServiceContext.TaxMethodService">
