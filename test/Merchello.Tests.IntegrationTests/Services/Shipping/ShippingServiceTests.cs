@@ -2,9 +2,13 @@
 {
     using System;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
     using Merchello.Core;
+    using Merchello.Core.Builders;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Tests.Base.DataMakers;
     using Merchello.Tests.Base.TestHelpers;
     using Merchello.Web.Models.ContentEditing;
 
@@ -39,6 +43,51 @@
                 Console.WriteLine(status.Name + ' ' + status.SortOrder);
             }
 
+        }
+
+        public void Can_Detect_A_ShipmentStatusChange()
+        {
+            //// Arrange
+            var address = new Address()
+                              {
+                                  Address1 = "111 Somewhere St.",
+                                  Locality = "Bellingham",
+                                  Region = "WA",
+                                  PostalCode = "98225",
+                                  CountryCode = "US",
+                                  Name = "Merchello"
+                              };
+
+            var invoice = MockInvoiceDataMaker.GetMockInvoiceForTaxation();
+
+            var payment = new Payment(PaymentMethodType.Cash, invoice.Total) { Collected = true, Authorized = true };
+
+            MerchelloContext.Current.Services.PaymentService.Save(payment);
+
+            MerchelloContext.Current.Services.InvoiceService.Save(invoice);
+
+            var appliedPaymentService = ((ServiceContext)(MerchelloContext.Current.Services)).AppliedPaymentService;
+
+            var appliedPayment = appliedPaymentService.CreateAppliedPaymentWithKey(
+                payment.Key,
+                invoice.Key,
+                AppliedPaymentType.Debit,
+                "Payment applied",
+                payment.Amount);
+
+            invoice = MerchelloContext.Current.Services.InvoiceService.GetByKey(invoice.Key);
+
+            Assert.NotNull(invoice);
+
+            var order = invoice.PrepareOrder();
+
+            MerchelloContext.Current.Services.OrderService.Save(order);
+
+            var builder = new ShipmentBuilderChain(MerchelloContext.Current, order, order.Items.Select(x => x.Key), Guid.NewGuid(), Constants.DefaultKeys.ShipmentStatus.Packaging, "Track");
+
+            var attempt = builder.Build();
+
+            Assert.IsTrue(attempt.Success);
         }
          
     }
