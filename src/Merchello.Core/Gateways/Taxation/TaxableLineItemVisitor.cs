@@ -56,7 +56,7 @@
             {
                 lineItem.ExtendedData.SetValue(Constants.ExtendedDataKeys.LineItemTaxAmount, (lineItem.TotalPrice * this._taxRate).ToString(CultureInfo.InvariantCulture));
             }
-            
+            lineItem.ExtendedData.SetValue(Constants.ExtendedDataKeys.BaseTaxRate, this._taxRate.ToString());
             _lineItems.Add(lineItem);
         }
     }
