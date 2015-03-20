@@ -3,7 +3,7 @@
     /// <summary>
     /// Define a Marketing CampaignSettings Base Class.
     /// </summary>
-    public interface ICampaignBase
+    public interface ICampaignSettingsBase
     {
         /// <summary>
         /// Gets or sets the name.

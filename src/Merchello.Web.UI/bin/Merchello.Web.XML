@@ -30,6 +30,122 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay">
+            <summary>
+            The campaign activity settings display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.Alias">
+            <summary>
+            Gets or sets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.Active">
+            <summary>
+            Gets or sets a value indicating whether active.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.CampaignKey">
+            <summary>
+            Gets or sets the campaign key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.CampaignActivityTfKey">
+            <summary>
+            Gets or sets the campaign activity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.CampaignActivityTypeField">
+            <summary>
+            Gets or sets the campaign activity type field.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.CampaignActivityType">
+            <summary>
+            Gets or sets the campaign activity type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.StartDate">
+            <summary>
+            Gets or sets the start date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.EndDate">
+            <summary>
+            Gets or sets the end date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.ExtendedData">
+            <summary>
+            Gets or sets the extended data.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay">
+            <summary>
+            The campaign settings display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay.Alias">
+            <summary>
+            Gets or sets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay.Active">
+            <summary>
+            Gets or sets a value indicating whether active.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay.ActivitySettings">
+            <summary>
+            Gets or sets the activity settings.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplayExtensions">
+            <summary>
+            Utility mapping extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplayExtensions.ToCampaignSettingsDisplay(Merchello.Core.Models.ICampaignSettings)">
+            <summary>
+            Maps a <see cref="T:Merchello.Core.Models.ICampaignSettings"/> to <see cref="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay"/>.
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay">
             <summary>
             The gate provider settings display.
@@ -278,6 +394,22 @@
             </param>
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.CampaignActivityTypeFieldResolver">
+            <summary>
+            The campaign activity type field resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.CampaignActivityTypeFieldResolver.ResolveCore(Merchello.Core.Models.ICampaignActivitySettings)">
+            <summary>
+            Resolves the campaign activity type field
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.AuthorizeCapturePaymentDialogEditorViewResolver">

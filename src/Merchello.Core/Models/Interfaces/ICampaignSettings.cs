@@ -7,7 +7,7 @@
     /// <summary>
     /// Marker interface for a Marketing Campaign Settings
     /// </summary>
-    public interface ICampaignSettings : ICampaignBase, IEntity
+    public interface ICampaignSettings : ICampaignSettingsBase, IEntity
     {
         /// <summary>
         /// Gets the collection campaign activities settings.

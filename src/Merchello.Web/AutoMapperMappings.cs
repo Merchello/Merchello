@@ -37,6 +37,16 @@
                     dest => dest.EntityType,
                     opt => opt.ResolveUsing<EntityTypeResolver>().ConstructedBy(() => new EntityTypeResolver()));
 
+            // Campaign Settings and Campaign Activity Settings
+            AutoMapper.Mapper.CreateMap<ICampaignSettings, CampaignSettingsDisplay>();
+            AutoMapper.Mapper.CreateMap<ICampaignActivitySettings, CampaignActivitySettingsDisplay>()
+                .ForMember(
+                    dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(
+                    dest => dest.CampaignActivityTypeField,
+                    opt => opt.ResolveUsing<CampaignActivityTypeFieldResolver>().ConstructedBy(() => new CampaignActivityTypeFieldResolver()));
+
             // Country and provinces
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
 

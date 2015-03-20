@@ -273,12 +273,13 @@
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\CampaignSettings.cs" />
     <Compile Include="Models\CampaignActivitySettings.cs" />
-    <Compile Include="Models\CampaignBase.cs" />
+    <Compile Include="Models\CampaignSettingsBase.cs" />
+    <Compile Include="Models\CampaignSettingsExtensions.cs" />
     <Compile Include="Models\CustomerExtensions.cs" />
     <Compile Include="Models\Interfaces\IAuditLog.cs" />
     <Compile Include="Models\Interfaces\ICampaignSettings.cs" />
     <Compile Include="Models\Interfaces\ICampaignActivitySettings.cs" />
-    <Compile Include="Models\Interfaces\ICampaignBase.cs" />
+    <Compile Include="Models\Interfaces\ICampaignSettingsBase.cs" />
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />

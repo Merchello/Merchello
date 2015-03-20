@@ -11,29 +11,29 @@
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class CampaignBase : Entity, ICampaignBase
+    public class CampaignSettingsBase : Entity, ICampaignSettingsBase
     {
         #region fields
 
         /// <summary>
         /// The name selector.
         /// </summary>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<CampaignBase, string>(x => x.Name);
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<CampaignSettingsBase, string>(x => x.Name);
 
         /// <summary>
         /// The alias selector.
         /// </summary>
-        private static readonly PropertyInfo AliasSelector = ExpressionHelper.GetPropertyInfo<CampaignBase, string>(x => x.Alias);
+        private static readonly PropertyInfo AliasSelector = ExpressionHelper.GetPropertyInfo<CampaignSettingsBase, string>(x => x.Alias);
 
         /// <summary>
         /// The description selector.
         /// </summary>
-        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<CampaignBase, string>(x => x.Description);
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<CampaignSettingsBase, string>(x => x.Description);
 
         /// <summary>
         /// The active selector.
         /// </summary>
-        private static readonly PropertyInfo ActiveSelector = ExpressionHelper.GetPropertyInfo<CampaignBase, bool>(x => x.Active);
+        private static readonly PropertyInfo ActiveSelector = ExpressionHelper.GetPropertyInfo<CampaignSettingsBase, bool>(x => x.Active);
 
         /// <summary>
         /// The name.

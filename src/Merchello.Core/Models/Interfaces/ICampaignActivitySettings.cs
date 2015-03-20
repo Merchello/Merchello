@@ -7,7 +7,7 @@
     /// <summary>
     /// The CampaignActivity interface.
     /// </summary>
-    public interface ICampaignActivitySettings : ICampaignBase, IEntity
+    public interface ICampaignActivitySettings : ICampaignSettingsBase, IEntity
     {
         /// <summary>
         /// Gets the campaign key.

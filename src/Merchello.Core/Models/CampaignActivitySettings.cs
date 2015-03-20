@@ -14,7 +14,7 @@
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    public class CampaignActivitySettings : CampaignBase, ICampaignActivitySettings
+    public class CampaignActivitySettings : CampaignSettingsBase, ICampaignActivitySettings
     {
         #region Fields
 

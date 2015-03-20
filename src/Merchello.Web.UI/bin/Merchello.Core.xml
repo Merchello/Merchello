@@ -1625,92 +1625,92 @@
             Represents a campaign
             </summary>
         </member>
-        <member name="T:Merchello.Core.Models.CampaignBase">
+        <member name="T:Merchello.Core.Models.CampaignSettingsBase">
             <summary>
             The campaign base.
             </summary>
         </member>
-        <member name="T:Merchello.Core.Models.ICampaignBase">
+        <member name="T:Merchello.Core.Models.ICampaignSettingsBase">
             <summary>
             Define a Marketing CampaignSettings Base Class.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.ICampaignBase.Name">
+        <member name="P:Merchello.Core.Models.ICampaignSettingsBase.Name">
             <summary>
             Gets or sets the name.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.ICampaignBase.Alias">
+        <member name="P:Merchello.Core.Models.ICampaignSettingsBase.Alias">
             <summary>
             Gets or sets the alias.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.ICampaignBase.Description">
+        <member name="P:Merchello.Core.Models.ICampaignSettingsBase.Description">
             <summary>
             Gets or sets the description.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.ICampaignBase.Active">
+        <member name="P:Merchello.Core.Models.ICampaignSettingsBase.Active">
             <summary>
             Gets or sets a value indicating whether active.
             </summary>
         </member>
-        <member name="F:Merchello.Core.Models.CampaignBase.NameSelector">
+        <member name="F:Merchello.Core.Models.CampaignSettingsBase.NameSelector">
             <summary>
             The name selector.
             </summary>
         </member>
-        <member name="F:Merchello.Core.Models.CampaignBase.AliasSelector">
+        <member name="F:Merchello.Core.Models.CampaignSettingsBase.AliasSelector">
             <summary>
             The alias selector.
             </summary>
         </member>
-        <member name="F:Merchello.Core.Models.CampaignBase.DescriptionSelector">
+        <member name="F:Merchello.Core.Models.CampaignSettingsBase.DescriptionSelector">
             <summary>
             The description selector.
             </summary>
         </member>
-        <member name="F:Merchello.Core.Models.CampaignBase.ActiveSelector">
+        <member name="F:Merchello.Core.Models.CampaignSettingsBase.ActiveSelector">
             <summary>
             The active selector.
             </summary>
         </member>
-        <member name="F:Merchello.Core.Models.CampaignBase._name">
+        <member name="F:Merchello.Core.Models.CampaignSettingsBase._name">
             <summary>
             The name.
             </summary>
         </member>
-        <member name="F:Merchello.Core.Models.CampaignBase._alias">
+        <member name="F:Merchello.Core.Models.CampaignSettingsBase._alias">
             <summary>
             The alias.
             </summary>
         </member>
-        <member name="F:Merchello.Core.Models.CampaignBase._description">
+        <member name="F:Merchello.Core.Models.CampaignSettingsBase._description">
             <summary>
             The description.
             </summary>
         </member>
-        <member name="F:Merchello.Core.Models.CampaignBase._active">
+        <member name="F:Merchello.Core.Models.CampaignSettingsBase._active">
             <summary>
             The active.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.CampaignBase.Name">
+        <member name="P:Merchello.Core.Models.CampaignSettingsBase.Name">
             <summary>
             Gets or sets the name.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.CampaignBase.Alias">
+        <member name="P:Merchello.Core.Models.CampaignSettingsBase.Alias">
             <summary>
             Gets or sets the alias.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.CampaignBase.Description">
+        <member name="P:Merchello.Core.Models.CampaignSettingsBase.Description">
             <summary>
             Gets or sets the description.
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.CampaignBase.Active">
+        <member name="P:Merchello.Core.Models.CampaignSettingsBase.Active">
             <summary>
             Gets or sets a value indicating whether active.
             </summary>
@@ -1862,6 +1862,22 @@
             <summary>
             Gets the extended data.
             </summary>
+        </member>
+        <member name="T:Merchello.Core.Models.CampaignSettingsExtensions">
+            <summary>
+            The campaign settings extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Models.CampaignSettingsExtensions.GetTypeField(Merchello.Core.Models.ICampaignActivitySettings)">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/> from the <see cref="T:Merchello.Core.Models.ICampaignActivitySettings"/>.
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.TypeFields.ITypeField"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Core.Models.CustomerExtensions">
             <summary>
