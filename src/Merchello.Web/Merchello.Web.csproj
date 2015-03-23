@@ -226,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Editors\MarketingCampaignApiController.cs" />
     <Compile Include="Models\ContentEditing\CampaignActivitySettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\CampaignSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\GateProviderSettingsDisplay.cs" />

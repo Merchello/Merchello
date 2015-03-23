@@ -383,7 +383,7 @@
                         });
                     }
 
-                    if ($('#payment-method-select')) {
+                    if ($('#payment-method-select').length) {
                         $('#payment-method-select').change(function () {
                             merchello.bazaar.checkout.setPaymentMethod();
                         });

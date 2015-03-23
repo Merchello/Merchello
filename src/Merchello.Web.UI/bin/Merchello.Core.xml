@@ -5635,6 +5635,26 @@
             Used if a migration has executed but the whole process has failed and cannot be rolled back
             </summary>
         </member>
+        <member name="T:Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneNineZero.CreateOneNineZeroTables">
+            <summary>
+            Adds new database tables .
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneNineZero.CreateOneNineZeroTables.OrderedTables">
+            <summary>
+            Tables in the order of creation or reverse deletion.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneNineZero.CreateOneNineZeroTables.Up">
+            <summary>
+            The up.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneNineZero.CreateOneNineZeroTables.Down">
+            <summary>
+            Throws a data loss exception
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Persistence.Querying.QueryExtensions">
             <summary>
             SD: This is a horrible hack but unless we break compatibility with anyone who's actually implemented IQuery{T} there's not much we can do.
