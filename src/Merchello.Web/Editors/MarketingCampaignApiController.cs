@@ -74,7 +74,7 @@
         [HttpGet]
         public IEnumerable<CampaignSettingsDisplay> GetAllCampaigns()
         {
-            return _campaignSettingsService.GetAll().Select(x => x.ToCampaignSettingsDisplay())
+            return _campaignSettingsService.GetAll().Select(x => x.ToCampaignSettingsDisplay());
         }
     }
 }

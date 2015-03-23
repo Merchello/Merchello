@@ -10,9 +10,10 @@
         return {
 
             getPayment: function (key) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentApiBaseUrl'] + 'GetPaymeent';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPayment'),
+                        url: url,
                         method: "GET",
                         params: { id: key }
                     }),
@@ -20,9 +21,10 @@
             },
 
             getPaymentMethod : function(key) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentApiBaseUrl'] + 'GetPaymentMethod';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPaymentMethod'),
+                        url: url,
                         method: "GET",
                         params: { id: key }
                     }),
@@ -30,10 +32,10 @@
             },
 
             getPaymentsByInvoice: function (invoiceKey) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentApiBaseUrl'] + 'GetPaymentsByInvoice';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPaymentsByInvoice'),
+                        url: url,
                         method: "GET",
                         params: { id: invoiceKey }
                     }),
@@ -41,36 +43,36 @@
             },
 
             authorizePayment: function (paymentRequest) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentApiBaseUrl'] + 'AuthorizePayment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'AuthorizePayment'),
+                    $http.post(url,
                         paymentRequest
                     ),
                     'Failed to authorize payment');
             },
 
             capturePayment: function (paymentRequest) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentApiBaseUrl'] + 'CapturePayment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'CapturePayment'),
+                    $http.post(url,
                         paymentRequest
                     ),
                     'Failed to capture payment');
             },
 
             authorizeCapturePayment: function (paymentRequest) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentApiBaseUrl'] + 'AuthorizeCapturePayment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'AuthorizeCapturePayment'),
+                    $http.post(url,
                         paymentRequest
                     ),
                     'Failed to authorize capture payment');
             },
 
             refundPayment: function (paymentRequest) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentApiBaseUrl'] + 'RefundPayment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'RefundPayment'),
+                    $http.post(url,
                         paymentRequest
                     ),
                     'Failed to refund payment');

@@ -30,6 +30,90 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
+        <member name="T:Merchello.Web.Editors.MarketingCampaignApiController">
+            <summary>
+            The MarketingCampaignApiController.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.WebApi.MerchelloApiController">
+            <summary>
+            The base Merchello back office API controller.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="umbracoContext">
+            The umbraco context.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.WebApi.MerchelloApiController.MerchelloContext">
+            <summary>
+            Gets the current <see cref="T:Merchello.Core.IMerchelloContext"/>
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.WebApi.MerchelloApiController.InstanceId">
+            <summary>
+            Gets the instance id
+            </summary>
+            <remarks>
+            Useful for debugging
+            </remarks>
+        </member>
+        <member name="F:Merchello.Web.Editors.MarketingCampaignApiController._campaignSettingsService">
+            <summary>
+            The <see cref="T:Merchello.Core.Services.CampaignSettingsService"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingCampaignApiController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.MarketingCampaignApiController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingCampaignApiController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.MarketingCampaignApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingCampaignApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.MarketingCampaignApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="umbracoContext">
+            The umbraco context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingCampaignApiController.GetActiveCampaigns">
+            <summary>
+            The get active campaigns.
+            </summary>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay">
             <summary>
             The campaign activity settings display.
@@ -987,48 +1071,6 @@
             <summary>
             The audit log api controller.
             </summary>
-        </member>
-        <member name="T:Merchello.Web.WebApi.MerchelloApiController">
-            <summary>
-            The base Merchello back office API controller.
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor(Merchello.Core.IMerchelloContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
-            </summary>
-            <param name="merchelloContext">
-            The merchello context.
-            </param>
-        </member>
-        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
-            </summary>
-            <param name="merchelloContext">
-            The merchello context.
-            </param>
-            <param name="umbracoContext">
-            The umbraco context.
-            </param>
-        </member>
-        <member name="P:Merchello.Web.WebApi.MerchelloApiController.MerchelloContext">
-            <summary>
-            Gets the current <see cref="T:Merchello.Core.IMerchelloContext"/>
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.WebApi.MerchelloApiController.InstanceId">
-            <summary>
-            Gets the instance id
-            </summary>
-            <remarks>
-            Useful for debugging
-            </remarks>
         </member>
         <member name="F:Merchello.Web.Editors.AuditLogApiController._auditLogService">
             <summary>

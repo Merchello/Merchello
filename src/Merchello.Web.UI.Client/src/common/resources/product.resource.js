@@ -19,9 +19,9 @@
                  * @description Creates a new product with an API call to the server
                  **/
                 add: function (product) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'AddProduct';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'AddProduct'),
+                        $http.post(url,
                             product
                         ),
                         'Failed to create product sku ' + product.sku);
@@ -33,10 +33,10 @@
                  * @description Gets a product with an API call to the server
                  **/
                 getByKey: function (key) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProduct';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProduct', [{ id: key }]),
+                            url: url + '?id=' + key,
                             method: "GET"
                         }),
                         'Failed to retreive data for product key ' + key);
@@ -48,10 +48,10 @@
                  * @description Gets a product variant with an API call to the server
                  **/
                 getVariant: function (key) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProductVariant';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProductVariant', [{ id: key }]),
+                            url: url + '?id=' + key,
                             method: "GET"
                         }),
                         'Failed to retreive data for product variant key ' + key);
@@ -63,9 +63,9 @@
                  * @description Saves / updates product with an api call back to the server
                  **/
                 save: function (product) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'PutProduct'),
+                        $http.post(url,
                             product
                         ),
                         'Failed to save data for product key ' + product.key);
@@ -77,9 +77,9 @@
                  * @description Saves / updates product variant with an api call back to the server
                  **/
                 saveVariant: function (productVariant) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'PutProductVariant'),
+                        $http.post(url,
                             productVariant
                         ),
                         'Failed to save data for product variant key ' + productVariant.key);
@@ -91,9 +91,9 @@
                  * @description Deletes product with an api call back to the server
                  **/
                 deleteProduct: function (product) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'DeleteProduct';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'DeleteProduct'),
+                        $http.post(url,
                             product.key,
                             { params: { id: product.key }}
                         ),
@@ -106,41 +106,14 @@
                  * @description Searches for all products with a ListQuery object
                  **/
                 searchProducts: function (query) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'SearchProducts';
                     return umbRequestHelper.resourcePromise(
                         $http.post(
-                            umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'SearchProducts'),
+                            url,
                             query
                         ),
                         'Failed to search products');
 
-                },
-
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                /// Business logic
-                ///////////////////////////////////////////////////////////////////////////////////////////
-
-
-                /**
-                 * @ngdoc method
-                 * @name updateProductVariant
-                 * @description Saves product variant changes and delivers the new ProductVariant model in the promise data
-                 **/
-                updateProductVariant: function (productVariant) {
-                    var deferred = $q.defer();
-                    var promise = prodservice.saveVariant(productVariant);
-
-                    promise.then(function (savedProductVariant) {
-
-                        productVariant = new merchello.Models.ProductVariant(savedProductVariant);
-
-                        deferred.resolve(productVariant);
-
-                    }, function (reason) {
-                        deferred.reject(reason);
-                    });
-
-                    return deferred.promise;
                 }
             };
     }]);
