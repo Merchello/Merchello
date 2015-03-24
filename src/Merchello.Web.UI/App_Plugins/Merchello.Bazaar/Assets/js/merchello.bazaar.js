@@ -297,7 +297,7 @@
 
         checkout: {
             bind: function () {
-                if ($('#addresses-form')) {
+                if ($('#addresses-form').length) {
                     // copy the billing address if needed
                     $('#addresses-form').submit(function(event) {
                         merchello.bazaar.checkout.copyBillingAddress(event);
@@ -332,7 +332,7 @@
                     }
 
                     // update ship rate quotes
-                    if ($('#shipping-quotes-select')) {
+                    if ($('#shipping-quotes-select').length) {
                         $('#shipping-quotes-select').change(function () {
                             merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
                             merchello.bazaar.checkout.setShipMethod();
@@ -341,7 +341,7 @@
                     }
 
                     // bind the customer address drop downs
-                    if ($('#billing-address-select')) {
+                    if ($('#billing-address-select').length) {
                         // TODO this should not be necessary
                         $('#billing-address-select').removeAttr('data-val').removeAttr('data-val-required');
 
@@ -357,7 +357,7 @@
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
                     }
-                    if ($('shipping-address-select')) {
+                    if ($('shipping-address-select').length) {
                         $('#shipping-address-select').removeAttr('data-val').removeAttr('data-val-required');
                         $('#shipping-address-select').change(function() {
                             if ($(this).val() !== '00000000-0000-0000-0000-000000000000') {
@@ -377,13 +377,13 @@
                         });
                     }
 
-                    if ($('#save-addresses-check')) {
+                    if ($('#save-addresses-check').length) {
                         $('#save-addresses-check').click(function() {
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
                     }
 
-                    if ($('#payment-method-select')) {
+                    if ($('#payment-method-select').length) {
                         $('#payment-method-select').change(function () {
                             merchello.bazaar.checkout.setPaymentMethod();
                         });
