@@ -13,7 +13,7 @@
             /* helper method to get from cache or fall back to an http api call */
             function getCachedOrApi(cacheKey, apiMethod, entityName) {
                 var deferred = $q.defer();
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + apiMethod;
                 var dataFromCache = _warehouseCache.get(cacheKey);
 
                 if (dataFromCache) {
@@ -22,7 +22,7 @@
                 else {
                     var promiseFromApi = umbRequestHelper.resourcePromise(
                         $http.get(
-                            umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', apiMethod)
+                            url
                         ),
                         'Failed to get ' + entityName);
 
@@ -48,8 +48,9 @@
                  * Posts a new warehouse catalog to the API.
                  **/
                 addWarehouseCatalog: function (catalog) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'AddWarehouseCatalog';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'AddWarehouseCatalog'), catalog),
+                        $http.post(url, catalog),
                         'Failed to add warehouse catalog');
                 },
 
@@ -62,9 +63,10 @@
                  * Deletes a warehouse catalog in the API.
                  **/
                 deleteWarehouseCatalog: function (key) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'DeleteWarehouseCatalog';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'DeleteWarehouseCatalog'),
+                            url: url,
                             method: 'GET',
                             params: { id: key }
                         }),
@@ -80,9 +82,10 @@
                  * Gets a Warehouse from the API by its id.
                  **/
                 getById: function (id) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'GetWarehouse';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'GetWarehouse'),
+                            url: url,
                             method: "GET",
                             params: { id: id }
                         }),
@@ -97,10 +100,10 @@
                  * @description Gets the default warehouse from the API.
                  **/
                 getDefaultWarehouse: function () {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'GetDefaultWarehouse';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'GetDefaultWarehouse'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to retreive data for default warehouse');
@@ -115,9 +118,10 @@
                  * Gets the catalogs from the warehouse with the given warehouse key.
                  **/
                 getWarehouseCatalogs: function (key) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'GetWarehouseCatalogs';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'GetWarehouseCatalgos'),
+                            url: url,
                             method: 'GET',
                             params: { id: key }
                         }),
@@ -133,8 +137,9 @@
                  * Updates a warehouse catalog in the API.
                  **/
                 putWarehouseCatalog: function (catalog) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'PutWarehouseCatalog';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'PutWarehouseCatalog'), catalog),
+                        $http.post(url, catalog),
                         'Failed to update warehouse catalog');
                 },
 
@@ -147,12 +152,12 @@
                  * Saves the provided warehouse to the API.
                  **/
                 save: function (warehouse) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'PutWarehouse';
                     _warehouseCache.remove("DefaultWarehouse");
 
                     return umbRequestHelper.resourcePromise(
                         $http.post(
-                            umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'PutWarehouse'),
+                            url,
                             warehouse
                         ),
                         'Failed to save data for warehouse: ' + warehouse.id);

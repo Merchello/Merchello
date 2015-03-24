@@ -9,10 +9,10 @@
 
             return {
                 getGatewayResources: function (paymentGatewayProviderKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentGatewayApiBaseUrl'] + 'GetGatewayResources';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetGatewayResources'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentGatewayProviderKey}
                         }),
@@ -20,20 +20,20 @@
                 },
 
                 getAllGatewayProviders: function () {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentGatewayApiBaseUrl'] + 'GetAllGatewayProviders';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetAllGatewayProviders'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to retreive data for all gateway providers');
                 },
 
                 getPaymentProviderPaymentMethods: function (paymentGatewayProviderKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentGatewayApiBaseUrl'] + 'GetPaymentProviderPaymentMethods';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetPaymentProviderPaymentMethods'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentGatewayProviderKey}
                         }),
@@ -41,28 +41,28 @@
                 },
 
                 addPaymentMethod: function (paymentMethod) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentGatewayApiBaseUrl'] + 'AddPaymentMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'AddPaymentMethod'),
+                        $http.post(url,
                             paymentMethod
                         ),
                         'Failed to create paymentMethod');
                 },
 
                 savePaymentMethod: function (paymentMethod) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentGatewayApiBaseUrl'] + 'PutPaymentMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'PutPaymentMethod'),
+                        $http.post(url,
                             paymentMethod
                         ),
                         'Failed to save paymentMethod');
                 },
 
                 deletePaymentMethod: function (paymentMethodKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentGatewayApiBaseUrl'] + 'DeletePaymentMethod';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'DeletePaymentMethod'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentMethodKey}
                         }),

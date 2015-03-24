@@ -15,7 +15,8 @@
                  * @description Posts to the API a new customer.
                  **/
                 AddCustomer: function(customer) {
-                    return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'AddCustomer'), customer), 'Failed to create customer');
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'AddCustomer';
+                    return umbRequestHelper.resourcePromise($http.post(url, customer), 'Failed to create customer');
                 },
 
                 /**
@@ -24,7 +25,8 @@
                  * @description Posts to the API a new anonymous customer.
                  **/
                 AddAnonymousCustomer: function (customer) {
-                    return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'AddAnonymousCustomer'), customer), 'Failed to create customer');
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'AddAnonymousCustomer';
+                    return umbRequestHelper.resourcePromise($http.post(url, customer), 'Failed to create customer');
                 },
 
                 /**
@@ -33,9 +35,10 @@
                  * @description Posts to the API a request to delete the specified customer.
                  **/
                 DeleteCustomer: function(customerKey) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'DeleteCustomer';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'DeleteCustomer'),
+                            url: url,
                             method: "GET",
                             params: { id: customerKey }
                         }),
@@ -57,9 +60,10 @@
                     if (perPage === undefined) {
                         perPage = 100;
                     }
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetAllCustomers';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'GetAllCustomers'), // TODO POST this is now SearchCustomers w/query
+                            url: url, // TODO POST this is now SearchCustomers w/query
                             method: "GET",
                             params: { page: page, perPage: perPage }
                         }),
@@ -72,9 +76,10 @@
                  * @description Requests from the API a customer with the provided customerKey.
                  **/
                 GetCustomer: function(customerKey) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetCustomer';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'GetCustomer'),
+                            url: url,
                             method: "GET",
                             params: { id: customerKey }
                         }),
@@ -87,7 +92,8 @@
                  * @description Posts to the API an edited customer.
                  **/
                 SaveCustomer: function(customer) {
-                    return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'PutCustomer'), customer), 'Failed to save customer');
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'PutCustomer';
+                    return umbRequestHelper.resourcePromise($http.post(url, customer), 'Failed to save customer');
                 },
 
                 /**
@@ -99,8 +105,9 @@
                  * Defaults to sortBy: loginname
                  **/
                 searchCustomers: function(query) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'SearchCustomers';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'SearchCustomers'), query),
+                        $http.post(url, query),
                         'Failed to retreive customers');
                 }
 

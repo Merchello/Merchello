@@ -13,6 +13,7 @@
         /* helper method to get from cache or fall back to an http api call */
         function getCachedOrApi(cacheKey, apiMethod, entityName)
         {
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSettingsApiBaseUrl'] + apiMethod;
             var deferred = $q.defer();
 
             var dataFromCache = _settingsCache.get(cacheKey);
@@ -23,7 +24,7 @@
             else {
                 var promiseFromApi = umbRequestHelper.resourcePromise(
                     $http.get(
-                        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', apiMethod)
+                        url
                     ),
                     'Failed to get all ' + entityName);
 
@@ -90,9 +91,10 @@
 
                 _settingsCache.remove("AllSettings");
 
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSettingsApiBaseUrl'] + 'PutSettings';
                 return umbRequestHelper.resourcePromise(
                     $http.post(
-                        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'PutSettings'),
+                        url,
                         storeSettings
                     ),
                     'Failed to save data for Store Settings');

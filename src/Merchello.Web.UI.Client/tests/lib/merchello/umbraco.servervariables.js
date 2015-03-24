@@ -21,7 +21,8 @@ Umbraco.Sys.ServerVariables = {
         "dashboardApiBaseUrl": "/umbraco/UmbracoApi/Dashboard/",
         "updateCheckApiBaseUrl": "/umbraco/Api/UpdateCheck/",
         "rteApiBaseUrl": "/umbraco/UmbracoApi/RichTextPreValue/",
-
+    },
+    merchelloUrls : {
         // merchello
         "merchelloInvoiceApiBaseUrl": "/umbraco/backoffice/Merchello/InvoiceApi/",
         "merchelloSettingsApiBaseUrl": "/umbraco/backoffice/Merchello/SettingApi/",
