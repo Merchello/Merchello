@@ -297,7 +297,7 @@
 
         checkout: {
             bind: function () {
-                if ($('#addresses-form')) {
+                if ($('#addresses-form').length) {
                     // copy the billing address if needed
                     $('#addresses-form').submit(function(event) {
                         merchello.bazaar.checkout.copyBillingAddress(event);
@@ -325,23 +325,15 @@
                     }
 
                     // use billing checkbox
-                    if ($('#billing-is-shipping')) {
+                    if ($('#billing-is-shipping').length) {
                         $('#billing-is-shipping').click(function () {
                             merchello.bazaar.checkout.toggleBillingIsShipping();
                         });
                     }
 
-                    // update ship rate quotes
-                    if ($('#shipping-quotes-select')) {
-                        $('#shipping-quotes-select').change(function () {
-                            merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
-                            merchello.bazaar.checkout.setShipMethod();
-                        });
-                        merchello.bazaar.checkout.setShipMethod();
-                    }
 
                     // bind the customer address drop downs
-                    if ($('#billing-address-select')) {
+                    if ($('#billing-address-select').length) {
                         // TODO this should not be necessary
                         $('#billing-address-select').removeAttr('data-val').removeAttr('data-val-required');
 
@@ -357,7 +349,7 @@
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
                     }
-                    if ($('shipping-address-select')) {
+                    if ($('shipping-address-select').length) {
                         $('#shipping-address-select').removeAttr('data-val').removeAttr('data-val-required');
                         $('#shipping-address-select').change(function() {
                             if ($(this).val() !== '00000000-0000-0000-0000-000000000000') {
@@ -377,23 +369,32 @@
                         });
                     }
 
-                    if ($('#save-addresses-check')) {
+                    if ($('#save-addresses-check').length) {
                         $('#save-addresses-check').click(function() {
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
                     }
-
-                    if ($('#payment-method-select').length) {
-                        $('#payment-method-select').change(function () {
-                            merchello.bazaar.checkout.setPaymentMethod();
-                        });
-                        merchello.bazaar.checkout.setPaymentMethod();
-                    }
                 }
+
+                // update ship rate quotes
+                if ($('#shipping-quotes-select').length) {
+                    $('#shipping-quotes-select').change(function () {
+                        merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
+                        merchello.bazaar.checkout.setShipMethod();
+                    });
+                    merchello.bazaar.checkout.setShipMethod();
+                }
+
+                if ($('#payment-method-select').length) {
+                    $('#payment-method-select').change(function () {
+                        merchello.bazaar.checkout.setPaymentMethod();
+                    });
+                    merchello.bazaar.checkout.setPaymentMethod();
+                }
+                
             },
             validateShippingCountry: function(elem) {
                 if (0 === $('#shipping-country-select option[value=' + $(elem).val() + ']').length && $('#billing-is-shipping:checked').length > 0) {
-                    console.info('open it');
                     merchello.bazaar.checkout.toggleBillingIsShipping();
                     $('#billing-is-shipping').attr('checked', false);
                     $('#billing-is-shipping').attr('disabled', true);
@@ -525,7 +526,6 @@
                     url: "/umbraco/Bazaar/BazaarSiteApi/UpdateShipRateQuote",
                     data: data,
                     success: function (summary) {
-                        console.info(summary);
                         $('#shipping-total').text(summary.shippingTotal);
                         $('#tax-total').text(summary.taxTotal);
                         $('#invoice-total').text(summary.invoiceTotal);
@@ -537,7 +537,6 @@
                 });
             },
             copyBillingAddress: function (event) {
-                console.info('should be copying');
                 if ($('#billing-is-shipping').is(':checked')) {
                     $('#shipping-name').val($('#billing-name').val());
                     $('#shipping-email').val($('#billing-email').val());
@@ -601,7 +600,6 @@
                     $(frm).hide();
                 });
                 var paymentMethodKey = $('#payment-method-select').val();
-                console.info(paymentMethodKey);
 
                 var data = {};
                 data.paymentMethodKey = paymentMethodKey;
