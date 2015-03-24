@@ -3071,6 +3071,52 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
 /**
  * @ngdoc controller
+ * @name Merchello.Backoffice.CampaignEditController
+ * @function
+ *
+ * @description
+ * The controller for adding and editing marketing campaigns
+ * 'campaignResource', 'campaignSettingDisplayBuilder',
+ * campaignResource, campaignSettingDisplayBuilder
+ */
+angular.module('merchello').controller('Merchello.Backoffice.CampaignEditController',[
+    '$scope', '$routeParams', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
+    function($scope, $routeParams, notificationsService, dialogService, merchelloTabsFactory) {
+
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+        $scope.tabs = [];
+        $scope.context = 'newcampaign';
+
+        function init() {
+            $scope.loaded = true;
+
+            loadCampaign();
+        }
+
+        function loadCampaign() {
+            var campaignKey = $routeParams.id;
+            console.info(campaignKey);
+            if (campaignKey === 'create') {
+                $scope.tabs = merchelloTabsFactory.createCampaignTabs();
+                $scope.tabs.addTab('newcampaign', 'New Campaign');
+                $scope.tabs.setActive('newcampaign');
+                $scope.context = 'newcampaign';
+                $scope.preValuesLoaded = true;
+            } else {
+                $scope.tabs = merchelloTabsFactory.createCampaignEditTabs(campaignKey);
+                $scope.tabs.setActive('campaignedit');
+                $scope.context = 'editcampaign';
+                $scope.preValuesLoaded = true;
+            }
+        }
+
+        //// Initializes the controller
+        init();
+    }]);
+
+/**
+ * @ngdoc controller
  * @name Merchello.Backoffice.CampaignListController
  * @function
  *
@@ -3078,12 +3124,39 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
  * The controller for the marketing campaign list
  */
 angular.module('merchello').controller('Merchello.Backoffice.CampaignListController',
-    ['$scope', 'assetsService', 'notificationsService', 'dialogService',
-    function($scope, assetsService, notificationsService, dialogService) {
+    ['$scope', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'marketingCampaignResource', 'campaignSettingsDisplayBuilder',
+    function($scope, notificationsService, dialogService, merchelloTabsFactory, marketingCampaignResource, campaignSettingsDisplayBuilder) {
 
-        $scope.loaded = true;
-        $scope.preValuesLoaded = true;
+        $scope.loaded = false;
+        $scope.activeOnly = true;
+        $scope.preValuesLoaded = false;
+        $scope.campaigns = [];
+        $scope.tabs = [];
 
+        function init()
+        {
+            loadCampaignSettings();
+            $scope.tabs = merchelloTabsFactory.createCampaignTabs();
+            $scope.tabs.setActive('campaignlist');
+            $scope.loaded = true;
+        }
+
+        function loadCampaignSettings()
+        {
+            var promise;
+            if ($scope.activeOnly) {
+                promise = marketingCampaignResource.getActiveCampaigns();
+            } else {
+                promise = marketingCampaignResource.getAllCampaigns();
+            }
+            promise.then(function(results) {
+                $scope.campaigns = campaignSettingsDisplayBuilder.transform(results);
+                $scope.preValuesLoaded = true;
+            });
+        }
+
+        //// Initializes the controller
+        init();
 }]);
 
     /**

@@ -44,7 +44,7 @@
                 var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'GetShipments';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: url + shipmentKeysStr,
+                        url: url,
                         method: "GET",
                         params: {ids: shipmentKeys}
                     }),

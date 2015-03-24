@@ -9,6 +9,9 @@
   </area>
     <area alias="merchelloMarketing">
         <key alias="campaigns">Marketing Campaigns</key>
+        <key alias="btnNewCampaign">New Campaign</key>
+        <key alias="btnDeleteCampaign">Delete</key>
+        <key alias="enterCampaignName">Enter a name for the campaign</key>
     </area>
   <area alias="merchelloVariant">
     <!-- things -->

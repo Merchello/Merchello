@@ -70,7 +70,12 @@
             return _campaignSettingsService.GetActive().Select(x => x.ToCampaignSettingsDisplay());
         }
 
-
+        /// <summary>
+        /// The get all campaigns.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{CampainSettingsDisplay}"/>.
+        /// </returns>
         [HttpGet]
         public IEnumerable<CampaignSettingsDisplay> GetAllCampaigns()
         {

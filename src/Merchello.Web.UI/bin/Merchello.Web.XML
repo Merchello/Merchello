@@ -114,6 +114,14 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.MarketingCampaignApiController.GetAllCampaigns">
+            <summary>
+            The get all campaigns.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay">
             <summary>
             The campaign activity settings display.

@@ -1040,9 +1040,12 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area><area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
   </area>
-  <area alias="merchelloMarketing">
-    <key alias="campaigns">Marketing Campaigns</key>
-  </area>
+      <area alias="merchelloMarketing">
+        <key alias="campaigns">Marketing Campaigns</key>
+        <key alias="btnNewCampaign">New Campaign</key>
+        <key alias="btnDeleteCampaign">Delete</key>
+        <key alias="enterCampaignName">Enter a name for the campaign</key>
+    </area>
   <area alias="merchelloVariant">
     <!-- things -->
     <key alias="product">Product</key>

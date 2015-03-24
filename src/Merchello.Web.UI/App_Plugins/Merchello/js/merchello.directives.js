@@ -211,7 +211,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 function loadCssAssets() {
 
                     assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
-                        var filesToLoad = ["lib/datetimepicker/bootstrap-datetimepicker.min.js"];
+                        var filesToLoad = ["lib/datetimepicker/bootstrap-datetimepicker.js"];
                         assetsService.load(filesToLoad).then(
                             function () {
                                 //The Datepicker js and css files are available and all components are ready to use.
@@ -228,7 +228,6 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 function loadSettings() {
                     var promise = settingsResource.getAllSettings();
                     promise.then(function(allSettings) {
-                        console.info(allSettings);
                         $scope.settings = settingDisplayBuilder.transform(allSettings);
                     }, function(reason) {
                         notificationsService.error('Failed to load settings', reason.message);

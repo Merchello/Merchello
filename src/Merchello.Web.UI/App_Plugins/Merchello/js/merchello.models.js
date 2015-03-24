@@ -1120,6 +1120,58 @@
     angular.module('merchello.models').constant('OrderLineItemDisplay', OrderLineItemDisplay);
     /**
      * @ngdoc model
+     * @name CampaignActivitySettingsDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's CampaignActivitySettingsDisplay object
+     */
+    var CampaignActivitySettingsDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.alias = '';
+        self.description = '';
+        self.active = true;
+        self.campaignKey = '';
+        self.campaignActivityTfKey = '';
+        self.campaignActivityTypeField = {};
+        self.campaignActivityType = '';
+        self.startDate = '';
+        self.endDate = '';
+        self.extendedData = {};
+    };
+
+    angular.module('merchello.models').constant('CampaignActivitySettingsDisplay', CampaignActivitySettingsDisplay);
+    /**
+     * @ngdoc model
+     * @name CampaignSettingsDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's CampaignSettingsDisplay object
+     */
+    var CampaignSettingsDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.alias = '';
+        self.description = '';
+        self.active = true;
+        self.activitySettings = [];
+    };
+
+    CampaignSettingsDisplay.prototype = (function() {
+
+        return {
+
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('CampaignSettingsDisplay', CampaignSettingsDisplay);
+    /**
+     * @ngdoc model
      * @name NotificationGatewayProviderDisplay
      * @function
      *
@@ -3267,6 +3319,82 @@ angular.module('merchello.models').factory('dialogDataFactory',
             }]);
 
 
+/**
+ * @ngdoc factory
+ * @name campaignActivitySettingsDisplayBuilder
+ *
+ * @description
+ * A utility service that builds CampaignActivitySettingsDisplay models
+ */
+angular.module('merchello.models').factory('campaignActivitySettingsDisplayBuilder',
+    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'typeFieldDisplayBuilder', 'CampaignActivitySettingsDisplay',
+    function(genericModelBuilder, extendedDataDisplayBuilder, typeFieldDisplayBuilder, CampaignActivitySettingsDisplay) {
+
+        var Constructor = CampaignActivitySettingsDisplay;
+
+        return {
+            createDefault: function() {
+                var activity = new Constructor();
+                activity.extendedData = extendedDataDisplayBuilder.createDefault();
+                activity.campaignActivityTypeField = typeFieldDisplayBuilder.createDefault();
+                return activity;
+            },
+
+            transform: function(jsonResult) {
+                var activities = [];
+                if (angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var activity = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        activity.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                        activity.campaignActivityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].campaignActivityTypeField);
+                        activities.push(activity);
+                    }
+                } else {
+                    activities = genericModelBuilder.transform(jsonResult, Constructor);
+                    activities.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                    activities.campaignActivityTypeField = typeFieldDisplayBuilder.transform(jsonResult.campaignActivityTypeField);
+                }
+                return activities;
+            }
+        };
+
+    }]);
+
+/**
+ * @ngdoc factory
+ * @name campaignSettingsDisplayBuilder
+ *
+ * @description
+ * A utility service that builds CampaignSettingsDisplay models
+ */
+angular.module('merchello.models').factory('campaignSettingsDisplayBuilder',
+    ['genericModelBuilder', 'campaignActivitySettingsDisplayBuilder', 'CampaignSettingsDisplay',
+    function(genericModelBuilder, campaignActivitySettingsDisplayBuilder, CampaignSettingsDisplay) {
+
+        var Constructor = CampaignSettingsDisplay;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                var settings = [];
+                if (angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var setting = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        setting.activitySettings = campaignActivitySettingsDisplayBuilder.transform(jsonResult[ i ].activitySettings);
+                        settings.push(setting);
+                    }
+                } else {
+                    settings = genericModelBuilder.transform(jsonResult, Constructor);
+                    settings.activitySettings = campaignActivitySettingsDisplayBuilder.transform(jsonResult.activitySettings);
+                }
+                return settings;
+            }
+        };
+
+}]);
+
 angular.module('merchello.models').factory('merchelloTabsFactory',
     ['MerchelloTabCollection',
         function(MerchelloTabCollection) {
@@ -3366,6 +3494,18 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            function createCampaignTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('campaignlist', 'Campaign Listing', '#/merchello/merchello/campaignlist/manage');
+                return tabs;
+            }
+
+            function createCampaignEditTabs(campaignKey) {
+                var tabs = new Constructor();
+                tabs.addTab('campaignlist', 'Campaign Listing', '#/merchello/merchello/campaignlist/manage');
+                tabs.addTab('campaignedit', 'Campaign Overview', '#/merchello/merchello/campaignedit/' + campaignKey === '' ? 'create' : campaignKey);
+                return tabs;
+            }
 
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,
@@ -3378,7 +3518,9 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs,
-                createProductVariantEditorTabs: createProductVariantEditorTabs
+                createProductVariantEditorTabs: createProductVariantEditorTabs,
+                createCampaignTabs: createCampaignTabs,
+                createCampaignEditTabs: createCampaignEditTabs
             };
 
 }]);

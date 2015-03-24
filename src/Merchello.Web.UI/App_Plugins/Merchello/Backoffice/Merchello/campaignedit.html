@@ -1,0 +1,31 @@
+<form novalidate name="productVariantForm" data-ng-controller="Merchello.Backoffice.CampaignEditController"
+      data-ng-show="loaded" data-ng-submit="save()">
+    <umb-panel val-show-validation>
+        <umb-header>
+            <div class="span7">
+                <umb-content-name ng-model="productVariant.name" localize="placeholder" placeholder="@merchelloMarketing_enterCampaignName">
+                </umb-content-name>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <a data-ng-click="deleteProductDialog()" data-ng-show="context !== 'newcampaign'" class="btn"><localize key="merchelloMarketing_btnDeleteCampaign" /></a>
+                        <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></a>
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+
+        <merchello-panel>
+            <div class="tab-content row-fluid" data-ng-show="preValuesLoaded">
+                <div class="merchello-pane">
+
+
+
+                </div>
+                <!-- /merchello-pane -->
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</form>
