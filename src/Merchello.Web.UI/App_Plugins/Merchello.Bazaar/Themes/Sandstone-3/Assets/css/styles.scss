@@ -4,6 +4,7 @@
 
 ol, ul {
     list-style: none;
+	padding:0px;
 }
 
 .second-form {
@@ -24,37 +25,12 @@ ol, ul {
 
 .price {
     font-size: 2em;
+    .on-sale {
+        text-decoration: line-through
+    }
     .sale-price {
         color: red;
-        margin-right: .5em;
     }
-    .original-price {
-        text-decoration: line-through;
-    }
-}
-
-.add-to-cart {
-
-    div.inventory {
-        margin: 1em;
-        padding-bottom: 1em;
-    padding-left: 1em;
-    text-align: center;
-    padding-right: 1.25em;
-    }
-
-    div.price {
-        padding: 1em;
-    }
-
-}
-
-// checkout addresses form
-#addresses-form {
-    h2 { font-size: 1.25em; }
-    .vcard { display: none; }
-    #shipping-address { display: none; }
-    #customer-address-labels { display: none; }
 }
 
 div.price {
@@ -70,39 +46,36 @@ span.field-validation-error {
         color: red;
 }
 .vcard {
-    h5, h4, h3, h2 { font-size: 1.5em; }
+    h5 { font-size: 1.5em; }
     .fn { display: block; }
     .adr { display: block; }
     .street-address { display: block; }
     .extended-address { display: block; }
-    .email { display: block; }
-    .country-name { display: block; }
 }
 
-// ------------------------------------
-// Account pages 
-// ------------------------------------
+.navbar-collapse {
+	&.collapsing {
+		ul.pull-right {
+				float:none !important;
+			}
+	}
+	&.collapse {
+		&.in {
+			ul.pull-right {
+				float:none !important;
+			}
+		}
+	}
+} 
 
-#btn-profile-open { margin-top: 1em;}
-
-.account {
-    h2 { font-size: 1.25em; }
-    #message { display: none; }
-    #profile-form { display: none; }
-    #address-form { display: none; }
-    table tr.default-address {
-        background-color: #eeeeee;
-    }
+.inventoryWrap {
+	margin:10px 0px;
+	border-top:1px solid #dcd4c6;
+	border-bottom:1px solid #dcd4c6;
+	padding:10px 0px;
 }
 
-.customer-addresses {
-    tr { 
-    }
 
-    caption {  
-        line-height: 2em;
-    }
-}
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) { 
@@ -119,7 +92,3 @@ span.field-validation-error {
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) { 
  }
- 
- #update-account-form {
-    #change-password-form { display: none; }
-}
