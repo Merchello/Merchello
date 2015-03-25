@@ -122,6 +122,17 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.MarketingCampaignApiController.GetCampaignSettingsByKey(System.Guid)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay"/> by it's unique key
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay">
             <summary>
             The campaign activity settings display.

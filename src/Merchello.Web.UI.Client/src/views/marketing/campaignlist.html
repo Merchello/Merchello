@@ -9,7 +9,7 @@
             <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <a href="#/merchello/merchello/campaignedit/create" class="btn btn-primary"><localize key="merchelloMarketing_btnNewCampaign" /></a>
+                        <button data-ng-click="openCreateCampaignDialog()" class="btn btn-primary"><localize key="merchelloMarketing_btnNewCampaign" /></button>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
             <!-- Main content area -->
             <div class="merchello-pane">
                 <form class="form-horizontal row-fluid">
-                    <div class="controls pull-right" style="margin-left: 0;" data-ng-show="campaigns.length > 0">
+                    <div class="controls pull-right" style="margin-left: 0;" data-ng-show="campaigns.length > 0 && false">
                         <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
                         <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
                             <option value="10">10</option>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="controls">
                             <label for="chk-active">
-                                <input type="checkbox" data-ng-model="activeOnly" /> Active only
+                                <input type="checkbox" data-ng-model="activeOnly" data-ng-click="toggleActiveOnly()" /> Active only
                             </label>
                         </div>
                     </div>
@@ -56,23 +56,25 @@
                 <thead>
                 <tr>
                     <th>
-                        Name
+                        <localize key="merchelloTableCaptions_name" />
                     </th>
                     <th>
-                        Alias
+                        <localize key="merchelloTableCaptions_alias" />
                     </th>
                     <th>
-                        Starts
+                        <localize key="merchelloTableCaptions_startDate" />
                     </th>
                     <th>
-                        Ends
+                        <localize key="merchelloTableCaptions_endDate" />
                     </th>
+                    <th><localize key="merchelloMarketing_activities" /></th>
                 </tr>
                 </thead>
                 <tbody>
                 <!-- Invoices -->
                 <tr data-ng-repeat="campaign in campaigns">
                     <td><a data-ng-href="#/merchello/merchello/campaignedit/{{campaign.key}}">{{campaign.name}}</a></td>
+                    <td>{{campaign.alias}}</td>
                     <td></td>
                     <td></td>
                     <td></td>

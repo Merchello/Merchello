@@ -137,6 +137,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkEditInventoryCountsDialogData();
         }
 
+        // creates a dialog data model for adding and updating campaign settings
+        function createAddEditCampaignSettingsDialogData() {
+            return new AddEditCampaignSettingsDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -172,6 +177,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteProductDialogData: createDeleteProductDialogData,
             createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
             createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
-            createProductSelectorDialogData: createProductSelectorDialogData
+            createProductSelectorDialogData: createProductSelectorDialogData,
+            createAddEditCampaignSettingsDialogData: createAddEditCampaignSettingsDialogData
         };
 }]);

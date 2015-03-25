@@ -10,12 +10,15 @@
  */
 angular.module('merchello').controller('Merchello.Backoffice.CampaignEditController',[
     '$scope', '$routeParams', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
-    function($scope, $routeParams, notificationsService, dialogService, merchelloTabsFactory) {
+    'marketingCampaignResource', 'campaignSettingsDisplayBuilder',
+    function($scope, $routeParams, notificationsService, dialogService, merchelloTabsFactory,
+    marketingCampaignResource, campaignSettingsDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
         $scope.tabs = [];
         $scope.context = 'newcampaign';
+        $scope.campaign = campaignSettingsDisplayBuilder.createDefault();
 
         function init() {
             $scope.loaded = true;
@@ -25,7 +28,6 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignEditControl
 
         function loadCampaign() {
             var campaignKey = $routeParams.id;
-            console.info(campaignKey);
             if (campaignKey === 'create') {
                 $scope.tabs = merchelloTabsFactory.createCampaignTabs();
                 $scope.tabs.addTab('newcampaign', 'New Campaign');
@@ -33,10 +35,15 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignEditControl
                 $scope.context = 'newcampaign';
                 $scope.preValuesLoaded = true;
             } else {
-                $scope.tabs = merchelloTabsFactory.createCampaignEditTabs(campaignKey);
-                $scope.tabs.setActive('campaignedit');
-                $scope.context = 'editcampaign';
-                $scope.preValuesLoaded = true;
+                var promise = marketingCampaignResource.getCampaignByKey(campaignKey);
+                promise.then(function(result) {
+                    $scope.tabs = merchelloTabsFactory.createCampaignEditTabs(campaignKey);
+                    $scope.campaign = campaignSettingsDisplayBuilder.transform(result);
+                    console.info($scope.campaign);
+                    $scope.tabs.setActive('campaignedit');
+                    $scope.context = 'editcampaign';
+                    $scope.preValuesLoaded = true;
+                });
             }
         }
 

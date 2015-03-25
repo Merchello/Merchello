@@ -1,8 +1,8 @@
 ﻿namespace Merchello.Web.Editors
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Web.Http;
 
     using Merchello.Core;
@@ -80,6 +80,21 @@
         public IEnumerable<CampaignSettingsDisplay> GetAllCampaigns()
         {
             return _campaignSettingsService.GetAll().Select(x => x.ToCampaignSettingsDisplay());
+        }
+
+        /// <summary>
+        /// Gets a <see cref="CampaignSettingsDisplay"/> by it's unique key
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CampaignSettingsDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public CampaignSettingsDisplay GetCampaignSettingsByKey(Guid key)
+        {
+            return _campaignSettingsService.GetByKey(key).ToCampaignSettingsDisplay();
         }
     }
 }

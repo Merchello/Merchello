@@ -3081,12 +3081,15 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
  */
 angular.module('merchello').controller('Merchello.Backoffice.CampaignEditController',[
     '$scope', '$routeParams', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
-    function($scope, $routeParams, notificationsService, dialogService, merchelloTabsFactory) {
+    'marketingCampaignResource', 'campaignSettingsDisplayBuilder',
+    function($scope, $routeParams, notificationsService, dialogService, merchelloTabsFactory,
+    marketingCampaignResource, campaignSettingsDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
         $scope.tabs = [];
         $scope.context = 'newcampaign';
+        $scope.campaign = campaignSettingsDisplayBuilder.createDefault();
 
         function init() {
             $scope.loaded = true;
@@ -3096,7 +3099,6 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignEditControl
 
         function loadCampaign() {
             var campaignKey = $routeParams.id;
-            console.info(campaignKey);
             if (campaignKey === 'create') {
                 $scope.tabs = merchelloTabsFactory.createCampaignTabs();
                 $scope.tabs.addTab('newcampaign', 'New Campaign');
@@ -3104,10 +3106,15 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignEditControl
                 $scope.context = 'newcampaign';
                 $scope.preValuesLoaded = true;
             } else {
-                $scope.tabs = merchelloTabsFactory.createCampaignEditTabs(campaignKey);
-                $scope.tabs.setActive('campaignedit');
-                $scope.context = 'editcampaign';
-                $scope.preValuesLoaded = true;
+                var promise = marketingCampaignResource.getCampaignByKey(campaignKey);
+                promise.then(function(result) {
+                    $scope.tabs = merchelloTabsFactory.createCampaignEditTabs(campaignKey);
+                    $scope.campaign = campaignSettingsDisplayBuilder.transform(result);
+                    console.info($scope.campaign);
+                    $scope.tabs.setActive('campaignedit');
+                    $scope.context = 'editcampaign';
+                    $scope.preValuesLoaded = true;
+                });
             }
         }
 
@@ -3125,13 +3132,20 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignEditControl
  */
 angular.module('merchello').controller('Merchello.Backoffice.CampaignListController',
     ['$scope', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'marketingCampaignResource', 'campaignSettingsDisplayBuilder',
-    function($scope, notificationsService, dialogService, merchelloTabsFactory, marketingCampaignResource, campaignSettingsDisplayBuilder) {
+    'dialogDataFactory',
+    function($scope, notificationsService, dialogService, merchelloTabsFactory, marketingCampaignResource, campaignSettingsDisplayBuilder,
+    dialogDataFactory) {
 
         $scope.loaded = false;
         $scope.activeOnly = true;
         $scope.preValuesLoaded = false;
         $scope.campaigns = [];
         $scope.tabs = [];
+        $scope.filterText = '';
+
+        // exposed methods
+        $scope.toggleActiveOnly = toggleActiveOnly;
+        $scope.openCreateCampaignDialog = openCreateCampaignDialog;
 
         function init()
         {
@@ -3141,9 +3155,19 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
             $scope.loaded = true;
         }
 
+        /**
+         * @ngdoc method
+         * @name loadCampaignSettings
+         * @function
+         *
+         * @description
+         * Loaps the campaign settings
+         */
         function loadCampaignSettings()
         {
+            $scope.preValuesLoaded = false;
             var promise;
+            console.info($scope.activeOnly);
             if ($scope.activeOnly) {
                 promise = marketingCampaignResource.getActiveCampaigns();
             } else {
@@ -3155,10 +3179,67 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
             });
         }
 
+        function toggleActiveOnly()
+        {
+            $scope.activeOnly = !$scope.activeOnly;
+            loadCampaignSettings();
+        }
+
+        // dialogs
+        function openCreateCampaignDialog() {
+            var data = dialogDataFactory.createAddEditCampaignSettingsDialogData();
+            data.campaign = campaignSettingsDisplayBuilder.createDefault();
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.create.campaign.html',
+                show: true,
+                callback: processCreateCampaign,
+                dialogData: data
+            });
+        }
+
+        function processCreateCampaign(dialogData) {
+            console.info(dialogData);
+        }
+
         //// Initializes the controller
         init();
 }]);
 
+    /**
+     * @ngdoc controller
+     * @name Merchello.Marketing.Dialogs.AddEditCampaignController
+     * @function
+     *
+     * @description
+     * The controller for the adding / editing marketing campaigns
+     */
+    angular.module('merchello').controller('Merchello.Marketing.Dialogs.AddEditCampaignController',
+        ['$scope',
+        function($scope) {
+
+            $scope.manuallyDefineAlias = false;
+
+            // exposed methods
+            $scope.save = save;
+
+            function init() {
+                console.info($scope.dialogData);
+                if ($scope.dialogData.isEdit()) {
+                    $scope.manuallyDefineAlias = true;
+                }
+            }
+
+            function save() {
+                if ($scope.dialogData.campaign.alias === '') {
+                    $scope.dialogData.generateAlias();
+                }
+                console.info($scope.dialogData);
+                $scope.submit($scope.dialogData);
+            }
+
+            // initialize the controller
+            init();
+    }])
     /**
      * @ngdoc controller
      * @name Merchello.Product.Dialogs.ProductVariantBulkChangePricesController
