@@ -1,21 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Core.Models.MonitorModels;
-using Merchello.Core.Observation;
-
-namespace Merchello.Core.Gateways.Notification.Triggering
+﻿namespace Merchello.Core.Gateways.Notification.Triggering
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.MonitorModels;
+    using Merchello.Core.Observation;
+
     /// <summary>            
-    /// Represents and OrdeShippedTrigger
+    /// Represents and OrderShippedTrigger
     /// </summary>
     [TriggerFor("OrderShipped", Topic.Notifications)]
-    public class OrderShippedTrigger : NotificationTriggerBase<IShipment, IShipment>
-    {                   
+    public class OrderShippedTrigger : NotificationTriggerBase<IShipment, IShipmentResultNotifyModel>
+    {
+        /// <summary>
+        /// The <see cref="ShipmentResultNotifyModelFactory"/>.
+        /// </summary>
+        private readonly Lazy<ShipmentResultNotifyModelFactory> _factory = new Lazy<ShipmentResultNotifyModelFactory>(() => new ShipmentResultNotifyModelFactory()); 
+
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
@@ -27,7 +30,11 @@ namespace Merchello.Core.Gateways.Notification.Triggering
         /// </param>
         protected override void Notify(IShipment model, IEnumerable<string> contacts)
         {
-            NotifyMonitors(model);
+            if (model == null || !model.Items.Any()) return;
+
+            var notifyModel = _factory.Value.Build(model);
+
+            NotifyMonitors(notifyModel);
         }
     }
 }

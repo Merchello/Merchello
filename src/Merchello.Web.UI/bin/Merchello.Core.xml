@@ -207,6 +207,38 @@
             Gets or sets the sub tree.
             </summary>
         </member>
+        <member name="T:Merchello.Core.Events.FormatterEventArgs`2">
+            <summary>
+            The formatter event args.
+            </summary>
+            <typeparam name="TFormatter">
+            The type of the formatter
+            </typeparam>
+            <typeparam name="TModel">
+            The type of the model
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Core.Events.FormatterEventArgs`2.#ctor(`0,`1)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Events.FormatterEventArgs`2"/> class.
+            </summary>
+            <param name="formatter">
+            The formatter.
+            </param>
+            <param name="model">
+            The model.
+            </param>
+        </member>
+        <member name="P:Merchello.Core.Events.FormatterEventArgs`2.Formatter">
+            <summary>
+            Gets or sets the formatter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Events.FormatterEventArgs`2.Model">
+            <summary>
+            Gets or sets the model.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Events.PaymentAttemptEventArgs`1">
             <summary>
             The payment attempt args.
@@ -544,6 +576,17 @@
             Merchello is boot strapped in Application Starting so the GatewayProviderResolver should be good to go at this point.
             </remarks>
         </member>
+        <member name="M:Merchello.Core.Gateways.GatewayEvents.NotificationMessageServiceOnSaved(Merchello.Core.Services.INotificationMessageService,Umbraco.Core.Events.SaveEventArgs{Merchello.Core.Models.INotificationMessage})">
+            <summary>
+            Clears messages from NotificationMonitors cache.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="saveEventArgs">
+            The save event args.
+            </param>
+        </member>
         <member name="M:Merchello.Core.Gateways.GatewayEvents.CreateOrder(Merchello.Core.Gateways.Payment.IPaymentResult)">
             <summary>
             Creates an order if approved
@@ -666,6 +709,33 @@
             The message to be removed from cache
             </param>
         </member>
+        <member name="T:Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents">
+            <summary>
+            The notification monitor events.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents.ApplicationStarted(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+            <summary>
+            The application started.
+            </summary>
+            <param name="umbracoApplication">
+            The umbraco application.
+            </param>
+            <param name="applicationContext">
+            The application context.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorEvents.NotificationMessageServiceOnSaved(Merchello.Core.Services.INotificationMessageService,Umbraco.Core.Events.SaveEventArgs{Merchello.Core.Models.INotificationMessage})">
+            <summary>
+            The notification message service on saved.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="saveEventArgs">
+            The save event args.
+            </param>
+        </member>
         <member name="T:Merchello.Core.Gateways.Notification.Monitors.OrderShippedMonitor">
             <summary>
             Represents and order shipped monitor
@@ -673,7 +743,7 @@
         </member>
         <member name="T:Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorBase`1">
             <summary>
-            Defines a <see cref="T:Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorBase`1"/> base class
+            Defines a <see cref="!:NotificationMonitorBase&lt;TFormatter, TModel&gt;"/> base class
             </summary>
             <typeparam name="T">
             The Type of the model passed to the monitor
@@ -721,7 +791,7 @@
         </member>
         <member name="M:Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorBase`1.#ctor(Merchello.Core.Gateways.Notification.INotificationContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorBase`1"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Notification.Monitors.NotificationMonitorBase`1"/> class. 
             </summary>
             <param name="notificationContext">
             The notification context.
@@ -779,7 +849,15 @@
             Gets the <see cref="T:Merchello.Core.Gateways.Notification.INotificationContext"/>
             </summary>
         </member>
-        <member name="M:Merchello.Core.Gateways.Notification.Monitors.OrderShippedMonitor.OnNext(Merchello.Core.Models.IShipment)">
+        <member name="M:Merchello.Core.Gateways.Notification.Monitors.OrderShippedMonitor.#ctor(Merchello.Core.Gateways.Notification.INotificationContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Notification.Monitors.OrderShippedMonitor"/> class.
+            </summary>
+            <param name="notificationContext">
+            The notification context.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Notification.Monitors.OrderShippedMonitor.OnNext(Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel)">
             <summary>
             Trigger call to notifify the monitor of a change
             </summary>
@@ -792,7 +870,15 @@
             Represents and order shipped monitor
             </summary>
         </member>
-        <member name="M:Merchello.Core.Gateways.Notification.Monitors.PartialOrderShippedMonitor.OnNext(Merchello.Core.Models.IShipment)">
+        <member name="M:Merchello.Core.Gateways.Notification.Monitors.PartialOrderShippedMonitor.#ctor(Merchello.Core.Gateways.Notification.INotificationContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Notification.Monitors.PartialOrderShippedMonitor"/> class.
+            </summary>
+            <param name="notificationContext">
+            The notification context.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Notification.Monitors.PartialOrderShippedMonitor.OnNext(Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel)">
             <summary>
             Trigger call to notifify the monitor of a change
             </summary>
@@ -800,7 +886,49 @@
             The model to be used by the monitor
             </param>
         </member>
-        <member name="T:Merchello.Core.Gateways.Notification.Triggering.IShipmentResult">
+        <member name="T:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory">
+            <summary>
+            The order shipped trigger helper.
+            </summary>
+            <remarks>
+            http://issues.merchello.com/youtrack/issue/M-532
+            </remarks>
+        </member>
+        <member name="F:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory._orderService">
+            <summary>
+            The <see cref="T:Merchello.Core.Services.IOrderService"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory._invoiceService">
+            <summary>
+            The <see cref="T:Merchello.Core.Services.IInvoiceService"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory.Build(Merchello.Core.Models.IShipment)">
+            <summary>
+            The build.
+            </summary>
+            <param name="shipment">
+            The shipment.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel">
             <summary>
             The ShipmentResult interface.
             </summary>
@@ -810,7 +938,7 @@
             Defines the NotifyModel
             </summary>
         </member>
-        <member name="P:Merchello.Core.Gateways.Notification.Triggering.IShipmentResult.Shipment">
+        <member name="P:Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel.Shipment">
             <summary>
             Gets the shipment.
             </summary>
@@ -818,7 +946,7 @@
             The shipment.
             </value>
         </member>
-        <member name="P:Merchello.Core.Gateways.Notification.Triggering.IShipmentResult.Invoice">
+        <member name="P:Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel.Invoice">
             <summary>
             Gets the invoice.
             </summary>
@@ -828,7 +956,7 @@
         </member>
         <member name="T:Merchello.Core.Gateways.Notification.Triggering.OrderShippedTrigger">
             <summary>            
-            Represents and OrdeShippedTrigger
+            Represents and OrderShippedTrigger
             </summary>
         </member>
         <member name="T:Merchello.Core.Gateways.Notification.Triggering.NotificationTriggerBase`2">
@@ -977,6 +1105,11 @@
             The contacts.
             </param>
         </member>
+        <member name="F:Merchello.Core.Gateways.Notification.Triggering.OrderShippedTrigger._factory">
+            <summary>
+            The <see cref="T:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory"/>.
+            </summary>
+        </member>
         <member name="M:Merchello.Core.Gateways.Notification.Triggering.OrderShippedTrigger.Notify(Merchello.Core.Models.IShipment,System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Value to pass to the notification monitors
@@ -989,8 +1122,13 @@
             </param>
         </member>
         <member name="T:Merchello.Core.Gateways.Notification.Triggering.PartialOrderShippedTrigger">
-            <summary>            
-            Represents and OrdeShippedTrigger
+            <summary>
+            The partial order shipped trigger.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Gateways.Notification.Triggering.PartialOrderShippedTrigger._factory">
+            <summary>
+            The <see cref="T:Merchello.Core.Gateways.Notification.Triggering.ShipmentResultNotifyModelFactory"/>.
             </summary>
         </member>
         <member name="M:Merchello.Core.Gateways.Notification.Triggering.PartialOrderShippedTrigger.Notify(Merchello.Core.Models.IShipment,System.Collections.Generic.IEnumerable{System.String})">
@@ -1994,7 +2132,7 @@
             The <see cref="T:Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Core.Models.MonitorModels.MonitorModelExtensions.ToOrderShippedNotification(Merchello.Core.Gateways.Notification.Triggering.IShipmentResult,System.Collections.Generic.IEnumerable{System.String})">
+        <member name="M:Merchello.Core.Models.MonitorModels.MonitorModelExtensions.ToOrderShippedNotification(Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel,System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             To the order shipped notification.
             </summary>
@@ -2102,22 +2240,22 @@
             An additional list of contacts
             </param>
         </member>
-        <member name="T:Merchello.Core.Models.MonitorModels.ShippingResultNotifyModel">
+        <member name="T:Merchello.Core.Models.MonitorModels.ShipmentResultNotifyModel">
             <summary>
             Represents a ShippingResultModel
             </summary>
         </member>
-        <member name="P:Merchello.Core.Models.MonitorModels.ShippingResultNotifyModel.Shipment">
+        <member name="P:Merchello.Core.Models.MonitorModels.ShipmentResultNotifyModel.Shipment">
             <summary>
-            Gets the shipment.
+            Gets or sets the shipment.
             </summary>
             <value>
             The shipment.
             </value>
         </member>
-        <member name="P:Merchello.Core.Models.MonitorModels.ShippingResultNotifyModel.Invoice">
+        <member name="P:Merchello.Core.Models.MonitorModels.ShipmentResultNotifyModel.Invoice">
             <summary>
-            Gets the invoice.
+            Gets or sets the invoice.
             </summary>
             <value>
             The invoice.
@@ -16678,15 +16816,15 @@
             <param name="shipMethodKey">The GUID key of the <see cref="T:Merchello.Core.Models.IShipMethod"/></param>
             <returns>The <see cref="T:Merchello.Core.Gateways.Shipping.IShipmentRateQuote"/> for the shipment by the specific <see cref="T:Merchello.Core.Models.IShipMethod"/> specified</returns>
         </member>
-        <member name="M:Merchello.Core.Models.ShipmentExtensions.ReplaceablePatterns(Merchello.Core.Models.IShipment)">
+        <member name="M:Merchello.Core.Models.ShipmentExtensions.ReplaceablePatterns(Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel)">
             <summary>
-            Gets a collection of <see cref="T:Merchello.Core.Formatters.IReplaceablePattern"/> for the invoice
+            Gets a collection of <see cref="T:Merchello.Core.Formatters.IReplaceablePattern"/> for the shipment result notify model
             </summary>
-            <param name="invoice">
-            The invoice.
+            <param name="notifyModel">
+            The <see cref="T:Merchello.Core.Models.MonitorModels.IShipmentResultNotifyModel"/>.
             </param>
             <returns>
-            The collection of replaceable patterns
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
         <member name="M:Merchello.Core.Models.ShipmentExtensions.Clone(Merchello.Core.Models.IShipment)">
