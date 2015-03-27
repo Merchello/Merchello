@@ -173,18 +173,12 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             // check configuration to see if we want to do this
             if (!bool.Parse(ConfigurationManager.AppSettings["sendTestEmail"])) Assert.Ignore("Skipping test");
 
-            const string user = "[username]";
-            const string password = "[password]";
-            var recipients = "rusty@mindfly.com";
+            var recipients = "noreply@merchello.com";
 
 
             //// Arrange
             var settings = _provider.ExtendedData.GetSmtpProviderSettings();
-            settings.Host = "smtp.gmail.com";
-            settings.Port = 587;
-            settings.EnableSsl = true;
-            settings.UserName = user;
-            settings.Password = password;
+            settings.Host = "127.0.0.1";
             _provider.ExtendedData.SaveSmtpProviderSettings(settings);
 
             var resource = _provider.ListResourcesOffered().FirstOrDefault();

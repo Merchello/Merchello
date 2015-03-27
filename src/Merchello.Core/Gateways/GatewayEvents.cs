@@ -1,7 +1,12 @@
 ﻿namespace Merchello.Core.Gateways
 {
+    using System;
+    using System.Linq;
+
     using Merchello.Core.Events;
+    using Merchello.Core.Gateways.Notification.Monitors;
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Observation;
 
     using Models;
     using Services;
@@ -40,6 +45,30 @@
             PaymentGatewayMethodBase.AuthorizeCaptureAttempted += PaymentGatewayMethodBaseOnAuthorizeCaptureAttempted;
 
             PaymentGatewayMethodBase.CaptureAttempted += PaymentGatewayMethodBaseOnCaptureAttempted;
+
+            NotificationMessageService.Saved += NotificationMessageServiceOnSaved;
+        }
+
+        /// <summary>
+        /// Clears messages from NotificationMonitors cache.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
+        private static void NotificationMessageServiceOnSaved(INotificationMessageService sender, SaveEventArgs<INotificationMessage> saveEventArgs)
+        {
+            var resolver = MonitorResolver.HasCurrent ? MonitorResolver.Current : null;
+            if (resolver == null) return;
+
+            var monitors = resolver.GetAllMonitors();
+
+            foreach (var implements in monitors.OfType<INotificationMonitorBase>())
+            {
+                implements.RebuildCache();
+            }
         }
 
         /// <summary>

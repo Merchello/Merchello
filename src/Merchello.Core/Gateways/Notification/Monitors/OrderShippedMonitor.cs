@@ -11,8 +11,14 @@
     /// Represents and order shipped monitor
     /// </summary>
     [MonitorFor("1078FE96-6C73-4CC7-A92D-496AFB2FC3CB", typeof(OrderShippedTrigger), "Order Shipped Message (Pattern Replace)")]
-    public class OrderShippedMonitor : NotificationMonitorBase<IShipment>
+    public class OrderShippedMonitor : NotificationMonitorBase<IShipmentResultNotifyModel>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderShippedMonitor"/> class.
+        /// </summary>
+        /// <param name="notificationContext">
+        /// The notification context.
+        /// </param>
         public OrderShippedMonitor(INotificationContext notificationContext)
             : base(notificationContext)
         {            
@@ -24,7 +30,7 @@
         /// <param name="value">
         /// The model to be used by the monitor
         /// </param>
-        public override void OnNext(IShipment value)
+        public override void OnNext(IShipmentResultNotifyModel value)
         {
             if (!Messages.Any()) return;
 
@@ -44,7 +50,8 @@
                     if (message.Recipients[0] == ';')
                         message.Recipients = message.Recipients.TrimStart(';');
 
-                    message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", value.Email));
+                    var email = value.Shipment.Email ?? value.Invoice.BillToEmail;
+                    message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", email));
                 }            
 
                 // send the message

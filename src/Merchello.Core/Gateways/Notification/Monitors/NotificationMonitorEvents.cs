@@ -8,8 +8,20 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
 
+    /// <summary>
+    /// The notification monitor events.
+    /// </summary>
     public class NotificationMonitorEvents : ApplicationEventHandler
     {
+        /// <summary>
+        /// The application started.
+        /// </summary>
+        /// <param name="umbracoApplication">
+        /// The umbraco application.
+        /// </param>
+        /// <param name="applicationContext">
+        /// The application context.
+        /// </param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
@@ -20,6 +32,15 @@
             LogHelper.Info<NotificationMonitorEvents>("Completed Merchello NotificationMonitor binding events");
         }
 
+        /// <summary>
+        /// The notification message service on saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
         private void NotificationMessageServiceOnSaved(INotificationMessageService sender, SaveEventArgs<INotificationMessage> saveEventArgs)
         {
             // TODO target this a bit better
