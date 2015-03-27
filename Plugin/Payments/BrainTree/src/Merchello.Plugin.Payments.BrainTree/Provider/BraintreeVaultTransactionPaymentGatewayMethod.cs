@@ -167,10 +167,13 @@
         /// <param name="token">
         /// The token.
         /// </param>
+        /// <param name="email">
+        /// The email.
+        /// </param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token)
+        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "")
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, amount, PaymentMethod.Key);
 

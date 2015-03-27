@@ -51,12 +51,23 @@
         /// <param name="option">
         /// The option.
         /// </param>
+        /// <param name="email">
+        /// The email.
+        /// </param>
         /// <returns>
         /// The <see cref="Result{Transaction}"/>.
         /// </returns>
-        public Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce = "", ICustomer customer = null, TransactionOption option = TransactionOption.SubmitForSettlement)
+        public Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce = "", ICustomer customer = null, TransactionOption option = TransactionOption.SubmitForSettlement, string email = "")
         {
-            return Sale(invoice, paymentMethodNonce, customer, null, option);
+            var request = RequestFactory.CreateTransactionRequest(invoice, paymentMethodNonce, customer, option);
+            if (customer == null && !string.IsNullOrEmpty(email))
+            {
+                request.Customer = new CustomerRequest() { Email = email };
+            }
+
+            var attempt = TryGetApiResult(() => BraintreeGateway.Transaction.Sale(request));
+
+            return attempt.Success ? attempt.Result : null;
         }
 
         /// <summary>
