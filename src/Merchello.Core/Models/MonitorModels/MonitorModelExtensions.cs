@@ -71,9 +71,9 @@ namespace Merchello.Core.Models.MonitorModels
         /// <param name="contacts">
         /// The contacts.
         /// </param>
-        public static IShipmentResult ToOrderShippedNotification(this IShipmentResult shipmentResult, IEnumerable<string> contacts)
+        public static IShipmentResultNotifyModel ToOrderShippedNotification(this IShipmentResultNotifyModel shipmentResult, IEnumerable<string> contacts)
         {
-            return new ShippingResultNotifyModel()
+            return new ShipmentResultNotifyModel()
             {
                 Shipment = shipmentResult.Shipment,
                 Invoice = shipmentResult.Invoice,

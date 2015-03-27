@@ -1,12 +1,11 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Models.MonitorModels;
-
-namespace Merchello.Core.Gateways.Notification.Triggering
+﻿namespace Merchello.Core.Models.MonitorModels
 {
+    using Merchello.Core.Models;
+
     /// <summary>
     /// The ShipmentResult interface.
     /// </summary>
-    public interface IShipmentResult : INotifyModel
+    public interface IShipmentResultNotifyModel : INotifyModel
     {
         /// <summary>
         /// Gets the shipment.
