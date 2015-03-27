@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Merchello.Core.Gateways.Notification.Triggering;
-
-namespace Merchello.Core.Models.MonitorModels
+﻿namespace Merchello.Core.Models.MonitorModels
 {
     /// <summary>
     /// Represents a ShippingResultModel
     /// </summary>
-    internal class ShippingResultNotifyModel : NotifyModelBase, IShipmentResult
+    internal class ShipmentResultNotifyModel : NotifyModelBase, IShipmentResultNotifyModel
     {
         /// <summary>
-        /// Gets the shipment.
+        /// Gets or sets the shipment.
         /// </summary>
         /// <value>
         /// The shipment.
@@ -21,7 +14,7 @@ namespace Merchello.Core.Models.MonitorModels
         public IShipment Shipment { get; set; }         
 
         /// <summary>
-        /// Gets the invoice.
+        /// Gets or sets the invoice.
         /// </summary>
         /// <value>
         /// The invoice.

@@ -28,7 +28,7 @@
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce, ICustomer customer = null, TransactionOption option = TransactionOption.SubmitForSettlement);
+        Result<Transaction> Sale(IInvoice invoice, string paymentMethodNonce, ICustomer customer = null, TransactionOption option = TransactionOption.SubmitForSettlement, string email = "");
 
         /// <summary>
         /// The sale.
