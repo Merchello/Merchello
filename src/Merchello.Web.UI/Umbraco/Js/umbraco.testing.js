@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2014 Umbraco HQ;
+ * Copyright (c) 2015 Umbraco HQ;
  * Licensed MIT
  */
 
@@ -2104,7 +2104,7 @@ angular.module('umbraco.mocks').
       return {
           register: function() {
               $httpBackend
-                  .whenGET(mocksUtils.urlRegex('js/language.aspx'))
+                  .whenGET(mocksUtils.urlRegex('LocalizedText'))
                   .respond(getLanguageResource);
           }
       };

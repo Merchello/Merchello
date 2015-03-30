@@ -11,6 +11,47 @@
             <param name="appContext"> </param>
             <param name="http"></param>
         </member>
+        <member name="M:Umbraco.Web.Models.ContentExtensions.GetCulture(Umbraco.Core.Models.IContent,System.Uri)">
+            <summary>
+            Gets the culture that would be selected to render a specified content,
+            within the context of a specified current request.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="current">The request Uri.</param>
+            <returns>The culture that would be selected to render the content.</returns>
+        </member>
+        <member name="M:Umbraco.Web.Models.ContentExtensions.GetCulture(Umbraco.Web.UmbracoContext,Umbraco.Core.Services.ILocalizationService,System.Int32,System.String,System.Uri)">
+            <summary>
+            Gets the culture that would be selected to render a specified content,
+            within the context of a specified current request.
+            </summary>
+            <param name="umbracoContext">An <see cref="T:Umbraco.Web.UmbracoContext"/> instance.</param>
+            <param name="localizationService">An <see cref="T:Umbraco.Core.Services.ILocalizationService"/> implementation.</param>
+            <param name="contentId">The content identifier.</param>
+            <param name="contentPath">The content path.</param>
+            <param name="current">The request Uri.</param>
+            <returns>The culture that would be selected to render the content.</returns>
+        </member>
+        <member name="T:Umbraco.Web.Models.LegacyConvertedNode">
+            <summary>
+            A legacy INode that wraps IPublishedContent
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Models.LegacyConvertedNodeProperty">
+            <summary>
+            A legacy IProperty that wraps IPublishedProperty
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Mvc.DisableClientCacheAttribute">
+            <summary>
+            Will ensure that client-side cache does not occur by sending the correct response headers
+            </summary>    
+        </member>
+        <member name="T:Umbraco.Web.Mvc.ReflectedFixedRazorViewEngine">
+            <summary>
+            This is here to support compatibility with both MVC4 and MVC5
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1">
             <summary>
             This is used to create a background task runner which will stay alive in the background of and complete
@@ -1474,6 +1515,9 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
+            <remarks>
+            Permission is granted to this method if the user has access to any of these trees: DataTypes, Content or Media
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Editors.DataTypeController.DeleteById(System.Int32)">
             <summary>
@@ -2293,7 +2337,7 @@
         </member>
         <member name="T:Umbraco.Web.Mvc.MinifyJavaScriptResultAttribute">
             <summary>
-            Minifies and caches the result for the JavaScriptResult
+            Minifies the result for the JavaScriptResult
             </summary>
             <remarks>
             Only minifies in release mode
@@ -2437,11 +2481,6 @@
             </remarks>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Umbraco.Web.Editors.MacroController.GetMacroResultAsHtmlForEditor(System.String,System.Int32,System.Collections.Generic.IDictionary{System.String,System.Object})" -->
-        <member name="T:Umbraco.Web.Editors.MembershipProviderValidationFilterAttribute">
-            <summary>
-            This validates the submitted data in regards to the current membership provider
-            </summary>
-        </member>
         <member name="T:Umbraco.Web.Editors.MemberTypeController">
             <summary>
             An API controller used for dealing with content types
@@ -3612,6 +3651,36 @@
             <param name="currentValue"></param>
             <returns></returns>
         </member>
+        <member name="P:Umbraco.Web.PropertyEditors.TagsPropertyEditor.TagPropertyValueEditor.RequiredValidator">
+            <summary>
+            Returns the validator used for the required field validation which is specified on the PropertyType
+            </summary>
+            <remarks>
+            This will become legacy as soon as we implement overridable pre-values.
+            
+            The default validator used is the RequiredValueValidator but this can be overridden by property editors
+            if they need to do some custom validation, or if the value being validated is a json object.
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.PropertyEditors.TagsPropertyEditor.TagPropertyValueEditor.RequiredTagsValueValidator">
+            <summary>
+            Custom validator to validate a required value against an empty json value
+            </summary>
+            <remarks>
+            This is required because the Tags property editor is not of type 'JSON', it's just string so the underlying
+            validator does not validate against an empty json string
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.PropertyEditors.TagsPropertyEditor.TagPropertyValueEditor.RequiredTagsValueValidator.Validate(System.Object,System.String,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
+            <summary>
+            Validates a null value or an empty json value
+            </summary>
+            <param name="value"></param>
+            <param name="config"></param>
+            <param name="preValues"></param>
+            <param name="editor"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.PropertyEditors.LabelPropertyEditor.LabelPropertyValueEditor">
             <summary>
             Custom value editor to mark it as readonly
@@ -3866,11 +3935,12 @@
             <param name="current"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Routing.UrlProviderExtensions.GetContentUrls(Umbraco.Core.Models.IContent)">
+        <member name="M:Umbraco.Web.Routing.UrlProviderExtensions.GetContentUrls(Umbraco.Core.Models.IContent,Umbraco.Web.UmbracoContext)">
             <summary>
             Gets the URLs for the content item
             </summary>
             <param name="content"></param>
+            <param name="umbracoContext"></param>
             <returns></returns>
             <remarks>
             Use this when displaying URLs, if there are errors genertaing the urls the urls themselves will
@@ -4408,23 +4478,17 @@
             <param name="httpContext"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.UI.JavaScript.AssetInitialization.CheckIfReleaseAndOptimized(Newtonsoft.Json.Linq.JArray,ClientDependency.Core.ClientDependencyType,System.Web.HttpContextBase)">
+        <member name="M:Umbraco.Web.UI.JavaScript.AssetInitialization.OptimizeAssetCollection(Newtonsoft.Json.Linq.JArray,ClientDependency.Core.ClientDependencyType,System.Web.HttpContextBase)">
             <summary>
-            This will check if we're in release mode, if so it will create a CDF URL to load them all in at once
+            This will use CDF to optimize the asset file collection
             </summary>
             <param name="fileRefs"></param>
             <param name="cdfType"></param>
             <param name="httpContext"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.UI.JavaScript.AssetInitialization.GetOptimized(Newtonsoft.Json.Linq.JArray,ClientDependency.Core.ClientDependencyType,System.Web.HttpContextBase)">
-            <summary>
-            Return array of optimized URLs
-            </summary>
-            <param name="fileRefs"></param>
-            <param name="cdfType"></param>
-            <param name="httpContext"></param>
-            <returns></returns>
+            <returns>
+            Return the asset URLs that should be loaded, if the application is in debug mode then the URLs returned will be the same as the ones
+            passed in with the CDF version query strings appended so cache busting works correctly.
+            </returns>
         </member>
         <member name="M:Umbraco.Web.UI.JavaScript.CssInitialization.GetStylesheetInitialization(System.Web.HttpContextBase)">
             <summary>
@@ -6123,6 +6187,14 @@
             All property data validation goes into the modelstate with a prefix of "Properties"
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.WebApi.Binders.MemberBinder.MemberValidationHelper.ValidatePropertyData(Umbraco.Web.Models.ContentEditing.ContentItemBasic{Umbraco.Web.Models.ContentEditing.ContentPropertyBasic,Umbraco.Core.Models.IMember},System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            We need to manually validate a few things here like email and login to make sure they are valid and aren't duplicates
+            </summary>
+            <param name="postedItem"></param>
+            <param name="actionContext"></param>
+            <returns></returns>           
+        </member>
         <member name="T:Umbraco.Web.WebApi.Filters.AngularAntiForgeryHelper">
             <summary>
             A helper class to deal with csrf prevention with angularjs and webapi
@@ -6176,10 +6248,35 @@
             Clears the angular csrf cookie if the request was successful
             </summary>
         </member>
+        <member name="T:Umbraco.Web.WebApi.Filters.EnableOverrideAuthorizationAttribute">
+            <summary>
+            This allows for Action based auth attributes to override Class based auth attributes if they are specified
+            </summary>
+            <remarks>
+            This attribute can be applied at the class level and will indicate to any class level auth attribute that inherits from OverridableAuthorizationAttribute
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.WebApi.Filters.FilterGrouping">
             <summary>
             Quickly split filters into different types 
             </summary>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.Filters.OverridableAuthorizationAttribute">
+            <summary>
+            Abstract auth filter class that can be used to enable overriding class auth filters at the action level
+            </summary>
+            <remarks>
+            To enable a class auth filter to be overridden by an action auth filter the EnableOverrideAuthorizationAttribute can be applied 
+            to the class.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.Filters.OverridableAuthorizationAttribute.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            If the controller has an EnabledOverrideAuthorizationAttribute attribute specified and the action has any AuthorizeAttribute
+            specified then use the action's auth attribute instead of this one
+            </summary>
+            <param name="actionContext">The context.</param>
+            <exception cref="T:System.ArgumentNullException">The context parameter is null.</exception>
         </member>
         <member name="T:Umbraco.Web.WebApi.Filters.SetAngularAntiForgeryTokensAttribute">
             <summary>
@@ -7569,6 +7666,13 @@
             </summary>
             <returns></returns>      
         </member>
+        <member name="M:Umbraco.Web.Editors.BackOfficeController.LocalizedText(System.String)">
+            <summary>
+            Get the json localized text for a given culture or the culture for the current user
+            </summary>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.BackOfficeController.Application">
             <summary>
             Returns the JavaScript main file including all references found in manifests
@@ -7584,6 +7688,12 @@
         <member name="M:Umbraco.Web.Editors.BackOfficeController.ServerVariables">
             <summary>
             Returns the JavaScript object representing the static server variables javascript object
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.BackOfficeController.GetApplicationState">
+            <summary>
+            Returns the server variables regarding the application state
             </summary>
             <returns></returns>
         </member>
@@ -7793,9 +7903,9 @@
             true if the specified username and password are valid; otherwise, false.
             </returns>
         </member>
-        <member name="P:Umbraco.Web.Security.Providers.MembersMembershipProvider.AllowManuallyChangingPassword">
+        <member name="P:Umbraco.Web.Security.Providers.UmbracoMembershipProvider`2.AllowManuallyChangingPassword">
             <summary>
-            For backwards compatibility, this provider supports this option
+            For backwards compatibility, this provider supports this option by default it is true
             </summary>
         </member>
         <member name="P:Umbraco.Web.Security.Providers.MembersRoleProvider.ApplicationName">
@@ -7808,11 +7918,6 @@
         <member name="T:Umbraco.Web.Security.Providers.UsersMembershipProvider">
             <summary>
             Custom Membership Provider for Umbraco Users (User authentication for Umbraco Backend CMS)  
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Security.Providers.UsersMembershipProvider.AllowManuallyChangingPassword">
-            <summary>
-            For backwards compatibility, this provider supports this option
             </summary>
         </member>
         <member name="M:Umbraco.Web.Trees.ContentTreeController.GetSingleTreeNode(Umbraco.Core.Models.EntityBase.IUmbracoEntity,System.String,System.Net.Http.Formatting.FormDataCollection)">
@@ -9387,7 +9492,7 @@
         </member>
         <member name="M:Umbraco.Web.Security.WebSecurity.ValidateCurrentUser(System.Boolean)">
             <summary>
-            Validates the current user
+            Validates the current user assigned to the request and ensures the stored user data is valid
             </summary>
             <param name="throwExceptions">set to true if you want exceptions to be thrown if failed</param>
             <returns></returns>
@@ -9530,6 +9635,11 @@
         <member name="T:Umbraco.Web.UI.CdfLogger">
             <summary>
             A logger for ClientDependency
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Models.LegacyNodeHelper">
+            <summary>
+            Used to convert to/from the legacy INode from IPublishedContent
             </summary>
         </member>
         <member name="F:umbraco.controls.passwordChanger.umbPasswordChanger_passwordNew">
@@ -10993,6 +11103,10 @@
             Authorizes the user
             </summary>
             <param name="e"></param>
+            <remarks>
+            Checks if the page exists outside of the /umbraco route, in which case the request will not have been authenticated for the back office 
+            so we'll force authentication.
+            </remarks>
         </member>
         <member name="P:Umbraco.Web.UI.Pages.UmbracoEnsuredPage.CurrentApp">
             <summary>
@@ -11429,7 +11543,6 @@
             <returns></returns>
             <remarks>
             We cannot validate this request with attributes (nicely) due to the nature of the multi-part for data.
-            
             </remarks>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaController.ValidateMoveOrCopy(Umbraco.Web.Models.ContentEditing.MoveOrCopy)">
@@ -11450,6 +11563,12 @@
             <param name="nodeId">The content to lookup, if the contentItem is not specified</param>
             <param name="media">Specifies the already resolved content item to check against, setting this ignores the nodeId</param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Editors.MediaController.PostedFiles">
+            <summary>
+            This is used for the response of PostAddFile so that we can analyze the response in a filter and remove the 
+            temporary files that were created.
+            </summary>
         </member>
         <member name="T:Umbraco.Web.UrlHelperRenderExtensions">
             <summary>
@@ -11574,6 +11693,12 @@
             <summary>
             Checks if the parameter is ContentItemSave and then deletes any temporary saved files from file uploads associated with the request
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.Filters.FileUploadCleanupFilterAttribute.#ctor(System.Boolean)">
+            <summary>
+            Constructor specifies if the filter should analyze the incoming or outgoing model
+            </summary>
+            <param name="incomingModel"></param>
         </member>
         <member name="P:Umbraco.Web.WebApi.Filters.FileUploadCleanupFilterAttribute.AllowMultiple">
             <summary>
@@ -12435,6 +12560,15 @@
             <param name="content">The content.</param>
             <param name="contentTypeAliasFilter">An optional content type alias.</param>
             <returns>The children of the content.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.GetCulture(Umbraco.Core.Models.IPublishedContent,System.Uri)">
+            <summary>
+            Gets the culture that would be selected to render a specified content,
+            within the context of a specified current request.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="current">The request Uri.</param>
+            <returns>The culture that would be selected to render the content.</returns>
         </member>
         <member name="P:Umbraco.Web.PublishedContentExtensions.GetPropertyAliasesAndNames">
             <summary>
@@ -14875,15 +15009,6 @@
         <member name="F:umbraco.dialogs.publish.feedbackMsg">
             <summary>
             feedbackMsg control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:umbraco.presentation.endPreview.form1">
-            <summary>
-            form1 control.
             </summary>
             <remarks>
             Auto-generated field.
@@ -23953,12 +24078,6 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="M:umbraco.js.language.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
         <member name="T:umbraco.presentation.members.EditMemberGroup">
             <summary>
             Summary description for EditMemberGroup.
@@ -28587,7 +28706,7 @@
             context and thread principle object
             </summary>
             <param name="sender"></param>
-            <param name="e"></param>
+            <param name="e"></param> 
             <remarks>
             We will set the identity, culture, etc... for any request that is:
             * A back office request
