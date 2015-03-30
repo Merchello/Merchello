@@ -241,6 +241,7 @@
   <ItemGroup>
     <Compile Include="Configuration\RegionalProvinceConfigurationCollectionTest.cs" />
     <Compile Include="ExtendedData\ExtendedDataExtensionTests.cs" />
+    <Compile Include="Localization\LocalizationFileTests.cs" />
     <Compile Include="Mappers\AutoMapperTests.cs" />
     <Compile Include="Models\AddressTests.cs" />
     <Compile Include="Models\BasketTests.cs" />

@@ -134,6 +134,11 @@
     <!-- actions -->
     <key alias="setVars">Set shipping variables: Weight, and dimensions</key>
     <!-- phrases -->
+      <key alias="editWarehouseHelper" >Edit your warehouse</key>
+      <key alias="editWarehouse" >Edit Warehouse</key>
+      <key alias="shippingMethods" >Shipping Methods</key>
+      <key alias="shippingMethodsHelper" >Add shipping methods to existing regions or create a new region</key>
+      <key alias="addCountry" >Add a Country</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
@@ -166,7 +171,6 @@
     <key alias="sku" >SKU</key>
     <key alias="quantity" >Qty</key>
     <key alias="fulfill"> Fulfill</key>
-    <key alias="shipment"> Shipment</key>
     <key alias="status"> Status</key>
     <key alias="type"> Type</key>
     <key alias="amount"> Amount</key>
@@ -193,15 +197,7 @@
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
   </area>
-  <area alias="merchelloShipping">
-    <key alias="shipping" >Shipping</key>
-    <key alias="editWarehouse" >Warehouse Info</key>
-    <key alias="editWarehouseHelper" >Edit your warehouse</key>
-    <key alias="editWarehouse" >Edit Warehouse</key>
-    <key alias="shippingMethods" >Shipping Methods</key>
-    <key alias="shippingMethodsHelper" >Add shipping methods to existing regions or create a new region</key>
-    <key alias="addCountry" >Add a Country</key>
-  </area>
+
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Add a Country</key>
     <key alias="typeCountryName" >Type your Country Name</key>
@@ -252,11 +248,6 @@
   <area alias="merchelloNotifications">
     <key alias="notifications" >Notifications</key>
     <key alias="addNotification" >Add a Notification</key>
-  </area>
-  <area alias="merchelloGatewayProvider">
-    <key alias="host" >Host</key>
-    <key alias="enableSSL" >Enable SSL</key>
-    <key alias="encryptProviderConfiguration" > Encrypt Provider Configuration</key>
   </area>
   <area alias="merchelloNotificationsEdit">
     <key alias="emailTemplate" >Email Template</key>
