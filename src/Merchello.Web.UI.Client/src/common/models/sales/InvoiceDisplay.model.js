@@ -137,8 +137,9 @@
 
         // gets a value indicating whether or not this invoice has been paid
         function isPaid() {
-            var status = this.getPaymentStatus.call(this);
-            return status === 'Paid';
+            // http://issues.merchello.com/youtrack/issue/M-659
+            var status = this.invoiceStatus.alias;
+            return status === 'paid';
         }
 
         // calculates the unpaid balance of the invoice
