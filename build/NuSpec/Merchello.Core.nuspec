@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Merchello.Core</id>
-    <version>1.8.0</version>
+    <version>1.8.0.10</version>
     <title>Merchello Core Binaries</title>
     <authors>Rusty Swayne, Jason Prothero</authors>
     <owners>Mindfly, Inc.</owners>

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Merchello.TestsBase</id>
-    <version>1.8.0</version>
+    <version>1.8.0.10</version>
     <title>Merchello Test Helpers</title>
     <authors>Rusty Swayne</authors>
     <owners>Mindfly, Inc.</owners>
