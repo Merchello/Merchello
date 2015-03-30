@@ -41,6 +41,16 @@
             // Add the replaceable patterns from the invoice
             formatter.AddOrUpdateReplaceablePattern(value.Invoice.ReplaceablePatterns());
 
+            // get shipping information if any
+            var invoice = value.Invoice;
+            var shippingLineItems = invoice.ShippingLineItems();
+            if (shippingLineItems.Any())
+            {
+                // just use the first one
+                var shipment = shippingLineItems.FirstOrDefault().ExtendedData.GetShipment<InvoiceLineItem>();
+                formatter.AddOrUpdateReplaceablePattern(shipment.ReplaceablePatterns());
+            }
+        
             foreach (var message in Messages)
             {
                 if (value.Contacts.Any() && message.SendToCustomer)

@@ -189,6 +189,25 @@ namespace Merchello.Core.Models
         {
             // TODO localization needed on pricing and datetime
             var shipment = notifyModel.Shipment;
+            var patterns = new List<IReplaceablePattern>();
+            patterns.AddRange(shipment.ReplaceablePatterns());
+                                  
+            patterns.AddRange(notifyModel.Invoice.ReplaceablePatterns());
+
+            return patterns;
+        }
+
+        /// <summary>
+        /// Adds shipment replaceable patters.
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IReplaceablePattern}"/>.
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipment shipment)
+        {
             var patterns = new List<IReplaceablePattern>
             {
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShippedDate", shipment.ShippedDate.ToShortDateString()),
@@ -205,12 +224,11 @@ namespace Merchello.Core.Models
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("TrackingCode", shipment.TrackingCode)
             };
-                                  
+
             patterns.AddRange(shipment.LineItemReplaceablePatterns());
-            patterns.AddRange(notifyModel.Invoice.ReplaceablePatterns());
 
             return patterns;
-        }
+        } 
 
         /// <summary>
         /// Clones a shipment
