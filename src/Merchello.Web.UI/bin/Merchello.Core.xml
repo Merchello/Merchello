@@ -16827,6 +16827,17 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Core.Models.ShipmentExtensions.ReplaceablePatterns(Merchello.Core.Models.IShipment)">
+            <summary>
+            Adds shipment replaceable patters.
+            </summary>
+            <param name="shipment">
+            The shipment.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Core.Models.ShipmentExtensions.Clone(Merchello.Core.Models.IShipment)">
             <summary>
             Clones a shipment
