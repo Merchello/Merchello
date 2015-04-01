@@ -41,16 +41,21 @@
             // Add the replaceable patterns from the invoice
             formatter.AddOrUpdateReplaceablePattern(value.Invoice.ReplaceablePatterns(value.CurrencySymbol));
 
-            // get shipping information if any
-            var invoice = value.Invoice;
-            var shippingLineItems = invoice.ShippingLineItems();
-            if (shippingLineItems.Any())
+            if (value.Payment != null)
             {
-                // just use the first one
-                var shipment = shippingLineItems.FirstOrDefault().ExtendedData.GetShipment<InvoiceLineItem>();
-                formatter.AddOrUpdateReplaceablePattern(shipment.ReplaceablePatterns(value.CurrencySymbol));
+                formatter.AddOrUpdateReplaceablePattern(value.Payment.ReplaceablePatterns(value.CurrencySymbol));
             }
-        
+
+            if (value.Shipment != null)
+            {
+                formatter.AddOrUpdateReplaceablePattern(value.Shipment.ReplaceablePatterns(value.CurrencySymbol));
+            }
+
+            if (value.ShipMethod != null)
+            {
+                formatter.AddOrUpdateReplaceablePattern(value.ShipMethod.ReplaceablePatterns());
+            }
+
             foreach (var message in Messages)
             {
                 if (value.Contacts.Any() && message.SendToCustomer)
