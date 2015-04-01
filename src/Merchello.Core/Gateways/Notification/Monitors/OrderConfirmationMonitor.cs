@@ -39,7 +39,22 @@
             var formatter = PatternReplaceFormatter.GetPatternReplaceFormatter();
 
             // Add the replaceable patterns from the invoice
-            formatter.AddOrUpdateReplaceablePattern(value.Invoice.ReplaceablePatterns());
+            formatter.AddOrUpdateReplaceablePattern(value.Invoice.ReplaceablePatterns(value.CurrencySymbol));
+
+            if (value.Payment != null)
+            {
+                formatter.AddOrUpdateReplaceablePattern(value.Payment.ReplaceablePatterns(value.CurrencySymbol));
+            }
+
+            if (value.Shipment != null)
+            {
+                formatter.AddOrUpdateReplaceablePattern(value.Shipment.ReplaceablePatterns(value.CurrencySymbol));
+            }
+
+            if (value.ShipMethod != null)
+            {
+                formatter.AddOrUpdateReplaceablePattern(value.ShipMethod.ReplaceablePatterns());
+            }
 
             foreach (var message in Messages)
             {

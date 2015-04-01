@@ -357,6 +357,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * Utility method to get the currency symbol for an invoice
              */
             function getCurrencySymbol(invoice) {
+
+                if (invoice.currency.symbol !== '') {
+                    return invoice.currency.symbol;
+                }
+
                 var currencyCode = invoice.getCurrencyCode();
                 var currency = _.find(allCurrencies, function(currency) {
                     return currency.currencyCode === currencyCode;

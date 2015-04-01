@@ -28,6 +28,11 @@
         private readonly IInvoiceService _invoiceService;
 
         /// <summary>
+        /// The <see cref="IStoreSettingService"/>.
+        /// </summary>
+        private readonly IStoreSettingService _storeSettingService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ShipmentResultNotifyModelFactory"/> class.
         /// </summary>
         public ShipmentResultNotifyModelFactory()
@@ -47,6 +52,7 @@
 
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
+            _storeSettingService = merchelloContext.Services.StoreSettingService;
         }
 
         /// <summary>
@@ -71,7 +77,18 @@
                 if (order != null)
                 {
                     var invoice = _invoiceService.GetByKey(order.InvoiceKey);
-                    if (invoice != null) notifyModel.Invoice = invoice;
+                    if (invoice != null)
+                    {
+                        notifyModel.Invoice = invoice;
+                        if (invoice.Items.Any())
+                        {
+                            var currencyCode =
+                                invoice.Items.First()
+                                    .ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.CurrencyCode);
+                            var currency = _storeSettingService.GetCurrencyByCode(currencyCode);
+                            notifyModel.CurrencySymbol = currency.Symbol;
+                        }
+                    }
                 }
             }
 

@@ -156,26 +156,31 @@
                    notificationsService.error('Failed to load global settings', reason.message);
                })
 
-                var currencySymbolPromise = settingsResource.getAllCurrencies();
-                currencySymbolPromise.then(function (symbols) {
-                    var currency = _.find(symbols, function(symbol) {
-                        return symbol.currencyCode === $scope.invoice.getCurrencyCode()
-                    });
-                    if (currency !== undefined) {
-                    $scope.currencySymbol = currency.symbol;
-                    } else {
-                        // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
-                        // default currency
-                        var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
-                        defaultCurrencyPromise.then(function (currencySymbol) {
-                            $scope.currencySymbol = currencySymbol;
-                        }, function (reason) {
-                            notificationService.error('Failed to load the default currency symbol', reason.message);
+               // TODO this can be refactored now that we have currency on the invoice model
+               if ($scope.invoice.currency.symbol === '') {
+                    var currencySymbolPromise = settingsResource.getAllCurrencies();
+                    currencySymbolPromise.then(function (symbols) {
+                        var currency = _.find(symbols, function(symbol) {
+                            return symbol.currencyCode === $scope.invoice.getCurrencyCode()
                         });
-                    }
-                }, function (reason) {
-                    alert('Failed: ' + reason.message);
-                });
+                        if (currency !== undefined) {
+                        $scope.currencySymbol = currency.symbol;
+                        } else {
+                            // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
+                            // default currency
+                            var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
+                            defaultCurrencyPromise.then(function (currencySymbol) {
+                                $scope.currencySymbol = currencySymbol;
+                            }, function (reason) {
+                                notificationService.error('Failed to load the default currency symbol', reason.message);
+                            });
+                        }
+                    }, function (reason) {
+                        alert('Failed: ' + reason.message);
+                    });
+               } else {
+                   $scope.currencySymbol = $scope.invoice.currency.symbol;
+               }
             }
 
             /**
@@ -291,6 +296,7 @@
                     data.order = $scope.invoice.orders[0]; // todo: pull from current order when multiple orders is available
                     data.order.items = data.order.getUnShippedItems();
                     data.shipmentStatuses = statuses;
+                    data.currencySymbol = $scope.currencySymbol;
 
                     // packaging
                     var quotedKey = '7342dcd6-8113-44b6-bfd0-4555b82f9503';
