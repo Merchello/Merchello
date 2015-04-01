@@ -392,8 +392,12 @@
 
             var token = container.GetFormatterIterationIdentifier();
 
+            var iterateItems =
+                container.Items.Where(
+                    x => x.LineItemType == LineItemType.Product || x.LineItemType == LineItemType.Custom).ToArray();
+
             // TODO localization needed on pricing and datetime
-            for (var i = 0; i < container.Items.Count; i++)
+            for (var i = 0; i < iterateItems.Count(); i++)
             {
                 var sku = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Sku", i), string.Format("{0}Item.Sku.{1}{2}", "{{", i, "}}"), container.Items[i].LineItemType == LineItemType.Shipping ? string.Empty : container.Items[i].Sku);
                 var unitPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "UnitPrice", i), string.Format("{0}Item.UnitPrice.{1}{2}", "{{", i, "}}"), container.Items[i].Price.FormatAsPrice(currencySymbol));
@@ -419,7 +423,7 @@
             //}
 
 
-            return patterns;
+            return patterns.Where(x => x != null);
         }
 
         #endregion

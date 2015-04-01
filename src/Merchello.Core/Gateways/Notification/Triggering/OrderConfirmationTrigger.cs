@@ -24,6 +24,11 @@
         private readonly IStoreSettingService _storeSettingService;
 
         /// <summary>
+        /// The <see cref="IShipMethodService"/>.
+        /// </summary>
+        private readonly IShipMethodService _shipMethodService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="OrderConfirmationTrigger"/> class.
         /// </summary>
         public OrderConfirmationTrigger()
@@ -41,6 +46,7 @@
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             _storeSettingService = merchelloContext.Services.StoreSettingService;
+            _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
         }
 
         /// <summary>
@@ -55,6 +61,8 @@
         protected override void Notify(IPaymentResult model, IEnumerable<string> contacts)
         {
             var symbol = string.Empty;
+            IShipment shipment = null;
+            IShipMethod shipMethod = null;
 
             if (model.Invoice != null)
             {
@@ -65,9 +73,25 @@
                     var currency = _storeSettingService.GetCurrencyByCode(currencyCode);
                     symbol = currency.Symbol;
                 }
+
+
+                // get shipping information if any
+                
+                var shippingLineItems = model.Invoice.ShippingLineItems().ToArray();
+                if (shippingLineItems.Any())
+                {
+                    // just use the first one
+                    shipment = shippingLineItems.First().ExtendedData.GetShipment<InvoiceLineItem>();
+
+                    // get the shipmethod information
+                    if (shipment != null && shipment.ShipMethodKey.HasValue)
+                    {
+                        shipMethod = _shipMethodService.GetByKey(shipment.ShipMethodKey.Value);
+                    }
+                }
             }
 
-            NotifyMonitors(model.ToOrderConfirmationNotification(contacts, symbol));           
+            NotifyMonitors(model.ToOrderConfirmationNotification(contacts, shipment, shipMethod, symbol));           
         }
     }
 }
