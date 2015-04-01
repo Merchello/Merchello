@@ -423,7 +423,7 @@
             //}
 
 
-            return patterns;
+            return patterns.Where(x => x != null);
         }
 
         #endregion

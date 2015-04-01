@@ -152,6 +152,7 @@
 
             var patterns = new List<IReplaceablePattern>
             {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceKey", invoice.Key.ToString()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceNumber", invoice.PrefixedInvoiceNumber()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceDate", invoice.InvoiceDate.FormatAsStoreDate()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToName", invoice.BillToName),
@@ -175,7 +176,7 @@
 
             patterns.AddRange(invoice.LineItemReplaceablePatterns(currencySymbol));
            
-            return patterns;
+            return patterns.Where(x => x != null);
         }
        
         #endregion

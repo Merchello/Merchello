@@ -194,7 +194,7 @@ namespace Merchello.Core.Models
                                   
             patterns.AddRange(notifyModel.Invoice.ReplaceablePatterns(notifyModel.CurrencySymbol));
 
-            return patterns;
+            return patterns.Where(x => x != null);
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace Merchello.Core.Models
 
             patterns.AddRange(shipment.LineItemReplaceablePatterns(currencySymbol));
 
-            return patterns;
+            return patterns.Where(x => x != null);
         }
 
         /// <summary>
