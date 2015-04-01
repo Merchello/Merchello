@@ -451,6 +451,7 @@
     <Compile Include="Persistence\Repositories\NotificationMethodRepository.cs" />
     <Compile Include="Persistence\Repositories\OrderLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\OrderStatusRepository.cs" />
+    <Compile Include="PriceExtensions.cs" />
     <Compile Include="Sales\SalePreparationBase.cs" />
     <Compile Include="Sales\ISalePreparationBase.cs" />
     <Compile Include="Builders\IBuilderChain.cs" />

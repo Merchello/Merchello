@@ -22,5 +22,10 @@
         /// The invoice.
         /// </value>
         IInvoice Invoice { get; }
+
+        /// <summary>
+        /// Gets or sets the currency symbol.
+        /// </summary>
+        string CurrencySymbol { get; set; }
     }
 }
