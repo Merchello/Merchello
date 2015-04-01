@@ -3229,6 +3229,7 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
             }
 
             function save() {
+                $scope.editCampaignForm.name.$valid
                 if ($scope.dialogData.campaign.alias === '') {
                     $scope.dialogData.generateAlias();
                 }
