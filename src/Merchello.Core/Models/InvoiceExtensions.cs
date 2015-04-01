@@ -141,17 +141,19 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
-        /// <param name="currencySymbol">The currency symbol</param>
+        /// <param name="currencySymbol">
+        /// The currency symbol
+        /// </param>
         /// <returns>
         /// The collection of replaceable patterns
         /// </returns>
         internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice, string currencySymbol)
         {
-            // TODO localization needed on pricing and datetime
+
             var patterns = new List<IReplaceablePattern>
             {
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceNumber", invoice.PrefixedInvoiceNumber()),
-                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceDate", invoice.InvoiceDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceDate", invoice.InvoiceDate.FormatAsStoreDate()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToName", invoice.BillToName),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToAddress1", invoice.BillToAddress1),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToAddress2", invoice.BillToAddress2),
@@ -162,7 +164,12 @@
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToEmail", invoice.BillToEmail),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPhone", invoice.BillToPhone),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCompany", invoice.BillToCompany),
-                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.ToString("C")),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalDiscountPrice", invoice.TotalDiscounts().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalItemPrice", invoice.TotalItemPrice().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalShippingPrice", invoice.TotalShipping().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalCustomPrice", invoice.TotalCustomItemPrice().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalTaxPrice", invoice.TotalTax().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.FormatAsPrice(currencySymbol)),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceStatus", invoice.InvoiceStatus.Name)                
             };
 

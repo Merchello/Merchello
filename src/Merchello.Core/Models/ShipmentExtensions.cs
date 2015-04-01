@@ -213,7 +213,7 @@ namespace Merchello.Core.Models
         {
             var patterns = new List<IReplaceablePattern>
             {
-                ReplaceablePattern.GetConfigurationReplaceablePattern("ShippedDate", shipment.ShippedDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShippedDate", shipment.ShippedDate.FormatAsStoreDate()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToName", shipment.ToName),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToAddress1", shipment.ToAddress1),
@@ -231,7 +231,26 @@ namespace Merchello.Core.Models
             patterns.AddRange(shipment.LineItemReplaceablePatterns(currencySymbol));
 
             return patterns;
-        } 
+        }
+
+        /// <summary>
+        /// Replaces shipmethod values.
+        /// </summary>
+        /// <param name="shipMethod">
+        /// The ship method.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IReplaceablePattern}"/>.
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipMethod shipMethod)
+        {
+            var patterns = new List<IReplaceablePattern>
+            {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipMethodName", shipMethod.Name),
+            };
+
+            return patterns;
+        }
 
         /// <summary>
         /// Clones a shipment

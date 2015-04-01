@@ -16,6 +16,16 @@
         public IInvoice Invoice { get; set; }
 
         /// <summary>
+        /// Gets or sets the shipment.
+        /// </summary>
+        public IShipment Shipment { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ship method.
+        /// </summary>
+        public IShipMethod ShipMethod { get; set; }
+
+        /// <summary>
         /// Gets or sets the currency symbol.
         /// </summary>
         public string CurrencySymbol { get; set; }

@@ -34,13 +34,19 @@ namespace Merchello.Core.Models.MonitorModels
         /// <param name="contacts">
         /// The contacts.
         /// </param>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <param name="shipMethod">
+        /// The ship Method.
+        /// </param>
         /// <param name="currencySymbol">
         /// The currency Symbol.
         /// </param>
         /// <returns>
         /// The <see cref="IPaymentResultMonitorModel"/>.
         /// </returns>
-        public static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult, IEnumerable<string> contacts, string currencySymbol = "")
+        public static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult, IEnumerable<string> contacts, IShipment shipment = null, IShipMethod shipMethod = null, string currencySymbol = "")
         {
             return new PaymentResultNotifyModel()
                 {
@@ -48,6 +54,8 @@ namespace Merchello.Core.Models.MonitorModels
                     Payment = paymentResult.Payment.Success ? paymentResult.Payment.Result : null,
                     Invoice = paymentResult.Invoice,
                     Contacts = contacts.ToArray(),
+                    Shipment = shipment,
+                    ShipMethod = shipMethod,
                     CurrencySymbol = currencySymbol,
                     ApproveOrderCreation = paymentResult.ApproveOrderCreation
                 };
