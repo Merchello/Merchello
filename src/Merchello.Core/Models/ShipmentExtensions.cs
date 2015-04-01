@@ -189,9 +189,31 @@ namespace Merchello.Core.Models
         {
             // TODO localization needed on pricing and datetime
             var shipment = notifyModel.Shipment;
+            var patterns = new List<IReplaceablePattern>();
+            patterns.AddRange(shipment.ReplaceablePatterns(notifyModel.CurrencySymbol));
+                                  
+            patterns.AddRange(notifyModel.Invoice.ReplaceablePatterns(notifyModel.CurrencySymbol));
+
+            return patterns.Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Adds shipment replaceable patters.
+        /// </summary>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <param name="currencySymbol">
+        /// The currency Symbol.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IReplaceablePattern}"/>.
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipment shipment, string currencySymbol)
+        {
             var patterns = new List<IReplaceablePattern>
             {
-                ReplaceablePattern.GetConfigurationReplaceablePattern("ShippedDate", shipment.ShippedDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShippedDate", shipment.ShippedDate.FormatAsStoreDate()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToName", shipment.ToName),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToAddress1", shipment.ToAddress1),
@@ -205,9 +227,27 @@ namespace Merchello.Core.Models
                 ReplaceablePattern.GetConfigurationReplaceablePattern("ShipToOrganization", shipment.ToOrganization),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("TrackingCode", shipment.TrackingCode)
             };
-                                  
-            patterns.AddRange(shipment.LineItemReplaceablePatterns());
-            patterns.AddRange(notifyModel.Invoice.ReplaceablePatterns());
+
+            patterns.AddRange(shipment.LineItemReplaceablePatterns(currencySymbol));
+
+            return patterns.Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Replaces shipmethod values.
+        /// </summary>
+        /// <param name="shipMethod">
+        /// The ship method.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IReplaceablePattern}"/>.
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipMethod shipMethod)
+        {
+            var patterns = new List<IReplaceablePattern>
+            {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("ShipMethodName", shipMethod.Name),
+            };
 
             return patterns;
         }

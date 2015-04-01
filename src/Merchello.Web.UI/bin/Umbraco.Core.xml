@@ -2623,11 +2623,12 @@
             A helper class to try invoke members, find properties, etc...
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Dynamics.DynamicInstanceHelper.TryInvokeMember``1(``0,System.Dynamic.InvokeMemberBinder,System.Object[])">
+        <member name="M:Umbraco.Core.Dynamics.DynamicInstanceHelper.TryInvokeMember``1(Umbraco.Core.Cache.IRuntimeCacheProvider,``0,System.Dynamic.InvokeMemberBinder,System.Object[])">
             <summary>
             Attempts to invoke a member based on the dynamic instance
             </summary>
             <typeparam name="T"></typeparam>
+            <param name="runtimeCache"></param>
             <param name="thisObject">The object instance to invoke the extension method for</param>
             <param name="binder"></param>
             <param name="args"></param>
@@ -2637,11 +2638,12 @@
             on the object that matches the binder name
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.Dynamics.DynamicInstanceHelper.TryInvokeMember``1(``0,System.Dynamic.InvokeMemberBinder,System.Object[],System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Umbraco.Core.Dynamics.DynamicInstanceHelper.TryInvokeMember``1(Umbraco.Core.Cache.IRuntimeCacheProvider,``0,System.Dynamic.InvokeMemberBinder,System.Object[],System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
             Attempts to invoke a member based on the dynamic instance
             </summary>
             <typeparam name="T"></typeparam>
+            <param name="runtimeCache"></param>
             <param name="thisObject">The object instance to invoke the extension method for</param>
             <param name="binder"></param>
             <param name="args"></param>
@@ -2653,11 +2655,12 @@
             based on the binder name and the extension method types to scan.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.Dynamics.DynamicInstanceHelper.FindAndExecuteExtensionMethod``1(``0,System.Object[],System.String,System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Umbraco.Core.Dynamics.DynamicInstanceHelper.FindAndExecuteExtensionMethod``1(Umbraco.Core.Cache.IRuntimeCacheProvider,``0,System.Object[],System.String,System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
             Attempts to find an extension method that matches the name and arguments based on scanning the Type's passed in
             to the findMethodsOnTypes parameter
             </summary>
+            <param name="runtimeCache"></param>
             <param name="thisObject">The instance object to execute the extension method for</param>
             <param name="args"></param>
             <param name="name"></param>
@@ -3080,6 +3083,1985 @@
             Any class implementing this interface that is added to the httpcontext.items keys or values will be disposed of at the end of the request.
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Media.Exif.BitConverterEx">
+            <summary>
+            An endian-aware converter for converting between base data types 
+            and an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToChar(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a Unicode character.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToUInt16(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a 16-bit unsigned integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToUInt32(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a 32-bit unsigned integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToUInt64(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a 64-bit unsigned integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToInt16(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a 16-bit signed integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToInt32(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a 32-bit signed integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToInt64(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a 64-bit signed integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToSingle(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a single precision floating number.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToDouble(System.Byte[],System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of bytes to a double precision floating number.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.UInt16,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given 16-bit unsigned integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.UInt32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given 32-bit unsigned integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.UInt64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given 64-bit unsigned integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Int16,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given 16-bit signed integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Int32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given 32-bit signed integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given 64-bit signed integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Single,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given single precision floating-point number to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Double,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given double precision floating-point number to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToChar(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a 16-bit unsigned integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToUInt16(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a 16-bit unsigned integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToUInt32(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a 32-bit unsigned integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToUInt64(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a 64-bit unsigned integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToInt16(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a 16-bit signed integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToInt32(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a 32-bit signed integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToInt64(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a 64-bit signed integer.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToSingle(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a single precision floating number.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.ToDouble(System.Byte[],System.Int64)">
+            <summary>
+            Converts the given array of bytes to a double precision floating number.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.UInt16)">
+            <summary>
+            Converts the given 16-bit unsigned integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.UInt32)">
+            <summary>
+            Converts the given 32-bit unsigned integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.UInt64)">
+            <summary>
+            Converts the given 64-bit unsigned integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Int16)">
+            <summary>
+            Converts the given 16-bit signed integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Int32)">
+            <summary>
+            Converts the given 32-bit signed integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Int64)">
+            <summary>
+            Converts the given 64-bit signed integer to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Single)">
+            <summary>
+            Converts the given single precision floating-point number to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.GetBytes(System.Double)">
+            <summary>
+            Converts the given double precision floating-point number to an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.CheckData(System.Byte[],System.Int64,System.Int64,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Reverse the array of bytes as needed.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.BitConverterEx.CheckData(System.Byte[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Reverse the array of bytes as needed.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.BitConverterEx.SystemByteOrder">
+            <summary>
+            Indicates the byte order in which data is stored in this platform.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.BitConverterEx.LittleEndian">
+            <summary>
+            Returns a bit converter that converts between little-endian and system byte-order.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.BitConverterEx.BigEndian">
+            <summary>
+            Returns a bit converter that converts between big-endian and system byte-order.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.BitConverterEx.SystemEndian">
+            <summary>
+            Returns a bit converter that does not do any byte-order conversion.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder">
+            <summary>
+            Represents the byte order.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifBitConverter">
+            <summary>
+            Converts between exif data types and array of bytes.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToAscii(System.Byte[],System.Boolean,System.Text.Encoding)">
+            <summary>
+            Returns an ASCII string converted from the given byte array.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToAscii(System.Byte[],System.Text.Encoding)">
+            <summary>
+            Returns an ASCII string converted from the given byte array.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToString(System.Byte[])">
+            <summary>
+            Returns a string converted from the given byte array.
+            from the numeric value of each byte.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToDateTime(System.Byte[],System.Boolean)">
+            <summary>
+            Returns a DateTime object converted from the given byte array.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToDateTime(System.Byte[])">
+            <summary>
+            Returns a DateTime object converted from the given byte array.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToURational(System.Byte[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns an unsigned rational number converted from the first 
+            eight bytes of the given byte array. The first four bytes are
+            assumed to be the numerator and the next four bytes are the
+            denumerator.
+            Numbers are converted from the given byte-order to platform byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToSRational(System.Byte[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns a signed rational number converted from the first 
+            eight bytes of the given byte array. The first four bytes are
+            assumed to be the numerator and the next four bytes are the
+            denumerator.
+            Numbers are converted from the given byte-order to platform byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToUShortArray(System.Byte[],System.Int32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns an array of 16-bit unsigned integers converted from 
+            the given byte array.
+            Numbers are converted from the given byte-order to platform byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToUIntArray(System.Byte[],System.Int32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns an array of 32-bit unsigned integers converted from 
+            the given byte array.
+            Numbers are converted from the given byte-order to platform byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToSIntArray(System.Byte[],System.Int32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns an array of 32-bit signed integers converted from 
+            the given byte array.
+            Numbers are converted from the given byte-order to platform byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToURationalArray(System.Byte[],System.Int32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns an array of unsigned rational numbers converted from 
+            the given byte array.
+            Numbers are converted from the given byte-order to platform byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.ToSRationalArray(System.Byte[],System.Int32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns an array of signed rational numbers converted from 
+            the given byte array.
+            Numbers are converted from the given byte-order to platform byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(System.String,System.Boolean,System.Text.Encoding)">
+            <summary>
+            Converts the given ascii string to an array of bytes optionally adding a null terminator.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(System.String,System.Text.Encoding)">
+            <summary>
+            Converts the given ascii string to an array of bytes without adding a null terminator.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(System.DateTime,System.Boolean)">
+            <summary>
+            Converts the given datetime to an array of bytes with a null terminator.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(Umbraco.Core.Media.Exif.MathEx.UFraction32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given unsigned rational number to an array of bytes.
+            Numbers are converted from the platform byte-order to the given byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(Umbraco.Core.Media.Exif.MathEx.Fraction32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given signed rational number to an array of bytes.
+            Numbers are converted from the platform byte-order to the given byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(System.UInt16[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of 16-bit unsigned integers to an array of bytes.
+            Numbers are converted from the platform byte-order to the given byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(System.UInt32[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of 32-bit unsigned integers to an array of bytes.
+            Numbers are converted from the platform byte-order to the given byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(System.Int32[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of 32-bit signed integers to an array of bytes.
+            Numbers are converted from the platform byte-order to the given byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(Umbraco.Core.Media.Exif.MathEx.UFraction32[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of unsigned rationals to an array of bytes.
+            Numbers are converted from the platform byte-order to the given byte-order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifBitConverter.GetBytes(Umbraco.Core.Media.Exif.MathEx.Fraction32[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Converts the given array of signed rationals to an array of bytes.
+            Numbers are converted from the platform byte-order to the given byte-order.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExposureProgram.Creative">
+            <summary>
+            Biased toward depth of field.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExposureProgram.Action">
+            <summary>
+            Biased toward fast shutter speed.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExposureProgram.Portrait">
+            <summary>
+            For closeup photos with the background out of focus.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExposureProgram.Landscape">
+            <summary>
+            For landscape photos with the background in focus.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.LightSource.DaylightFluorescent">
+            <summary>
+            D 5700 – 7100K
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.LightSource.DayWhiteFluorescent">
+            <summary>
+            N 4600 – 5400K
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.LightSource.CoolWhiteFluorescent">
+            <summary>
+            W 3900 – 4500K
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.LightSource.WhiteFluorescent">
+            <summary>
+            WW 3200 – 3700K
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.NotValidExifFileException">
+            <summary>
+            The exception that is thrown when the format of the JPEG/Exif file
+            could not be understood.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.UnknownIFDSectionException">
+            <summary>
+            The exception that is thrown when the IFD section ID could not be understood.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.UnknownEnumTypeException">
+            <summary>
+            The exception that is thrown when an invalid enum type is given to an 
+            ExifEnumProperty.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.IFD0IsEmptyException">
+            <summary>
+            The exception that is thrown when the 0th IFD section does not contain any fields.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifEnumProperty`1">
+            <summary>
+            Represents an enumerated value.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifProperty">
+            <summary>
+            Represents the abstract base class for an Exif property.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifProperty.Tag">
+            <summary>
+            Gets the Exif tag associated with this property.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifProperty.IFD">
+            <summary>
+            Gets the IFD section contaning this property.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifProperty.Name">
+            <summary>
+            Gets or sets the name of this property.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifProperty.Value">
+            <summary>
+            Gets or sets the value of this property.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifProperty.Interoperability">
+            <summary>
+            Gets interoperability data for this property.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifEncodedString">
+            <summary>
+            Represents an ASCII string. (EXIF Specification: UNDEFINED) Used for the UserComment field.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifDateTime">
+            <summary>
+            Represents an ASCII string formatted as DateTime. (EXIF Specification: ASCII) Used for the date time fields.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifVersion">
+            <summary>
+            Represents the exif version as a 4 byte ASCII string. (EXIF Specification: UNDEFINED) 
+            Used for the ExifVersion, FlashpixVersion, InteroperabilityVersion and GPSVersionID fields.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifPointSubjectArea">
+            <summary>
+            Represents the location and area of the subject (EXIF Specification: 2xSHORT)
+            The coordinate values, width, and height are expressed in relation to the 
+            upper left as origin, prior to rotation processing as per the Rotation tag.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifUShortArray">
+            <summary>
+            Represents an array of 16-bit unsigned integers. 
+            (EXIF Specification: SHORT with count > 1)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifCircularSubjectArea">
+            <summary>
+            Represents the location and area of the subject (EXIF Specification: 3xSHORT)
+            The coordinate values, width, and height are expressed in relation to the 
+            upper left as origin, prior to rotation processing as per the Rotation tag.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifRectangularSubjectArea">
+            <summary>
+            Represents the location and area of the subject (EXIF Specification: 4xSHORT)
+            The coordinate values, width, and height are expressed in relation to the 
+            upper left as origin, prior to rotation processing as per the Rotation tag.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.GPSLatitudeLongitude">
+            <summary>
+            Represents GPS latitudes and longitudes (EXIF Specification: 3xRATIONAL)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifURationalArray">
+            <summary>
+            Represents an array of unsigned rational numbers. 
+            (EXIF Specification: RATIONAL with count > 1)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.GPSTimeStamp">
+            <summary>
+            Represents a GPS time stamp as UTC (EXIF Specification: 3xRATIONAL)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.WindowsByteString">
+            <summary>
+            Represents an ASCII string. (EXIF Specification: BYTE) 
+            Used by Windows XP.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifFileTypeDescriptionProvider">
+            <summary>
+            Provides a custom type descriptor for an ExifFile instance.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifFileTypeDescriptionProvider.GetTypeDescriptor(System.Type,System.Object)">
+            <summary>
+            Gets a custom type descriptor for the given type and object.
+            </summary>
+            <param name="objectType">The type of object for which to retrieve the type descriptor.</param>
+            <param name="instance">An instance of the type. Can be null if no instance was passed to the <see cref="T:System.ComponentModel.TypeDescriptor"/>.</param>
+            <returns>
+            An <see cref="T:System.ComponentModel.ICustomTypeDescriptor"/> that can provide metadata for the type.
+            </returns>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifFileTypeDescriptor">
+            <summary>
+            Expands ExifProperty objects contained in an ExifFile as seperate properties.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifFileTypeDescriptor.GetProperties">
+            <summary>
+            Returns a collection of property descriptors for the object represented by this type descriptor.
+            </summary>
+            <returns>
+            A <see cref="T:System.ComponentModel.PropertyDescriptorCollection"/> containing the property descriptions for the object represented by this type descriptor. The default is <see cref="F:System.ComponentModel.PropertyDescriptorCollection.Empty"/>.
+            </returns>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifInterOperability">
+            <summary>
+            Represents interoperability data for an exif tag in the platform byte order.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifInterOperability.ToString">
+            <summary>
+            Returns the string representation of this instance.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifInterOperability.TagID">
+            <summary>
+            Gets the tag ID defined in the Exif standard.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifInterOperability.TypeID">
+            <summary>
+            Gets the type code defined in the Exif standard.
+            <list type="bullet">
+            <item>1 = BYTE (byte)</item>
+            <item>2 = ASCII (byte array)</item>
+            <item>3 = SHORT (ushort)</item>
+            <item>4 = LONG (uint)</item>
+            <item>5 = RATIONAL (2 x uint: numerator, denominator)</item>
+            <item>6 = BYTE (sbyte)</item>
+            <item>7 = UNDEFINED (byte array)</item>
+            <item>8 = SSHORT (short)</item>
+            <item>9 = SLONG (int)</item>
+            <item>10 = SRATIONAL (2 x int: numerator, denominator)</item>
+            <item>11 = FLOAT (float)</item>
+            <item>12 = DOUBLE (double)</item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifInterOperability.Count">
+            <summary>
+            Gets the byte count or number of components.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifInterOperability.Data">
+            <summary>
+            Gets the field value as an array of bytes.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifByte">
+            <summary>
+            Represents an 8-bit unsigned integer. (EXIF Specification: BYTE)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifByteArray">
+            <summary>
+            Represents an array of 8-bit unsigned integers. (EXIF Specification: BYTE with count > 1)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifAscii">
+            <summary>
+            Represents an ASCII string. (EXIF Specification: ASCII)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifUShort">
+            <summary>
+            Represents a 16-bit unsigned integer. (EXIF Specification: SHORT)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifUInt">
+            <summary>
+            Represents a 32-bit unsigned integer. (EXIF Specification: LONG)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifUIntArray">
+            <summary>
+            Represents an array of 16-bit unsigned integers. 
+            (EXIF Specification: LONG with count > 1)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifURational">
+            <summary>
+            Represents a rational number defined with a 32-bit unsigned numerator 
+            and denominator. (EXIF Specification: RATIONAL)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifUndefined">
+            <summary>
+            Represents a byte array that can take any value. (EXIF Specification: UNDEFINED)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifSInt">
+            <summary>
+            Represents a 32-bit signed integer. (EXIF Specification: SLONG)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifSIntArray">
+            <summary>
+            Represents an array of 32-bit signed integers. 
+            (EXIF Specification: SLONG with count > 1)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifSRational">
+            <summary>
+            Represents a rational number defined with a 32-bit signed numerator 
+            and denominator. (EXIF Specification: SRATIONAL)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifSRationalArray">
+            <summary>
+            Represents an array of signed rational numbers. 
+            (EXIF Specification: SRATIONAL with count > 1)
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifPropertyCollection">
+            <summary>
+            Represents a collection of <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> objects.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.Byte)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.String)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.UInt16)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.Int32)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.UInt32)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.Single)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.Double)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.Object)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.String,System.Text.Encoding)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+            <param name="encoding">String encoding.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.DateTime)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="value">The value of tag.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Set(Umbraco.Core.Media.Exif.ExifTag,System.Single,System.Single,System.Single)">
+            <summary>
+            Sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+            <param name="key">The tag to set.</param>
+            <param name="d">Angular degrees (or clock hours for a timestamp).</param>
+            <param name="m">Angular minutes (or clock minutes for a timestamp).</param>
+            <param name="s">Angular seconds (or clock seconds for a timestamp).</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Add(Umbraco.Core.Media.Exif.ExifProperty)">
+            <summary>
+            Adds the specified item to the collection.
+            </summary>
+            <param name="item">The <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> to add to the collection.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Clear">
+            <summary>
+            Removes all items from the collection.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.ContainsKey(Umbraco.Core.Media.Exif.ExifTag)">
+            <summary>
+            Determines whether the collection contains an element with the specified key.
+            </summary>
+            <param name="key">The key to locate in the collection.</param>
+            <returns>
+            true if the collection contains an element with the key; otherwise, false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Remove(Umbraco.Core.Media.Exif.ExifTag)">
+            <summary>
+            Removes the element with the specified key from the collection.
+            </summary>
+            <param name="key">The key of the element to remove.</param>
+            <returns>
+            true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key"/> was not found in the original collection.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.Remove(Umbraco.Core.Media.Exif.IFD)">
+            <summary>
+            Removes all items with the given IFD from the collection.
+            </summary>
+            <param name="ifd">The IFD section to remove.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.TryGetValue(Umbraco.Core.Media.Exif.ExifTag,Umbraco.Core.Media.Exif.ExifProperty@)">
+            <summary>
+            Gets the value associated with the specified key.
+            </summary>
+            <param name="key">The key whose value to get.</param>
+            <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param>
+            <returns>
+            true if the collection contains an element with the specified key; otherwise, false.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="key"/> is null.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.System#Collections#Generic#IDictionary{Umbraco#Core#Media#Exif#ExifTag@Umbraco#Core#Media#Exif#ExifProperty}#Add(Umbraco.Core.Media.Exif.ExifTag,Umbraco.Core.Media.Exif.ExifProperty)">
+            <summary>
+            Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </summary>
+            <param name="key">The object to use as the key of the element to add.</param>
+            <param name="value">The object to use as the value of the element to add.</param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="key"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</exception>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{Umbraco#Core#Media#Exif#ExifTag@Umbraco#Core#Media#Exif#ExifProperty}}#Add(System.Collections.Generic.KeyValuePair{Umbraco.Core.Media.Exif.ExifTag,Umbraco.Core.Media.Exif.ExifProperty})">
+            <summary>
+            Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{Umbraco#Core#Media#Exif#ExifTag@Umbraco#Core#Media#Exif#ExifProperty}}#CopyTo(System.Collections.Generic.KeyValuePair{Umbraco.Core.Media.Exif.ExifTag,Umbraco.Core.Media.Exif.ExifProperty}[],System.Int32)">
+            <summary>
+            Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
+            <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="array"/> is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            	<paramref name="arrayIndex"/> is less than 0.</exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="array"/> is multidimensional.-or-<paramref name="arrayIndex"/> is equal to or greater than the length of <paramref name="array"/>.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.-or-Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{Umbraco#Core#Media#Exif#ExifTag@Umbraco#Core#Media#Exif#ExifProperty}}#Remove(System.Collections.Generic.KeyValuePair{Umbraco.Core.Media.Exif.ExifTag,Umbraco.Core.Media.Exif.ExifProperty})">
+            <summary>
+            Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+            <returns>
+            true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </returns>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyCollection.System#Collections#Generic#IEnumerable{System#Collections#Generic#KeyValuePair{Umbraco#Core#Media#Exif#ExifTag@Umbraco#Core#Media#Exif#ExifProperty}}#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifPropertyCollection.Count">
+            <summary>
+            Gets the number of elements contained in the collection.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifPropertyCollection.Keys">
+            <summary>
+            Gets a collection containing the keys in this collection.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifPropertyCollection.Values">
+            <summary>
+            Gets a collection containing the values in this collection.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifPropertyCollection.Item(Umbraco.Core.Media.Exif.ExifTag)">
+            <summary>
+            Gets or sets the <see cref="T:Umbraco.Core.Media.Exif.ExifProperty"/> with the specified key.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ExifPropertyCollection.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{Umbraco#Core#Media#Exif#ExifTag@Umbraco#Core#Media#Exif#ExifProperty}}#IsReadOnly">
+            <summary>
+            Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+            </summary>
+            <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.</returns>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifPropertyFactory">
+            <summary>
+            Creates exif properties from interoperability parameters.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifPropertyFactory.Get(System.UInt16,System.UInt16,System.UInt32,System.Byte[],Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,Umbraco.Core.Media.Exif.IFD,System.Text.Encoding)">
+            <summary>
+            Creates an ExifProperty from the given interoperability parameters.
+            </summary>
+            <param name="tag">The tag id of the exif property.</param>
+            <param name="type">The type id of the exif property.</param>
+            <param name="count">Byte or component count.</param>
+            <param name="value">Field data as an array of bytes.</param>
+            <param name="byteOrder">Byte order of value.</param>
+            <param name="ifd">IFD section containing this propery.</param>
+            <param name="encoding">The encoding to be used for text metadata when the source encoding is unknown.</param>
+            <returns>an ExifProperty initialized from the interoperability parameters.</returns>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ExifTag">
+            <summary>
+            Represents the tags associated with exif fields.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFIFVersion">
+            <summary>
+            Represents the JFIF version.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFIFUnits">
+            <summary>
+            Represents units for X and Y densities.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.XDensity">
+            <summary>
+            Horizontal pixel density.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.YDensity">
+            <summary>
+            Vertical pixel density
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFIFXThumbnail">
+            <summary>
+            Thumbnail horizontal pixel count.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFIFYThumbnail">
+            <summary>
+            Thumbnail vertical pixel count.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFIFThumbnail">
+            <summary>
+            JFIF JPEG thumbnail.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFXXExtensionCode">
+            <summary>
+            Code which identifies the JFIF extension.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFXXXThumbnail">
+            <summary>
+            Thumbnail horizontal pixel count.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFXXYThumbnail">
+            <summary>
+            Thumbnail vertical pixel count.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFXXPalette">
+            <summary>
+            The 256-Color RGB palette.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ExifTag.JFXXThumbnail">
+            <summary>
+            JFIF thumbnail. The thumbnail will be either a JPEG, 
+            a 256 color palette bitmap, or a 24-bit RGB bitmap.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifTagFactory.GetExifTag(Umbraco.Core.Media.Exif.IFD,System.UInt16)">
+            <summary>
+            Returns the ExifTag corresponding to the given tag id.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifTagFactory.GetTagID(Umbraco.Core.Media.Exif.ExifTag)">
+            <summary>
+            Returns the tag id corresponding to the given ExifTag.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifTagFactory.GetTagIFD(Umbraco.Core.Media.Exif.ExifTag)">
+            <summary>
+            Returns the IFD section containing the given tag.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifTagFactory.GetTagName(Umbraco.Core.Media.Exif.ExifTag)">
+            <summary>
+            Returns the string representation for the given exif tag.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifTagFactory.GetTagName(Umbraco.Core.Media.Exif.IFD,System.UInt16)">
+            <summary>
+            Returns the string representation for the given tag id.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ExifTagFactory.GetTagLongName(Umbraco.Core.Media.Exif.ExifTag)">
+            <summary>
+            Returns the string representation for the given exif tag including 
+            IFD section and tag id.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.IFD">
+            <summary>
+            Represents the IFD section containing tags.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ImageFile">
+            <summary>
+            Represents the base class for image files.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFile.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> class.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFile.ToImage">
+            <summary>
+            Converts the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> to a <see cref="T:System.Drawing.Image"/>.
+            </summary>
+            <returns>Returns a <see cref="T:System.Drawing.Image"/> containing image data.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFile.Save(System.String)">
+            <summary>
+            Saves the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> to the specified file.
+            </summary>
+            <param name="filename">A string that contains the name of the file.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFile.Save(System.IO.Stream)">
+            <summary>
+            Saves the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> to the specified stream.
+            </summary>
+            <param name="stream">A <see cref="!:Sytem.IO.Stream"/> to save image data to.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFile.FromFile(System.String)">
+            <summary>
+            Creates an <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> from the specified file.
+            </summary>
+            <param name="filename">A string that contains the name of the file.</param>
+            <returns>The <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> created from the file.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFile.FromFile(System.String,System.Text.Encoding)">
+            <summary>
+            Creates an <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> from the specified file.
+            </summary>
+            <param name="filename">A string that contains the name of the file.</param>
+            <param name="encoding">The encoding to be used for text metadata when the source encoding is unknown.</param>
+            <returns>The <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> created from the file.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFile.FromStream(System.IO.Stream)">
+            <summary>
+            Creates an <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> from the specified data stream.
+            </summary>
+            <param name="stream">A <see cref="!:Sytem.IO.Stream"/> that contains image data.</param>
+            <returns>The <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> created from the file.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFile.FromStream(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Creates an <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> from the specified data stream.
+            </summary>
+            <param name="stream">A <see cref="!:Sytem.IO.Stream"/> that contains image data.</param>
+            <param name="encoding">The encoding to be used for text metadata when the source encoding is unknown.</param>
+            <returns>The <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> created from the file.</returns>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ImageFile.Format">
+            <summary>
+            Returns the format of the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/>.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ImageFile.Properties">
+            <summary>
+            Gets the collection of Exif properties contained in the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/>.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ImageFile.Thumbnail">
+            <summary>
+            Gets or sets the embedded thumbnail image.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ImageFile.Item(Umbraco.Core.Media.Exif.ExifTag)">
+            <summary>
+            Gets or sets the Exif property with the given key.
+            </summary>
+            <param name="key">The Exif tag associated with the Exif property.</param>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ImageFile.Encoding">
+            <summary>
+            Gets the encoding used for text metadata when the source encoding is unknown.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ImageFileDirectory">
+            <summary>
+            Represents an image file directory.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFileDirectory.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Media.Exif.ImageFileDirectory"/> class.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFileDirectory.FromBytes(System.Byte[],System.UInt32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns a <see cref="T:Umbraco.Core.Media.Exif.ImageFileDirectory"/> initialized from the given byte data.
+            </summary>
+            <param name="data">The data.</param>
+            <param name="offset">The offset into <paramref name="data"/>.</param>
+            <param name="byteOrder">The byte order of <paramref name="data"/>.</param>
+            <returns>A <see cref="T:Umbraco.Core.Media.Exif.ImageFileDirectory"/> initialized from the given byte data.</returns>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ImageFileDirectory.Fields">
+            <summary>
+            The fields contained in this IFD.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ImageFileDirectory.NextIFDOffset">
+            <summary>
+            Offset to the next IFD.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.ImageFileDirectory.Strips">
+            <summary>
+            Compressed image data.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry">
+            <summary>
+            Represents an entry in the image file directory.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry.Tag">
+            <summary>
+            The tag that identifies the field.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry.Type">
+            <summary>
+            Field type identifier.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry.Count">
+            <summary>
+            Count of Type.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry.Data">
+            <summary>
+            Field data.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry.#ctor(System.UInt16,System.UInt16,System.UInt32,System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry"/> struct.
+            </summary>
+            <param name="tag">The tag that identifies the field.</param>
+            <param name="type">Field type identifier.</param>
+            <param name="count">Count of Type.</param>
+            <param name="data">Field data.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry.FromBytes(System.Byte[],System.UInt32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Returns a <see cref="T:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry"/> initialized from the given byte data.
+            </summary>
+            <param name="data">The data.</param>
+            <param name="offset">The offset into <paramref name="data"/>.</param>
+            <param name="byteOrder">The byte order of <paramref name="data"/>.</param>
+            <returns>A <see cref="T:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry"/> initialized from the given byte data.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.ImageFileDirectoryEntry.GetBaseLength(System.UInt16)">
+            <summary>
+            Gets the base byte length for the given type.
+            </summary>
+            <param name="type">Type identifier.</param>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.ImageFileFormat">
+            <summary>
+            Represents the format of the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/>.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ImageFileFormat.Unknown">
+            <summary>
+            The file is not recognized.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ImageFileFormat.JPEG">
+            <summary>
+            The file is a JPEG/Exif or JPEG/JFIF file.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.ImageFileFormat.TIFF">
+            <summary>
+            The file is a TIFF File.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.JFIFDensityUnit">
+            <summary>
+            Represents the units for the X and Y densities
+            for a JFIF file.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.JFIFDensityUnit.None">
+            <summary>
+            No units, XDensity and YDensity specify the pixel aspect ratio.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.JFIFDensityUnit.DotsPerInch">
+            <summary>
+            XDensity and YDensity are dots per inch.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.JFIFDensityUnit.DotsPerCm">
+            <summary>
+            XDensity and YDensity are dots per cm.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.JFIFExtension">
+            <summary>
+            Represents the JFIF extension.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.JFIFExtension.ThumbnailJPEG">
+            <summary>
+            Thumbnail coded using JPEG.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.JFIFExtension.ThumbnailPaletteRGB">
+            <summary>
+            Thumbnail stored using a 256-Color RGB palette.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.JFIFExtension.Thumbnail24BitRGB">
+            <summary>
+            Thumbnail stored using 3 bytes/pixel (24-bit) RGB values.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.JFIFVersion">
+            <summary>
+            Represents the JFIF version as a 16 bit unsigned integer. (EXIF Specification: SHORT) 
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JFIFVersion.Major">
+            <summary>
+            Gets the major version.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JFIFVersion.Minor">
+            <summary>
+            Gets the minor version.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.JFIFThumbnailProperty">
+            <summary>
+            Represents a JFIF thumbnail. (EXIF Specification: BYTE) 
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.JFIFThumbnail">
+            <summary>
+            Represents a JFIF thumbnail.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JFIFThumbnail.Palette">
+            <summary>
+            Gets the 256 color RGB palette.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JFIFThumbnail.PixelData">
+            <summary>
+            Gets raw image data.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JFIFThumbnail.Format">
+            <summary>
+            Gets the image format.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.UnknownImageFormatException">
+            <summary>
+            The exception that is thrown when the format of the image file
+            could not be understood.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.NotValidImageFileException">
+            <summary>
+            The exception that is thrown when the format of the image file
+            could not be understood.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.NotValidJPEGFileException">
+            <summary>
+            The exception that is thrown when the format of the JPEG file
+            could not be understood.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.NotValidTIFFileException">
+            <summary>
+            The exception that is thrown when the format of the TIFF file
+            could not be understood.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.NotValidTIFFHeader">
+            <summary>
+            The exception that is thrown when the format of the TIFF header
+            could not be understood.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.SectionExceeds64KBException">
+            <summary>
+            The exception that is thrown when the length of a section exceeds 64 kB.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.JPEGFile">
+            <summary>
+            Represents the binary view of a JPEG compressed file.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the <see cref="!:ExifFile"/> class.
+            </summary>
+            <param name="stream">A <see cref="!:Sytem.IO.Stream"/> that contains image data.</param>
+            <param name="encoding">The encoding to be used for text metadata when the source encoding is unknown.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.Save(System.IO.Stream,System.Boolean)">
+            <summary>
+            Saves the JPEG/Exif image to the given stream.
+            </summary>
+            <param name="filename">The path to the JPEG/Exif file.</param>
+            <param name="preserveMakerNote">Determines whether the maker note offset of
+            the original file will be preserved.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.Save(System.String,System.Boolean)">
+            <summary>
+            Saves the JPEG/Exif image with the given filename.
+            </summary>
+            <param name="filename">The path to the JPEG/Exif file.</param>
+            <param name="preserveMakerNote">Determines whether the maker note offset of
+            the original file will be preserved.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.Save(System.String)">
+            <summary>
+            Saves the JPEG/Exif image with the given filename.
+            </summary>
+            <param name="filename">The path to the JPEG/Exif file.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.Save(System.IO.Stream)">
+            <summary>
+            Saves the JPEG/Exif image to the given stream.
+            </summary>
+            <param name="filename">The path to the JPEG/Exif file.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.ToImage">
+            <summary>
+            Returns a System.Drawing.Image created with image data.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.ReadJFIFAPP0">
+            <summary>
+            Reads the APP0 section containing JFIF metadata.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.WriteJFIFApp0">
+            <summary>
+            Replaces the contents of the APP0 section with the JFIF properties.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.ReadJFXXAPP0">
+            <summary>
+            Reads the APP0 section containing JFIF extension metadata.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.WriteJFXXApp0">
+            <summary>
+            Replaces the contents of the APP0 section with the JFIF extension properties.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.ReadExifAPP1">
+            <summary>
+            Reads the APP1 section containing Exif metadata.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGFile.WriteExifApp1(System.Boolean)">
+            <summary>
+            Replaces the contents of the APP1 section with the Exif properties.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JPEGFile.ByteOrder">
+            <summary>
+            Gets or sets the byte-order of the Exif properties.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JPEGFile.Sections">
+            <summary>
+            Gets or sets the sections contained in the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/>.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JPEGFile.TrailingData">
+            <summary>
+            Gets or sets non-standard trailing data following the End of Image (EOI) marker.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.JPEGMarker">
+            <summary>
+            Represents a JPEG marker byte.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.JPEGSection">
+            <summary>
+            Represents the memory view of a JPEG section.
+            A JPEG section is the data between markers of the JPEG file.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGSection.#ctor(Umbraco.Core.Media.Exif.JPEGMarker,System.Byte[],System.Byte[])">
+            <summary>
+            Constructs a JPEGSection represented by the marker byte and containing
+            the given data.
+            </summary>
+            <param name="marker">The marker byte representing the section.</param>
+            <param name="data">Section data.</param>
+            <param name="entropydata">Entropy coded data.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGSection.#ctor(Umbraco.Core.Media.Exif.JPEGMarker)">
+            <summary>
+            Constructs a JPEGSection represented by the marker byte.
+            </summary>
+            <param name="marker">The marker byte representing the section.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.JPEGSection.ToString">
+            <summary>
+            Returns a string representation of the current section.
+            </summary>
+            <returns>A System.String that represents the current section.</returns>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JPEGSection.Marker">
+            <summary>
+            The marker byte representing the section.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JPEGSection.Header">
+            <summary>
+            Section header as a byte array. This is different from the header
+            definition in JPEG specification in that it does not include the 
+            two byte section length.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.JPEGSection.EntropyData">
+            <summary>
+            For the SOS and RST markers, this contains the entropy coded data.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.MathEx">
+            <summary>
+            Contains extended Math functions.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.GCD(System.UInt32,System.UInt32)">
+            <summary>
+            Returns the greatest common divisor of two numbers.
+            </summary>
+            <param name="a">First number.</param>
+            <param name="b">Second number.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.GCD(System.UInt64,System.UInt64)">
+            <summary>
+            Returns the greatest common divisor of two numbers.
+            </summary>
+            <param name="a">First number.</param>
+            <param name="b">Second number.</param>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.MathEx.Fraction32">
+            <summary>
+            Represents a generic rational number represented by 32-bit signed numerator and denominator.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.IsNan(Umbraco.Core.Media.Exif.MathEx.Fraction32)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to a value
+            that is not a number.
+            </summary>
+            <param name="f">A fraction.</param>
+            <returns>true if f evaluates to Fraction.NaN; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.IsNegativeInfinity(Umbraco.Core.Media.Exif.MathEx.Fraction32)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to negative
+            infinity.
+            </summary>
+            <param name="f">A fraction.</param>
+            <returns>true if f evaluates to Fraction.NegativeInfinity; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.IsPositiveInfinity(Umbraco.Core.Media.Exif.MathEx.Fraction32)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to positive
+            infinity.
+            </summary>
+            <param name="f">A fraction.</param>
+            <returns>true if f evaluates to Fraction.PositiveInfinity; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.IsInfinity(Umbraco.Core.Media.Exif.MathEx.Fraction32)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to negative
+            or positive infinity.
+            </summary>
+            <param name="f">A fraction.</param>
+            <returns>true if f evaluates to Fraction.NegativeInfinity or Fraction.PositiveInfinity; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.Inverse(Umbraco.Core.Media.Exif.MathEx.Fraction32)">
+            <summary>
+            Returns the multiplicative inverse of a given value.
+            </summary>
+            <param name="f">A fraction.</param>
+            <returns>Multiplicative inverse of f.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.Parse(System.String)">
+            <summary>
+            Converts the string representation of a fraction to a fraction object.
+            </summary>
+            <param name="s">A string formatted as numerator/denominator</param>
+            <returns>A fraction object converted from s.</returns>
+            <exception cref="T:System.ArgumentNullException">s is null</exception>
+            <exception cref="T:System.FormatException">s is not in the correct format</exception>
+            <exception cref="T:System.OverflowException">
+            s represents a number less than System.UInt32.MinValue or greater than 
+            System.UInt32.MaxValue.
+            </exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.TryParse(System.String,Umbraco.Core.Media.Exif.MathEx.Fraction32@)">
+            <summary>
+            Converts the string representation of a fraction to a fraction object.
+            A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="s">A string formatted as numerator/denominator</param>
+            <returns>true if s was converted successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.Set(System.Int32,System.Int32)">
+            <summary>
+            Sets the value of this instance to the fraction represented
+            by the given numerator and denominator.
+            </summary>
+            <param name="numerator">The new numerator.</param>
+            <param name="denominator">The new denominator.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.Equals(System.Object)">
+            <summary>
+            Indicates whether this instance and a specified object are equal value-wise.
+            </summary>
+            <param name="obj">Another object to compare to.</param>
+            <returns>true if obj and this instance are the same type and represent 
+            the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.Equals(Umbraco.Core.Media.Exif.MathEx.Fraction32)">
+            <summary>
+            Indicates whether this instance and a specified object are equal value-wise.
+            </summary>
+            <param name="obj">Another fraction object to compare to.</param>
+            <returns>true if obj and this instance represent the same value; 
+            otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.GetHashCode">
+            <summary>
+            Returns the hash code for this instance.
+            </summary>
+            <returns> A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.ToString(System.String,System.IFormatProvider)">
+            <summary>
+            Returns a string representation of the fraction.
+            </summary>
+            <param name="format">A numeric format string.</param>
+            <param name="formatProvider">
+            An System.IFormatProvider that supplies culture-specific 
+            formatting information.
+            </param>
+            <returns>
+            The string representation of the value of this instance as 
+            specified by format and provider.
+            </returns>
+            <exception cref="T:System.FormatException">
+            format is invalid or not supported.
+            </exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.ToString(System.String)">
+            <summary>
+            Returns a string representation of the fraction.
+            </summary>
+            <param name="format">A numeric format string.</param>
+            <returns>
+            The string representation of the value of this instance as 
+            specified by format.
+            </returns>
+            <exception cref="T:System.FormatException">
+            format is invalid or not supported.
+            </exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.ToString(System.IFormatProvider)">
+            <summary>
+            Returns a string representation of the fraction.
+            </summary>
+            <param name="formatProvider">
+            An System.IFormatProvider that supplies culture-specific 
+            formatting information.
+            </param>
+            <returns>
+            The string representation of the value of this instance as 
+            specified by provider.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.ToString">
+            <summary>
+            Returns a string representation of the fraction.
+            </summary>
+            <returns>A string formatted as numerator/denominator.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.CompareTo(System.Object)">
+            <summary>
+            Compares this instance to a specified object and returns an indication of
+            their relative values.
+            </summary>
+            <param name="obj">An object to compare, or null.</param>
+            <returns>
+            A signed number indicating the relative values of this instance and value.
+            Less than zero: This instance is less than obj.
+            Zero: This instance is equal to obj. 
+            Greater than zero: This instance is greater than obj or obj is null.
+            </returns>
+            <exception cref="T:System.ArgumentException">obj is not a Fraction.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.CompareTo(Umbraco.Core.Media.Exif.MathEx.Fraction32)">
+            <summary>
+            Compares this instance to a specified object and returns an indication of
+            their relative values.
+            </summary>
+            <param name="obj">An fraction to compare with this instance.</param>
+            <returns>
+            A signed number indicating the relative values of this instance and value.
+            Less than zero: This instance is less than obj.
+            Zero: This instance is equal to obj. 
+            Greater than zero: This instance is greater than obj or obj is null.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.FromDouble(System.Double)">
+            <summary>
+            Converts the given floating-point number to its rational representation.
+            </summary>
+            <param name="value">The floating-point number to be converted.</param>
+            <returns>The rational representation of value.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.FromString(System.String)">
+            <summary>Converts the string representation of a fraction to a Fraction type.</summary>
+            <param name="s">The input string formatted as numerator/denominator.</param>
+            <exception cref="T:System.ArgumentNullException">s is null.</exception>
+            <exception cref="T:System.FormatException">s is not formatted as numerator/denominator.</exception>
+            <exception cref="T:System.OverflowException">
+            s represents numbers less than System.Int32.MinValue or greater than 
+            System.Int32.MaxValue.
+            </exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.Fraction32.Reduce(System.Int32@,System.Int32@)">
+            <summary>
+            Reduces the given numerator and denominator by dividing with their
+            greatest common divisor.
+            </summary>
+            <param name="numerator">numerator to be reduced.</param>
+            <param name="denominator">denominator to be reduced.</param>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.MathEx.Fraction32.Numerator">
+            <summary>
+            Gets or sets the numerator.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.MathEx.Fraction32.Denominator">
+            <summary>
+            Gets or sets the denominator.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.MathEx.Fraction32.Error">
+            <summary>
+            Gets the error term.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.MathEx.Fraction32.IsNegative">
+            <summary>
+            Gets or sets a value determining id the fraction is a negative value.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.MathEx.UFraction32">
+            <summary>
+            Represents a generic rational number represented by 32-bit unsigned numerator and denominator.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.IsNan(Umbraco.Core.Media.Exif.MathEx.UFraction32)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to a value
+            that is not a number.
+            </summary>
+            <param name="f">A fraction.</param>
+            <returns>true if f evaluates to Fraction.NaN; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.IsInfinity(Umbraco.Core.Media.Exif.MathEx.UFraction32)">
+            <summary>
+            Returns a value indicating whether the specified number evaluates to infinity.
+            </summary>
+            <param name="f">A fraction.</param>
+            <returns>true if f evaluates to Fraction.Infinity; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.Parse(System.String)">
+            <summary>
+            Converts the string representation of a fraction to a fraction object.
+            </summary>
+            <param name="s">A string formatted as numerator/denominator</param>
+            <returns>A fraction object converted from s.</returns>
+            <exception cref="T:System.ArgumentNullException">s is null</exception>
+            <exception cref="T:System.FormatException">s is not in the correct format</exception>
+            <exception cref="T:System.OverflowException">
+            s represents a number less than System.UInt32.MinValue or greater than 
+            System.UInt32.MaxValue.
+            </exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.TryParse(System.String,Umbraco.Core.Media.Exif.MathEx.UFraction32@)">
+            <summary>
+            Converts the string representation of a fraction to a fraction object.
+            A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="s">A string formatted as numerator/denominator</param>
+            <returns>true if s was converted successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.Set(System.UInt32,System.UInt32)">
+            <summary>
+            Sets the value of this instance to the fraction represented
+            by the given numerator and denominator.
+            </summary>
+            <param name="numerator">The new numerator.</param>
+            <param name="denominator">The new denominator.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.Inverse(Umbraco.Core.Media.Exif.MathEx.UFraction32)">
+            <summary>
+            Returns the multiplicative inverse of a given value.
+            </summary>
+            <param name="f">A fraction.</param>
+            <returns>Multiplicative inverse of f.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.Equals(System.Object)">
+            <summary>
+            Indicates whether this instance and a specified object are equal value-wise.
+            </summary>
+            <param name="obj">Another object to compare to.</param>
+            <returns>true if obj and this instance are the same type and represent 
+            the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.Equals(Umbraco.Core.Media.Exif.MathEx.UFraction32)">
+            <summary>
+            Indicates whether this instance and a specified object are equal value-wise.
+            </summary>
+            <param name="obj">Another fraction object to compare to.</param>
+            <returns>true if obj and this instance represent the same value; 
+            otherwise, false.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.GetHashCode">
+            <summary>
+            Returns the hash code for this instance.
+            </summary>
+            <returns> A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.ToString(System.String,System.IFormatProvider)">
+            <summary>
+            Returns a string representation of the fraction.
+            </summary>
+            <param name="format">A numeric format string.</param>
+            <param name="formatProvider">
+            An System.IFormatProvider that supplies culture-specific 
+            formatting information.
+            </param>
+            <returns>
+            The string representation of the value of this instance as 
+            specified by format and provider.
+            </returns>
+            <exception cref="T:System.FormatException">
+            format is invalid or not supported.
+            </exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.ToString(System.String)">
+            <summary>
+            Returns a string representation of the fraction.
+            </summary>
+            <param name="format">A numeric format string.</param>
+            <returns>
+            The string representation of the value of this instance as 
+            specified by format.
+            </returns>
+            <exception cref="T:System.FormatException">
+            format is invalid or not supported.
+            </exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.ToString(System.IFormatProvider)">
+            <summary>
+            Returns a string representation of the fraction.
+            </summary>
+            <param name="formatProvider">
+            An System.IFormatProvider that supplies culture-specific 
+            formatting information.
+            </param>
+            <returns>
+            The string representation of the value of this instance as 
+            specified by provider.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.ToString">
+            <summary>
+            Returns a string representation of the fraction.
+            </summary>
+            <returns>A string formatted as numerator/denominator.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.CompareTo(System.Object)">
+            <summary>
+            Compares this instance to a specified object and returns an indication of
+            their relative values.
+            </summary>
+            <param name="obj">An object to compare, or null.</param>
+            <returns>
+            A signed number indicating the relative values of this instance and value.
+            Less than zero: This instance is less than obj.
+            Zero: This instance is equal to obj. 
+            Greater than zero: This instance is greater than obj or obj is null.
+            </returns>
+            <exception cref="T:System.ArgumentException">obj is not a Fraction.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.CompareTo(Umbraco.Core.Media.Exif.MathEx.UFraction32)">
+            <summary>
+            Compares this instance to a specified object and returns an indication of
+            their relative values.
+            </summary>
+            <param name="obj">An fraction to compare with this instance.</param>
+            <returns>
+            A signed number indicating the relative values of this instance and value.
+            Less than zero: This instance is less than obj.
+            Zero: This instance is equal to obj. 
+            Greater than zero: This instance is greater than obj or obj is null.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.FromDouble(System.Double)">
+            <summary>
+            Converts the given floating-point number to its rational representation.
+            </summary>
+            <param name="value">The floating-point number to be converted.</param>
+            <returns>The rational representation of value.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.FromString(System.String)">
+            <summary>Converts the string representation of a fraction to a Fraction type.</summary>
+            <param name="s">The input string formatted as numerator/denominator.</param>
+            <exception cref="T:System.ArgumentNullException">s is null.</exception>
+            <exception cref="T:System.FormatException">s is not formatted as numerator/denominator.</exception>
+            <exception cref="T:System.OverflowException">
+            s represents numbers less than System.UInt32.MinValue or greater than 
+            System.UInt32.MaxValue.
+            </exception>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.MathEx.UFraction32.Reduce(System.UInt32@,System.UInt32@)">
+            <summary>
+            Reduces the given numerator and denominator by dividing with their
+            greatest common divisor.
+            </summary>
+            <param name="numerator">numerator to be reduced.</param>
+            <param name="denominator">denominator to be reduced.</param>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.MathEx.UFraction32.Numerator">
+            <summary>
+            Gets or sets the numerator.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.MathEx.UFraction32.Denominator">
+            <summary>
+            Gets or sets the denominator.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.MathEx.UFraction32.Error">
+            <summary>
+            Gets the error term.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.TIFFFile">
+            <summary>
+            Represents the binary view of a TIFF file.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.TIFFFile.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Media.Exif.JPEGFile"/> class from the
+            specified data stream.
+            </summary>
+            <param name="stream">A <see cref="!:Sytem.IO.Stream"/> that contains image data.</param>
+            <param name="encoding">The encoding to be used for text metadata when the source encoding is unknown.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.TIFFFile.Save(System.IO.Stream)">
+            <summary>
+            Saves the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> to the given stream.
+            </summary>
+            <param name="stream">The data stream used to save the image.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.TIFFFile.ToImage">
+            <summary>
+            Converts the <see cref="T:Umbraco.Core.Media.Exif.ImageFile"/> to a <see cref="T:System.Drawing.Image"/>.
+            </summary>
+            <returns>Returns a <see cref="T:System.Drawing.Image"/> containing image data.</returns>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.TIFFFile.TIFFHeader">
+            <summary>
+            Gets the TIFF header.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.TIFFFile.IFDs">
+            <summary>
+            Gets the image file directories.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.TIFFHeader">
+            <summary>
+            Represents a TIFF Header.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.TIFFHeader.ByteOrder">
+            <summary>
+            The byte order of the image file.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.TIFFHeader.ID">
+            <summary>
+            TIFF ID. This value should always be 42.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.TIFFHeader.IFDOffset">
+            <summary>
+            The offset to the first IFD section from the 
+            start of the TIFF header.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Media.Exif.TIFFHeader.TIFFHeaderByteOrder">
+            <summary>
+            The byte order of the TIFF header itself.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.TIFFHeader.#ctor(Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder,System.Byte,System.UInt32,Umbraco.Core.Media.Exif.BitConverterEx.ByteOrder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Media.Exif.TIFFHeader"/> struct.
+            </summary>
+            <param name="byteOrder">The byte order.</param>
+            <param name="id">The TIFF ID. This value should always be 42.</param>
+            <param name="ifdOffset">The offset to the first IFD section from the 
+            start of the TIFF header.</param>
+            <param name="headerByteOrder">The byte order of the TIFF header itself.</param>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.TIFFHeader.FromBytes(System.Byte[],System.Int32)">
+            <summary>
+            Returns a <see cref="T:Umbraco.Core.Media.Exif.TIFFHeader"/> initialized from the given byte data.
+            </summary>
+            <param name="data">The data.</param>
+            <param name="offset">The offset into <paramref name="data"/>.</param>
+            <returns>A <see cref="T:Umbraco.Core.Media.Exif.TIFFHeader"/> initialized from the given byte data.</returns>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.TIFFStrip">
+            <summary>
+            Represents a strip of compressed image data in a TIFF file.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.TIFFStrip.#ctor(System.Byte[],System.UInt32,System.UInt32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Media.Exif.TIFFStrip"/> class.
+            </summary>
+            <param name="data">The byte array to copy strip from.</param>
+            <param name="offset">The offset to the beginning of strip.</param>
+            <param name="length">The length of strip.</param>
+        </member>
+        <member name="P:Umbraco.Core.Media.Exif.TIFFStrip.Data">
+            <summary>
+            Compressed image data contained in this strip.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Media.Exif.Utility">
+            <summary>
+            Contains utility functions.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.Exif.Utility.GetStreamBytes(System.IO.Stream)">
+            <summary>
+            Reads the entire stream and returns its contents as a byte array.
+            </summary>
+            <param name="stream">The <see cref="T:System.IO.Stream"/> to read.</param>
+            <returns>Contents of the <paramref name="stream"/> as a byte array.</returns>
+        </member>
         <member name="M:Umbraco.Core.IO.UmbracoMediaFile.Initialize">
             <summary>
             Initialized values that don't require opening the file.
@@ -3091,6 +5073,206 @@
             </summary>
             <remarks>
             We are lazy loading this, don't go opening the file on ctor like we were doing.
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Core.Models.IFile">
+            <summary>
+            Defines a File
+            </summary>
+            <remarks>Used for Scripts, Stylesheets and Templates</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Models.EntityBase.IAggregateRoot">
+            <summary>
+            Marker interface for aggregate roots
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.EntityBase.IEntity">
+            <summary>
+            Defines an Entity.
+            Entities should always have an Id, Created and Modified date
+            </summary>
+            <remarks>The current database schema doesn't provide a modified date
+            for all entities, so this will have to be changed at a later stage.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.Id">
+            <summary>
+            The Id of the entity
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.Key">
+            <summary>
+            Guid based Id
+            </summary>
+            <remarks>The key is currectly used to store the Unique Id from the 
+            umbracoNode table, which many of the entities are based on.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.CreateDate">
+            <summary>
+            Gets or sets the Created Date
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.UpdateDate">
+            <summary>
+            Gets or sets the Modified Date
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.HasIdentity">
+            <summary>
+            Indicates whether the current entity has an identity, eg. Id.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.IFile.IsValid">
+            <summary>
+            Boolean indicating whether the file could be validated
+            </summary>
+            <returns>True if file is valid, otherwise false</returns>
+        </member>
+        <member name="P:Umbraco.Core.Models.IFile.Name">
+            <summary>
+            Gets the Name of the File including extension
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IFile.Alias">
+            <summary>
+            Gets the Alias of the File, which is the name without the extension
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IFile.Path">
+            <summary>
+            Gets or sets the Path to the File from the root of the file's associated IFileSystem
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IFile.Content">
+            <summary>
+            Gets or sets the Content of a File
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IFile.VirtualPath">
+            <summary>
+            Gets or sets the file's virtual path (i.e. the file path relative to the root of the website)
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.GridEditor.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            true if the specified object  is equal to the current object; otherwise, false.
+            </returns>
+            <param name="obj">The object to compare with the current object. </param>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.GridEditor.GetHashCode">
+            <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="T:Umbraco.Core.Services.ILocalizedTextService">
+            <summary>
+            The entry point to localize any key in the text storage source for a given culture 
+            </summary>
+            <remarks>
+            This class is created to be as simple as possible so that it can be replaced very easily, 
+            all other methods are extension methods that simply call the one underlying method in this class
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Services.ILocalizedTextService.Localize(System.String,System.Globalization.CultureInfo,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Localize a key with variables
+            </summary>
+            <param name="key"></param>
+            <param name="culture"></param>
+            <param name="tokens">This can be null</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ILocalizedTextService.GetAllStoredValues(System.Globalization.CultureInfo)">
+            <summary>
+            Returns all key/values in storage for the given culture
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ILocalizedTextService.GetSupportedCultures">
+            <summary>
+            Returns a list of all currently supported cultures
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ILocalizedTextService.ConvertToSupportedCultureWithRegionCode(System.Globalization.CultureInfo)">
+            <summary>
+            Tries to resolve a full 4 letter culture from a 2 letter culture name
+            </summary>
+            <param name="currentCulture">
+            The culture to determine if it is only a 2 letter culture, if so we'll try to convert it, otherwise it will just be returned
+            </param>
+            <returns></returns>
+            <remarks>
+            TODO: This is just a hack due to the way we store the language files, they should be stored with 4 letters since that 
+            is what they reference but they are stored with 2, further more our user's languages are stored with 2. So this attempts
+            to resolve the full culture if possible.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextService.#ctor(Umbraco.Core.Services.LocalizedTextServiceFileSources)">
+            <summary>
+            Initializes with a file sources instance
+            </summary>
+            <param name="fileSources"></param>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextService.#ctor(System.Collections.Generic.IDictionary{System.Globalization.CultureInfo,System.Lazy{System.Xml.Linq.XDocument}})">
+            <summary>
+            Initializes with an XML source
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextService.#ctor(System.Collections.Generic.IDictionary{System.Globalization.CultureInfo,System.Collections.Generic.IDictionary{System.String,System.Collections.Generic.IDictionary{System.String,System.String}}})">
+            <summary>
+            Initializes with a source of a dictionary of culture -> areas -> sub dictionary of keys/values
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextService.GetAllStoredValues(System.Globalization.CultureInfo)">
+            <summary>
+            Returns all key/values in storage for the given culture
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextService.GetSupportedCultures">
+            <summary>
+            Returns a list of all currently supported cultures
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextService.ConvertToSupportedCultureWithRegionCode(System.Globalization.CultureInfo)">
+            <summary>
+            Tries to resolve a full 4 letter culture from a 2 letter culture name
+            </summary>
+            <param name="currentCulture">
+            The culture to determine if it is only a 2 letter culture, if so we'll try to convert it, otherwise it will just be returned
+            </param>
+            <returns></returns>
+            <remarks>
+            TODO: This is just a hack due to the way we store the language files, they should be stored with 4 letters since that 
+            is what they reference but they are stored with 2, further more our user's languages are stored with 2. So this attempts
+            to resolve the full culture if possible.
+            
+            This only works when this service is constructed with the LocalizedTextServiceFileSources
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextService.ParseTokens(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Parses the tokens in the value
+            </summary>
+            <param name="value"></param>
+            <param name="tokens"></param>
+            <returns></returns>
+            <remarks>
+            This is based on how the legacy ui localized text worked, each token was just a sequential value delimited with a % symbol. 
+            For example: hello %0%, you are %1% !
+            
+            Since we're going to continue using the same language files for now, the token system needs to remain the same. With our new service
+            we support a dictionary which means in the future we can really have any sort of token system. 
+            Currently though, the token key's will need to be an integer and sequential - though we aren't going to throw exceptions if that is not the case.
             </remarks>
         </member>
         <member name="T:Umbraco.Core.Macros.XsltExtension">
@@ -3546,9 +5728,9 @@
             This reads in the manifests and stores some definitions in memory so we can look them on the server side
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Manifest.ManifestBuilder.GetManifests">
+        <member name="P:Umbraco.Core.Manifest.ManifestBuilder.GridEditors">
             <summary>
-            Ensures the manifests are found and loaded into memory
+            Returns all grid editors found in the manfifests
             </summary>
         </member>
         <member name="P:Umbraco.Core.Manifest.ManifestBuilder.PropertyEditors">
@@ -3565,6 +5747,13 @@
             <summary>
             Parses the Main.js file and replaces all tokens accordingly.
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Manifest.ManifestParser.GetGridEditors(Newtonsoft.Json.Linq.JArray)">
+            <summary>
+            Parse the grid editors from the json array
+            </summary>
+            <param name="jsonEditors"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Manifest.ManifestParser.GetPropertyEditors(Newtonsoft.Json.Linq.JArray)">
             <summary>
@@ -3585,8 +5774,11 @@
             Get all registered manifests
             </summary>
             <returns></returns>
+            <remarks>
+            This ensures that we only build and look for all manifests once per Web app (based on the IRuntimeCache)
+            </remarks>
         </member>
-        <member name="M:Umbraco.Core.Manifest.ManifestParser.GetAllManfifestFileContents(System.IO.DirectoryInfo)">
+        <member name="M:Umbraco.Core.Manifest.ManifestParser.GetAllManifestFileContents(System.IO.DirectoryInfo)">
             <summary>
             Get the file contents from all declared manifest files
             </summary>
@@ -3712,6 +5904,11 @@
             The json array of parameter editors
             </summary>
         </member>
+        <member name="P:Umbraco.Core.Manifest.PackageManifest.GridEditors">
+            <summary>
+            The json array of grid editors
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Manifest.ParameterEditorConverter">
             <summary>
             Used to convert a parameter editor manifest to a property editor object
@@ -3731,6 +5928,19 @@
             <summary>
             A helper class used for imaging
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Media.ImageHelper.GetDimensions(System.IO.Stream)">
+            <summary>
+            Gets the dimensions of an image based on a stream
+            </summary>
+            <param name="imageStream"></param>
+            <returns></returns>
+            <remarks>
+            First try with EXIF, this is because it is insanely faster and doesn't use any memory to read exif data than to load in the entire
+            image via GDI. Otherwise loading an image into GDI consumes a crazy amount of memory on large images.
+            
+            Of course EXIF data might not exist in every file and can only exist in JPGs
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.Media.ImageHelper.GenerateMediaThumbnails(Umbraco.Core.IO.IFileSystem,System.String,System.String,System.Drawing.Image,System.Collections.Generic.IEnumerable{System.Int32})">
             <summary>
@@ -3883,44 +6093,25 @@
             to the same value, so it's really not dirty.
             </remarks>
         </member>
+        <member name="M:Umbraco.Core.Models.EntityBase.TracksChangesEntityBase.SetPropertyValueAndDetectChanges``1(System.Func{``0,``0},``0,System.Reflection.PropertyInfo,System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Used by inheritors to set the value of properties, this will detect if the property value actually changed and if it did
+            it will ensure that the property has a dirty flag set.
+            </summary>
+            <param name="setValue"></param>
+            <param name="value"></param>
+            <param name="propertySelector"></param>
+            <param name="comparer">The equality comparer to use</param>
+            <returns>returns true if the value changed</returns>
+            <remarks>
+            This is required because we don't want a property to show up as "dirty" if the value is the same. For example, when we 
+            save a document type, nearly all properties are flagged as dirty just because we've 'reset' them, but they are all set 
+            to the same value, so it's really not dirty.
+            </remarks>
+        </member>
         <member name="E:Umbraco.Core.Models.EntityBase.TracksChangesEntityBase.PropertyChanged">
             <summary>
             Property changed event
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.EntityBase.IEntity">
-            <summary>
-            Defines an Entity.
-            Entities should always have an Id, Created and Modified date
-            </summary>
-            <remarks>The current database schema doesn't provide a modified date
-            for all entities, so this will have to be changed at a later stage.</remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.Id">
-            <summary>
-            The Id of the entity
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.Key">
-            <summary>
-            Guid based Id
-            </summary>
-            <remarks>The key is currectly used to store the Unique Id from the 
-            umbracoNode table, which many of the entities are based on.</remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.CreateDate">
-            <summary>
-            Gets or sets the Created Date
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.UpdateDate">
-            <summary>
-            Gets or sets the Modified Date
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IEntity.HasIdentity">
-            <summary>
-            Indicates whether the current entity has an identity, eg. Id.
             </summary>
         </member>
         <member name="M:Umbraco.Core.Models.EntityBase.Entity.AddingEntity">
@@ -3972,11 +6163,6 @@
             <summary>
             Defines the base for a Content object with properties that
             are shared between Content and Media.
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.EntityBase.IAggregateRoot">
-            <summary>
-            Marker interface for aggregate roots
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.CreatorId">
@@ -4788,6 +6974,13 @@
             in a single transaction during saving an entity
             </summary>
         </member>
+        <member name="P:Umbraco.Core.Models.ContentXmlEntity`1.HasIdentity">
+            <summary>
+            Special case, always return false, this will cause the repositories managing 
+            this object to always do an 'insert' but these are special repositories that 
+            do an InsertOrUpdate on insert since the data for this needs to be managed this way
+            </summary>        
+        </member>
         <member name="T:Umbraco.Core.Models.ContentTypeBase">
             <summary>
             Represents an abstract class for base ContentType properties and methods
@@ -5256,6 +7449,11 @@
             <summary>
             Marker interface for value object, eg. objects without
             the same kind of identity as an Entity (with its Id).
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentTypeSort.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Object"/> class.
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.ContentTypeSort.Id">
@@ -5751,38 +7949,6 @@
             Represents an abstract file which provides basic functionality for a File with an Alias and Name
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Models.IFile">
-            <summary>
-            Defines a File
-            </summary>
-            <remarks>Used for Scripts, Stylesheets and Templates</remarks>
-        </member>
-        <member name="M:Umbraco.Core.Models.IFile.IsValid">
-            <summary>
-            Boolean indicating whether the file could be validated
-            </summary>
-            <returns>True if file is valid, otherwise false</returns>
-        </member>
-        <member name="P:Umbraco.Core.Models.IFile.Name">
-            <summary>
-            Gets the Name of the File including extension
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.IFile.Alias">
-            <summary>
-            Gets the Alias of the File, which is the name without the extension
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.IFile.Path">
-            <summary>
-            Gets or sets the Path to the File from the root of the site
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.IFile.Content">
-            <summary>
-            Gets or sets the Content of a File
-            </summary>
-        </member>
         <member name="M:Umbraco.Core.Models.File.IsValid">
             <summary>
             Boolean indicating whether the file could be validated
@@ -5801,12 +7967,17 @@
         </member>
         <member name="P:Umbraco.Core.Models.File.Path">
             <summary>
-            Gets or sets the Path to the File from the root of the site
+            Gets or sets the Path to the File from the root of the file's associated IFileSystem
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.File.Content">
             <summary>
             Gets or sets the Content of a File
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.File.VirtualPath">
+            <summary>
+            Gets or sets the file's virtual path (i.e. the file path relative to the root of the website)
             </summary>
         </member>
         <member name="M:Umbraco.Core.Models.PartialView.IsValid">
@@ -6103,12 +8274,6 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.IPartialViewMacroRepository.AddOrUpdate(Umbraco.Core.Models.IMacro)">
-            <summary>
-            Adds or Updates an associated macro
-            </summary>
-            <param name="macro"></param>
-        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IRecycleBinRepository`1.GetEntitiesInRecycleBin">
             <summary>
             Gets all entities in recycle bin
@@ -6133,6 +8298,13 @@
             Defines the Unit Of Work-part of a repository
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.FileRepository`2.GetContentStream(System.String)">
+            <summary>
+            Gets a stream that is used to write to the file
+            </summary>
+            <param name="content"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.FileRepository`2.DisposeResources">
             <summary>
             Dispose any disposable properties
@@ -6146,16 +8318,15 @@
             Returns the Unit of Work added to the repository
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.PartialViewMacroRepository.DisposeResources">
+        <member name="M:Umbraco.Core.Persistence.Repositories.PartialViewRepository.GetContentStream(System.String)">
             <summary>
-            Ensure the macro repo is disposed which contains a database UOW
+            Gets a stream that is used to write to the file
             </summary>
-        </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.PartialViewMacroRepository.AddOrUpdate(Umbraco.Core.Models.IMacro)">
-            <summary>
-            Adds or updates a macro associated with the partial view
-            </summary>
-            <param name="macro"></param>
+            <param name="content"></param>
+            <returns></returns>
+            <remarks>
+            This ensures the stream includes a utf8 BOM
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.Persistence.SqlSyntax.MicrosoftSqlSyntaxProviderBase`1">
             <summary>
@@ -8812,6 +10983,14 @@
             <param name="umbracoObjectType">UmbracoObjectTypes value</param>
             <returns>a string of the FriendlyName</returns>
         </member>
+        <member name="M:Umbraco.Core.Models.UserExtensions.GetUserCulture(Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Services.ILocalizedTextService)">
+            <summary>
+            Returns the culture info associated with this user, based on the language they're assigned to in the back office
+            </summary>
+            <param name="user"></param>
+            <param name="textService"></param>
+            <returns></returns>      
+        </member>
         <member name="M:Umbraco.Core.Models.UserExtensions.HasPathAccess(Umbraco.Core.Models.Membership.IUser,Umbraco.Core.Models.IContent)">
             <summary>
             Checks if the user has access to the content item based on their start noe
@@ -10736,6 +12915,52 @@
             <param name="connection">The connection object that is required as per extension method declaration.</param>
             <param name="retryPolicy">The retry policy defining whether to retry a request if the connection fails to be opened.</param>
         </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.InsertOrUpdate``1(Umbraco.Core.Persistence.Database,``0)">
+            <summary>
+            This will handle the issue of inserting data into a table when there can be a violation of a primary key or unique constraint which
+            can occur when two threads are trying to insert data at the exact same time when the data violates this constraint. 
+            </summary>
+            <param name="db"></param>
+            <param name="poco"></param>       
+            <returns>
+            Returns the action that executed, either an insert or an update
+            
+            NOTE: If an insert occurred and a PK value got generated, the poco object passed in will contain the updated value.
+            </returns>
+            <remarks>
+            In different databases, there are a few raw SQL options like MySql's ON DUPLICATE KEY UPDATE or MSSQL's MERGE WHEN MATCHED, but since we are 
+            also supporting SQLCE for which this doesn't exist we cannot simply rely on the underlying database to help us here. So we'll actually need to 
+            try to be as proficient as possible when we know this can occur and manually handle the issue. 
+            
+            We do this by first trying to Update the record, this will return the number of rows affected. If it is zero then we insert, if it is one, then
+            we know the update was successful and the row was already inserted by another thread. If the rowcount is zero and we insert and get an exception, 
+            that's due to a race condition, in which case we need to retry and update.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.InsertOrUpdate``1(Umbraco.Core.Persistence.Database,``0,System.String,System.Object)">
+            <summary>
+            This will handle the issue of inserting data into a table when there can be a violation of a primary key or unique constraint which
+            can occur when two threads are trying to insert data at the exact same time when the data violates this constraint. 
+            </summary>
+            <param name="db"></param>
+            <param name="poco"></param>
+            <param name="updateArgs"></param>      
+            <param name="updateCommand">If the entity has a composite key they you need to specify the update command explicitly</param>
+            <returns>
+            Returns the action that executed, either an insert or an update
+            
+            NOTE: If an insert occurred and a PK value got generated, the poco object passed in will contain the updated value.
+            </returns>
+            <remarks>
+            In different databases, there are a few raw SQL options like MySql's ON DUPLICATE KEY UPDATE or MSSQL's MERGE WHEN MATCHED, but since we are 
+            also supporting SQLCE for which this doesn't exist we cannot simply rely on the underlying database to help us here. So we'll actually need to 
+            try to be as proficient as possible when we know this can occur and manually handle the issue. 
+            
+            We do this by first trying to Update the record, this will return the number of rows affected. If it is zero then we insert, if it is one, then
+            we know the update was successful and the row was already inserted by another thread. If the rowcount is zero and we insert and get an exception, 
+            that's due to a race condition, in which case we need to retry and update.
+            </remarks>
+        </member>
         <member name="M:Umbraco.Core.Persistence.PetaPocoExtensions.EscapeAtSymbols(System.String)">
             <summary>
             This will escape single @ symbols for peta poco values so it doesn't think it's a parameter
@@ -10995,6 +13220,12 @@
             </remarks>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Umbraco.Core.Persistence.Repositories.IContentRepository.ReplaceContentPermissions(Umbraco.Core.Models.Membership.EntityPermissionSet)" -->
+        <member name="M:Umbraco.Core.Persistence.Repositories.IContentRepository.ClearPublished(Umbraco.Core.Models.IContent)">
+            <summary>
+            Clears the published flag for a content.
+            </summary>
+            <param name="content"></param>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IContentRepository.GetByLanguage(System.Int32,System.String)">
             <summary>
             Gets a specific language version of an <see cref="T:Umbraco.Core.Models.IContent"/>
@@ -12929,17 +15160,38 @@
             Utility class for finding extension methods on a type to execute
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Dynamics.ExtensionMethodFinder.GetAllExtensionMethods(System.Type,System.String,System.Int32,System.Boolean)">
+        <member name="F:Umbraco.Core.Dynamics.ExtensionMethodFinder.MethodCache">
+            <summary>
+            The static cache for extension methods found that match the criteria that we are looking for
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Dynamics.ExtensionMethodFinder.GetAllExtensionMethodsInAppDomain(Umbraco.Core.Cache.IRuntimeCacheProvider)">
+            <summary>
+            Returns the enumerable of all extension method info's in the app domain = USE SPARINGLY!!!
+            </summary>
+            <returns></returns>
+            <remarks>
+            We cache this as a sliding 5 minute exiration, in unit tests there's over 1100 methods found, surely that will eat up a bit of memory so we want
+            to make sure we give it back.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Dynamics.ExtensionMethodFinder.GetAllExtensionMethods(Umbraco.Core.Cache.IRuntimeCacheProvider,System.Type,System.String,System.Int32)">
             <summary>
             Returns all extension methods found matching the definition
             </summary>
+            <param name="runtimeCache">
+            The runtime cache is used to temporarily cache all extension methods found in the app domain so that 
+            while we search for individual extension methods, the process will be reasonably 'quick'. We then statically
+            cache the MethodInfo's that we are looking for and then the runtime cache will expire and give back all that memory.
+            </param>
             <param name="thisType"></param>
             <param name="name"></param>
-            <param name="argumentCount"></param>
-            <param name="argsContainsThis"></param>
+            <param name="argumentCount">
+            The arguments EXCLUDING the 'this' argument in an extension method
+            </param>
             <returns></returns>
             <remarks>
-            TODO: NOTE: This will be an intensive method to call!! Results should be cached!
+            NOTE: This will be an intensive method to call! Results will be cached based on the key (args) of this method
             </remarks>
         </member>
         <member name="T:Umbraco.Core.Dynamics.PropertyResultType">
@@ -12960,6 +15212,12 @@
         <member name="F:Umbraco.Core.Dynamics.PropertyResultType.CustomProperty">
             <summary>
             The property was created manually for a custom purpose
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.IO.FileSystemExtensions.OpenReadWithRetry(System.IO.FileInfo,System.Int32,System.Int32)">
+            <summary>
+            Attempts to open the file at <code>filePath</code> up to <code>maxRetries</code> times,
+            with a thread sleep time of <code>sleepPerRetryInMilliseconds</code> between retries.
             </summary>
         </member>
         <member name="T:Umbraco.Core.IO.MediaFileSystem">
@@ -15311,9 +17569,10 @@
             This will return the current back office identity. 
             </summary>
             <param name="http"></param>
-            <param name="authenticateRequestIfNotFound">
+            <param name="authenticateRequestIfNotFound"> 
             If set to true and a back office identity is not found and not authenticated, this will attempt to authenticate the 
-            request just as is done in the Umbraco module and then set the current identity if it is valid
+            request just as is done in the Umbraco module and then set the current identity if it is valid.
+            Just like in the UmbracoModule, if this is true then the user's culture will be assigned to the request.
             </param>
             <returns>
             Returns the current back office identity if an admin is authenticated otherwise null
@@ -20207,6 +22466,14 @@
             <remarks>This is useful when an entire section is removed from config</remarks>
             <param name="sectionAlias">Alias of the section to remove</param>
         </member>
+        <member name="M:Umbraco.Core.Services.IUserService.AddSectionToAllUsers(System.String,System.Int32[])">
+            <summary>
+            Add a specific section to all users or those specified as parameters
+            </summary>
+            <remarks>This is useful when a new section is created to allow specific users accessing it</remarks>
+            <param name="sectionAlias">Alias of the section to add</param>
+            <param name="userIds">Specifiying nothing will add the section to all user</param>
+        </member>
         <member name="M:Umbraco.Core.Services.IUserService.GetPermissions(Umbraco.Core.Models.Membership.IUser,System.Int32[])">
             <summary>
             Get permissions set for a user and optional node ids
@@ -20408,6 +22675,39 @@
             <summary>
             Occurs after Save
             </summary>
+        </member>
+        <member name="T:Umbraco.Core.Services.LocalizedTextServiceExtensions">
+            <summary>
+            Extension methods for ILocalizedTextService
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextServiceExtensions.Localize(Umbraco.Core.Services.ILocalizedTextService,System.String,System.Globalization.CultureInfo,System.String[])">
+            <summary>
+            Localize a key without any variables
+            </summary>
+            <param name="manager"></param>
+            <param name="key"></param>
+            <param name="culture"></param>
+            <param name="tokens"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextServiceExtensions.ConvertToDictionaryVars(System.String[])">
+            <summary>
+            Convert an array of strings to a dictionary of indicies -> values
+            </summary>
+            <param name="variables"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Services.LocalizedTextServiceFileSources">
+            <summary>
+            Exposes the XDocument sources from files for the default localization text service and ensure caching is taken care of
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextServiceFileSources.GetXmlSources">
+            <summary>
+            returns all xml sources for all culture files found in the folder
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Services.MacroService">
             <summary>
@@ -22157,7 +24457,7 @@
             <see cref="T:Umbraco.Core.Services.IFileService"/>, <see cref="T:Umbraco.Core.Services.ILocalizationService"/> and <see cref="T:Umbraco.Core.Services.IMediaService"/>.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Services.ServiceContext.#ctor(Umbraco.Core.Services.IContentService,Umbraco.Core.Services.IMediaService,Umbraco.Core.Services.IContentTypeService,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.IFileService,Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Services.IPackagingService,Umbraco.Core.Services.IEntityService,Umbraco.Core.Services.IRelationService,Umbraco.Core.Services.IMemberGroupService,Umbraco.Core.Services.IMemberTypeService,Umbraco.Core.Services.IMemberService,Umbraco.Core.Services.IUserService,Umbraco.Core.Services.ISectionService,Umbraco.Core.Services.IApplicationTreeService,Umbraco.Core.Services.ITagService,Umbraco.Core.Services.INotificationService)">
+        <member name="M:Umbraco.Core.Services.ServiceContext.#ctor(Umbraco.Core.Services.IContentService,Umbraco.Core.Services.IMediaService,Umbraco.Core.Services.IContentTypeService,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.IFileService,Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Services.IPackagingService,Umbraco.Core.Services.IEntityService,Umbraco.Core.Services.IRelationService,Umbraco.Core.Services.IMemberGroupService,Umbraco.Core.Services.IMemberTypeService,Umbraco.Core.Services.IMemberService,Umbraco.Core.Services.IUserService,Umbraco.Core.Services.ISectionService,Umbraco.Core.Services.IApplicationTreeService,Umbraco.Core.Services.ITagService,Umbraco.Core.Services.INotificationService,Umbraco.Core.Services.ILocalizedTextService)">
             <summary>
             public ctor - will generally just be used for unit testing
             </summary>
@@ -22178,6 +24478,7 @@
             <param name="treeService"></param>
             <param name="tagService"></param>
             <param name="notificationService"></param>
+            <param name="localizedTextService"></param>
         </member>
         <member name="M:Umbraco.Core.Services.ServiceContext.#ctor(Umbraco.Core.Persistence.UnitOfWork.IDatabaseUnitOfWorkProvider,Umbraco.Core.Persistence.UnitOfWork.IUnitOfWorkProvider,Umbraco.Core.Publishing.BasePublishingStrategy,Umbraco.Core.CacheHelper)">
             <summary>
@@ -22191,6 +24492,11 @@
         <member name="M:Umbraco.Core.Services.ServiceContext.BuildServiceCache(Umbraco.Core.Persistence.UnitOfWork.IDatabaseUnitOfWorkProvider,Umbraco.Core.Persistence.UnitOfWork.IUnitOfWorkProvider,Umbraco.Core.Publishing.BasePublishingStrategy,Umbraco.Core.CacheHelper,System.Lazy{Umbraco.Core.Persistence.RepositoryFactory})">
             <summary>
             Builds the various services
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Services.ServiceContext.TextService">
+            <summary>
+            Gets the <see cref="T:Umbraco.Core.Services.ILocalizedTextService"/>
             </summary>
         </member>
         <member name="P:Umbraco.Core.Services.ServiceContext.NotificationService">
@@ -22649,6 +24955,14 @@
             </summary>
             <remarks>This is useful when an entire section is removed from config</remarks>
             <param name="sectionAlias">Alias of the section to remove</param>
+        </member>
+        <member name="M:Umbraco.Core.Services.UserService.AddSectionToAllUsers(System.String,System.Int32[])">
+            <summary>
+            Add a specific section to all users or those specified as parameters
+            </summary>
+            <remarks>This is useful when a new section is created to allow specific users accessing it</remarks>
+            <param name="sectionAlias">Alias of the section to add</param>
+            <param name="userIds">Specifiying nothing will add the section to all user</param>
         </member>
         <member name="M:Umbraco.Core.Services.UserService.GetPermissions(Umbraco.Core.Models.Membership.IUser,System.Int32[])">
             <summary>
@@ -24249,6 +26563,16 @@
             <param name="type"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.TypeExtensions.GetPublicProperties(System.Type)">
+            <summary>
+            Returns all public properties including inherited properties even for interfaces
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+            <remarks>
+            taken from http://stackoverflow.com/questions/358835/getproperties-to-return-all-properties-for-an-interface-inheritance-hierarchy
+            </remarks>
+        </member>
         <member name="M:Umbraco.Core.TypeExtensions.IsType``1(System.Type)">
             <summary>
             Determines whether the specified actual type is type.
@@ -24512,7 +26836,7 @@
         </member>
         <member name="M:Umbraco.Core.TypeHelper.IsTypeAssignableFrom(System.Type,System.Type)">
             <summary>
-            Determines whether the type <paramref name="implementation"/> is assignable from the specified implementation <typeparamref name="TContract"/>,
+            Determines whether the type <paramref name="implementation"/> is assignable from the specified implementation,
             and caches the result across the application using a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/>.
             </summary>
             <param name="contract">The type of the contract.</param>
@@ -24529,21 +26853,29 @@
             <typeparam name="TContract">The type of the contract.</typeparam>
             <param name="implementation">The implementation.</param>
         </member>
+        <member name="M:Umbraco.Core.TypeHelper.IsTypeAssignableFrom``1(System.Object)">
+            <summary>
+            Determines whether the object instance <paramref name="implementation"/> is assignable from the specified implementation <typeparamref name="TContract"/>,
+            and caches the result across the application using a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/>.
+            </summary>
+            <typeparam name="TContract">The type of the contract.</typeparam>
+            <param name="implementation">The implementation.</param>
+        </member>
         <member name="M:Umbraco.Core.TypeHelper.IsValueType(System.Type)">
             <summary>
-            A cached method to determine whether <paramref name="implementation"/> represents a value type.
+            A method to determine whether <paramref name="implementation"/> represents a value type.
             </summary>
             <param name="implementation">The implementation.</param>
         </member>
         <member name="M:Umbraco.Core.TypeHelper.IsImplicitValueType(System.Type)">
             <summary>
-            A cached method to determine whether <paramref name="implementation"/> is an implied value type (<see cref="P:System.Type.IsValueType"/>, <see cref="P:System.Type.IsEnum"/> or a string).
+            A method to determine whether <paramref name="implementation"/> is an implied value type (<see cref="P:System.Type.IsValueType"/>, <see cref="P:System.Type.IsEnum"/> or a string).
             </summary>
             <param name="implementation">The implementation.</param>
         </member>
         <member name="M:Umbraco.Core.TypeHelper.GetProperty(System.Type,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
-            Returns a PropertyInfo from a type
+            Returns (and caches) a PropertyInfo from a type
             </summary>
             <param name="type"></param>
             <param name="name"></param>
@@ -24552,16 +26884,6 @@
             <param name="includeIndexed"></param>
             <param name="caseSensitive"> </param>
             <returns></returns>
-        </member>
-        <member name="M:Umbraco.Core.TypeHelper.GetPublicProperties(System.Type)">
-            <summary>
-            Returns all public properties including inherited properties even for interfaces
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
-            <remarks>
-            taken from http://stackoverflow.com/questions/358835/getproperties-to-return-all-properties-for-an-interface-inheritance-hierarchy
-            </remarks>
         </member>
         <member name="M:Umbraco.Core.TypeHelper.CachedDiscoverableFields(System.Type)">
             <summary>
@@ -24737,6 +27059,21 @@
             <param name="items">The enumerable to search.</param>
             <param name="item">The item to find.</param>
             <returns>The index of the first matching item, or -1 if the item was not found.</returns>
+        </member>
+        <member name="M:Umbraco.Core.EnumerableExtensions.UnsortedSequenceEqual``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Determines if 2 lists have equal elements within them regardless of how they are sorted
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="other"></param>
+            <returns></returns>
+            <remarks>
+            The logic for this is taken from:
+            http://stackoverflow.com/questions/4576723/test-whether-two-ienumerablet-have-the-same-values-with-the-same-frequencies
+            
+            There's a few answers, this one seems the best for it's simplicity and based on the comment of Eamon
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.IfExtensions">
             <summary>
@@ -25767,6 +28104,13 @@
             <param name="uri">The relative uri.</param>
             <param name="baseUri">The base absolute uri.</param>
             <returns>The absolute uri.</returns>
+        </member>
+        <member name="M:Umbraco.Core.UriExtensions.WithoutPort(System.Uri)">
+            <summary>
+            Removes the port from the uri.
+            </summary>
+            <param name="uri">The uri.</param>
+            <returns>The same uri, without its port.</returns>
         </member>
         <member name="T:Umbraco.Core.SystemUtilities">
             <summary>
