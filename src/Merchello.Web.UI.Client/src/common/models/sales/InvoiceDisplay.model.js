@@ -29,6 +29,7 @@
         self.exported = '';
         self.archived = '';
         self.total = 0.0;
+        self.currency = {};
         self.items = [];
         self.orders = [];
     };
@@ -71,9 +72,13 @@
 
         // gets the currency code for the invoice
         function getCurrencyCode() {
-            var first = this.items[0];
-            var currencyCode = first.extendedData.getValue('merchCurrencyCode');
-            return currencyCode;
+            if (this.currency.currencyCode === '') {
+                var first = this.items[0];
+                var currencyCode = first.extendedData.getValue('merchCurrencyCode');
+                return currencyCode;
+            } else {
+                return this.currency.currencyCode;
+            }
         }
 
         // gets the product line items

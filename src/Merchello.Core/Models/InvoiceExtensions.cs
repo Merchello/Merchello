@@ -56,6 +56,40 @@
             return allCurrencyCodes.Any() ? allCurrencyCodes.First() : string.Empty;
         }
 
+        /// <summary>
+        /// The currency.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICurrency"/>.
+        /// </returns>
+        public static ICurrency Currency(this IInvoice invoice)
+        {
+            return invoice.Currency(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// The currency.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICurrency"/>.
+        /// </returns>
+        internal static ICurrency Currency(this IInvoice invoice, IMerchelloContext merchelloContext)
+        {
+            var currencyCode = invoice.CurrencyCode();
+            return !string.IsNullOrEmpty(currencyCode)
+                       ? merchelloContext.Services.StoreSettingService.GetCurrencyByCode(currencyCode)
+                       : null;
+        }
+
         #region Address
 
         /// <summary>
@@ -789,6 +823,7 @@
                     writer.WriteAttributeString("exported", invoice.Exported.ToString());
                     writer.WriteAttributeString("archived", invoice.Archived.ToString());
                     writer.WriteAttributeString("total", invoice.Total.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("currency", GetCurrencyJson(invoice.Currency()));
                     writer.WriteAttributeString("invoiceStatus", GetInvoiceStatusJson(invoice.InvoiceStatus));
                     writer.WriteAttributeString("invoiceItems", GetGenericItemsCollection(invoice.Items));
                     writer.WriteAttributeString("createDate", invoice.CreateDate.ToString("s"));
@@ -827,7 +862,24 @@
                         }, 
                         Formatting.None);
         }
-        
+
+        /// <summary>
+        /// The get currency JSON.
+        /// </summary>
+        /// <param name="currency">
+        /// The currency.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string GetCurrencyJson(ICurrency currency)
+        {
+            if (currency == null) return string.Empty;
+
+            return JsonConvert.SerializeObject(
+                new { currency.Name, currency.CurrencyCode, currency.Symbol },
+                Formatting.None);
+        }
 
         /// <summary>
         /// The get generic items collection.
