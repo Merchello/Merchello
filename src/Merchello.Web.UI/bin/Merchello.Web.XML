@@ -30,6 +30,7 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
+<<<<<<< HEAD
         <member name="T:Merchello.Web.Editors.MarketingCampaignApiController">
             <summary>
             The MarketingCampaignApiController.
@@ -139,10 +140,19 @@
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.Name">
+=======
+        <member name="T:Merchello.Web.Models.ContentEditing.CurrencyDisplay">
+            <summary>
+            The currency display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CurrencyDisplay.Name">
+>>>>>>> 1.9.0
             <summary>
             Gets or sets the name.
             </summary>
         </member>
+<<<<<<< HEAD
         <member name="P:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay.Alias">
             <summary>
             Gets or sets the alias.
@@ -248,6 +258,17 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.CampaignSettingsDisplay"/>.
             </returns>
+=======
+        <member name="P:Merchello.Web.Models.ContentEditing.CurrencyDisplay.CurrencyCode">
+            <summary>
+            Gets or sets the currency code.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.CurrencyDisplay.Symbol">
+            <summary>
+            Gets or sets the currency symbol.
+            </summary>
+>>>>>>> 1.9.0
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.GateProviderSettingsDisplay">
             <summary>
@@ -7571,6 +7592,11 @@
         <member name="P:Merchello.Web.Models.ContentEditing.InvoiceDisplay.Items">
             <summary>
             Gets or sets the items.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.InvoiceDisplay.Currency">
+            <summary>
+            Gets or sets the currency.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.InvoiceDisplayExtensions">

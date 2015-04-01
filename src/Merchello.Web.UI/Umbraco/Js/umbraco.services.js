@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2014 Umbraco HQ;
+ * Copyright (c) 2015 Umbraco HQ;
  * Licensed MIT
  */
 
@@ -507,27 +507,36 @@ angular.module('umbraco.services')
 .factory('assetsService', function ($q, $log, angularHelper, umbRequestHelper, $rootScope, $http) {
 
     var initAssetsLoaded = false;
-    var appendRnd = function(url){
+    var appendRnd = function (url) {
         //if we don't have a global umbraco obj yet, the app is bootstrapping
-        if(!Umbraco.Sys.ServerVariables.application){
+        if (!Umbraco.Sys.ServerVariables.application) {
             return url;
         }
 
-        var rnd = Umbraco.Sys.ServerVariables.application.version +"."+Umbraco.Sys.ServerVariables.application.cdf;
-        var _op = (url.indexOf("?")>0) ? "&" : "?";
+        var rnd = Umbraco.Sys.ServerVariables.application.version + "." + Umbraco.Sys.ServerVariables.application.cdf;
+        var _op = (url.indexOf("?") > 0) ? "&" : "?";
         url = url + _op + "umb__rnd=" + rnd;
         return url;
     };
 
+    function convertVirtualPath(path) {
+        //make this work for virtual paths
+        if (path.startsWith("~/")) {
+            path = umbRequestHelper.convertVirtualToAbsolutePath(path);
+        }
+        return path;
+    }
+
     var service = {
-        loadedAssets:{},
-        
-        _getAssetPromise : function(path){
-            if(this.loadedAssets[path]){
+        loadedAssets: {},
+
+        _getAssetPromise: function (path) {
+
+            if (this.loadedAssets[path]) {
                 return this.loadedAssets[path];
-            }else{
+            } else {
                 var deferred = $q.defer();
-                this.loadedAssets[path] = {deferred: deferred, state: "new", path: path};
+                this.loadedAssets[path] = { deferred: deferred, state: "new", path: path };
                 return this.loadedAssets[path];
             }
         },
@@ -540,7 +549,7 @@ angular.module('umbraco.services')
             //here we need to ensure the required application assets are loaded
             if (initAssetsLoaded === false) {
                 var self = this;
-                self.loadJs(umbRequestHelper.getApiUrl("serverVarsJs", "", ""), $rootScope).then(function() {
+                self.loadJs(umbRequestHelper.getApiUrl("serverVarsJs", "", ""), $rootScope).then(function () {
                     initAssetsLoaded = true;
 
                     //now we need to go get the legacyTreeJs - but this can be done async without waiting.
@@ -569,30 +578,33 @@ angular.module('umbraco.services')
          * @param {Number} timeout in milliseconds
          * @returns {Promise} Promise object which resolves when the file has loaded
          */
-         loadCss : function(path, scope, attributes, timeout){
-             var asset = this._getAssetPromise(path); // $q.defer();
-             var t = timeout || 5000;
-             var a = attributes || undefined;
-             
-             if(asset.state === "new"){
-                 asset.state = "loading";
-                 LazyLoad.css(appendRnd(path), function () {
-                   if (!scope) {
-                       asset.state = "loaded";  
-                       asset.deferred.resolve(true);
-                   }else{
-                       asset.state = "loaded";    
-                       angularHelper.safeApply(scope, function () {
-                           asset.deferred.resolve(true);
-                       });
-                   }
-                 });    
-             }else if(asset.state === "loaded"){
-                 asset.deferred.resolve(true);
-             }
-             return asset.deferred.promise;
-         },
-        
+        loadCss: function (path, scope, attributes, timeout) {
+
+            path = convertVirtualPath(path);
+
+            var asset = this._getAssetPromise(path); // $q.defer();
+            var t = timeout || 5000;
+            var a = attributes || undefined;
+
+            if (asset.state === "new") {
+                asset.state = "loading";
+                LazyLoad.css(appendRnd(path), function () {
+                    if (!scope) {
+                        asset.state = "loaded";
+                        asset.deferred.resolve(true);
+                    } else {
+                        asset.state = "loaded";
+                        angularHelper.safeApply(scope, function () {
+                            asset.deferred.resolve(true);
+                        });
+                    }
+                });
+            } else if (asset.state === "loaded") {
+                asset.deferred.resolve(true);
+            }
+            return asset.deferred.promise;
+        },
+
         /**
          * @ngdoc method
          * @name umbraco.services.assetsService#loadJs
@@ -607,28 +619,30 @@ angular.module('umbraco.services')
          * @param {Number} timeout in milliseconds
          * @returns {Promise} Promise object which resolves when the file has loaded
          */
-        loadJs : function(path, scope, attributes, timeout){
-            
+        loadJs: function (path, scope, attributes, timeout) {
+
+            path = convertVirtualPath(path);
+
             var asset = this._getAssetPromise(path); // $q.defer();
             var t = timeout || 5000;
             var a = attributes || undefined;
-            
-            if(asset.state === "new"){
+
+            if (asset.state === "new") {
                 asset.state = "loading";
 
                 LazyLoad.js(appendRnd(path), function () {
-                  if (!scope) {
-                      asset.state = "loaded";  
-                      asset.deferred.resolve(true);
-                  }else{
-                      asset.state = "loaded";  
-                      angularHelper.safeApply(scope, function () {
-                          asset.deferred.resolve(true);
-                      });
-                  }
+                    if (!scope) {
+                        asset.state = "loaded";
+                        asset.deferred.resolve(true);
+                    } else {
+                        asset.state = "loaded";
+                        angularHelper.safeApply(scope, function () {
+                            asset.deferred.resolve(true);
+                        });
+                    }
                 });
 
-            }else if(asset.state === "loaded"){
+            } else if (asset.state === "loaded") {
                 asset.deferred.resolve(true);
             }
 
@@ -655,7 +669,7 @@ angular.module('umbraco.services')
                 throw "pathArray must be an array";
             }
 
-            var nonEmpty = _.reject(pathArray, function(item) {
+            var nonEmpty = _.reject(pathArray, function (item) {
                 return item === undefined || item === "";
             });
 
@@ -667,12 +681,14 @@ angular.module('umbraco.services')
 
                 //compile a list of promises
                 //blocking
-                _.each(nonEmpty, function(path){
+                _.each(nonEmpty, function (path) {
+
+                    path = convertVirtualPath(path);
+
                     var asset = service._getAssetPromise(path);
                     //if not previously loaded, add to list of promises
-                    if(asset.state !== "loaded")
-                    {
-                        if(asset.state === "new"){
+                    if (asset.state !== "loaded") {
+                        if (asset.state === "new") {
                             asset.state = "loading";
                             assets.push(asset);
                         }
@@ -686,21 +702,21 @@ angular.module('umbraco.services')
 
                 //gives a central monitoring of all assets to load
                 promise = $q.all(promises);
-                
-                _.each(assets, function(asset){
+
+                _.each(assets, function (asset) {
                     LazyLoad.js(appendRnd(asset.path), function () {
-                      if (!scope) {
-                          asset.state = "loaded";  
-                          asset.deferred.resolve(true);
-                      }else{
-                          asset.state = "loaded";    
-                          angularHelper.safeApply(scope, function () {
-                              asset.deferred.resolve(true);
-                          });
-                      }
-                    });    
+                        if (!scope) {
+                            asset.state = "loaded";
+                            asset.deferred.resolve(true);
+                        } else {
+                            asset.state = "loaded";
+                            angularHelper.safeApply(scope, function () {
+                                asset.deferred.resolve(true);
+                            });
+                        }
+                    });
                 });
-            }else{
+            } else {
                 //return and resolve
                 var deferred = $q.defer();
                 promise = deferred.promise;
@@ -2264,7 +2280,7 @@ angular.module('umbraco.services').factory('formHelper', formHelper);
 angular.module('umbraco.services')
 	.factory('gridService', function ($http, $q){
 
-		var configPath = "../config/grid.editors.config.js";
+	    var configPath = Umbraco.Sys.ServerVariables.umbracoUrls.gridConfig;
         var service = {
 			getGridEditors: function () {
 				return $http.get(configPath);
@@ -3026,122 +3042,126 @@ angular.module('umbraco.services')
 }]);
 angular.module('umbraco.services')
 .factory('localizationService', function ($http, $q, eventsService, $window, $filter, userService) {
-        var service = {
-            // array to hold the localized resource string entries
-            dictionary:[],
-            // location of the resource file
-            url: "js/language.aspx",
-            // flag to indicate if the service hs loaded the resource file
-            resourceFileLoaded:false,
 
-            // success handler for all server communication
-            successCallback:function (data) {
-                // store the returned array in the dictionary
-                service.dictionary = data;
-                // set the flag that the resource are loaded
-                service.resourceFileLoaded = true;
-                // broadcast that the file has been loaded
-                eventsService.emit("localizationService.updated", data);
-            },
+    var url = "LocalizedText";
+    var resourceFileLoadStatus = "none";
+    var resourceLoadingPromise = [];
 
-            // allows setting of language on the fly
-            setLanguage: function(value) {
-                service.initLocalizedResources();
-            },
+    function _lookup(value, tokens, dictionary) {
 
-            // allows setting of resource url on the fly
-            setUrl: function(value) {
-                service.url = value;
-                service.initLocalizedResources();
-            },
+        //strip the key identifier if its there
+        if (value && value[0] === "@") {
+            value = value.substring(1);
+        }
 
-            // loads the language resource file from the server
-            initLocalizedResources:function () {
-                var deferred = $q.defer();
-                // build the url to retrieve the localized resource file
-                $http({ method:"GET", url:service.url, cache:false })
-                    .then(function(response){
-                        service.resourceFileLoaded = true;
-                        service.dictionary = response.data;
+        //if no area specified, add general_
+        if (value && value.indexOf("_") < 0) {
+            value = "general_" + value;
+        }
 
-                        eventsService.emit("localizationService.updated", service.dictionary);
-
-                        return deferred.resolve(service.dictionary);
-                    }, function(err){
-                        return deferred.reject("Something broke");
-                    });
-                return deferred.promise;
-            },
-
-            //helper to tokenize and compile a localization string
-            tokenize: function(value,scope) {
-                if (value) {
-                    var localizer = value.split(':');
-                    var retval = { tokens: undefined, key: localizer[0].substring(0) };
-                    if (localizer.length > 1) {
-                        retval.tokens = localizer[1].split(',');
-                        for (var x = 0; x < retval.tokens.length; x++) {
-                            retval.tokens[x] = scope.$eval(retval.tokens[x]);
-                        }
-                    }
-
-                    return retval;
+        var entry = dictionary[value];
+        if (entry) {
+            if (tokens) {
+                for (var i = 0; i < tokens.length; i++) {
+                    entry = entry.replace("%" + i + "%", tokens[i]);
                 }
-                return value;
-            },
-
-            // checks the dictionary for a localized resource string
-            localize: function(value,tokens) {
-                var deferred = $q.defer();
-
-                if(service.resourceFileLoaded){
-                    var val = service._lookup(value,tokens);
-                    deferred.resolve(val);
-                }else{
-                    service.initLocalizedResources().then(function(dic){
-                           var val = service._lookup(value,tokens);
-                           deferred.resolve(val); 
-                    });
-                }
-
-                return deferred.promise;
-            },
-            _lookup: function(value,tokens){
-
-                //strip the key identifier if its there
-                if(value && value[0] === "@"){
-                    value = value.substring(1);
-                }
-
-                //if no area specified, add general_
-                if(value && value.indexOf("_") < 0){
-                    value = "general_" + value;
-                }
-
-                var entry = service.dictionary[value];
-                if(entry){
-                    if(tokens){
-                        for (var i = 0; i < tokens.length; i++) {
-                            entry = entry.replace("%"+i+"%", tokens[i]);
-                        }    
-                    }
-                    return entry;
-                }
-                return "[" + value + "]";
             }
-        };
+            return entry;
+        }
+        return "[" + value + "]";
+    }
 
-        // force the load of the resource file
-        service.initLocalizedResources();
+    var service = {
+        // array to hold the localized resource string entries
+        dictionary: [],
 
-        //This happens after login / auth and assets loading
-        eventsService.on("app.authenticated", function(){
-            service.resourceFileLoaded = false;
-        });
+        // loads the language resource file from the server
+        initLocalizedResources: function () {
+            var deferred = $q.defer();
 
-        // return the local instance when called
-        return service;
+            //if the resource is already loading, we don't want to force it to load another one in tandem, we'd rather
+            // wait for that initial http promise to finish and then return this one with the dictionary loaded
+            if (resourceFileLoadStatus === "loading") {
+                //add to the list of promises waiting
+                resourceLoadingPromise.push(deferred);
+
+                //exit now it's already loading
+                return deferred.promise;
+            }
+
+            resourceFileLoadStatus = "loading";
+
+            // build the url to retrieve the localized resource file
+            $http({ method: "GET", url: url, cache: false })
+                .then(function (response) {
+                    resourceFileLoadStatus = "loaded";
+                    service.dictionary = response.data;
+
+                    eventsService.emit("localizationService.updated", response.data);
+
+                    deferred.resolve(response.data);
+                    //ensure all other queued promises are resolved
+                    for (var p in resourceLoadingPromise) {
+                        resourceLoadingPromise[p].resolve(response.data);
+                    }
+                }, function (err) {
+                    deferred.reject("Something broke");
+                    //ensure all other queued promises are resolved
+                    for (var p in resourceLoadingPromise) {
+                        resourceLoadingPromise[p].reject("Something broke");
+                    }
+                });
+            return deferred.promise;
+        },
+
+        //helper to tokenize and compile a localization string
+        tokenize: function (value, scope) {
+            if (value) {
+                var localizer = value.split(':');
+                var retval = { tokens: undefined, key: localizer[0].substring(0) };
+                if (localizer.length > 1) {
+                    retval.tokens = localizer[1].split(',');
+                    for (var x = 0; x < retval.tokens.length; x++) {
+                        retval.tokens[x] = scope.$eval(retval.tokens[x]);
+                    }
+                }
+
+                return retval;
+            }
+            return value;
+        },
+
+        // checks the dictionary for a localized resource string
+        localize: function (value, tokens) {
+            var deferred = $q.defer();
+
+            if (resourceFileLoadStatus === "loaded") {
+                var val = _lookup(value, tokens, service.dictionary);
+                deferred.resolve(val);
+            } else {
+                service.initLocalizedResources().then(function (dic) {
+                    var val = _lookup(value, tokens, dic);
+                    deferred.resolve(val);
+                });
+            }
+
+            return deferred.promise;
+        },
+        
+    };
+
+    // force the load of the resource file
+    service.initLocalizedResources();
+
+    //This happens after login / auth and assets loading
+    eventsService.on("app.authenticated", function () {
+        resourceFileLoadStatus = "none";
+        resourceLoadingPromise = [];
     });
+
+    // return the local instance when called
+    return service;
+});
 /**
  * @ngdoc service
  * @name umbraco.services.macroService
@@ -3156,8 +3176,10 @@ function macroService() {
        
         /** parses the special macro syntax like <?UMBRACO_MACRO macroAlias="Map" /> and returns an object with the macro alias and it's parameters */
         parseMacroSyntax: function (syntax) {
-
-            var expression = /(<\?UMBRACO_MACRO macroAlias=["']([\w\.]+?)["'][\s\S]+?)(\/>|>.*?<\/\?UMBRACO_MACRO>)/i;
+            
+            //This regex will match an alias of anything except characters that are quotes or new lines (for legacy reasons, when new macros are created
+            // their aliases are cleaned an invalid chars are stripped)
+            var expression = /(<\?UMBRACO_MACRO macroAlias=["']([^\"\'\n\r]+?)["'][\s\S]+?)(\/>|>.*?<\/\?UMBRACO_MACRO>)/i;
             var match = expression.exec(syntax);
             if (!match || match.length < 3) {
                 return null;
@@ -3302,6 +3324,7 @@ function macroService() {
 }
 
 angular.module('umbraco.services').factory('macroService', macroService);
+
 /**
 * @ngdoc service
 * @name umbraco.services.mediaHelper
@@ -4843,7 +4866,7 @@ angular.module('umbraco.services')
                 throw "args.term is required";
             }
 
-            return entityResource.search(args.term, "Document", args.searchFrom).then(function (data) {
+            return entityResource.search(args.term, "Document", args.searchFrom, args.canceler).then(function (data) {
                 _.each(data, function (item) {
                     configureContentResult(item);
                 });
@@ -4893,7 +4916,7 @@ angular.module('umbraco.services')
                 throw "args.term is required";
             }
 
-            return entityResource.searchAll(args.term).then(function (data) {
+            return entityResource.searchAll(args.term, args.canceler).then(function (data) {
 
                 _.each(data, function(resultByType) {
                     switch(resultByType.type) {
@@ -5423,7 +5446,7 @@ function tinyMceService(dialogService, $log, imageHelper, $http, $timeout, macro
                                 if (img) {
 
                                     var data = {
-                                        alt: img.altText,
+                                        alt: img.altText || "",
                                         src: (img.url) ? img.url : "nothing.jpg",
                                         rel: img.id,
                                         id: '__mcenew'
@@ -6589,6 +6612,30 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
 
         /**
          * @ngdoc method
+         * @name umbraco.services.umbRequestHelper#convertVirtualToAbsolutePath
+         * @methodOf umbraco.services.umbRequestHelper
+         * @function
+         *
+         * @description
+         * This will convert a virtual path (i.e. ~/App_Plugins/Blah/Test.html ) to an absolute path
+         * 
+         * @param {string} a virtual path, if this is already an absolute path it will just be returned, if this is a relative path an exception will be thrown
+         */
+        convertVirtualToAbsolutePath: function(virtualPath) {
+            if (virtualPath.startsWith("/")) {
+                return virtualPath;
+            }
+            if (!virtualPath.startsWith("~/")) {
+                throw "The path " + virtualPath + " is not a virtual path";
+            }
+            if (!Umbraco.Sys.ServerVariables.application.applicationPath) { 
+                throw "No applicationPath defined in Umbraco.ServerVariables.application.applicationPath";
+            }
+            return Umbraco.Sys.ServerVariables.application.applicationPath + virtualPath.trimStart("~/");
+        },
+
+        /**
+         * @ngdoc method
          * @name umbraco.services.umbRequestHelper#dictionaryToQueryString
          * @methodOf umbraco.services.umbRequestHelper
          * @function
@@ -6802,8 +6849,14 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
                     //when there's a 500 (unhandled) error show a YSOD overlay if debugging is enabled.
                     if (status >= 500 && status < 600) {
 
-                        //show a ysod dialog
-                        if (Umbraco.Sys.ServerVariables["isDebuggingEnabled"] === true) {
+                        //This is a bit of a hack to check if the error is due to a file being uploaded that is too large,
+                        // we have to just check for the existence of a string value but currently that is the best way to
+                        // do this since it's very hacky/difficult to catch this on the server
+                        if (data.indexOf("Maximum request length exceeded") >= 0) {
+                            notificationsService.error("Server error", "The uploaded file was too large, check with your site administrator to adjust the maximum size allowed");
+                        }                        
+                        else if (Umbraco.Sys.ServerVariables["isDebuggingEnabled"] === true) {
+                            //show a ysod dialog
                             dialogService.ysodDialog({
                                 errorMsg: 'An error occurred',
                                 data: data
@@ -7349,8 +7402,12 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
                 //if there is only one image, then return the target height
                 return targetHeight;
             }
+            else if (currRowWidth / targetRowWidth > 0.90) {
+                //it's close enough, it's at least 90% of the width so we'll accept it with the target height
+                return targetHeight;
+            }
             else {
-                //if it's not successful, return false
+                //if it's not successful, return null
                 return null;
             }
         },

@@ -80,10 +80,10 @@
             $scope.notificationMessage.bodyText = $scope.rteProperties.value;
             var promiseSave = notificationGatewayProviderResource.updateNotificationMessage($scope.notificationMessage);
             promiseSave.then(function () {
-                notificationsService.success("Payment Method Saved");
+                notificationsService.success("Notification Message Saved");
                 init();
             }, function (reason) {
-                notificationsService.error("Payment Method Save Failed", reason.message);
+                notificationsService.error("Notification Message Save Failed", reason.message);
             });
         }
 

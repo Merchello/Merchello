@@ -34,19 +34,34 @@ namespace Merchello.Core.Models.MonitorModels
         /// <param name="contacts">
         /// The contacts.
         /// </param>
+        /// <param name="shipment">
+        /// The shipment.
+        /// </param>
+        /// <param name="shipMethod">
+        /// The ship Method.
+        /// </param>
+        /// <param name="currencySymbol">
+        /// The currency Symbol.
+        /// </param>
         /// <returns>
         /// The <see cref="IPaymentResultMonitorModel"/>.
         /// </returns>
-        public static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult, IEnumerable<string> contacts)
+        public static IPaymentResultMonitorModel ToOrderConfirmationNotification(this IPaymentResult paymentResult, IEnumerable<string> contacts, IShipment shipment = null, IShipMethod shipMethod = null, string currencySymbol = "")
         {
             return new PaymentResultNotifyModel()
                 {
                     PaymentSuccess = paymentResult.Payment.Success,
                     Payment = paymentResult.Payment.Success ? paymentResult.Payment.Result : null,
                     Invoice = paymentResult.Invoice,
-                    Contacts = contacts.ToArray()
+                    Contacts = contacts.ToArray(),
+                    Shipment = shipment,
+                    ShipMethod = shipMethod,
+                    CurrencySymbol = currencySymbol,
+                    ApproveOrderCreation = paymentResult.ApproveOrderCreation
                 };
         }
+
+
 
         /// <summary>
         /// To the order shipped notification.
@@ -71,9 +86,9 @@ namespace Merchello.Core.Models.MonitorModels
         /// <param name="contacts">
         /// The contacts.
         /// </param>
-        public static IShipmentResult ToOrderShippedNotification(this IShipmentResult shipmentResult, IEnumerable<string> contacts)
+        public static IShipmentResultNotifyModel ToOrderShippedNotification(this IShipmentResultNotifyModel shipmentResult, IEnumerable<string> contacts)
         {
-            return new ShippingResultNotifyModel()
+            return new ShipmentResultNotifyModel()
             {
                 Shipment = shipmentResult.Shipment,
                 Invoice = shipmentResult.Invoice,

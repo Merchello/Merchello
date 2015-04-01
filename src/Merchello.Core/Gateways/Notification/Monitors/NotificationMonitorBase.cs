@@ -3,13 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Observation;
     using Umbraco.Core;
+    using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
 
     /// <summary>
-    /// Defines a <see cref="NotificationMonitorBase{T}"/> base class
+    /// Defines a <see cref="NotificationMonitorBase{TFormatter, TModel}"/> base class
     /// </summary>
     /// <typeparam name="T">
     /// The Type of the model passed to the monitor
@@ -27,7 +31,7 @@
         private Lazy<List<INotificationMessage>> _messages;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotificationMonitorBase{T}"/> class.
+        /// Initializes a new instance of the <see cref="NotificationMonitorBase{T}"/> class. 
         /// </summary>
         /// <param name="notificationContext">
         /// The notification context.

@@ -460,7 +460,6 @@
                     $scope.tabs.setActive('overview');
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-                    console.info($scope.customer);
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
                 });
@@ -1809,10 +1808,10 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
             $scope.notificationMessage.bodyText = $scope.rteProperties.value;
             var promiseSave = notificationGatewayProviderResource.updateNotificationMessage($scope.notificationMessage);
             promiseSave.then(function () {
-                notificationsService.success("Payment Method Saved");
+                notificationsService.success("Notification Message Saved");
                 init();
             }, function (reason) {
-                notificationsService.error("Payment Method Save Failed", reason.message);
+                notificationsService.error("Notification Message Save Failed", reason.message);
             });
         }
 
@@ -4882,6 +4881,7 @@ angular.module('merchello')
     ['$scope', 'ShipmentRequestDisplay', 'OrderDisplay', function($scope, ShipmentRequestDisplay, OrderDisplay) {
 
         $scope.save = save;
+        $scope.currencySymbol = '';
         $scope.loaded = false;
 
         function init() {
@@ -4892,9 +4892,10 @@ angular.module('merchello')
             if($scope.dialogData.shipMethods.selected === null || $scope.dialogData.shipMethods.selected === undefined) {
                 $scope.dialogData.shipMethods.selected = $scope.dialogData.shipMethods.alternatives[0];
             }
-            if($scope.dialogData)
+
             $scope.dialogData.shipmentRequest = new ShipmentRequestDisplay();
             $scope.dialogData.shipmentRequest.order = angular.extend($scope.dialogData.order, OrderDisplay);
+            $scope.currencySymbol = $scope.dialogData.currencySymbol;
             $scope.loaded = true;
         }
 
@@ -5499,26 +5500,31 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                    notificationsService.error('Failed to load global settings', reason.message);
                })
 
-                var currencySymbolPromise = settingsResource.getAllCurrencies();
-                currencySymbolPromise.then(function (symbols) {
-                    var currency = _.find(symbols, function(symbol) {
-                        return symbol.currencyCode === $scope.invoice.getCurrencyCode()
-                    });
-                    if (currency !== undefined) {
-                    $scope.currencySymbol = currency.symbol;
-                    } else {
-                        // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
-                        // default currency
-                        var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
-                        defaultCurrencyPromise.then(function (currencySymbol) {
-                            $scope.currencySymbol = currencySymbol;
-                        }, function (reason) {
-                            notificationService.error('Failed to load the default currency symbol', reason.message);
+               // TODO this can be refactored now that we have currency on the invoice model
+               if ($scope.invoice.currency.symbol === '') {
+                    var currencySymbolPromise = settingsResource.getAllCurrencies();
+                    currencySymbolPromise.then(function (symbols) {
+                        var currency = _.find(symbols, function(symbol) {
+                            return symbol.currencyCode === $scope.invoice.getCurrencyCode()
                         });
-                    }
-                }, function (reason) {
-                    alert('Failed: ' + reason.message);
-                });
+                        if (currency !== undefined) {
+                        $scope.currencySymbol = currency.symbol;
+                        } else {
+                            // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
+                            // default currency
+                            var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
+                            defaultCurrencyPromise.then(function (currencySymbol) {
+                                $scope.currencySymbol = currencySymbol;
+                            }, function (reason) {
+                                notificationService.error('Failed to load the default currency symbol', reason.message);
+                            });
+                        }
+                    }, function (reason) {
+                        alert('Failed: ' + reason.message);
+                    });
+               } else {
+                   $scope.currencySymbol = $scope.invoice.currency.symbol;
+               }
             }
 
             /**
@@ -5634,6 +5640,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     data.order = $scope.invoice.orders[0]; // todo: pull from current order when multiple orders is available
                     data.order.items = data.order.getUnShippedItems();
                     data.shipmentStatuses = statuses;
+                    data.currencySymbol = $scope.currencySymbol;
 
                     // packaging
                     var quotedKey = '7342dcd6-8113-44b6-bfd0-4555b82f9503';
@@ -6110,6 +6117,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * Utility method to get the currency symbol for an invoice
              */
             function getCurrencySymbol(invoice) {
+
+                if (invoice.currency.symbol !== '') {
+                    return invoice.currency.symbol;
+                }
+
                 var currencyCode = invoice.getCurrencyCode();
                 var currency = _.find(allCurrencies, function(currency) {
                     return currency.currencyCode === currencyCode;

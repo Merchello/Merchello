@@ -127,6 +127,7 @@
                     Archived = FieldAsBoolean(result.Fields["archived"]),
                     Total = FieldAsDecimal(result, "total"),
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
+                    Currency = JsonFieldAs<CurrencyDisplay>(result, "currency"),
                     Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
                 };
 

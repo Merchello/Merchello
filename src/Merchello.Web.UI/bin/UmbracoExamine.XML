@@ -256,6 +256,11 @@
             via reflection because of the circular reference we have between Umbraco.Web and UmbracoExamine. 
             </summary>
         </member>
+        <member name="T:UmbracoExamine.LocalStorage.LocalTempStorageDirectory">
+            <summary>
+            Used to read data from local temp storage and write to both local storage and main storage
+            </summary>
+        </member>
         <member name="M:UmbracoExamine.LocalStorage.LocalTempStorageDirectory.FileExists(System.String)">
             <summary>Returns true if a file with the given name exists. </summary>
         </member>

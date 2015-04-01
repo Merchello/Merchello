@@ -3,6 +3,9 @@
     using System;
     using System.Collections.Generic;
     using Gateways.Payment;
+
+    using Merchello.Core.Formatters;
+
     using Services;
 
     /// <summary>
@@ -255,6 +258,30 @@
         {
             var paymentGatewayMethod = merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
             return paymentGatewayMethod.VoidPayment(invoice, payment, args);
+        }
+
+        /// <summary>
+        /// The replaceable patterns.
+        /// </summary>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="currencySymbol">
+        /// The currency symbol.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IReplaceablePattern}"/>.
+        /// </returns>
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IPayment payment, string currencySymbol)
+        {
+            var patterns = new List<IReplaceablePattern>
+            {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("PamentReferenceNumber", payment.ReferenceNumber),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("PaymentAmount", payment.Amount.FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("PaymentMethodName", payment.PaymentMethodName),             
+            };
+
+            return patterns;
         }
 
     }
