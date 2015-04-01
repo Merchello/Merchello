@@ -380,10 +380,13 @@
         /// <param name="container">
         /// The container.
         /// </param>
+        /// <param name="currencySymbol">
+        /// The currency Symbol.
+        /// </param>
         /// <returns>
         /// A collection of replaceable patterns
         /// </returns>
-        internal static IEnumerable<IReplaceablePattern> LineItemReplaceablePatterns(this ILineItemContainer container)
+        internal static IEnumerable<IReplaceablePattern> LineItemReplaceablePatterns(this ILineItemContainer container, string currencySymbol)
         {
             var patterns = new List<IReplaceablePattern>();
 
@@ -393,10 +396,10 @@
             for (var i = 0; i < container.Items.Count; i++)
             {
                 var sku = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Sku", i), string.Format("{0}Item.Sku.{1}{2}", "{{", i, "}}"), container.Items[i].LineItemType == LineItemType.Shipping ? string.Empty : container.Items[i].Sku);
-                var unitPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "UnitPrice", i), string.Format("{0}Item.UnitPrice.{1}{2}", "{{", i, "}}"), container.Items[i].Price.ToString("C"));
+                var unitPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "UnitPrice", i), string.Format("{0}Item.UnitPrice.{1}{2}", "{{", i, "}}"), container.Items[i].Price.FormatAsPrice(currencySymbol));
                 var name = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Name", i), string.Format("{0}Item.Name.{1}{2}", "{{", i, "}}"), container.Items[i].Name);
                 var qty = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "Quantity", i), string.Format("{0}Item.Quantity.{1}{2}", "{{", i, "}}"), container.Items[i].Quantity.ToString(CultureInfo.InvariantCulture));
-                var totalPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "TotalPrice", i), string.Format("{0}Item.TotalPrice.{1}{2}", "{{", i, "}}"), container.Items[i].TotalPrice.ToString("C"));
+                var totalPrice = new ReplaceablePattern(string.Format("{0}.{1}.{2}", token, "TotalPrice", i), string.Format("{0}Item.TotalPrice.{1}{2}", "{{", i, "}}"), container.Items[i].TotalPrice.FormatAsPrice(currencySymbol));
 
                 patterns.Add(sku);
                 patterns.Add(name);

@@ -39,7 +39,7 @@
             var formatter = PatternReplaceFormatter.GetPatternReplaceFormatter();
 
             // Add the replaceable patterns from the invoice
-            formatter.AddOrUpdateReplaceablePattern(value.Invoice.ReplaceablePatterns());
+            formatter.AddOrUpdateReplaceablePattern(value.Invoice.ReplaceablePatterns(value.CurrencySymbol));
 
             // get shipping information if any
             var invoice = value.Invoice;
@@ -48,7 +48,7 @@
             {
                 // just use the first one
                 var shipment = shippingLineItems.FirstOrDefault().ExtendedData.GetShipment<InvoiceLineItem>();
-                formatter.AddOrUpdateReplaceablePattern(shipment.ReplaceablePatterns());
+                formatter.AddOrUpdateReplaceablePattern(shipment.ReplaceablePatterns(value.CurrencySymbol));
             }
         
             foreach (var message in Messages)

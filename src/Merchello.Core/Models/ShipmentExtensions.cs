@@ -190,9 +190,9 @@ namespace Merchello.Core.Models
             // TODO localization needed on pricing and datetime
             var shipment = notifyModel.Shipment;
             var patterns = new List<IReplaceablePattern>();
-            patterns.AddRange(shipment.ReplaceablePatterns());
+            patterns.AddRange(shipment.ReplaceablePatterns(notifyModel.CurrencySymbol));
                                   
-            patterns.AddRange(notifyModel.Invoice.ReplaceablePatterns());
+            patterns.AddRange(notifyModel.Invoice.ReplaceablePatterns(notifyModel.CurrencySymbol));
 
             return patterns;
         }
@@ -203,10 +203,13 @@ namespace Merchello.Core.Models
         /// <param name="shipment">
         /// The shipment.
         /// </param>
+        /// <param name="currencySymbol">
+        /// The currency Symbol.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IReplaceablePattern}"/>.
         /// </returns>
-        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipment shipment)
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IShipment shipment, string currencySymbol)
         {
             var patterns = new List<IReplaceablePattern>
             {
@@ -225,7 +228,7 @@ namespace Merchello.Core.Models
                 ReplaceablePattern.GetConfigurationReplaceablePattern("TrackingCode", shipment.TrackingCode)
             };
 
-            patterns.AddRange(shipment.LineItemReplaceablePatterns());
+            patterns.AddRange(shipment.LineItemReplaceablePatterns(currencySymbol));
 
             return patterns;
         } 

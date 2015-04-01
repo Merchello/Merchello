@@ -1,9 +1,16 @@
 ﻿namespace Merchello.Core.Gateways.Notification.Triggering
 {
     using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+
     using Models.MonitorModels;
     using Observation;
     using Payment;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// Represents and OrderConfirmationTrigger
@@ -11,6 +18,31 @@
     [TriggerFor("OrderConfirmation", Topic.Notifications)]
     public sealed class OrderConfirmationTrigger : NotificationTriggerBase<IPaymentResult, IPaymentResultMonitorModel>
     {
+        /// <summary>
+        /// The <see cref="IStoreSettingService"/>.
+        /// </summary>
+        private readonly IStoreSettingService _storeSettingService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderConfirmationTrigger"/> class.
+        /// </summary>
+        public OrderConfirmationTrigger()
+            : this(MerchelloContext.Current)
+        {   
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderConfirmationTrigger"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
+        public OrderConfirmationTrigger(IMerchelloContext merchelloContext)
+        {
+            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            _storeSettingService = merchelloContext.Services.StoreSettingService;
+        }
+
         /// <summary>
         /// Value to pass to the notification monitors
         /// </summary>
@@ -21,8 +53,21 @@
         /// An additional list of contacts
         /// </param>
         protected override void Notify(IPaymentResult model, IEnumerable<string> contacts)
-        {            
-           NotifyMonitors(model.ToOrderConfirmationNotification(contacts));           
+        {
+            var symbol = string.Empty;
+
+            if (model.Invoice != null)
+            {
+                if (model.Invoice.Items.Any())
+                {
+                    var currencyCode =
+                        model.Invoice.Items.First().ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.CurrencyCode);
+                    var currency = _storeSettingService.GetCurrencyByCode(currencyCode);
+                    symbol = currency.Symbol;
+                }
+            }
+
+            NotifyMonitors(model.ToOrderConfirmationNotification(contacts, symbol));           
         }
     }
 }

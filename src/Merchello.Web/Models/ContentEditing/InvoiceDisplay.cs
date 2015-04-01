@@ -130,6 +130,11 @@
         /// Gets or sets the items.
         /// </summary>
         public override IEnumerable<InvoiceLineItemDisplay> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the currency.
+        /// </summary>
+        public CurrencyDisplay Currency { get; set; }
     }
 
     /// <summary>

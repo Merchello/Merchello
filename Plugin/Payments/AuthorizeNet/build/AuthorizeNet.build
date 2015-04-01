@@ -14,10 +14,10 @@
     <!-- PROPERTIES -->
     <PropertyGroup>
         <VersionMajor>1</VersionMajor>
-        <VersionMinor>1</VersionMinor>
+        <VersionMinor>2</VersionMinor>
         <VersionPatch>0</VersionPatch>
         <VersionSuffix>0</VersionSuffix>
-        <UmbracoVersion>7.1.4</UmbracoVersion>
+        <UmbracoVersion>7.2.4</UmbracoVersion>
     </PropertyGroup>
 
 

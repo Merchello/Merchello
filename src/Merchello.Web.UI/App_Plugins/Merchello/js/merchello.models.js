@@ -772,6 +772,7 @@
         self.shipmentRequest = {};
         self.shipMethods = {};
         self.trackingNumber = '';
+        self.currencySymbol = '';
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
@@ -1878,6 +1879,7 @@
         self.exported = '';
         self.archived = '';
         self.total = 0.0;
+        self.currency = {};
         self.items = [];
         self.orders = [];
     };
@@ -1920,9 +1922,13 @@
 
         // gets the currency code for the invoice
         function getCurrencyCode() {
-            var first = this.items[0];
-            var currencyCode = first.extendedData.getValue('merchCurrencyCode');
-            return currencyCode;
+            if (this.currency.currencyCode === '') {
+                var first = this.items[0];
+                var currencyCode = first.extendedData.getValue('merchCurrencyCode');
+                return currencyCode;
+            } else {
+                return this.currency.currencyCode;
+            }
         }
 
         // gets the product line items
@@ -3914,15 +3920,16 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
     angular.module('merchello.models')
         .factory('invoiceDisplayBuilder',
         ['genericModelBuilder', 'invoiceStatusDisplayBuilder', 'invoiceLineItemDisplayBuilder',
-            'orderDisplayBuilder', 'InvoiceDisplay',
+            'orderDisplayBuilder', 'currencyDisplayBuilder', 'InvoiceDisplay',
             function(genericModelBuilder, invoiceStatusDisplayBuilder, invoiceLineItemDisplayBuilder,
-                     orderDisplayBuilder, InvoiceDisplay) {
+                     orderDisplayBuilder, currencyDisplayBuilder, InvoiceDisplay) {
                 var Constructor = InvoiceDisplay;
 
                 return {
                     createDefault: function() {
                         var invoice = new Constructor();
                         invoice.invoiceStatus = invoiceStatusDisplayBuilder.createDefault();
+                        invoice.currency = currencyDisplayBuilder.createDefault();
                         return invoice;
                     },
                     transform: function(jsonResult) {
@@ -3932,12 +3939,14 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                                 invoices[ i ].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[ i ].invoiceStatus);
                                 invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
                                 invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
+                                invoices[ i ].currency = currencyDisplayBuilder.transform(jsonResult[ i ].currency);
                             }
                         } else {
                             //jsonResult = JSON.stringify(jsonResult);
                             invoices.invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult.invoiceStatus);
                             invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
                             invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
+                            invoices.curreny = currencyDisplayBuilder.transform(jsonResult.currency);
                         }
                         return invoices;
                     }
