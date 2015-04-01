@@ -107,10 +107,11 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
+        /// <param name="currencySymbol">The currency symbol</param>
         /// <returns>
         /// The collection of replaceable patterns
         /// </returns>
-        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice)
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice, string currencySymbol)
         {
             // TODO localization needed on pricing and datetime
             var patterns = new List<IReplaceablePattern>
@@ -131,7 +132,7 @@
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceStatus", invoice.InvoiceStatus.Name)                
             };
 
-            patterns.AddRange(invoice.LineItemReplaceablePatterns());
+            patterns.AddRange(invoice.LineItemReplaceablePatterns(currencySymbol));
            
             return patterns;
         }

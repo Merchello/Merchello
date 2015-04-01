@@ -84,7 +84,7 @@ Thanks for the order.
             var formatter = (PatternReplaceFormatter)PatternReplaceFormatter.GetPatternReplaceFormatter();
 
             //// Act
-            formatter.AddOrUpdateReplaceablePattern(_invoice.ReplaceablePatterns());
+            formatter.AddOrUpdateReplaceablePattern(_invoice.ReplaceablePatterns("$"));
 
             //// Assert
             Assert.AreEqual(formatter.Patterns["InvoiceNumber"].Replacement, "123", "InvoiceNumber does not match");
@@ -103,7 +103,7 @@ Thanks for the order.
         {
             //// Arrange
             var formatter = PatternReplaceFormatter.GetPatternReplaceFormatter();
-            formatter.AddOrUpdateReplaceablePattern(_invoice.ReplaceablePatterns());
+            formatter.AddOrUpdateReplaceablePattern(_invoice.ReplaceablePatterns("$"));
 
             //// Act
 
