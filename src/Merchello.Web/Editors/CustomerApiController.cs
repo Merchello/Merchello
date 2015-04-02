@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Web.Editors
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -9,11 +8,9 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
-    using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
     using Umbraco.Core;
