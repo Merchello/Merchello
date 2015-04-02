@@ -6,7 +6,7 @@
     /// <summary>
     /// The payment request.
     /// </summary>
-    public class PaymentRequest
+    public class PaymentRequestDisplay
     {
         /// <summary>
         /// Gets or sets the invoice key.

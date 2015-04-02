@@ -4597,9 +4597,9 @@
             The collection of applied payments.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Editors.PaymentApiController.AuthorizePayment(Merchello.Web.Models.Payments.PaymentRequest)">
+        <member name="M:Merchello.Web.Editors.PaymentApiController.AuthorizePayment(Merchello.Web.Models.Payments.PaymentRequestDisplay)">
             <summary>
-            Returns a payment for an AuthorizePayment PaymentRequest
+            Returns a payment for an AuthorizePayment PaymentRequestDisplay
             
             GET /umbraco/Merchello/PaymentApi/AuthorizePayment/
             </summary>
@@ -4610,9 +4610,9 @@
             The <see cref="T:Merchello.Web.Models.Payments.PaymentDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Editors.PaymentApiController.CapturePayment(Merchello.Web.Models.Payments.PaymentRequest)">
+        <member name="M:Merchello.Web.Editors.PaymentApiController.CapturePayment(Merchello.Web.Models.Payments.PaymentRequestDisplay)">
             <summary>
-            Returns a payment for an CapturePayment PaymentRequest
+            Returns a payment for an CapturePayment PaymentRequestDisplay
             
             GET /umbraco/Merchello/PaymentApi/CapturePayment/
             </summary>
@@ -4623,9 +4623,9 @@
             The <see cref="T:Merchello.Web.Models.Payments.PaymentDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Editors.PaymentApiController.AuthorizeCapturePayment(Merchello.Web.Models.Payments.PaymentRequest)">
+        <member name="M:Merchello.Web.Editors.PaymentApiController.AuthorizeCapturePayment(Merchello.Web.Models.Payments.PaymentRequestDisplay)">
             <summary>
-            Returns a payment for an AuthorizeCapturePayment PaymentRequest
+            Returns a payment for an AuthorizeCapturePayment PaymentRequestDisplay
             
             GET /umbraco/Merchello/PaymentApi/AuthorizeCapturePayment/
             </summary>
@@ -4636,9 +4636,9 @@
             The <see cref="T:Merchello.Web.Models.Payments.PaymentDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Editors.PaymentApiController.RefundPayment(Merchello.Web.Models.Payments.PaymentRequest)">
+        <member name="M:Merchello.Web.Editors.PaymentApiController.RefundPayment(Merchello.Web.Models.Payments.PaymentRequestDisplay)">
             <summary>
-            Returns a payment for an CapturePayment for a PaymentRequest
+            Returns a payment result for an refund operation
             
             GET /umbraco/Merchello/PaymentApi/RefundPayment/
             </summary>
@@ -4647,6 +4647,17 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Payments.PaymentDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.PaymentApiController.VoidPayment(Merchello.Web.Models.Payments.PaymentRequestDisplay)">
+            <summary>
+            Returns a payment result for a void operation
+            </summary>
+            <param name="request">
+            The request.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Payments.PaymentResultDisplay"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Editors.PaymentGatewayApiController">
@@ -4704,6 +4715,17 @@
             </param>
             <returns>
             A collection of <see cref="T:Merchello.Web.Models.Payments.PaymentMethodDisplay"/>
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.PaymentGatewayApiController.GetPaymentMethodByKey(System.Guid)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.Payments.PaymentMethodDisplay"/> by it's key.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Payments.PaymentMethodDisplay"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.PaymentGatewayApiController.AddPaymentMethod(Merchello.Web.Models.Payments.PaymentMethodDisplay)">
@@ -6275,7 +6297,7 @@
             The payment gateway method.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Workflow.PaymentProcessor.#ctor(Merchello.Core.IMerchelloContext,Merchello.Web.Models.Payments.PaymentRequest)">
+        <member name="M:Merchello.Web.Workflow.PaymentProcessor.#ctor(Merchello.Core.IMerchelloContext,Merchello.Web.Models.Payments.PaymentRequestDisplay)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Workflow.PaymentProcessor"/> class.
             </summary>
@@ -6309,6 +6331,14 @@
             Performs a refund payment
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Merchello.Web.Workflow.PaymentProcessor.Void">
+            <summary>
+            Performs a void payment
+            </summary>
+            <returns>
+            The <see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Workflow.PaymentProcessor.IsReady">
             <summary>
@@ -7626,6 +7656,11 @@
             Gets or sets a value indicating whether collected.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.Payments.PaymentDisplay.Voided">
+            <summary>
+            Gets or sets a value indicating whether the payment has been voided.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.Payments.PaymentDisplay.Exported">
             <summary>
             Gets or sets a value indicating whether exported.
@@ -8422,32 +8457,32 @@
             The <see cref="T:Merchello.Core.Models.ICatalogInventory"/>.
             </returns>
         </member>
-        <member name="T:Merchello.Web.Models.Payments.PaymentRequest">
+        <member name="T:Merchello.Web.Models.Payments.PaymentRequestDisplay">
             <summary>
             The payment request.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Payments.PaymentRequest.InvoiceKey">
+        <member name="P:Merchello.Web.Models.Payments.PaymentRequestDisplay.InvoiceKey">
             <summary>
             Gets or sets the invoice key.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Payments.PaymentRequest.PaymentKey">
+        <member name="P:Merchello.Web.Models.Payments.PaymentRequestDisplay.PaymentKey">
             <summary>
             Gets or sets the payment key.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Payments.PaymentRequest.PaymentMethodKey">
+        <member name="P:Merchello.Web.Models.Payments.PaymentRequestDisplay.PaymentMethodKey">
             <summary>
             Gets or sets the payment method key.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Payments.PaymentRequest.Amount">
+        <member name="P:Merchello.Web.Models.Payments.PaymentRequestDisplay.Amount">
             <summary>
             Gets or sets the amount.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Payments.PaymentRequest.ProcessorArgs">
+        <member name="P:Merchello.Web.Models.Payments.PaymentRequestDisplay.ProcessorArgs">
             <summary>
             Gets or sets the processor args.
             </summary>

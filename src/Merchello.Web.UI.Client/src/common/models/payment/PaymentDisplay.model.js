@@ -17,6 +17,7 @@
         self.referenceNumber = '';
         self.amount = 0.0;
         self.authorized = false;
+        self.voided = false;
         self.collected = false;
         self.exported = false;
         self.extendedData = {};

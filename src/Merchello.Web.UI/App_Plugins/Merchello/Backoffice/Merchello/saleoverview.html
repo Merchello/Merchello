@@ -8,8 +8,7 @@
             </div>
             <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <button type="button" class="btn btn-default btn-trash pull-right" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete" data-ng-click="openDeleteInvoiceDialog()"><localize key="merchelloButtons_delete" /></button>
-                    {{alwaysAllowDelete}}
+                    <button type="button" class="btn btn-danger pull-right" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete" data-ng-click="openDeleteInvoiceDialog()"><localize key="merchelloButtons_delete" /></button>
                 </div>
             </div>
             <merchello-tabs invoice="invoice" tabs="tabs"></merchello-tabs>

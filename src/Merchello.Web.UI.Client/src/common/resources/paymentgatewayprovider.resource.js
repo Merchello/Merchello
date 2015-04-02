@@ -40,6 +40,16 @@
                         'Failed to payment provider methods for: ' + paymentGatewayProviderKey);
                 },
 
+                getPaymentMethodByKey: function(paymentMethodKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetPaymentMethodByKey'),
+                            method: "GET",
+                            params: {key: paymentMethodKey}
+                        }),
+                        'Failed to payment method: ' + paymentMethodKey);
+                },
+
                 addPaymentMethod: function (paymentMethod) {
 
                     return umbRequestHelper.resourcePromise(

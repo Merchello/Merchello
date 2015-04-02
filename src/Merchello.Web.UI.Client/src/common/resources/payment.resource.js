@@ -74,6 +74,14 @@
                         paymentRequest
                     ),
                     'Failed to refund payment');
+            },
+
+            voidPayment: function (paymentRequest) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'VoidPayment'),
+                        paymentRequest
+                    ),
+                    'Failed to void payment');
             }
         };
     }]);

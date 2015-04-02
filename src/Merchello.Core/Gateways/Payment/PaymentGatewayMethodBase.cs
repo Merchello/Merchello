@@ -319,14 +319,14 @@
                 GatewayProviderService.Save(appliedPayment);
             }
 
-            AssertInvoiceStatus(invoice);
-
             // Assert the payment has been voided
             if (!payment.Voided)
             {
                 payment.Voided = true;
                 GatewayProviderService.Save(payment);
             }
+
+            AssertInvoiceStatus(invoice);
 
             // Force the ApproveOrderCreation to false
             if (response.ApproveOrderCreation)
@@ -419,12 +419,12 @@
 
             var statuses = GatewayProviderService.GetAllInvoiceStatuses().ToArray();
 
+            if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Partial)
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Partial);
             if (appliedTotal == 0 && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Unpaid)
                 invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
             if (invoice.Total <= appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Paid)
                 invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Paid);
-            if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Partial)
-                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Partial);
 
             if(invoice.IsDirty()) GatewayProviderService.Save(invoice);
                 

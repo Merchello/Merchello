@@ -137,6 +137,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkEditInventoryCountsDialogData();
         }
 
+        // creates a dialog data for voiding payments
+        function createProcessVoidPaymentDialogData() {
+            return new ProcessVoidPaymentDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -172,6 +177,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteProductDialogData: createDeleteProductDialogData,
             createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
             createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
-            createProductSelectorDialogData: createProductSelectorDialogData
+            createProductSelectorDialogData: createProductSelectorDialogData,
+            createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData
         };
 }]);

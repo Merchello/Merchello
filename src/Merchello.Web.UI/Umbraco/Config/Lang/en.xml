@@ -1039,10 +1039,10 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="yourHistory" version="7.0">Your recent history</key>
     <key alias="sessionExpires" version="7.0">Session expires in</key>
   </area>
-
   <area alias="merchelloButtons">
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
+    <key alias="delete">Delete</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
@@ -1120,7 +1120,9 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="filter">Filter Invoices</key>
     <key alias="capturePayment">Capture Payment</key>
     <key alias="processPayment">Process Payment</key>
-
+    <key alias="voidPayment">Void Payment</key>
+    <key alias="refundPayment">Refund Payment</key>
+    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
     <!-- phrases -->
     <key alias="invoicesPerPage">Invoices / Page</key>
     <key alias="noOrders">You have no orders.</key>
@@ -1346,11 +1348,12 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="deactivate" >deactivate</key>
   </area>
   <area alias="merchelloPayment">
+    <key alias="paymentInfo">Payment Information</key>
     <key alias="payment" >Payment</key>
     <key alias="addPaymentMethod" >Add a Method</key>
     <key alias="resourceType" >Resource Type:</key>
     <key alias="deletePayment" >Delete a Payment Method</key>
-
+    <key alias="paymentMethod">Payment Method</key>
   </area>
   <area alias="merchelloPaymentMethod">
     <key alias="addEditPayment" >Add/Edit a Payment Method</key>

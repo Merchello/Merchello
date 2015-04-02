@@ -8,9 +8,7 @@
             </div>
             <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <!-- ACTION: Refund -->
-                    <span class="btn">{{invoice.invoiceDateString() | date : settings.dateFormat }}</span>
-                    <!--button type="button" class="btn btn-default btn-trash" data-ng-click="">Refund</button-->
+                    <button type="button" class="btn btn-danger pull-right" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete" data-ng-click="openDeleteInvoiceDialog()"><localize key="merchelloButtons_delete" /></button>
                 </div>
             </div>
             <merchello-tabs invoice="invoice" tabs="tabs"></merchello-tabs>
@@ -21,19 +19,17 @@
                 <!-- Order Information -->
                 <div class="control-group umb-control-group">
                     <div class="merchello-section-label">
-                        Sale Information
+                        <localize key="merchelloOrder_saleInformation" />
                         <small><localize key="merchelloOrderView_orderInformationHelper" /></small>
                     </div>
                     <div class="merchello-controls">
+                        <h5>Invoiced: {{invoice.invoiceDateString() | date : settings.dateFormat }}</h5>
                         <div class="button-bar">
                             <!-- ACTION: Cancel Sale -->
-                            <button type="button" class="btn btn-default btn-trash pull-right" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled'" data-ng-click="openDeleteInvoiceDialog()">Cancel Sale</button>
-
                             <!-- ACTION: Capture Payment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid()" data-ng-click="capturePayment()">Capture Funds</button>
                             <!-- ACTION: Fulfill Shipment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
-
                         </div>
                         <table class="table table-striped merchello-striped-table order-items">
                             <tbody>

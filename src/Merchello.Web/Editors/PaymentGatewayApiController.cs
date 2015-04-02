@@ -116,6 +116,22 @@
         }
 
         /// <summary>
+        /// Gets a <see cref="PaymentMethodDisplay"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PaymentMethodDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public PaymentMethodDisplay GetPaymentMethodByKey(Guid key)
+        {
+            var method = _paymentContext.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key == key);
+            return method != null ? method.ToPaymentMethodDisplay() : null;
+        }
+
+        /// <summary>
         /// Adds a <see cref="IPaymentMethod"/>
         /// 
         /// POST /umbraco/Merchello/PaymentGatewayApi/AddPaymentMethod

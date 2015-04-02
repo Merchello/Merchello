@@ -645,6 +645,14 @@ angular.module('merchello.resources')
                         paymentRequest
                     ),
                     'Failed to refund payment');
+            },
+
+            voidPayment: function (paymentRequest) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'VoidPayment'),
+                        paymentRequest
+                    ),
+                    'Failed to void payment');
             }
         };
     }]);
@@ -689,6 +697,16 @@ angular.module('merchello.resources')
                             params: {id: paymentGatewayProviderKey}
                         }),
                         'Failed to payment provider methods for: ' + paymentGatewayProviderKey);
+                },
+
+                getPaymentMethodByKey: function(paymentMethodKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetPaymentMethodByKey'),
+                            method: "GET",
+                            params: {key: paymentMethodKey}
+                        }),
+                        'Failed to payment method: ' + paymentMethodKey);
                 },
 
                 addPaymentMethod: function (paymentMethod) {

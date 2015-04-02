@@ -989,6 +989,38 @@
 
     /**
      * @ngdoc model
+     * @name ProcessorArgumentsCollectionDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProcessVoidPaymentDialogData object
+     */
+    var ProcessVoidPaymentDialogData = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentMethodKey = '';
+        self.paymentKey = '';
+        self.processorArgumentCollectionDisplay = new ProcessorArgumentCollectionDisplay();
+        self.warning = '';
+    };
+
+    ProcessVoidPaymentDialogData.prototype = (function() {
+
+        function toPaymentRequestDisplay() {
+            var paymentRequest = angular.extend(this, PaymentRequestDisplay);
+            paymentRequest.processorArgs = this.processorArgumentCollectionDisplay.toArray();
+            return paymentRequest;
+        }
+
+        return {
+            toPaymentRequestDisplay : toPaymentRequestDisplay
+        }
+    }());
+
+    angular.module('merchello.models').constant('ProcessVoidPaymentDialogData', ProcessVoidPaymentDialogData);
+
+    /**
+     * @ngdoc model
      * @name ProductSelectorDialogData
      * @function
      *
@@ -1247,6 +1279,7 @@
         self.referenceNumber = '';
         self.amount = 0.0;
         self.authorized = false;
+        self.voided = false;
         self.collected = false;
         self.exported = false;
         self.extendedData = {};
@@ -1330,6 +1363,50 @@
     };
 
     angular.module('merchello.models').constant('PaymentMethodDisplay', PaymentMethodDisplay);
+    /**
+     * @ngdoc model
+     * @name PaymentRequestDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's PaymentRequestDisplay object
+     */
+    var PaymentRequestDisplay = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentKey = '';
+        self.paymentMethodKey = '';
+        self.amount = 0.0;
+        self.processorArgs = [];
+    };
+
+    angular.module('merchello.models').constant('PaymentRequestDisplay', PaymentRequestDisplay);
+    /**
+     * @ngdoc model
+     * @name ProcessorArgumentCollectionDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProcessorArgumentCollectionDisplay object
+     */
+     var ProcessorArgumentCollectionDisplay = function() {
+        var self = this;
+        self.items = [];
+    };
+
+    ProcessorArgumentCollectionDisplay.prototype = (function() {
+
+        function toArray() {
+            return this.items;
+        };
+
+        return {
+            toArray: toArray
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('ProcessorArgumentCollectionDisplay', ProcessorArgumentCollectionDisplay);
     /**
      * @ngdoc model
      * @name CatalogInventoryDisplay
@@ -1997,6 +2074,7 @@
             return status === 'paid';
         }
 
+        
         // calculates the unpaid balance of the invoice
         function remainingBalance(payments) {
             var amountPaid = 0;
@@ -3120,6 +3198,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkEditInventoryCountsDialogData();
         }
 
+        // creates a dialog data for voiding payments
+        function createProcessVoidPaymentDialogData() {
+            return new ProcessVoidPaymentDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -3155,7 +3238,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteProductDialogData: createDeleteProductDialogData,
             createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
             createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
-            createProductSelectorDialogData: createProductSelectorDialogData
+            createProductSelectorDialogData: createProductSelectorDialogData,
+            createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData
         };
 }]);
 
@@ -3552,10 +3636,20 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         return payment;
                     },
                     transform: function(jsonResult) {
-                        var payment = genericModelBuilder.transform(jsonResult, Constructor);
-                        payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
-                        payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
-                        return payment;
+                        var payments = [];
+                        if (angular.isArray(jsonResult)) {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                var payment = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                                payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult[ i ].appliedPayments);
+                                payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                                payments.push(payment);
+                            }
+                        } else {
+                            payments = genericModelBuilder.transform(jsonResult, Constructor);
+                            payments.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
+                            payments.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        }
+                        return payments;
                     }
                 };
             }]);

@@ -107,6 +107,7 @@
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
                         $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+                        console.info($scope.productVariant);
                     } else {
                         // this is a product variant edit
                         // in this case we need the specific variant

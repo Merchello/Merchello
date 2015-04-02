@@ -362,7 +362,7 @@
     <Compile Include="Models\ContentEditing\TaxProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseDisplay.cs" />
     <Compile Include="Models\ContentEditing\CatalogInventoryDisplay.cs" />
-    <Compile Include="Models\Payments\PaymentRequest.cs" />
+    <Compile Include="Models\Payments\PaymentRequestDisplay.cs" />
     <Compile Include="Mvc\MerchelloViewPage.cs" />
     <Compile Include="Search\OrderQuery.cs" />
     <Compile Include="PackageActions\AddConfigSection.cs" />
