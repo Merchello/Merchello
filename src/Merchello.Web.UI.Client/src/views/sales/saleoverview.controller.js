@@ -216,7 +216,7 @@
              * @name capturePayment
              * @function
              *
-             * @description - Open the capture shipment dialog.
+             * @description - Open the capture payment dialog.
              */
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
@@ -228,7 +228,7 @@
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
-                    if (pm.authorizeCapturePaymentDialogEditorView !== '') {
+                    if (pm.authorizeCapturePaymentEditorView.editorView !== '') {
                         dialogData.authorizeCapturePaymentEditorView = pm.authorizeCapturePaymentEditorView.editorView;
                     } else {
                         dialogData.authorizeCapturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
