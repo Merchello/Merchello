@@ -35,6 +35,7 @@
             $scope.shipmentLineItems = [];
             $scope.customLineItems = [];
             $scope.discountLineItems = [];
+            $scope.debugAllowDelete = false;
 
             // exposed methods
             //  dialogs
@@ -48,6 +49,7 @@
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
 
+
             /**
              * @ngdoc method
              * @name init
@@ -60,6 +62,9 @@
                 $scope.tabs = merchelloTabsFactory.createSalesTabs($routeParams.id);
                 $scope.tabs.setActive('overview');
                 $scope.loaded = true;
+                if(Umbraco.Sys.ServerVariables.isDebuggingEnabled) {
+                    $scope.debugAllowDelete = true;
+                }
             }
 
             function localizeMessage(msg) {
@@ -209,6 +214,10 @@
                 }, function(reason) {
                     notificationsService.error('Failed to load shipping address', reason.message);
                 });
+            }
+
+            function setPreValuesLoaded() {
+
             }
 
             /**
