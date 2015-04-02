@@ -532,6 +532,8 @@
   font-size: 1.2em; }
 .merchello-panel-body .order-items input[type="checkbox"] {
   margin-top: 2px; }
+.merchello-panel-body .order-items .break-all {
+  -ms-word-break: break-all; word-break: break-all; }
 .merchello-panel-body .invoice-total {
   font-weight: bold; }
 
