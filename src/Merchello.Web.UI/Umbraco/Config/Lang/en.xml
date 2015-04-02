@@ -1039,37 +1039,31 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="yourHistory" version="7.0">Your recent history</key>
     <key alias="sessionExpires" version="7.0">Session expires in</key>
   </area>
-
   <area alias="merchelloButtons">
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
-<<<<<<< HEAD
     <key alias="delete">Delete</key>
-  <key alias="save">Save</key>
-  </area><area alias="merchelloHeadline">
-=======
+    <key alias="save">Save</key>
   </area>
   <area alias="merchelloHeadline">
->>>>>>> 1.9.0
     <key alias="catalog">Catalog</key>
-
   </area>
-      <area alias="merchelloTableCaptions">
-        <key alias="name">Name</key>
-        <key alias="startDate">Starting</key>
-        <key alias="endDate">Ending</key>
-        <key alias="alias">Alias</key>
-    </area>
-      <area alias="merchelloMarketing">
-        <key alias="campaigns">Marketing Campaigns</key>
-        <key alias="activities">Activities</key>
-        <key alias="btnNewCampaign">New Campaign</key>
-        <key alias="btnDeleteCampaign">Delete</key>
-        <key alias="enterCampaignName">Enter a name for the campaign</key>
-        <key alias="campaignInfo">Campaign Settings</key>
-        <key alias="configCampaign">Configure this marketing campaign</key>
-        <key alias="isActive">Is active</key>
-    </area>
+  <area alias="merchelloTableCaptions">
+    <key alias="name">Name</key>
+    <key alias="startDate">Starting</key>
+    <key alias="endDate">Ending</key>
+    <key alias="alias">Alias</key>
+  </area>
+  <area alias="merchelloMarketing">
+    <key alias="campaigns">Marketing Campaigns</key>
+    <key alias="activities">Activities</key>
+    <key alias="btnNewCampaign">New Campaign</key>
+    <key alias="btnDeleteCampaign">Delete</key>
+    <key alias="enterCampaignName">Enter a name for the campaign</key>
+    <key alias="campaignInfo">Campaign Settings</key>
+    <key alias="configCampaign">Configure this marketing campaign</key>
+    <key alias="isActive">Is active</key>
+  </area>
   <area alias="merchelloVariant">
     <!-- things -->
     <key alias="product">Product</key>

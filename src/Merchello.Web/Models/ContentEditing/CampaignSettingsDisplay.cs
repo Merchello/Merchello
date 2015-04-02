@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core.Cache;
     using Merchello.Core.Models;
 
     /// <summary>
@@ -60,6 +61,26 @@
         public static CampaignSettingsDisplay ToCampaignSettingsDisplay(this ICampaignSettings settings)
         {
             return AutoMapper.Mapper.Map<CampaignSettingsDisplay>(settings);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="CampaignSettingsDisplay"/> to <see cref="ICampaignSettings"/>.
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICampaignSettings"/>.
+        /// </returns>
+        public static ICampaignSettings ToCampaignSettings(this CampaignSettingsDisplay settings, ICampaignSettings destination)
+        {
+            destination.Name = settings.Name;
+            destination.Alias = settings.Alias;
+
+            return destination;
         }
     }
 }

@@ -33,6 +33,18 @@ angular.module('merchello.resources').factory('marketingCampaignResource',
                         params: { key: key }
                     }),
                     'Failed to get a campaign setting by its unique key');
+            },
+            addCampaignSettings: function(campaign) {
+                var url = baseUrl + 'PostAddCampaignSettings';
+                return umbRequestHelper.resourcePromise(
+                   $http.post(url, campaign),
+                'Failed to add a new campaign');
+            },
+            updateCampaignSettings: function(campaign) {
+                var url = baseUrl + 'PostUpdateCampaignSettings';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url, campaign),
+                    'Failed to update the campaign');
             }
         };
     }]);

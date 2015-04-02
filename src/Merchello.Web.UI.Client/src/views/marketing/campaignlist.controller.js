@@ -43,7 +43,6 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
         {
             $scope.preValuesLoaded = false;
             var promise;
-            console.info($scope.activeOnly);
             if ($scope.activeOnly) {
                 promise = marketingCampaignResource.getActiveCampaigns();
             } else {
@@ -74,7 +73,13 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
         }
 
         function processCreateCampaign(dialogData) {
-            console.info(dialogData);
+            $scope.preValuesLoaded = false;
+            var promise = marketingCampaignResource.addCampaignSettings(dialogData.campaign);
+            promise.then(function(result) {
+                loadCampaignSettings();
+            }, function(reason) {
+                notificationsService.error("Campaign save Failed", reason.message);
+            })
         }
 
         //// Initializes the controller

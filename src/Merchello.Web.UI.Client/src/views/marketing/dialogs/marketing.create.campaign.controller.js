@@ -16,7 +16,6 @@
             $scope.save = save;
 
             function init() {
-                console.info($scope.dialogData);
                 if ($scope.dialogData.isEdit()) {
                     $scope.manuallyDefineAlias = true;
                 }
@@ -27,7 +26,6 @@
                 if ($scope.dialogData.campaign.alias === '') {
                     $scope.dialogData.generateAlias();
                 }
-                console.info($scope.dialogData);
                 $scope.submit($scope.dialogData);
             }
 

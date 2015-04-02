@@ -3166,7 +3166,6 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
         {
             $scope.preValuesLoaded = false;
             var promise;
-            console.info($scope.activeOnly);
             if ($scope.activeOnly) {
                 promise = marketingCampaignResource.getActiveCampaigns();
             } else {
@@ -3197,7 +3196,13 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
         }
 
         function processCreateCampaign(dialogData) {
-            console.info(dialogData);
+            $scope.preValuesLoaded = false;
+            var promise = marketingCampaignResource.addCampaignSettings(dialogData.campaign);
+            promise.then(function(result) {
+                loadCampaignSettings();
+            }, function(reason) {
+                notificationsService.error("Campaign save Failed", reason.message);
+            })
         }
 
         //// Initializes the controller
@@ -3222,7 +3227,6 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
             $scope.save = save;
 
             function init() {
-                console.info($scope.dialogData);
                 if ($scope.dialogData.isEdit()) {
                     $scope.manuallyDefineAlias = true;
                 }
@@ -3233,7 +3237,6 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
                 if ($scope.dialogData.campaign.alias === '') {
                     $scope.dialogData.generateAlias();
                 }
-                console.info($scope.dialogData);
                 $scope.submit($scope.dialogData);
             }
 

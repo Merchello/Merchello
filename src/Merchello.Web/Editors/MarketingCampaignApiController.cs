@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography;
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.WebApi;
@@ -95,6 +97,41 @@
         public CampaignSettingsDisplay GetCampaignSettingsByKey(Guid key)
         {
             return _campaignSettingsService.GetByKey(key).ToCampaignSettingsDisplay();
+        }
+
+        /// <summary>
+        /// Saves a campaign setting.
+        /// </summary>
+        /// <param name="campaign">
+        /// The campaign.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CampaignSettingsDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public CampaignSettingsDisplay PostAddCampaignSettings(CampaignSettingsDisplay campaign)
+        {
+            return _campaignSettingsService.CreateCampaignSettingsWithKey(campaign.Name, campaign.Alias).ToCampaignSettingsDisplay();
+        }
+
+        /// <summary>
+        /// The post update campaign setting.
+        /// </summary>
+        /// <param name="campaign">
+        /// The campaign.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CampaignActivitySettings"/>.
+        /// </returns>
+        [HttpPost]
+        public CampaignSettingsDisplay PostUpdateCampaignSetting(CampaignSettingsDisplay campaign)
+        {
+            var destination = _campaignSettingsService.GetByKey(campaign.Key);
+
+            destination = campaign.ToCampaignSettings(destination);
+            _campaignSettingsService.Save(destination);
+
+            return destination.ToCampaignSettingsDisplay();
         }
     }
 }
