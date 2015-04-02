@@ -1,0 +1,6 @@
+﻿{
+	javascript: [
+		'~/App_Plugins/Merchello.SagePay/payment.sagepay.module.js',
+		'~/App_Plugins/Merchello.SagePay/payment.sagepay.providersettings.controller.js'
+	]
+}
