@@ -46,21 +46,21 @@
                             </tr>
                             <tr data-ng-repeat="lineItem in invoice.getProductLineItems()">
                                 <td>{{lineItem.name}}</td>
-                                <td>{{lineItem.sku}}</td>
+                                <td class="break-all">{{lineItem.sku}}</td>
                                 <td class="text-center">{{lineItem.quantity}}</td>
                                 <td class="text-right">{{lineItem.price | currency : currencySymbol}}</td>
                                 <td class="text-right">{{lineItem.quantity * lineItem.price | currency : currencySymbol}}</td>
                             </tr>
                             <tr data-ng-show="customLineItems.length > 0" data-ng-repeat="customItem in customLineItems">
                                 <td>{{customItem.name}}</td>
-                                <td>{{customItem.sku}}</td>
+                                <td class="break-all">{{customItem.sku}}</td>
                                 <td class="text-center">{{customItem.quantity}}</td>
                                 <td class="text-right">{{customItem.price | currency : currencySymbol}}</td>
                                 <td class="text-right">{{customItem.quantity * customItem.price | currency : currencySymbol}}</td>
                             </tr>
                             <tr data-ng-show="discountLineItems.length > 0" data-ng-repeat="discountItem in discountLineItems">
                                 <td>{{discountItem.name}}</td>
-                                <td>{{discountItem.sku}}</td>
+                                <td class="break-all">{{discountItem.sku}}</td>
                                 <td class="text-center">{{discountItem.quantity}}</td>
                                 <td class="text-right">({{discountItem.price | currency : currencySymbol}})</td>
                                 <td class="text-right">({{discountItem.quantity * discountItem.price | currency : currencySymbol}})</td>
