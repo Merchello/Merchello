@@ -1,7 +1,7 @@
 angular.module('merchello.salesreports').controller('Merchello.Plugins.SalesReports.SalesByItemController',
-    ['$scope', '$element', 'angularHelper', 'notificationsService', 'assetsService', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    ['$scope', '$element', 'angularHelper', 'notificationsService', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
         'saleByItemResultBuilder', 'salesByItemResource',
-    function ($scope, $element, angularHelper, notificationsService, assetsService, queryDisplayBuilder, queryResultDisplayBuilder, saleByItemResultBuilder,
+    function ($scope, $element, angularHelper, notificationsService, queryDisplayBuilder, queryResultDisplayBuilder, saleByItemResultBuilder,
               salesByItemResource) {
 
         $scope.loaded = false;
@@ -27,9 +27,7 @@ angular.module('merchello.salesreports').controller('Merchello.Plugins.SalesRepo
         function init() {
             setDefaultDates(new Date());
             defaultData();
-            $scope.loaded = true;
         }
-
 
         /**
          * @ngdoc method
@@ -46,18 +44,12 @@ angular.module('merchello.salesreports').controller('Merchello.Plugins.SalesRepo
             if (startDate === undefined && endDate === undefined) {
                 $scope.currentFilters = [];
             } else {
-                if (Date.parse(startDate) > Date.parse(endDate)) {
-                    var temp = startDate;
-                    startDate = endDate;
-                    endDate = temp;
-                    $scope.filterStartDate = startDate;
-                    $scope.filterEndDate = endDate;
-                }
+                $scope.filterStartDate = startDate;
+                $scope.filterEndDate = endDate;
                 query.addInvoiceDateParam($scope.filterStartDate, 'start');
                 query.addInvoiceDateParam($scope.filterEndDate, 'end');
             }
 
-            $scope.filterStartDate = startDate;
             query.currentPage = 0;
             query.itemsPerPage = 25;
             query.sortBy = 'invoiceDate';

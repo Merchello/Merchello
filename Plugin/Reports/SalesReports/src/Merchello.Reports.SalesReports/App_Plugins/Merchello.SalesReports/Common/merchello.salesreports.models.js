@@ -39,8 +39,8 @@
 
     var SaleOverTimeResult = function() {
         self.date = {};
-        self.salestotal = 0;
-        self.salescount = 0;
+        self.salesTotal = 0;
+        self.salesCount = 0;
     };
 
     angular.module('merchello.salesreports.models').constant('SaleOverTimeResult', SaleOverTimeResult);

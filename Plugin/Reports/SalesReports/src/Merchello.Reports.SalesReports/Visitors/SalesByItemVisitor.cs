@@ -97,7 +97,7 @@
                     });
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 LogHelper.Debug<SalesByItemVisitor>("Could not retrieve product variant key from the extended data collection.  This may be a result of an issue fixed in 1.5.1 or indicate a custom product line item which is not valid for this report.");
             }
