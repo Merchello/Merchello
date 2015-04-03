@@ -261,6 +261,8 @@
   <ItemGroup>
     <Content Include="App_Plugins\Merchello.PayPal\editor.html" />
     <Content Include="App_Plugins\Merchello.PayPal\merchello.paypal.controller.js" />
+    <Content Include="App_Plugins\Merchello.PayPal\merchello.paypal.paymentmethod.controller.js" />
+    <Content Include="App_Plugins\Merchello.PayPal\paymentmethod.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
