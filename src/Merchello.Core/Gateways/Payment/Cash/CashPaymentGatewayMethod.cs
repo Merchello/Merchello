@@ -15,7 +15,7 @@
     /// </summary>    
     [GatewayMethodUi("CashPaymentMethod")]
     [GatewayMethodEditor("Cash Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
-    [PaymentGatewayMethod("Cash Payment Gateway Method Editors", 
+    [PaymentGatewayMethod("Cash Payment Gateway Method Editors",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html", 
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.voidpayment.html", 
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.refundpayment.html")]
