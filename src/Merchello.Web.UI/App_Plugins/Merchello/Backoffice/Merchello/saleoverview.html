@@ -27,7 +27,16 @@
                         <div class="button-bar">
                             <!-- ACTION: Cancel Sale -->
                             <!-- ACTION: Capture Payment -->
-                            <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid()" data-ng-click="capturePayment()">Capture Funds</button>
+                            <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()">Capture Funds</button>
+
+                            <div class="btn-group" data-ng-show="false">
+                                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Actions <i class="icon-navigation-down"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><a data-ng-click="openAddressAddEditDialog(address)">Edit address</a></li>
+                                    <li><a data-ng-click="openDeleteAddressDialog(address)">Delete address</a></li>
+                                </ul>
+                            </div>
+
                             <!-- ACTION: Fulfill Shipment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                         </div>

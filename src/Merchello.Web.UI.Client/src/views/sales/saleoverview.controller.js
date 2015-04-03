@@ -27,7 +27,7 @@
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
-            $scope.paymentMethods = {};
+            $scope.paymentMethods = [];
             $scope.payments = [];
             $scope.billingAddress = {};
             $scope.hasShippingAddress = false;
@@ -36,6 +36,7 @@
             $scope.customLineItems = [];
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
+
 
             // exposed methods
             //  dialogs
@@ -196,14 +197,17 @@
              * @description - Load the Merchello payments for the invoice.
              */
             function loadPayments(key) {
-                var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
-                paymentsPromise.then(function(payments) {
-                    $scope.payments = paymentDisplayBuilder.transform(payments);
-                    $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
-                    $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
-                }, function(reason) {
-                    notificationsService.error('Failed to load payments for invoice', reason.message);
-                });
+                if (!$scope.invoice.isPaid()) {
+                    var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
+                    paymentsPromise.then(function(payments) {
+                        var allPayments = paymentDisplayBuilder.transform(payments);
+                        $scope.payments = _.filter(allPayments, function(p) { return !p.voided && !p.collected; })
+                        $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
+                        $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
+                    }, function(reason) {
+                        notificationsService.error('Failed to load payments for invoice', reason.message);
+                    });
+                }
             }
 
             function loadShippingAddress(key) {
