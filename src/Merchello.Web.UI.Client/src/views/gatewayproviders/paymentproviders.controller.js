@@ -88,7 +88,6 @@
                 provider.showSelectResource = false;
                 var promiseAllResources = paymentGatewayProviderResource.getGatewayResources(provider.key);
                 promiseAllResources.then(function (allResources) {
-                    console.info(allResources);
                     provider.gatewayResources = gatewayResourceDisplayBuilder.transform(allResources);
                     if (provider.gatewayResources.length > 0) {
                         provider.selectedGatewayResource = provider.gatewayResources[0];

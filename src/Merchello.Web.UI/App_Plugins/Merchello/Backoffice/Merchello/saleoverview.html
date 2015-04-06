@@ -29,11 +29,10 @@
                             <!-- ACTION: Capture Payment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()">Capture Funds</button>
 
-                            <div class="btn-group" data-ng-show="false">
-                                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Actions <i class="icon-navigation-down"></i></a>
-                                <ul class="dropdown-menu">
-                                    <li><a data-ng-click="openAddressAddEditDialog(address)">Edit address</a></li>
-                                    <li><a data-ng-click="openDeleteAddressDialog(address)">Delete address</a></li>
+                            <div class="btn-group" data-ng-show="!invoice.isPaid() && payments.length === 0">
+                                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">New Payment <i class="icon-navigation-down"></i></a>
+                                <ul class="dropdown-menu" data-ng-repeat="method in paymentMethods">
+                                    <li><a>{{method.name}}</a></li>
                                 </ul>
                             </div>
 

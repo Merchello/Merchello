@@ -18,6 +18,7 @@
             // exposed properties
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
+            $scope.paymentMethodsLoaded = false;
             $scope.invoice = {};
             $scope.tabs = [];
             $scope.historyLoaded = false;
@@ -202,6 +203,7 @@
                     paymentsPromise.then(function(payments) {
                         var allPayments = paymentDisplayBuilder.transform(payments);
                         $scope.payments = _.filter(allPayments, function(p) { return !p.voided && !p.collected; })
+                        loadPaymentMethods()
                         $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
                         $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
                     }, function(reason) {
@@ -210,6 +212,19 @@
                 }
             }
 
+            function loadPaymentMethods() {
+                if($scope.payments.length === 0) {
+
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadShippingAddress
+             * @function
+             *
+             * @description - Load the shipping address (if any) for an invoice.
+             */
             function loadShippingAddress(key) {
                 var shippingAddressPromise = orderResource.getShippingAddress(key);
                 shippingAddressPromise.then(function(result) {
@@ -218,10 +233,6 @@
                 }, function(reason) {
                     notificationsService.error('Failed to load shipping address', reason.message);
                 });
-            }
-
-            function setPreValuesLoaded() {
-
             }
 
             /**

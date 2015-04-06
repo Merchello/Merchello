@@ -229,6 +229,7 @@
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizeCapturePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\RefundPaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\VoidPaymentDialogEditorViewResolver.cs" />

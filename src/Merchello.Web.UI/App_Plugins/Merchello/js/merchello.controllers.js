@@ -2221,7 +2221,6 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 provider.showSelectResource = false;
                 var promiseAllResources = paymentGatewayProviderResource.getGatewayResources(provider.key);
                 promiseAllResources.then(function (allResources) {
-                    console.info(allResources);
                     provider.gatewayResources = gatewayResourceDisplayBuilder.transform(allResources);
                     if (provider.gatewayResources.length > 0) {
                         provider.selectedGatewayResource = provider.gatewayResources[0];
@@ -5528,6 +5527,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }
             }
 
+            /**
+             * @ngdoc method
+             * @name loadShippingAddress
+             * @function
+             *
+             * @description - Load the shipping address (if any) for an invoice.
+             */
             function loadShippingAddress(key) {
                 var shippingAddressPromise = orderResource.getShippingAddress(key);
                 shippingAddressPromise.then(function(result) {
@@ -5536,10 +5542,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }, function(reason) {
                     notificationsService.error('Failed to load shipping address', reason.message);
                 });
-            }
-
-            function setPreValuesLoaded() {
-
             }
 
             /**

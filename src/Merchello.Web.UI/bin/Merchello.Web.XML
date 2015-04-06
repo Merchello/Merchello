@@ -300,6 +300,22 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.AuthorizePaymentDialogEditorViewResolver">
+            <summary>
+            Resolves the custom DialogEditorView property from the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> for AutoMapper mappings
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.AuthorizePaymentDialogEditorViewResolver.ResolveCore(Merchello.Core.Gateways.Payment.IPaymentGatewayMethod)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.AuthorizeCapturePaymentDialogEditorViewResolver">
             <summary>
             Resolves the custom DialogEditorView property from the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> for AutoMapper mappings
@@ -7704,6 +7720,11 @@
         <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.PaymentCode">
             <summary>
             Gets or sets the payment code.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.AuthorizePaymentEditorView">
+            <summary>
+            Gets or sets the authorize capture editor view.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.AuthorizeCapturePaymentEditorView">

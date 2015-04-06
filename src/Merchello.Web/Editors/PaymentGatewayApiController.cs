@@ -115,7 +115,13 @@
             }
         }
 
-        /// <summary>
+        public IEnumerable<PaymentMethodDisplay> GetAvailablePaymentMethods()
+        {
+            var methods = _paymentContext.GetPaymentGatewayMethods().Select(x => x.ToPaymentMethodDisplay());
+            return methods.Where(x => x.IncludeInPaymentSelection).OrderBy(x => x.Name);
+        }
+
+            /// <summary>
         /// Gets a <see cref="PaymentMethodDisplay"/> by it's key.
         /// </summary>
         /// <param name="key">
