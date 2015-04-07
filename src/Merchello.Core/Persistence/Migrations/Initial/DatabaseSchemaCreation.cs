@@ -63,7 +63,9 @@
             { 35, typeof(OrderIndexDto) },
             { 36, typeof(NotificationMethodDto) },
             { 37, typeof(NotificationMessageDto) },
-            { 38, typeof(AuditLogDto) }
+            { 38, typeof(AuditLogDto) },
+            { 39, typeof(CampaignSettingsDto) },
+            { 40, typeof(CampaignActivitySettingsDto) }
         };
 
         /// <summary>

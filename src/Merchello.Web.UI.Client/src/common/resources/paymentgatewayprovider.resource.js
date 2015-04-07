@@ -7,12 +7,14 @@
         ['$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
 
+            var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentGatewayApiBaseUrl'];
+
             return {
                 getGatewayResources: function (paymentGatewayProviderKey) {
-
+                    var url = baseUrl + 'GetGatewayResources';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetGatewayResources'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentGatewayProviderKey}
                         }),
@@ -20,20 +22,20 @@
                 },
 
                 getAllGatewayProviders: function () {
-
+                    var url = baseUrl + 'GetAllGatewayProviders';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetAllGatewayProviders'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to retreive data for all gateway providers');
                 },
 
                 getPaymentProviderPaymentMethods: function (paymentGatewayProviderKey) {
-
+                    var url = baseUrl + 'GetPaymentProviderPaymentMethods';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetPaymentProviderPaymentMethods'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentGatewayProviderKey}
                         }),
@@ -43,7 +45,7 @@
                 getAvailablePaymentMethods: function() {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetAvailablePaymentMethods'),
+                            url: baseUrl + 'GetAvailablePaymentMethods',
                             method: "GET"
                         }),
                         'Failed to load payment methods');
@@ -52,7 +54,7 @@
                 getPaymentMethodByKey: function(paymentMethodKey) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetPaymentMethodByKey'),
+                            url: baseUrl + 'GetPaymentMethodByKey',
                             method: "GET",
                             params: {key: paymentMethodKey}
                         }),
@@ -60,28 +62,28 @@
                 },
 
                 addPaymentMethod: function (paymentMethod) {
-
+                    var url = baseUrl + 'AddPaymentMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'AddPaymentMethod'),
+                        $http.post(url,
                             paymentMethod
                         ),
                         'Failed to create paymentMethod');
                 },
 
                 savePaymentMethod: function (paymentMethod) {
-
+                    var url = baseUrl + 'PutPaymentMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'PutPaymentMethod'),
+                        $http.post(url,
                             paymentMethod
                         ),
                         'Failed to save paymentMethod');
                 },
 
                 deletePaymentMethod: function (paymentMethodKey) {
-
+                    var url = baseUrl + 'DeletePaymentMethod';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'DeletePaymentMethod'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentMethodKey}
                         }),

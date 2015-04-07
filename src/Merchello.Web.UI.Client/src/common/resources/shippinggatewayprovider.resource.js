@@ -11,18 +11,19 @@ angular.module('merchello.resources')
             return {
 
                 addShipMethod: function (shipMethod) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'AddShipMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'AddShipMethod'),
+                        $http.post(url,
                             shipMethod
                         ),
                         'Failed to create ship method');
                 },
 
                 deleteShipCountry: function (shipCountryKey) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'DeleteShipCountry';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'DeleteShipCountry'),
+                            url: url,
                             method: "GET",
                             params: { id: shipCountryKey }
                         }),
@@ -30,18 +31,19 @@ angular.module('merchello.resources')
                 },
 
                 deleteShipMethod: function (shipMethod) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'DeleteShipMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'DeleteShipMethod'),
+                        $http.post(url,
                             shipMethod
                         ),
                         'Failed to delete ship method');
                 },
 
                 getAllShipCountryProviders: function (shipCountry) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetAllShipCountryProviders';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetAllShipCountryProviders'),
+                            url: url,
                             method: "GET",
                             params: { id: shipCountry.key }
                         }),
@@ -49,20 +51,20 @@ angular.module('merchello.resources')
                 },
 
                 getAllShipGatewayProviders: function () {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetAllShipGatewayProviders';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetAllShipGatewayProviders'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to retreive shipping gateway providers');
                 },
 
                 getShippingProviderShipMethods: function (shipProvider) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetShippingProviderShipMethods';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShippingProviderShipMethods'),
+                            url: url,
                             method: "GET",
                             params: { id: shipProvider.key }
                         }),
@@ -70,10 +72,10 @@ angular.module('merchello.resources')
                 },
 
                 getShippingGatewayMethodsByCountry: function (shipProvider, shipCountry) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetShippingGatewayMethodsByCountry';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShippingGatewayMethodsByCountry'),
+                            url: url,
                             method: "GET",
                             params: { id: shipProvider.key, shipCountryId: shipCountry.key }
                         }),
@@ -81,10 +83,10 @@ angular.module('merchello.resources')
                 },
 
                 getAllShipGatewayResourcesForProvider: function (shipProvider) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetAllShipGatewayResourcesForProvider';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetAllShipGatewayResourcesForProvider'),
+                            url: url,
                             method: "GET",
                             params: { id: shipProvider.key }
                         }),
@@ -92,10 +94,10 @@ angular.module('merchello.resources')
                 },
 
                 getShippingCountry: function (id) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetShipCountry';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShipCountry'),
+                            url: url,
                             method: "GET",
                             params: { id: id }
                         }),
@@ -103,10 +105,10 @@ angular.module('merchello.resources')
                 },
 
                 getWarehouseCatalogShippingCountries: function (id) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetAllShipCountries';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetAllShipCountries'),
+                            url: url,
                             method: "GET",
                             params: { id: id }
                         }),
@@ -114,10 +116,10 @@ angular.module('merchello.resources')
                 },
 
                 newWarehouseCatalogShippingCountry: function (catalogKey, countryCode) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'NewShipCountry';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'NewShipCountry'),
+                            url: url,
                             method: "GET",
                             params: { catalogKey: catalogKey, countryCode: countryCode }
                         }),
@@ -129,9 +131,9 @@ angular.module('merchello.resources')
                     if (shipMethod.key === '') {
                         return this.addShipMethod(shipMethod);
                     }
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'PutShipMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'PutShipMethod'),
+                        $http.post(url,
                             shipMethod
                         ),
                         'Failed to save ship method');

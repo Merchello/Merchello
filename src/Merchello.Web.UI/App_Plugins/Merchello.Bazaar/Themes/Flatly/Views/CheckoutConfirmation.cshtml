@@ -1,4 +1,5 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationModel>
+@using System.Web.Mvc.Html
 @using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
 @{
@@ -13,3 +14,8 @@
     @Html.ThemedPartial(Model, "CheckoutConfirmationForm", Model.CheckoutConfirmationForm)
 
 </div>
+
+@section AdditionalScripts
+{
+    @Html.Action("RenderBraintreeSetupJs", "BraintreePaymentOperations", new { area = "MerchelloIntroduction" })
+}

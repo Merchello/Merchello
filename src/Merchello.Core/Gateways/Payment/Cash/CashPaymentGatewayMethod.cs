@@ -83,7 +83,7 @@
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, amount, PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
-            payment.PaymentMethodName = PaymentMethod.Name + " " + PaymentMethod.PaymentCode;
+            payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
             payment.Collected = true;
             payment.Authorized = true;

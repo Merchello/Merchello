@@ -52,7 +52,6 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                     loadPayments(id);
                     loadSettings();
                     $scope.loaded = true;
-                    //console.info($scope.invoice);
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
@@ -139,7 +138,6 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             }
 
             function loadPaymentMethods(payments) {
-                console.info(payments);
                 var keys = [];
                 // we need to get unique keys here so we don't have to look up for every payment
                 angular.forEach(payments, function(p) {
@@ -201,7 +199,6 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 var request = dialogData.toPaymentRequestDisplay();
                 var promise = paymentResource.voidPayment(request);
                 promise.then(function(result) {
-                    console.info(result);
                     init();
                 });
             }

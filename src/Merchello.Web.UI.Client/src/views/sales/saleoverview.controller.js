@@ -8,11 +8,11 @@
      */
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
+            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
             'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
+                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, dialogDataFactory,
                  merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
@@ -37,7 +37,8 @@
             $scope.customLineItems = [];
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
-
+            $scope.newPaymentOpen = false;
+            $scope.authorizePaymentOnly = false;
 
             // exposed methods
             //  dialogs
@@ -46,7 +47,10 @@
             $scope.openDeleteInvoiceDialog = openDeleteInvoiceDialog;
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
+            $scope.openAddPaymentDialog = openAddPaymentDialog;
             $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
+            $scope.filterPaymentMethods = filterPaymentMethods;
+            $scope.toggleAuthorizePaymentOnly = toggleAuthorizePaymentOnly;
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
@@ -113,6 +117,8 @@
              */
             function loadInvoice(id) {
                 // assert the collections are reset before populating
+                console.info('Should get a value here');
+               console.info($scope.newPaymentOpen);
                 $scope.shipmentLineItems = [];
                 $scope.customLineItems = [];
                 $scope.discountLineItems = [];
@@ -214,7 +220,11 @@
 
             function loadPaymentMethods() {
                 if($scope.payments.length === 0) {
-
+                    var promise = paymentGatewayProviderResource.getAvailablePaymentMethods();
+                    promise.then(function(methods) {
+                        $scope.paymentMethods = paymentMethodDisplayBuilder.transform(methods);
+                        $scope.paymentMethodsLoaded = true;
+                    })
                 }
             }
 
@@ -233,6 +243,32 @@
                 }, function(reason) {
                     notificationsService.error('Failed to load shipping address', reason.message);
                 });
+            }
+
+            /**
+             * @ngdoc method
+             * @name filterPaymentMethods
+             * @function
+             *
+             * @description - Filters payment methods for methods that offer authorize / authorize capture dialogs
+             */
+            function filterPaymentMethods() {
+                if ($scope.authorizePaymentOnly) {
+                    return _.filter($scope.paymentMethods, function(auth) { return auth.authorizePaymentEditorView.editorView !== ''; });
+                } else {
+                    return _.filter($scope.paymentMethods, function(capture) { return capture.authorizeCapturePaymentEditorView.editorView !== ''; });
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name toggleAuthorizePaymentOnly
+             * @function
+             *
+             * @description - Toggles the payment method setting to authorize / authorize capture.
+             */
+            function toggleAuthorizePaymentOnly() {
+                $scope.authorizePaymentOnly = !$scope.authorizePaymentOnly;
             }
 
             /**
@@ -275,7 +311,6 @@
              */
             function capturePaymentDialogConfirm(paymentRequest) {
                 $scope.preValuesLoaded = false;
-                console.info(paymentRequest);
                 var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
                     // added a timeout here to give the examine index
@@ -285,6 +320,61 @@
                     }, 400);
                 }, function (reason) {
                     notificationsService.error("Payment Capture Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name openAddPaymentDialog
+             * @function
+             *
+             * @description - Opens a dialog to authorize and/or capture a new payment
+             */
+            function openAddPaymentDialog(paymentMethod) {
+
+                var dialogData = dialogDataFactory.createAddPaymentDialogData();
+                dialogData.paymentMethod = paymentMethod;
+                dialogData.paymentMethodName = paymentMethod.name;
+                dialogData.invoiceBalance = $scope.invoice.remainingBalance($scope.payments);
+                dialogData.currencySymbol = $scope.currencySymbol;
+                dialogData.invoice = $scope.invoice;
+                dialogData.authorizePaymentOnly = $scope.authorizePaymentOnly;
+                var dialogView = $scope.authorizePaymentOnly ? paymentMethod.authorizePaymentEditorView.editorView : paymentMethod.authorizeCapturePaymentEditorView.editorView;
+
+                dialogService.open({
+                    template: dialogView,
+                    show: true,
+                    callback: addPaymentDialogConfirm,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name addPaymentDialogConfirm
+             * @function
+             *
+             * @description - Authorizes and/or captures a new payment
+             */
+            function addPaymentDialogConfirm(dialogData) {
+                $scope.preValuesLoaded = false;
+                var paymentRequest = dialogData.asPaymentRequestDisplay();
+                var promise;
+                var note =  ' Authorize/Capture ';
+                if (dialogData.authorizePaymentOnly) {
+                    promise = paymentResource.authorizePayment(paymentRequest);
+                    name = ' Authorize ';
+                } else {
+                    promise = paymentResource.authorizeCapturePayment(paymentRequest);
+                }
+                promise.then(function (payment) {
+                    // added a timeout here to give the examine index
+                    $timeout(function() {
+                        notificationsService.success('Payment ' + note + 'success');
+                        loadInvoice(paymentRequest.invoiceKey);
+                    }, 400);
+                }, function (reason) {
+                    notificationsService.error('Payment ' + note + 'Failed', reason.message);
                 });
             }
 

@@ -115,6 +115,13 @@
             }
         }
 
+        /// <summary>
+        /// The get available payment methods.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{PaymentMethodDisplay}"/>.
+        /// </returns>
+        [HttpGet]
         public IEnumerable<PaymentMethodDisplay> GetAvailablePaymentMethods()
         {
             var methods = _paymentContext.GetPaymentGatewayMethods().Select(x => x.ToPaymentMethodDisplay());

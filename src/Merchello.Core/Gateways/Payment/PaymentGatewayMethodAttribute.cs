@@ -111,6 +111,7 @@
             Mandate.ParameterNotNullOrEmpty(title, "title");
 
             Title = title;
+            AuthorizeEditorView = authorizeEditorView;
             AuthorizeCaptureEditorView = authorizeCaptureEditorView;
             this.IncludeInPaymentSelection = includeInPaymentSelection;
             VoidPaymentEditorView = voidPaymentEditorView;

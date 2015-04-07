@@ -186,11 +186,10 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
             scope: {
                 filterStartDate: '=',
                 filterEndDate: '=',
-                filterButtonText: '@filterButtonText',
                 filterWithDates: '&'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterbydaterange.tpl.html',
-            controller: function($scope, $element, $q, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
+            controller: function($scope, $element, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
 
                 $scope.settings = {};
 
@@ -198,46 +197,37 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 $scope.changeDateFilters = changeDateFilters;
 
                 function init() {
-                    var promises = loadAssets();
-                    promises.push(loadSettings());
-
-                    $q.all(promises).then(function() {
-                        $scope.filterStartDate = moment($scope.filterStartDate).format($scope.settings.dateFormat.toUpperCase());
-                        $scope.filterEndDate = moment($scope.filterEndDate).format($scope.settings.dateFormat.toUpperCase());
-                    });
+                    loadCssAssets();
+                    loadSettings();
                 }
 
                 /**
                  * @ngdoc method
-                 * @name loadAssets
+                 * @name loadCssAssets
                  * @function
                  *
-                 * @description - Loads needed and js stylesheets for the view.
+                 * @description - Loads needed stylesheets for the view.
                  */
-                function loadAssets() {
-                    var promises = [];
-                    var cssPromise = assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css');
-                    var jsPromise = assetsService.load(['lib/moment/moment-with-locales.js', 'lib/datetimepicker/bootstrap-datetimepicker.min.js']);
+                function loadCssAssets() {
 
-                    promises.push(cssPromise);
-                    promises.push(jsPromise);
+                    assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
+                        var filesToLoad = ["lib/datetimepicker/bootstrap-datetimepicker.js"];
+                        assetsService.load(filesToLoad).then(
+                            function () {
+                                //The Datepicker js and css files are available and all components are ready to use.
 
-                    //The Datepicker js and css files are available and all components are ready to use.
-                    $q.all(promises).then(function() {
-                        setupDatePicker("#filterStartDate");
-                        $element.find("#filterStartDate").datetimepicker().on("changeDate", applyDateStart);
+                                setupDatePicker("#filterStartDate");
+                                $element.find("#filterStartDate").datetimepicker().on("changeDate", applyDateStart);
 
-                        setupDatePicker("#filterEndDate");
-                        $element.find("#filterEndDate").datetimepicker().on("changeDate", applyDateEnd);
+                                setupDatePicker("#filterEndDate");
+                                $element.find("#filterEndDate").datetimepicker().on("changeDate", applyDateEnd);
+                            });
                     });
-
-                    return promises;
                 }
 
                 function loadSettings() {
                     var promise = settingsResource.getAllSettings();
-                    return promise.then(function(allSettings) {
-                        console.info(allSettings);
+                    promise.then(function(allSettings) {
                         $scope.settings = settingDisplayBuilder.transform(allSettings);
                     }, function(reason) {
                         notificationsService.error('Failed to load settings', reason.message);
@@ -255,9 +245,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 function setupDatePicker(pickerId) {
 
                     // Open the datepicker and add a changeDate eventlistener
-                    $element.find(pickerId).datetimepicker({
-                        format: $scope.settings.dateFormat
-                    });
+                    $element.find(pickerId).datetimepicker();
 
                     //Ensure to remove the event handler when this instance is destroyted
                     $scope.$on('$destroy', function () {
@@ -294,7 +282,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                     angularHelper.safeApply($scope, function () {
                         // when a date is changed, update the model
                         if (e.localDate) {
-                            $scope.filterStartDate = moment(e.localDate).format($scope.settings.dateFormat.toUpperCase());
+                            $scope.filterStartDate = e.localDate.toIsoDateString();
                         }
                     });
                 }
@@ -304,18 +292,13 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                     angularHelper.safeApply($scope, function () {
                         // when a date is changed, update the model
                         if (e.localDate) {
-                            $scope.filterEndDate = moment(e.localDate).format($scope.settings.dateFormat.toUpperCase());
+                            $scope.filterEndDate = e.localDate.toIsoDateString();
                         }
                     });
                 }
 
                 // Initialize the controller
                 init();
-            },
-            compile: function (element, attrs) {
-                if (!attrs.filterButtonText) {
-                    attrs.filterButtonText = 'Filter';
-                }
             }
         };
     });
@@ -361,6 +344,8 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 if ($scope.classes == undefined) {
                     $scope.classes = 'control-group umb-control-group';
                 }
+
+
             }
         };
     });

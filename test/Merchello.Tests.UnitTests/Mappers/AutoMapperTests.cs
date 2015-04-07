@@ -55,6 +55,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             var display = cash.ToPaymentMethodDisplay();
 
             Assert.NotNull(display);
+            Assert.IsNotNullOrEmpty(display.AuthorizePaymentEditorView.EditorView);
             Assert.IsNotNullOrEmpty(display.AuthorizeCapturePaymentEditorView.EditorView);
             Assert.IsNotNullOrEmpty(display.VoidPaymentEditorView.EditorView);
             Assert.IsNotNullOrEmpty(display.RefundPaymentEditorView.EditorView);

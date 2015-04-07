@@ -23,7 +23,7 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// The uow provider.
+        /// The database unit of work provider.
         /// </summary>
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
 

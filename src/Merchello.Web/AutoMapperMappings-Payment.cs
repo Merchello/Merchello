@@ -57,7 +57,13 @@ namespace Merchello.Web
                     dest => dest.VoidPaymentEditorView,
                     opt =>
                     opt.ResolveUsing<VoidPaymentDialogEditorViewResolver>()
-                        .ConstructedBy(() => new VoidPaymentDialogEditorViewResolver()));
+                        .ConstructedBy(() => new VoidPaymentDialogEditorViewResolver()))
+                .ForMember(
+                    dest => dest.IncludeInPaymentSelection,
+                    opt =>
+                    opt.ResolveUsing<IncludeInPaymentSelectionResolver>()
+                        .ConstructedBy(() => new IncludeInPaymentSelectionResolver()));
+
         }
     }
 }

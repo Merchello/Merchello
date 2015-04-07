@@ -14,9 +14,10 @@
              * @description
              **/
             getSalesHistoryByInvoiceKey: function (key) {
+                var url = Umbraco.Sys.ServerVariables["merchelloUrls"]["merchelloAuditLogApiBaseUrl"] + 'GetSalesHistoryByInvoiceKey';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetSalesHistoryByInvoiceKey'),
+                        url: url,
                         method: "GET",
                         params: { id: key }
                     }),
