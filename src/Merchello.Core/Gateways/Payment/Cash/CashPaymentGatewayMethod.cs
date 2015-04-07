@@ -105,8 +105,12 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
+            // We need to determine if the entire amount authorized has been collected before marking
+            // the payment collected.
+            var appliedPayments = GatewayProviderService.GetAppliedPaymentsByPaymentKey(payment.Key);
+            var applied = appliedPayments.Sum(x => x.Amount);
 
-            payment.Collected = true;
+            payment.Collected = (amount + applied) == payment.Amount;
             payment.Authorized = true;
 
             GatewayProviderService.Save(payment);

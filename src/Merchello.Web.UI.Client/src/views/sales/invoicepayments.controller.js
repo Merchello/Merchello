@@ -19,12 +19,14 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             $scope.invoice = {};
             $scope.payments = [];
             $scope.paymentMethods = [];
+            $scope.remainingBalance = 0;
             $scope.settings = {};
             $scope.currencySymbol = '';
             $scope.showAddPayment = false;
 
             // exposed methods
             $scope.openVoidPaymentDialog = openVoidPaymentDialog;
+            $scope.openRefundPaymentDialog = openRefundPaymentDialog;
             $scope.showVoid = showVoid;
             $scope.showRefund = showRefund;
 
@@ -201,6 +203,18 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 promise.then(function(result) {
                     init();
                 });
+            }
+
+            function openRefundPaymentDialog(payment) {
+                var method = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; });
+                if (method === undefined) {
+                    return;
+                }
+                var dialogData = dialogDataFactory.createProcessRefundPaymentDialogData();
+                dialogData.invoiceKey = $scope.invoice.key;
+                dialogData.paymentMethodKey = payment.paymentMethodKey;
+                dialogData.appliedAmount = payment.appliedAmount();
+                console.info(dialogData);
             }
 
             init();

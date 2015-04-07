@@ -142,6 +142,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new ProcessVoidPaymentDialogData();
         }
 
+        // creates a dialog data for refunding payments
+        function createProcessRefundPaymentDialogData() {
+            return new ProcessRefundPaymentDialogData();
+        }
+
         // creates a dialog data for adding new payments
         function createAddPaymentDialogData() {
             return new AddPaymentDialogData();
@@ -184,6 +189,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
             createProductSelectorDialogData: createProductSelectorDialogData,
             createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
+            createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
             createAddPaymentDialogData: createAddPaymentDialogData
         };
 }]);

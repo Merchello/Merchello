@@ -13,7 +13,7 @@
             </div>
             <merchello-tabs invoice="invoice" tabs="tabs"></merchello-tabs>
         </umb-header>
-        <merchello-panel class="row-fluid" data-ng-show="preValuesLoaded">
+        <merchello-panel class="row-fluid">
             <!-- Main content area -->
             <div class="merchello-pane primary span9">
                 <!-- Order Information -->
@@ -29,33 +29,13 @@
                             <!-- ACTION: Capture Payment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-hide="invoice.isPaid() || payments.length === 0" data-ng-click="capturePayment()">Capture Funds</button>
 
-                            <button type="button" class="btn btn-default btn-action" data-ng-click="newPaymentOpen = !newPaymentOpen" data-ng-show="!invoice.isPaid() && payments.length === 0 && paymentMethodsLoaded">New Payment</button>
-
+                            <button type="button" class="btn btn-default btn-action" data-ng-click="toggleNewPaymentOpen()" data-ng-show="!invoice.isPaid() && payments.length === 0 && paymentMethodsLoaded">New Payment</button>
                             <!-- ACTION: Fulfill Shipment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                         </div>
-                        <merchello-slide-open-panel is-open="newPaymentOpen" hide-close="true" classes="'row-fluid col-xs-12 span12'">
-                            <table class="table table-striped merchello-striped-table">
-                                <thead>
-                                <tr>
-                                    <th><localize key="merchelloPayment_paymentMethod"></th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr data-ng-repeat="method in filterPaymentMethods()">
-                                        <td>{{method.name}}</td>
-                                        <td class="text-right">
-                                            <button type="button" class="btn btn-default" data-ng-show="authorizePaymentOnly" data-ng-click="openAddPaymentDialog(method)">Authorize</button>
-                                            <button type="button" class="btn btn-default" data-ng-show="!authorizePaymentOnly" data-ng-click="openAddPaymentDialog(method)">Authorize Capture</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="control-group row-fluid">
-                                <input type="checkbox" data-ng-model="authorizePaymentOnly" data-ng-click="toggleAuthorizePaymentOnly()" /> Authorize Only
-                            </div>
-                        </merchello-slide-open-panel>
+
+                        <add-payment-table is-open="newPaymentOpen" payments="payments" toggle-open="toggleNewPaymentOpen()" reload="reload()" currency-symbol="currencySymbol" invoice="invoice" payment-methods="paymentMethods"></add-payment-table>
+
                         <table class="table table-striped merchello-striped-table order-items">
                             <thead>
                             <tr>

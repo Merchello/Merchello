@@ -1061,11 +1061,31 @@
 
     /**
      * @ngdoc model
-     * @name ProcessorArgumentsCollectionDisplay
+     * @name ProcessRefundPaymentDialogData
      * @function
      *
      * @description
-     * Represents a JS version of Merchello's ProcessVoidPaymentDialogData object
+     * Dialog data model for refunding payments
+     */
+    var ProcessRefundPaymentDialogData = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentMethodKey = '';
+        self.paymentKey = '';
+        self.amount = 0;
+        self.appliedAmount = 0;
+        self.processorArgumentCollectionDisplay = new ProcessorArgumentCollectionDisplay();
+        self.warning = '';
+    };
+
+    angular.module('merchello.models').constant('ProcessRefundPaymentDialogData', ProcessRefundPaymentDialogData);
+    /**
+     * @ngdoc model
+     * @name ProcessVoidPaymentDialogData
+     * @function
+     *
+     * @description
+     * Dialog data model for voiding payments
      */
     var ProcessVoidPaymentDialogData = function() {
         var self = this;
@@ -1413,29 +1433,38 @@
     PaymentDisplay.prototype = (function() {
 
         // private
-        var getStatus = function() {
-                var statusArr = [];
-                if (this.authorized) {
-                    statusArr.push("Authorized");
-                }
-                if (this.collected) {
-                    statusArr.push("Captured");
-                }
-                if (this.exported) {
-                    statusArr.push("Exported");
-                }
+        function getStatus() {
+            var statusArr = [];
+            if (this.authorized) {
+                statusArr.push("Authorized");
+            }
+            if (this.collected) {
+                statusArr.push("Captured");
+            }
+            if (this.exported) {
+                statusArr.push("Exported");
+            }
 
-                return statusArr.join("/");
-            },
+            return statusArr.join("/");
+        }
 
-            hasAmount = function() {
-                return this.amount > 0;
-            };
+        function hasAmount() {
+            return this.amount > 0;
+        }
+
+        function appliedAmount() {
+            var applied = 0;
+            angular.forEach(this.appliedPayments, function(ap) {
+                applied += ap.amount;
+            });
+            return applied;
+        }
 
         // public
         return {
             getStatus: getStatus,
-            hasAmount: hasAmount
+            hasAmount: hasAmount,
+            appliedAmount: appliedAmount
         };
     }());
 
@@ -3328,6 +3357,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new ProcessVoidPaymentDialogData();
         }
 
+        // creates a dialog data for refunding payments
+        function createProcessRefundPaymentDialogData() {
+            return new ProcessRefundPaymentDialogData();
+        }
+
         // creates a dialog data for adding new payments
         function createAddPaymentDialogData() {
             return new AddPaymentDialogData();
@@ -3370,6 +3404,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
             createProductSelectorDialogData: createProductSelectorDialogData,
             createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
+            createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
             createAddPaymentDialogData: createAddPaymentDialogData
         };
 }]);

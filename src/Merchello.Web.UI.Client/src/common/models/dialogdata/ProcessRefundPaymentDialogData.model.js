@@ -1,22 +1,23 @@
     /**
      * @ngdoc model
-     * @name ProcessVoidPaymentDialogData
+     * @name ProcessRefundPaymentDialogData
      * @function
      *
      * @description
-     * Dialog data model for voiding payments
+     * Dialog data model for refunding payments
      */
-    var ProcessVoidPaymentDialogData = function() {
+    var ProcessRefundPaymentDialogData = function() {
         var self = this;
         self.invoiceKey = '';
         self.paymentMethodKey = '';
         self.paymentKey = '';
+        self.amount = 0;
+        self.appliedAmount = 0;
         self.processorArgumentCollectionDisplay = new ProcessorArgumentCollectionDisplay();
         self.warning = '';
     };
 
-    ProcessVoidPaymentDialogData.prototype = (function() {
-
+    ProcessRefundPaymentDialogData.prototype = (function() {
         function toPaymentRequestDisplay() {
             var paymentRequest = angular.extend(this, PaymentRequestDisplay);
             paymentRequest.processorArgs = this.processorArgumentCollectionDisplay.toArray();
@@ -24,9 +25,8 @@
         }
 
         return {
-            toPaymentRequestDisplay : toPaymentRequestDisplay
+            toPaymentRequestDisplay: toPaymentRequestDisplay
         }
-
     }());
 
-    angular.module('merchello.models').constant('ProcessVoidPaymentDialogData', ProcessVoidPaymentDialogData);
+    angular.module('merchello.models').constant('ProcessRefundPaymentDialogData', ProcessRefundPaymentDialogData);

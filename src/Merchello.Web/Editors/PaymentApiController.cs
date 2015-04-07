@@ -120,7 +120,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return payments.Select(x => x.ToPaymentDisplay());
+            return payments.OrderByDescending(x => x.CreateDate).Select(x => x.ToPaymentDisplay());
         }
 
         /// <summary>
