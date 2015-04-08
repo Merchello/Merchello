@@ -167,7 +167,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             var customer = _customerService.CreateCustomerWithKey(loginName, firstName, lastName, email);
 
             //// Act
-            var customerAddress = customer.CreateCustomerAddress(MerchelloContext, _address, "Test address", AddressType.Billing);
+            var customerAddress = customer.CreateCustomerAddress(MerchelloContext.Current, _address, "Test address", AddressType.Billing);
 
             //// Assert
             Assert.NotNull(customerAddress, "Customer address was null");
@@ -197,8 +197,8 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
 
            //// Assert
            Assert.AreEqual(4, customer.Addresses.Count());
-            var defaultBilling = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing);
-            var defaultShipping = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Shipping);
+           var defaultBilling = customer.DefaultCustomerAddress(MerchelloContext.Current, AddressType.Billing);
+           var defaultShipping = customer.DefaultCustomerAddress(MerchelloContext.Current, AddressType.Shipping);
             Assert.NotNull(defaultBilling);
             Assert.NotNull(defaultShipping);
             Assert.AreEqual(2, customer.Addresses.Count(x => x.AddressType == AddressType.Billing));
@@ -224,7 +224,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             }
             ((Core.Models.Customer)customer).Addresses = customerAddresses;
             _customerService.Save(customer);
-            var oldDefaultKey = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing).Key;
+            var oldDefaultKey = customer.DefaultCustomerAddress(MerchelloContext.Current, AddressType.Billing).Key;
 
             //// Act
             var addresses = customer.Addresses.ToList();
@@ -237,7 +237,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
 
             //// Assert
             Assert.AreEqual(5, customer.Addresses.Count());
-            var newDefaultKey = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing).Key;
+            var newDefaultKey = customer.DefaultCustomerAddress(MerchelloContext.Current, AddressType.Billing).Key;
             Assert.AreNotEqual(oldDefaultKey, newDefaultKey);
             Assert.AreEqual(3, customer.Addresses.Count(x => x.AddressType == AddressType.Billing));
             Assert.AreEqual(2, customer.Addresses.Count(x => x.AddressType == AddressType.Shipping));
@@ -256,22 +256,22 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.NotNull(customer, "Customer was null");            
 
             //// Act
-            customer.CreateCustomerAddress(MerchelloContext, _address, "test address1", AddressType.Billing);
-            customer.CreateCustomerAddress(MerchelloContext, _address, "test address2", AddressType.Billing);
-            customer.CreateCustomerAddress(MerchelloContext, _address, "test address3", AddressType.Shipping);
-            customer.CreateCustomerAddress(MerchelloContext, _address, "test address4", AddressType.Shipping);
-            customer.CreateCustomerAddress(MerchelloContext, _address, "test address5", AddressType.Shipping);
+            customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address1", AddressType.Billing);
+            customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address2", AddressType.Billing);
+            customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address3", AddressType.Shipping);
+            customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address4", AddressType.Shipping);
+            customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address5", AddressType.Shipping);
 
             //// Assert
-            var all = customer.CustomerAddresses(MerchelloContext);
+            var all = customer.CustomerAddresses(MerchelloContext.Current);
             Assert.AreEqual(5, all.Count(), "Total address count was not five");
             Assert.AreEqual(2, all.Count(x => x.IsDefault), "There were not two defaults");
 
-            var billings = customer.CustomerAddresses(MerchelloContext, AddressType.Billing);
+            var billings = customer.CustomerAddresses(MerchelloContext.Current, AddressType.Billing);
             Assert.AreEqual(2, billings.Count(), "There were not two billing addresses");
             Assert.AreEqual(1, billings.Count(x => x.IsDefault), "There was not one default billing address");
 
-            var shippings = customer.CustomerAddresses(MerchelloContext, AddressType.Shipping);
+            var shippings = customer.CustomerAddresses(MerchelloContext.Current, AddressType.Shipping);
             Assert.AreEqual(3, shippings.Count(), "There were not two shipping addresses");
             Assert.AreEqual(1, shippings.Count(x => x.IsDefault), "There was not one default shipping address");
             
@@ -288,26 +288,26 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.NotNull(customer, "Customer was null");
             
             //// Act
-            var address1 = customer.CreateCustomerAddress(MerchelloContext, _address, "test address1", AddressType.Billing);
-            var address2 = customer.CreateCustomerAddress(MerchelloContext, _address, "test address2", AddressType.Billing);
+            var address1 = customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address1", AddressType.Billing);
+            var address2 = customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address2", AddressType.Billing);
 
             // at this point address 1 should be default
-            var defaultBilling = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing);
+            var defaultBilling = customer.DefaultCustomerAddress(MerchelloContext.Current, AddressType.Billing);
             Assert.NotNull(defaultBilling, "Default billing was null");
             Assert.AreEqual(address1.Key, defaultBilling.Key, "Address 1 was not the default address");
 
 
             address2.IsDefault = true;
-            customer.SaveCustomerAddress(MerchelloContext, address2);
+            customer.SaveCustomerAddress(MerchelloContext.Current, address2);
 
             //// Assert
             
             // now the address 2 should be the default billing address and the only address flagged as default
-            var assertDefaultBilling = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing);
+            var assertDefaultBilling = customer.DefaultCustomerAddress(MerchelloContext.Current, AddressType.Billing);
             Assert.NotNull(assertDefaultBilling, "Assert Default billing was null");
             Assert.AreEqual(address2.Key, assertDefaultBilling.Key, "Address 2 was not the default address");
 
-            var allBillings = customer.CustomerAddresses(MerchelloContext, AddressType.Billing);
+            var allBillings = customer.CustomerAddresses(MerchelloContext.Current, AddressType.Billing);
             Assert.AreEqual(1, allBillings.Count(x => x.IsDefault));
         }
 
@@ -322,14 +322,14 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             Assert.NotNull(customer, "Customer was null");
 
             //// Act
-            var address1 = customer.CreateCustomerAddress(MerchelloContext, _address, "test address1", AddressType.Billing);
-            var address2 = customer.CreateCustomerAddress(MerchelloContext, _address, "test address2", AddressType.Billing);
+            var address1 = customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address1", AddressType.Billing);
+            var address2 = customer.CreateCustomerAddress(MerchelloContext.Current, _address, "test address2", AddressType.Billing);
 
             // at this point address 1 should be default
 
-            customer.DeleteCustomerAddress(MerchelloContext, address1);
+            customer.DeleteCustomerAddress(MerchelloContext.Current, address1);
 
-            var assertDefaultBilling = customer.DefaultCustomerAddress(MerchelloContext, AddressType.Billing);
+            var assertDefaultBilling = customer.DefaultCustomerAddress(MerchelloContext.Current, AddressType.Billing);
             Assert.NotNull(assertDefaultBilling, "Assert Default billing was null");
             Assert.AreEqual(address2.Key, assertDefaultBilling.Key, "Address 2 was not the default address");
         }

@@ -35,7 +35,7 @@
             var usCountry = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
             var key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
 
-            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.CreateInstance(key);
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.CreateInstance(key);
 
             rateTableProvider.DeleteAllActiveShipMethods(usCountry);
             var gwshipMethod1 = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByPrice, usCountry, "Ground (Vary By Pricc) 1");
@@ -82,11 +82,11 @@
             PreTestDataWorker.DeleteAllItemCaches();   
             PreTestDataWorker.DeleteAllInvoices();
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
-            _basket = Basket.GetBasket(MerchelloContext, _customer);
+            _basket = Basket.GetBasket(MerchelloContext.Current, _customer);
 
             for (var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct(true, WeightPerProduct, PricePerProduct));
 
-            Basket.Save(MerchelloContext, _basket);
+            Basket.Save(MerchelloContext.Current, _basket);
 
             _shipCountry = ShipCountryService.GetShipCountryByCountryCode(Catalog.Key, "US");
 
@@ -96,7 +96,7 @@
         public void Can_Quote_A_Basket_Shipment_And_Assert_That_ShipMethods_Are_Set()
         {
             //// Arrange
-            var shipment = _basket.PackageBasket(MerchelloContext, _destination).FirstOrDefault();
+            var shipment = _basket.PackageBasket(MerchelloContext.Current, _destination).FirstOrDefault();
             Assert.NotNull(shipment);
 
             //// Act

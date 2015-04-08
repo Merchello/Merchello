@@ -27,7 +27,7 @@ namespace Merchello.Tests.Base.TestHelpers
         public virtual void FixtureSetup()
         {
             
-            AutoMapperMappings.CreateMappings();  
+            //AutoMapperMappings.CreateMappings();  
 
             // Umbraco Application
             var applicationMock = new Mock<UmbracoApplication>();

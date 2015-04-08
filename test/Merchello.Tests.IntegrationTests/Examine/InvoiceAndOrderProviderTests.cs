@@ -29,8 +29,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             PreTestDataWorker.DeleteAllCustomers();
 
-            var bootManager = new WebBootManager();
-            bootManager.Initialize();
+            //var bootManager = new WebBootManager();
+            //bootManager.Initialize();
 
             _address = new Address()
                 {

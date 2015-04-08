@@ -32,9 +32,9 @@ namespace Merchello.Tests.IntegrationTests.Payments
             PreTestDataWorker.DeleteAllPaymentMethods();
             PreTestDataWorker.DeleteAllShipCountries();
 
-            // Merchello CoreBootStrap
-            var bootManager = new WebBootManager();
-            bootManager.Initialize();
+            //// Merchello CoreBootStrap
+            //var bootManager = new WebBootManager();
+            //bootManager.Initialize();
 
             _merchelloContext = Core.MerchelloContext.Current;
 
