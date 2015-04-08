@@ -38,6 +38,7 @@
             Weight = masterVariant.Weight;
             Length = masterVariant.Length;
             Height = masterVariant.Height;
+            Width = masterVariant.Width;
             Barcode = masterVariant.Barcode;
             Available = masterVariant.Available;
             TrackInventory = masterVariant.TrackInventory;

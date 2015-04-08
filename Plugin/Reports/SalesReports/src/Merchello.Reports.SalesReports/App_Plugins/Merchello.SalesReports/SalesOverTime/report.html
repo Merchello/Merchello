@@ -1,5 +1,4 @@
-﻿<div data-ng-controller="Merchello.Plugins.SalesReports.SalesOverTimeController"
-     data-ng-show="loaded">
+﻿<div data-ng-controller="Merchello.Plugins.SalesReports.SalesOverTimeController">
     <umb-panel>
         <umb-header>
             <div class="span4">
@@ -14,8 +13,9 @@
                     <p>Show sales between</p>
                     <filter-by-date-range filter-start-date="filterStartDate" filter-end-date="filterEndDate" filter-with-dates="filterWithDates(filterStartDate, filterEndDate)"></filter-by-date-range>
                 </div>
-
-                <table class="table table-hover merchello-selectable-table sortable reports-table">
+                <div class="clear" />
+                <div class="pager" data-ng-hide="loaded"><img src="/umbraco/assets/img/loader.gif" /></div>
+                <table data-ng-show="loaded" class="table table-hover merchello-selectable-table sortable reports-table">
                     <thead>
                         <tr>
                             <td>Date</td>
@@ -26,8 +26,8 @@
                     <tbody>
                         <tr data-ng-repeat="result in results">
                             <td>{{result.date}}</td>
-                            <td>{{result.salestotal | currency : currencySymbol }}</td>
-                            <td>{{result.salescount}}</td>
+                            <td>{{result.salesTotal | currency : currencySymbol }}</td>
+                            <td>{{result.salesCount}}</td>
                         </tr>
                     </tbody>
                 </table>

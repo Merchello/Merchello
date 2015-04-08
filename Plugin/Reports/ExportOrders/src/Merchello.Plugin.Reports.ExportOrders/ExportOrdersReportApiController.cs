@@ -1,14 +1,12 @@
 ﻿using System;
-using System.IO;
+using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
-using System.Web;
-using System.Xml.Linq;
+using System.Web.Http;
 using Merchello.Core.Models;
-using Microsoft.Web.Infrastructure;
-using Umbraco.Core.IO;
-using Umbraco.Web.Mvc;
 
 namespace Merchello.Plugin.Reports.ExportOrders
 {
@@ -18,7 +16,6 @@ namespace Merchello.Plugin.Reports.ExportOrders
     using Merchello.Web.Models.Querying;
     using Merchello.Web.Trees;
     using Merchello.Web.Reporting;
-    using Merchello.Web.WebApi;
     using Merchello.Core.Services;
     using Merchello.Web;
     
@@ -33,6 +30,11 @@ namespace Merchello.Plugin.Reports.ExportOrders
         /// The <see cref="IInvoiceService"/>.
         /// </summary>
         private readonly IInvoiceService _invoiceService;
+
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
+        private readonly StoreSettingService _storeSettingService;
 
         /// <summary>
         /// The <see cref="MerchelloHelper"/>
@@ -57,6 +59,7 @@ namespace Merchello.Plugin.Reports.ExportOrders
             : base(merchelloContext)
         {
             _invoiceService = merchelloContext.Services.InvoiceService;
+            _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
             
             _merchello = new MerchelloHelper(merchelloContext.Services);
         }
@@ -109,12 +112,45 @@ namespace Merchello.Plugin.Reports.ExportOrders
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetOrderReportData()
+        [HttpPost]
+        public HttpResponseMessage GetOrderReportData(QueryDisplay query)
         {
-            var dtStart = new DateTime(2014,1,1);
-            var dtEnd = new DateTime(2014,12,31);
+            HttpResponseMessage result = null;
+
+            var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
+            var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
+
+            DateTime dtStart;
+            DateTime dtEnd;
+            if (invoiceDateStart == null)
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "invoiceDateStart is a required parameter");
+                return result;
+            }
+
+            var settings = _storeSettingService.GetAll().ToList();
+            var dateFormat = settings.FirstOrDefault(s => s.Name == "dateFormat");
+            if (dateFormat == null)
+            {
+                if (!DateTime.TryParse(invoiceDateStart.Value, out dtStart))
+                {
+                    result = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Failed to convert invoiceDateStart to a valid DateTime");
+                    return result;
+                }
+            }
+            else if (!DateTime.TryParseExact(invoiceDateStart.Value, dateFormat.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dtStart))
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Failed to convert invoiceDateStart to a valid DateTime");
+                return result;
+            }
+            
+            dtEnd = invoiceDateEnd == null || dateFormat == null
+                ? DateTime.MaxValue
+                : DateTime.TryParseExact(invoiceDateEnd.Value, dateFormat.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out dtEnd)
+                    ? dtEnd.AddDays(1) // through end of day
+                    : DateTime.MaxValue;
+
             var invoices = _invoiceService.GetInvoicesByDateRange(dtStart,dtEnd).ToArray();
-            var queryResultDisplay = new QueryResultDisplay();
 
             try
             {
@@ -177,18 +213,21 @@ namespace Merchello.Plugin.Reports.ExportOrders
                     }
                 }
 
-                string path = HttpContext.Current.Server.MapPath("/orders.csv");
-
-                csvExport.ExportToFile(path);
-
-                queryResultDisplay = new QueryResultDisplay { Items = invoices, TotalItems = invoices.Count() };
+                result = Request.CreateResponse(HttpStatusCode.OK);
+                result.Content = new StreamContent(csvExport.ExportToStream());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = "Orders.csv"
+                };
             }
-            catch (SystemException e)
+            catch (SystemException ex)
             {
-                string ex = e.Message;
+                result = Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+                return result;
             }
 
-            return queryResultDisplay;
+            return result;
         }
     }
 }

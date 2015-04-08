@@ -18,6 +18,17 @@
                         method: "GET"
                     }),
                     'Failed to get orders');
+            },
+
+            /**
+             * @ngdoc method
+             * @name getOrdersByDateRange
+             * @description
+             **/
+            getOrdersByDateRange: function (query) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(umbRequestHelper.getApiUrl('merchelloReportExportOrders', 'GetOrderReportData'), query),
+                    'Failed to retreive report data from the service');
             }
         };
     };

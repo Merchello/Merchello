@@ -39,6 +39,11 @@ namespace Merchello.Web
                     opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>()
                         .ConstructedBy(() => new GatewayMethodDialogEditorViewResolver()))
                 .ForMember(
+                    dest => dest.AuthorizePaymentEditorView,
+                    opt =>
+                    opt.ResolveUsing<AuthorizePaymentDialogEditorViewResolver>()
+                        .ConstructedBy(() => new AuthorizePaymentDialogEditorViewResolver()))
+                .ForMember(
                     dest => dest.AuthorizeCapturePaymentEditorView,
                     opt =>
                     opt.ResolveUsing<AuthorizeCapturePaymentDialogEditorViewResolver>()
@@ -52,7 +57,13 @@ namespace Merchello.Web
                     dest => dest.VoidPaymentEditorView,
                     opt =>
                     opt.ResolveUsing<VoidPaymentDialogEditorViewResolver>()
-                        .ConstructedBy(() => new VoidPaymentDialogEditorViewResolver()));
+                        .ConstructedBy(() => new VoidPaymentDialogEditorViewResolver()))
+                .ForMember(
+                    dest => dest.IncludeInPaymentSelection,
+                    opt =>
+                    opt.ResolveUsing<IncludeInPaymentSelectionResolver>()
+                        .ConstructedBy(() => new IncludeInPaymentSelectionResolver()));
+
         }
     }
 }

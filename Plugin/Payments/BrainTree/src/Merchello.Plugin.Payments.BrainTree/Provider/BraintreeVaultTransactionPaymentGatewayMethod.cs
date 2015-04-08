@@ -24,9 +24,10 @@
     [GatewayMethodUi("BrainTree.CustomerTransaction")]
     [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
     [PaymentGatewayMethod("Braintree Payment Gateway Method Editors",
-    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.authorizecapturepayment.html",
-    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.voidpayment.html",
-    "~/App_Plugins/Merchello.Braintree/vault/payment.vault.refundpayment.html")]
+    "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.authorizepayment.html",
+    "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.authorizecapturepayment.html",
+    "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.voidpayment.html",
+    "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.refundpayment.html")]
     public class BraintreeVaultTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase,  IBraintreeVaultTransactionPaymentGatewayMethod
     {
         /// <summary>

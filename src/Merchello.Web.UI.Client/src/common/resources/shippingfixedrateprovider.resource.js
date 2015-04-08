@@ -6,16 +6,17 @@ angular.module('merchello.resources')
         return {
 
             getRateTable: function(shipMethod) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloFixedRateShippingApiBaseUrl'] + 'GetShipFixedRateTable';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloFixedRateShippingApiBaseUrl', 'GetShipFixedRateTable'), shipMethod),
+                    $http.post(url, shipMethod),
                     'Failed to acquire rate table');
 
             },
 
             saveRateTable: function(rateTable) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloFixedRateShippingApiBaseUrl'] + 'PutShipFixedRateTable';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloFixedRateShippingApiBaseUrl', 'PutShipFixedRateTable'), rateTable),
+                    $http.post(url, rateTable),
                     'Failed to save rate table');
             }
 

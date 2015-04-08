@@ -59,7 +59,7 @@
         /// <param name="request">
         /// The request.
         /// </param>
-        public PaymentProcessor(IMerchelloContext merchelloContext, PaymentRequest request)
+        public PaymentProcessor(IMerchelloContext merchelloContext, PaymentRequestDisplay request)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             
@@ -112,6 +112,19 @@
         }
 
         /// <summary>
+        /// Performs a void payment
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
+        public IPaymentResult Void()
+        {
+            return !this.IsReady() || _payment == null
+                       ? this.GetFailedResult()
+                       : _paymentGatewayMethod.VoidPayment(_invoice, _payment, _args);
+        }
+
+        /// <summary>
         /// True/false indicating whether or not the processor is ready
         /// </summary>
         private bool IsReady()
@@ -124,7 +137,7 @@
             return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("PaymentProcessor is not ready")), _invoice, false);
         }
 
-        private void Build(PaymentRequest request)
+        private void Build(PaymentRequestDisplay request)
         {
             _invoice = _merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
 

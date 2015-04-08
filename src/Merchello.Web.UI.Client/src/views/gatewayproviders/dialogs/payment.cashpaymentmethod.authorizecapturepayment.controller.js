@@ -9,12 +9,13 @@
  */
 angular.module('merchello')
     .controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodAuthorizeCapturePaymentController',
-    ['$scope', function($scope) {
+    ['$scope', 'invoiceHelper',
+        function($scope, invoiceHelper) {
 
-        function round(num, places) {
-            return +(Math.round(num + "e+" + places) + "e-" + places);
-        }
+            function init() {
+                $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.invoiceBalance, 2);
+            }
 
-        $scope.dialogData.amount = round($scope.dialogData.invoiceBalance, 2)
+            init();
 
     }]);

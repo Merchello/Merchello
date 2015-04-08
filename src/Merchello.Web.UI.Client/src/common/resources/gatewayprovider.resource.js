@@ -10,10 +10,10 @@ angular.module('merchello.resources')
 
         return {
             getGatewayProvider: function (providerKey) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetGatewayProvider';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetGatewayProvider'),
+                        url: url,
                         method: "GET",
                         params: { id: providerKey }
                     }),
@@ -21,58 +21,58 @@ angular.module('merchello.resources')
             },
 
             getResolvedNotificationGatewayProviders: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetResolvedNotificationGatewayProviders';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedNotificationGatewayProviders'),
+                        url: url,
                         method: "GET"
                     }),
                     'Failed to retrieve data for all resolved notification gateway providers');
             },
 
             getResolvedPaymentGatewayProviders: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetResolvedPaymentGatewayProviders';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedPaymentGatewayProviders'),
+                        url: url,
                         method: "GET"
                     }),
                     'Failed to retreive data for all resolved payment gateway providers');
             },
 
             getResolvedShippingGatewayProviders: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetResolvedShippingGatewayProviders';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedShippingGatewayProviders'),
+                        url: url,
                         method: "GET"
                     }),
                     'Failed to retreive data for all resolved shipping gateway providers');
             },
 
             getResolvedTaxationGatewayProviders: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetResolvedTaxationGatewayProviders';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedTaxationGatewayProviders'),
+                        url: url,
                         method: "GET"
                     }),
                     'Failed to retreive data for all resolved taxation gateway providers');
             },
 
             activateGatewayProvider: function (gatewayProvider) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'ActivateGatewayProvider';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'ActivateGatewayProvider'),
+                    $http.post(url,
                         gatewayProvider
                     ),
                     'Failed to activate gateway provider');
             },
 
             deactivateGatewayProvider: function (gatewayProvider) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'DeactivateGatewayProvider';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'DeactivateGatewayProvider'),
+                    $http.post(url,
                         gatewayProvider
                     ),
                     'Failed to deactivate gateway provider');
@@ -80,9 +80,10 @@ angular.module('merchello.resources')
 
             saveGatewayProvider: function(gatewayProvider) {
                 // we need to hack the extended data here
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'PutGatewayProvider';
                 gatewayProvider.extendedData = gatewayProvider.extendedData.toArray();
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'PutGatewayProvider'),
+                    $http.post(url,
                         gatewayProvider
                     ),
                     'Failed to save gateway provider');

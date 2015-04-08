@@ -45,6 +45,10 @@
   .month li {
     margin-right: 0.8%; }
   .ninety li {
-    margin-right: 0.3%; } }
+    margin-right: 0.3%; }
+ }
+
+.report-spinner {
+  clear: both; }
 
 /*# sourceMappingURL=styles.css.map */

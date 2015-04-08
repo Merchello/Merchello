@@ -16,9 +16,10 @@
                      * @description
                      **/
                     getByKey: function (id) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'GetInvoice';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetInvoice'),
+                                url: url,
                                 method: "GET",
                                 params: { id: id }
                             }),
@@ -50,9 +51,9 @@
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();
                         }
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'SearchInvoices';
                         return umbRequestHelper.resourcePromise(
-                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), query),
+                            $http.post(url, query),
                             'Failed to retreive invoices');
                     },
 
@@ -73,8 +74,9 @@
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();
                         }
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'SearchByDateRange';
                         return umbRequestHelper.resourcePromise(
-                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchByDateRange'), query),
+                            $http.post(url, query),
                             'Failed to retreive invoices');
                     },
 
@@ -84,8 +86,9 @@
                      * @description
                      **/
                     saveInvoice: function (invoice) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'PutInvoice';
                         return umbRequestHelper.resourcePromise(
-                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoice'),
+                            $http.post(url,
                                 invoice
                             ),
                             'Failed to save invoice');
@@ -97,9 +100,10 @@
                      * @description
                      **/
                     deleteInvoice: function (invoiceKey) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'DeleteInvoice';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'DeleteInvoice'),
+                                url: url,
                                 method: "GET",
                                 params: { id: invoiceKey }
                             }),

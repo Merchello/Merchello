@@ -50,20 +50,24 @@
         /// <param name="items">
         /// The items.
         /// </param>
-        private static void ServerVariablesParserParsing(object sender, Dictionary<string, object> items)
+        private static void ServerVariablesParserParsing(object sender, Dictionary<string, object> e)
         {
-            if (!items.ContainsKey("umbracoUrls")) return;
 
-            var umbracoUrls = (Dictionary<string, object>)items["umbracoUrls"];
+            //var umbracoUrls = (Dictionary<string, object>)e["umbracoUrls"];
+
+            if (HttpContext.Current == null) throw new InvalidOperationException("HttpContext is null");
+
+           
+            var merchelloUrls = new Dictionary<string, object>();
 
             var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));            
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloAuditLogApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<AuditLogApiController>(
                     controller => controller.GetSalesHistoryByInvoiceKey(Guid.Empty)));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloProductApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<ProductApiController>(
                 controller => controller.SearchProducts(new QueryDisplay()
@@ -73,12 +77,12 @@
                         Parameters = new QueryDisplayParameter[] { }
                     })));
 
-            //umbracoUrls.Add(
-            //    "merchelloProductVariantsApiBaseUrl", 
-            //    url.GetUmbracoApiServiceBaseUrl<ProductVariantApiController>(
-            //    controller => controller.GetProductVariant(Guid.NewGuid())));
+            merchelloUrls.Add(
+                "merchelloMarketingCampaignApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<MarketingCampaignApiController>(
+                controller => controller.GetActiveCampaigns()));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloCustomerApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<CustomerApiController>(
                 controller => controller.SearchCustomers(new QueryDisplay()
@@ -88,37 +92,37 @@
                         Parameters = new QueryDisplayParameter[] { }
                     })));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloSettingsApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<SettingsApiController>(
                 controller => controller.GetAllCountries()));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloWarehouseApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<WarehouseApiController>(
                 controller => controller.GetDefaultWarehouse()));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloShippingGatewayApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<ShippingGatewayApiController>(
                 controller => controller.GetShipCountry(Guid.NewGuid())));
             
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloNotificationApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<NotificationGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloPaymentGatewayApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<PaymentGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloTaxationGatewayApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<TaxationGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloInvoiceApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<InvoiceApiController>(
                 controller => controller.SearchInvoices(new QueryDisplay()
@@ -128,27 +132,27 @@
                     Parameters = new QueryDisplayParameter[] { }
                 })));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloOrderApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<OrderApiController>(
                 controller => controller.GetOrder(Guid.NewGuid())));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloShipmentApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<ShipmentApiController>(
                 controller => controller.GetShipment(Guid.NewGuid())));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloFixedRateShippingApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<FixedRateShippingApiController>(
                 controller => controller.GetShipFixedRateTable(new ShipMethodDisplay())));
 
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloPaymentApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<PaymentApiController>(
                 controller => controller.GetPayment(Guid.NewGuid())));
             
-            umbracoUrls.Add(
+            merchelloUrls.Add(
                 "merchelloGatewayProviderApiBaseUrl", 
                 url.GetUmbracoApiServiceBaseUrl<GatewayProviderApiController>(
                 controller => controller.GetGatewayProvider(Guid.NewGuid())));
@@ -157,8 +161,10 @@
 
             foreach (var keyValue in ReportApiControllerResolver.Current.GetAll().Select(reportController => reportController.BaseUrl))
             {
-                umbracoUrls.Add(keyValue.Key, keyValue.Value);
+                merchelloUrls.Add(keyValue.Key, keyValue.Value);
             }
+
+            e.Add("merchelloUrls", merchelloUrls);
         }
     }
 }

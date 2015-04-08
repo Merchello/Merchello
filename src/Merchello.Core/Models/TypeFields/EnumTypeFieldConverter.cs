@@ -1,12 +1,12 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
     /// <summary>
-    /// The enum type field converter.
+    /// Utility class to for converting type fields.
     /// </summary>
     public class EnumTypeFieldConverter
     {
         /// <summary>
-        /// Creates an instance of an <see cref="IAddressTypeField"/> object
+        /// Gets the <see cref="IAddressTypeField"/>
         /// </summary>
         public static IAddressTypeField Address
         {
@@ -14,15 +14,18 @@
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="IEntityTypeField"/> object
+        /// Gets the <see cref="ICampaignActivityTypeField"/>.
         /// </summary>
-        internal static IEntityTypeField EntityType
+        public static ICampaignActivityTypeField CampaignActivity
         {
-            get { return new EntityTypeField(); }
+            get
+            {
+                return new CampaignActivityTypeField();
+            }
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="IItemCacheTypeField"/> object
+        /// Gets the <see cref="IItemCacheTypeField"/>
         /// </summary>
         public static IItemCacheTypeField ItemItemCache
         {
@@ -30,25 +33,23 @@
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="ILineItemTypeField"/> object
+        /// Gets the <see cref="ILineItemTypeField"/>
         /// </summary>
-        /// <returns></returns>
         public static ILineItemTypeField LineItemType
         {
             get { return new LineItemTypeField(); }
         }
       
         /// <summary>
-        /// Creates an instance of an <see cref="IPaymentMethodTypeField"/> object
+        /// Gets the <see cref="IPaymentMethodTypeField"/>
         /// </summary>
-        /// <returns></returns>
         public static IPaymentMethodTypeField PaymentMethod
         {
             get { return new PaymentMethodTypeField(); }
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="IAppliedPaymentTypeField"/>
+        /// Gets the <see cref="IAppliedPaymentTypeField"/>
         /// </summary>
         /// <returns></returns>
         public static IAppliedPaymentTypeField AppliedPayment
@@ -57,9 +58,16 @@
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="IGatewayProviderTypeField"/>
+        /// Gets the <see cref="IEntityTypeField"/>
         /// </summary>
-        /// <returns></returns>
+        internal static IEntityTypeField EntityType
+        {
+            get { return new EntityTypeField(); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IGatewayProviderTypeField"/>
+        /// </summary>
         internal static IGatewayProviderTypeField GatewayProvider
         {
             get { return new GatewayProviderTypeField(); }

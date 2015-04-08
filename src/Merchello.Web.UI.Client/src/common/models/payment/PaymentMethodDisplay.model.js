@@ -14,6 +14,7 @@
         self.description = '';
         self.paymentCode = '';
         self.dialogEditorView = {};
+        self.authorizePaymentEditorView = {};
         self.authorizeCapturePaymentEditorView = {};
         self.voidPaymentEditorView = {};
         self.refundPaymentEditorView = {};
