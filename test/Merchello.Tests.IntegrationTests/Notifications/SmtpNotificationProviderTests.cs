@@ -127,7 +127,7 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             var message = new NotificationMessage(method.NotificationMethod.Key, "Test email",
                 "Can_Send_A_Test_Email@merchello.com")
             {
-                Recipients = "rusty@mindfly.com",
+                Recipients = "test@test.com",
                 BodyText = "Successful test?"
             };
 
