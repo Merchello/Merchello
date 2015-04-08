@@ -29,6 +29,7 @@
             $scope.settings = {};
             $scope.salesHistory = {};
             $scope.paymentMethods = [];
+            $scope.allPayments = [];
             $scope.payments = [];
             $scope.billingAddress = {};
             $scope.hasShippingAddress = false;
@@ -202,10 +203,10 @@
                 if (!$scope.invoice.isPaid()) {
                     var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                     paymentsPromise.then(function(payments) {
-                        var allPayments = paymentDisplayBuilder.transform(payments);
-                        $scope.payments = _.filter(allPayments, function(p) { return !p.voided && !p.collected; })
+                        $scope.allPayments = paymentDisplayBuilder.transform(payments);
+                        $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
                         loadPaymentMethods()
-                        $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance(allPayments), 2);
+                        $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
                         $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
                         $scope.preValuesLoaded = true;
                     }, function(reason) {

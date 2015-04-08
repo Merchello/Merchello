@@ -12,6 +12,8 @@
         self.paymentMethodKey = '';
         self.paymentKey = '';
         self.amount = 0;
+        self.currencySymbol = '';
+        self.paymentMethodName = '';
         self.appliedAmount = 0;
         self.processorArgumentCollectionDisplay = new ProcessorArgumentCollectionDisplay();
         self.warning = '';

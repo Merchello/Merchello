@@ -265,15 +265,6 @@
 
             if (!response.Payment.Success) return response;
 
-            var appliedPayments = payment.AppliedPayments().Where(x => x.TransactionType != AppliedPaymentType.Void);
-            foreach (var appliedPayment in appliedPayments)
-            {
-                appliedPayment.TransactionType = AppliedPaymentType.Void;
-                appliedPayment.Amount = 0;
-
-                GatewayProviderService.Save(appliedPayment);
-            }
-
             AssertInvoiceStatus(invoice);
 
             // Force the ApproveOrderCreation to false

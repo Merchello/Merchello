@@ -110,7 +110,7 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             }
 
             function showRefund(payment) {
-                if (payment.voided) {
+                if (payment.voided || payment.appliedAmount() === 0) {
                     return false;
                 }
                 var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; })
@@ -212,9 +212,28 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 }
                 var dialogData = dialogDataFactory.createProcessRefundPaymentDialogData();
                 dialogData.invoiceKey = $scope.invoice.key;
+                dialogData.paymentKey = payment.key;
+                dialogData.currencySymbol = $scope.currencySymbol;
                 dialogData.paymentMethodKey = payment.paymentMethodKey;
+                dialogData.paymentMethodName = method.name;
+
                 dialogData.appliedAmount = payment.appliedAmount();
-                console.info(dialogData);
+                console.info(method.refundPaymentEditorView.editorView);
+                dialogService.open({
+                    template: method.refundPaymentEditorView.editorView,
+                    show: true,
+                    callback: processRefundPaymentDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            function processRefundPaymentDialog(dialogData) {
+                $scope.loaded = false;
+                var request = dialogData.toPaymentRequestDisplay();
+                var promise = paymentResource.refundPayment(request);
+                promise.then(function(result) {
+                    init();
+                });
             }
 
             init();

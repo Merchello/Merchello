@@ -278,16 +278,29 @@
 
             /**
              * @ngdoc method
-             * @name rounds a decimal to a specific number of places
+             * @name round
              * @function
              *
              * @description
-             * Totals a collection of invoices by currency code.
+             * Rounds a decimal to a specific number of places.
              */
             this.round = function(num, places) {
                 var rounded = +(Math.round(num + "e+" + places) + "e-" + places);
                 return isNaN(rounded) ? 0 : rounded;
-            }
+            },
+
+            /**
+             * @ngdoc method
+             * @name valueIsInRange
+             * @function
+             *
+             * @description
+             * Verifies a value is within a range of values.
+             */
+            this.valueIsInRage = function(str,min, max) {
+                n = parseFloat(str);
+                return (!isNaN(n) && n >= min && n <= max);
+            };
 
     }]);
 

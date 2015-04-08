@@ -1129,6 +1129,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="attentionRequired">You Have Orders That Require Attention</key>
     <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
     <key alias="processedBy">Processed by</key>
+    <key alias="refundMethod">Refund method</key>
     <key alias="resetFilters">Reset Filters</key>
   </area>
   <area alias="merchelloOrderView">

@@ -984,13 +984,27 @@ angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.CashP
      * @description
      * The controller for the dialog used in refunding cash payments
      */
-    angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodRefundPaymentController'
+    angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodRefundPaymentController',
         ['$scope', 'invoiceHelper',
         function($scope, invoiceHelper) {
 
-            function init() {
+            $scope.wasFormSubmitted = false;
+            $scope.save = save;
 
+            function init() {
+                $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.appliedAmount, 2);
             }
+
+            function save() {
+                $scope.wasFormSubmitted = true;
+                if(invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.appliedAmount)) {
+                    $scope.submit($scope.dialogData);
+                } else {
+                    $scope.refundForm.amount.$setValidity('amount', false);
+                }
+            }
+
+
 
             // initializes the controller
             init();
@@ -5124,7 +5138,7 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
             }
 
             function showRefund(payment) {
-                if (payment.voided) {
+                if (payment.voided || payment.appliedAmount() === 0) {
                     return false;
                 }
                 var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; })
@@ -5226,9 +5240,28 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 }
                 var dialogData = dialogDataFactory.createProcessRefundPaymentDialogData();
                 dialogData.invoiceKey = $scope.invoice.key;
+                dialogData.paymentKey = payment.key;
+                dialogData.currencySymbol = $scope.currencySymbol;
                 dialogData.paymentMethodKey = payment.paymentMethodKey;
+                dialogData.paymentMethodName = method.name;
+
                 dialogData.appliedAmount = payment.appliedAmount();
-                console.info(dialogData);
+                console.info(method.refundPaymentEditorView.editorView);
+                dialogService.open({
+                    template: method.refundPaymentEditorView.editorView,
+                    show: true,
+                    callback: processRefundPaymentDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            function processRefundPaymentDialog(dialogData) {
+                $scope.loaded = false;
+                var request = dialogData.toPaymentRequestDisplay();
+                var promise = paymentResource.refundPayment(request);
+                promise.then(function(result) {
+                    init();
+                });
             }
 
             init();
@@ -5547,6 +5580,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.settings = {};
             $scope.salesHistory = {};
             $scope.paymentMethods = [];
+            $scope.allPayments = [];
             $scope.payments = [];
             $scope.billingAddress = {};
             $scope.hasShippingAddress = false;
@@ -5720,10 +5754,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 if (!$scope.invoice.isPaid()) {
                     var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
                     paymentsPromise.then(function(payments) {
-                        var allPayments = paymentDisplayBuilder.transform(payments);
-                        $scope.payments = _.filter(allPayments, function(p) { return !p.voided && !p.collected; })
+                        $scope.allPayments = paymentDisplayBuilder.transform(payments);
+                        $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
                         loadPaymentMethods()
-                        $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance(allPayments), 2);
+                        $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
                         $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
                         $scope.preValuesLoaded = true;
                     }, function(reason) {
