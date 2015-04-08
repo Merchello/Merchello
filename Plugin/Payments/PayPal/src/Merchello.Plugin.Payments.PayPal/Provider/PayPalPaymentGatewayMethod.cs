@@ -12,6 +12,7 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 	/// Represents a PayPal Payment Method
 	/// </summary>
     [GatewayMethodUi("PayPalPayment")]
+	[GatewayMethodEditor("PayPal Method Editor", "~/App_Plugins/Merchello.PayPal/paymentmethod.html")]
     public class PayPalPaymentGatewayMethod : PaymentGatewayMethodBase
 	{
 		private readonly PayPalPaymentProcessor _processor;
