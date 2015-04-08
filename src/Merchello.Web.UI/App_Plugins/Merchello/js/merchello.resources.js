@@ -22,9 +22,10 @@
              * @description
              **/
             getSalesHistoryByInvoiceKey: function (key) {
+                var url = Umbraco.Sys.ServerVariables["merchelloUrls"]["merchelloAuditLogApiBaseUrl"] + 'GetSalesHistoryByInvoiceKey';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetSalesHistoryByInvoiceKey'),
+                        url: url,
                         method: "GET",
                         params: { id: key }
                     }),
@@ -50,7 +51,8 @@
                  * @description Posts to the API a new customer.
                  **/
                 AddCustomer: function(customer) {
-                    return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'AddCustomer'), customer), 'Failed to create customer');
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'AddCustomer';
+                    return umbRequestHelper.resourcePromise($http.post(url, customer), 'Failed to create customer');
                 },
 
                 /**
@@ -59,7 +61,8 @@
                  * @description Posts to the API a new anonymous customer.
                  **/
                 AddAnonymousCustomer: function (customer) {
-                    return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'AddAnonymousCustomer'), customer), 'Failed to create customer');
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'AddAnonymousCustomer';
+                    return umbRequestHelper.resourcePromise($http.post(url, customer), 'Failed to create customer');
                 },
 
                 /**
@@ -68,9 +71,10 @@
                  * @description Posts to the API a request to delete the specified customer.
                  **/
                 DeleteCustomer: function(customerKey) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'DeleteCustomer';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'DeleteCustomer'),
+                            url: url,
                             method: "GET",
                             params: { id: customerKey }
                         }),
@@ -92,9 +96,10 @@
                     if (perPage === undefined) {
                         perPage = 100;
                     }
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetAllCustomers';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'GetAllCustomers'), // TODO POST this is now SearchCustomers w/query
+                            url: url, // TODO POST this is now SearchCustomers w/query
                             method: "GET",
                             params: { page: page, perPage: perPage }
                         }),
@@ -107,9 +112,10 @@
                  * @description Requests from the API a customer with the provided customerKey.
                  **/
                 GetCustomer: function(customerKey) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetCustomer';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'GetCustomer'),
+                            url: url,
                             method: "GET",
                             params: { id: customerKey }
                         }),
@@ -122,7 +128,8 @@
                  * @description Posts to the API an edited customer.
                  **/
                 SaveCustomer: function(customer) {
-                    return umbRequestHelper.resourcePromise($http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'PutCustomer'), customer), 'Failed to save customer');
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'PutCustomer';
+                    return umbRequestHelper.resourcePromise($http.post(url, customer), 'Failed to save customer');
                 },
 
                 /**
@@ -134,8 +141,9 @@
                  * Defaults to sortBy: loginname
                  **/
                 searchCustomers: function(query) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'SearchCustomers';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloCustomerApiBaseUrl', 'SearchCustomers'), query),
+                        $http.post(url, query),
                         'Failed to retreive customers');
                 }
 
@@ -155,10 +163,10 @@ angular.module('merchello.resources')
 
         return {
             getGatewayProvider: function (providerKey) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetGatewayProvider';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetGatewayProvider'),
+                        url: url,
                         method: "GET",
                         params: { id: providerKey }
                     }),
@@ -166,58 +174,58 @@ angular.module('merchello.resources')
             },
 
             getResolvedNotificationGatewayProviders: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetResolvedNotificationGatewayProviders';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedNotificationGatewayProviders'),
+                        url: url,
                         method: "GET"
                     }),
                     'Failed to retrieve data for all resolved notification gateway providers');
             },
 
             getResolvedPaymentGatewayProviders: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetResolvedPaymentGatewayProviders';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedPaymentGatewayProviders'),
+                        url: url,
                         method: "GET"
                     }),
                     'Failed to retreive data for all resolved payment gateway providers');
             },
 
             getResolvedShippingGatewayProviders: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetResolvedShippingGatewayProviders';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedShippingGatewayProviders'),
+                        url: url,
                         method: "GET"
                     }),
                     'Failed to retreive data for all resolved shipping gateway providers');
             },
 
             getResolvedTaxationGatewayProviders: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'GetResolvedTaxationGatewayProviders';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'GetResolvedTaxationGatewayProviders'),
+                        url: url,
                         method: "GET"
                     }),
                     'Failed to retreive data for all resolved taxation gateway providers');
             },
 
             activateGatewayProvider: function (gatewayProvider) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'ActivateGatewayProvider';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'ActivateGatewayProvider'),
+                    $http.post(url,
                         gatewayProvider
                     ),
                     'Failed to activate gateway provider');
             },
 
             deactivateGatewayProvider: function (gatewayProvider) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'DeactivateGatewayProvider';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'DeactivateGatewayProvider'),
+                    $http.post(url,
                         gatewayProvider
                     ),
                     'Failed to deactivate gateway provider');
@@ -225,9 +233,10 @@ angular.module('merchello.resources')
 
             saveGatewayProvider: function(gatewayProvider) {
                 // we need to hack the extended data here
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloGatewayProviderApiBaseUrl'] + 'PutGatewayProvider';
                 gatewayProvider.extendedData = gatewayProvider.extendedData.toArray();
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'PutGatewayProvider'),
+                    $http.post(url,
                         gatewayProvider
                     ),
                     'Failed to save gateway provider');
@@ -253,9 +262,10 @@ angular.module('merchello.resources')
                      * @description
                      **/
                     getByKey: function (id) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'GetInvoice';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'GetInvoice'),
+                                url: url,
                                 method: "GET",
                                 params: { id: id }
                             }),
@@ -287,9 +297,9 @@ angular.module('merchello.resources')
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();
                         }
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'SearchInvoices';
                         return umbRequestHelper.resourcePromise(
-                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchInvoices'), query),
+                            $http.post(url, query),
                             'Failed to retreive invoices');
                     },
 
@@ -310,8 +320,9 @@ angular.module('merchello.resources')
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();
                         }
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'SearchByDateRange';
                         return umbRequestHelper.resourcePromise(
-                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchByDateRange'), query),
+                            $http.post(url, query),
                             'Failed to retreive invoices');
                     },
 
@@ -321,8 +332,9 @@ angular.module('merchello.resources')
                      * @description
                      **/
                     saveInvoice: function (invoice) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'PutInvoice';
                         return umbRequestHelper.resourcePromise(
-                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoice'),
+                            $http.post(url,
                                 invoice
                             ),
                             'Failed to save invoice');
@@ -334,9 +346,10 @@ angular.module('merchello.resources')
                      * @description
                      **/
                     deleteInvoice: function (invoiceKey) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'DeleteInvoice';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'DeleteInvoice'),
+                                url: url,
                                 method: "GET",
                                 params: { id: invoiceKey }
                             }),
@@ -345,6 +358,57 @@ angular.module('merchello.resources')
 
                 };
             }]);
+
+angular.module('merchello.resources').factory('marketingCampaignResource',
+    ['$http', 'umbRequestHelper',
+    function($http, umbRequestHelper) {
+
+        var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloMarketingCampaignApiBaseUrl'];
+
+        return {
+            getActiveCampaigns: function () {
+                var url = baseUrl + 'GetActiveCampaigns';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET"
+                    }),
+                    'Failed to get active marketing campaigns');
+            },
+            getAllCampaigns: function() {
+                var url = baseUrl + 'GetAllCampaigns';
+
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET"
+                    }),
+                    'Failed to get all marketing campaigns');
+            },
+            getCampaignByKey: function(key) {
+                var url = baseUrl + 'GetCampaignSettingsByKey';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: 'GET',
+                        params: { key: key }
+                    }),
+                    'Failed to get a campaign setting by its unique key');
+            },
+            addCampaignSettings: function(campaign) {
+                var url = baseUrl + 'PostAddCampaignSettings';
+                return umbRequestHelper.resourcePromise(
+                   $http.post(url, campaign),
+                'Failed to add a new campaign');
+            },
+            updateCampaignSettings: function(campaign) {
+                var url = baseUrl + 'PostUpdateCampaignSettings';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url, campaign),
+                    'Failed to update the campaign');
+            }
+        };
+    }]);
 
     /**
      * @ngdoc resource
@@ -358,69 +422,70 @@ angular.module('merchello.resources')
                 return {
 
                     getGatewayResources: function (key) {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'GetGatewayResources';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetGatewayResources') + "?id=" + key,
+                                url: url + "?id=" + key,
                                 method: "GET"
                             }),
                             'Failed to save data for Notification');
                     },
 
                     getAllGatewayProviders: function () {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'GetAllGatewayProviders';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllGatewayProviders'),
+                                url: url,
                                 method: "GET"
                             }),
                             'Failed to retreive data for all gateway providers');
                     },
 
                     getAllNotificationMonitors: function () {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'GetAllNotificationMonitors';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetAllNotificationMonitors'),
+                                url: url,
                                 method: "GET"
                             }),
                             'Failed to retreive data for all gateway providers');
                     },
 
                     getNotificationProviderNotificationMethods: function (id) {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'GetNotificationProviderNotificationMethods';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationProviderNotificationMethods') + "?id=" + id,
+                                url: url + "?id=" + id,
                                 method: "GET"
                             }),
                             'Failed to save data for Notification');
                     },
 
                     saveNotificationMethod: function (method) {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'AddNotificationMethod';
                         return umbRequestHelper.resourcePromise(
                             $http.post(
-                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'AddNotificationMethod'),
+                                url,
                                 angular.toJson(method)
                             ),
                             'Failed to save data for Notification');
                     },
 
                     deleteNotificationMethod: function (methodKey) {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'DeleteNotificationMethod';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'DeleteNotificationMethod') + "?id=" + methodKey,
+                                url: url + "?id=" + methodKey,
                                 method: "DELETE"
                             }),
                             'Failed to delete data for Notification');
                     },
 
                     getNotificationMessagesByKey: function (id) {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'GetNotificationMessagesByKey';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'GetNotificationMessagesByKey') + "?id=" + id,
+                                url: url + "?id=" + id,
                                 method: "GET"
                             }),
                             'Failed to save data for Notification');
@@ -428,30 +493,30 @@ angular.module('merchello.resources')
                     },
 
                     saveNotificationMessage: function (notification) {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'PutNotificationMessage';
                         return umbRequestHelper.resourcePromise(
                             $http.post(
-                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'PutNotificationMessage'),
+                                url,
                                 angular.toJson(notification)
                             ),
                             'Failed to save data for Notification');
                     },
 
                     deleteNotificationMessage: function (methodKey) {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'DeleteNotificationMessage';
                         return umbRequestHelper.resourcePromise(
                             $http({
-                                url: umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'DeleteNotificationMessage') + "?id=" + methodKey,
+                                url: url + "?id=" + methodKey,
                                 method: "DELETE"
                             }),
                             'Failed to delete data for Notification');
                     },
 
                     updateNotificationMessage: function (notification) {
-
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'UpdateNotificationMessage';
                         return umbRequestHelper.resourcePromise(
                             $http.post(
-                                umbRequestHelper.getApiUrl('merchelloNotificationApiBaseUrl', 'UpdateNotificationMessage'),
+                                url,
                                 angular.toJson(notification)
                             ),
                             'Failed to save data for Notification');
@@ -471,10 +536,10 @@ angular.module('merchello.resources')
             return {
 
                 getOrder: function (orderKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchello']['merchelloOrderApiBaseUrl'] + 'GetOrder';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetOrder'),
+                            url: url,
                             method: "GET",
                             params: { id: orderKey }
                         }),
@@ -482,10 +547,10 @@ angular.module('merchello.resources')
                 },
 
                 getOrdersByInvoice: function (invoiceKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetOrdersByInvoiceKey';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetOrdersByInvoiceKey'),
+                            url: url,
                             method: "GET",
                             params: { id: invoiceKey }
                         }),
@@ -493,10 +558,10 @@ angular.module('merchello.resources')
                 },
 
                 getUnFulfilledItems: function (invoiceKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetUnFulfilledItems';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetUnFulfilledItems'),
+                            url: url,
                             method: "GET",
                             params: { id: invoiceKey }
                         }),
@@ -504,9 +569,10 @@ angular.module('merchello.resources')
                 },
 
                 getShippingAddress: function (invoiceKey) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetShippingAddress';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingAddress'),
+                            url: url,
                             method: "GET",
                             params: { id: invoiceKey }
                         }),
@@ -519,9 +585,9 @@ angular.module('merchello.resources')
                     model.ProductKeys = products;
                     model.ShippingAddress = shippingAddress;
                     model.BillingAddress = billingAddress;
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'ProcessesProductsToBackofficeOrder';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'ProcessesProductsToBackofficeOrder'),
+                        $http.post(url,
                             model
                         ),
                         'Failed to add products to invoice');
@@ -533,18 +599,19 @@ angular.module('merchello.resources')
                     model.ProductKeys = products;
                     model.ShippingAddress = shippingAddress;
                     model.BillingAddress = billingAddress;
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetShippingMethods';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingMethods'),
+                        $http.post(url,
                             model
                         ),
                         'Failed to get shipping methods');
                 },
 
                 getPaymentMethods: function () {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetPaymentMethods';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetPaymentMethods'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to get payment methods');
@@ -559,8 +626,9 @@ angular.module('merchello.resources')
                     model.PaymentKey = paymentKey;
                     model.PaymentProviderKey = paymentProviderKey;
                     model.ShipmentKey = shipmentKey;
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'FinalizeBackofficeOrder';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'FinalizeBackofficeOrder'),
+                        $http.post(url,
                             model
                         ),
                         'Failed to finalize backoffice order');
@@ -578,12 +646,15 @@ angular.module('merchello.resources')
         ['$q', '$http', 'umbRequestHelper',
         function($q, $http, umbRequestHelper) {
 
+        var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentApiBaseUrl'];
+
         return {
 
             getPayment: function (key) {
+                var url = baseUrl + 'GetPaymeent';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPayment'),
+                        url: url,
                         method: "GET",
                         params: { id: key }
                     }),
@@ -591,9 +662,10 @@ angular.module('merchello.resources')
             },
 
             getPaymentMethod : function(key) {
+                var url = baseUrl + 'GetPaymentMethod';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPaymentMethod'),
+                        url: url,
                         method: "GET",
                         params: { id: key }
                     }),
@@ -601,10 +673,10 @@ angular.module('merchello.resources')
             },
 
             getPaymentsByInvoice: function (invoiceKey) {
-
+                var url = baseUrl + 'GetPaymentsByInvoice';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'GetPaymentsByInvoice'),
+                        url: url,
                         method: "GET",
                         params: { id: invoiceKey }
                     }),
@@ -612,39 +684,47 @@ angular.module('merchello.resources')
             },
 
             authorizePayment: function (paymentRequest) {
-
+                var url = baseUrl + 'AuthorizePayment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'AuthorizePayment'),
+                    $http.post(url,
                         paymentRequest
                     ),
                     'Failed to authorize payment');
             },
 
             capturePayment: function (paymentRequest) {
-
+                var url = baseUrl + 'CapturePayment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'CapturePayment'),
+                    $http.post(url,
                         paymentRequest
                     ),
                     'Failed to capture payment');
             },
 
             authorizeCapturePayment: function (paymentRequest) {
-
+                var url = baseUrl + 'AuthorizeCapturePayment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'AuthorizeCapturePayment'),
+                    $http.post(url,
                         paymentRequest
                     ),
                     'Failed to authorize capture payment');
             },
 
             refundPayment: function (paymentRequest) {
-
+                var url = baseUrl + 'RefundPayment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloPaymentApiBaseUrl', 'RefundPayment'),
+                    $http.post(url,
                         paymentRequest
                     ),
                     'Failed to refund payment');
+            },
+
+            voidPayment: function (paymentRequest) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(baseUrl + 'VoidPayment',
+                        paymentRequest
+                    ),
+                    'Failed to void payment');
             }
         };
     }]);
@@ -658,12 +738,14 @@ angular.module('merchello.resources')
         ['$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
 
+            var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPaymentGatewayApiBaseUrl'];
+
             return {
                 getGatewayResources: function (paymentGatewayProviderKey) {
-
+                    var url = baseUrl + 'GetGatewayResources';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetGatewayResources'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentGatewayProviderKey}
                         }),
@@ -671,49 +753,68 @@ angular.module('merchello.resources')
                 },
 
                 getAllGatewayProviders: function () {
-
+                    var url = baseUrl + 'GetAllGatewayProviders';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetAllGatewayProviders'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to retreive data for all gateway providers');
                 },
 
                 getPaymentProviderPaymentMethods: function (paymentGatewayProviderKey) {
-
+                    var url = baseUrl + 'GetPaymentProviderPaymentMethods';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'GetPaymentProviderPaymentMethods'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentGatewayProviderKey}
                         }),
                         'Failed to payment provider methods for: ' + paymentGatewayProviderKey);
                 },
 
-                addPaymentMethod: function (paymentMethod) {
-
+                getAvailablePaymentMethods: function() {
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'AddPaymentMethod'),
+                        $http({
+                            url: baseUrl + 'GetAvailablePaymentMethods',
+                            method: "GET"
+                        }),
+                        'Failed to load payment methods');
+                },
+
+                getPaymentMethodByKey: function(paymentMethodKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetPaymentMethodByKey',
+                            method: "GET",
+                            params: {key: paymentMethodKey}
+                        }),
+                        'Failed to payment method: ' + paymentMethodKey);
+                },
+
+                addPaymentMethod: function (paymentMethod) {
+                    var url = baseUrl + 'AddPaymentMethod';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
                             paymentMethod
                         ),
                         'Failed to create paymentMethod');
                 },
 
                 savePaymentMethod: function (paymentMethod) {
-
+                    var url = baseUrl + 'PutPaymentMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'PutPaymentMethod'),
+                        $http.post(url,
                             paymentMethod
                         ),
                         'Failed to save paymentMethod');
                 },
 
                 deletePaymentMethod: function (paymentMethodKey) {
-
+                    var url = baseUrl + 'DeletePaymentMethod';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloPaymentGatewayApiBaseUrl', 'DeletePaymentMethod'),
+                            url: url,
                             method: "GET",
                             params: {id: paymentMethodKey}
                         }),
@@ -745,9 +846,9 @@ angular.module('merchello.resources')
                  * @description Creates a new product with an API call to the server
                  **/
                 add: function (product) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'AddProduct';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'AddProduct'),
+                        $http.post(url,
                             product
                         ),
                         'Failed to create product sku ' + product.sku);
@@ -759,10 +860,10 @@ angular.module('merchello.resources')
                  * @description Gets a product with an API call to the server
                  **/
                 getByKey: function (key) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProduct';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProduct', [{ id: key }]),
+                            url: url + '?id=' + key,
                             method: "GET"
                         }),
                         'Failed to retreive data for product key ' + key);
@@ -774,10 +875,10 @@ angular.module('merchello.resources')
                  * @description Gets a product variant with an API call to the server
                  **/
                 getVariant: function (key) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProductVariant';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'GetProductVariant', [{ id: key }]),
+                            url: url + '?id=' + key,
                             method: "GET"
                         }),
                         'Failed to retreive data for product variant key ' + key);
@@ -789,9 +890,9 @@ angular.module('merchello.resources')
                  * @description Saves / updates product with an api call back to the server
                  **/
                 save: function (product) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'PutProduct'),
+                        $http.post(url,
                             product
                         ),
                         'Failed to save data for product key ' + product.key);
@@ -803,9 +904,9 @@ angular.module('merchello.resources')
                  * @description Saves / updates product variant with an api call back to the server
                  **/
                 saveVariant: function (productVariant) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'PutProductVariant'),
+                        $http.post(url,
                             productVariant
                         ),
                         'Failed to save data for product variant key ' + productVariant.key);
@@ -817,9 +918,9 @@ angular.module('merchello.resources')
                  * @description Deletes product with an api call back to the server
                  **/
                 deleteProduct: function (product) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'DeleteProduct';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'DeleteProduct'),
+                        $http.post(url,
                             product.key,
                             { params: { id: product.key }}
                         ),
@@ -832,41 +933,14 @@ angular.module('merchello.resources')
                  * @description Searches for all products with a ListQuery object
                  **/
                 searchProducts: function (query) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'SearchProducts';
                     return umbRequestHelper.resourcePromise(
                         $http.post(
-                            umbRequestHelper.getApiUrl('merchelloProductApiBaseUrl', 'SearchProducts'),
+                            url,
                             query
                         ),
                         'Failed to search products');
 
-                },
-
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                /// Business logic
-                ///////////////////////////////////////////////////////////////////////////////////////////
-
-
-                /**
-                 * @ngdoc method
-                 * @name updateProductVariant
-                 * @description Saves product variant changes and delivers the new ProductVariant model in the promise data
-                 **/
-                updateProductVariant: function (productVariant) {
-                    var deferred = $q.defer();
-                    var promise = prodservice.saveVariant(productVariant);
-
-                    promise.then(function (savedProductVariant) {
-
-                        productVariant = new merchello.Models.ProductVariant(savedProductVariant);
-
-                        deferred.resolve(productVariant);
-
-                    }, function (reason) {
-                        deferred.reject(reason);
-                    });
-
-                    return deferred.promise;
                 }
             };
     }]);
@@ -886,6 +960,7 @@ angular.module('merchello.resources')
         /* helper method to get from cache or fall back to an http api call */
         function getCachedOrApi(cacheKey, apiMethod, entityName)
         {
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSettingsApiBaseUrl'] + apiMethod;
             var deferred = $q.defer();
 
             var dataFromCache = _settingsCache.get(cacheKey);
@@ -896,7 +971,7 @@ angular.module('merchello.resources')
             else {
                 var promiseFromApi = umbRequestHelper.resourcePromise(
                     $http.get(
-                        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', apiMethod)
+                        url
                     ),
                     'Failed to get all ' + entityName);
 
@@ -963,9 +1038,10 @@ angular.module('merchello.resources')
 
                 _settingsCache.remove("AllSettings");
 
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSettingsApiBaseUrl'] + 'PutSettings';
                 return umbRequestHelper.resourcePromise(
                     $http.post(
-                        umbRequestHelper.getApiUrl('merchelloSettingsApiBaseUrl', 'PutSettings'),
+                        url,
                         storeSettings
                     ),
                     'Failed to save data for Store Settings');
@@ -1073,10 +1149,10 @@ angular.module('merchello.resources')
         return {
 
             getAllShipmentStatuses: function () {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'GetAllShipmentStatuses';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetAllShipmentStatuses'),
+                        url: url,
                         method: 'GET'
                     }),
                     'Failed to get shipment statuses');
@@ -1084,10 +1160,10 @@ angular.module('merchello.resources')
             },
 
             getShipment: function (key) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'GetShipment';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipment'),
+                        url: url,
                         method: "GET",
                         params: {id: key}
                     }),
@@ -1106,10 +1182,10 @@ angular.module('merchello.resources')
 
 
                 var shipmentKeysStr = shipmentKeys.join("&ids=");
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'GetShipments';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'GetShipments', shipmentKeysStr),
+                        url: url,
                         method: "GET",
                         params: {ids: shipmentKeys}
                     }),
@@ -1117,43 +1193,46 @@ angular.module('merchello.resources')
             },
 
             getShipMethodAndAlternatives: function (shipMethodRequest) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'SearchShipMethodAndAlternatives';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'SearchShipMethodAndAlternatives'),
+                    $http.post(url,
                         shipMethodRequest
                     ),
                     'Failed to get the ship methods');
             },
 
             newShipment: function (shipmentRequest) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'NewShipment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'NewShipment'),
+                    $http.post(url,
                         shipmentRequest
                     ),
                     'Failed to create shipment');
             },
 
             saveShipment: function (shipment) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'PutShipment';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'PutShipment'),
+                    $http.post(url,
                         shipment
                     ),
                     'Failed to save shipment');
             },
 
             updateShippingAddressLineItem: function(shipment) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'UpdateShippingAddressLineItem';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'UpdateShippingAddressLineItem'),
+                    $http.post(url,
                         shipment
                     ),
                     'Failed to save shipment');
             },
 
             deleteShipment: function(shipment) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'DeleteShipment';
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloShipmentApiBaseUrl', 'DeleteShipment'),
+                        url: url,
                         method: "GET",
                         params: { id: shipment.key }
                     }), 'Failed to delete shipment');
@@ -1168,16 +1247,17 @@ angular.module('merchello.resources')
         return {
 
             getRateTable: function(shipMethod) {
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloFixedRateShippingApiBaseUrl'] + 'GetShipFixedRateTable';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloFixedRateShippingApiBaseUrl', 'GetShipFixedRateTable'), shipMethod),
+                    $http.post(url, shipMethod),
                     'Failed to acquire rate table');
 
             },
 
             saveRateTable: function(rateTable) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloFixedRateShippingApiBaseUrl'] + 'PutShipFixedRateTable';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloFixedRateShippingApiBaseUrl', 'PutShipFixedRateTable'), rateTable),
+                    $http.post(url, rateTable),
                     'Failed to save rate table');
             }
 
@@ -1198,18 +1278,19 @@ angular.module('merchello.resources')
             return {
 
                 addShipMethod: function (shipMethod) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'AddShipMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'AddShipMethod'),
+                        $http.post(url,
                             shipMethod
                         ),
                         'Failed to create ship method');
                 },
 
                 deleteShipCountry: function (shipCountryKey) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'DeleteShipCountry';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'DeleteShipCountry'),
+                            url: url,
                             method: "GET",
                             params: { id: shipCountryKey }
                         }),
@@ -1217,18 +1298,19 @@ angular.module('merchello.resources')
                 },
 
                 deleteShipMethod: function (shipMethod) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'DeleteShipMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'DeleteShipMethod'),
+                        $http.post(url,
                             shipMethod
                         ),
                         'Failed to delete ship method');
                 },
 
                 getAllShipCountryProviders: function (shipCountry) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetAllShipCountryProviders';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetAllShipCountryProviders'),
+                            url: url,
                             method: "GET",
                             params: { id: shipCountry.key }
                         }),
@@ -1236,20 +1318,20 @@ angular.module('merchello.resources')
                 },
 
                 getAllShipGatewayProviders: function () {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetAllShipGatewayProviders';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetAllShipGatewayProviders'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to retreive shipping gateway providers');
                 },
 
                 getShippingProviderShipMethods: function (shipProvider) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetShippingProviderShipMethods';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShippingProviderShipMethods'),
+                            url: url,
                             method: "GET",
                             params: { id: shipProvider.key }
                         }),
@@ -1257,10 +1339,10 @@ angular.module('merchello.resources')
                 },
 
                 getShippingGatewayMethodsByCountry: function (shipProvider, shipCountry) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetShippingGatewayMethodsByCountry';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShippingGatewayMethodsByCountry'),
+                            url: url,
                             method: "GET",
                             params: { id: shipProvider.key, shipCountryId: shipCountry.key }
                         }),
@@ -1268,10 +1350,10 @@ angular.module('merchello.resources')
                 },
 
                 getAllShipGatewayResourcesForProvider: function (shipProvider) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetAllShipGatewayResourcesForProvider';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetAllShipGatewayResourcesForProvider'),
+                            url: url,
                             method: "GET",
                             params: { id: shipProvider.key }
                         }),
@@ -1279,10 +1361,10 @@ angular.module('merchello.resources')
                 },
 
                 getShippingCountry: function (id) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetShipCountry';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetShipCountry'),
+                            url: url,
                             method: "GET",
                             params: { id: id }
                         }),
@@ -1290,10 +1372,10 @@ angular.module('merchello.resources')
                 },
 
                 getWarehouseCatalogShippingCountries: function (id) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'GetAllShipCountries';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'GetAllShipCountries'),
+                            url: url,
                             method: "GET",
                             params: { id: id }
                         }),
@@ -1301,10 +1383,10 @@ angular.module('merchello.resources')
                 },
 
                 newWarehouseCatalogShippingCountry: function (catalogKey, countryCode) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'NewShipCountry';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'NewShipCountry'),
+                            url: url,
                             method: "GET",
                             params: { catalogKey: catalogKey, countryCode: countryCode }
                         }),
@@ -1316,9 +1398,9 @@ angular.module('merchello.resources')
                     if (shipMethod.key === '') {
                         return this.addShipMethod(shipMethod);
                     }
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShippingGatewayApiBaseUrl'] + 'PutShipMethod';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloShippingGatewayApiBaseUrl', 'PutShipMethod'),
+                        $http.post(url,
                             shipMethod
                         ),
                         'Failed to save ship method');
@@ -1337,10 +1419,10 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
     function($http, umbRequestHelper) {
     return {
         getGatewayResources: function (taxationGatewayProviderKey) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'GetGatewayResources';
             return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetGatewayResources'),
+                    url: url,
                     method: "GET",
                     params: {id: taxationGatewayProviderKey}
                 }),
@@ -1348,20 +1430,20 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
         },
 
         getAllGatewayProviders: function () {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'GetAllGatewayProviders';
             return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetAllGatewayProviders'),
+                    url: url,
                     method: "GET"
                 }),
                 'Failed to retreive data for all gateway providers');
         },
 
         getTaxationProviderTaxMethods: function (taxationGatewayProviderKey) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'GetTaxationProviderTaxMethods';
             return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetTaxationProviderTaxMethods'),
+                    url: url,
                     method: "GET",
                     params: {id: taxationGatewayProviderKey}
                 }),
@@ -1369,28 +1451,28 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
         },
 
         addTaxMethod: function (taxMethod) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'AddTaxMethod';
             return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'AddTaxMethod'),
+                $http.post(url,
                     taxMethod
                 ),
                 'Failed to create taxMethod');
         },
 
         saveTaxMethod: function (taxMethod) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'PutTaxMethod';
             return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'PutTaxMethod'),
+                $http.post(url,
                     taxMethod
                 ),
                 'Failed to save taxMethod');
         },
 
         deleteTaxMethod: function (taxMethodKey) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'DeleteTaxMethod';
             return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'DeleteTaxMethod'),
+                    url: url,
                     method: "GET",
                     params: {id: taxMethodKey}
                 }),
@@ -1414,7 +1496,7 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
             /* helper method to get from cache or fall back to an http api call */
             function getCachedOrApi(cacheKey, apiMethod, entityName) {
                 var deferred = $q.defer();
-
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + apiMethod;
                 var dataFromCache = _warehouseCache.get(cacheKey);
 
                 if (dataFromCache) {
@@ -1423,7 +1505,7 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                 else {
                     var promiseFromApi = umbRequestHelper.resourcePromise(
                         $http.get(
-                            umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', apiMethod)
+                            url
                         ),
                         'Failed to get ' + entityName);
 
@@ -1449,8 +1531,9 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                  * Posts a new warehouse catalog to the API.
                  **/
                 addWarehouseCatalog: function (catalog) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'AddWarehouseCatalog';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'AddWarehouseCatalog'), catalog),
+                        $http.post(url, catalog),
                         'Failed to add warehouse catalog');
                 },
 
@@ -1463,9 +1546,10 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                  * Deletes a warehouse catalog in the API.
                  **/
                 deleteWarehouseCatalog: function (key) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'DeleteWarehouseCatalog';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'DeleteWarehouseCatalog'),
+                            url: url,
                             method: 'GET',
                             params: { id: key }
                         }),
@@ -1481,9 +1565,10 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                  * Gets a Warehouse from the API by its id.
                  **/
                 getById: function (id) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'GetWarehouse';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'GetWarehouse'),
+                            url: url,
                             method: "GET",
                             params: { id: id }
                         }),
@@ -1498,10 +1583,10 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                  * @description Gets the default warehouse from the API.
                  **/
                 getDefaultWarehouse: function () {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'GetDefaultWarehouse';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'GetDefaultWarehouse'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to retreive data for default warehouse');
@@ -1516,9 +1601,10 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                  * Gets the catalogs from the warehouse with the given warehouse key.
                  **/
                 getWarehouseCatalogs: function (key) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'GetWarehouseCatalogs';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'GetWarehouseCatalgos'),
+                            url: url,
                             method: 'GET',
                             params: { id: key }
                         }),
@@ -1534,8 +1620,9 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                  * Updates a warehouse catalog in the API.
                  **/
                 putWarehouseCatalog: function (catalog) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'PutWarehouseCatalog';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'PutWarehouseCatalog'), catalog),
+                        $http.post(url, catalog),
                         'Failed to update warehouse catalog');
                 },
 
@@ -1548,12 +1635,12 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                  * Saves the provided warehouse to the API.
                  **/
                 save: function (warehouse) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloWarehouseApiBaseUrl'] + 'PutWarehouse';
                     _warehouseCache.remove("DefaultWarehouse");
 
                     return umbRequestHelper.resourcePromise(
                         $http.post(
-                            umbRequestHelper.getApiUrl('merchelloWarehouseApiBaseUrl', 'PutWarehouse'),
+                            url,
                             warehouse
                         ),
                         'Failed to save data for warehouse: ' + warehouse.id);

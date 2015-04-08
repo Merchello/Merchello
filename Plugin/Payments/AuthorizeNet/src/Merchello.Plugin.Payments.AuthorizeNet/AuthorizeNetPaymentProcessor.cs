@@ -1,24 +1,35 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Web;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Plugin.Payments.AuthorizeNet.Models;
-using Umbraco.Core;
-
-namespace Merchello.Plugin.Payments.AuthorizeNet
+﻿namespace Merchello.Plugin.Payments.AuthorizeNet
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Web;
+
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Models;
+    using Merchello.Plugin.Payments.AuthorizeNet.Models;
+
+    using Umbraco.Core;
+
     /// <summary>
     /// The Authorize.Net payment processor
     /// </summary>
     public class AuthorizeNetPaymentProcessor
     {
+        /// <summary>
+        /// The settings.
+        /// </summary>
         private readonly AuthorizeNetProcessorSettings _settings;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthorizeNetPaymentProcessor"/> class.
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
         public AuthorizeNetPaymentProcessor(AuthorizeNetProcessorSettings settings)
         {
             _settings = settings;
@@ -41,10 +52,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
 
             var names = creditCard.CardholderName.Split(' ');
 
-            form.Add("x_type", 
-                    transactionMode == TransactionMode.Authorize ?
-                    "AUTH_ONLY" : "AUTH_CAPTURE"
-                );
+            form.Add("x_type", transactionMode == TransactionMode.Authorize ? "AUTH_ONLY" : "AUTH_CAPTURE");
            
             // Credit card information            
             form.Add("x_card_num", creditCard.CardNumber);
@@ -105,7 +113,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
         public IPaymentResult PriorAuthorizeCapturePayment(IInvoice invoice, IPayment payment)
         {
             var codes = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.AuthorizationTransactionCode);
-            if(!payment.Authorized || string.IsNullOrEmpty(codes)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or TransactionCodes not present")), invoice, false);
+            if (!payment.Authorized || string.IsNullOrEmpty(codes)) return new PaymentResult(Attempt<IPayment>.Fail(payment, new InvalidOperationException("Payment is not Authorized or TransactionCodes not present")), invoice, false);
 
             var form = GetInitialRequestForm(invoice.CurrencyCode());
             form.Add("x_type", "PRIOR_AUTH_CAPTURE");
@@ -141,7 +149,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
         /// <param name="invoice">The <see cref="IInvoice"/> associated with the payment</param>
         /// <param name="payment">The <see cref="IPayment"/> to be refunded</param>
         /// <param name="amount">The amount of the <see cref="IPayment"/> to be refunded</param>
-        /// <returns></returns>
+        /// <returns>The <see cref="IPaymentResult"/></returns>
         public IPaymentResult RefundPayment(IInvoice invoice, IPayment payment, decimal amount)
         {
 

@@ -147,6 +147,7 @@
             return status === 'paid';
         }
 
+        
         // calculates the unpaid balance of the invoice
         function remainingBalance(payments) {
             var amountPaid = 0;

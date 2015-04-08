@@ -61,7 +61,7 @@
         /// Gets a collection of all <see cref="ICountry"/>
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable{ICountry"/>.
+        /// The <see cref="IEnumerable{ICountry}"/>.
         /// </returns>
         IEnumerable<ICountry> GetAllCountries();
 

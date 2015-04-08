@@ -121,7 +121,8 @@
 
         internal static ProductDisplay ToProductDisplay(this IProduct product)
         {            
-            return AutoMapper.Mapper.Map<ProductDisplay>(product);
+            var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
+            return productDisplay;
         }
                
         #endregion

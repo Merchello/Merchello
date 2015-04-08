@@ -8,6 +8,7 @@
                 createDefault: function() {
                     var paymentMethod = new Constructor();
                     paymentMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    paymentMethod.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
@@ -19,6 +20,7 @@
                         for(var i = 0; i < jsonResult.length; i++) {
                             var paymentMethod = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             paymentMethod.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                            paymentMethod.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[i].authorizePaymentEditorView);
                             paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].authorizeCapturePaymentEditorView);
                             paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].voidPaymentEditorView);
                             paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].refundPaymentEditorView);
@@ -27,6 +29,7 @@
                     } else {
                         paymentMethods = genericModelBuilder.transform(jsonResult, Constructor);
                         paymentMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                        paymentMethods.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.authorizePaymentEditorView);
                         paymentMethods.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.authorizeCapturePaymentEditorView);
                         paymentMethods.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.voidPaymentEditorView);
                         paymentMethods.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.refundPaymentEditorView);

@@ -149,6 +149,7 @@
         /// </returns>
         internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice, string currencySymbol)
         {
+            
 
             var patterns = new List<IReplaceablePattern>
             {
@@ -165,6 +166,7 @@
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToEmail", invoice.BillToEmail),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPhone", invoice.BillToPhone),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCompany", invoice.BillToCompany),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalItemPlusCustom", (invoice.TotalCustomItemPrice() + invoice.TotalItemPrice()).FormatAsPrice(currencySymbol)),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("TotalDiscountPrice", invoice.TotalDiscounts().FormatAsPrice(currencySymbol)),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("TotalItemPrice", invoice.TotalItemPrice().FormatAsPrice(currencySymbol)),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("TotalShippingPrice", invoice.TotalShipping().FormatAsPrice(currencySymbol)),

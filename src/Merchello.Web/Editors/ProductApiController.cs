@@ -100,7 +100,8 @@
         /// </returns>
         public ProductDisplay GetProduct(Guid id)
         {            
-            return _merchello.Query.Product.GetByKey(id);            
+            var product = _merchello.Query.Product.GetByKey(id);
+            return product;
         }
 
         /// <summary>

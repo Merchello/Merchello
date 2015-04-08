@@ -19,10 +19,20 @@
                         return payment;
                     },
                     transform: function(jsonResult) {
-                        var payment = genericModelBuilder.transform(jsonResult, Constructor);
-                        payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
-                        payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
-                        return payment;
+                        var payments = [];
+                        if (angular.isArray(jsonResult)) {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                var payment = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                                payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult[ i ].appliedPayments);
+                                payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                                payments.push(payment);
+                            }
+                        } else {
+                            payments = genericModelBuilder.transform(jsonResult, Constructor);
+                            payments.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
+                            payments.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        }
+                        return payments;
                     }
                 };
             }]);

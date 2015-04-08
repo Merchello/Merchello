@@ -67,7 +67,6 @@
     <Reference Include="Examine, Version=0.1.61.2941, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\src\packages\Examine.0.1.61.2941\lib\Examine.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\src\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>

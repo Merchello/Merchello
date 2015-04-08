@@ -33,14 +33,14 @@
         /// <param name="title">
         /// The title.
         /// </param>
-        /// <param name="authorizeCaptureEditorView">
-        /// The authorize capture editor view.
+        /// <param name="authorizeEditorView">
+        /// The authorize editor view.
         /// </param>
         /// <param name="includeInPaymentSelection">
         /// The include in payment selection.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeCaptureEditorView, bool includeInPaymentSelection = true)
-            : this(title, authorizeCaptureEditorView, string.Empty, includeInPaymentSelection)
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView,  bool includeInPaymentSelection = true)
+            : this(title, authorizeEditorView, string.Empty, string.Empty, includeInPaymentSelection)
         {
         }
 
@@ -49,6 +49,29 @@
         /// </summary>
         /// <param name="title">
         /// The title.
+        /// </param>
+        /// <param name="authorizeEditorView">
+        /// The authorize editor view.
+        /// </param>
+        /// <param name="authorizeCaptureEditorView">
+        /// The authorize capture editor view.
+        /// </param>
+        /// <param name="includeInPaymentSelection">
+        /// The include in payment selection.
+        /// </param>
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, bool includeInPaymentSelection = true)
+            : this(title, authorizeEditorView, authorizeCaptureEditorView, string.Empty, includeInPaymentSelection)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentGatewayMethodAttribute"/> class.
+        /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="authorizeEditorView">
+        /// The authorize Editor View.
         /// </param>
         /// <param name="authorizeCaptureEditorView">
         /// The authorize capture editor view.
@@ -59,8 +82,8 @@
         /// <param name="includeInShipmentQuotations">
         /// The include in shipment quotations.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeCaptureEditorView, string voidPaymentEditorView, bool includeInShipmentQuotations = true)
-            : this(title, authorizeCaptureEditorView, voidPaymentEditorView, string.Empty, includeInShipmentQuotations)
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, bool includeInShipmentQuotations = true)
+            : this(title, authorizeEditorView, authorizeCaptureEditorView, voidPaymentEditorView, string.Empty, includeInShipmentQuotations)
         {
         }
 
@@ -70,6 +93,7 @@
         /// <param name="title">
         /// The title.
         /// </param>
+        /// <param name="authorizeEditorView"></param>
         /// <param name="authorizeCaptureEditorView">
         /// The authorize capture editor view.
         /// </param>
@@ -82,11 +106,12 @@
         /// <param name="includeInPaymentSelection">
         /// The include in shipment quotations.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, bool includeInPaymentSelection = true)
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, bool includeInPaymentSelection = true)
         {
             Mandate.ParameterNotNullOrEmpty(title, "title");
 
             Title = title;
+            AuthorizeEditorView = authorizeEditorView;
             AuthorizeCaptureEditorView = authorizeCaptureEditorView;
             this.IncludeInPaymentSelection = includeInPaymentSelection;
             VoidPaymentEditorView = voidPaymentEditorView;
@@ -98,6 +123,11 @@
         /// Gets a title to be displayed in the back office if applicable.
         /// </summary>
         public string Title { get; private set; }
+
+        /// <summary>
+        /// Gets the authorize capture editor view.
+        /// </summary>
+        public string AuthorizeEditorView { get; private set; }
 
         /// <summary>
         /// Gets the authorize capture editor view.

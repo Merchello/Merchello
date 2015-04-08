@@ -8,10 +8,10 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
     function($http, umbRequestHelper) {
     return {
         getGatewayResources: function (taxationGatewayProviderKey) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'GetGatewayResources';
             return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetGatewayResources'),
+                    url: url,
                     method: "GET",
                     params: {id: taxationGatewayProviderKey}
                 }),
@@ -19,20 +19,20 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
         },
 
         getAllGatewayProviders: function () {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'GetAllGatewayProviders';
             return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetAllGatewayProviders'),
+                    url: url,
                     method: "GET"
                 }),
                 'Failed to retreive data for all gateway providers');
         },
 
         getTaxationProviderTaxMethods: function (taxationGatewayProviderKey) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'GetTaxationProviderTaxMethods';
             return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'GetTaxationProviderTaxMethods'),
+                    url: url,
                     method: "GET",
                     params: {id: taxationGatewayProviderKey}
                 }),
@@ -40,28 +40,28 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
         },
 
         addTaxMethod: function (taxMethod) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'AddTaxMethod';
             return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'AddTaxMethod'),
+                $http.post(url,
                     taxMethod
                 ),
                 'Failed to create taxMethod');
         },
 
         saveTaxMethod: function (taxMethod) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'PutTaxMethod';
             return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'PutTaxMethod'),
+                $http.post(url,
                     taxMethod
                 ),
                 'Failed to save taxMethod');
         },
 
         deleteTaxMethod: function (taxMethodKey) {
-
+            var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloTaxationGatewayApiBaseUrl'] + 'DeleteTaxMethod';
             return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloTaxationGatewayApiBaseUrl', 'DeleteTaxMethod'),
+                    url: url,
                     method: "GET",
                     params: {id: taxMethodKey}
                 }),

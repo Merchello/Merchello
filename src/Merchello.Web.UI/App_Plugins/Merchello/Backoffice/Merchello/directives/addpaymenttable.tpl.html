@@ -1,0 +1,23 @@
+<div class="well row-fluid col-xs-12 span12" data-ng-class="{ 'open': isOpen, 'closed': (!isOpen) }">
+    <table class="table table-striped merchello-striped-table">
+        <thead>
+        <tr>
+            <th colspan="2"><localize key="merchelloPayment_paymentMethod"> {{isOpen}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="method in filterPaymentMethods()">
+            <td>{{method.name}}</td>
+            <td class="text-right">
+                <button type="button" class="btn btn-default" data-ng-show="authorizePaymentOnly" data-ng-click="openAddPaymentDialog(method)">Authorize</button>
+                <button type="button" class="btn btn-default" data-ng-show="!authorizePaymentOnly" data-ng-click="openAddPaymentDialog(method)">Authorize Capture</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="control-group row-fluid">
+        <label>
+        <input type="checkbox" data-ng-model="authorizePaymentOnly" /> Authorize Only
+        </label>
+    </div>
+</div>

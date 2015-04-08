@@ -511,6 +511,40 @@
 
     /**
      * @ngdoc model
+     * @name AddEditCampaignSettingsDialogData
+     * @function
+     *
+     * @description
+     *  A dialog data object for adding or editing CampaignSettingsDisplay objects
+     */
+
+    var AddEditCampaignSettingsDialogData = function() {
+        var self = this;
+        self.campaign = {};
+    };
+
+    AddEditCampaignSettingsDialogData.prototype = (function() {
+
+        // returns a value indicating whether or not this is to add or edit a campaign
+        function isEdit() {
+            return this.campaign.key !== '';
+        }
+
+        // generates an alias for the campaign
+        function generateAlias() {
+            this.campaign.alias = this.campaign.name.replace( /[^a-zA-Z0-9]/ , '-').toLowerCase();
+        }
+
+        return {
+            isEdit: isEdit,
+            generateAlias: generateAlias
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('AddEditCampaignSettingsDialogData', AddEditCampaignSettingsDialogData);
+    /**
+     * @ngdoc model
      * @name AddEditCustomerAddressDialogData
      * @function
      *
@@ -606,6 +640,44 @@
     };
 
     angular.module('merchello.models').constant('AddEditWarehouseDialogData', AddEditWarehouseDialogData);
+
+    /**
+     * @ngdoc model
+     * @name AddPaymentDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for adding payments to a sale.
+     */
+    var AddPaymentDialogData = function() {
+        var self = this;
+        self.paymentMethod = {};
+        self.paymentMethodName = '';
+        self.invoice = {};
+        self.authorizePaymentOnly = false;
+        self.invoiceBalance = 0;
+        self.amount = 0;
+        self.currencySymbol = '';
+        self.processorArgs = new ProcessorArgumentCollectionDisplay();
+    };
+
+    AddPaymentDialogData.prototype = (function() {
+
+        function asPaymentRequestDisplay() {
+            var request = new PaymentRequestDisplay();
+            request.invoiceKey = this.invoice.key;
+            request.paymentMethodKey = this.paymentMethod.key;
+            request.amount = this.amount;
+            request.processorArgs = this.processorArgs.toArray();
+            return request;
+        }
+
+        return {
+            asPaymentRequestDisplay: asPaymentRequestDisplay
+        }
+    }());
+
+    angular.module('merchello.models').constant('AddPaymentDialogData', AddPaymentDialogData);
 
     /**
      * @ngdoc model
@@ -989,6 +1061,73 @@
 
     /**
      * @ngdoc model
+     * @name ProcessRefundPaymentDialogData
+     * @function
+     *
+     * @description
+     * Dialog data model for refunding payments
+     */
+    var ProcessRefundPaymentDialogData = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentMethodKey = '';
+        self.paymentKey = '';
+        self.amount = 0;
+        self.currencySymbol = '';
+        self.paymentMethodName = '';
+        self.appliedAmount = 0;
+        self.processorArgumentCollectionDisplay = new ProcessorArgumentCollectionDisplay();
+        self.warning = '';
+    };
+
+    ProcessRefundPaymentDialogData.prototype = (function() {
+        function toPaymentRequestDisplay() {
+            var paymentRequest = angular.extend(this, PaymentRequestDisplay);
+            paymentRequest.processorArgs = this.processorArgumentCollectionDisplay.toArray();
+            return paymentRequest;
+        }
+
+        return {
+            toPaymentRequestDisplay: toPaymentRequestDisplay
+        }
+    }());
+
+    angular.module('merchello.models').constant('ProcessRefundPaymentDialogData', ProcessRefundPaymentDialogData);
+    /**
+     * @ngdoc model
+     * @name ProcessVoidPaymentDialogData
+     * @function
+     *
+     * @description
+     * Dialog data model for voiding payments
+     */
+    var ProcessVoidPaymentDialogData = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentMethodKey = '';
+        self.paymentKey = '';
+        self.processorArgumentCollectionDisplay = new ProcessorArgumentCollectionDisplay();
+        self.warning = '';
+    };
+
+    ProcessVoidPaymentDialogData.prototype = (function() {
+
+        function toPaymentRequestDisplay() {
+            var paymentRequest = angular.extend(this, PaymentRequestDisplay);
+            paymentRequest.processorArgs = this.processorArgumentCollectionDisplay.toArray();
+            return paymentRequest;
+        }
+
+        return {
+            toPaymentRequestDisplay : toPaymentRequestDisplay
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('ProcessVoidPaymentDialogData', ProcessVoidPaymentDialogData);
+
+    /**
+     * @ngdoc model
      * @name ProductSelectorDialogData
      * @function
      *
@@ -1121,6 +1260,58 @@
     angular.module('merchello.models').constant('OrderLineItemDisplay', OrderLineItemDisplay);
     /**
      * @ngdoc model
+     * @name CampaignActivitySettingsDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's CampaignActivitySettingsDisplay object
+     */
+    var CampaignActivitySettingsDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.alias = '';
+        self.description = '';
+        self.active = true;
+        self.campaignKey = '';
+        self.campaignActivityTfKey = '';
+        self.campaignActivityTypeField = {};
+        self.campaignActivityType = '';
+        self.startDate = '';
+        self.endDate = '';
+        self.extendedData = {};
+    };
+
+    angular.module('merchello.models').constant('CampaignActivitySettingsDisplay', CampaignActivitySettingsDisplay);
+    /**
+     * @ngdoc model
+     * @name CampaignSettingsDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's CampaignSettingsDisplay object
+     */
+    var CampaignSettingsDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.alias = '';
+        self.description = '';
+        self.active = true;
+        self.activitySettings = [];
+    };
+
+    CampaignSettingsDisplay.prototype = (function() {
+
+        return {
+
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('CampaignSettingsDisplay', CampaignSettingsDisplay);
+    /**
+     * @ngdoc model
      * @name NotificationGatewayProviderDisplay
      * @function
      *
@@ -1247,6 +1438,7 @@
         self.referenceNumber = '';
         self.amount = 0.0;
         self.authorized = false;
+        self.voided = false;
         self.collected = false;
         self.exported = false;
         self.extendedData = {};
@@ -1256,29 +1448,38 @@
     PaymentDisplay.prototype = (function() {
 
         // private
-        var getStatus = function() {
-                var statusArr = [];
-                if (this.authorized) {
-                    statusArr.push("Authorized");
-                }
-                if (this.collected) {
-                    statusArr.push("Captured");
-                }
-                if (this.exported) {
-                    statusArr.push("Exported");
-                }
+        function getStatus() {
+            var statusArr = [];
+            if (this.authorized) {
+                statusArr.push("Authorized");
+            }
+            if (this.collected) {
+                statusArr.push("Captured");
+            }
+            if (this.exported) {
+                statusArr.push("Exported");
+            }
 
-                return statusArr.join("/");
-            },
+            return statusArr.join("/");
+        }
 
-            hasAmount = function() {
-                return this.amount > 0;
-            };
+        function hasAmount() {
+            return this.amount > 0;
+        }
+
+        function appliedAmount() {
+            var applied = 0;
+            angular.forEach(this.appliedPayments, function(ap) {
+                applied += ap.amount;
+            });
+            return applied;
+        }
 
         // public
         return {
             getStatus: getStatus,
-            hasAmount: hasAmount
+            hasAmount: hasAmount,
+            appliedAmount: appliedAmount
         };
     }());
 
@@ -1324,12 +1525,57 @@
         self.description = '';
         self.paymentCode = '';
         self.dialogEditorView = {};
+        self.authorizePaymentEditorView = {};
         self.authorizeCapturePaymentEditorView = {};
         self.voidPaymentEditorView = {};
         self.refundPaymentEditorView = {};
     };
 
     angular.module('merchello.models').constant('PaymentMethodDisplay', PaymentMethodDisplay);
+    /**
+     * @ngdoc model
+     * @name PaymentRequestDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's PaymentRequestDisplay object
+     */
+    var PaymentRequestDisplay = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentKey = '';
+        self.paymentMethodKey = '';
+        self.amount = 0.0;
+        self.processorArgs = [];
+    };
+
+    angular.module('merchello.models').constant('PaymentRequestDisplay', PaymentRequestDisplay);
+    /**
+     * @ngdoc model
+     * @name ProcessorArgumentCollectionDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProcessorArgumentCollectionDisplay object
+     */
+     var ProcessorArgumentCollectionDisplay = function() {
+        var self = this;
+        self.items = [];
+    };
+
+    ProcessorArgumentCollectionDisplay.prototype = (function() {
+
+        function toArray() {
+            return this.items;
+        };
+
+        return {
+            toArray: toArray
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('ProcessorArgumentCollectionDisplay', ProcessorArgumentCollectionDisplay);
     /**
      * @ngdoc model
      * @name CatalogInventoryDisplay
@@ -1997,6 +2243,7 @@
             return status === 'paid';
         }
 
+        
         // calculates the unpaid balance of the invoice
         function remainingBalance(payments) {
             var amountPaid = 0;
@@ -3120,6 +3367,21 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkEditInventoryCountsDialogData();
         }
 
+        // creates a dialog data for voiding payments
+        function createProcessVoidPaymentDialogData() {
+            return new ProcessVoidPaymentDialogData();
+        }
+
+        // creates a dialog data for refunding payments
+        function createProcessRefundPaymentDialogData() {
+            return new ProcessRefundPaymentDialogData();
+        }
+
+        // creates a dialog data for adding new payments
+        function createAddPaymentDialogData() {
+            return new AddPaymentDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -3155,7 +3417,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteProductDialogData: createDeleteProductDialogData,
             createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
             createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
-            createProductSelectorDialogData: createProductSelectorDialogData
+            createProductSelectorDialogData: createProductSelectorDialogData,
+            createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
+            createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
+            createAddPaymentDialogData: createAddPaymentDialogData
         };
 }]);
 
@@ -3274,6 +3539,82 @@ angular.module('merchello.models').factory('dialogDataFactory',
             }]);
 
 
+/**
+ * @ngdoc factory
+ * @name campaignActivitySettingsDisplayBuilder
+ *
+ * @description
+ * A utility service that builds CampaignActivitySettingsDisplay models
+ */
+angular.module('merchello.models').factory('campaignActivitySettingsDisplayBuilder',
+    ['genericModelBuilder', 'extendedDataDisplayBuilder', 'typeFieldDisplayBuilder', 'CampaignActivitySettingsDisplay',
+    function(genericModelBuilder, extendedDataDisplayBuilder, typeFieldDisplayBuilder, CampaignActivitySettingsDisplay) {
+
+        var Constructor = CampaignActivitySettingsDisplay;
+
+        return {
+            createDefault: function() {
+                var activity = new Constructor();
+                activity.extendedData = extendedDataDisplayBuilder.createDefault();
+                activity.campaignActivityTypeField = typeFieldDisplayBuilder.createDefault();
+                return activity;
+            },
+
+            transform: function(jsonResult) {
+                var activities = [];
+                if (angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var activity = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        activity.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                        activity.campaignActivityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].campaignActivityTypeField);
+                        activities.push(activity);
+                    }
+                } else {
+                    activities = genericModelBuilder.transform(jsonResult, Constructor);
+                    activities.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                    activities.campaignActivityTypeField = typeFieldDisplayBuilder.transform(jsonResult.campaignActivityTypeField);
+                }
+                return activities;
+            }
+        };
+
+    }]);
+
+/**
+ * @ngdoc factory
+ * @name campaignSettingsDisplayBuilder
+ *
+ * @description
+ * A utility service that builds CampaignSettingsDisplay models
+ */
+angular.module('merchello.models').factory('campaignSettingsDisplayBuilder',
+    ['genericModelBuilder', 'campaignActivitySettingsDisplayBuilder', 'CampaignSettingsDisplay',
+    function(genericModelBuilder, campaignActivitySettingsDisplayBuilder, CampaignSettingsDisplay) {
+
+        var Constructor = CampaignSettingsDisplay;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                var settings = [];
+                if (angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var setting = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        setting.activitySettings = campaignActivitySettingsDisplayBuilder.transform(jsonResult[ i ].activitySettings);
+                        settings.push(setting);
+                    }
+                } else {
+                    settings = genericModelBuilder.transform(jsonResult, Constructor);
+                    settings.activitySettings = campaignActivitySettingsDisplayBuilder.transform(jsonResult.activitySettings);
+                }
+                return settings;
+            }
+        };
+
+}]);
+
 angular.module('merchello.models').factory('merchelloTabsFactory',
     ['MerchelloTabCollection',
         function(MerchelloTabCollection) {
@@ -3373,6 +3714,18 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            function createCampaignTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('campaignlist', 'Campaign Listing', '#/merchello/merchello/campaignlist/manage');
+                return tabs;
+            }
+
+            function createCampaignEditTabs(campaignKey) {
+                var tabs = new Constructor();
+                tabs.addTab('campaignlist', 'Campaign Listing', '#/merchello/merchello/campaignlist/manage');
+                tabs.addTab('campaignedit', 'Campaign Overview', '#/merchello/merchello/campaignedit/' + campaignKey === '' ? 'create' : campaignKey);
+                return tabs;
+            }
 
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,
@@ -3385,7 +3738,9 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs,
-                createProductVariantEditorTabs: createProductVariantEditorTabs
+                createProductVariantEditorTabs: createProductVariantEditorTabs,
+                createCampaignTabs: createCampaignTabs,
+                createCampaignEditTabs: createCampaignEditTabs
             };
 
 }]);
@@ -3552,10 +3907,20 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         return payment;
                     },
                     transform: function(jsonResult) {
-                        var payment = genericModelBuilder.transform(jsonResult, Constructor);
-                        payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
-                        payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
-                        return payment;
+                        var payments = [];
+                        if (angular.isArray(jsonResult)) {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                var payment = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                                payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult[ i ].appliedPayments);
+                                payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                                payments.push(payment);
+                            }
+                        } else {
+                            payments = genericModelBuilder.transform(jsonResult, Constructor);
+                            payments.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
+                            payments.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        }
+                        return payments;
                     }
                 };
             }]);
@@ -3600,6 +3965,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                 createDefault: function() {
                     var paymentMethod = new Constructor();
                     paymentMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    paymentMethod.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
@@ -3611,6 +3977,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         for(var i = 0; i < jsonResult.length; i++) {
                             var paymentMethod = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             paymentMethod.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                            paymentMethod.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[i].authorizePaymentEditorView);
                             paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].authorizeCapturePaymentEditorView);
                             paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].voidPaymentEditorView);
                             paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].refundPaymentEditorView);
@@ -3619,6 +3986,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                     } else {
                         paymentMethods = genericModelBuilder.transform(jsonResult, Constructor);
                         paymentMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                        paymentMethods.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.authorizePaymentEditorView);
                         paymentMethods.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.authorizeCapturePaymentEditorView);
                         paymentMethods.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.voidPaymentEditorView);
                         paymentMethods.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.refundPaymentEditorView);

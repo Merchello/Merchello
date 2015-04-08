@@ -8,16 +8,17 @@
      */
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
-            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
+            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
+            'orderResource', 'invoiceHelper', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
+                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, invoiceHelper, dialogDataFactory,
                  merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
+            $scope.paymentMethodsLoaded = false;
             $scope.invoice = {};
             $scope.tabs = [];
             $scope.historyLoaded = false;
@@ -27,7 +28,8 @@
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
-            $scope.paymentMethods = {};
+            $scope.paymentMethods = [];
+            $scope.allPayments = [];
             $scope.payments = [];
             $scope.billingAddress = {};
             $scope.hasShippingAddress = false;
@@ -35,6 +37,8 @@
             $scope.shipmentLineItems = [];
             $scope.customLineItems = [];
             $scope.discountLineItems = [];
+            $scope.debugAllowDelete = false;
+            $scope.newPaymentOpen = false;
 
             // exposed methods
             //  dialogs
@@ -44,6 +48,8 @@
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
             $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
+            $scope.toggleNewPaymentOpen = toggleNewPaymentOpen;
+            $scope.reload = init;
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
@@ -56,10 +62,14 @@
              * @description - Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init () {
+                $scope.preValuesLoaded = false;
+                $scope.newPaymentOpen = false;
                 loadInvoice($routeParams.id);
                 $scope.tabs = merchelloTabsFactory.createSalesTabs($routeParams.id);
                 $scope.tabs.setActive('overview');
-                $scope.loaded = true;
+                if(Umbraco.Sys.ServerVariables.isDebuggingEnabled) {
+                    $scope.debugAllowDelete = true;
+                }
             }
 
             function localizeMessage(msg) {
@@ -127,7 +137,7 @@
 
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
+
                     var shipmentLineItem = $scope.invoice.getShippingLineItems();
                     if (shipmentLineItem) {
                         $scope.shipmentLineItems.push(shipmentLineItem);
@@ -139,7 +149,6 @@
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
             }
-
 
            /**
              * @ngdoc method
@@ -191,16 +200,48 @@
              * @description - Load the Merchello payments for the invoice.
              */
             function loadPayments(key) {
-                var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
-                paymentsPromise.then(function(payments) {
-                    $scope.payments = paymentDisplayBuilder.transform(payments);
-                    $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
-                    $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
-                }, function(reason) {
-                    notificationsService.error('Failed to load payments for invoice', reason.message);
-                });
+                if (!$scope.invoice.isPaid()) {
+                    var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
+                    paymentsPromise.then(function(payments) {
+                        $scope.allPayments = paymentDisplayBuilder.transform(payments);
+                        $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
+                        loadPaymentMethods()
+                        $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
+                        $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
+                        $scope.preValuesLoaded = true;
+                    }, function(reason) {
+                        notificationsService.error('Failed to load payments for invoice', reason.message);
+                    });
+                } else {
+                    $scope.preValuesLoaded = true;
+                }
             }
 
+            /**
+             * @ngdoc method
+             * @name loadPaymentMethods
+             * @function
+             *
+             * @description - Load the available Merchello payment methods for the invoice.
+             */
+            function loadPaymentMethods() {
+                if($scope.payments.length === 0) {
+                    var promise = paymentGatewayProviderResource.getAvailablePaymentMethods();
+                    promise.then(function(methods) {
+                        $scope.paymentMethods = paymentMethodDisplayBuilder.transform(methods);
+                        $scope.preValuesLoaded = true;
+                        $scope.paymentMethodsLoaded = true;
+                    })
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadShippingAddress
+             * @function
+             *
+             * @description - Load the shipping address (if any) for an invoice.
+             */
             function loadShippingAddress(key) {
                 var shippingAddressPromise = orderResource.getShippingAddress(key);
                 shippingAddressPromise.then(function(result) {
@@ -211,12 +252,16 @@
                 });
             }
 
+            function toggleNewPaymentOpen() {
+                $scope.newPaymentOpen = !$scope.newPaymentOpen;
+            }
+
             /**
              * @ngdoc method
              * @name capturePayment
              * @function
              *
-             * @description - Open the capture shipment dialog.
+             * @description - Open the capture payment dialog.
              */
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
@@ -228,7 +273,7 @@
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
-                    if (pm.authorizeCapturePaymentDialogEditorView !== '') {
+                    if (pm.authorizeCapturePaymentEditorView.editorView !== '') {
                         dialogData.authorizeCapturePaymentEditorView = pm.authorizeCapturePaymentEditorView.editorView;
                     } else {
                         dialogData.authorizeCapturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
@@ -251,7 +296,6 @@
              */
             function capturePaymentDialogConfirm(paymentRequest) {
                 $scope.preValuesLoaded = false;
-                console.info(paymentRequest);
                 var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
                     // added a timeout here to give the examine index

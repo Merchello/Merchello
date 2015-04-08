@@ -17,6 +17,7 @@
         self.referenceNumber = '';
         self.amount = 0.0;
         self.authorized = false;
+        self.voided = false;
         self.collected = false;
         self.exported = false;
         self.extendedData = {};
@@ -26,29 +27,38 @@
     PaymentDisplay.prototype = (function() {
 
         // private
-        var getStatus = function() {
-                var statusArr = [];
-                if (this.authorized) {
-                    statusArr.push("Authorized");
-                }
-                if (this.collected) {
-                    statusArr.push("Captured");
-                }
-                if (this.exported) {
-                    statusArr.push("Exported");
-                }
+        function getStatus() {
+            var statusArr = [];
+            if (this.authorized) {
+                statusArr.push("Authorized");
+            }
+            if (this.collected) {
+                statusArr.push("Captured");
+            }
+            if (this.exported) {
+                statusArr.push("Exported");
+            }
 
-                return statusArr.join("/");
-            },
+            return statusArr.join("/");
+        }
 
-            hasAmount = function() {
-                return this.amount > 0;
-            };
+        function hasAmount() {
+            return this.amount > 0;
+        }
+
+        function appliedAmount() {
+            var applied = 0;
+            angular.forEach(this.appliedPayments, function(ap) {
+                applied += ap.amount;
+            });
+            return applied;
+        }
 
         // public
         return {
             getStatus: getStatus,
-            hasAmount: hasAmount
+            hasAmount: hasAmount,
+            appliedAmount: appliedAmount
         };
     }());
 

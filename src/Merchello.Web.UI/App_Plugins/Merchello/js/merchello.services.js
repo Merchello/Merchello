@@ -261,10 +261,11 @@
              * Totals a collection of invoices by currency code.
              */
             this.getTotalsByCurrencyCode = function(invoices) {
+                var self = this;
                 var totals = [];
                 angular.forEach(invoices, function(inv) {
                     var cc = inv.getCurrencyCode();
-                    var total = inv.total;
+                    var total = self.round(inv.total, 2);
                     var existing = _.find(totals, function(t) { return t.currencyCode === cc; });
                     if (existing === null || existing === undefined) {
                         totals.push({ currencyCode: cc, total: total });
@@ -273,8 +274,33 @@
                     }
                 });
                 return _.sortBy(totals, function(o) { return o.currencyCode; });
-            };
+            },
 
+            /**
+             * @ngdoc method
+             * @name round
+             * @function
+             *
+             * @description
+             * Rounds a decimal to a specific number of places.
+             */
+            this.round = function(num, places) {
+                var rounded = +(Math.round(num + "e+" + places) + "e-" + places);
+                return isNaN(rounded) ? 0 : rounded;
+            },
+
+            /**
+             * @ngdoc method
+             * @name valueIsInRange
+             * @function
+             *
+             * @description
+             * Verifies a value is within a range of values.
+             */
+            this.valueIsInRage = function(str,min, max) {
+                n = parseFloat(str);
+                return (!isNaN(n) && n >= min && n <= max);
+            };
 
     }]);
 

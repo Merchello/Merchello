@@ -17,6 +17,11 @@
         ICustomerService CustomerService { get; }
 
         /// <summary>
+        /// Gets the <see cref="ICampaignSettingsService"/>.
+        /// </summary>
+        ICampaignSettingsService CampaignSettingsService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>
         /// </summary>
         IGatewayProviderService GatewayProviderService { get; }
