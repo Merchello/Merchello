@@ -80,10 +80,11 @@ angular.module('merchello.resources')
 
             saveGatewayProvider: function(gatewayProvider) {
                 // we need to hack the extended data here
-                gatewayProvider.extendedData = gatewayProvider.extendedData.toArray();
+                var tempGatewayProvider = angular.copy(gatewayProvider);
+                tempGatewayProvider.extendedData = tempGatewayProvider.extendedData.toArray();
                 return umbRequestHelper.resourcePromise(
                     $http.post(umbRequestHelper.getApiUrl('merchelloGatewayProviderApiBaseUrl', 'PutGatewayProvider'),
-                        gatewayProvider
+                        tempGatewayProvider
                     ),
                     'Failed to save gateway provider');
             }
