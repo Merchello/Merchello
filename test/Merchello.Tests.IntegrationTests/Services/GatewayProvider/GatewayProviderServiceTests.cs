@@ -39,7 +39,7 @@ namespace Merchello.Tests.IntegrationTests.Services.GatewayProvider
            
        
             var shippingProvider =
-               (FixedRateShippingGatewayProvider) MerchelloContext.Gateways.Shipping.CreateInstance(Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
+               (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.CreateInstance(Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey);
             Assert.NotNull(shippingProvider);
 
             var resource = shippingProvider.ListResourcesOffered().FirstOrDefault();

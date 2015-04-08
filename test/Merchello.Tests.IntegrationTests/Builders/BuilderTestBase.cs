@@ -38,12 +38,12 @@ namespace Merchello.Tests.IntegrationTests.Builders
             var defaultCatalog = PreTestDataWorker.WarehouseService.GetDefaultWarehouse().WarehouseCatalogs.FirstOrDefault();
             if (defaultCatalog == null) Assert.Ignore("Default WarehouseCatalog is null");
 
-            var us = MerchelloContext.Services.StoreSettingService.GetCountryByCode("US");
+            var us = MerchelloContext.Current.Services.StoreSettingService.GetCountryByCode("US");
             var usCountry = new ShipCountry(defaultCatalog.Key, us);
-            ((ServiceContext)MerchelloContext.Services).ShipCountryService.Save(usCountry);
+            ((ServiceContext)MerchelloContext.Current.Services).ShipCountryService.Save(usCountry);
 
             var key = Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
-            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Gateways.Shipping.GetProviderByKey(key);
+            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.GetProviderByKey(key);
             rateTableProvider.DeleteAllActiveShipMethods(usCountry);
 
             #region Add and configure 3 rate table shipmethods
@@ -63,7 +63,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public virtual void Init()
         {
             Customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
-            Basket = Web.Workflow.Basket.GetBasket(MerchelloContext, Customer);
+            Basket = Web.Workflow.Basket.GetBasket(MerchelloContext.Current, Customer);
 
             var odd = true;
             for (var i = 0; i < ProductCount; i++)
@@ -117,11 +117,11 @@ namespace Merchello.Tests.IntegrationTests.Builders
 
 
             // setup the checkout
-            SalePreparationMock = new SalePreparationMock(MerchelloContext, ItemCache, Customer);
+            SalePreparationMock = new SalePreparationMock(MerchelloContext.Current, ItemCache, Customer);
 
             // add the shipment rate quote
-            var shipment = Basket.PackageBasket(MerchelloContext, BillingAddress).First();
-            var shipRateQuote = shipment.ShipmentRateQuotes(MerchelloContext).FirstOrDefault();
+            var shipment = Basket.PackageBasket(MerchelloContext.Current, BillingAddress).First();
+            var shipRateQuote = shipment.ShipmentRateQuotes(MerchelloContext.Current).FirstOrDefault();
             
             //_checkoutMock.ItemCache.Items.Add(shipRateQuote.AsLineItemOf<InvoiceLineItem>());
             SalePreparationMock.SaveShipmentRateQuote(shipRateQuote);

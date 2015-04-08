@@ -52,8 +52,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
         public void Can_RetrieveProductOptions_From_ProductInIndex()
         {            
             //// Arrange
-            
-            var merchello = new MerchelloHelper(MerchelloContext.Services);
+
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
 
             var productService = PreTestDataWorker.ProductService;
 
@@ -111,7 +111,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Services);
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
 
             var productService = PreTestDataWorker.ProductService;
 
@@ -140,7 +140,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Services);
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
 
             var productService = PreTestDataWorker.ProductService;
 
