@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0c8517c-4cb8-4237-b0ab-5358043bdf8d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.module.js" afterPath="$PROJECT_DIR$/payment.braintree.module.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/App.config" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/App.config" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../build/Merchello.Version.props" afterPath="$PROJECT_DIR$/../../../../../../../build/Merchello.Version.props" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" afterPath="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" />
+      <change type="MODIFICATION" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\config\lang\en.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/config/lang/en.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/invoicepayments.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/invoicepayments.controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.manifest" afterPath="$PROJECT_DIR$/package.manifest" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.html" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" afterPath="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/web.config" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/web.config" />
     </list>
     <ignored path="Merchello.Braintree.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,11 +32,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="payment.standard.authorizepayment.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="payment.standard.authorizepayment.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="136" selection-start-line="0" selection-start-column="136" selection-end-line="0" selection-end-column="136" />
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="0" column="103" selection-start-line="0" selection-start-column="103" selection-end-line="0" selection-end-column="103" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="payment.standard.voidpayment.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.voidpayment.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="0" column="108" selection-start-line="0" selection-start-column="108" selection-end-line="0" selection-end-column="108" />
               <folding />
             </state>
           </provider>
@@ -40,7 +56,7 @@
         <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="139" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="139" />
+              <caret line="20" column="111" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="111" />
               <folding />
             </state>
           </provider>
@@ -60,7 +76,7 @@
         <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="94" />
+              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -79,8 +95,18 @@
       <file leaf-file-name="package.manifest" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package.manifest">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="3" column="70" selection-start-line="3" selection-start-column="70" selection-end-line="3" selection-end-column="70" />
+            <state vertical-scroll-proportion="-7.44">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="payment.standard.refundpayment.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.refundpayment.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.38653368">
+              <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -91,8 +117,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Html5" />
         <option value="JavaScript File" />
+        <option value="Html5" />
       </list>
     </option>
   </component>
@@ -102,15 +128,17 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/package.manifest" />
         <option value="$PROJECT_DIR$/payment.braintree.models.js" />
         <option value="$PROJECT_DIR$/dialogs/payment.braintree.standardmethod.authorizepayment.html" />
         <option value="$PROJECT_DIR$/dialogs/payment.braintree.standardmethod.authorizepayment.controller.js" />
-        <option value="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
         <option value="$PROJECT_DIR$/payment.braintree.providersettings.html" />
         <option value="$PROJECT_DIR$/payment.braintree.module.js" />
-        <option value="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" />
         <option value="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" />
+        <option value="$PROJECT_DIR$/dialogs/payment.standard.voidpayment.html" />
+        <option value="$PROJECT_DIR$/package.manifest" />
+        <option value="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
+        <option value="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" />
+        <option value="$PROJECT_DIR$/dialogs/payment.standard.refundpayment.html" />
       </list>
     </option>
   </component>
@@ -122,8 +150,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-115" />
-    <option name="y" value="17" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
     <option name="width" value="1938" />
     <option name="height" value="1050" />
   </component>
@@ -184,8 +212,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -249,10 +277,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-115" y="17" width="1938" height="1050" extended-state="0" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1641161" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26701847" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -288,10 +316,50 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
+    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="139" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="139" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment.braintree.module.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="94" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment.braintree.models.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.manifest">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="70" selection-start-line="3" selection-start-column="70" selection-end-line="3" selection-end-column="70" />
           <folding />
         </state>
       </provider>
@@ -300,7 +368,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -316,7 +390,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -339,7 +412,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -365,19 +437,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.manifest">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="70" selection-start-line="3" selection-start-column="70" selection-end-line="3" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="126" selection-start-line="0" selection-start-column="126" selection-end-line="0" selection-end-column="126" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -389,10 +452,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
+    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="94" />
+          <caret line="0" column="103" selection-start-line="0" selection-start-column="103" selection-end-line="0" selection-end-column="103" />
           <folding />
         </state>
       </provider>
@@ -405,18 +468,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
+    <entry file="file://$PROJECT_DIR$/package.manifest">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="139" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="139" />
+        <state vertical-scroll-proportion="-7.44">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
+    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.voidpayment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="136" selection-start-line="0" selection-start-column="136" selection-end-line="0" selection-end-column="136" />
+          <caret line="0" column="108" selection-start-line="0" selection-start-column="108" selection-end-line="0" selection-end-column="108" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="111" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="111" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.refundpayment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.38653368">
+          <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
           <folding />
         </state>
       </provider>

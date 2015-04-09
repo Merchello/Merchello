@@ -30,7 +30,7 @@
         /// <summary>
         /// The _braintree api service.
         /// </summary>
-        private IBraintreeApiService _braintreeApiService;
+        private readonly IBraintreeApiService _braintreeApiService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreeSubscriptionRecordPaymentMethod"/> class.

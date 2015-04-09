@@ -14,6 +14,7 @@
                 }, function (newValue, oldValue) {
                     $scope.dialogData.provider.extendedData.setValue('braintreeProviderSettings', angular.toJson(newValue));
                 }, true);
+
             }
 
             // initialize the controller

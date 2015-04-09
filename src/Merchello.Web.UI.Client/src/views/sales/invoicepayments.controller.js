@@ -101,6 +101,7 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 if (payment.voided) {
                     return false;
                 }
+                console.info(payment);
                 var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; })
                 if (exists !== undefined) {
                     return exists.voidPaymentEditorView.editorView !== '';

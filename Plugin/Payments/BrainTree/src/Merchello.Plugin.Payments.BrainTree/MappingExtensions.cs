@@ -223,10 +223,10 @@
         /// <returns>
         /// The <see cref="Transaction"/>.
         /// </returns>
-        public static Transaction GetBraintreeTransaction(this ExtendedDataCollection extendedData)
+        public static TransactionReference GetBraintreeTransaction(this ExtendedDataCollection extendedData)
         {
             return extendedData.ContainsKey(Constants.ExtendedDataKeys.BraintreeTransaction)
-                ? JsonConvert.DeserializeObject<Transaction>(
+                ? JsonConvert.DeserializeObject<TransactionReference>(
                     extendedData.GetValue(Constants.ExtendedDataKeys.BraintreeTransaction))
                 : null;
         }

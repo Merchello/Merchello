@@ -3,5 +3,6 @@
 		'~/App_Plugins/Merchello.Braintree/payment.braintree.module.js',
 		'~/App_Plugins/Merchello.Braintree/payment.braintree.models.js',
 		'~/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.controller.js',
+		'~/App_Plugins/Merchello.Braintree/dialogs/braintree.payment.dialog.controllers.js'
 	]
 }
