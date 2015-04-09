@@ -3,6 +3,7 @@
   <area alias="merchelloButtons">
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
+    <key alias="delete">Delete</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Katalog</key>
@@ -94,6 +95,9 @@
     <key alias="createOrder">Create Order</key>
     <key alias="sales">Sales</key>
     <key alias="saleInformation">Sale Information</key>
+    <key alias="voidPayment">Void Payment</key>
+    <key alias="refundPayment">Refund Payment</key>
+    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -318,6 +322,8 @@
     <key alias="addPaymentMethod">Tilføj betalingsmetode</key>
     <key alias="resourceType">Betalingstype:</key>
     <key alias="deletePayment">Fjern en betalingsmetode</key>
+    <key alias="paymentInfo">Payment Information</key>
+    <key alias="paymentMethod">Payment Method</key>
   </area>
   <area alias="merchelloPaymentMethod">
     <key alias="addEditPayment">Tilføj/Redigér en betalingsmetode</key>
