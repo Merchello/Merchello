@@ -2,125 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0c8517c-4cb8-4237-b0ab-5358043bdf8d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/dialogdata/AddEditCampaignSettingsDialogData.model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/tests/unit/models/AddressDisplay.model.spec.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Marketing/CampaignActivityAttribute.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/CampaignActivityBase.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/CampaignActivitySettings.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Models/ContentEditing/CampaignActivitySettingsDisplay.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/marketing/CampaignActivitySettingsDisplay.model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/Rdbms/CampaignActivitySettingsDto.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Factories/CampaignActivitySettingsFactory.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Mappers/CampaignActivitySettingsMapper.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Repositories/CampaignActivitySettingsRepository.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/CampaignActivitySettingsService.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.IntegrationTests/Services/CampaignSettings/CampaignActivitySettingsTests.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/TypeFields/CampaignActivityTypeField.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Models/MapperResolvers/CampaignActivityTypeFieldResolver.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/CampaignSettings.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/CampaignSettingsBase.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Models/ContentEditing/CampaignSettingsDisplay.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/marketing/CampaignSettingsDisplay.model.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/Rdbms/CampaignSettingsDto.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/CampaignSettingsExtensions.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Factories/CampaignSettingsFactory.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Mappers/CampaignSettingsMapper.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Repositories/CampaignSettingsRepository.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/CampaignSettingsService.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.IntegrationTests/Services/CampaignSettings/CampaignSettingsServiceTests.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Migrations/Upgrades/TargetVersionOneNineZero/CreateOneNineZeroTables.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/Interfaces/ICampaignActivitySettings.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Repositories/Interfaces/ICampaignActivitySettingsRepository.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/Interfaces/ICampaignActivitySettingsService.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/TypeFields/Interfaces/ICampaignActivityTypeField.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/Interfaces/ICampaignSettings.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/Interfaces/ICampaignSettingsBase.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Repositories/Interfaces/ICampaignSettingsRepository.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/Interfaces/ICampaignSettingsService.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Editors/MarketingCampaignApiController.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/factories/marketing/campaignActivitySettingsDisplayBuilder.factory.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/factories/marketing/campaignSettingsDisplayBuilder.factory.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/marketing/campaignedit.controller.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/marketing/campaignedit.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/campaignedit.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/marketing/dialogs/marketing.create.campaign.controller.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/marketing/dialogs/marketing.create.campaign.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/dialogs/marketing.create.campaign.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/marketingcampaign.resource.js" />
-      <change type="DELETED" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI.Client\src\common\resources\readme" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/Umbraco.sdf" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/Umbraco.sdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../.gitignore" afterPath="$PROJECT_DIR$/../../../../../../../.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.IntegrationTests/App.config" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.IntegrationTests/App.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/AppliedPaymentService.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/AppliedPaymentService.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/AutoMapperMappings-Payment.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/AutoMapperMappings-Payment.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/AutoMapperMappings.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/AutoMapperMappings.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/Mappers/AutoMapperTests.cs" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/Mappers/AutoMapperTests.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Migrations/Initial/BaseDataCreation.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Migrations/Initial/BaseDataCreation.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Constants-Keys.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Constants-Keys.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Migrations/Initial/DatabaseSchemaCreation.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Migrations/Initial/DatabaseSchemaCreation.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/TypeFields/EntityTypeField.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/TypeFields/EntityTypeField.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/TypeFields/EnumTypeFieldConverter.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/TypeFields/EnumTypeFieldConverter.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/Interfaces/IServiceContext.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/Interfaces/IServiceContext.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/Interfaces/IStoreSettingService.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/Interfaces/IStoreSettingService.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.IntegrationTests/A.DbInstall/InitialDataTests.cs" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.IntegrationTests/A.DbInstall/InitialDataTests.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/Localization/LocalizationFileTests.cs" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/Localization/LocalizationFileTests.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Merchello.Core.csproj" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Merchello.Core.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.IntegrationTests/Merchello.Tests.IntegrationTests.csproj" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.IntegrationTests/Merchello.Tests.IntegrationTests.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.XML" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.XML" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Merchello.Web.csproj" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Merchello.Web.csproj" />
-      <change type="MODIFICATION" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\config\Merchello.config" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/config/Merchello.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Mappers/MerchelloMapper.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/Mappers/MerchelloMapper.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/Mappers/MerchelloMapperTests.cs" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/Mappers/MerchelloMapperTests.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Editors/PaymentGatewayApiController.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Editors/PaymentGatewayApiController.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/Payment/PaymentGatewayMethodAttribute.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/Payment/PaymentGatewayMethodAttribute.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/Rdbms/ProductVariantDto.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Models/Rdbms/ProductVariantDto.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/RepositoryFactory.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Persistence/RepositoryFactory.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Trees/ServerVariablesParsingEvents.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Trees/ServerVariablesParsingEvents.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/ServiceContext.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Services/ServiceContext.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Configuration/Outline/TypeFieldDefinitionsElement.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Configuration/Outline/TypeFieldDefinitionsElement.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/TypeFieldMapperEnumerations.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/TypeFieldMapperEnumerations.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/auditlog.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/auditlog.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/marketing/campaignlist.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/marketing/campaignlist.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/marketing/campaignlist.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/marketing/campaignlist.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/campaignlist.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/campaignlist.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/customer.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/customer.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/customers/customeroverview.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/customers/customeroverview.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/customeroverview.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/customeroverview.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/lang/da.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/lang/da.xml" />
-      <change type="MODIFICATION" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\config\lang\da.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/config/lang/da.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/lang/en_us.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/lang/en_us.xml" />
-      <change type="MODIFICATION" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\config\lang\en_us.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/config/lang/en_us.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/lang/es.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/lang/es.xml" />
-      <change type="MODIFICATION" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\config\lang\es.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/config/lang/es.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/directives/filterbydaterange.directive.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/directives/filterbydaterange.directive.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/gatewayprovider.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/gatewayprovider.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/invoice.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/invoice.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/lang/it.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/lang/it.xml" />
-      <change type="MODIFICATION" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\config\lang\it.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/config/lang/it.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/merchello.config" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/config/merchello.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.directives.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.directives.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.models.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.models.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.resources.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.resources.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/tests/unit/merchello.tests.specRunner.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/tests/unit/merchello.tests.specRunner.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/factories/merchelloTabsFactory.factory.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/factories/merchelloTabsFactory.factory.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/notificationGatewayProvider.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/notificationGatewayProvider.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/order.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/order.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/payment.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/payment.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/paymentgatewayprovider.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/paymentgatewayprovider.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/product.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/product.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/saleoverview.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/saleoverview.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/saleoverview.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/saleoverview.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/saleoverview.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/saleoverview.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/settings.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/settings.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/shipment.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/shipment.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/shippingfixedrateprovider.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/shippingfixedrateprovider.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/shippinggatewayprovider.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/shippinggatewayprovider.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/taxationgatewayprovider.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/taxationgatewayprovider.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/umbraco.config" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/umbraco.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/tests/lib/merchello/umbraco.servervariables.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/tests/lib/merchello/umbraco.servervariables.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/warehouse.resource.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/resources/warehouse.resource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.module.js" afterPath="$PROJECT_DIR$/payment.braintree.module.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.html" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Merchello.Braintree.iws" />
@@ -142,17 +26,75 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="payment.braintree.providersettings.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
+      <file leaf-file-name="payment.standard.authorizepayment.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5361596">
-              <caret line="60" column="77" selection-start-line="60" selection-start-column="77" selection-end-line="60" selection-end-column="77" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="136" selection-start-line="0" selection-start-column="136" selection-end-line="0" selection-end-column="136" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="braintree.payment.dialog.controllers.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="2" column="139" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="139" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="payment.braintree.module.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/payment.braintree.module.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="payment.braintree.providersettings.controller.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="94" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="payment.braintree.models.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/payment.braintree.models.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="package.manifest" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.manifest">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="3" column="70" selection-start-line="3" selection-start-column="70" selection-end-line="3" selection-end-column="70" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Html5" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../../../.." />
@@ -162,8 +104,13 @@
       <list>
         <option value="$PROJECT_DIR$/package.manifest" />
         <option value="$PROJECT_DIR$/payment.braintree.models.js" />
+        <option value="$PROJECT_DIR$/dialogs/payment.braintree.standardmethod.authorizepayment.html" />
+        <option value="$PROJECT_DIR$/dialogs/payment.braintree.standardmethod.authorizepayment.controller.js" />
         <option value="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
         <option value="$PROJECT_DIR$/payment.braintree.providersettings.html" />
+        <option value="$PROJECT_DIR$/payment.braintree.module.js" />
+        <option value="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" />
+        <option value="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" />
       </list>
     </option>
   </component>
@@ -175,8 +122,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
+    <option name="x" value="-115" />
+    <option name="y" value="17" />
     <option name="width" value="1938" />
     <option name="height" value="1050" />
   </component>
@@ -187,7 +134,7 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="1" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
@@ -221,6 +168,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Merchello.Braintree" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Merchello.Braintree" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dialogs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -232,6 +193,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="FullScreen" value="false" />
+    <property name="DefaultHtmlFileTemplate" value="Html5" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
@@ -240,18 +202,18 @@
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
       <method />
     </configuration>
-    <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
-      <setting name="configLocationType" value="CONFIG_FILE" />
-      <setting name="settingsFile" value="" />
-      <setting name="serverType" value="INTERNAL" />
-      <setting name="preferredDebugBrowser" value="Chrome" />
-      <method />
-    </configuration>
     <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
       <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="JsTestDriver-test-runner" factoryName="JsTestDriver">
+      <setting name="configLocationType" value="CONFIG_FILE" />
+      <setting name="settingsFile" value="" />
+      <setting name="serverType" value="INTERNAL" />
+      <setting name="preferredDebugBrowser" value="Chrome" />
       <method />
     </configuration>
     <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
@@ -287,27 +249,27 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="0" />
+    <frame x="-115" y="17" width="1938" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24960423" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1641161" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -326,6 +288,14 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -397,15 +367,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package.manifest">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1104513">
+        <state vertical-scroll-proportion="0.0">
           <caret line="3" column="70" selection-start-line="3" selection-start-column="70" selection-end-line="3" selection-end-column="70" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/payment.braintree.module.js">
+    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="1" column="20" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="47" />
+          <caret line="0" column="126" selection-start-line="0" selection-start-column="126" selection-end-line="0" selection-end-column="126" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -413,21 +385,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51543945">
-          <caret line="14" column="95" selection-start-line="14" selection-start-column="95" selection-end-line="14" selection-end-column="95" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="94" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.html">
+    <entry file="file://$PROJECT_DIR$/payment.braintree.module.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5361596">
-          <caret line="60" column="77" selection-start-line="60" selection-start-column="77" selection-end-line="60" selection-end-column="77" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="139" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="139" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="136" selection-start-line="0" selection-start-column="136" selection-end-line="0" selection-end-column="136" />
           <folding />
         </state>
       </provider>

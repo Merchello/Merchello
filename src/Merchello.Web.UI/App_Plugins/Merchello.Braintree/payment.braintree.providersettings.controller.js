@@ -1,4 +1,4 @@
-﻿angular.module('merchello.plugins.braintree').controller('Merchello.Plugins.GatewayProviders.Dialogs.PaymentMethodAddEditController',
+﻿angular.module('merchello.plugins.braintree').controller('Merchello.Plugins.Braintree.Dialogs.ProviderSettingsController',
     ['$scope', 'braintreeProviderSettingsBuilder',
         function($scope, braintreeProviderSettingsBuilder) {
 
