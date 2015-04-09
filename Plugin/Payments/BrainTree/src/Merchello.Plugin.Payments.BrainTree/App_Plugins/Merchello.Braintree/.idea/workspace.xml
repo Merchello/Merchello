@@ -2,16 +2,35 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0c8517c-4cb8-4237-b0ab-5358043bdf8d" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Models/TransactionReference.cs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/dialogs/payment.cashpaymentmethod.voidpayment.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dialogs/payment.standard.refundpayment.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/payment.standard.refundpayment.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dialogs/payment.standard.voidpayment.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/payment.standard.voidpayment.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Plugin.Payments.Braintree.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Plugin.Payments.Braintree.dll" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/App.config" afterPath="$PROJECT_DIR$/../../../../../../../test/Merchello.Tests.UnitTests/App.config" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreePaymentGatewayMethodBase.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreePaymentGatewayMethodBase.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreeStandardTransactionPaymentGatewayMethod.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreeStandardTransactionPaymentGatewayMethod.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreeSubscriptionRecordPaymentMethod.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreeSubscriptionRecordPaymentMethod.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../MappingExtensions.cs" afterPath="$PROJECT_DIR$/../../MappingExtensions.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Merchello.Plugin.Payments.BrainTree.csproj" afterPath="$PROJECT_DIR$/../../Merchello.Plugin.Payments.BrainTree.csproj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../build/Merchello.Version.props" afterPath="$PROJECT_DIR$/../../../../../../../build/Merchello.Version.props" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" afterPath="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/braintree.payment.dialog.controllers.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/braintree.payment.dialog.controllers.js" />
       <change type="MODIFICATION" beforePath="C:\Working Repositories\GitHub\Merchello\src\Merchello.Web.UI\App_Plugins\Merchello\config\lang\en.xml" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/config/lang/en.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/invoicepayments.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/invoicepayments.controller.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.manifest" afterPath="$PROJECT_DIR$/package.manifest" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/package.manifest" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/package.manifest" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" afterPath="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/payment.braintree.providersettings.controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/gatewayproviders/dialogs/payment.cashpaymentmethod.refundpayment.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/gatewayproviders/dialogs/payment.cashpaymentmethod.refundpayment.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/dialogs/payment.cashpaymentmethod.refundpayment.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/Backoffice/Merchello/dialogs/payment.cashpaymentmethod.refundpayment.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" afterPath="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/payment.standard.authorizepayment.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/payment.standard.authorizepayment.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/web.config" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/web.config" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Merchello.Braintree.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,77 +55,27 @@
         <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-0.0">
-              <caret line="0" column="103" selection-start-line="0" selection-start-column="103" selection-end-line="0" selection-end-column="103" />
+              <caret line="0" column="113" selection-start-line="0" selection-start-column="113" selection-end-line="0" selection-end-column="113" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="payment.standard.voidpayment.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.voidpayment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
-              <caret line="0" column="108" selection-start-line="0" selection-start-column="108" selection-end-line="0" selection-end-column="108" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="braintree.payment.dialog.controllers.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="braintree.payment.dialog.controllers.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="111" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="111" />
+            <state vertical-scroll-proportion="0.36817104">
+              <caret line="16" column="50" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="payment.braintree.module.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/payment.braintree.module.js">
+      <file leaf-file-name="payment.standard.authorizecapturepayment.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizecapturepayment.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="payment.braintree.providersettings.controller.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/payment.braintree.providersettings.controller.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="payment.braintree.models.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/payment.braintree.models.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.manifest" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.manifest">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.44">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="payment.standard.refundpayment.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.refundpayment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38653368">
-              <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
+            <state vertical-scroll-proportion="-5.425">
+              <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
               <folding />
             </state>
           </provider>
@@ -133,12 +102,13 @@
         <option value="$PROJECT_DIR$/dialogs/payment.braintree.standardmethod.authorizepayment.controller.js" />
         <option value="$PROJECT_DIR$/payment.braintree.providersettings.html" />
         <option value="$PROJECT_DIR$/payment.braintree.module.js" />
-        <option value="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" />
         <option value="$PROJECT_DIR$/dialogs/payment.standard.voidpayment.html" />
         <option value="$PROJECT_DIR$/package.manifest" />
         <option value="$PROJECT_DIR$/payment.braintree.providersettings.controller.js" />
-        <option value="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" />
         <option value="$PROJECT_DIR$/dialogs/payment.standard.refundpayment.html" />
+        <option value="$PROJECT_DIR$/dialogs/braintree.standard.authorizecapturepayment.html" />
+        <option value="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" />
+        <option value="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" />
       </list>
     </option>
   </component>
@@ -452,14 +422,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="103" selection-start-line="0" selection-start-column="103" selection-end-line="0" selection-end-column="103" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/payment.braintree.module.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -492,18 +454,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="111" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="111" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.refundpayment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.38653368">
           <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="113" selection-start-line="0" selection-start-column="113" selection-end-line="0" selection-end-column="113" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizecapturepayment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.425">
+          <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36817104">
+          <caret line="16" column="50" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
           <folding />
         </state>
       </provider>

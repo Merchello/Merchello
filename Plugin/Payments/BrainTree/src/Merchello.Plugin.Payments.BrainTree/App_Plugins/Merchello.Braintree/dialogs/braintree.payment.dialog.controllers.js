@@ -6,6 +6,32 @@
 
     }]);
 
+    angular.module('merchello.plugins.braintree').controller('Merchello.Plugins.Braintree.Dialogs.Standard.AuthorizeCapturePaymentController',
+        ['$scope', 'invoiceHelper',
+        function($scope, invoiceHelper) {
+
+            $scope.wasFormSubmitted = false;
+            $scope.save = save;
+
+            function init() {
+                // TODO ADD Customer to dialogData
+                $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.invoiceBalance, 2);
+            }
+
+            function save() {
+                $scope.wasFormSubmitted = true;
+                if(invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.appliedAmount)) {
+                    $scope.submit($scope.dialogData);
+                } else {
+                    $scope.refundForm.amount.$setValidity('amount', false);
+                }
+            }
+
+
+            // Initialize the controller
+            init();
+        }]);
+
     angular.module('merchello.plugins.braintree').controller('Merchello.Plugins.Braintree.Dialogs.Standard.VoidPaymentController',
         ['$scope',
         function($scope) {

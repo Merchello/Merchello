@@ -5,9 +5,12 @@
     <div class="umb-panel-body with-header with-footer">
         <form name="refundForm" id="refundForm">
         <div class="control-group row-fluid">
-            <p>
-                <localize key="merchelloOrder_refundMethod" /> <strong>{{dialogData.paymentMethodName}}</strong><br />
-            </p>
+            <div class="control-group row-fluid">
+                <h4><localize key="merchelloOrder_refundMethod" /> {{dialogData.paymentMethodName}}</h4>
+                <div data-ng-show="dialogData.warning !== undefined && dialogData.warning != ''">
+                    <p class="text-warning">{{ dialogData.warning }}</p>
+                </div>
+            </div>
             <div class="col-xs-12 span12">
                 <label for="amount">*Amount</label>
                 <div class="error" data-ng-show="refundForm.amount.$invalid && wasFormSubmitted">Amount between {{0 | currency: currencySymbol }} & {{ dialogData.appliedAmount | currency: currencySymbol }}.</div>
