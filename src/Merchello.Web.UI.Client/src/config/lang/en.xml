@@ -3,6 +3,7 @@
   <area alias="merchelloButtons">
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
+    <key alias="delete">Delete</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
