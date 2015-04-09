@@ -81,9 +81,7 @@
     <key alias="filter">Filter Invoices</key>
     <key alias="capturePayment">Capture Payment</key>
     <key alias="processPayment">Process Payment</key>
-    <key alias="voidPayment">Void Payment</key>
-    <key alias="refundPayment">Refund Payment</key>
-    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
+
     <!-- phrases -->
     <key alias="invoicesPerPage">Invoices / Page</key>
     <key alias="noOrders">You have no orders.</key>
@@ -310,12 +308,11 @@
     <key alias="deactivate" >deactivate</key>
   </area>
   <area alias="merchelloPayment">
-    <key alias="paymentInfo">Payment Information</key>
     <key alias="payment" >Payment</key>
     <key alias="addPaymentMethod" >Add a Method</key>
     <key alias="resourceType" >Resource Type:</key>
     <key alias="deletePayment" >Delete a Payment Method</key>
-    <key alias="paymentMethod">Payment Method</key>
+
   </area>
   <area alias="merchelloPaymentMethod">
     <key alias="addEditPayment" >Add/Edit a Payment Method</key>
