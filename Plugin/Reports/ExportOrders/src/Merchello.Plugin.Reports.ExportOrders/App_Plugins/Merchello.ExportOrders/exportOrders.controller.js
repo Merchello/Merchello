@@ -44,7 +44,7 @@
          */
         function exportOrders(filterStartDate, filterEndDate) {
             // prevent exporting more orders until current order is complete
-            if (loaded == false) {
+            if ($scope.loaded == false) {
                 return;
             }
 

@@ -135,6 +135,14 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);
             }
 
+            foreach (var applied in payment.AppliedPayments())
+            {
+                applied.TransactionType = AppliedPaymentType.Refund;
+                applied.Amount = 0;
+                applied.Description += " - Refunded";
+                GatewayProviderService.Save(applied);
+            }
+
             payment.Amount = payment.Amount - amount;
 
             if (payment.Amount != 0)

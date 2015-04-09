@@ -6039,7 +6039,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.salesLoaded = true;
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
-            //$scope.currencySymbol = '$';
             $scope.settings = {};
             $scope.sortOrder = "desc";
             $scope.sortProperty = "-invoiceNumber";
