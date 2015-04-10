@@ -62,7 +62,12 @@ namespace Merchello.Web
                     dest => dest.IncludeInPaymentSelection,
                     opt =>
                     opt.ResolveUsing<IncludeInPaymentSelectionResolver>()
-                        .ConstructedBy(() => new IncludeInPaymentSelectionResolver()));
+                        .ConstructedBy(() => new IncludeInPaymentSelectionResolver()))
+                .ForMember(
+                    dest => dest.RequiresCustomer,
+                    opt =>
+                    opt.ResolveUsing<RequiresCustomerResolver>()
+                        .ConstructedBy(() => new RequiresCustomerResolver()));
 
         }
     }

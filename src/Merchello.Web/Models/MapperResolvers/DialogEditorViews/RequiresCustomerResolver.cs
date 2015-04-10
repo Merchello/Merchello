@@ -5,15 +5,13 @@
     using AutoMapper;
 
     using Merchello.Core.Gateways.Payment;
-    using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Core;
-    using Umbraco.Core.IO;
 
     /// <summary>
-    /// The refund payment dialog editor view resolver.
+    /// The requires customer resolver.
     /// </summary>
-    internal class IncludeInPaymentSelectionResolver : ValueResolver<IPaymentGatewayMethod, bool>
+    internal class RequiresCustomerResolver : ValueResolver<IPaymentGatewayMethod, bool>
     {
         /// <summary>
         /// The resolve core.
@@ -22,15 +20,14 @@
         /// The source.
         /// </param>
         /// <returns>
-        /// A bool indicating whether or not this payment method should be included in payment method selection.
+        /// Returns a bool indicating whether or not this payment method can only be used by known customers.
         /// </returns>
         protected override bool ResolveCore(IPaymentGatewayMethod source)
         {
             // Check for custom attribute
             var editorAtt = source.GetType().GetCustomAttributes<PaymentGatewayMethodAttribute>(false).FirstOrDefault();
 
-            return editorAtt == null || editorAtt.IncludeInPaymentSelection;
-
+            return editorAtt == null || editorAtt.RequiresCustomer;
         }
     }
 }

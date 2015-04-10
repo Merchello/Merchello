@@ -57,5 +57,10 @@
         /// Gets or sets a value indicating whether include in payment selection.
         /// </summary>
         public bool IncludeInPaymentSelection { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether  or not this payment method can only be used by known customers.
+        /// </summary>
+        public bool RequiresCustomer { get; set; }
     }
 }

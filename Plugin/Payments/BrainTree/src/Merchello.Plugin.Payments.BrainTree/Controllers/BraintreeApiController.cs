@@ -77,8 +77,11 @@ namespace Merchello.Plugin.Payments.Braintree.Controllers
         [HttpGet]
         public string GetClientRequestToken(Guid customerKey)
         {
-            Mandate.ParameterCondition(customerKey != Guid.Empty, "customerKey");
-           
+            if (customerKey == Guid.Empty)
+            {
+                return _braintreeApiService.Customer.GenerateClientRequestToken();
+            } 
+
             var customer = _customerService.GetAnyByKey(customerKey);
 
             return customer.IsAnonymous

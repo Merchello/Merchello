@@ -1,22 +1,56 @@
-<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Plugins.Braintree.Dialogs.Standard.AuthorizePaymentController">
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Plugins.Braintree.Dialogs.Standard.AuthorizeCapturePaymentController">
     <div class="umb-modalcolumn-header">
         <h4>Authorize {{dialogData.paymentMethodName}} Payment</h4>
     </div>
-    <div class="umb-panel-body with-header with-footer">
+    <div class="umb-panel-body with-header with-footer" data-ng-show="loaded">
 
         <div class="control-group row-fluid">
             <p>
-                <localize key="merchelloOrder_processedBy" /> <strong>{{dialogData.paymentMethodName}}</strong><br />
+                <localize key="merchelloOrder_processedBy" />: <strong>{{dialogData.paymentMethodName}}</strong><br />
             </p>
+            <div data-ng-show="dialogData.warning !== undefined && dialogData.warning != ''">
+                <p class="text-warning">{{ dialogData.warning }}</p>
+            </div>
             <div class="input-prepend col-xs-12 span12">
                 <span class="add-on">{{dialogData.currencySymbol}}</span>
                 <input class="col-xs-4 span4" type="text" data-ng-model="dialogData.amount">
             </div>
         </div>
+        <div class="control-group row-fluid">
+            <label class="control-label">Card Holder Name</label>
+            <div class="controls">
+                <input class="span8" type="text" data-ng-model="cardholderName" value="" placeholder="Card Holder Name">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <label class="control-label">Credit Card Number</label>
+            <div class="controls">
+                <input class="span8" type="text" data-ng-model="cardNumber" value="" placeholder="Credit Card Number">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <div class="controls">
+                <label class="control-label">Expiration Date</label>
+                <select ng-init="selectedMonth = months[0]" ng-model="selectedMonth" data-ng-options="option.monthName for option in months" class="span4"></select>
 
+                <select data-ng-init="expirationYear = years[0]" data-ng-model="expirationYear" data-ng-options="option for option in years"  class="span3"></select>
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <label class="control-label">CVV</label>
+            <div class="controls">
+                <input type="text" data-ng-model="cvv" value="" class="span3" placeholder="CVV">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <label class="control-label">Billing Zip</label>
+            <div class="controls">
+                <input type="text" data-ng-model="postalCode" value="" placeholder="Postal code">
+            </div>
+        </div>
     </div>
 
-    <div class="umb-panel-footer" >
+    <div class="umb-panel-footer" data-ng-show="loaded">
         <div class="umb-el-wrap umb-panel-buttons">
             <div class="btn-toolbar umb-btn-toolbar pull-right">
 
@@ -24,13 +58,17 @@
                     <localize key="general_cancel">Cancel</localize>
                 </a>
 
-                <button
-                        class="btn btn-primary"
+                <button class="btn btn-primary"
                         data-ng-click="submit(dialogData)">
                     <localize key="merchelloOrder_processPayment" />
                 </button>
 
             </div>
         </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="pager" data-ng-show="!loaded">
+        <img src="/umbraco/assets/img/loader.gif" />
     </div>
 </div>

@@ -1,7 +1,11 @@
 ﻿namespace Merchello.Plugin.Payments.Braintree
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
 
     using Braintree;
 
@@ -10,13 +14,15 @@
     using global::Braintree;
 
     using Merchello.Core.Models;
+    using Merchello.Plugin.Payments.Braintree.Controllers;
     using Merchello.Plugin.Payments.Braintree.Models;
     using Merchello.Plugin.Payments.Braintree.Services;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
-
+    using Umbraco.Web;
+    using Umbraco.Web.UI.JavaScript;
 
     /// <summary>
     /// Handles Umbraco application events.
@@ -42,6 +48,8 @@
 
             AutoMapperMappings.CreateMappings();
 
+            ServerVariablesParser.Parsing += ServerVariablesParserOnParsing;
+
             //// Clear cache for customer
             //// TODO this is sort of punting to blanket clear all cached braintree requests
             //// but in some cases a customer needs to be cleared when the id is not available
@@ -51,6 +59,29 @@
             BraintreeSubscriptionApiService.Updated += BraintreeSubscriptionApiServiceOnUpdated;
             BraintreePaymentMethodApiService.Created += BraintreePaymentMethodApiServiceOnCreated;
             BraintreePaymentMethodApiService.Updating += BraintreePaymentMethodApiServiceOnUpdating;
+        }
+
+        /// <summary>
+        /// The server variables parser on parsing.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The dictionary.
+        /// </param>
+        private static void ServerVariablesParserOnParsing(object sender, Dictionary<string, object> e)
+        {
+            if (HttpContext.Current == null) throw new InvalidOperationException("HttpContext is null");
+
+            var urlHelper = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
+
+            e.Add(
+                "merchelloBraintree", 
+                new Dictionary<string, object>
+            {
+                { "merchelloBraintreeBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<BraintreeApiController>(controller => controller.GetClientRequestToken(Guid.Empty)) }
+            });
         }
 
         /// <summary>

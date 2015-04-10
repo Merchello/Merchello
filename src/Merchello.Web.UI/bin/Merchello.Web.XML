@@ -616,7 +616,7 @@
             The source.
             </param>
             <returns>
-            The <see cref="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay"/>.
+            A bool indicating whether or not this payment method should be included in payment method selection.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.RefundPaymentDialogEditorViewResolver">
@@ -633,6 +633,22 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.RequiresCustomerResolver">
+            <summary>
+            The requires customer resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.RequiresCustomerResolver.ResolveCore(Merchello.Core.Gateways.Payment.IPaymentGatewayMethod)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            Returns a bool indicating whether or not this payment method can only be used by known customers.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.VoidPaymentDialogEditorViewResolver">
@@ -7998,6 +8014,11 @@
         <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.IncludeInPaymentSelection">
             <summary>
             Gets or sets a value indicating whether include in payment selection.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.RequiresCustomer">
+            <summary>
+            Gets or sets a value indicating whether  or not this payment method can only be used by known customers.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.ShipFixedRateTableDisplay">

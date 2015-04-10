@@ -1529,6 +1529,8 @@
         self.authorizeCapturePaymentEditorView = {};
         self.voidPaymentEditorView = {};
         self.refundPaymentEditorView = {};
+        self.includeInPaymentSelection = true;
+        self.requiresCustomer = false;
     };
 
     angular.module('merchello.models').constant('PaymentMethodDisplay', PaymentMethodDisplay);
