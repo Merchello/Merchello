@@ -35,6 +35,7 @@
             $scope.shipmentLineItems = [];
             $scope.customLineItems = [];
             $scope.discountLineItems = [];
+            $scope.debugAllowDelete = false;
 
             // exposed methods
             //  dialogs
@@ -60,6 +61,9 @@
                 $scope.tabs = merchelloTabsFactory.createSalesTabs($routeParams.id);
                 $scope.tabs.setActive('overview');
                 $scope.loaded = true;
+                if(Umbraco.Sys.ServerVariables.isDebuggingEnabled) {
+                    $scope.debugAllowDelete = true;
+                }
             }
 
             function localizeMessage(msg) {
@@ -156,26 +160,31 @@
                    notificationsService.error('Failed to load global settings', reason.message);
                })
 
-                var currencySymbolPromise = settingsResource.getAllCurrencies();
-                currencySymbolPromise.then(function (symbols) {
-                    var currency = _.find(symbols, function(symbol) {
-                        return symbol.currencyCode === $scope.invoice.getCurrencyCode()
-                    });
-                    if (currency !== undefined) {
-                    $scope.currencySymbol = currency.symbol;
-                    } else {
-                        // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
-                        // default currency
-                        var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
-                        defaultCurrencyPromise.then(function (currencySymbol) {
-                            $scope.currencySymbol = currencySymbol;
-                        }, function (reason) {
-                            notificationService.error('Failed to load the default currency symbol', reason.message);
+               // TODO this can be refactored now that we have currency on the invoice model
+               if ($scope.invoice.currency.symbol === '') {
+                    var currencySymbolPromise = settingsResource.getAllCurrencies();
+                    currencySymbolPromise.then(function (symbols) {
+                        var currency = _.find(symbols, function(symbol) {
+                            return symbol.currencyCode === $scope.invoice.getCurrencyCode()
                         });
-                    }
-                }, function (reason) {
-                    alert('Failed: ' + reason.message);
-                });
+                        if (currency !== undefined) {
+                        $scope.currencySymbol = currency.symbol;
+                        } else {
+                            // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
+                            // default currency
+                            var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
+                            defaultCurrencyPromise.then(function (currencySymbol) {
+                                $scope.currencySymbol = currencySymbol;
+                            }, function (reason) {
+                                notificationService.error('Failed to load the default currency symbol', reason.message);
+                            });
+                        }
+                    }, function (reason) {
+                        alert('Failed: ' + reason.message);
+                    });
+               } else {
+                   $scope.currencySymbol = $scope.invoice.currency.symbol;
+               }
             }
 
             /**
@@ -211,7 +220,7 @@
              * @name capturePayment
              * @function
              *
-             * @description - Open the capture shipment dialog.
+             * @description - Open the capture payment dialog.
              */
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
@@ -223,7 +232,7 @@
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
-                    if (pm.authorizeCapturePaymentDialogEditorView !== '') {
+                    if (pm.authorizeCapturePaymentEditorView.editorView !== '') {
                         dialogData.authorizeCapturePaymentEditorView = pm.authorizeCapturePaymentEditorView.editorView;
                     } else {
                         dialogData.authorizeCapturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
@@ -291,6 +300,7 @@
                     data.order = $scope.invoice.orders[0]; // todo: pull from current order when multiple orders is available
                     data.order.items = data.order.getUnShippedItems();
                     data.shipmentStatuses = statuses;
+                    data.currencySymbol = $scope.currencySymbol;
 
                     // packaging
                     var quotedKey = '7342dcd6-8113-44b6-bfd0-4555b82f9503';

@@ -22,7 +22,7 @@ namespace Merchello.Plugin.Payments.AuthorizeNet
         }
 
         /// <summary>
-        /// Get teh processor settings from the extended data collection
+        /// Get the processor settings from the extended data collection
         /// </summary>
         /// <param name="extendedData">The <see cref="ExtendedDataCollection"/></param>
         /// <returns>The deserialized <see cref="AuthorizeNetProcessorSettings"/></returns>

@@ -231,10 +231,12 @@
     <Compile Include="TransactionMode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello.PurchaseOrder\editor.html" />
-    <Content Include="App_Plugins\Merchello.PurchaseOrder\merchello.purchaseorder.controller.js" />
-    <Content Include="App_Plugins\Merchello.PurchaseOrder\merchello.purchaseorder.paymentmethod.controller.js" />
-    <Content Include="App_Plugins\Merchello.PurchaseOrder\paymentmethod.html" />
+    <Content Include="App_Plugins\Merchello.PurchaseOrder\payment.purchaseorder.models.js" />
+    <Content Include="App_Plugins\Merchello.PurchaseOrder\payment.purchaseorder.providersettings.html" />
+    <Content Include="App_Plugins\Merchello.PurchaseOrder\payment.purchaseorder.providersettings.controller.js" />
+    <Content Include="App_Plugins\Merchello.PurchaseOrder\payment.purchaseorder.paymentmethoddialog.controller.js" />
+    <Content Include="App_Plugins\Merchello.PurchaseOrder\payment.purchaseorder.module.js" />
+    <Content Include="App_Plugins\Merchello.PurchaseOrder\payment.purchaseorder.paymentmethoddialog.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

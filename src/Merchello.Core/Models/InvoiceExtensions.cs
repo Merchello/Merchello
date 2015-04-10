@@ -13,6 +13,7 @@
     using Gateways.Payment;
     using Gateways.Taxation;
 
+    using Merchello.Core.Cache;
     using Merchello.Core.Models.TypeFields;
 
     using Newtonsoft.Json;
@@ -53,6 +54,40 @@
                 invoice.Items.Select(x => x.ExtendedData.GetValue(Constants.ExtendedDataKeys.CurrencyCode)).Distinct().ToArray();
 
             return allCurrencyCodes.Any() ? allCurrencyCodes.First() : string.Empty;
+        }
+
+        /// <summary>
+        /// The currency.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICurrency"/>.
+        /// </returns>
+        public static ICurrency Currency(this IInvoice invoice)
+        {
+            return invoice.Currency(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// The currency.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICurrency"/>.
+        /// </returns>
+        internal static ICurrency Currency(this IInvoice invoice, IMerchelloContext merchelloContext)
+        {
+            var currencyCode = invoice.CurrencyCode();
+            return !string.IsNullOrEmpty(currencyCode)
+                       ? merchelloContext.Services.StoreSettingService.GetCurrencyByCode(currencyCode)
+                       : null;
         }
 
         #region Address
@@ -106,16 +141,21 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
+        /// <param name="currencySymbol">
+        /// The currency symbol
+        /// </param>
         /// <returns>
         /// The collection of replaceable patterns
         /// </returns>
-        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice)
+        internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice, string currencySymbol)
         {
-            // TODO localization needed on pricing and datetime
+            
+
             var patterns = new List<IReplaceablePattern>
             {
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceKey", invoice.Key.ToString()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceNumber", invoice.PrefixedInvoiceNumber()),
-                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceDate", invoice.InvoiceDate.ToShortDateString()),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceDate", invoice.InvoiceDate.FormatAsStoreDate()),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToName", invoice.BillToName),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToAddress1", invoice.BillToAddress1),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToAddress2", invoice.BillToAddress2),
@@ -126,13 +166,19 @@
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToEmail", invoice.BillToEmail),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToPhone", invoice.BillToPhone),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("BillToCompany", invoice.BillToCompany),
-                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.ToString("C")),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalItemPlusCustom", (invoice.TotalCustomItemPrice() + invoice.TotalItemPrice()).FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalDiscountPrice", invoice.TotalDiscounts().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalItemPrice", invoice.TotalItemPrice().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalShippingPrice", invoice.TotalShipping().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalCustomPrice", invoice.TotalCustomItemPrice().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalTaxPrice", invoice.TotalTax().FormatAsPrice(currencySymbol)),
+                ReplaceablePattern.GetConfigurationReplaceablePattern("TotalPrice", invoice.Total.FormatAsPrice(currencySymbol)),
                 ReplaceablePattern.GetConfigurationReplaceablePattern("InvoiceStatus", invoice.InvoiceStatus.Name)                
             };
 
-            patterns.AddRange(invoice.LineItemReplaceablePatterns());
+            patterns.AddRange(invoice.LineItemReplaceablePatterns(currencySymbol));
            
-            return patterns;
+            return patterns.Where(x => x != null);
         }
        
         #endregion
@@ -679,10 +725,29 @@
         /// <summary>
         /// Sums the total price of invoice items
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
         public static decimal TotalItemPrice(this IInvoice invoice)
         {                                                                 
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice);
+        }
+
+        /// <summary>
+        /// Sums the total prices of custom line items.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal TotalCustomItemPrice(this IInvoice invoice)
+        {
+            return invoice.Items.Where(x => x.LineItemType == LineItemType.Custom).Sum(x => x.TotalPrice);
         }
 
         /// <summary>
@@ -768,6 +833,7 @@
                     writer.WriteAttributeString("exported", invoice.Exported.ToString());
                     writer.WriteAttributeString("archived", invoice.Archived.ToString());
                     writer.WriteAttributeString("total", invoice.Total.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("currency", GetCurrencyJson(invoice.Currency()));
                     writer.WriteAttributeString("invoiceStatus", GetInvoiceStatusJson(invoice.InvoiceStatus));
                     writer.WriteAttributeString("invoiceItems", GetGenericItemsCollection(invoice.Items));
                     writer.WriteAttributeString("createDate", invoice.CreateDate.ToString("s"));
@@ -806,7 +872,24 @@
                         }, 
                         Formatting.None);
         }
-        
+
+        /// <summary>
+        /// The get currency JSON.
+        /// </summary>
+        /// <param name="currency">
+        /// The currency.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string GetCurrencyJson(ICurrency currency)
+        {
+            if (currency == null) return string.Empty;
+
+            return JsonConvert.SerializeObject(
+                new { currency.Name, currency.CurrencyCode, currency.Symbol },
+                Formatting.None);
+        }
 
         /// <summary>
         /// The get generic items collection.

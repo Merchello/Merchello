@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2014 Umbraco HQ;
+ * Copyright (c) 2015 Umbraco HQ;
  * Licensed MIT
  */
 
@@ -720,6 +720,32 @@ angular.module("umbraco.directives")
                                     }, 400);
 
                                 });
+                                
+                                // pin toolbar to top of screen if we have focus and it scrolls off the screen
+                                var pinToolbar = function () {
+
+                                    var _toolbar = $(editor.editorContainer).find(".mce-toolbar");
+                                    var toolbarHeight = _toolbar.height();
+
+                                    var _tinyMce = $(editor.editorContainer);
+                                    var tinyMceRect = _tinyMce[0].getBoundingClientRect();
+                                    var tinyMceTop = tinyMceRect.top;
+                                    var tinyMceBottom = tinyMceRect.bottom;
+
+                                    if (tinyMceTop < 100 && (tinyMceBottom > (100 + toolbarHeight))) {
+                                        _toolbar
+                                            .css("visibility", "visible")
+                                            .css("position", "fixed")
+                                            .css("top", "100px")
+                                            .css("margin-top", "0");
+                                    } else {
+                                        _toolbar
+                                            .css("visibility", "visible")
+                                            .css("position", "absolute")
+                                            .css("top", "auto")
+                                            .css("margin-top", (-toolbarHeight - 2) + "px");
+                                    }
+                                };
 
                                 //when we leave the editor (maybe)
                                 editor.on('blur', function (e) {
@@ -735,6 +761,7 @@ angular.module("umbraco.directives")
                                         }
 
                                         _toolbar.css("visibility", "hidden");
+                                        $('.umb-panel-body').off('scroll', pinToolbar);
                                     });
                                 });
 
@@ -742,17 +769,12 @@ angular.module("umbraco.directives")
                                 editor.on('focus', function (e) {
                                     angularHelper.safeApply(scope, function () {
 
-                                        var _toolbar = $(editor.editorContainer)
-                                             .find(".mce-toolbar");
-
                                         if(scope.onFocus){
                                             scope.onFocus();
                                         }
 
-                                        var toolbarHeight = -_toolbar.height() - 2;
-                                        _toolbar
-                                            .css("visibility", "visible")
-                                            .css("margin-top", toolbarHeight + "px");
+                                        pinToolbar();
+                                        $('.umb-panel-body').on('scroll', pinToolbar);
                                     });
                                 });
 
@@ -760,17 +782,12 @@ angular.module("umbraco.directives")
                                 editor.on('click', function (e) {
                                     angularHelper.safeApply(scope, function () {
 
-                                        var _toolbar = $(editor.editorContainer)
-                                             .find(".mce-toolbar");
-
                                         if(scope.onClick){
                                             scope.onClick();
                                         }
 
-                                        var toolbarHeight = -_toolbar.height() - 2;
-                                        _toolbar
-                                            .css("visibility", "visible")
-                                            .css("margin-top", toolbarHeight + "px");
+                                        pinToolbar();
+                                        $('.umb-panel-body').on('scroll', pinToolbar);
                                     });
                                 });
 
@@ -1222,7 +1239,7 @@ angular.module("umbraco.directives")
 });
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbPanel
+* @name umbraco.directives.directive:umbUploadDropzone
 * @restrict E
 **/
 angular.module("umbraco.directives.html")
@@ -1230,11 +1247,6 @@ angular.module("umbraco.directives.html")
 		return {
 			restrict: 'E',
 			replace: true,
-			scope: {
-				dropping: "=",
-				files: "="
-			},
-			transclude: 'true',
 			templateUrl: 'views/directives/html/umb-upload-dropzone.html'
 		};
 	});
@@ -1524,6 +1536,170 @@ angular.module("umbraco.directives")
 		});
 /**
 * @ngdoc directive
+* @name umbraco.directives.directive:umbImageFolder
+* @restrict E
+* @function
+**/
+function umbImageFolder($rootScope, assetsService, $timeout, $log, umbRequestHelper, mediaResource, imageHelper, notificationsService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: 'views/directives/imaging/umb-image-folder.html',
+        scope: {
+            options: '=',
+            nodeId: '@',
+            onUploadComplete: '='
+        },
+        link: function (scope, element, attrs) {
+            //NOTE: Blueimp handlers are documented here: https://github.com/blueimp/jQuery-File-Upload/wiki/Options
+            //NOTE: We are using a Blueimp version specifically ~9.4.0 because any higher than that and we get crazy errors with jquery, also note
+            // that the jquery UI version 1.10.3 is required for this blueimp version! if we go higher to 1.10.4 it breaks! seriously! 
+            // It's do to with the widget framework in jquery ui changes which must have broken a whole lot of stuff. So don't change it for now.
+
+            if (scope.onUploadComplete && !angular.isFunction(scope.onUploadComplete)) {
+                throw "onUploadComplete must be a function callback";
+            }
+
+            scope.uploading = false;
+            scope.files = [];
+            scope.progress = 0;
+
+            var defaultOptions = {
+                url: umbRequestHelper.getApiUrl("mediaApiBaseUrl", "PostAddFile") + "?origin=blueimp",
+                //we'll start it manually to make sure the UI is all in order before processing
+                autoUpload: true,
+                disableImageResize: /Android(?!.*Chrome)|Opera/
+                    .test(window.navigator.userAgent),
+                previewMaxWidth: 150,
+                previewMaxHeight: 150,
+                previewCrop: true,
+                dropZone: element.find(".drop-zone"),
+                fileInput: element.find("input.uploader"),
+                formData: {
+                    currentFolder: scope.nodeId
+                }
+            };
+
+            //merge options
+            scope.blueimpOptions = angular.extend(defaultOptions, scope.options);
+
+            function loadChildren(id) {
+                mediaResource.getChildren(id)
+                    .then(function(data) {
+                        scope.images = data.items;
+                    });
+            }
+
+            function checkComplete(e, data) {
+                scope.$apply(function () {
+                    //remove the amount of files complete
+                    //NOTE: function is here instead of in the loop otherwise jshint blows up
+                    function findFile(file) { return file === data.files[i]; }
+                    for (var i = 0; i < data.files.length; i++) {
+                        var found = _.find(scope.files, findFile);
+                        found.completed = true;
+                    }
+
+                    //when none are left resync everything
+                    var remaining = _.filter(scope.files, function (file) { return file.completed !== true; });
+                    if (remaining.length === 0) {
+
+                        scope.progress = 100;
+
+                        //just the ui transition isn't too abrupt, just wait a little here
+                        $timeout(function () {
+                            scope.progress = 0;
+                            scope.files = [];
+                            scope.uploading = false;
+
+                            loadChildren(scope.nodeId);
+
+                            //call the callback
+                            scope.onUploadComplete.apply(this, [data]);
+
+
+                        }, 200);
+
+
+                    }
+                });
+            }
+            
+            //when one is finished
+            scope.$on('fileuploaddone', function(e, data) {
+                checkComplete(e, data);
+            });
+
+            //This handler gives us access to the file 'preview', this is the only handler that makes this available for whatever reason
+            // so we'll use this to also perform the adding of files to our collection
+            scope.$on('fileuploadprocessalways', function(e, data) {
+                scope.$apply(function() {
+                    scope.uploading = true;
+                    scope.files.push(data.files[data.index]);
+                });
+            });
+
+            //This is a bit of a hack to check for server errors, currently if there's a non
+            //known server error we will tell them to check the logs, otherwise we'll specifically 
+            //check for the file size error which can only be done with dodgy string checking
+            scope.$on('fileuploadfail', function (e, data) {
+                if (data.jqXHR.status === 500 && data.jqXHR.responseText.indexOf("Maximum request length exceeded") >= 0) {
+                    notificationsService.error(data.errorThrown, "The uploaded file was too large, check with your site administrator to adjust the maximum size allowed");
+
+                }
+                else {
+                    notificationsService.error(data.errorThrown, data.jqXHR.statusText);
+                }
+
+                checkComplete(e, data);
+            });
+
+            //This executes prior to the whole processing which we can use to get the UI going faster,
+            //this also gives us the start callback to invoke to kick of the whole thing
+            scope.$on('fileuploadadd', function(e, data) {
+                scope.$apply(function() {
+                    scope.uploading = true;
+                });
+            });
+
+            // All these sit-ups are to add dropzone area and make sure it gets removed if dragging is aborted! 
+            scope.$on('fileuploaddragover', function(e, data) {
+                if (!scope.dragClearTimeout) {
+                    scope.$apply(function() {
+                        scope.dropping = true;
+                    });
+                }
+                else {
+                    $timeout.cancel(scope.dragClearTimeout);
+                }
+                scope.dragClearTimeout = $timeout(function() {
+                    scope.dropping = null;
+                    scope.dragClearTimeout = null;
+                }, 300);
+            });
+
+            //init load
+            loadChildren(scope.nodeId);
+
+        }
+    };
+}
+
+angular.module("umbraco.directives")
+    .directive("umbUploadPreview", function($parse) {
+        return {
+            link: function(scope, element, attr, ctrl) {
+                var fn = $parse(attr.umbUploadPreview),
+                    file = fn(scope);
+                if (file.preview) {
+                    element.append(file.preview);
+                }
+            }
+        };
+    })
+    .directive('umbImageFolder', umbImageFolder);
+/**
+* @ngdoc directive
 * @name umbraco.directives.directive:umbCropsy
 * @restrict E
 * @function
@@ -1721,6 +1897,68 @@ angular.module("umbraco.directives")
 				}
 			};
 		});
+/**
+* @ngdoc directive
+* @name umbraco.directives.directive:umbImageFileUpload
+* @restrict E
+* @function
+* @description 
+* This is a wrapper around the blueimp angular file-upload directive so that we can expose a proper API to other directives, the blueimp
+* directive isn't actually made very well and only exposes an API/events on the $scope so we can't do things like require: "^fileUpload" and use
+* it's instance.
+**/
+function umbImageUpload($compile) {
+    return {
+        restrict: 'A', 
+        scope: true,
+        link: function (scope, element, attrs) {
+            //set inner scope variable to assign to file-upload directive in the template
+            scope.innerOptions = scope.$eval(attrs.umbImageUpload);
+
+            //compile an inner blueimp file-upload with our scope
+
+            var x = angular.element('<div file-upload="innerOptions" />');
+            element.append(x);
+            $compile(x)(scope);
+        },
+
+        //Define a controller for this directive to expose APIs to other directives
+        controller: function ($scope, $element, $attrs) {
+            
+
+            //create a method to allow binding to a blueimp event (which is based on it's directives scope)
+            this.bindEvent = function (e, callback) {
+                $scope.$on(e, callback);
+            };
+
+        }
+    };
+}
+
+angular.module("umbraco.directives").directive('umbImageUpload', umbImageUpload);
+/**
+* @ngdoc directive
+* @name umbraco.directives.directive:umbImageUploadProgress
+* @restrict E
+* @function
+**/
+function umbImageUploadProgress($rootScope, assetsService, $timeout, $log, umbRequestHelper, mediaResource, imageHelper) {
+    return {
+        require: '^umbImageUpload',
+        restrict: 'E',
+        replace: true,
+        template: '<div class="progress progress-striped active"><div class="bar" ng-style="{width: progress + \'%\'}"></div></div>',
+        
+        link: function (scope, element, attrs, umbImgUploadCtrl) {
+
+            umbImgUploadCtrl.bindEvent('fileuploadprogressall', function (e, data) {
+                scope.progress = parseInt(data.loaded / data.total * 100, 10);
+            });
+        }
+    };
+}
+
+angular.module("umbraco.directives").directive('umbImageUploadProgress', umbImageUploadProgress);
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:umbItemSorter
@@ -1991,8 +2229,18 @@ angular.module("umbraco.directives")
             restrict: 'E',
             replace: true,        
             templateUrl: 'views/directives/umb-property.html',
-            link: function (scope, element, attrs, ctrl) {
 
+            //Define a controller for this directive to expose APIs to other directives
+            controller: function ($scope, $timeout) {
+               
+                var self = this;
+
+                //set the API properties/methods
+
+                self.property = $scope.property;
+                self.setPropertyError = function(errorMsg) {
+                    $scope.property.propertyErrorMessage = errorMsg;
+                };
             }
         };
     });
@@ -2133,11 +2381,11 @@ function umbTreeDirective($compile, $log, $q, $rootScope, treeService, notificat
             //var showheader = (attrs.showheader !== 'false');
             var hideoptions = (attrs.hideoptions === 'true') ? "hide-options" : "";
             var template = '<ul class="umb-tree ' + hideoptions + '"><li class="root">';
-            template += '<div ng-hide="hideheader">' +
+            template += '<div ng-hide="hideheader" on-right-click="altSelect(tree.root, $event)">' +
                 '<h5>' +
                 '<i ng-if="enablecheckboxes == \'true\'" ng-class="selectEnabledNodeClass(tree.root)"></i>' +
-                '<a href="#/{{section}}" ng-click="select(tree.root, $event)" on-right-click="altSelect(tree.root, $event)"  class="root-link">{{tree.name}}</a></h5>' +
-                '<a href class="umb-options" ng-hide="tree.root.isContainer || !tree.root.menuUrl" ng-click="options(tree.root, $event)" ng-swipe-right="options(tree.root, $event)"><i></i><i></i><i></i></a>' +
+                '<a href="#/{{section}}" ng-click="select(tree.root, $event)"  class="root-link">{{tree.name}}</a></h5>' +
+                '<a class="umb-options" ng-hide="tree.root.isContainer || !tree.root.menuUrl" ng-click="options(tree.root, $event)" ng-swipe-right="options(tree.root, $event)"><i></i><i></i><i></i></a>' +
                 '</div>';
             template += '<ul>' +
                 '<umb-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" section="{{section}}" ng-animate="animation()"></umb-tree-item>' +
@@ -2561,9 +2809,9 @@ angular.module("umbraco.directives")
             '<ins style="width:18px;"></ins>' +
             '<ins ng-class="{\'icon-navigation-right\': !node.expanded, \'icon-navigation-down\': node.expanded}" ng-click="load(node)"></ins>' +
             '<i class="icon umb-tree-icon sprTree"></i>' +
-            '<a href ng-click="select(node, $event)" on-right-click="altSelect(node, $event)"></a>' +
+            '<a ng-click="select(node, $event)"></a>' +
             //NOTE: These are the 'option' elipses
-            '<a href class="umb-options" ng-click="options(node, $event)"><i></i><i></i><i></i></a>' +
+            '<a class="umb-options" ng-click="options(node, $event)"><i></i><i></i><i></i></a>' +
             '<div ng-show="node.loading" class="l"><div></div></div>' +
             '</div>' +
             '</li>',
@@ -2579,6 +2827,7 @@ angular.module("umbraco.directives")
 
             // Helper function to emit tree events
             function emitEvent(eventName, args) {
+
                 if (scope.eventhandler) {
                     $(scope.eventhandler).trigger(eventName, args);
                 }
@@ -2609,7 +2858,7 @@ angular.module("umbraco.directives")
                 element.find("a:first").html(node.name);
 
                 if (!node.menuUrl) {
-                    element.find("a:last").remove();
+                    element.find("a.umb-options").remove();
                 }
 
                 if (node.style) {
@@ -2755,7 +3004,7 @@ angular.module("umbraco.directives")
 * @element ANY
 * @restrict E
 **/
-function treeSearchBox(localizationService, searchService) {
+function treeSearchBox(localizationService, searchService, $q) {
     return {
         scope: {
             searchFromId: "@",
@@ -2784,19 +3033,37 @@ function treeSearchBox(localizationService, searchService) {
                 scope.showSearch = "false";
             }
 
+            //used to cancel any request in progress if another one needs to take it's place
+            var canceler = null;
+
             function performSearch() {
                 if (scope.term) {
                     scope.results = [];
+                    
+                    //a canceler exists, so perform the cancelation operation and reset
+                    if (canceler) {
+                        console.log("CANCELED!");
+                        canceler.resolve();
+                        canceler = $q.defer();
+                    }
+                    else {
+                        canceler = $q.defer();
+                    }
 
                     var searchArgs = {
-                        term: scope.term
+                        term: scope.term,
+                        canceler: canceler
                     };
+
                     //append a start node context if there is one
                     if (scope.searchFromId) {
                         searchArgs["searchFrom"] = scope.searchFromId;
                     }
+
                     searcher(searchArgs).then(function (data) {
                         scope.searchCallback(data);
+                        //set back to null so it can be re-created
+                        canceler = null;
                     });
                 }
             }
@@ -3140,6 +3407,9 @@ function fixNumber($parse) {
 
             //always return an int to the model
             ctrl.$parsers.push(function (value) {
+                if (value === 0) {
+                    return 0;
+                }
                 return parseFloat(value || '', 10);
             });
 
@@ -3369,7 +3639,7 @@ function noDirtyCheck() {
         }
     };
 }
-angular.module('umbraco.directives').directive("noDirtyCheck", noDirtyCheck);
+angular.module('umbraco.directives.validation').directive("noDirtyCheck", noDirtyCheck);
 /**
  * General-purpose validator for ngModel.
  * angular.js comes with several built-in validation mechanism for input fields (ngRequired, ngPattern etc.) but using
@@ -3522,7 +3792,7 @@ function valHighlight($timeout) {
         }
     };
 }
-angular.module('umbraco.directives').directive("valHighlight", valHighlight);
+angular.module('umbraco.directives.validation').directive("valHighlight", valHighlight);
 angular.module('umbraco.directives.validation')
 	.directive('valCompare',function () {
 	return {
@@ -3547,6 +3817,50 @@ angular.module('umbraco.directives.validation')
 	        }
 	};
 });
+/**
+    * @ngdoc directive
+    * @name umbraco.directives.directive:valEmail
+    * @restrict A
+    * @description A custom directive to validate an email address string, this is required because angular's default validator is incorrect.
+    **/
+function valEmail(valEmailExpression) {
+   
+    return {
+        require: 'ngModel',
+        restrict: "A",
+        link: function (scope, elm, attrs, ctrl) {
+            
+            var patternValidator = function (viewValue) {
+                //NOTE: we don't validate on empty values, use required validator for that
+                if (!viewValue || valEmailExpression.EMAIL_REGEXP.test(viewValue)) {
+                    // it is valid
+                    ctrl.$setValidity('valEmail', true);
+                    //assign a message to the validator
+                    ctrl.errorMsg = "";
+                    return viewValue;
+                }
+                else {
+                    // it is invalid, return undefined (no model update)
+                    ctrl.$setValidity('valEmail', false);
+                    //assign a message to the validator
+                    ctrl.errorMsg = "Invalid email";
+                    return undefined;
+                }
+            };
+
+            ctrl.$formatters.push(patternValidator);
+            ctrl.$parsers.push(patternValidator);
+        }
+    };
+}
+
+angular.module('umbraco.directives.validation')
+    .directive("valEmail", valEmail)
+    .factory('valEmailExpression', function() {
+        return {
+            EMAIL_REGEXP: /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i
+        };
+    });
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:valFormManager
@@ -3654,7 +3968,7 @@ function valFormManager(serverValidationManager, $rootScope, $log, $timeout, not
         }
     };
 }
-angular.module('umbraco.directives').directive("valFormManager", valFormManager);
+angular.module('umbraco.directives.validation').directive("valFormManager", valFormManager);
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:valPropertyMsg
@@ -3666,21 +3980,85 @@ angular.module('umbraco.directives').directive("valFormManager", valFormManager)
 * and when an error is detected for this property we'll show the error message.
 * In order for this directive to work, the valStatusChanged directive must be placed on the containing form.
 **/
-function valPropertyMsg(serverValidationManager) {    
+function valPropertyMsg(serverValidationManager) {
+
     return {
         scope: {
-            property: "=property"
+            property: "="
         },
         require: "^form",   //require that this directive is contained within an ngForm
         replace: true,      //replace the element with the template
         restrict: "E",      //restrict to element
-        template: "<div ng-show=\"errorMsg != ''\" class='alert alert-error property-error' >{{errorMsg}}</div>",        
-       
+        template: "<div ng-show=\"errorMsg != ''\" class='alert alert-error property-error' >{{errorMsg}}</div>",
+
         /**
             Our directive requries a reference to a form controller 
             which gets passed in to this parameter
          */
         link: function (scope, element, attrs, formCtrl) {
+
+            var watcher = null;
+
+            // Gets the error message to display
+            function getErrorMsg() {
+                //this can be null if no property was assigned
+                if (scope.property) {
+                    //first try to get the error msg from the server collection
+                    var err = serverValidationManager.getPropertyError(scope.property.alias, "");
+                    //if there's an error message use it
+                    if (err && err.errorMsg) {
+                        return err.errorMsg;
+                    }
+                    else {
+                        return scope.property.propertyErrorMessage ? scope.property.propertyErrorMessage : "Property has errors";
+                    }
+
+                }
+                return "Property has errors";
+            }
+
+            // We need to subscribe to any changes to our model (based on user input)
+            // This is required because when we have a server error we actually invalidate 
+            // the form which means it cannot be resubmitted. 
+            // So once a field is changed that has a server error assigned to it
+            // we need to re-validate it for the server side validator so the user can resubmit
+            // the form. Of course normal client-side validators will continue to execute. 
+            function startWatch() {
+                //if there's not already a watch
+                if (!watcher) {
+                    watcher = scope.$watch("property.value", function (newValue, oldValue) {
+                        
+                        if (!newValue || angular.equals(newValue, oldValue)) {
+                            return;
+                        }
+
+                        var errCount = 0;
+                        for (var e in formCtrl.$error) {
+                            if (angular.isArray(formCtrl.$error[e])) {
+                                errCount++;
+                            }
+                        }
+
+                        //we are explicitly checking for valServer errors here, since we shouldn't auto clear
+                        // based on other errors. We'll also check if there's no other validation errors apart from valPropertyMsg, if valPropertyMsg
+                        // is the only one, then we'll clear.
+
+                        if ((errCount === 1 && angular.isArray(formCtrl.$error.valPropertyMsg)) || (formCtrl.$invalid && angular.isArray(formCtrl.$error.valServer))) {
+                            scope.errorMsg = "";
+                            formCtrl.$setValidity('valPropertyMsg', true);
+                            stopWatch();
+                        }
+                    }, true);
+                }
+            }
+
+            //clear the watch when the property validator is valid again
+            function stopWatch() {
+                if (watcher) {
+                    watcher();
+                    watcher = null;
+                }
+            }
 
             //if there's any remaining errors in the server validation service then we should show them.
             var showValidation = serverValidationManager.items.length > 0;
@@ -3690,7 +4068,7 @@ function valPropertyMsg(serverValidationManager) {
             scope.errorMsg = "";
 
             //listen for form error changes
-            scope.$on("valStatusChanged", function(evt, args) {
+            scope.$on("valStatusChanged", function (evt, args) {
                 if (args.form.$invalid) {
 
                     //first we need to check if the valPropertyMsg validity is invalid
@@ -3704,12 +4082,7 @@ function valPropertyMsg(serverValidationManager) {
                         hasError = true;
                         //update the validation message if we don't already have one assigned.
                         if (showValidation && scope.errorMsg === "") {
-                            var err;
-                            //this can be null if no property was assigned
-                            if (scope.property) {
-                                err = serverValidationManager.getPropertyError(scope.property.alias, "");
-                            }
-                            scope.errorMsg = err ? err.errorMsg : "Property has errors";
+                            scope.errorMsg = getErrorMsg();
                         }
                     }
                     else {
@@ -3727,15 +4100,11 @@ function valPropertyMsg(serverValidationManager) {
             scope.$on("formSubmitting", function (ev, args) {
                 showValidation = true;
                 if (hasError && scope.errorMsg === "") {
-                    var err;
-                    //this can be null if no property was assigned
-                    if (scope.property) {
-                        err = serverValidationManager.getPropertyError(scope.property.alias, "");
-                    }
-                    scope.errorMsg = err ? err.errorMsg : "Property has errors";
+                    scope.errorMsg = getErrorMsg();
                 }
                 else if (!hasError) {
                     scope.errorMsg = "";
+                    stopWatch();
                 }
             });
 
@@ -3743,37 +4112,10 @@ function valPropertyMsg(serverValidationManager) {
             scope.$on("formSubmitted", function (ev, args) {
                 showValidation = false;
                 scope.errorMsg = "";
-                formCtrl.$setValidity('valPropertyMsg', true);                
+                formCtrl.$setValidity('valPropertyMsg', true);
+                stopWatch();
             });
 
-            //We need to subscribe to any changes to our model (based on user input)
-            // This is required because when we have a server error we actually invalidate 
-            // the form which means it cannot be resubmitted. 
-            // So once a field is changed that has a server error assigned to it
-            // we need to re-validate it for the server side validator so the user can resubmit
-            // the form. Of course normal client-side validators will continue to execute.          
-            scope.$watch("property.value", function(newValue) {
-                //we are explicitly checking for valServer errors here, since we shouldn't auto clear
-                // based on other errors. We'll also check if there's no other validation errors apart from valPropertyMsg, if valPropertyMsg
-                // is the only one, then we'll clear.
-
-                if (!newValue) {
-                    return;
-                }
-
-                var errCount = 0;
-                for (var e in formCtrl.$error) {
-                    if (angular.isArray(formCtrl.$error[e])) {
-                        errCount++;
-                    }
-                }
-
-                if ((errCount === 1 && angular.isArray(formCtrl.$error.valPropertyMsg)) || (formCtrl.$invalid && angular.isArray(formCtrl.$error.valServer))) {
-                    scope.errorMsg = "";
-                    formCtrl.$setValidity('valPropertyMsg', true);
-                }
-            }, true);
-            
             //listen for server validation changes
             // NOTE: we pass in "" in order to listen for all validation changes to the content property, not for
             // validation changes to fields in the property this is because some server side validators may not
@@ -3781,34 +4123,109 @@ function valPropertyMsg(serverValidationManager) {
             // It's important to note that we need to subscribe to server validation changes here because we always must
             // indicate that a content property is invalid at the property level since developers may not actually implement
             // the correct field validation in their property editors.
-            
+
             if (scope.property) { //this can be null if no property was assigned
-                serverValidationManager.subscribe(scope.property.alias, "", function(isValid, propertyErrors, allErrors) {
+                serverValidationManager.subscribe(scope.property.alias, "", function (isValid, propertyErrors, allErrors) {
                     hasError = !isValid;
                     if (hasError) {
                         //set the error message to the server message
                         scope.errorMsg = propertyErrors[0].errorMsg;
                         //flag that the current validator is invalid
                         formCtrl.$setValidity('valPropertyMsg', false);
+                        startWatch();
                     }
                     else {
                         scope.errorMsg = "";
                         //flag that the current validator is valid
                         formCtrl.$setValidity('valPropertyMsg', true);
+                        stopWatch();
                     }
                 });
 
                 //when the element is disposed we need to unsubscribe!
                 // NOTE: this is very important otherwise when this controller re-binds the previous subscriptsion will remain
                 // but they are a different callback instance than the above.
-                element.bind('$destroy', function() {
+                element.bind('$destroy', function () {
+                    stopWatch();
                     serverValidationManager.unsubscribe(scope.property.alias, "");
                 });
             }
         }
     };
 }
-angular.module('umbraco.directives').directive("valPropertyMsg", valPropertyMsg);
+angular.module('umbraco.directives.validation').directive("valPropertyMsg", valPropertyMsg);
+/**
+* @ngdoc directive
+* @name umbraco.directives.directive:valPropertyValidator
+* @restrict A
+* @description Performs any custom property value validation checks on the client side. This allows property editors to be highly flexible when it comes to validation
+                on the client side. Typically if a property editor stores a primitive value (i.e. string) then the client side validation can easily be taken care of 
+                with standard angular directives such as ng-required. However since some property editors store complex data such as JSON, a given property editor
+                might require custom validation. This directive can be used to validate an Umbraco property in any way that a developer would like by specifying a
+                callback method to perform the validation. The result of this method must return an object in the format of 
+                {isValid: true, errorKey: 'required', errorMsg: 'Something went wrong' }
+                The error message returned will also be displayed for the property level validation message.
+                This directive should only be used when dealing with complex models, if custom validation needs to be performed with primitive values, use the simpler 
+                angular validation directives instead since this will watch the entire model. 
+**/
+
+function valPropertyValidator(serverValidationManager) {
+    return {
+        scope: {
+            valPropertyValidator: "="
+        },
+
+        // The element must have ng-model attribute and be inside an umbProperty directive
+        require: ['ngModel', '?^umbProperty'],
+
+        restrict: "A",
+
+        link: function (scope, element, attrs, ctrls) {
+
+            var modelCtrl = ctrls[0];
+            var propCtrl = ctrls.length > 1 ? ctrls[1] : null;
+            
+            // Check whether the scope has a valPropertyValidator method 
+            if (!scope.valPropertyValidator || !angular.isFunction(scope.valPropertyValidator)) {
+                throw new Error('val-property-validator directive must specify a function to call');
+            }
+
+            var initResult = scope.valPropertyValidator();
+
+            // Validation method
+            var validate = function (viewValue) {
+                // Calls the validition method
+                var result = scope.valPropertyValidator();
+                if (!result.errorKey || result.isValid === undefined || !result.errorMsg) {
+                    throw "The result object from valPropertyValidator does not contain required properties: isValid, errorKey, errorMsg";
+                }
+                if (result.isValid === true) {
+                    // Tell the controller that the value is valid
+                    modelCtrl.$setValidity(result.errorKey, true);
+                    if (propCtrl) {
+                        propCtrl.setPropertyError(null);
+                    }                    
+                }
+                else {
+                    // Tell the controller that the value is invalid
+                    modelCtrl.$setValidity(result.errorKey, false);
+                    if (propCtrl) {
+                        propCtrl.setPropertyError(result.errorMsg);
+                    }
+                }
+            };
+
+            // Formatters are invoked when the model is modified in the code.
+            modelCtrl.$formatters.push(validate);
+
+            // Parsers are called as soon as the value in the form input is modified
+            modelCtrl.$parsers.push(validate);
+
+        }
+    };
+}
+angular.module('umbraco.directives.validation').directive("valPropertyValidator", valPropertyValidator);
+
 /**
     * @ngdoc directive
     * @name umbraco.directives.directive:valRegex
@@ -3872,7 +4289,7 @@ function valRegex() {
         }
     };
 }
-angular.module('umbraco.directives').directive("valRegex", valRegex);
+angular.module('umbraco.directives.validation').directive("valRegex", valRegex);
 /**
     * @ngdoc directive
     * @name umbraco.directives.directive:valServer
@@ -3882,14 +4299,53 @@ angular.module('umbraco.directives').directive("valRegex", valRegex);
     **/
 function valServer(serverValidationManager) {
     return {
-        require: 'ngModel',
+        require: ['ngModel', '?^umbProperty'],
         restrict: "A",
-        link: function (scope, element, attr, ctrl) {
-            
-            if (!scope.model || !scope.model.alias){
-                throw "valServer can only be used in the scope of a content property object";
+        link: function (scope, element, attr, ctrls) {
+
+            var modelCtrl = ctrls[0];
+            var umbPropCtrl = ctrls.length > 1 ? ctrls[1] : null;
+            if (!umbPropCtrl) {
+                //we cannot proceed, this validator will be disabled
+                return;
             }
-            var currentProperty = scope.model;
+
+            var watcher = null;
+
+            //Need to watch the value model for it to change, previously we had  subscribed to 
+            //modelCtrl.$viewChangeListeners but this is not good enough if you have an editor that
+            // doesn't specifically have a 2 way ng binding. This is required because when we
+            // have a server error we actually invalidate the form which means it cannot be 
+            // resubmitted. So once a field is changed that has a server error assigned to it
+            // we need to re-validate it for the server side validator so the user can resubmit
+            // the form. Of course normal client-side validators will continue to execute.
+            function startWatch() {
+                //if there's not already a watch
+                if (!watcher) {
+                    watcher = scope.$watch(function () {
+                        return modelCtrl.$modelValue;
+                    }, function (newValue, oldValue) {
+
+                        if (!newValue || angular.equals(newValue, oldValue)) {
+                            return;
+                        }
+
+                        if (modelCtrl.$invalid) {
+                            modelCtrl.$setValidity('valServer', true);
+                            stopWatch();
+                        }
+                    }, true);
+                }
+            }
+
+            function stopWatch() {
+                if (watcher) {
+                    watcher();
+                    watcher = null;
+                }
+            }
+
+            var currentProperty = umbPropCtrl.property;
 
             //default to 'value' if nothing is set
             var fieldName = "value";
@@ -3900,33 +4356,20 @@ function valServer(serverValidationManager) {
                     fieldName = attr.valServer;
                 }
             }            
-
-            //Need to watch the value model for it to change, previously we had  subscribed to 
-            //ctrl.$viewChangeListeners but this is not good enough if you have an editor that
-            // doesn't specifically have a 2 way ng binding. This is required because when we
-            // have a server error we actually invalidate the form which means it cannot be 
-            // resubmitted. So once a field is changed that has a server error assigned to it
-            // we need to re-validate it for the server side validator so the user can resubmit
-            // the form. Of course normal client-side validators will continue to execute.
-            scope.$watch(function() {
-                return ctrl.$modelValue;
-            }, function (newValue) {
-                if (ctrl.$invalid) {
-                    ctrl.$setValidity('valServer', true);
-                }
-            });            
             
             //subscribe to the server validation changes
             serverValidationManager.subscribe(currentProperty.alias, fieldName, function (isValid, propertyErrors, allErrors) {
                 if (!isValid) {
-                    ctrl.$setValidity('valServer', false);
+                    modelCtrl.$setValidity('valServer', false);
                     //assign an error msg property to the current validator
-                    ctrl.errorMsg = propertyErrors[0].errorMsg;
+                    modelCtrl.errorMsg = propertyErrors[0].errorMsg;
+                    startWatch();
                 }
                 else {
-                    ctrl.$setValidity('valServer', true);
+                    modelCtrl.$setValidity('valServer', true);
                     //reset the error message
-                    ctrl.errorMsg = "";
+                    modelCtrl.errorMsg = "";
+                    stopWatch();
                 }
             });
             
@@ -3934,12 +4377,13 @@ function valServer(serverValidationManager) {
             // NOTE: this is very important otherwise when this controller re-binds the previous subscriptsion will remain
             // but they are a different callback instance than the above.
             element.bind('$destroy', function () {
+                stopWatch();
                 serverValidationManager.unsubscribe(currentProperty.alias, fieldName);
             });
         }
     };
 }
-angular.module('umbraco.directives').directive("valServer", valServer);
+angular.module('umbraco.directives.validation').directive("valServer", valServer);
 /**
     * @ngdoc directive
     * @name umbraco.directives.directive:valServerField
@@ -3993,7 +4437,7 @@ function valServerField(serverValidationManager) {
         }
     };
 }
-angular.module('umbraco.directives').directive("valServerField", valServerField);
+angular.module('umbraco.directives.validation').directive("valServerField", valServerField);
 
 /**
 * @ngdoc directive
@@ -4031,7 +4475,7 @@ function valTab() {
         }
     };
 }
-angular.module('umbraco.directives').directive("valTab", valTab);
+angular.module('umbraco.directives.validation').directive("valTab", valTab);
 function valToggleMsg(serverValidationManager) {
     return {
         require: "^form",
@@ -4118,7 +4562,7 @@ function valToggleMsg(serverValidationManager) {
 * @requires formController
 * @description This directive will show/hide an error based on: is the value + the given validator invalid? AND, has the form been submitted ?
 **/
-angular.module('umbraco.directives').directive("valToggleMsg", valToggleMsg);
+angular.module('umbraco.directives.validation').directive("valToggleMsg", valToggleMsg);
 angular.module('umbraco.directives.validation')
 .directive('valTriggerChange', function($sniffer) {
 	return {

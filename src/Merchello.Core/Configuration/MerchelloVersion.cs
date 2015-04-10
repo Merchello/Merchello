@@ -12,7 +12,7 @@
         /// <summary>
         /// The version.
         /// </summary>
-        private static readonly Version Version = new Version("1.8.0");
+        private static readonly Version Version = new Version("1.8.1");
 
         /// <summary>
         /// Gets the current version of Merchello.
@@ -39,7 +39,7 @@
         /// Gets the assembly version.
         /// </summary>
         /// <remarks>
-        /// Get the version of the Umbraco by looking at a class in that dll
+        /// Get the version of the Merchello by looking at a class in that dll
         /// Had to do it like this due to medium trust issues, see: http://haacked.com/archive/2010/11/04/assembly-location-and-medium-trust.aspx
         /// </remarks>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]

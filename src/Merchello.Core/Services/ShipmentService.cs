@@ -233,8 +233,8 @@
                 ((Shipment)shipment).ShipmentNumber = _storeSettingService.GetNextShipmentNumber();
             }
 
-            var includesStatusChange = ((Shipment)shipment).IsPropertyDirty("ShipmentStatusKey") &&
-                                       ((Shipment)shipment).HasIdentity == false;
+            var includesStatusChange = ((Shipment)shipment).IsPropertyDirty("ShipmentStatus")
+                                       && shipment.HasIdentity;
 
             if (raiseEvents)
             {
@@ -296,7 +296,7 @@
 
             var existingShipmentsWithStatusChanges =
                 shipmentsArray.Where(
-                    x => ((Shipment)x).HasIdentity == false && ((Shipment)x).IsPropertyDirty("ShipmentStatusKey"))
+                    x => ((Shipment)x).HasIdentity && ((Shipment)x).IsPropertyDirty("ShipmentStatus"))
                     .ToArray();
 
             if (raiseEvents)

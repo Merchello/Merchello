@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using Newtonsoft.Json;
-using Formatting = System.Xml.Formatting;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+
     using Merchello.Core.Models.TypeFields;
+
+    using Newtonsoft.Json;
+
+    using Formatting = System.Xml.Formatting;
 
     /// <summary>
     /// Extension methods for <see cref="IOrder"/>

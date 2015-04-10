@@ -772,6 +772,7 @@
         self.shipmentRequest = {};
         self.shipMethods = {};
         self.trackingNumber = '';
+        self.currencySymbol = '';
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);
@@ -1647,18 +1648,20 @@
             delete product['productKey'];
             delete product['attributes'];
             // remove catalog inventories that are not active
-            product.catalogInventories = _.reject(product.catalogInventories, function(ci) { return ci.active === false; });
+            product.catalogInventories = _.reject(product.catalogInventories, function (ci) {
+                return ci.active === false;
+            });
             return product;
         }
 
         // ensures a catalog is selected if the variant is marked shippable
         function ensureCatalogInventory(defaultCatalogKey) {
-            if(!this.shippable && !this.trackInventory) {
+            if (!this.shippable && !this.trackInventory) {
                 return;
             }
             // if this product is not associated with any catalogs we need to add the default catalog
             // so that we can associate shipping information
-            if(this.catalogInventories.length === 0) {
+            if (this.catalogInventories.length === 0) {
                 var inv = new CatalogInventoryDisplay();
                 inv.productVariantKey = this.key;
                 inv.catalogKey = defaultCatalogKey;
@@ -1666,9 +1669,13 @@
                 this.catalogInventories.push(inv);
             } else {
                 // if there are catalogs and none are selected we need to force the default catalog to be selected.
-                var activeInventories = _.filter(this.catalogInventories, function(ci) { return ci.active; });
-                if(activeInventories.length === 0) {
-                    var defaultInv = _.find(this.catalogInventories, function(dci) { return dci.catalogKey === defaultCatalogKey; });
+                var activeInventories = _.filter(this.catalogInventories, function (ci) {
+                    return ci.active;
+                });
+                if (activeInventories.length === 0) {
+                    var defaultInv = _.find(this.catalogInventories, function (dci) {
+                        return dci.catalogKey === defaultCatalogKey;
+                    });
                     if (defaultInv !== undefined) {
                         defaultInv.active = true;
                     }
@@ -1678,19 +1685,21 @@
 
         // removes inactive catalog inventories from a variant before save
         function removeInActiveInventories() {
-            this.catalogInventories = _.reject(this.catalogInventories, function(ci) { return ci.active === false; });
+            this.catalogInventories = _.reject(this.catalogInventories, function (ci) {
+                return ci.active === false;
+            });
         }
 
         // updates all inventory counts to the count passed as a parameter
         function setAllInventoryCount(count) {
-            angular.forEach(this.catalogInventories, function(ci) {
+            angular.forEach(this.catalogInventories, function (ci) {
                 ci.count = count;
             });
         }
 
         // updates all inventory low count to the low count passed as a parameter
         function setAllInventoryLowCount(lowCount) {
-            angular.forEach(this.catalogInventories, function(ci) {
+            angular.forEach(this.catalogInventories, function (ci) {
                 ci.lowCount = lowCount;
             });
         }
@@ -1701,13 +1710,13 @@
             var variant = new ProductVariantDisplay();
             variant = angular.extend(variant, this);
             variant.attributes = [];
-            angular.forEach(this.attributes, function(att) {
+            angular.forEach(this.attributes, function (att) {
                 var attribute = new ProductAttributeDisplay();
                 angular.extend(attribute, att);
                 variant.attributes.push(attribute);
             });
             variant.catalogInventories = [];
-            angular.forEach(this.catalogInventories, function(ci) {
+            angular.forEach(this.catalogInventories, function (ci) {
                 var inv = new CatalogInventoryDisplay();
                 angular.extend(inv, ci);
                 variant.catalogInventories.push(ci);
@@ -1716,7 +1725,7 @@
         }
 
         return {
-            getProductForMasterVariant : getProductForMasterVariant,
+            getProductForMasterVariant: getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,
@@ -1870,6 +1879,7 @@
         self.exported = '';
         self.archived = '';
         self.total = 0.0;
+        self.currency = {};
         self.items = [];
         self.orders = [];
     };
@@ -1912,9 +1922,13 @@
 
         // gets the currency code for the invoice
         function getCurrencyCode() {
-            var first = this.items[0];
-            var currencyCode = first.extendedData.getValue('merchCurrencyCode');
-            return currencyCode;
+            if (this.currency.currencyCode === '') {
+                var first = this.items[0];
+                var currencyCode = first.extendedData.getValue('merchCurrencyCode');
+                return currencyCode;
+            } else {
+                return this.currency.currencyCode;
+            }
         }
 
         // gets the product line items
@@ -1978,8 +1992,9 @@
 
         // gets a value indicating whether or not this invoice has been paid
         function isPaid() {
-            var status = this.getPaymentStatus.call(this);
-            return status === 'Paid';
+            // http://issues.merchello.com/youtrack/issue/M-659
+            var status = this.invoiceStatus.alias;
+            return status === 'paid';
         }
 
         // calculates the unpaid balance of the invoice
@@ -3905,15 +3920,16 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
     angular.module('merchello.models')
         .factory('invoiceDisplayBuilder',
         ['genericModelBuilder', 'invoiceStatusDisplayBuilder', 'invoiceLineItemDisplayBuilder',
-            'orderDisplayBuilder', 'InvoiceDisplay',
+            'orderDisplayBuilder', 'currencyDisplayBuilder', 'InvoiceDisplay',
             function(genericModelBuilder, invoiceStatusDisplayBuilder, invoiceLineItemDisplayBuilder,
-                     orderDisplayBuilder, InvoiceDisplay) {
+                     orderDisplayBuilder, currencyDisplayBuilder, InvoiceDisplay) {
                 var Constructor = InvoiceDisplay;
 
                 return {
                     createDefault: function() {
                         var invoice = new Constructor();
                         invoice.invoiceStatus = invoiceStatusDisplayBuilder.createDefault();
+                        invoice.currency = currencyDisplayBuilder.createDefault();
                         return invoice;
                     },
                     transform: function(jsonResult) {
@@ -3923,12 +3939,14 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                                 invoices[ i ].invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult[ i ].invoiceStatus);
                                 invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
                                 invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
+                                invoices[ i ].currency = currencyDisplayBuilder.transform(jsonResult[ i ].currency);
                             }
                         } else {
                             //jsonResult = JSON.stringify(jsonResult);
                             invoices.invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult.invoiceStatus);
                             invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
                             invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
+                            invoices.curreny = currencyDisplayBuilder.transform(jsonResult.currency);
                         }
                         return invoices;
                     }

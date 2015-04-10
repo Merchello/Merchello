@@ -137,7 +137,7 @@ namespace Merchello.Plugin.Payments.PayPal
 							Phone = address.Phone
 						};
 					}
-				} else if (item.LineItemTfKey == Merchello.Core.Constants.TypeFieldKeys.LineItem.ProductKey) {
+				} else {
 					var paymentItem = new PaymentDetailsItemType {
 						Name = item.Name,
 						ItemURL = (articleBySkuPath.IsEmpty() ? null : articleBySkuPath + item.Sku),
@@ -359,7 +359,7 @@ namespace Merchello.Plugin.Payments.PayPal
 		/// </summary>
 		public static string ApiVersion
 		{
-			get { return "1.0.3"; }
+			get { return "1.0.4"; }
 		}
 	}
 }

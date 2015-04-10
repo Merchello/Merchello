@@ -78,14 +78,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.7.0\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.7.0\lib\net40\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web">
-      <HintPath>..\packages\Merchello.Core.1.7.0\lib\net40\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.0\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.2.1\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -196,6 +199,7 @@
   <ItemGroup>
     <Compile Include="Controllers\SalesByItemReportApiController.cs" />
     <Compile Include="Controllers\SalesOverTimeReportApiController.cs" />
+    <Compile Include="Models\SalesOverTimeResult.cs" />
     <Compile Include="Models\SalesByItemResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Visitors\SalesByItemVisitor.cs" />
@@ -214,6 +218,9 @@
   <ItemGroup>
     <Content Include="App_Plugins\Merchello.SalesReports\assets\css\styles.css">
       <DependentUpon>styles.scss</DependentUpon>
+    </Content>
+    <Content Include="App_Plugins\Merchello.SalesReports\assets\css\styles.min.css">
+      <DependentUpon>styles.css</DependentUpon>
     </Content>
     <Content Include="App_Plugins\Merchello.SalesReports\Common\merchello.salesreports.models.js" />
     <Content Include="App_Plugins\Merchello.SalesReports\Common\merchello.salesreports.module.js" />

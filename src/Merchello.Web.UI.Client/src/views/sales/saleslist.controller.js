@@ -28,7 +28,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.salesLoaded = true;
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
-            //$scope.currencySymbol = '$';
             $scope.settings = {};
             $scope.sortOrder = "desc";
             $scope.sortProperty = "-invoiceNumber";
@@ -357,6 +356,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * Utility method to get the currency symbol for an invoice
              */
             function getCurrencySymbol(invoice) {
+
+                if (invoice.currency.symbol !== '') {
+                    return invoice.currency.symbol;
+                }
+
                 var currencyCode = invoice.getCurrencyCode();
                 var currency = _.find(allCurrencies, function(currency) {
                     return currency.currencyCode === currencyCode;

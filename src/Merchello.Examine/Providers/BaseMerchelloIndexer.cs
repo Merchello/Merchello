@@ -126,7 +126,7 @@
             }
             else if (DataService == null)
             {
-                ////By default, we will be using the UmbracoDataService
+                ////By default, we will be using the MerchelloDataService
                 ////generally this would only need to be set differently for unit testing
                 DataService = new MerchelloDataService();
             }

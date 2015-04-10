@@ -181,7 +181,7 @@
             GatewayProviderService.Save(payment);
 
             return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
-        }        
+        }
 
         /// <summary>
         /// Processes a payment against the Braintree API using the BraintreeApiService.
@@ -198,13 +198,14 @@
         /// <param name="token">
         /// The payment method nonce.
         /// </param>
+        /// <param name="email">The email</param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
         /// <remarks>
         /// This converts the <see cref="Result{Transaction}"/> into Merchello's <see cref="IPaymentResult"/>
         /// </remarks>
-        protected abstract IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token);
+        protected abstract IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "");
         
     }
 }

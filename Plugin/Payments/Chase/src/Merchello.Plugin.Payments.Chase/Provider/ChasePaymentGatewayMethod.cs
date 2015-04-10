@@ -13,7 +13,7 @@
     /// Represents an Chase Payment Method
     /// </summary>
     [GatewayMethodUi("Chase.CreditCard")]
-    [GatewayMethodEditor("Chase Payment Method Editor", "~/App_Plugins/Merchello.Chase/paymentmethod.html")]
+    [GatewayMethodEditor("Chase Payment Method Editor", "~/App_Plugins/Merchello.Chase/payment.chase.paymentmethod.html")]
     public class ChasePaymentGatewayMethod : PaymentGatewayMethodBase, IChasePaymentGatewayMethod
     {
         /// <summary>

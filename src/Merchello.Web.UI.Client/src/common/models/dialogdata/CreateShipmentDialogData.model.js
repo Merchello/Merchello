@@ -18,6 +18,7 @@
         self.shipmentRequest = {};
         self.shipMethods = {};
         self.trackingNumber = '';
+        self.currencySymbol = '';
     };
 
     angular.module('merchello.models').constant('CreateShipmentDialogData', CreateShipmentDialogData);

@@ -194,11 +194,16 @@
              * initialize a new method and pass that to the dialog service.
              */
             function addEditPaymentMethod(provider, method) {
-                if (method == undefined) {
+                if (method === undefined) {
                     method = paymentMethodDisplayBuilder.createDefault();
                     method.providerKey = provider.key; //Todo: When able to add external providers, make this select the correct provider
                     method.paymentCode = provider.selectedGatewayResource.serviceCode;
                     method.name = provider.selectedGatewayResource.name;
+                }
+
+                // assert that there is a method editor
+                //// http://issues.merchello.com/youtrack/issue/M-610
+                if (method.dialogEditorView === undefined || method.dialogEditorView.editorView === '') {
                     method.dialogEditorView.editorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html';
                 }
 

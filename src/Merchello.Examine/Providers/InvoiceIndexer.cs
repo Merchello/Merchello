@@ -43,6 +43,7 @@
                 new StaticField("total", FieldIndexTypes.ANALYZED, true, "DOUBLE"),
                 new StaticField("invoiceStatus", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("invoiceItems", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("currency", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)

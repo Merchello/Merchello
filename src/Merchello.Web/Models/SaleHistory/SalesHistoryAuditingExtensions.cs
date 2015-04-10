@@ -202,13 +202,16 @@
         /// </param>
         public static void AuditPaymentDeclined(this IPayment payment)
         {
+
             var obj = new
             {
                 area = Area,
                 key = "paymentDeclined"
             };
-
-            UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize());
+            if (payment != null)
+            {
+                UpdateAuditLog(payment.Key, EntityType.Payment, obj.Serialize()); 
+            }            
         }
 
         /// <summary>

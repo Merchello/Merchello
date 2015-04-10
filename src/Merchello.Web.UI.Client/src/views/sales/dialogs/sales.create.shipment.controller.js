@@ -12,6 +12,7 @@ angular.module('merchello')
     ['$scope', 'ShipmentRequestDisplay', 'OrderDisplay', function($scope, ShipmentRequestDisplay, OrderDisplay) {
 
         $scope.save = save;
+        $scope.currencySymbol = '';
         $scope.loaded = false;
 
         function init() {
@@ -22,9 +23,10 @@ angular.module('merchello')
             if($scope.dialogData.shipMethods.selected === null || $scope.dialogData.shipMethods.selected === undefined) {
                 $scope.dialogData.shipMethods.selected = $scope.dialogData.shipMethods.alternatives[0];
             }
-            if($scope.dialogData)
+
             $scope.dialogData.shipmentRequest = new ShipmentRequestDisplay();
             $scope.dialogData.shipmentRequest.order = angular.extend($scope.dialogData.order, OrderDisplay);
+            $scope.currencySymbol = $scope.dialogData.currencySymbol;
             $scope.loaded = true;
         }
 

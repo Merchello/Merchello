@@ -48,8 +48,15 @@
         public void Visit(ILineItem lineItem)
         {
             if (!lineItem.ExtendedData.GetTaxableValue()) return;
-            
-            lineItem.ExtendedData.SetValue(Constants.ExtendedDataKeys.LineItemTaxAmount, (lineItem.TotalPrice * this._taxRate).ToString(CultureInfo.InvariantCulture));
+            if (lineItem.LineItemType == LineItemType.Discount)
+            {
+                lineItem.ExtendedData.SetValue(Constants.ExtendedDataKeys.LineItemTaxAmount, (-lineItem.TotalPrice * this._taxRate).ToString(CultureInfo.InvariantCulture));
+            }
+            else
+            {
+                lineItem.ExtendedData.SetValue(Constants.ExtendedDataKeys.LineItemTaxAmount, (lineItem.TotalPrice * this._taxRate).ToString(CultureInfo.InvariantCulture));
+            }
+            lineItem.ExtendedData.SetValue(Constants.ExtendedDataKeys.BaseTaxRate, this._taxRate.ToString());
             _lineItems.Add(lineItem);
         }
     }

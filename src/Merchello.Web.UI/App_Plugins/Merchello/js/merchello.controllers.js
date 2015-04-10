@@ -460,7 +460,6 @@
                     $scope.tabs.setActive('overview');
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-                    console.info($scope.customer);
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
                 });
@@ -777,12 +776,24 @@
 
         }]);
 
-angular.module('merchello').controller('MerchelloDashboardController',
-    ['assetsService',
-    function(assetsService) {
+angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardController',
+    ['$scope', 'settingsResource',
+    function($scope, settingsResource) {
 
-        assetsService.loadCss('/App_Plugins/Merchello/assets/merchello.css');
+        $scope.loaded = false;
+        $scope.merchelloVersion = '';
 
+        function init() {
+            var promise = settingsResource.getMerchelloVersion();
+            promise.then(function(version) {
+                console.info(version);
+              $scope.merchelloVersion = version.replace(/['"]+/g, '');
+                $scope.loaded = true;
+            });
+        }
+
+        // initialize the controller
+        init();
     }]);
 
 /**
@@ -1631,9 +1642,9 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 promiseActivate.then(function () {
                     provider.activated = true;
                     init();
-                    notificationsService.success("Payment Method Activated");
+                    notificationsService.success(provider.name + " Method Activated");
                 }, function (reason) {
-                    notificationsService.error("Payment Method Activate Failed", reason.message);
+                    notificationsService.error(provider.name + " Activate Failed", reason.message);
                 });
             }
 
@@ -1650,9 +1661,9 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 var promiseDeactivate = gatewayProviderResource.deactivateGatewayProvider(provider);
                 promiseDeactivate.then(function () {
                     provider.activated = false;
-                    notificationsService.success("Payment Method Deactivated");
+                    notificationsService.success(provider.name + " Deactivated");
                 }, function (reason) {
-                    notificationsService.error("Payment Method Deactivate Failed", reason.message);
+                    notificationsService.error(provider.name + " Deactivate Failed", reason.message);
                 });
             }
 
@@ -1797,10 +1808,10 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
             $scope.notificationMessage.bodyText = $scope.rteProperties.value;
             var promiseSave = notificationGatewayProviderResource.updateNotificationMessage($scope.notificationMessage);
             promiseSave.then(function () {
-                notificationsService.success("Payment Method Saved");
+                notificationsService.success("Notification Message Saved");
                 init();
             }, function (reason) {
-                notificationsService.error("Payment Method Save Failed", reason.message);
+                notificationsService.error("Notification Message Save Failed", reason.message);
             });
         }
 
@@ -2299,11 +2310,16 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * initialize a new method and pass that to the dialog service.
              */
             function addEditPaymentMethod(provider, method) {
-                if (method == undefined) {
+                if (method === undefined) {
                     method = paymentMethodDisplayBuilder.createDefault();
                     method.providerKey = provider.key; //Todo: When able to add external providers, make this select the correct provider
                     method.paymentCode = provider.selectedGatewayResource.serviceCode;
                     method.name = provider.selectedGatewayResource.name;
+                }
+
+                // assert that there is a method editor
+                //// http://issues.merchello.com/youtrack/issue/M-610
+                if (method.dialogEditorView === undefined || method.dialogEditorView.editorView === '') {
                     method.dialogEditorView.editorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html';
                 }
 
@@ -3055,6 +3071,23 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
         // Initialize the controller
         init();
+}]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Backoffice.CampaignListController
+ * @function
+ *
+ * @description
+ * The controller for the marketing campaign list
+ */
+angular.module('merchello').controller('Merchello.Backoffice.CampaignListController',
+    ['$scope', 'assetsService', 'notificationsService', 'dialogService',
+    function($scope, assetsService, notificationsService, dialogService) {
+
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+
 }]);
 
     /**
@@ -4699,6 +4732,7 @@ angular.module('merchello')
     ['$scope', 'ShipmentRequestDisplay', 'OrderDisplay', function($scope, ShipmentRequestDisplay, OrderDisplay) {
 
         $scope.save = save;
+        $scope.currencySymbol = '';
         $scope.loaded = false;
 
         function init() {
@@ -4709,9 +4743,10 @@ angular.module('merchello')
             if($scope.dialogData.shipMethods.selected === null || $scope.dialogData.shipMethods.selected === undefined) {
                 $scope.dialogData.shipMethods.selected = $scope.dialogData.shipMethods.alternatives[0];
             }
-            if($scope.dialogData)
+
             $scope.dialogData.shipmentRequest = new ShipmentRequestDisplay();
             $scope.dialogData.shipmentRequest.order = angular.extend($scope.dialogData.order, OrderDisplay);
+            $scope.currencySymbol = $scope.dialogData.currencySymbol;
             $scope.loaded = true;
         }
 
@@ -5195,6 +5230,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.shipmentLineItems = [];
             $scope.customLineItems = [];
             $scope.discountLineItems = [];
+            $scope.debugAllowDelete = false;
 
             // exposed methods
             //  dialogs
@@ -5220,6 +5256,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 $scope.tabs = merchelloTabsFactory.createSalesTabs($routeParams.id);
                 $scope.tabs.setActive('overview');
                 $scope.loaded = true;
+                if(Umbraco.Sys.ServerVariables.isDebuggingEnabled) {
+                    $scope.debugAllowDelete = true;
+                }
             }
 
             function localizeMessage(msg) {
@@ -5316,26 +5355,31 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                    notificationsService.error('Failed to load global settings', reason.message);
                })
 
-                var currencySymbolPromise = settingsResource.getAllCurrencies();
-                currencySymbolPromise.then(function (symbols) {
-                    var currency = _.find(symbols, function(symbol) {
-                        return symbol.currencyCode === $scope.invoice.getCurrencyCode()
-                    });
-                    if (currency !== undefined) {
-                    $scope.currencySymbol = currency.symbol;
-                    } else {
-                        // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
-                        // default currency
-                        var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
-                        defaultCurrencyPromise.then(function (currencySymbol) {
-                            $scope.currencySymbol = currencySymbol;
-                        }, function (reason) {
-                            notificationService.error('Failed to load the default currency symbol', reason.message);
+               // TODO this can be refactored now that we have currency on the invoice model
+               if ($scope.invoice.currency.symbol === '') {
+                    var currencySymbolPromise = settingsResource.getAllCurrencies();
+                    currencySymbolPromise.then(function (symbols) {
+                        var currency = _.find(symbols, function(symbol) {
+                            return symbol.currencyCode === $scope.invoice.getCurrencyCode()
                         });
-                    }
-                }, function (reason) {
-                    alert('Failed: ' + reason.message);
-                });
+                        if (currency !== undefined) {
+                        $scope.currencySymbol = currency.symbol;
+                        } else {
+                            // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
+                            // default currency
+                            var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
+                            defaultCurrencyPromise.then(function (currencySymbol) {
+                                $scope.currencySymbol = currencySymbol;
+                            }, function (reason) {
+                                notificationService.error('Failed to load the default currency symbol', reason.message);
+                            });
+                        }
+                    }, function (reason) {
+                        alert('Failed: ' + reason.message);
+                    });
+               } else {
+                   $scope.currencySymbol = $scope.invoice.currency.symbol;
+               }
             }
 
             /**
@@ -5371,7 +5415,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              * @name capturePayment
              * @function
              *
-             * @description - Open the capture shipment dialog.
+             * @description - Open the capture payment dialog.
              */
             function capturePayment() {
                 var dialogData = dialogDataFactory.createCapturePaymentDialogData();
@@ -5383,7 +5427,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
-                    if (pm.authorizeCapturePaymentDialogEditorView !== '') {
+                    if (pm.authorizeCapturePaymentEditorView.editorView !== '') {
                         dialogData.authorizeCapturePaymentEditorView = pm.authorizeCapturePaymentEditorView.editorView;
                     } else {
                         dialogData.authorizeCapturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
@@ -5451,6 +5495,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     data.order = $scope.invoice.orders[0]; // todo: pull from current order when multiple orders is available
                     data.order.items = data.order.getUnShippedItems();
                     data.shipmentStatuses = statuses;
+                    data.currencySymbol = $scope.currencySymbol;
 
                     // packaging
                     var quotedKey = '7342dcd6-8113-44b6-bfd0-4555b82f9503';
@@ -5598,7 +5643,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.salesLoaded = true;
             $scope.selectAllOrders = false;
             $scope.selectedOrderCount = 0;
-            //$scope.currencySymbol = '$';
             $scope.settings = {};
             $scope.sortOrder = "desc";
             $scope.sortProperty = "-invoiceNumber";
@@ -5927,6 +5971,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * Utility method to get the currency symbol for an invoice
              */
             function getCurrencySymbol(invoice) {
+
+                if (invoice.currency.symbol !== '') {
+                    return invoice.currency.symbol;
+                }
+
                 var currencyCode = invoice.getCurrencyCode();
                 var currency = _.find(allCurrencies, function(currency) {
                     return currency.currencyCode === currencyCode;

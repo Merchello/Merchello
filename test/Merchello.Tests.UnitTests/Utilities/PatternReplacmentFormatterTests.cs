@@ -74,46 +74,5 @@ Thanks for the order.
             Assert.IsTrue(formatter.Patterns.Any()); 
         }
 
-        /// <summary>
-        /// Test asserts taht invoice data can be added to the PatternReplaceFormatter
-        /// </summary>
-        [Test]
-        public void Can_Update_PatternReplaceFormatter_Default_Data_With_Invoice_Data()
-        {
-            //// Arrange
-            var formatter = (PatternReplaceFormatter)PatternReplaceFormatter.GetPatternReplaceFormatter();
-
-            //// Act
-            formatter.AddOrUpdateReplaceablePattern(_invoice.ReplaceablePatterns());
-
-            //// Assert
-            Assert.AreEqual(formatter.Patterns["InvoiceNumber"].Replacement, "123", "InvoiceNumber does not match");
-            Assert.AreEqual(formatter.Patterns["BillToName"].Replacement, "Mindfly", "BillToname does not match");
-            Assert.AreEqual(formatter.Patterns["BillToAddress1"].Replacement, "114 W. Magnolia St.", "BillToAddress1 does not match");
-            Assert.AreEqual(formatter.Patterns["BillToAddress2"].Replacement, "Suite 300", "BillToAddress2 does not match");
-            Assert.AreEqual(formatter.Patterns["BillToLocality"].Replacement, "Bellingham", "BillToLocality does not match");
-            Assert.AreEqual(formatter.Patterns["BillToRegion"].Replacement, "WA", "BillToRegion does not match");
-            Assert.AreEqual(formatter.Patterns["BillToPostalCode"].Replacement, "98225", "BillToPostalCode does not match");
-            Assert.AreEqual(formatter.Patterns["BillToEmail"].Replacement, "debug@mindfly.com", "BillToEmail does not match");
-            Assert.AreEqual(formatter.Patterns["BillToPhone"].Replacement, "555-555-5555", "BillToPhone does not match");
-        }
-
-        [Test]
-        public void Can_Format_A_Message()
-        {
-            //// Arrange
-            var formatter = PatternReplaceFormatter.GetPatternReplaceFormatter();
-            formatter.AddOrUpdateReplaceablePattern(_invoice.ReplaceablePatterns());
-
-            //// Act
-
-            var text = formatter.Format(_message);
-
-            Console.Write(text);
-
-            //// Assert
-            Assert.IsTrue(text.Contains("Mindfly"));
-        }
-
     }
 }

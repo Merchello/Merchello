@@ -120,7 +120,11 @@
                 return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
             }
 
-            var attempt = ProcessPayment(invoice, TransactionOption.Authorize, invoice.Total, paymentMethodNonce);
+            // TODO this is a total last minute hack
+            var email = string.Empty;
+            if (args.ContainsKey("customerEmail")) email = args["customerEmail"];
+
+            var attempt = ProcessPayment(invoice, TransactionOption.Authorize, invoice.Total, paymentMethodNonce, email);
 
             var payment = attempt.Payment.Result;
 
@@ -153,13 +157,16 @@
         /// <param name="token">
         /// The payment method nonce.
         /// </param>
+        /// <param name="email">
+        /// The email.
+        /// </param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
         /// <remarks>
         /// This converts the <see cref="Result{T}"/> into Merchello's <see cref="IPaymentResult"/>
         /// </remarks>
-        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token)
+        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "")
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, amount, PaymentMethod.Key);
 
@@ -169,7 +176,7 @@
             payment.PaymentMethodName = "Braintree Transaction";
             payment.ExtendedData.SetValue(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, token);
 
-            var result = BraintreeApiService.Transaction.Sale(invoice, token, option: option);
+            var result = BraintreeApiService.Transaction.Sale(invoice, token, option: option, email: email);
 
             if (result.IsSuccess())
             {
