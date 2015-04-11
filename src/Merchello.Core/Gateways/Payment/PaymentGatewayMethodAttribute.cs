@@ -19,11 +19,14 @@
         /// <param name="includeInPaymentSelection">
         /// The include in payment selection.
         /// </param>
+        /// <param name="requiresCustomer">
+        /// A value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
+        /// </param>
         /// <remarks>
         /// TODO rename includeInPaymentSelection ... these are payments!
         /// </remarks>
-        public PaymentGatewayMethodAttribute(string title, bool includeInPaymentSelection = true)
-            : this(title, string.Empty, includeInPaymentSelection)
+        public PaymentGatewayMethodAttribute(string title, bool includeInPaymentSelection = true, bool requiresCustomer = false)
+            : this(title, string.Empty, includeInPaymentSelection, requiresCustomer)
         {
         }
 
@@ -39,8 +42,11 @@
         /// <param name="includeInPaymentSelection">
         /// The include in payment selection.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView,  bool includeInPaymentSelection = true)
-            : this(title, authorizeEditorView, string.Empty, string.Empty, includeInPaymentSelection)
+        /// <param name="requiresCustomer">
+        /// A value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
+        /// </param>
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, bool includeInPaymentSelection = true, bool requiresCustomer = false)
+            : this(title, authorizeEditorView, string.Empty, string.Empty, includeInPaymentSelection, requiresCustomer)
         {
         }
 
@@ -59,8 +65,11 @@
         /// <param name="includeInPaymentSelection">
         /// The include in payment selection.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, bool includeInPaymentSelection = true)
-            : this(title, authorizeEditorView, authorizeCaptureEditorView, string.Empty, includeInPaymentSelection)
+        /// <param name="requiresCustomer">
+        /// A value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
+        /// </param>
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, bool includeInPaymentSelection = true, bool requiresCustomer = false)
+            : this(title, authorizeEditorView, authorizeCaptureEditorView, string.Empty, includeInPaymentSelection, requiresCustomer)
         {
         }
 
@@ -82,8 +91,11 @@
         /// <param name="includeInShipmentQuotations">
         /// The include in shipment quotations.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, bool includeInShipmentQuotations = true)
-            : this(title, authorizeEditorView, authorizeCaptureEditorView, voidPaymentEditorView, string.Empty, includeInShipmentQuotations)
+        /// <param name="requiresCustomer">
+        /// A value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
+        /// </param>
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, bool includeInShipmentQuotations = true, bool requiresCustomer = false)
+            : this(title, authorizeEditorView, authorizeCaptureEditorView, voidPaymentEditorView, string.Empty, includeInShipmentQuotations, requiresCustomer)
         {
         }
 
@@ -93,7 +105,9 @@
         /// <param name="title">
         /// The title.
         /// </param>
-        /// <param name="authorizeEditorView"></param>
+        /// <param name="authorizeEditorView">
+        /// The authorize Editor View.
+        /// </param>
         /// <param name="authorizeCaptureEditorView">
         /// The authorize capture editor view.
         /// </param>
@@ -106,7 +120,10 @@
         /// <param name="includeInPaymentSelection">
         /// The include in shipment quotations.
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, bool includeInPaymentSelection = true)
+        /// <param name="requiresCustomer">
+        /// A value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
+        /// </param>
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, bool includeInPaymentSelection = true, bool requiresCustomer = false)
         {
             Mandate.ParameterNotNullOrEmpty(title, "title");
 
@@ -116,6 +133,7 @@
             this.IncludeInPaymentSelection = includeInPaymentSelection;
             VoidPaymentEditorView = voidPaymentEditorView;
             RefundPaymentEditorView = refundPaymentEditorView;
+            RequiresCustomer = requiresCustomer;
         }
 
 
@@ -149,6 +167,11 @@
         /// If false, it is assumed that the payment method is to be used programmatically for some other purpose.
         /// </summary>
         public bool IncludeInPaymentSelection { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
+        /// </summary>
+        public bool RequiresCustomer { get; private set; }
 
     }
 }

@@ -131,7 +131,6 @@
                     loadPayments(id);
                     loadAuditLog(id);
                     loadShippingAddress(id);
-
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
 

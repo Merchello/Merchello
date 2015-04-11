@@ -1,5 +1,35 @@
 (function() {
 
+    var BraintreeCreditCard = function() {
+        var self = this;
+        self.cardholderName = '';
+        self.number = '';
+        self.cvv = '';
+        self.expirationMonth = '';
+        self.expirationYear = '';
+        self.billingAddress = {
+            postalCode: ''
+        };
+    };
+
+    angular.module('merchello.plugins.braintree').constant('BraintreeCreditCard', BraintreeCreditCard);
+
+    angular.module('merchello.plugins.braintree').factory('braintreeCreditCardBuilder',
+        ['genericModelBuilder', 'BraintreeCreditCard',
+        function(genericModelBuilder, BraintreeCreditCard) {
+
+            var Constructor = BraintreeCreditCard;
+
+            return {
+                createDefault: function () {
+                    return new Constructor();
+                },
+                transform: function (jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
+
     var MerchantDescriptor = function() {
         var self = this;
         self.name = '';

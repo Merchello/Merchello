@@ -14,7 +14,7 @@
     /// The BrainTree Payment Gateway Provider.
     /// </summary>
     [GatewayProviderActivation("D143E0F6-98BB-4E0A-8B8C-CE9AD91B0969", "BrainTree Payment Provider", "BrainTree Payment Provider")]
-    [GatewayProviderEditor("BrainTree Configuration", "~/App_Plugins/Merchello.BrainTree/payment.braintree.providersettings.html")]
+    [GatewayProviderEditor("BrainTree Configuration", "~/App_Plugins/Merchello.BrainTree/merchello.plugins.braintree.providersettings.html")]
     public class BraintreePaymentGatewayProvider : PaymentGatewayProviderBase, IBraintreePaymentGatewayProvider
     {
         #region AvailableResources
