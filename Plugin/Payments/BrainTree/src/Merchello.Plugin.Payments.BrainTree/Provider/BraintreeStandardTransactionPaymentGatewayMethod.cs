@@ -25,7 +25,8 @@
         "~/App_Plugins/Merchello.Braintree/dialogs/payment.standard.authorizepayment.html",
         "~/App_Plugins/Merchello.Braintree/dialogs/payment.standard.authorizecapturepayment.html",
         "~/App_Plugins/Merchello.Braintree/dialogs/payment.standard.voidpayment.html",
-        "~/App_Plugins/Merchello.Braintree/dialogs/payment.standard.refundpayment.html")]
+        "~/App_Plugins/Merchello.Braintree/dialogs/payment.standard.refundpayment.html",
+        "~/App_Plugins/Merchello.Braintree/dialogs/payment.standard.capturepayment.html")]
     public class BraintreeStandardTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase, IBraintreeStandardTransactionPaymentGatewayMethod
     {
         /// <summary>
@@ -59,12 +60,6 @@
         /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
-            // The Provider settings 
-            if (BraintreeApiService.BraintreeProviderSettings.DefaultTransactionOption == TransactionOption.SubmitForSettlement)
-            {
-                return this.PerformAuthorizeCapturePayment(invoice, invoice.Total, args);
-            }
-
             var paymentMethodNonce = args.GetPaymentMethodNonce();
 
             if (string.IsNullOrEmpty(paymentMethodNonce))

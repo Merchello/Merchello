@@ -230,7 +230,7 @@
                         $scope.paymentMethods = paymentMethodDisplayBuilder.transform(methods);
                         $scope.preValuesLoaded = true;
                         $scope.paymentMethodsLoaded = true;
-                    })
+                    });
                 }
             }
 
@@ -272,13 +272,13 @@
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
-                    if (pm.authorizeCapturePaymentEditorView.editorView !== '') {
-                        dialogData.authorizeCapturePaymentEditorView = pm.authorizeCapturePaymentEditorView.editorView;
+                    if (pm.capturePaymentEditorView.editorView !== '') {
+                        dialogData.capturePaymentEditorView = pm.capturePaymentEditorView.editorView;
                     } else {
-                        dialogData.authorizeCapturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
+                        dialogData.capturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
                     }
                     dialogService.open({
-                        template: dialogData.authorizeCapturePaymentEditorView,
+                        template: dialogData.capturePaymentEditorView,
                         show: true,
                         callback: capturePaymentDialogConfirm,
                         dialogData: dialogData

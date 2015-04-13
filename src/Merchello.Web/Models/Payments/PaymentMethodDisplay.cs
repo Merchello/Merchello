@@ -54,6 +54,11 @@
         public DialogEditorViewDisplay RefundPaymentEditorView { get; set; }
 
         /// <summary>
+        /// Gets or sets the capture payment editor view.
+        /// </summary>
+        public DialogEditorViewDisplay CapturePaymentEditorView { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether include in payment selection.
         /// </summary>
         public bool IncludeInPaymentSelection { get; set; }
