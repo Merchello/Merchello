@@ -27,7 +27,9 @@
     "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.authorizepayment.html",
     "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.authorizecapturepayment.html",
     "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.voidpayment.html",
-    "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.refundpayment.html")]
+    "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.refundpayment.html",
+    "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.capturepayment.html",
+    true, true)]
     public class BraintreeVaultTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase,  IBraintreeVaultTransactionPaymentGatewayMethod
     {
         /// <summary>

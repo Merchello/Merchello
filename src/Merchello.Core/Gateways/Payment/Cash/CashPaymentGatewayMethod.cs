@@ -19,7 +19,8 @@
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizepayment.html", 
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html", 
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.voidpayment.html", 
-        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.refundpayment.html")]
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.refundpayment.html", 
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html")]
     public class CashPaymentGatewayMethod : PaymentGatewayMethodBase, ICashPaymentGatewayMethod
     {
         /// <summary>

@@ -51,6 +51,14 @@
             this.valueIsInRage = function(str,min, max) {
                 n = parseFloat(str);
                 return (!isNaN(n) && n >= min && n <= max);
+            },
+
+            this.padLeft = function(str, char, num) {
+                var pad = '';
+                for(var i = 0; i < num; i++) {
+                    pad += char;
+                }
+                return (pad + str).slice(-num)
             };
 
     }]);

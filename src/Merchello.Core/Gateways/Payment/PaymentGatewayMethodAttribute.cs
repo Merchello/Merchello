@@ -50,6 +50,7 @@
         {
         }
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentGatewayMethodAttribute"/> class.
         /// </summary>
@@ -88,14 +89,14 @@
         /// <param name="voidPaymentEditorView">
         /// The void payment editor view.
         /// </param>
-        /// <param name="includeInShipmentQuotations">
-        /// The include in shipment quotations.
+        /// <param name="includeInPaymentSelection">
+        /// The include in payment selection.
         /// </param>
         /// <param name="requiresCustomer">
         /// A value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
         /// </param>
-        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, bool includeInShipmentQuotations = true, bool requiresCustomer = false)
-            : this(title, authorizeEditorView, authorizeCaptureEditorView, voidPaymentEditorView, string.Empty, includeInShipmentQuotations, requiresCustomer)
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, bool includeInPaymentSelection = true, bool requiresCustomer = false)
+            : this(title, authorizeEditorView, authorizeCaptureEditorView, voidPaymentEditorView, string.Empty, includeInPaymentSelection, requiresCustomer)
         {
         }
 
@@ -124,15 +125,48 @@
         /// A value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
         /// </param>
         public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, bool includeInPaymentSelection = true, bool requiresCustomer = false)
+            : this(title, authorizeEditorView, authorizeCaptureEditorView, voidPaymentEditorView, refundPaymentEditorView, string.Empty, includeInPaymentSelection, requiresCustomer)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentGatewayMethodAttribute"/> class.
+        /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="authorizeEditorView">
+        /// The authorize Editor View.
+        /// </param>
+        /// <param name="authorizeCaptureEditorView">
+        /// The authorize capture editor view.
+        /// </param>
+        /// <param name="voidPaymentEditorView">
+        /// The void payment editor view.
+        /// </param>
+        /// <param name="refundPaymentEditorView">
+        /// The refund payment editor view.
+        /// </param>
+        /// <param name="capturePaymentEditorView">
+        /// The capture payment editor view
+        /// </param>
+        /// <param name="includeInPaymentSelection">
+        /// The include in shipment quotations.
+        /// </param>
+        /// <param name="requiresCustomer">
+        /// A value indicating whether or not this payment method must be used with a logged in customer (vaulted transactions)
+        /// </param>
+        public PaymentGatewayMethodAttribute(string title, string authorizeEditorView, string authorizeCaptureEditorView, string voidPaymentEditorView, string refundPaymentEditorView, string capturePaymentEditorView, bool includeInPaymentSelection = true, bool requiresCustomer = false)
         {
             Mandate.ParameterNotNullOrEmpty(title, "title");
 
             Title = title;
             AuthorizeEditorView = authorizeEditorView;
             AuthorizeCaptureEditorView = authorizeCaptureEditorView;
-            this.IncludeInPaymentSelection = includeInPaymentSelection;
+            IncludeInPaymentSelection = includeInPaymentSelection;
             VoidPaymentEditorView = voidPaymentEditorView;
             RefundPaymentEditorView = refundPaymentEditorView;
+            CapturePaymentEditorView = capturePaymentEditorView;
             RequiresCustomer = requiresCustomer;
         }
 
@@ -161,6 +195,11 @@
         /// Gets the refund payment editor view.
         /// </summary>
         public string RefundPaymentEditorView { get; private set; }
+
+        /// <summary>
+        /// Gets the capture payment editor view.
+        /// </summary>
+        public string CapturePaymentEditorView { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether or not the payment method should be used when quoting shipments.

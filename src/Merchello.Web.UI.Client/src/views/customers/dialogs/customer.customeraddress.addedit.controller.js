@@ -36,7 +36,6 @@
                         $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
                     }
                     $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
-                    $scope.submit($scope.dialogData);
                 }
             }
 

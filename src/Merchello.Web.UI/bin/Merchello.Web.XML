@@ -571,6 +571,22 @@
             The <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.CapturePaymentDialogEditorViewResolver">
+            <summary>
+            Resolves the custom DialogEditorView property from the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> for AutoMapper mappings
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.CapturePaymentDialogEditorViewResolver.ResolveCore(Merchello.Core.Gateways.Payment.IPaymentGatewayMethod)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.DialogEditorViewDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.AuthorizePaymentDialogEditorViewResolver">
             <summary>
             Resolves the custom DialogEditorView property from the <see cref="T:Merchello.Core.Gateways.Payment.PaymentGatewayMethodAttribute"/> for AutoMapper mappings
@@ -8009,6 +8025,11 @@
         <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.RefundPaymentEditorView">
             <summary>
             Gets or sets the refund payment dialog editor view.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.CapturePaymentEditorView">
+            <summary>
+            Gets or sets the capture payment editor view.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.Payments.PaymentMethodDisplay.IncludeInPaymentSelection">
