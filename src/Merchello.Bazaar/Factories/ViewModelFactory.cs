@@ -286,7 +286,13 @@
         {
             var viewModel = this.Build<CheckoutConfirmationModel>(model);
 
+            var isAnonymous = basket.Customer.IsAnonymous;
+            var allowedMethods = new List<IPaymentMethod>();
 
+            foreach (var method in paymentMethods.ToArray())
+            {
+                // TODO constrain methods to only those allowed by known customers.
+            }
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
