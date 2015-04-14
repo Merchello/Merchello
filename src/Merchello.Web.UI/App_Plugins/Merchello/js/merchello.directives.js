@@ -876,11 +876,16 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
              * @description - Filters payment methods for methods that offer authorize / authorize capture dialogs
              */
             function filterPaymentMethods() {
+                var methods = [];
                 if ($scope.authorizePaymentOnly) {
-                    return _.filter($scope.paymentMethods, function(auth) { return auth.authorizePaymentEditorView.editorView !== ''; });
+                    methods = _.filter($scope.paymentMethods, function(auth) { return auth.authorizePaymentEditorView.editorView !== ''; });
                 } else {
-                    return _.filter($scope.paymentMethods, function(capture) { return capture.authorizeCapturePaymentEditorView.editorView !== ''; });
+                    methods = _.filter($scope.paymentMethods, function(capture) { return capture.authorizeCapturePaymentEditorView.editorView !== ''; });
                 }
+                if ($scope.invoice.isAnonymous()) {
+                    methods = _.filter(methods, function(m) { return !m.requiresCustomer; })
+                }
+                return methods;
             }
 
             /**

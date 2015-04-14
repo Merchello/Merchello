@@ -159,6 +159,10 @@
             return this.total - amountPaid;
         }
 
+        function isAnonymous() {
+            return this.customerKey === '00000000-0000-0000-0000-000000000000';
+        }
+
         return {
             getPaymentStatus: getPaymentStatus,
             getFulfillmentStatus: getFulfillmentStatus,
@@ -173,7 +177,8 @@
             getBillToAddress: getBillingAddress,
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
-            shippingTotal: shippingTotal
+            shippingTotal: shippingTotal,
+            isAnonymous:  isAnonymous
         };
     }());
 

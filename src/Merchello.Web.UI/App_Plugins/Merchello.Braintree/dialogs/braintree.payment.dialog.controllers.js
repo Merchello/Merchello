@@ -14,11 +14,12 @@
             $scope.postalCode = '';
             $scope.months = [];
             $scope.years = [];
+            $scope.braintreeClient = {};
 
             // Exposed methods
             $scope.save = save;
 
-            var braintreeClient = {};
+
 
             function init() {
                 var filesToLoad = ['https://js.braintreegateway.com/v2/braintree.js'];
@@ -41,9 +42,9 @@
                     var setup = {
                         clientToken: JSON.parse(requestToken)
                     };
-                    console.info(setup);
-                    braintreeClient = braintree.api.Client(setup);
+                    $scope.braintreeClient = new braintree.api.Client(setup);
                     $scope.loaded = true;
+                    console.info($scope.dialogData);
                 });
             }
 
@@ -66,13 +67,29 @@
 
             function save() {
                 $scope.wasFormSubmitted = true;
-                if(invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.appliedAmount)) {
+                if(invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.invoiceBalance) && $scope.authCaptureForm.cardholderName.$valid
+                && $scope.authCaptureForm.cardNumber.$valid && $scope.authCaptureForm.cvv.$valid && $scope.authCaptureForm.postalCode.$valid) {
 
                     var cc = braintreeCreditCardBuilder.createDefault();
-
-
+                    cc.cardholderName = $scope.cardholderName;
+                    cc.number = $scope.cardNumber;
+                    cc.cvv = $scope.cvv;
+                    cc.expirationMonth = invoiceHelper.padLeft($scope.selectedMonth.monthNumber + 1, '0', 2);
+                    cc.expirationYear = $scope.expirationYear;
+                    cc.billingAddress.postalCode = $scope.postalCode;
+                    $scope.braintreeClient.tokenizeCard(cc, function (err, nonce) {
+                        // Send nonce to your server
+                        if(err !== null) {
+                            console.info(err);
+                            return;
+                        }
+                        $scope.dialogData.processorArgs.setValue('nonce-from-the-client', nonce);
+                        $scope.submit($scope.dialogData);
+                    });
                 } else {
-                    $scope.refundForm.amount.$setValidity('amount', false);
+                    if(!invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.invoiceBalance)) {
+                        $scope.authCaptureForm.amount.$setValidity('amount', false);
+                    }
                 }
             }
 
@@ -91,6 +108,24 @@
 
             // initialize the controller
             init();
+        }]);
+
+    angular.module('merchello.plugins.braintree').controller('Merchello.Plugins.Braintree.Dialogs.Standard.CapturePaymentController',
+        ['$scope', 'invoiceHelper',
+        function($scope, invoiceHelper) {
+
+            $scope.transaction = {};
+
+            function init() {
+                $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.invoiceBalance, 2);
+                var transactionStr = $scope.dialogData.payment.extendedData.getValue('braintreeTransaction');
+                $scope.transaction = JSON.parse(transactionStr);
+                $scope.dialogData.warning = 'This action will submit a previously authorized transaction for settlement.';
+            }
+
+
+            init();
+            // initialize the controller
         }]);
 
     angular.module('merchello').controller('Merchello.Plugins.Braintree.Dialogs.Dialogs.RefundPaymentController',

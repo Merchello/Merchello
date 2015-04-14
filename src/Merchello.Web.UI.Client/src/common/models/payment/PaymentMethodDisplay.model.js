@@ -18,6 +18,7 @@
         self.authorizeCapturePaymentEditorView = {};
         self.voidPaymentEditorView = {};
         self.refundPaymentEditorView = {};
+        self.capturePaymentEditorView = {};
         self.includeInPaymentSelection = true;
         self.requiresCustomer = false;
     };

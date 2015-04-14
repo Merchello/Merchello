@@ -94,7 +94,8 @@
 
             payment.Collected = true;
             this.GatewayProviderService.Save(payment);
-            this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, attempt.Message, amount);
+            var transactionReference = payment.ExtendedData.GetBraintreeTransaction();
+            this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Payment submitted for settlement to card " + transactionReference.MaskedNumber, amount);
             return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, true);
         }
 

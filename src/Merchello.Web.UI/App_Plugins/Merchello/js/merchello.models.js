@@ -767,11 +767,12 @@
         self.currencySymbol = '';
         self.invoiceKey = '';
         self.paymentKey = '';
+        self.payment = {};
         self.paymentMethodKey = '';
         self.invoiceBalance = 0.0;
         self.amount = 0.0;
         self.processorArgs = [];
-        self.authorizeCaptureEditorView = '';
+        self.captureEditorView = '';
     };
 
     CapturePaymentDialogData.prototype = (function() {
@@ -781,7 +782,7 @@
             this.paymentKey = payment.key;
             this.paymentMethodKey = payment.paymentMethodKey;
             this.paymentMethodName = payment.paymentMethodName;
-
+            this.payment = payment
         }
 
         //// helper method to set required associated invoice info
@@ -1529,6 +1530,7 @@
         self.authorizeCapturePaymentEditorView = {};
         self.voidPaymentEditorView = {};
         self.refundPaymentEditorView = {};
+        self.capturePaymentEditorView = {};
         self.includeInPaymentSelection = true;
         self.requiresCustomer = false;
     };
@@ -1571,8 +1573,46 @@
             return this.items;
         };
 
+        function isEmpty() {
+            return this.items.length === 0;
+        }
+
+        function getValue(key) {
+            if (isEmpty.call(this)) {
+                return;
+            }
+            var found = false;
+            var i = 0;
+            var value = '';
+            while(i < this.items.length && !found) {
+                if (this.items[ i ].key === key) {
+                    found = true;
+
+                    value = this.items[ i ].value;
+                } else {
+                    i++;
+                }
+            }
+            return value;
+        }
+
+        function setValue(key, value) {
+
+            var existing = _.find(this.items, function(item) {
+                return item.key === key;
+            });
+            if(existing) {
+                existing.value = value;
+                return;
+            }
+
+            this.items.push({ key: key, value: value });
+        }
+
         return {
-            toArray: toArray
+            toArray: toArray,
+            getValue: getValue,
+            setValue: setValue
         }
 
     }());
@@ -2257,6 +2297,10 @@
             return this.total - amountPaid;
         }
 
+        function isAnonymous() {
+            return this.customerKey === '00000000-0000-0000-0000-000000000000';
+        }
+
         return {
             getPaymentStatus: getPaymentStatus,
             getFulfillmentStatus: getFulfillmentStatus,
@@ -2271,7 +2315,8 @@
             getBillToAddress: getBillingAddress,
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
-            shippingTotal: shippingTotal
+            shippingTotal: shippingTotal,
+            isAnonymous:  isAnonymous
         };
     }());
 
@@ -3971,6 +4016,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                     paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    paymentMethod.capturePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     return paymentMethod;
                 },
                 transform: function(jsonResult) {
@@ -3983,6 +4029,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].authorizeCapturePaymentEditorView);
                             paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].voidPaymentEditorView);
                             paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].refundPaymentEditorView);
+                            paymentMethod.capturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].capturePaymentEditorView);
                             paymentMethods.push(paymentMethod);
                         }
                     } else {
@@ -3992,6 +4039,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         paymentMethods.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.authorizeCapturePaymentEditorView);
                         paymentMethods.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.voidPaymentEditorView);
                         paymentMethods.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.refundPaymentEditorView);
+                        paymentMethods.capturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.capturePaymentEditorView);
                     }
                     return paymentMethods;
                 }
