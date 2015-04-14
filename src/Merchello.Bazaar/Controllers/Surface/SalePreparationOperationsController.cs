@@ -1,4 +1,4 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿namespace Merchello.Bazaar.Controllers.Surface
 {
     using System;
     using System.Linq;
@@ -34,22 +34,22 @@
             var isValid = true;
             if (model.BillingAddressKey.Equals(Guid.Empty))
             {
-                isValid = ModelState.IsValidField("BillingName") && ModelState.IsValidField("BillingEmail")
-                          && ModelState.IsValidField("BillingAddress1") && ModelState.IsValidField("BillingLocality")
-                          && ModelState.IsValidField("BillingPostalCode");
+                isValid = this.ModelState.IsValidField("BillingName") && this.ModelState.IsValidField("BillingEmail")
+                          && this.ModelState.IsValidField("BillingAddress1") && this.ModelState.IsValidField("BillingLocality")
+                          && this.ModelState.IsValidField("BillingPostalCode");
             }
             if (!isValid) return this.CurrentUmbracoPage();
 
             if (model.ShippingAddressKey.Equals(Guid.Empty))
             {
-                isValid = ModelState.IsValidField("ShippingName") && ModelState.IsValidField("ShippingEmail")
-                          && ModelState.IsValidField("ShippingAddress1") && ModelState.IsValidField("ShippingLocality")
-                          && ModelState.IsValidField("ShippingPostalCode");
+                isValid = this.ModelState.IsValidField("ShippingName") && this.ModelState.IsValidField("ShippingEmail")
+                          && this.ModelState.IsValidField("ShippingAddress1") && this.ModelState.IsValidField("ShippingLocality")
+                          && this.ModelState.IsValidField("ShippingPostalCode");
             }
 
             if (!isValid) return this.CurrentUmbracoPage();
 
-            var preparation = Basket.SalePreparation();
+            var preparation = this.Basket.SalePreparation();
             preparation.RaiseCustomerEvents = false;
 
             var saveBilling = false;
@@ -58,7 +58,7 @@
             IAddress billingAddress;
             if (!model.BillingAddressKey.Equals(Guid.Empty))
             {
-                var billing = MerchelloServices.CustomerService.GetAddressByKey(model.BillingAddressKey);
+                var billing = this.MerchelloServices.CustomerService.GetAddressByKey(model.BillingAddressKey);
                 billingAddress = billing.AsAddress(billing.FullName);
             }
             else
@@ -70,7 +70,7 @@
             IAddress shippingAddress;
             if (!model.ShippingAddressKey.Equals(Guid.Empty))
             {
-                var shipping = MerchelloServices.CustomerService.GetAddressByKey(model.ShippingAddressKey);
+                var shipping = this.MerchelloServices.CustomerService.GetAddressByKey(model.ShippingAddressKey);
                 shippingAddress = shipping.AsAddress(shipping.FullName);
             }
             else
@@ -86,7 +86,7 @@
                 if (redirect) return this.CurrentUmbracoPage();
                 
                 //// at this point we know the customer is an ICustomer 
-                var customer = (ICustomer)CurrentCustomer;
+                var customer = (ICustomer)this.CurrentCustomer;
                 
                 if (saveBilling)
                 {
@@ -103,7 +103,7 @@
             preparation.SaveBillToAddress(billingAddress);
             preparation.SaveShipToAddress(shippingAddress);
             
-            return RedirectToUmbracoPage(model.ConfirmSalePageId);
+            return this.RedirectToUmbracoPage(model.ConfirmSalePageId);
         }
 
         /// <summary>
@@ -118,25 +118,25 @@
         [HttpPost]
         public ActionResult ConfirmSale(CheckoutConfirmationForm model)
         {
-            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
+            if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            var preparation = Basket.SalePreparation();
+            var preparation = this.Basket.SalePreparation();
             preparation.RaiseCustomerEvents = false;
            
 
             preparation.ClearShipmentRateQuotes();
-            var shippingAddress = Basket.SalePreparation().GetShipToAddress();
+            var shippingAddress = this.Basket.SalePreparation().GetShipToAddress();
 
             // Get the shipment again
-            var shipment = Basket.PackageBasket(shippingAddress).FirstOrDefault();
+            var shipment = this.Basket.PackageBasket(shippingAddress).FirstOrDefault();
 
             // get the quote using the "approved shipping method"
             var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey);
 
             // save the quote
-            Basket.SalePreparation().SaveShipmentRateQuote(quote);
+            this.Basket.SalePreparation().SaveShipmentRateQuote(quote);
 
-            var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
+            var paymentMethod = this.GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
             preparation.SavePaymentMethod(paymentMethod);
 
             // AuthorizePayment will save the invoice with an Invoice Number.
@@ -150,9 +150,9 @@
             // Trigger the order confirmation notification
             var billingAddress = attempt.Invoice.GetBillingAddress();
             string contactEmail;
-            if (string.IsNullOrEmpty(billingAddress.Email) && !CurrentCustomer.IsAnonymous)
+            if (string.IsNullOrEmpty(billingAddress.Email) && !this.CurrentCustomer.IsAnonymous)
             {
-                contactEmail = ((ICustomer)CurrentCustomer).Email;
+                contactEmail = ((ICustomer)this.CurrentCustomer).Email;
             }
             else
             {
@@ -165,9 +165,9 @@
             }
             
             // store the invoice key in the CustomerContext for use on the receipt page.
-            CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
+            this.CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
 
-            return RedirectToUmbracoPage(model.ReceiptPageId);
+            return this.RedirectToUmbracoPage(model.ReceiptPageId);
             
         }
     }

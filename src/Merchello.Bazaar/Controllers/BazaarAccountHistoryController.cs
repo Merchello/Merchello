@@ -2,8 +2,7 @@
 {
     using System.Web.Mvc;
 
-    using Merchello.Bazaar.Models.ViewModels;
-    using Merchello.Core.Models;
+    using Merchello.Core;
     using Merchello.Web;
 
     using Umbraco.Web.Models;
@@ -26,7 +25,7 @@
         /// </summary>
         public BazaarAccountHistoryController()
         {
-            _merchello = new MerchelloHelper(MerchelloContext.Services);
+            _merchello = new MerchelloHelper(MerchelloContext.Current.Services);
         }
 
         /// <summary>

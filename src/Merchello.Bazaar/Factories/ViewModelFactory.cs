@@ -10,6 +10,7 @@
     using Merchello.Bazaar.Models.Account;
     using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
@@ -282,16 +283,28 @@
         /// <returns>
         /// The <see cref="CheckoutModel"/>.
         /// </returns>
-        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods, IEnumerable<PaymentMethodUiInfo> paymentMethodUiInfos)
+        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentGatewayMethod> paymentMethods, IEnumerable<PaymentMethodUiInfo> paymentMethodUiInfos)
         {
             var viewModel = this.Build<CheckoutConfirmationModel>(model);
 
             var isAnonymous = basket.Customer.IsAnonymous;
-            var allowedMethods = new List<IPaymentMethod>();
+            var allowedMethods = new List<IPaymentGatewayMethod>();
 
-            foreach (var method in paymentMethods.ToArray())
+            // Payment methods, such as vaulted/stored credit cards may not be available to anonymous customers
+            if (isAnonymous)
             {
-                // TODO constrain methods to only those allowed by known customers.
+                foreach (var method in paymentMethods.ToArray())
+                {
+                    var addMethod = true;
+
+                    var att = method.GetType().GetCustomAttribute<PaymentGatewayMethodAttribute>(false);
+                    if (att != null && att.RequiresCustomer) addMethod = false;
+                    if (addMethod) allowedMethods.Add(method);
+                }
+            }
+            else
+            {
+                allowedMethods.AddRange(paymentMethods);
             }
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
@@ -304,10 +317,10 @@
                                                                         Value = x.ShipMethod.Key.ToString(),
                                                                         Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency.Symbol))
                                                                     }),
-                PaymentMethods = paymentMethods.Select(x => new SelectListItem()
+                PaymentMethods = allowedMethods.Select(x => new SelectListItem()
                                                                 {
-                                                                    Value = x.Key.ToString(),
-                                                                    Text = x.Name
+                                                                    Value = x.PaymentMethod.Key.ToString(),
+                                                                    Text = x.PaymentMethod.Name
                                                                 }),
                 PaymentMethodUiInfo = paymentMethodUiInfos,
                 ReceiptPageId = viewModel.ReceiptPage.Id

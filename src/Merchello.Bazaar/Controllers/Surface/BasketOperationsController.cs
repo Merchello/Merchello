@@ -1,4 +1,4 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿namespace Merchello.Bazaar.Controllers.Surface
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +11,6 @@
     using Merchello.Core.Models;
     using Merchello.Web.Workflow;
 
-    using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -127,7 +126,7 @@
         [HttpGet]
         public ActionResult RemoveItemFromBasket(Guid lineItemKey, int basketPageId)
         {
-            EnsureOwner(Basket.Items, lineItemKey);
+            EnsureOwner(this.Basket.Items, lineItemKey);
 
             // remove the item by it's pk.  
             this.Basket.RemoveItem(lineItemKey);
@@ -155,13 +154,13 @@
         [HttpGet]
         public ActionResult MoveItemToWishList(Guid lineItemKey, int basketPageId, int wishListPageId)
         {
-            if (CurrentCustomer.IsAnonymous) return this.RedirectToUmbracoPage(basketPageId);
+            if (this.CurrentCustomer.IsAnonymous) return this.RedirectToUmbracoPage(basketPageId);
 
-            EnsureOwner(Basket.Items, lineItemKey);
+            EnsureOwner(this.Basket.Items, lineItemKey);
 
-            Basket.MoveItemToWishList(lineItemKey);
+            this.Basket.MoveItemToWishList(lineItemKey);
 
-            return RedirectToUmbracoPage(wishListPageId);
+            return this.RedirectToUmbracoPage(wishListPageId);
         }
     }
 }

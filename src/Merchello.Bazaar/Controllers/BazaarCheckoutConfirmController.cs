@@ -71,7 +71,7 @@
                     });
             }
 
-            var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods.Select(x => x.PaymentMethod), paymentMethodInfos);
+            var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods, paymentMethodInfos);
 
             return this.View(viewModel.ThemeViewPath("CheckoutConfirmation"), viewModel);
         }

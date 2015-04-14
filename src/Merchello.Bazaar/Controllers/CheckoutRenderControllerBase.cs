@@ -96,16 +96,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets the gateway context.
-        /// </summary>
-        protected IGatewayContext GatewayContext
-        {
-            get
-            {
-                return _gatewayContext;
-            }
-        }
 
         /// <summary>
         /// Responsible for initializing the controller.
