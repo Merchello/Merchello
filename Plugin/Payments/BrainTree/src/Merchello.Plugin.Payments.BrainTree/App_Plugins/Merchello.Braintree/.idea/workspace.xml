@@ -2,48 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0c8517c-4cb8-4237-b0ab-5358043bdf8d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Plugin.Payments.Braintree.dll" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Plugin.Payments.Braintree.dll" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Properties/AssemblyInfo.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Properties/AssemblyInfo.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Properties/AssemblyInfo.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Properties/AssemblyInfo.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/AutoMapperMappings-Payment.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/AutoMapperMappings-Payment.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreePaymentGatewayMethodBase.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreePaymentGatewayMethodBase.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreeStandardTransactionPaymentGatewayMethod.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreeStandardTransactionPaymentGatewayMethod.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Controllers/Store/BraintreePaymentOperationsController.cs" afterPath="$PROJECT_DIR$/../../Controllers/Store/BraintreePaymentOperationsController.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Provider/BraintreeVaultTransactionPaymentGatewayMethod.cs" afterPath="$PROJECT_DIR$/../../Provider/BraintreeVaultTransactionPaymentGatewayMethod.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/dialogdata/CapturePaymentDialogData.model.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/dialogdata/CapturePaymentDialogData.model.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/Payment/Cash/CashPaymentGatewayMethod.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/Payment/Cash/CashPaymentGatewayMethod.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/sales/InvoiceDisplay.model.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/sales/InvoiceDisplay.model.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../build/NuSpec/Merchello.Core.nuspec" afterPath="$PROJECT_DIR$/../../../../../../../build/NuSpec/Merchello.Core.nuspec" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Merchello.Plugin.Payments.BrainTree.csproj" afterPath="$PROJECT_DIR$/../../Merchello.Plugin.Payments.BrainTree.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../tests/Merchello.Tests.BrainTree.Integration/Merchello.Tests.BrainTree.Integration.csproj" afterPath="$PROJECT_DIR$/../../../../tests/Merchello.Tests.BrainTree.Integration/Merchello.Tests.BrainTree.Integration.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../build/NuSpec/Merchello.TestsBase.nuspec" afterPath="$PROJECT_DIR$/../../../../../../../build/NuSpec/Merchello.TestsBase.nuspec" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../build/Merchello.Version.props" afterPath="$PROJECT_DIR$/../../../../../../../build/Merchello.Version.props" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.XML" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.XML" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Merchello.Web.csproj" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Merchello.Web.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Configuration/MerchelloVersion.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Configuration/MerchelloVersion.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/Payment/PaymentGatewayMethodAttribute.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Core/Gateways/Payment/PaymentGatewayMethodAttribute.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Models/Payments/PaymentMethodDisplay.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Models/Payments/PaymentMethodDisplay.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/payment/PaymentMethodDisplay.model.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/payment/PaymentMethodDisplay.model.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/payment/ProcessorArgumentsCollectionDisplay.model.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/payment/ProcessorArgumentsCollectionDisplay.model.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Models/TransactionReference.cs" afterPath="$PROJECT_DIR$/../../Models/TransactionReference.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/directives/addpaymenttable.directive.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/directives/addpaymenttable.directive.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" afterPath="$PROJECT_DIR$/dialogs/braintree.payment.dialog.controllers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/braintree.payment.dialog.controllers.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/braintree.payment.dialog.controllers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/customers/dialogs/customer.customeraddress.addedit.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/customers/dialogs/customer.customeraddress.addedit.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/services/invoiceHelper.service.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/services/invoiceHelper.service.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.controllers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.directives.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.directives.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.models.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.models.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.services.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello/js/merchello.services.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../packages.config" afterPath="$PROJECT_DIR$/../../packages.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../tests/Merchello.Tests.BrainTree.Integration/packages.config" afterPath="$PROJECT_DIR$/../../../../tests/Merchello.Tests.BrainTree.Integration/packages.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dialogs/payment.standard.authorizecapturepayment.html" afterPath="$PROJECT_DIR$/dialogs/payment.standard.authorizecapturepayment.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/payment.standard.authorizecapturepayment.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/payment.standard.authorizecapturepayment.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" afterPath="$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/payment.standard.authorizepayment.html" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Plugins/Merchello.Braintree/dialogs/payment.standard.authorizepayment.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/factories/payments/paymentMethodDisplayBuilder.factory.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/common/models/factories/payments/paymentMethodDisplayBuilder.factory.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/saleoverview.controller.js" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI.Client/src/views/sales/saleoverview.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/web.config" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/web.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Merchello.Braintree.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,18 +24,7 @@
     <favorites_list name="Merchello.Braintree" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="payment.standard.capturepayment.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.capturepayment.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.3528678">
-              <caret line="35" column="56" selection-start-line="35" selection-start-column="56" selection-end-line="35" selection-end-column="56" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -254,24 +204,24 @@
     <frame x="-9" y="-9" width="1932" height="1050" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26786658" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2673372" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -292,15 +242,18 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.capturepayment.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.authorizepayment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="113" selection-start-line="0" selection-start-column="113" selection-end-line="0" selection-end-column="113" />
-          <folding>
-            <element signature="n#div#1;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#2;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#3;n#div#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -308,9 +261,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#5823#6757#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -318,11 +268,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
-          <folding>
-            <element signature="n#div#1;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#2;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#3;n#div#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -330,11 +275,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#div#1;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#2;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#3;n#div#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -342,9 +282,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="2" column="139" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="139" />
-          <folding>
-            <element signature="e#5823#6757#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -359,7 +296,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="94" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -367,7 +303,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -396,7 +331,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="14" column="95" selection-start-line="14" selection-start-column="95" selection-end-line="14" selection-end-column="95" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -411,7 +345,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="14" column="95" selection-start-line="14" selection-start-column="95" selection-end-line="14" selection-end-column="95" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -433,7 +366,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -469,7 +401,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="16" selection-start-line="0" selection-start-column="16" selection-end-line="0" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -491,11 +422,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.975">
           <caret line="78" column="10" selection-start-line="78" selection-start-column="10" selection-end-line="78" selection-end-column="10" />
-          <folding>
-            <element signature="n#div#1;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#2;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#3;n#div#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -503,7 +429,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.2209026">
           <caret line="51" column="28" selection-start-line="51" selection-start-column="28" selection-end-line="51" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -511,11 +436,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15461347">
           <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="78" selection-end-column="10" />
-          <folding>
-            <element signature="n#div#1;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#2;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#div#3;n#div#0;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -523,7 +443,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.38653368">
           <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -531,7 +450,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.975">
           <caret line="9" column="68" selection-start-line="9" selection-start-column="68" selection-end-line="9" selection-end-column="68" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -539,15 +457,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.70190024">
           <caret line="85" column="37" selection-start-line="85" selection-start-column="37" selection-end-line="85" selection-end-column="37" />
-          <folding>
-            <element signature="e#5823#6757#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dialogs/payment.standard.capturepayment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3528678">
+        <state vertical-scroll-proportion="0.5785536">
           <caret line="35" column="56" selection-start-line="35" selection-start-column="56" selection-end-line="35" selection-end-column="56" />
           <folding />
         </state>
