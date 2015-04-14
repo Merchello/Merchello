@@ -1469,6 +1469,148 @@
             The <see cref="T:System.DateTime"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Mvc.MerchelloRenderMvcController">
+            <summary>
+            A controller to render front-end requests for Merchello
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Mvc.MerchelloRenderMvcController._merchelloContext">
+            <summary>
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloRenderMvcController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloRenderMvcController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloRenderMvcController.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloRenderMvcController"/> class.
+            </summary>
+            <param name="umbracoContext">
+            The <see cref="T:Umbraco.Web.UmbracoContext"/>
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloRenderMvcController.#ctor(Umbraco.Web.UmbracoContext,Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloRenderMvcController"/> class.
+            </summary>
+            <param name="umbracoContext">
+            The <see cref="T:Umbraco.Web.UmbracoContext"/>
+            </param>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloRenderMvcController.Initialize">
+            <summary>
+            Initializes the controller.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloRenderMvcController.CustomerContext">
+            <summary>
+            Gets the customer context.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloRenderMvcController.CurrentCustomer">
+            <summary>
+            Gets the current customer.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloRenderMvcController.Basket">
+            <summary>
+            Gets the current customer <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloRenderMvcController.MerchelloServices">
+            <summary>
+            Gets the services.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloRenderMvcController.GatewayContext">
+            <summary>
+            Gets the gateway context.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloRenderMvcController.Currency">
+            <summary>
+            Gets the currency.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Mvc.MerchelloSurfaceController">
+            <summary>
+            A <see cref="T:Umbraco.Web.Mvc.SurfaceController"/> that Merchello presentation Add-in controllers should inherit from
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Mvc.MerchelloSurfaceController._merchelloContext">
+            <summary>
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+            <param name="umbracoContext">
+            The <see cref="T:Umbraco.Web.UmbracoContext"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.EnsureOwner(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ILineItem},System.Guid)">
+            <summary>
+            Ensures the owner of the item cache.
+            </summary>
+            <param name="collection">
+            The <see cref="T:Merchello.Core.Models.LineItemCollection"/>
+            </param>
+            <param name="lineItemKey">
+            The line item key.
+            </param>
+            <exception cref="T:System.InvalidOperationException">
+            Throws an exception if the line item does not belong to the current customer
+            </exception>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.CustomerContext">
+            <summary>
+            Gets the customer context.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.CurrentCustomer">
+            <summary>
+            Gets the current customer.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.Basket">
+            <summary>
+            Gets the current customer <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.MerchelloServices">
+            <summary>
+            Gets the services.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.GatewayContext">
+            <summary>
+            Gets the gateway context.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.PluginManagerExtensions">
             <summary>
             Extension methods for the Plugin Manager

@@ -4,6 +4,7 @@
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
@@ -103,7 +104,7 @@
         /// <returns>
         /// The <see cref="CheckoutModel"/>.
         /// </returns>
-        CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods, IEnumerable<PaymentMethodUiInfo> paymentMethodUiInfos);
+        CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentGatewayMethod> paymentMethods, IEnumerable<PaymentMethodUiInfo> paymentMethodUiInfos);
 
         /// <summary>
         /// Creates a <see cref="ProductGroupModel"/>.

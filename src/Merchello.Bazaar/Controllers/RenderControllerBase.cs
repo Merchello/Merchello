@@ -4,25 +4,16 @@
 
     using Merchello.Bazaar.Factories;
     using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Web;
-    using Merchello.Web.Workflow;
+    using Merchello.Web.Mvc;
 
-    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Web;
-    using Umbraco.Web.Mvc;
 
     /// <summary>
     /// The base controller for the Merchello Starter Kit.
     /// </summary>
-    public abstract class RenderControllerBase : RenderMvcController
+    public abstract class RenderControllerBase : MerchelloRenderMvcController
     {
-        /// <summary>
-        /// The <see cref="IMerchelloContext"/>.
-        /// </summary>
-        private readonly IMerchelloContext _merchelloContext;
-
         /// <summary>
         /// The <see cref="IViewModelFactory"/>.
         /// </summary>
@@ -64,56 +55,13 @@
         /// The <see cref="IMerchelloContext"/>
         /// </param>
         protected RenderControllerBase(UmbracoContext umbracoContext, IMerchelloContext merchelloContext)
+            : base(umbracoContext, merchelloContext)
         {
-            Mandate.ParameterNotNull(umbracoContext, "umbracoContext");
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-
-            this.CustomerContext = new CustomerContext(umbracoContext);
-
-            this._merchelloContext = merchelloContext;
-
             this.Initialize();
         }
 
         #endregion
 
-        /// <summary>
-        /// Gets the customer context.
-        /// </summary>
-        protected CustomerContext CustomerContext { get; private set; }
-
-        /// <summary>
-        /// Gets the current customer.
-        /// </summary>
-        protected ICustomerBase CurrentCustomer 
-        {
-            get
-            {
-                return this.CustomerContext.CurrentCustomer;
-            } 
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IMerchelloContext"/>.
-        /// </summary>
-        protected IMerchelloContext MerchelloContext
-        {
-            get
-            {
-                return _merchelloContext;
-            }
-        }
-
-        /// <summary>
-        /// Gets the current customer <see cref="IBasket"/>.
-        /// </summary>
-        protected IBasket Basket
-        {
-            get
-            {
-                return this.CurrentCustomer.Basket();
-            }
-        }
 
         /// <summary>
         /// Gets the root shop page.
@@ -138,21 +86,11 @@
         }
 
         /// <summary>
-        /// Gets the currency.
-        /// </summary>
-        protected ICurrency Currency { get; private set; }
-
-        /// <summary>
         /// Initializes the controller.
         /// </summary>
         private void Initialize()
         {
             this._shopPage = new Lazy<IPublishedContent>(() => this.UmbracoContext.PublishedContentRequest == null ? null : this.UmbracoContext.PublishedContentRequest.PublishedContent.AncestorOrSelf("MerchStore"));
-
-            var storeSettingsService = this._merchelloContext.Services.StoreSettingService;
-            var storeSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey);
-
-            this.Currency = storeSettingsService.GetCurrencyByCode(storeSetting.Value);
 
             _viewModelFactory = new Lazy<IViewModelFactory>(() => new ViewModelFactory(Umbraco, CurrentCustomer, Currency));
         }

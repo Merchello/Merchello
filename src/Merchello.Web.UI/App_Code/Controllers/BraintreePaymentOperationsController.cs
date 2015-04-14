@@ -5,6 +5,7 @@
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Controllers;
+    using Merchello.Bazaar.Controllers.Surface;
     using Merchello.Bazaar.Models;
     using Merchello.Core;
     using Merchello.Core.Gateways.Payment;

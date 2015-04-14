@@ -81,13 +81,13 @@
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.8.0.10\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.1.5\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.8.0.10\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.1.5\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web">
-      <HintPath>..\packages\Merchello.Core.1.8.0.10\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.1.5\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.2.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿namespace Merchello.Bazaar.Controllers.Surface
 {
     using System;
     using System.Collections.Generic;
@@ -34,8 +34,8 @@
         [HttpGet]
         public ActionResult LinkToReceipt(int receiptContentId, Guid invoiceKey)
         {
-            CustomerContext.SetValue("invoiceKey", invoiceKey.ToString());
-            return RedirectToUmbracoPage(receiptContentId);
+            this.CustomerContext.SetValue("invoiceKey", invoiceKey.ToString());
+            return this.RedirectToUmbracoPage(receiptContentId);
         }
 
         /// <summary>
@@ -66,15 +66,15 @@
         [HttpPost]
         public ActionResult UpdateAccountProfile(AccountProfileModel model)
         {
-            if (model.SetPassword && !ModelState.IsValid) return this.CurrentUmbracoPage();
+            if (model.SetPassword && !this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            if (!(ModelState.IsValidField("firstName") && ModelState.IsValidField("lastName"))) return this.CurrentUmbracoPage();
+            if (!(this.ModelState.IsValidField("firstName") && this.ModelState.IsValidField("lastName"))) return this.CurrentUmbracoPage();
 
-            var customer = (ICustomer)CurrentCustomer;
+            var customer = (ICustomer)this.CurrentCustomer;
             customer.FirstName = model.FirstName;
             customer.LastName = model.LastName;
 
-            MerchelloServices.CustomerService.Save(customer);
+            this.MerchelloServices.CustomerService.Save(customer);
 
             if (model.SetPassword)
             {
@@ -119,11 +119,11 @@
         [HttpPost]
         public ActionResult SaveCustomerAddress(CustomerAddressModel model)
         {
-            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
+            if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
             ICustomerAddress customerAddress;
             if (!model.Key.Equals(Guid.Empty))
             {
-                var existing = MerchelloServices.CustomerService.GetAddressByKey(model.Key);
+                var existing = this.MerchelloServices.CustomerService.GetAddressByKey(model.Key);
                 customerAddress = model.AsCustomerAddress(existing);
             }
             else
@@ -131,8 +131,8 @@
                 customerAddress = model.AsCustomerAddress();
             }
 
-            MerchelloServices.CustomerService.Save(customerAddress);
-            CustomerContext.Reinitialize(CurrentCustomer);
+            this.MerchelloServices.CustomerService.Save(customerAddress);
+            this.CustomerContext.Reinitialize(this.CurrentCustomer);
             return this.SuccessfulRedirect(model.AccountPageId);
         }
 
@@ -154,12 +154,12 @@
         [HttpGet]
         public ActionResult DeleteCustomerAddress(Guid customerKey, Guid customerAddressKey, int accountPageId)
         {
-            var customer = MerchelloServices.CustomerService.GetByKey(customerKey);
+            var customer = this.MerchelloServices.CustomerService.GetByKey(customerKey);
             var address = customer.Addresses.FirstOrDefault(x => x.Key == customerAddressKey);
             if (address != null)
             {
                 customer.DeleteCustomerAddress(address);
-                CustomerContext.Reinitialize(customer);
+                this.CustomerContext.Reinitialize(customer);
             }
 
             return this.SuccessfulRedirect(accountPageId);
@@ -183,7 +183,7 @@
         [HttpGet]
         public ActionResult SetDefaultAddress(Guid customerKey, Guid customerAddressKey, int accountPageId)
         {
-            var customer = MerchelloServices.CustomerService.GetByKey(customerKey);
+            var customer = this.MerchelloServices.CustomerService.GetByKey(customerKey);
             var address = customer.Addresses.FirstOrDefault(x => x.Key == customerAddressKey);
             if (address != null)
             {
@@ -195,8 +195,8 @@
                 }
 
                 address.IsDefault = true;
-                MerchelloServices.CustomerService.Save(addresses);
-                CustomerContext.Reinitialize(customer);
+                this.MerchelloServices.CustomerService.Save(addresses);
+                this.CustomerContext.Reinitialize(customer);
             }
 
             return this.SuccessfulRedirect(accountPageId);
@@ -213,7 +213,7 @@
         /// </returns>
         private ActionResult SuccessfulRedirect(int accountPageId)
         {
-            var accountPage = Umbraco.TypedContent(accountPageId);
+            var accountPage = this.Umbraco.TypedContent(accountPageId);
 
             return this.Redirect(accountPage.Url + "#success");
         }

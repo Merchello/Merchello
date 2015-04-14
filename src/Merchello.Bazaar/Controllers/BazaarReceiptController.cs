@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Attributes;
+    using Merchello.Core;
 
     using Umbraco.Core.Logging;
     using Umbraco.Web;
@@ -41,7 +42,7 @@
 
             var invoiceKey = new Guid(key);
 
-            var invoice = MerchelloContext.Services.InvoiceService.GetByKey(invoiceKey);
+            var invoice = MerchelloContext.Current.Services.InvoiceService.GetByKey(invoiceKey);
            
             var viewModel = ViewModelFactory.CreateReceipt(model, invoice);
 

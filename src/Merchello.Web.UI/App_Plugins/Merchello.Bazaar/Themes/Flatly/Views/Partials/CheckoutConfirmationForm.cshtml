@@ -2,6 +2,7 @@
 @using System.Globalization
 @using System.Web.Mvc.Html
 @using Merchello.Bazaar.Controllers
+@using Merchello.Bazaar.Controllers.Surface
 @using Merchello.Bazaar.Models
 @using Merchello.Bazaar
 @using Merchello.Introduction.Controllers
@@ -104,7 +105,7 @@
                 </div>
             }
         </div>
-        
+        @Html.Action("RenderBraintreeSetupJs", "BraintreePaymentOperations", new { area = "MerchelloIntroduction" })
 
     </div>
         

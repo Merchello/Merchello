@@ -7,6 +7,7 @@
     using Merchello.Bazaar.Attributes;
     using Merchello.Bazaar.Models;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
@@ -63,15 +64,14 @@
             foreach (var method in paymentMethods)
             {
                 var att = method.GetType().GetCustomAttribute<GatewayMethodUiAttribute>(false);
-
                 paymentMethodInfos.Add(new PaymentMethodUiInfo()
-                                           {
-                                               Alias = att == null ? string.Empty : att.Alias.Replace(".", string.Empty),
-                                               PaymentMethodKey = method.PaymentMethod.Key
-                                           });
+                    {
+                        Alias = att == null ? string.Empty : att.Alias.Replace(".", string.Empty),
+                        PaymentMethodKey = method.PaymentMethod.Key
+                    });
             }
 
-            var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods.Select(x => x.PaymentMethod), paymentMethodInfos);
+            var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods, paymentMethodInfos);
 
             return this.View(viewModel.ThemeViewPath("CheckoutConfirmation"), viewModel);
         }

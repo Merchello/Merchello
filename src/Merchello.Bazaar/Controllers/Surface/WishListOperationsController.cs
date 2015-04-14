@@ -1,4 +1,4 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿namespace Merchello.Bazaar.Controllers.Surface
 {
     using System;
     using System.Collections.Generic;
@@ -31,7 +31,7 @@
         /// </summary>
         public WishListOperationsController()
         {
-            if (CurrentCustomer != null) _wishList = ((ICustomer)CurrentCustomer).WishList();
+            if (this.CurrentCustomer != null) this._wishList = ((ICustomer)this.CurrentCustomer).WishList();
         }
 
         /// <summary>
@@ -53,14 +53,14 @@
             if (model.OptionChoices != null && model.OptionChoices.Any())
             {
                 var variant = this.MerchelloServices.ProductVariantService.GetProductVariantWithAttributes(product, model.OptionChoices);
-                _wishList.AddItem(variant, variant.Name, 1, extendedData);
+                this._wishList.AddItem(variant, variant.Name, 1, extendedData);
             }
             else
             {
-                _wishList.AddItem(product, product.Name, 1, extendedData);
+                this._wishList.AddItem(product, product.Name, 1, extendedData);
             }
 
-            _wishList.Save();
+            this._wishList.Save();
 
             return this.RedirectToUmbracoPage(model.WishListPageId);
         }
@@ -77,12 +77,12 @@
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
             // The only thing that can be updated in this basket is the quantity
-            foreach (var item in model.Items.Where(item => _wishList.Items.First(x => x.Key == item.Key).Quantity != item.Quantity))
+            foreach (var item in model.Items.Where(item => this._wishList.Items.First(x => x.Key == item.Key).Quantity != item.Quantity))
             {
-                _wishList.UpdateQuantity(item.Key, item.Quantity);
+                this._wishList.UpdateQuantity(item.Key, item.Quantity);
             }
 
-            _wishList.Save();
+            this._wishList.Save();
 
             return this.CurrentUmbracoPage();
         }
@@ -106,12 +106,12 @@
         [HttpGet]
         public ActionResult RemoveItemFromWishList(Guid lineItemKey, int wishListPageId)
         {
-            EnsureOwner(_wishList.Items, lineItemKey);
+            EnsureOwner(this._wishList.Items, lineItemKey);
 
             // remove the item by it's pk.  
-            _wishList.RemoveItem(lineItemKey);
+            this._wishList.RemoveItem(lineItemKey);
 
-            _wishList.Save();
+            this._wishList.Save();
 
             return this.RedirectToUmbracoPage(wishListPageId);
         }
@@ -134,13 +134,13 @@
         [HttpGet]
         public ActionResult MoveItemToBasket(Guid lineItemKey, int basketPageId, int wishListPageId)
         {
-            if (CurrentCustomer.IsAnonymous) return this.RedirectToUmbracoPage(basketPageId);
+            if (this.CurrentCustomer.IsAnonymous) return this.RedirectToUmbracoPage(basketPageId);
 
-            EnsureOwner(_wishList.Items, lineItemKey);
+            EnsureOwner(this._wishList.Items, lineItemKey);
 
-            _wishList.MoveItemToBasket(lineItemKey);
+            this._wishList.MoveItemToBasket(lineItemKey);
 
-            return _wishList.IsEmpty ? RedirectToUmbracoPage(basketPageId) : RedirectToUmbracoPage(wishListPageId);
+            return this._wishList.IsEmpty ? this.RedirectToUmbracoPage(basketPageId) : this.RedirectToUmbracoPage(wishListPageId);
         }
     }
 }
