@@ -18,8 +18,18 @@
 
     CampaignSettingsDisplay.prototype = (function() {
 
-        return {
+        function clone() {
+            var settings = this.activitySettings;
+            var campaign = angular.extend(new CampaignSettingsDisplay(), this);
+            campaign.activitySettings = [];
+            angular.forEach(settings, function(act) {
+              campaign.activitySettings.push(act);
+            });
+            return campaign;
+        }
 
+        return {
+            clone: clone
         }
 
     }());

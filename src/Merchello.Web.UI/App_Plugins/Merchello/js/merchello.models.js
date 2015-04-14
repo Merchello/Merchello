@@ -532,7 +532,7 @@
 
         // generates an alias for the campaign
         function generateAlias() {
-            this.campaign.alias = this.campaign.name.replace( /[^a-zA-Z0-9]/ , '-').toLowerCase();
+            this.campaign.alias = this.campaign.name.replace(/\W+/g, '-').toLowerCase();
         }
 
         return {
@@ -1304,8 +1304,18 @@
 
     CampaignSettingsDisplay.prototype = (function() {
 
-        return {
+        function clone() {
+            var settings = this.activitySettings;
+            var campaign = angular.extend(new CampaignSettingsDisplay(), this);
+            campaign.activitySettings = [];
+            angular.forEach(settings, function(act) {
+              campaign.activitySettings.push(act);
+            });
+            return campaign;
+        }
 
+        return {
+            clone: clone
         }
 
     }());
@@ -3429,6 +3439,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new AddPaymentDialogData();
         }
 
+        // Marketing
+        function createAddEditCampaignSettingsDialogData() {
+            return new AddEditCampaignSettingsDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -3467,7 +3482,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createProductSelectorDialogData: createProductSelectorDialogData,
             createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
             createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
-            createAddPaymentDialogData: createAddPaymentDialogData
+            createAddPaymentDialogData: createAddPaymentDialogData,
+            createAddEditCampaignSettingsDialogData: createAddEditCampaignSettingsDialogData
         };
 }]);
 

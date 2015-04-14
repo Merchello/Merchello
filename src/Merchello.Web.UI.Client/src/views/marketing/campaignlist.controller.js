@@ -79,7 +79,7 @@ angular.module('merchello').controller('Merchello.Backoffice.CampaignListControl
                 loadCampaignSettings();
             }, function(reason) {
                 notificationsService.error("Campaign save Failed", reason.message);
-            })
+            });
         }
 
         //// Initializes the controller

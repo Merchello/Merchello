@@ -61,6 +61,7 @@
         Cash,
         CreditCard,
         PurchaseOrder,
+        CustomerCredit,
         Custom
     }
 

@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Security.Cryptography;
     using System.Web.Http;
 
@@ -132,6 +134,29 @@
             _campaignSettingsService.Save(destination);
 
             return destination.ToCampaignSettingsDisplay();
+        }
+
+        /// <summary>
+        /// The get delete campaign setting.
+        /// </summary>
+        /// <param name="key">
+        /// The campaign key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpGet, HttpDelete]
+        public HttpResponseMessage DeleteCampaignSetting(string key)
+        {
+            var campaign = _campaignSettingsService.GetByKey(new Guid(key));
+            if (campaign == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            _campaignSettingsService.Delete(campaign);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

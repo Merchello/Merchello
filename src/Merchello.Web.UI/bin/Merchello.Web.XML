@@ -155,6 +155,17 @@
             The <see cref="T:Merchello.Core.Models.CampaignActivitySettings"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.MarketingCampaignApiController.DeleteCampaignSetting(System.String)">
+            <summary>
+            The get delete campaign setting.
+            </summary>
+            <param name="key">
+            The campaign key.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.CampaignActivitySettingsDisplay">
             <summary>
             The campaign activity settings display.

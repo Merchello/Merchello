@@ -218,7 +218,6 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 dialogData.paymentMethodName = method.name;
 
                 dialogData.appliedAmount = payment.appliedAmount();
-                console.info(method.refundPaymentEditorView.editorView);
                 dialogService.open({
                     template: method.refundPaymentEditorView.editorView,
                     show: true,

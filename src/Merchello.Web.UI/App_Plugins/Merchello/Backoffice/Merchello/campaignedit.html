@@ -7,8 +7,8 @@
             <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <a data-ng-click="deleteProductDialog()" data-ng-show="context !== 'newcampaign'" class="btn"><localize key="merchelloMarketing_btnDeleteCampaign" /></a>
-                        <a data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></a>
+                        <a data-ng-click="openDeleteCampaignDialog()" data-ng-show="context !== 'newcampaign'" class="btn btn-danger"><localize key="merchelloButtons_delete" /></a>
+                        <a class="btn btn-success"><localize key="buttons_save" /></a>
                     </div>
                 </div>
             </div>
@@ -27,8 +27,11 @@
                         </label>
                         <div class="merchello-controls">
                             <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
-                            <div class="row-fluid">
-                               <h2>{{campaign.Name}}</h2>
+                            <div class="row-fluid well">
+                                <a class="btn btn-default btn-xs btn-mini pull-right" data-ng-click="openEditCampaignDialog()"><i class="icon-edit"></i></a>
+                                <h4>{{ campaign.name }}</h4>
+                                <small>{{ campaign.alias }}</small>
+                                <p data-ng-show="campaign.description !== '">{{campaign.description}}</p>
                             </div>
                         </div>
                     </div>

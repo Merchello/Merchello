@@ -1,7 +1,4 @@
-﻿using Lucene.Net.Index;
-using Merchello.Web.Models.SaleHistory;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
@@ -9,15 +6,16 @@ namespace Merchello.Web.Editors
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
-    using Core;
-    using Core.Gateways.Payment;
-    using Core.Models;
-    using Core.Services;
-    using Models;
-    using Models.ContentEditing;
-    using Models.Payments;
-    using WebApi;
-    using Workflow;
+
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Payments;
+    using Merchello.Web.Models.SaleHistory;
+    using Merchello.Web.WebApi;
+    using Merchello.Web.Workflow;
+
     using Umbraco.Web;
 
     /// <summary>

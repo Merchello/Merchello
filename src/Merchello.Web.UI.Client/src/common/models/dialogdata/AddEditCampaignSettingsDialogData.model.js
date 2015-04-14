@@ -21,7 +21,7 @@
 
         // generates an alias for the campaign
         function generateAlias() {
-            this.campaign.alias = this.campaign.name.replace( /[^a-zA-Z0-9]/ , '-').toLowerCase();
+            this.campaign.alias = this.campaign.name.replace(/\W+/g, '-').toLowerCase();
         }
 
         return {
