@@ -228,7 +228,7 @@
                 if (!params) {
                     params = {};
                 }
-                var size = '64', defaultImage = 'blank';
+                var size = '64', defaultImage = 'mm';
                 if (params.size) {
                     size = params.size;
                 }

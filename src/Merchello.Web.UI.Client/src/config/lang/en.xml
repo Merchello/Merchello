@@ -8,8 +8,19 @@
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
   </area>
+  <area alias="merchelloTableCaptions">
+    <key alias="name">Name</key>
+    <key alias="alias">Alias</key>
+    <key alias="startDate">Start Date</key>
+    <key alias="endDate">End Date</key>
+  </area>
     <area alias="merchelloMarketing">
-        <key alias="campaigns">Marketing Campaigns</key>
+      <key alias="campaigns">Marketing Campaigns</key>
+      <key alias="btnNewCampaign">New Campaign</key>
+      <key alias="isActive">Active</key>
+      <key alias="activities">Activities</key>
+      <key alias="campaignInfo">Campaign Info</key>
+      <key alias="configCampaign">Configure the Marketing Campaign</key>
     </area>
   <area alias="merchelloVariant">
     <!-- things -->

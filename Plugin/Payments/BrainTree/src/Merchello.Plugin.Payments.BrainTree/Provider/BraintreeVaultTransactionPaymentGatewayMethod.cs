@@ -21,7 +21,7 @@
     /// <remarks>
     /// This method assumes that the invoice is associated with a customer
     /// </remarks>
-    [GatewayMethodUi("BrainTree.CustomerTransaction")]
+    [GatewayMethodUi("BrainTree.VaultTransaction")]
     [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
     [PaymentGatewayMethod("Braintree Payment Gateway Method Editors",
     "~/App_Plugins/Merchello.Braintree/dialogs/payment.vault.authorizepayment.html",

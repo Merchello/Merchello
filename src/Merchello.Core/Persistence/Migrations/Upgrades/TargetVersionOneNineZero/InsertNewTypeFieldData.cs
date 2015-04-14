@@ -1,36 +1,28 @@
 ﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneNineZero
 {
     using System;
-    using System.Collections.Generic;
 
     using Merchello.Core.Configuration;
     using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Models.TypeFields;
 
     using Umbraco.Core;
     using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
-    /// Adds new database tables .
+    /// The insert new type field data.
     /// </summary>
-    [Migration("1.8.1", "1.9.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
-    public class CreateOneNineZeroTables : MigrationBase
+    [Migration("1.8.1", "1.9.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    public class InsertNewTypeFieldData : MigrationBase
     {
-        /// <summary>
-        /// Tables in the order of creation or reverse deletion.
-        /// </summary>
-        private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
-        {
-            { 0, typeof(CampaignSettingsDto) },
-            { 1, typeof(CampaignActivitySettingsDto) }
-        };
-
         /// <summary>
         /// The up.
         /// </summary>
         public override void Up()
         {
             var database = ApplicationContext.Current.DatabaseContext.Database;
-            DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "1.9.0 upgrade");
+            var entity = new PaymentMethodTypeField();
+            database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.CustomerCredit.TypeKey, Alias = entity.CustomerCredit.Alias, Name = entity.CustomerCredit.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
         }
 
         /// <summary>

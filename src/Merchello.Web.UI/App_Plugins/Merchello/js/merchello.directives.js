@@ -863,7 +863,11 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
             function init() {
                 $scope.$watch('paymentMethods', function(methods) {
                   if (methods.length > 0) {
-                      $scope.loaded = true;
+                      $scope.$watch('invoice', function(inv) {
+                          if (inv.key !== null && inv.key !== undefined) {
+                              $scope.loaded = true;
+                          }
+                      });
                   }
                 });
             }
@@ -877,6 +881,9 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
              */
             function filterPaymentMethods() {
                 var methods = [];
+                if (!$scope.loaded) {
+                    return methods;
+                }
                 if ($scope.authorizePaymentOnly) {
                     methods = _.filter($scope.paymentMethods, function(auth) { return auth.authorizePaymentEditorView.editorView !== ''; });
                 } else {

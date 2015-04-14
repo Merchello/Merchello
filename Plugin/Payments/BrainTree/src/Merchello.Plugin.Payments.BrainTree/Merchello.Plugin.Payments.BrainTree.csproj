@@ -286,6 +286,8 @@
     <Content Include="App_Plugins\Merchello.Braintree\payment.braintree.providersettings.html" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controllers\Store\" />
+    <Folder Include="Models\Store\" />
     <Folder Include="Subscriptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

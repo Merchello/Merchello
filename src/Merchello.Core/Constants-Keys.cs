@@ -578,6 +578,14 @@
                 {
                     get { return new Guid("2B588AE0-7B76-430F-9341-270A8C943E7E"); }
                 }
+
+                /// <summary>
+                /// Gets the customer credit.
+                /// </summary>
+                public static Guid CustomerCreditKey
+                {
+                    get { return new Guid("CD0FB122-DE4E-4F1A-939F-EC5859777EAE"); }
+                }
             }
 
             /// <summary>

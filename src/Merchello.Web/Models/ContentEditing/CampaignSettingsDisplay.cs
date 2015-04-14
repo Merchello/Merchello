@@ -79,6 +79,7 @@
         {
             destination.Name = settings.Name;
             destination.Alias = settings.Alias;
+            destination.Description = settings.Description;
 
             return destination;
         }

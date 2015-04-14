@@ -402,10 +402,20 @@ angular.module('merchello.resources').factory('marketingCampaignResource',
                 'Failed to add a new campaign');
             },
             updateCampaignSettings: function(campaign) {
-                var url = baseUrl + 'PostUpdateCampaignSettings';
+                var url = baseUrl + 'PostUpdateCampaignSetting';
                 return umbRequestHelper.resourcePromise(
                     $http.post(url, campaign),
                     'Failed to update the campaign');
+            },
+            deleteCampaignSettings: function(campaign) {
+                var url = baseUrl + 'DeleteCampaignSetting';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET",
+                        params: { key: campaign.key }
+                    }),
+                    'Failed to delete marketing campaign settings');
             }
         };
     }]);
