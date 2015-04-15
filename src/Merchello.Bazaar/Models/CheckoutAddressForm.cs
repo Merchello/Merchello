@@ -58,7 +58,7 @@
             /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        [Required(ErrorMessage = "Name is reqired"), Display(Name = "Name")]
+        [Required(ErrorMessage = "Name is required"), Display(Name = "Name")]
         public string BillingName { get; set; }
 
         /// <summary>
@@ -150,7 +150,7 @@
             /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        [Required(ErrorMessage = "Name is reqired"), Display(Name = "Name")]
+        [Required(ErrorMessage = "Name is required"), Display(Name = "Name")]
         public string ShippingName { get; set; }
 
         /// <summary>
