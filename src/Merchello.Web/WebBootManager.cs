@@ -19,7 +19,7 @@
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebBootManager"/> class. 
-        /// A bootstrapper for the Merchello plugin which initializes all objects including the Web portion of the plugin
+        /// A boot strap class for the Merchello plugin which initializes all objects including the Web portion of the plugin
         /// </summary>
         public WebBootManager()
         {

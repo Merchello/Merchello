@@ -11378,6 +11378,14 @@
             member changes their username we have to update the association.
             </remarks>
         </member>
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.VerifyMerchelloVersion">
+            <summary>
+            Verifies that the Merchello Version (binary) is consistent with the configuration version.
+            </summary>
+            <remarks>
+            This process also does database schema migrations (for Merchello) if necessary
+            </remarks>
+        </member>
         <member name="T:Merchello.Web.Validation.BasketItemInventoryValidation">
             <summary>
             Visitor to audit basket line item for inventory requirements
@@ -11458,7 +11466,7 @@
         <member name="M:Merchello.Web.WebBootManager.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.WebBootManager"/> class. 
-            A bootstrapper for the Merchello plugin which initializes all objects including the Web portion of the plugin
+            A boot strap class for the Merchello plugin which initializes all objects including the Web portion of the plugin
             </summary>
         </member>
         <member name="M:Merchello.Web.WebBootManager.#ctor(System.Boolean)">

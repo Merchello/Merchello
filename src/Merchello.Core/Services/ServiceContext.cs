@@ -152,10 +152,17 @@
         /// </param>
         public ServiceContext(IDatabaseUnitOfWorkProvider dbUnitOfWorkProvider)
         {
+            DatabaseUnitOfWorkProvider = dbUnitOfWorkProvider;
             BuildServiceContext(dbUnitOfWorkProvider, new Lazy<RepositoryFactory>(() => new RepositoryFactory()));
         }
 
         #region IServiceContext Members
+
+        /// <summary>
+        /// Gets the database unit of work provider.
+        /// </summary>
+        /// <remarks>Used for testing</remarks>
+        internal IDatabaseUnitOfWorkProvider DatabaseUnitOfWorkProvider { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="IAuditLogService"/>

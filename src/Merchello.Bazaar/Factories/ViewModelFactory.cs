@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Web.UI.WebControls;
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.Account;
@@ -23,12 +22,10 @@
     using Umbraco.Web;
     using Umbraco.Web.Models;
 
-    using Constants = Merchello.Core.Constants;
-
     /// <summary>
     /// Represents a view model factory.
     /// </summary>
-    internal class ViewModelFactory : IViewModelFactory
+    public class ViewModelFactory : IViewModelFactory
     {
         /// <summary>
         /// The <see cref="ICustomerBase"/>.
@@ -115,7 +112,7 @@
                                                  {
                                                      Theme = viewModel.Theme,
                                                      CustomerKey = viewModel.CurrentCustomer.Key,
-                                                     AccountPageId =  viewModel.Id,
+                                                     AccountPageId = viewModel.Id,
                                                      ShipCountries = shipCountries.Select(x => new SelectListItem()
                                                                                                    {
                                                                                                        Value = x.CountryCode,

@@ -2,14 +2,24 @@
 {
     using System;
     using System.Configuration;
+    using System.Net.Mime;
+
     using Cache;
     using Configuration;
     using Gateways;
+
+    using Merchello.Core.Persistence.Migrations;
+    using Merchello.Core.Persistence.Migrations.Initial;
+
     using Observation;
     using Persistence.UnitOfWork;
     using Services;
+
+    using umbraco.cms.businesslogic.packager;
+
     using Umbraco.Core;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
     /// A bootstrapper for the Merchello Plugin which initializes all objects to be used in the Merchello Core
@@ -219,26 +229,5 @@
                 serviceContext.GatewayProviderService,
                 cache.RuntimeCache);
         }
-
-        ////protected void BindEventTriggers()
-        ////{
-        ////    LogHelper.Info<CoreBootManager>("Beginning Merchello Trigger Binding");
-        ////    foreach (var trigger in TriggerResolver.Current.GetAllTriggers())
-        ////    {
-        ////        var att = trigger.GetType().GetCustomAttributes<TriggerForAttribute>(false).FirstOrDefault();
-
-        ////        if (att == null) continue;
-
-        ////        var bindTo = att.Type.GetEvent(att.HandleEvent);
-
-        ////        if (bindTo == null) continue;
-
-        ////        var mi = trigger.GetType().GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
-
-        ////        bindTo.AddEventHandler(trigger, Delegate.CreateDelegate(bindTo.EventHandlerType, trigger, mi));
-
-        ////        LogHelper.Info<CoreBootManager>(string.Format("Binding {0} to {1} - {2} event", trigger.GetType().Name, att.Type.Name, att.HandleEvent));
-        ////    }
-        ////}      
     }
 }

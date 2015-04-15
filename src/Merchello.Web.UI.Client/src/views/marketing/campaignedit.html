@@ -29,7 +29,7 @@
                             <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
                             <div class="row-fluid well">
                                 <a class="btn btn-default btn-xs btn-mini pull-right" data-ng-click="openEditCampaignDialog()"><i class="icon-edit"></i></a>
-                                <h4>{{ campaign.name }}</h4>
+                                <h4>{{ campaign.name }} <span data-ng-show="campaign.active">(Active)</span></h4>
                                 <small>{{ campaign.alias }}</small>
                                 <p data-ng-show="campaign.description !== '">{{campaign.description}}</p>
                             </div>
