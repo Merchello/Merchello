@@ -201,6 +201,7 @@
     <Compile Include="Controllers\BazaarCheckoutConfirmController.cs" />
     <Compile Include="Controllers\BazaarReceiptController.cs" />
     <Compile Include="Controllers\Surface\AccountOperationsController.cs" />
+    <Compile Include="Controllers\Surface\MembershipOperationsController.cs" />
     <Compile Include="Install\PackageActions\AddMembershipTypeAndGroup.cs" />
     <Compile Include="Models\Account\AccountProfileModel.cs" />
     <Compile Include="Models\Account\CustomerAddressModel.cs" />
@@ -216,7 +217,6 @@
     <Compile Include="Controllers\BazaarProductGroupController.cs" />
     <Compile Include="Controllers\BazaarStoreController.cs" />
     <Compile Include="Controllers\BazaarWishListController.cs" />
-    <Compile Include="Controllers\Surface\MembershipOperationsController.cs" />
     <Compile Include="Controllers\Api\PropertyEditorsController.cs" />
     <Compile Include="Controllers\RenderControllerBase.cs" />
     <Compile Include="Controllers\Surface\SurfaceControllerBase.cs" />

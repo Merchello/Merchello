@@ -1004,7 +1004,7 @@
     <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Persistence\Migrations\Initial\PluginDatabaseSchemaResult.cs" />
+    <Compile Include="Persistence\Migrations\Initial\MerchelloDatabaseSchemaResult.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
     <Compile Include="Models\TypeFields\ItemCacheTypeField.cs" />

@@ -12,7 +12,7 @@
     /// <summary>
     /// The insert new type field data.
     /// </summary>
-    [Migration("1.8.1", "1.9.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.7.0", "1.9.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
     public class InsertNewTypeFieldData : MigrationBase
     {
         /// <summary>

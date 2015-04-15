@@ -80,6 +80,7 @@
             destination.Name = settings.Name;
             destination.Alias = settings.Alias;
             destination.Description = settings.Description;
+            destination.Active = settings.Active;
 
             return destination;
         }
