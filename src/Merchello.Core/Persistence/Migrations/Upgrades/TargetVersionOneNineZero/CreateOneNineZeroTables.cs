@@ -12,7 +12,7 @@
     /// <summary>
     /// Adds new database tables .
     /// </summary>
-    [Migration("1.7.0", "1.9.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.7.0", "1.8.1.6", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateOneNineZeroTables : MigrationBase
     {
         /// <summary>

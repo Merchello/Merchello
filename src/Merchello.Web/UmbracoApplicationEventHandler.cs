@@ -13,6 +13,9 @@ namespace Merchello.Web
     using Core.Models;
     using Core.Sales;
     using Core.Services;
+
+    using Merchello.Core.Persistence.Migrations;
+
     using Models.SaleHistory;
     using Umbraco.Core;
     using Umbraco.Core.Events;
@@ -69,6 +72,8 @@ namespace Merchello.Web
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
+
+            VerifyMerchelloVersion();
 
             LogHelper.Info<UmbracoApplicationEventHandler>("Initializing Customer related events");
 
@@ -266,6 +271,32 @@ namespace Merchello.Web
 
                     customerService.Save(customer);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the Merchello Version (binary) is consistent with the configuration version.
+        /// </summary>
+        /// <remarks>
+        /// This process also does database schema migrations (for Merchello) if necessary
+        /// </remarks>
+        private void VerifyMerchelloVersion()
+        {
+            LogHelper.Info<UmbracoApplicationEventHandler>("Verifying Merchello Version.");
+
+            if (!MerchelloUpgradeHelper.CheckConfigurationStatusVersion())
+            {
+                LogHelper.Info<UmbracoApplicationEventHandler>(
+                    "Merchello Versions did not match - initializing upgrade.");
+
+                if (MerchelloUpgradeHelper.UpgradeMerchello(ApplicationContext.Current.DatabaseContext.Database))
+                {
+                    LogHelper.Info<UmbracoApplicationEventHandler>("Upgrade completed successfully.");
+                }
+            }
+            else
+            {
+                LogHelper.Info<UmbracoApplicationEventHandler>("Merchello Version Verified - no upgrade required.");
             }
         }
     }
