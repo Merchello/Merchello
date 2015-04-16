@@ -374,7 +374,6 @@
     <Compile Include="Persistence\Migrations\MerchelloUpgradeHelper.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\CreateOneNineZeroTables.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\InsertNewTypeFieldData.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
@@ -453,9 +452,6 @@
     <Compile Include="Persistence\Mappers\NotificationMessageMapper.cs" />
     <Compile Include="Persistence\Mappers\NotificationMethodMapper.cs" />
     <Compile Include="Persistence\Migrations\DatabaseSchemaHelper.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\AddShippedDateColumn.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\CreateOneOneZeroTables.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\InsertNewTypeFieldData.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IItemCacheLineItemRepository.cs" />
