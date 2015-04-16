@@ -22,6 +22,11 @@
         ICampaignSettingsService CampaignSettingsService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IDigitalMediaService"/>.
+        /// </summary>
+        IDigitalMediaService DigitalMediaService { get;  }
+
+        /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>
         /// </summary>
         IGatewayProviderService GatewayProviderService { get; }

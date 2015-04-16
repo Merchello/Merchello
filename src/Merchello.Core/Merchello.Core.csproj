@@ -259,6 +259,8 @@
     <Compile Include="Gateways\Notification\Monitors\OrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\PartialOrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Triggering\ShipmentResultNotifyModelFactory.cs" />
+    <Compile Include="Models\DigitalMedia.cs" />
+    <Compile Include="Models\Interfaces\IDigitalMedia.cs" />
     <Compile Include="Models\MonitorModels\IShipmentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
@@ -282,6 +284,7 @@
     <Compile Include="Models\NotificationExtensions.cs" />
     <Compile Include="Models\Rdbms\CampaignSettingsDto.cs" />
     <Compile Include="Models\Rdbms\CampaignActivitySettingsDto.cs" />
+    <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
@@ -364,10 +367,12 @@
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\CampaignActivitySettingsFactory.cs" />
     <Compile Include="Persistence\Factories\CampaignSettingsFactory.cs" />
+    <Compile Include="Persistence\Factories\DigitalMediaFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\CampaignActivitySettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\CampaignSettingsMapper.cs" />
+    <Compile Include="Persistence\Mappers\DigitalMediaMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
@@ -379,10 +384,12 @@
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\CampaignActivitySettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\CampaignSettingsRepository.cs" />
+    <Compile Include="Persistence\Repositories\DigitalMediaRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAssertsDocumentNumber.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICampaignActivitySettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICampaignSettingsRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IDigitalMediaRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
@@ -933,12 +940,14 @@
     <Compile Include="Services\CampaignActivitySettingsService.cs" />
     <Compile Include="Services\CampaignSettingsService.cs" />
     <Compile Include="Services\CustomerAddressService.cs" />
+    <Compile Include="Services\DigitalMediaService.cs" />
     <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\IAuditLogService.cs" />
     <Compile Include="Services\Interfaces\ICampaignActivitySettingsService.cs" />
     <Compile Include="Services\Interfaces\ICampaignSettingsService.cs" />
     <Compile Include="Services\Interfaces\ICustomerAddressService.cs" />
+    <Compile Include="Services\Interfaces\IDigitalMediaService.cs" />
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />

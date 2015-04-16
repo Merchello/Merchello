@@ -58,6 +58,11 @@
         private Lazy<ICustomerService> _customerService;
 
         /// <summary>
+        /// The digital media service.
+        /// </summary>
+        private Lazy<IDigitalMediaService> _digitalMediaService; 
+
+        /// <summary>
         /// The invoice service.
         /// </summary>
         private Lazy<IInvoiceService> _invoiceService;
@@ -159,12 +164,6 @@
         #region IServiceContext Members
 
         /// <summary>
-        /// Gets the database unit of work provider.
-        /// </summary>
-        /// <remarks>Used for testing</remarks>
-        internal IDatabaseUnitOfWorkProvider DatabaseUnitOfWorkProvider { get; private set; }
-
-        /// <summary>
         /// Gets the <see cref="IAuditLogService"/>
         /// </summary>
         public IAuditLogService AuditLogService
@@ -189,6 +188,17 @@
         public ICustomerService CustomerService
         {
             get { return _customerService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IDigitalMediaService"/>.
+        /// </summary>
+        public IDigitalMediaService DigitalMediaService
+        {
+            get
+            {
+                return _digitalMediaService.Value; 
+            }
         }
 
         /// <summary>
@@ -270,6 +280,12 @@
         {
             get { return _warehouseService.Value; }
         }
+
+        /// <summary>
+        /// Gets the database unit of work provider.
+        /// </summary>
+        /// <remarks>Used for testing</remarks>
+        internal IDatabaseUnitOfWorkProvider DatabaseUnitOfWorkProvider { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="IAppliedPaymentService"/>.
@@ -394,6 +410,9 @@
 
             if (_customerService == null)
                 _customerService = new Lazy<ICustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _anonymousCustomerService.Value, _customerAddressService.Value, _invoiceService.Value, _paymentService.Value));
+
+            if (_digitalMediaService == null)
+                _digitalMediaService = new Lazy<IDigitalMediaService>(() => new DigitalMediaService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_itemCacheService == null)
                 _itemCacheService = new Lazy<IItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
