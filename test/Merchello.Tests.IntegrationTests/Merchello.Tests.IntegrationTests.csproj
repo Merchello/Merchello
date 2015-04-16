@@ -276,7 +276,6 @@
     <Compile Include="Services\Warehouse\WarehhouseServiceTests.cs" />
     <Compile Include="Shipping\ShippingLineItemTests.cs" />
     <Compile Include="TestHelpers\JsonResultData\JsonDataWriter.cs" />
-    <Compile Include="TestHelpers\MigrationHelper.cs" />
     <Compile Include="TestHelpers\TestMerchelloDataService.cs" />
     <Compile Include="Workflow\CheckoutProcessesTests.cs" />
     <Compile Include="DisplayClasses\ProductDisplayTests.cs" />
