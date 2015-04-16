@@ -77,6 +77,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IStoreSetting), typeof(StoreSettingMapper));
             CacheMapper(typeof(IWarehouse), typeof(WarehouseMapper));
             CacheMapper(typeof(IWarehouseCatalog), typeof(WarehouseCatalogMapper));
+            CacheMapper(typeof(IDigitalMedia), typeof(DigitalMediaMapper));
         }
 
 
