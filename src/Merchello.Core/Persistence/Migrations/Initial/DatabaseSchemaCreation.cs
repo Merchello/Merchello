@@ -65,7 +65,8 @@
             { 37, typeof(NotificationMessageDto) },
             { 38, typeof(AuditLogDto) },
             { 39, typeof(CampaignSettingsDto) },
-            { 40, typeof(CampaignActivitySettingsDto) }
+            { 40, typeof(CampaignActivitySettingsDto) },
+            { 41, typeof(DigitalMediaDto) }
         };
 
         /// <summary>

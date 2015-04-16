@@ -22,6 +22,8 @@
         {
             { 0, typeof(CampaignSettingsDto) },
             { 1, typeof(CampaignActivitySettingsDto) }
+            // TODO add the digital media table
+            //{ 2, typeof(DigitalMediaDto) }
         };
 
         /// <summary>
