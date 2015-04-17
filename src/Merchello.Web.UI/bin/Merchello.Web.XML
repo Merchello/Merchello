@@ -2552,6 +2552,41 @@
             <param name="sortDirection">
             The sort direction.
             </param>
+            <param name="customerOnly">
+            The customer Only.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.Search(System.String,System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
+            <summary>
+            Searches invoices that have invoice dates within a specified date range and a specific term
+            </summary>
+            <param name="term">
+            The term.
+            </param>
+            <param name="invoiceDateStart">
+            The invoice date start.
+            </param>
+            <param name="invoiceDateEnd">
+            The invoice date end.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <param name="customerOnly">
+            The customer only.
+            </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
@@ -2893,6 +2928,38 @@
             </param>
             <param name="customerOnly">
             Restricts search to only invoices associated with a customer
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.Search(System.String,System.DateTime,System.DateTime,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
+            <summary>
+            Searches invoices that have invoice dates within a specified date range and a specific term
+            </summary>
+            <param name="term">
+            The term.
+            </param>
+            <param name="invoiceDateStart">
+            The invoice date start.
+            </param>
+            <param name="invoiceDateEnd">
+            The invoice date end.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <param name="customerOnly">
+            The customer only.
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
