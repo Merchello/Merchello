@@ -79,44 +79,44 @@
         /// </returns>
         public override Page<Guid> SearchKeys(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
-            searchTerm = searchTerm.Replace(",", " ");
-            var invidualTerms = searchTerm.Split(' ');
-
-            var numbers = new List<int>();
-            var terms = new List<string>();
-
-            foreach (var term in invidualTerms.Where(x => !string.IsNullOrEmpty(x)))
-            {
-                int invoiceNumber;
-                if (int.TryParse(term, out invoiceNumber))
-                {
-                    numbers.Add(invoiceNumber);
-                }
-                else
-                {
-                    terms.Add(term);
-                }
-            }
-
-
-            var sql = new Sql();
-            sql.Select("*").From<InvoiceDto>();
-            if (numbers.Any() && terms.Any())
-            {
-                sql.Where("billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("%", terms)), @email = string.Format("%{0}%", string.Join("%", terms)), @invNo = numbers.ToArray() });
-            }
-            else if (numbers.Any())
-            {
-                sql.Where("invoiceNumber IN (@invNo)", new { @invNo = numbers.ToArray() });
-            }
-            else
-            {
-                sql.Where("billToName LIKE @term OR billToEmail LIKE @term", new { @term = string.Format("%{0}%", string.Join("%", terms)), @email = string.Format("%{0}%", string.Join("%", terms)) });
-            }
+            var sql = this.BuildInvoiceSearchSql(searchTerm);
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// Performs a search by term and a date rang
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> SearchKeys(string searchTerm, DateTime startDate, DateTime endDate, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = this.BuildInvoiceSearchSql(searchTerm);
+            sql.Where("invoiceDate BETWEEN @start AND @end", new { @start = startDate, @end = endDate });
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
 
         /// <summary>
         /// The get max document number.
@@ -348,6 +348,55 @@
             }
 
             return collection;            
+        }
+
+        /// <summary>
+        /// Builds an invoice search query.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        private Sql BuildInvoiceSearchSql(string searchTerm)
+        {
+            searchTerm = searchTerm.Replace(",", " ");
+            var invidualTerms = searchTerm.Split(' ');
+
+            var numbers = new List<int>();
+            var terms = new List<string>();
+
+            foreach (var term in invidualTerms.Where(x => !string.IsNullOrEmpty(x)))
+            {
+                int invoiceNumber;
+                if (int.TryParse(term, out invoiceNumber))
+                {
+                    numbers.Add(invoiceNumber);
+                }
+                else
+                {
+                    terms.Add(term);
+                }
+            }
+
+
+            var sql = new Sql();
+            sql.Select("*").From<InvoiceDto>();
+            if (numbers.Any() && terms.Any())
+            {
+                sql.Where("billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("%", terms)), @email = string.Format("%{0}%", string.Join("%", terms)), @invNo = numbers.ToArray() });
+            }
+            else if (numbers.Any())
+            {
+                sql.Where("invoiceNumber IN (@invNo)", new { @invNo = numbers.ToArray() });
+            }
+            else
+            {
+                sql.Where("billToName LIKE @term OR billToEmail LIKE @term", new { @term = string.Format("%{0}%", string.Join("%", terms)), @email = string.Format("%{0}%", string.Join("%", terms)) });
+            }
+
+            return sql;
         }
 
     }
