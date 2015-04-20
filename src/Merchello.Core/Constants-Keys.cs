@@ -325,7 +325,18 @@
             /// </summary>
             public static Guid GlobalShippingIsTaxableKey
             {
-                get { return new Guid("E322F6C7-9AD6-4338-ADAA-0C86353D8192");}
+                get { return new Guid("E322F6C7-9AD6-4338-ADAA-0C86353D8192"); }
+            }
+
+            /// <summary>
+            /// Gets the migration key.
+            /// </summary>
+            public static Guid MigrationKey
+            {
+                get
+                {
+                    return new Guid("56044D81-5C1E-4073-A2CB-1BE3412E461B"); 
+                }
             }
         }
 
