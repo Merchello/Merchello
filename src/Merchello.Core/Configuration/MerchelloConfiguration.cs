@@ -65,9 +65,9 @@
         {
             get
             {
-                return ConfigurationManager.AppSettings.Cast<object>().Any(x => (string) x == "merchelloConfigurationStatus")
+                return ConfigurationManager.AppSettings.Cast<object>().Any(x => (string)x == "merchelloConfigurationStatus")
                     ? ConfigurationManager.AppSettings["merchelloConfigurationStatus"]
-                    : string.Empty;
+                    : "0.0.0";
             }
 
             set
@@ -75,7 +75,18 @@
                 SaveAppSetting("merchelloConfigurationStatus", value);
             }
         }
-        
+
+        /// <summary>
+        /// Gets the configuration status version.
+        /// </summary>
+        public static Version ConfigurationStatusVersion
+        {
+           get
+           {
+               return new Version(ConfigurationStatus);
+           }   
+        }
+
         /// <summary>
         /// Gets the <see cref="MerchelloSection"/> Configuration Element
         /// </summary>
