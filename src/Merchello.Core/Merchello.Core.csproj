@@ -370,8 +370,10 @@
     <Compile Include="Persistence\Mappers\CampaignSettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
+    <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\MerchelloUpgradeHelper.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneEightTwo\InsertNewMerchelloSettings.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\CreateOneNineZeroTables.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\InsertNewTypeFieldData.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />

@@ -3,6 +3,7 @@
     using System;
 
     using Merchello.Core.Configuration;
+    using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
 
     using Umbraco.Core.Logging;
@@ -25,7 +26,15 @@
             return MerchelloConfiguration.ConfigurationStatusVersion == MerchelloVersion.Current;
         }
 
-
+        /// <summary>
+        /// Executes the Migration runner.
+        /// </summary>
+        /// <param name="database">
+        /// The database.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not the migration was successful.
+        /// </returns>
         public static bool UpgradeMerchello(Database database)
         {
             var databaseSchemaCreation = new DatabaseSchemaCreation(database);
@@ -41,6 +50,16 @@
                     var upgraded = runner.Execute(database);
                     if (upgraded)
                     {
+
+                        var record = new MigrationRecord()
+                                         {
+
+                                             TargetVersion = MerchelloVersion.Current.ToString(),
+                                             DbProvider = database.GetDatabaseProvider().ToString(),
+                                             InstallDate = DateTime.Now,
+                                             IsUpgrade = true
+                                         };
+
                         LogHelper.Info<MerchelloUpgradeHelper>("Merchello Schema Migration completed successfully");
                     }
 
@@ -57,5 +76,6 @@
 
             return true;
         }
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C63E81EB-22C7-4B40-BBCE-1FC5D858C380}"
 EndProject
@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{BE01E8CF
 		..\build\readme.txt = ..\build\readme.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Plugin.Payments.Braintree.Bazaar", "Merchello.Plugin.Payments.Braintree.Bazaar\Merchello.Plugin.Payments.Braintree.Bazaar.csproj", "{345FFDED-BC83-4E50-8B39-871882130657}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{8D646848-83D0-4D53-84C1-6DF39081E653}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D646848-83D0-4D53-84C1-6DF39081E653}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D646848-83D0-4D53-84C1-6DF39081E653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{345FFDED-BC83-4E50-8B39-871882130657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{345FFDED-BC83-4E50-8B39-871882130657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{345FFDED-BC83-4E50-8B39-871882130657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{345FFDED-BC83-4E50-8B39-871882130657}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

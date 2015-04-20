@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Configuration.Outline
+﻿namespace Merchello.Core.Configuration.Outline 
 {
     using System.Configuration;
 
@@ -35,6 +35,17 @@
         {
             get { return (bool)this["enableLogging"]; }
             set { this["enableLogging"] = value; }
+        }
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not installs and upgrades can be tracked.
+        /// </summary>
+        [ConfigurationProperty("enableInstallTracking", DefaultValue = true, IsRequired = false)]
+        public bool EnableInstallTracking
+        {
+            get { return (bool)this["enableInstallTracking"]; }
+            set { this["enableInstallTracking"] = value; }
         }
 
         /// <summary>

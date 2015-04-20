@@ -63,9 +63,7 @@
             { 35, typeof(OrderIndexDto) },
             { 36, typeof(NotificationMethodDto) },
             { 37, typeof(NotificationMessageDto) },
-            { 38, typeof(AuditLogDto) },
-            { 39, typeof(CampaignSettingsDto) },
-            { 40, typeof(CampaignActivitySettingsDto) }
+            { 38, typeof(AuditLogDto) }
         };
 
         /// <summary>
@@ -137,7 +135,30 @@
 
             ValidateDbConstraints(result);
 
+            LoadMerchelloData(result);
+
             return result;
+        }
+
+        /// <summary>
+        /// The load merchello data.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        private void LoadMerchelloData(MerchelloDatabaseSchemaResult result)
+        {
+            var sqlSettings = new Sql();
+            sqlSettings.Select("*")
+                .From<StoreSettingDto>();
+
+            result.StoreSettings = _database.Fetch<StoreSettingDto>(sqlSettings);
+
+            var sqlTypeFields = new Sql();
+            sqlSettings.Select("*")
+                .From<TypeFieldDto>();
+
+            result.TypeFields = _database.Fetch<TypeFieldDto>(sqlTypeFields);
         }
 
         private void ValidateDbConstraints(MerchelloDatabaseSchemaResult result)
