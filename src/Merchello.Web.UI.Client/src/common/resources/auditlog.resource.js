@@ -7,7 +7,6 @@
         '$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
         return {
-
             /**
              * @ngdoc method
              * @name getSalesHistoryByInvoiceKey
