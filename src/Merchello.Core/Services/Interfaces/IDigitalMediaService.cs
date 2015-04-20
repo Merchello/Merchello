@@ -35,7 +35,7 @@
         /// <returns>
         /// The <see cref="IDigitalMedia"/>.
         /// </returns>
-        IDigitalMedia CreateDigitalMediaWithKey(string name, bool raiseEvents = true);
+        IDigitalMedia CreateDigitalMediaForProductVariant(Guid productVariantKey, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single <see cref="IDigitalMedia"/>

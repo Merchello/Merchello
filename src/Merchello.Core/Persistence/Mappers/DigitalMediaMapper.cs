@@ -25,7 +25,8 @@
             if (!PropertyInfoCache.IsEmpty) return;
 
             CacheMap<DigitalMedia, DigitalMediaDto>(src => src.Key, dto => dto.Key);
-            CacheMap<DigitalMedia, DigitalMediaDto>(src => src.Name, dto => dto.Name);
+            CacheMap<DigitalMedia, DigitalMediaDto>(src => src.ProductVariantKey, dto => dto.ProductVariantKey);
+            CacheMap<DigitalMedia, DigitalMediaDto>(src => src.FirstAccessed, dto => dto.FirstAccessed);
             CacheMap<DigitalMedia, DigitalMediaDto>(src => src.UpdateDate, dto => dto.UpdateDate);
             CacheMap<DigitalMedia, DigitalMediaDto>(src => src.CreateDate, dto => dto.CreateDate);
         }

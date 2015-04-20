@@ -25,26 +25,25 @@
         /// <remarks>
         /// SR - This is used for the tracks dirty
         /// </remarks>
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<DigitalMedia, string>(x => x.Name);
+        private static readonly PropertyInfo FirstAccessedSelector = ExpressionHelper.GetPropertyInfo<DigitalMedia, DateTime?>(x => x.FirstAccessed);
 
+        private static readonly PropertyInfo ProductVariantSelector = ExpressionHelper.GetPropertyInfo<DigitalMedia, Guid>(x => x.ProductVariantKey);
 
         /// <summary>
-        /// The name.
+        /// This is immutable
         /// </summary>
-        private string _name;
+        
+        private DateTime? _firstAccessed;
+
+        private Guid _productVariantKey;
 
         #endregion
-
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        [DataMember]
-        public string Name
+        
+        public Guid ProductVariantKey
         {
             get
             {
-                return _name;
+                return _productVariantKey;
             }
 
             set
@@ -52,12 +51,34 @@
                 SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _name = value;
-                        return _name;
+                        _productVariantKey = value;
+                        return _productVariantKey;
                     },
-                    _name,
-                    NameSelector);
+                    _productVariantKey,
+                    ProductVariantSelector);
             }
         }
+
+        public DateTime? FirstAccessed
+        {
+            get
+            {
+                return _firstAccessed;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _firstAccessed = value;
+                        return _firstAccessed;
+                    },
+                    _firstAccessed,
+                    FirstAccessedSelector);
+            }
+        }
+
+        public ExtendedDataCollection ExtendedData { get; private set; }
     }
 }

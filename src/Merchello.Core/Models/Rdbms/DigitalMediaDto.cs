@@ -22,17 +22,19 @@
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
-
-        // TODO add other handler columns here
+      
+        /// <summary>
+        /// Used to calculate validity
+        /// </summary>
+        [Column("firstAccessed")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public DateTime? FirstAccessed { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Used to retrieve download
         /// </summary>
-        /// <remarks>
-        /// TODO - you may not want this column - I've just added this as an example for you to follow through the layers
-        /// </remarks>
-        [Column("name")]
-        public string Name { get; set; }
+        [Column("productVariantKey")]
+        public Guid ProductVariantKey { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
@@ -47,5 +49,10 @@
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
+
+        [Column("extendedData")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
+        public string ExtendedData { get; set; }
     }
 }

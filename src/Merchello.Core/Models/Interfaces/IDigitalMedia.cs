@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Models.Interfaces
+﻿using System;
+
+namespace Merchello.Core.Models.Interfaces
 {
     using System.Runtime.Serialization;
 
@@ -9,14 +11,18 @@
     /// <summary>
     /// Defines DigitalMedia.
     /// </summary>
-    public interface IDigitalMedia : IEntity
+    public interface IDigitalMedia : IEntity, IHasExtendedData
     {
-        // TODO define digital media fields
-
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [DataMember]
-        string Name { get; set; }
+        Guid ProductVariantKey { get; set; }
+
+        /// <summary>
+        /// Reference to an order
+        /// </summary>
+        [DataMember]
+        DateTime? FirstAccessed { get; set; }
     }
 }

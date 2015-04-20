@@ -107,8 +107,8 @@
         /// <summary>
         /// Creates a <see cref="IDigitalMedia"/> and saves it to the database.
         /// </summary>
-        /// <param name="name">
-        /// The name.
+        /// <param name="productVariantKey">
+        /// Tkey for the item to work
         /// </param>
         /// <param name="raiseEvents">
         /// Optional boolean indicating whether or not to raise events
@@ -116,9 +116,12 @@
         /// <returns>
         /// The <see cref="IDigitalMedia"/>.
         /// </returns>
-        public IDigitalMedia CreateDigitalMediaWithKey(string name, bool raiseEvents = true)
+        public IDigitalMedia CreateDigitalMediaForProductVariant(Guid productVariantKey, bool raiseEvents = true)
         {
-            var digitalMedia = new DigitalMedia() { Name = name };
+            var digitalMedia = new DigitalMedia() { 
+                FirstAccessed = null,
+                ProductVariantKey = productVariantKey
+            };
 
             if (raiseEvents)
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IDigitalMedia>(digitalMedia), this))
