@@ -4153,6 +4153,11 @@
             The invoice api controller.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Editors.InvoiceApiController._storeSettingService">
+            <summary>
+            The store setting service.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Editors.InvoiceApiController._invoiceService">
             <summary>
             The <see cref="T:Merchello.Core.Services.IInvoiceService"/>.
