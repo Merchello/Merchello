@@ -37,6 +37,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             // exposed methods
             $scope.getCurrencySymbol = getCurrencySymbol;
+            $scope.resetFilters = resetFilters;
 
             // for testing
             $scope.itemCount = 0;
@@ -131,25 +132,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 loadInvoices(query);
             };
 
-            /**
-             * @ngdoc method
-             * @name resetFilters
-             * @function
-             *
-             * @description
-             * Fired when the reset filter button is clicked.
-             */
-            $scope.resetFilters = function () {
-                var query = buildQuery();
-                $scope.currentFilters = [];
-                $scope.filterText = "";
-                $scope.filterStartDate = "";
-                $scope.filterEndDate = "";
-                loadInvoices(query);
-                $scope.filterAction = false;
-            };
-
-
 
             //--------------------------------------------------------------------------------------
             // Helper Methods
@@ -197,8 +179,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             // PRIVATE
             function init() {
                 $scope.currencySymbol = '$';
-                setDefaultDates(new Date());
-                loadInvoices(buildQuery());
+                resetFilters();
                 $scope.tabs = merchelloTabsFactory.createSalesListTabs();
                 $scope.tabs.setActive('saleslist');
                 $scope.loaded = true;
@@ -224,6 +205,22 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             }
 
+            /**
+             * @ngdoc method
+             * @name resetFilters
+             * @function
+             *
+             * @description
+             * Fired when the reset filter button is clicked.
+             */
+            function resetFilters() {
+                var query = buildQuery();
+                $scope.currentFilters = [];
+                $scope.filterText = '';
+                setDefaultDates(new Date());
+                loadInvoices(query);
+                $scope.filterAction = false;
+            };
 
             /**
              * @ngdoc method
@@ -295,43 +292,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 if (query.parameters.length > 0) {
                     $scope.currentFilters = query.parameters;
                 }
-                return query;
-            };
-
-            /**
-             * @ngdoc method
-             * @name buildQueryDates
-             * @function
-             *
-             * @description
-             * Perpares a new query object for passing to the ApiController
-             */
-             function buildQueryDates(startDate, endDate) {
-                var page = $scope.currentPage;
-                var perPage = $scope.limitAmount;
-                var sortBy = $scope.sortInfo().sortBy;
-                var sortDirection = $scope.sortInfo().sortDirection;
-                if (startDate === undefined && endDate === undefined) {
-                    $scope.currentFilters = [];
-                } else {
-                    $scope.currentFilters = [{
-                        fieldName: 'invoiceDateStart',
-                        value: startDate
-                    }, {
-                        fieldName: 'invoiceDateEnd',
-                        value: endDate
-                    }];
-                }
-                if (startDate !== $scope.filterStartDate) {
-                    page = 0;
-                    $scope.currentPage = 0;
-                }
-                $scope.filterStartDate = startDate;
-                $scope.filterEndDate = endDate;
-                var query = buildQuery($scope.filterText);
-                query.addInvoiceDateParam(startDate, 'start');
-                query.addInvoiceDateParam(endDate, 'end');
-
                 return query;
             };
 
