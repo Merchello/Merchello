@@ -21,7 +21,6 @@
     /// <summary>
     /// The merchello tree controller.
     /// </summary>
-    [UmbracoApplicationAuthorize("merchello")]
     [Tree("merchello", "merchello", "Merchello")]
     [PluginController("Merchello")]
     public class MerchelloTreeController : TreeController
