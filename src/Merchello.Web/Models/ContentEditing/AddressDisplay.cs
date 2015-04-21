@@ -2,7 +2,11 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The address display.
@@ -63,6 +67,12 @@
         /// Gets or sets a value indicating whether the address is a commercial address.
         /// </summary>
         public bool IsCommercial { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address type.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AddressType AddressType { get; set; }
     }
 
     /// <summary>

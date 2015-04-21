@@ -43,8 +43,15 @@
             return result;
         }
 
+        function clone() {
+            var dst = new AddressDisplay();
+            angular.extend(dst, this);
+            return dst;
+        }
+
         return {
-            isEmpty: isEmpty
+            isEmpty: isEmpty,
+            clone: clone
         };
     }());
 
@@ -933,6 +940,7 @@
         self.countries = [];
         self.selectedCountry = {};
         self.selectedProvince = {};
+        self.warning = '';
     };
 
     angular.module('merchello.models').constant('EditAddressDialogData', EditAddressDialogData);
@@ -1897,6 +1905,7 @@
             adr.name = this.billToName;
             adr.phone = this.billToPhone;
             adr.email = this.billToEmail;
+            adr.addressType = 'Billing';
             adr.organization = this.billToCompany;
             return adr;
         }

@@ -5204,11 +5204,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
-            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
+            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
                  auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
-                 merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
@@ -5240,9 +5240,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
             $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
+            $scope.openAddressAddEditDialog = openAddressAddEditDialog;
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
+
+
+            var countries = [];
 
             /**
              * @ngdoc method
@@ -5354,6 +5358,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                }, function(reason) {
                    notificationsService.error('Failed to load global settings', reason.message);
                })
+
+               var countriesPromise = settingsResource.getAllCountries();
+               countriesPromise.then(function(results) {
+                   countries = countryDisplayBuilder.transform(results);
+               });
 
                // TODO this can be refactored now that we have currency on the invoice model
                if ($scope.invoice.currency.symbol === '') {
@@ -5608,6 +5617,68 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     collection.push(lineItems);
                 }
             }
+
+            /**
+             * @ngdoc method
+             * @name openAddressEditDialog
+             * @function
+             *
+             * @description
+             * Opens the edit address dialog via the Umbraco dialogService.
+             */
+            function openAddressAddEditDialog(address) {
+                var dialogData = dialogDataFactory.createEditAddressDialogData();
+                // if the address is not defined we need to create a default (empty) AddressDisplay
+                if(address === null || address === undefined) {
+                    dialogData.address = addressDisplayBuilder.createDefault();
+                    dialogData.selectedCountry = countries[0];
+                } else {
+                    dialogData.address = address.clone();
+                    dialogData.selectedCountry = address.countryCode === '' ? countries[0] :
+                        _.find(countries, function(country) {
+                            return country.countryCode === address.countryCode;
+                        });
+                }
+                dialogData.countries = countries;
+
+                if (dialogData.selectedCountry.hasProvinces()) {
+                    if(dialogData.address.region !== '') {
+                        dialogData.selectedProvince = _.find(dialogData.selectedCountry.provinces, function(province) {
+                            return province.code === address.region;
+                        });
+                    }
+                    if(dialogData.selectedProvince === null || dialogData.selectedProvince === undefined) {
+                        dialogData.selectedProvince = dialogData.selectedCountry.provinces[0];
+                    }
+                }
+
+                if (address.addressType === 'Billing') {
+                    dialogData.warning = 'Note: This ONLY changes the addresses associated with THIS invoice.';
+                } else {
+                    dialogData.warning = 'Note: This will not change any existing shipment destination addresses.'
+                }
+
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.address.html',
+                    show: true,
+                    callback: processAddEditAddressDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name processAddEditAddressDialog
+             * @function
+             *
+             * @description
+             * Responsible for editing an address
+             */
+            function processAddEditAddressDialog(dialogData) {
+                console.info(dialogData);
+            }
+
 
             // initialize the controller
             init();

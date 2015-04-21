@@ -34,8 +34,15 @@
             return result;
         }
 
+        function clone() {
+            var dst = new AddressDisplay();
+            angular.extend(dst, this);
+            return dst;
+        }
+
         return {
-            isEmpty: isEmpty
+            isEmpty: isEmpty,
+            clone: clone
         };
     }());
 

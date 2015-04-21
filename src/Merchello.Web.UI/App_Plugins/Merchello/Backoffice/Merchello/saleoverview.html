@@ -120,12 +120,16 @@
             <div class="merchello-pane secondary span3">
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
+                    <a class="btn btn-default btn-action pull-right" data-ng-show="!invoice.isPaid()" data-ng-click="openAddressAddEditDialog(billingAddress)"><i class="icon icon-edit"></i></a>
                     <h3><localize key="merchelloOrderView_billingAddress" /></h3><br />
                     <merchello-address address="billingAddress"></merchello-address>
+
                 </div>
                 <div class="well invoice-order-info" ng-hide="shippingLineItems.length > 0">
+                    <a class="btn btn-default btn-action pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'" data-ng-click="openAddressAddEditDialog(shippingAddress)"><i class="icon icon-edit"></i></a>
                     <h3><localize key="merchelloOrderView_shippingAddress" /></h3><br />
                     <merchello-address address="shippingAddress"></merchello-address>
+
                 </div>
             </div>
             <!-- Debug -->
