@@ -1730,7 +1730,7 @@
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,
             setAllInventoryLowCount: setAllInventoryLowCount
-        }
+        };
     }());
 
     angular.module('merchello.models').constant('ProductVariantDisplay', ProductVariantDisplay);

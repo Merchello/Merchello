@@ -1,4 +1,7 @@
-﻿namespace Merchello.Web.Editors
+﻿using System.Globalization;
+using Umbraco.Core.Logging;
+
+namespace Merchello.Web.Editors
 {
     using System;
     using System.Linq;
@@ -22,6 +25,11 @@
     [PluginController("Merchello")]
     public class InvoiceApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
+        private readonly StoreSettingService _storeSettingService;
+
         /// <summary>
         /// The <see cref="IInvoiceService"/>.
         /// </summary>
@@ -49,6 +57,7 @@
         public InvoiceApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
+            _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
             _invoiceService = merchelloContext.Services.InvoiceService;
 
             _merchello = new MerchelloHelper(merchelloContext.Services);
@@ -101,21 +110,81 @@
         public QueryResultDisplay SearchInvoices(QueryDisplay query)
         {
             var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
+            var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
+            var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
 
-            return term != null && !string.IsNullOrEmpty(term.Value)
-                ? 
-                 _merchello.Query.Invoice.Search(
+            var isTermSearch = term != null && !String.IsNullOrEmpty(term.Value);
+            var isDateSearch = invoiceDateStart != null && !String.IsNullOrEmpty(invoiceDateStart.Value);
+
+            var startDate = DateTime.MinValue;
+            var endDate = DateTime.MaxValue;
+            if (isDateSearch)
+            {
+                var settings = _storeSettingService.GetAll().ToList();
+                var dateFormat = settings.FirstOrDefault(s => s.Name == "dateFormat");
+
+                if (dateFormat == null)
+                {
+                    if (!DateTime.TryParse(invoiceDateStart.Value, out startDate))
+                    {
+                        LogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
+                        startDate = DateTime.MinValue;
+                    }
+                    
+                }
+                else if (!DateTime.TryParseExact(invoiceDateStart.Value, dateFormat.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
+                {
+                    LogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
+                    startDate = DateTime.MinValue;
+                }
+
+                endDate = invoiceDateEnd == null || dateFormat == null
+                ? DateTime.MaxValue
+                : DateTime.TryParseExact(invoiceDateEnd.Value, dateFormat.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out endDate)
+                    ? endDate
+                    : DateTime.MaxValue;
+            }
+            
+
+            if (isTermSearch && isDateSearch)
+            {
+                return _merchello.Query.Invoice.Search(
                     term.Value,
-                    query.CurrentPage + 1,
-                    query.ItemsPerPage,
-                    query.SortBy,
-                    query.SortDirection) 
-                :
-                _merchello.Query.Invoice.Search(
+                    startDate,
+                    endDate,
                     query.CurrentPage + 1,
                     query.ItemsPerPage,
                     query.SortBy,
                     query.SortDirection);
+            }
+            else if(isTermSearch)
+            {
+                return _merchello.Query.Invoice.Search(
+                    term.Value,
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection);
+            }
+            else if (isDateSearch)
+            {
+
+                return _merchello.Query.Invoice.Search(
+                    startDate,
+                    endDate,
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection);
+            }
+            else
+            {
+                return _merchello.Query.Invoice.Search(
+                    query.CurrentPage + 1,
+                    query.ItemsPerPage,
+                    query.SortBy,
+                    query.SortDirection);
+            }
         }
 
         /// <summary>
