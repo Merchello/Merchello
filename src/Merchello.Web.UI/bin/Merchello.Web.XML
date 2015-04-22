@@ -95,6 +95,21 @@
             Gets the extended data.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData">
+            <summary>
+            The invoice shipping update data.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData.InvoiceKey">
+            <summary>
+            Gets or sets the invoice key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData.Address">
+            <summary>
+            Gets or sets the address.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.LineItemDisplayBase">
             <summary>
             The line item display base.
@@ -4251,6 +4266,17 @@
             </summary>
             <param name="invoice">
             InvoiceDisplay object serialized from WebApi
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.InvoiceApiController.PutInvoiceShippingAddress(Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData)">
+            <summary>
+            The put invoice shipping address.
+            </summary>
+            <param name="data">
+            The data.
             </param>
             <returns>
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.

@@ -52,6 +52,18 @@
             return adr;
         }
 
+        function setBillingAddress(adr) {
+            this.billToAddress1 = adr.address1;
+            this.billToAddress2 = adr.address2;
+            this.billToLocality = adr.locality;
+            this.billToRegion = adr.region;
+            this.billToCountryCode = adr.countryCode;
+            this.billToPostalCode = adr.postalCode;
+            this.billToName = adr.name;
+            this.billToEmail = adr.email;
+            this.billToCompany = adr.organization;
+        }
+
         // gets the invoice date as a date string
         function invoiceDateString() {
             return this.invoiceDate.split('T')[0];
@@ -171,6 +183,7 @@
             hasOrder: hasOrder,
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,
+            setBillingAddress: setBillingAddress,
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
             shippingTotal: shippingTotal

@@ -10,6 +10,7 @@ namespace Merchello.Web.Editors
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
@@ -18,6 +19,8 @@ namespace Merchello.Web.Editors
     using Umbraco.Core;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
+
+    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// The invoice api controller.
@@ -293,6 +296,38 @@ namespace Merchello.Web.Editors
             return response;
         }
 
+        /// <summary>
+        /// The put invoice shipping address.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage PutInvoiceShippingAddress(InvoiceShippingUpdateData data)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var invoice = _invoiceService.GetByKey(data.InvoiceKey);
+                var shippingLineItems = invoice.ShippingLineItems().ToArray();
+                foreach (var lineItem in shippingLineItems)
+                {
+                    lineItem.ExtendedData.AddAddress(data.Address.ToAddress(), Constants.ExtendedDataKeys.ShippingDestinationAddress);
+                }
+
+                _invoiceService.Save(invoice);
+            }
+            catch (Exception ex)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
+            }
+
+            return response;
+        }
 
         /// <summary>
         /// Deletes an existing invoice

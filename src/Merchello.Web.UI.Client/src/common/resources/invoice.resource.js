@@ -91,6 +91,14 @@
                             'Failed to save invoice');
                     },
 
+                    saveInvoiceShippingAddress: function (data) {
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoiceShippingAddress'),
+                                data
+                            ),
+                            'Failed to save invoice');
+                    },
+
                     /**
                      * @ngdoc method
                      * @name deleteInvoice
