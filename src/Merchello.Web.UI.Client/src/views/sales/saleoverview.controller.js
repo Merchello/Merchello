@@ -484,12 +484,34 @@
                 var adr = dialogData.address;
 
                 if (adr.addressType === 'Billing') {
-
+                    $scope.invoice.setBillingAddress(adr);
+                    $scope.preValuesLoaded = false;
+                    var billingPromise = invoiceResource.saveInvoice($scope.invoice);
+                    billingPromise.then(function () {
+                        notificationsService.success('Billing address successfully updated.');
+                        $timeout(function () {
+                            loadInvoice($scope.invoice.key);
+                        }, 400);
+                    }, function (reason) {
+                        notificationsService.error("Failed to update billing address", reason.message);
+                    });
                 } else {
                     // we need to update the shipment line item on the invoice
+                    var adrData = {
+                        invoiceKey: $scope.invoice.key,
+                        address: dialogData.address
+                    };
+                    var shippingPromise = invoiceResource.saveInvoiceShippingAddress(adrData);
+                    shippingPromise.then(function () {
+                        notificationsService.success('Shipping address successfully updated.');
+                        $timeout(function () {
+                            loadInvoice($scope.invoice.key);
+                        }, 400);
+                    }, function (reason) {
+                        notificationsService.error("Failed to update shippingaddress", reason.message);
+                    });
                 }
             }
-
 
             // initialize the controller
             init();
