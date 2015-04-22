@@ -108,7 +108,7 @@
                             }
                             else
                             {
-                                Console.WriteLine("Area: " + a + " contains multiple keys: " + key);
+                                Console.WriteLine("DUPLICATE KEY - Area: " + a + " contains multiple keys: " + key);
                             }
 
                             var xpath = "area[@alias='" + ((XmlElement)a).GetAttribute("alias") + "']";
