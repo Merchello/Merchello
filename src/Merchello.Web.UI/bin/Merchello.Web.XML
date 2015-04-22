@@ -7190,6 +7190,11 @@
             Gets or sets a value indicating whether the address is a commercial address.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.AddressDisplay.AddressType">
+            <summary>
+            Gets or sets the address type.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.AddressDetailsMappingExtensions">
             <summary>
             Mapping extensions for <see cref="!:AddressDetails"/>

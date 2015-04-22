@@ -47,6 +47,7 @@
             adr.name = this.billToName;
             adr.phone = this.billToPhone;
             adr.email = this.billToEmail;
+            adr.addressType = 'Billing';
             adr.organization = this.billToCompany;
             return adr;
         }

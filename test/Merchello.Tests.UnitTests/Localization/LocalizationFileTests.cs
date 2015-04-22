@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -92,6 +93,8 @@
                     }
                     else
                     {
+                        var uniqueKeys = new ArrayList();
+
                         // verify that all keys match
                         var otherNode =
                             otherDom.DocumentElement.SelectNodes("area[@alias='" + ((XmlElement)a).GetAttribute("alias") + "']").Item(0);
@@ -99,6 +102,15 @@
                         Console.WriteLine("Verifying keys in " + ((XmlElement)a).GetAttribute("alias"));
                         foreach (var key in ((XmlNode)a).SelectNodes("key"))
                         {
+                            if (!uniqueKeys.Contains(key))
+                            {
+                                uniqueKeys.Add(key);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Area: " + a + " contains multiple keys: " + key);
+                            }
+
                             var xpath = "area[@alias='" + ((XmlElement)a).GetAttribute("alias") + "']";
                             var match = otherNode.SelectSingleNode("key[@alias='" + ((XmlElement)key).GetAttribute("alias") + "']");
                             if (match == null)
