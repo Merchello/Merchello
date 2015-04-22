@@ -65,7 +65,6 @@
                 function loadSettings() {
                     var promise = settingsResource.getAllSettings();
                     return promise.then(function(allSettings) {
-                        console.info(allSettings);
                         $scope.settings = settingDisplayBuilder.transform(allSettings);
                     }, function(reason) {
                         notificationsService.error('Failed to load settings', reason.message);

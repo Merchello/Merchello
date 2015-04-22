@@ -5676,7 +5676,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              * Responsible for editing an address
              */
             function processAddEditAddressDialog(dialogData) {
-                console.info(dialogData);
+                var adr = dialogData.address;
+
+                if (adr.addressType === 'Billing') {
+
+                } else {
+                    // we need to update the shipment line item on the invoice
+                }
             }
 
 
