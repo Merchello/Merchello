@@ -45,7 +45,7 @@
                 function loadAssets() {
                     var promises = [];
                     var cssPromise = assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css');
-                    var jsPromise = assetsService.load(['lib/moment/moment-with-locales.js', 'lib/datetimepicker/bootstrap-datetimepicker.min.js']);
+                    var jsPromise = assetsService.load(['lib/moment/moment-with-locales.js', 'lib/datetimepicker/bootstrap-datetimepicker.js']);
 
                     promises.push(cssPromise);
                     promises.push(jsPromise);
