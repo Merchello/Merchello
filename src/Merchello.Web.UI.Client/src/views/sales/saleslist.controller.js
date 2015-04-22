@@ -37,6 +37,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             // exposed methods
             $scope.getCurrencySymbol = getCurrencySymbol;
+            $scope.resetFilters = resetFilters;
 
             // for testing
             $scope.itemCount = 0;
@@ -126,29 +127,10 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description
              * Fired when the filter button next to the filter text box at the top of the page is clicked.
              */
-            $scope.filterWithDates = function(filterStartDate, filterEndDate) {
-                var query = buildQueryDates(filterStartDate, filterEndDate);
+            $scope.filterInvoices = function(filterStartDate, filterEndDate, filterText) {
+                var query = buildQuery(filterStartDate, filterEndDate, filterText);
                 loadInvoices(query);
             };
-
-            /**
-             * @ngdoc method
-             * @name resetFilters
-             * @function
-             *
-             * @description
-             * Fired when the reset filter button is clicked.
-             */
-            $scope.resetFilters = function () {
-                var query = buildQuery();
-                $scope.currentFilters = [];
-                $scope.filterText = "";
-                $scope.filterStartDate = "";
-                $scope.filterEndDate = "";
-                loadInvoices(query);
-                $scope.filterAction = false;
-            };
-
 
 
             //--------------------------------------------------------------------------------------
@@ -197,7 +179,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             // PRIVATE
             function init() {
                 $scope.currencySymbol = '$';
-                loadInvoices(buildQuery());
+                resetFilters();
                 $scope.tabs = merchelloTabsFactory.createSalesListTabs();
                 $scope.tabs.setActive('saleslist');
                 $scope.loaded = true;
@@ -223,6 +205,22 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             }
 
+            /**
+             * @ngdoc method
+             * @name resetFilters
+             * @function
+             *
+             * @description
+             * Fired when the reset filter button is clicked.
+             */
+            function resetFilters() {
+                var query = buildQuery();
+                $scope.currentFilters = [];
+                $scope.filterText = '';
+                setDefaultDates(new Date());
+                loadInvoices(query);
+                $scope.filterAction = false;
+            };
 
             /**
              * @ngdoc method
@@ -263,18 +261,23 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description
              * Perpares a new query object for passing to the ApiController
              */
-            function buildQuery(filterText) {
+            function buildQuery(startDate, endDate, filterText) {
                 var page = $scope.currentPage;
                 var perPage = $scope.limitAmount;
                 var sortBy = $scope.sortInfo().sortBy;
                 var sortDirection = $scope.sortInfo().sortDirection;
+
                 if (filterText === undefined) {
                     filterText = '';
                 }
-                if (filterText !== $scope.filterText) {
+                // back to page 0 if filterText or startDate change
+                if (filterText !== $scope.filterText || startDate !== $scope.filterStartDate) {
                     page = 0;
                     $scope.currentPage = 0;
                 }
+
+                $scope.filterStartDate = startDate;
+                $scope.filterEndDate = endDate;
                 $scope.filterText = filterText;
 
                 var query = queryDisplayBuilder.createDefault();
@@ -282,69 +285,14 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 query.itemsPerPage = perPage;
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
-                query.addFilterTermParam(filterText)
+                query.addInvoiceDateParam(startDate, 'start');
+                query.addInvoiceDateParam(endDate, 'end');
+                query.addFilterTermParam(filterText);
 
                 if (query.parameters.length > 0) {
                     $scope.currentFilters = query.parameters;
                 }
                 return query;
-            };
-
-            /**
-             * @ngdoc method
-             * @name buildQueryDates
-             * @function
-             *
-             * @description
-             * Perpares a new query object for passing to the ApiController
-             */
-             function buildQueryDates(startDate, endDate) {
-                var page = $scope.currentPage;
-                var perPage = $scope.limitAmount;
-                var sortBy = $scope.sortInfo().sortBy;
-                var sortDirection = $scope.sortInfo().sortDirection;
-                if (startDate === undefined && endDate === undefined) {
-                    $scope.currentFilters = [];
-                } else {
-                    $scope.currentFilters = [{
-                        fieldName: 'invoiceDateStart',
-                        value: startDate
-                    }, {
-                        fieldName: 'invoiceDateEnd',
-                        value: endDate
-                    }];
-                }
-                if (startDate !== $scope.filterStartDate) {
-                    page = 0;
-                    $scope.currentPage = 0;
-                }
-                $scope.filterStartDate = startDate;
-                var query = buildQuery();
-                query.addInvoiceDateParam(startDate, 'start');
-                query.addInvoiceDateParam(endDate, 'end');
-
-                return query;
-            };
-
-            /**
-             * @ngdoc method
-             * @name setupDatePicker
-             * @function
-             *
-             * @description
-             * Sets up the datepickers
-             */
-            function setupDatePicker(pickerId) {
-
-                // Open the datepicker and add a changeDate eventlistener
-                $element.find(pickerId).datetimepicker({
-                    pickTime: false
-                });
-
-                //Ensure to remove the event handler when this instance is destroyted
-                $scope.$on('$destroy', function () {
-                    $element.find(pickerId).datetimepicker("destroy");
-                });
             };
 
             /**
@@ -372,23 +320,21 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 }
             }
 
-
-            //// Initialize
-            assetsService.loadCss('/umbraco/lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
-                var filesToLoad = [
-                    'lib/moment/moment-with-locales.js',
-                    'lib/datetimepicker/bootstrap-datetimepicker.js'];
-                assetsService.load(filesToLoad).then(
-                    function () {
-                        //The Datepicker js and css files are available and all components are ready to use.
-
-                        setupDatePicker("#filterStartDate");
-                        $element.find("#filterStartDate").datetimepicker().on("changeDate", $scope.applyDateStart);
-
-                        setupDatePicker("#filterEndDate");
-                        $element.find("#filterEndDate").datetimepicker().on("changeDate", $scope.applyDateEnd);
-                    });
-            });
+            /**
+            * @ngdoc method
+            * @name setDefaultDates
+            * @function
+            *
+            * @description
+            * Sets the default dates
+            */
+            function setDefaultDates(actual) {
+                var month = actual.getMonth() == 0 ? 11 : actual.getMonth() - 1;
+                var start = new Date(actual.getFullYear(), month, actual.getDate());
+                var end = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate());
+                $scope.filterStartDate = start.toLocaleDateString();
+                $scope.filterEndDate = end.toLocaleDateString();
+            }
 
             init();
         }]);

@@ -361,6 +361,21 @@
             Gets the extended data.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData">
+            <summary>
+            The invoice shipping update data.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData.InvoiceKey">
+            <summary>
+            Gets or sets the invoice key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData.Address">
+            <summary>
+            Gets or sets the address.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.LineItemDisplayBase">
             <summary>
             The line item display base.
@@ -4599,6 +4614,11 @@
             The invoice api controller.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Editors.InvoiceApiController._storeSettingService">
+            <summary>
+            The store setting service.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Editors.InvoiceApiController._invoiceService">
             <summary>
             The <see cref="T:Merchello.Core.Services.IInvoiceService"/>.
@@ -4692,6 +4712,17 @@
             </summary>
             <param name="invoice">
             InvoiceDisplay object serialized from WebApi
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.InvoiceApiController.PutInvoiceShippingAddress(Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData)">
+            <summary>
+            The put invoice shipping address.
+            </summary>
+            <param name="data">
+            The data.
             </param>
             <returns>
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
@@ -7667,6 +7698,11 @@
         <member name="P:Merchello.Web.Models.ContentEditing.AddressDisplay.IsCommercial">
             <summary>
             Gets or sets a value indicating whether the address is a commercial address.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.AddressDisplay.AddressType">
+            <summary>
+            Gets or sets the address type.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.AddressDetailsMappingExtensions">

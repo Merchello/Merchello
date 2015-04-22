@@ -227,6 +227,7 @@
     <Compile Include="Models\ContentEditing\CampaignSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\CurrencyDisplay.cs" />
     <Compile Include="Models\ContentEditing\GateProviderSettingsDisplay.cs" />
+    <Compile Include="Models\ContentEditing\InvoiceShippingUpdateData.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />

@@ -6,17 +6,18 @@
      * @description
      * Directive to wrap all Merchello Mark up.
      */
-    angular.module('merchello.directives').directive('filterByDateRange', function() {
+    angular.module('merchello.directives').directive('filterInvoices', function() {
         return {
             restrict: 'E',
             replace: true,
             scope: {
                 filterStartDate: '=',
                 filterEndDate: '=',
+                filterText: '=',
                 filterButtonText: '@filterButtonText',
-                filterWithDates: '&'
+                filterCallback: '&'
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterbydaterange.tpl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterinvoices.tpl.html',
             controller: function($scope, $element, $q, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
 
                 $scope.settings = {};
@@ -64,7 +65,6 @@
                 function loadSettings() {
                     var promise = settingsResource.getAllSettings();
                     return promise.then(function(allSettings) {
-                        console.info(allSettings);
                         $scope.settings = settingDisplayBuilder.transform(allSettings);
                     }, function(reason) {
                         notificationsService.error('Failed to load settings', reason.message);
@@ -109,7 +109,7 @@
                     $scope.filterStartDate = start;
                     $scope.filterEndDate = end;
                     $scope.currentPage = 0;
-                    $scope.filterWithDates();
+                    $scope.filterCallback();
                 }
 
                 /*-------------------------------------------------------------------

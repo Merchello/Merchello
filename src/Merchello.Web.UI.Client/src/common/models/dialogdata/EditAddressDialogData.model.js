@@ -13,6 +13,7 @@
         self.countries = [];
         self.selectedCountry = {};
         self.selectedProvince = {};
+        self.warning = '';
     };
 
     angular.module('merchello.models').constant('EditAddressDialogData', EditAddressDialogData);
