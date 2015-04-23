@@ -47,6 +47,8 @@ namespace Merchello.Web
         {
             base.ApplicationStarting(umbracoApplication, applicationContext);
 
+            BootManagerBase.MerchelloStarted += BootManagerBaseOnMerchelloStarted;
+
             // Initialize Merchello
             Log.Info("Attempting to initialize Merchello");
             try
@@ -73,8 +75,6 @@ namespace Merchello.Web
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            VerifyMerchelloVersion();
-
             LogHelper.Info<UmbracoApplicationEventHandler>("Initializing Customer related events");
 
             MemberService.Saving += this.MemberServiceOnSaving;
@@ -88,6 +88,20 @@ namespace Merchello.Web
             PaymentGatewayMethodBase.VoidAttempted += PaymentGatewayMethodBaseOnVoidAttempted;
 
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
+        }
+
+        /// <summary>
+        /// The boot manager base on merchello started.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="eventArgs">
+        /// The event args.
+        /// </param>
+        private void BootManagerBaseOnMerchelloStarted(object sender, EventArgs eventArgs)
+        {
+            this.VerifyMerchelloVersion();
         }
 
         #region Shipment Audits

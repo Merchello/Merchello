@@ -10902,6 +10902,17 @@
             The application context.
             </param>
         </member>
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.BootManagerBaseOnMerchelloStarted(System.Object,System.EventArgs)">
+            <summary>
+            The boot manager base on merchello started.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="eventArgs">
+            The event args.
+            </param>
+        </member>
         <member name="M:Merchello.Web.UmbracoApplicationEventHandler.ShipmentServiceOnStatusChanged(Merchello.Core.Services.IShipmentService,Merchello.Core.Events.StatusChangeEventArgs{Merchello.Core.Models.IShipment})">
             <summary>
             Handles the <see cref="T:Merchello.Core.Services.ShipmentService"/> status changed
