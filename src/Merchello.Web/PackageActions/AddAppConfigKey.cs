@@ -15,6 +15,9 @@
     /// 
     /// Original contribution from Paul Sterling
     /// </remarks>
+    /// <remarks>
+    /// This is now only being used for uninstalls
+    /// </remarks>
     public class AddAppConfigKey : IPackageAction
     {
         #region IPackageAction Members
@@ -51,7 +54,7 @@
         {    
             try
             {
-                CreateAppSettingsKey(Key, MerchelloVersion.Current.ToString());
+                // CreateAppSettingsKey(Key, MerchelloVersion.Current.ToString());
 
                 return true;
             }

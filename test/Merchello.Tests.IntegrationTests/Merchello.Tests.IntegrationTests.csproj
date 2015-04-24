@@ -266,6 +266,7 @@
     <Compile Include="ObjectResolution\TestingPaymentGatewayProvider.cs" />
     <Compile Include="ObjectResolution\TestingShippingGatewayProvider.cs" />
     <Compile Include="ObjectResolution\TestingTaxationGatewayProvider.cs" />
+    <Compile Include="PackageActions\CreateDatabasePackageActionTest.cs" />
     <Compile Include="PartialView\PartialViewFormatterTests.cs" />
     <Compile Include="PartialView\RazorEngineTests.cs" />
     <Compile Include="Payments\PaymentProcessingTests.cs" />
