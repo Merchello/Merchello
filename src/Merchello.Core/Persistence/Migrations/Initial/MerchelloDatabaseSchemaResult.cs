@@ -64,16 +64,18 @@
             if (this.ValidTables.Count == 0)
                 return new Version(0, 0, 0);
 
+            if (this.StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.MigrationKey))
+            {
+                return new Version(1, 8, 1);
+            }
+
+
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
                  && this.TableDefinitions.SelectMany(definition => definition.Columns).All(x => this.ValidColumns.Contains(x.Name))))
                 return MerchelloVersion.Current;
 
-            if (this.StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.MigrationKey))
-            {
-                return new Version(1, 8, 1);
-            }
 
             //// if the error is for umbracoServer
             if (this.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchCampaignSettings")))

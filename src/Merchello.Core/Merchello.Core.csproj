@@ -249,6 +249,7 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />
+    <Compile Include="Events\MerchelloMigrationEventArgs.cs" />
     <Compile Include="Events\PaymentAttemptEventArgs.cs" />
     <Compile Include="Events\SalesPreparationEventArgs.cs" />
     <Compile Include="Formatters\IPatternReplaceFormatter.cs" />

@@ -10875,6 +10875,11 @@
             Handles the Umbraco Application "Starting" and "Started" event and initiates the Merchello startup
             </summary>
         </member>
+        <member name="F:Merchello.Web.UmbracoApplicationEventHandler._merchelloIsStarted">
+            <summary>
+            The _merchello is started.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.UmbracoApplicationEventHandler.Log">
             <summary>
             The log.
@@ -10990,6 +10995,17 @@
             <remarks>
             This process also does database schema migrations (for Merchello) if necessary
             </remarks>
+        </member>
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.MerchelloUpgradeHelperOnUpgraded(System.Object,Merchello.Core.Events.MerchelloMigrationEventArgs)">
+            <summary>
+            The merchello upgrade helper on upgraded.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="merchelloMigrationEventArgs">
+            The merchello migration event args.
+            </param>
         </member>
         <member name="T:Merchello.Web.Validation.BasketItemInventoryValidation">
             <summary>
