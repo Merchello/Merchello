@@ -66,7 +66,7 @@
 
             if (this.StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.MigrationKey))
             {
-                return new Version(1, 8, 1);
+                return new Version(1, 7, 0);
             }
 
 

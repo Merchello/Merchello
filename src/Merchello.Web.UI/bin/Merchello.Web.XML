@@ -5257,6 +5257,37 @@
             The count of anonymous customers deleted
             </returns>
         </member>
+        <member name="T:Merchello.Web.WebMigrationManager">
+            <summary>
+            The web migration manager.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.WebMigrationManager.PostUrl">
+            <summary>
+            The post URL.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebMigrationManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebMigrationManager"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebMigrationManager.#ctor(Umbraco.Core.Persistence.Database)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebMigrationManager"/> class.
+            </summary>
+            <param name="database">
+            The database.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.WebMigrationManager.PostAnalyticInfo(Merchello.Core.Persistence.Migrations.Analytics.MigrationRecord)">
+            <summary>
+            The post analytic info.
+            </summary>
+            <param name="record">
+            The record.
+            </param>
+        </member>
         <member name="T:Merchello.Web.Workflow.Backoffice">
             <summary>
             A Backoffice for the Backoffice
@@ -10996,14 +11027,14 @@
             This process also does database schema migrations (for Merchello) if necessary
             </remarks>
         </member>
-        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.MerchelloUpgradeHelperOnUpgraded(System.Object,Merchello.Core.Events.MerchelloMigrationEventArgs)">
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.MigrationManagerOnUpgraded(System.Object,Merchello.Core.Events.MerchelloMigrationEventArgs)">
             <summary>
-            The merchello upgrade helper on upgraded.
+            The migration manager on upgraded.
             </summary>
             <param name="sender">
             The sender.
             </param>
-            <param name="merchelloMigrationEventArgs">
+            <param name="e">
             The merchello migration event args.
             </param>
         </member>

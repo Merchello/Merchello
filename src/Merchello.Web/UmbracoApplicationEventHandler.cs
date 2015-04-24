@@ -1,14 +1,8 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Merchello.Web
+﻿namespace Merchello.Web
 {
     using System;
     using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Reflection;
-    using System.Text;
 
     using log4net;
     using Core;
@@ -19,12 +13,7 @@ namespace Merchello.Web
     using Core.Sales;
     using Core.Services;
 
-    using Merchello.Core.Persistence.Migrations;
-    using Merchello.Core.Persistence.Migrations.Analytics;
-
     using Models.SaleHistory;
-
-    using Newtonsoft.Json;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
@@ -313,45 +302,23 @@ namespace Merchello.Web
         private void VerifyMerchelloVersion()
         {
             LogHelper.Info<UmbracoApplicationEventHandler>("Verifying Merchello Version.");
-
-            var merchelloUpgradeHelper = new MerchelloUpgradeHelper();
-            merchelloUpgradeHelper.Upgraded += MerchelloUpgradeHelperOnUpgraded;
-            if (!merchelloUpgradeHelper.CheckConfigurationStatusVersion())
-            {
-                LogHelper.Info<UmbracoApplicationEventHandler>(
-                    "Merchello Versions did not match - initializing upgrade.");
-
-                if (merchelloUpgradeHelper.UpgradeMerchello(ApplicationContext.Current.DatabaseContext.Database))
-                {
-                    LogHelper.Info<UmbracoApplicationEventHandler>("Upgrade completed successfully.");
-                }
-            }
-            else
-            {
-                LogHelper.Info<UmbracoApplicationEventHandler>("Merchello Version Verified - no upgrade required.");
-            }
+            var migrationManager = new WebMigrationManager();
+            migrationManager.Upgraded += MigrationManagerOnUpgraded;
+            migrationManager.EnsureMerchelloVersion();
         }
 
-
-
         /// <summary>
-        /// The merchello upgrade helper on upgraded.
+        /// The migration manager on upgraded.
         /// </summary>
         /// <param name="sender">
         /// The sender.
         /// </param>
-        /// <param name="merchelloMigrationEventArgs">
+        /// <param name="e">
         /// The merchello migration event args.
         /// </param>
-        private async void MerchelloUpgradeHelperOnUpgraded(object sender, MerchelloMigrationEventArgs e)
+        private void MigrationManagerOnUpgraded(object sender, MerchelloMigrationEventArgs e)
         {
-            var postAddress = "http://privateapi.local/api/migration/Post";
-            var client = new HttpClient();
-            var data = JsonConvert.SerializeObject(e.MigrationRecord);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var response =
-                await client.PostAsync(postAddress, new StringContent(data, Encoding.UTF8, "application/json"));
+            ((WebMigrationManager)sender).PostAnalyticInfo(e.MigrationRecord);
         }
     }
 }

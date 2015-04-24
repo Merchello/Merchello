@@ -8,15 +8,43 @@
     using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
 
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
 
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// The merchello upgrade helper.
     /// </summary>
-    internal sealed class MerchelloUpgradeHelper
+    internal class CoreMigrationManager
     {
+        /// <summary>
+        /// The <see cref="Database"/>.
+        /// </summary>
+        private readonly Database _database;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CoreMigrationManager"/> class.
+        /// </summary>
+        public CoreMigrationManager()
+            : this(ApplicationContext.Current.DatabaseContext.Database)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CoreMigrationManager"/> class.
+        /// </summary>
+        /// <param name="database">
+        /// The database.
+        /// </param>
+        public CoreMigrationManager(Database database)
+        {
+            Mandate.ParameterNotNull(database, "database");
+            _database = database;
+        }
+
         /// <summary>
         /// The delegate for the upgraded event handler.
         /// </summary>
@@ -36,12 +64,22 @@
         /// <summary>
         /// Checks the binary version against the web.config configuration status version.
         /// </summary>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public bool CheckConfigurationStatusVersion()
+        public void EnsureMerchelloVersion()
         {
-            return MerchelloConfiguration.ConfigurationStatusVersion == MerchelloVersion.Current;
+            if (MerchelloConfiguration.ConfigurationStatusVersion != MerchelloVersion.Current)
+            {
+                LogHelper.Info<CoreMigrationManager>(
+                    "Merchello Versions did not match - initializing upgrade.");
+
+                if (UpgradeMerchello(_database))
+                {
+                    LogHelper.Info<CoreMigrationManager>("Upgrade completed successfully.");
+                }
+            }
+            else
+            {
+                LogHelper.Debug<CoreMigrationManager>("Merchello Version Verified - no upgrade required.");
+            }
         }
 
         /// <summary>
@@ -53,7 +91,7 @@
         /// <returns>
         /// A value indicating whether or not the migration was successful.
         /// </returns>
-        public bool UpgradeMerchello(Database database)
+        private bool UpgradeMerchello(Database database)
         {
             var databaseSchemaCreation = new DatabaseSchemaCreation(database);
             var schemaResult = databaseSchemaCreation.ValidateSchema();
@@ -63,7 +101,7 @@
             {
                 try
                 {
-                    LogHelper.Info<MerchelloUpgradeHelper>("Merchello database upgraded required.  Initializing Upgrade.");
+                    LogHelper.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
                     var runner = new MigrationRunner(MerchelloConfiguration.ConfigurationStatusVersion, MerchelloVersion.Current, MerchelloConfiguration.MerchelloMigrationName);
                     var upgraded = runner.Execute(database);
                     if (upgraded)
@@ -83,14 +121,14 @@
 
                         this.OnUpgraded(record);
 
-                        LogHelper.Info<MerchelloUpgradeHelper>("Merchello Schema Migration completed successfully");
+                        LogHelper.Info<CoreMigrationManager>("Merchello Schema Migration completed successfully");
                     }
 
-                    LogHelper.Debug<MerchelloUpgradeHelper>("Merchello migration runner returned false.");
+                    LogHelper.Debug<CoreMigrationManager>("Merchello migration runner returned false.");
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Error<MerchelloUpgradeHelper>("Merchello Database Schema Upgrade Failed", ex);
+                    LogHelper.Error<CoreMigrationManager>("Merchello Database Schema Upgrade Failed", ex);
                     throw;
                 }
             }
