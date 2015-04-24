@@ -26,6 +26,7 @@
   <Languages />
   <DataTypes />
   <Actions>
+    <Action runat="install" undo="true" alias="Merchello_AddAppConfigKey" />
     <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />                   
     <Action runat="install" undo="true" alias="Merchello_CreateDatabase" />
     <Action runat="install" undo="true" alias="Merchello_AddExamineConfigs">

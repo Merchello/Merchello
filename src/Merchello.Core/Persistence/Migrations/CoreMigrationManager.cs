@@ -102,13 +102,18 @@
                 try
                 {
                     LogHelper.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
-                    var runner = new MigrationRunner(MerchelloConfiguration.ConfigurationStatusVersion, MerchelloVersion.Current, MerchelloConfiguration.MerchelloMigrationName);
+                    var runner = new MigrationRunner(
+                        MerchelloConfiguration.ConfigurationStatusVersion,
+                        MerchelloVersion.Current,
+                        MerchelloConfiguration.MerchelloMigrationName);
                     var upgraded = runner.Execute(database);
                     if (upgraded)
                     {
-                        var migrationSetting = schemaResult.StoreSettings.FirstOrDefault(x => x.Key == Constants.StoreSettingKeys.MigrationKey);
+                        var migrationSetting =
+                            schemaResult.StoreSettings.FirstOrDefault(
+                                x => x.Key == Constants.StoreSettingKeys.MigrationKey);
                         var migrationKey = migrationSetting != null ? migrationSetting.Value : Guid.NewGuid().ToString();
-                        
+
                         var record = new MigrationRecord()
                                          {
                                              MigrationKey = migrationKey,
@@ -131,6 +136,25 @@
                     LogHelper.Error<CoreMigrationManager>("Merchello Database Schema Upgrade Failed", ex);
                     throw;
                 }
+            }
+            else
+            {
+                    // this is a new install
+                    var migrationSetting =
+                            schemaResult.StoreSettings.FirstOrDefault(
+                                x => x.Key == Constants.StoreSettingKeys.MigrationKey);
+                    var migrationKey = migrationSetting != null ? migrationSetting.Value : Guid.NewGuid().ToString();
+
+                    var record = new MigrationRecord()
+                                     {
+                                         MigrationKey = migrationKey,
+                                         CurrentVersion = MerchelloConfiguration.ConfigurationStatus,
+                                         TargetVersion = MerchelloVersion.Current.ToString(),
+                                         DbProvider = database.GetDatabaseProvider().ToString(),
+                                         InstallDate = DateTime.Now,
+                                         IsUpgrade = !MerchelloConfiguration.ConfigurationStatus.Equals("0.0.0")
+                                     };
+                    this.OnUpgraded(record);
             }
             
             MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();

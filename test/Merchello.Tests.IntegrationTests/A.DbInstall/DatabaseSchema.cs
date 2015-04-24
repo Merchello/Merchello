@@ -20,6 +20,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
             var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
             var worker = new DbPreTestDataWorker {SqlSyntax = syntax };
             _database = worker.Database;
+
         }
 
         [Test]

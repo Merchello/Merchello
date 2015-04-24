@@ -5157,6 +5157,9 @@
             
             Original contribution from Paul Sterling
             </remarks>
+            <remarks>
+            This is now only being used for uninstalls
+            </remarks>
         </member>
         <member name="F:Merchello.Web.PackageActions.AddAppConfigKey.Key">
             <summary>
@@ -8782,6 +8785,24 @@
             <summary>
             This package action will create the database tables and initial data for Merchello.
             </summary>
+        </member>
+        <member name="F:Merchello.Web.PackageActions.CreateDatabase._database">
+            <summary>
+            The _is test.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.PackageActions.CreateDatabase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.PackageActions.CreateDatabase"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.PackageActions.CreateDatabase.#ctor(Umbraco.Core.Persistence.Database)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.PackageActions.CreateDatabase"/> class.
+            </summary>
+            <param name="isTest">
+            The is test.
+            </param>
         </member>
         <member name="M:Merchello.Web.PackageActions.CreateDatabase.Alias">
             <summary>

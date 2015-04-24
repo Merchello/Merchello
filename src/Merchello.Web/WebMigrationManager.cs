@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web
 {
+    using System;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
@@ -11,6 +12,7 @@
     using Newtonsoft.Json;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
 
     /// <summary>
@@ -48,13 +50,29 @@
         /// <param name="record">
         /// The record.
         /// </param>
-        public void PostAnalyticInfo(MigrationRecord record)
+        public async void PostAnalyticInfo(MigrationRecord record)
         {
             if (!MerchelloConfiguration.Current.Section.EnableInstallTracking) return;
             var client = new HttpClient();
-            var data = JsonConvert.SerializeObject(record);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.PostAsync(PostUrl, new StringContent(data, Encoding.UTF8, "application/json"));
+            try
+            {
+                var data = JsonConvert.SerializeObject(record);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                await client.PostAsync(PostUrl, new StringContent(data, Encoding.UTF8, "application/json"));
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<WebMigrationManager>("Migration record post exception", ex);
+            }
+            finally
+            {
+                if (client != null)
+                {
+                    client.Dispose();
+                    client = null;
+                } 
+            }
+            
         }
     }
 }
