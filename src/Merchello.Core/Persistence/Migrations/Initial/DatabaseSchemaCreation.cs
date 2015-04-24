@@ -135,7 +135,11 @@
 
             ValidateDbConstraints(result);
 
-            LoadMerchelloData(result);
+            if (!result.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchStoreSetting")))
+            {
+                // catch this so it doesn't kick off on an install
+                LoadMerchelloData(result);   
+            }
 
             return result;
         }

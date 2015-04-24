@@ -361,6 +361,21 @@
             Gets the extended data.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData">
+            <summary>
+            The invoice shipping update data.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData.InvoiceKey">
+            <summary>
+            Gets or sets the invoice key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData.Address">
+            <summary>
+            Gets or sets the address.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.LineItemDisplayBase">
             <summary>
             The line item display base.
@@ -4599,6 +4614,11 @@
             The invoice api controller.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Editors.InvoiceApiController._storeSettingService">
+            <summary>
+            The store setting service.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Editors.InvoiceApiController._invoiceService">
             <summary>
             The <see cref="T:Merchello.Core.Services.IInvoiceService"/>.
@@ -4692,6 +4712,17 @@
             </summary>
             <param name="invoice">
             InvoiceDisplay object serialized from WebApi
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.InvoiceApiController.PutInvoiceShippingAddress(Merchello.Web.Models.ContentEditing.InvoiceShippingUpdateData)">
+            <summary>
+            The put invoice shipping address.
+            </summary>
+            <param name="data">
+            The data.
             </param>
             <returns>
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
@@ -5602,6 +5633,9 @@
             
             Original contribution from Paul Sterling
             </remarks>
+            <remarks>
+            This is now only being used for uninstalls
+            </remarks>
         </member>
         <member name="F:Merchello.Web.PackageActions.AddAppConfigKey.Key">
             <summary>
@@ -5701,6 +5735,37 @@
             <returns>
             The count of anonymous customers deleted
             </returns>
+        </member>
+        <member name="T:Merchello.Web.WebMigrationManager">
+            <summary>
+            The web migration manager.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.WebMigrationManager.PostUrl">
+            <summary>
+            The post URL.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebMigrationManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebMigrationManager"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebMigrationManager.#ctor(Umbraco.Core.Persistence.Database)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebMigrationManager"/> class.
+            </summary>
+            <param name="database">
+            The database.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.WebMigrationManager.PostAnalyticInfo(Merchello.Core.Persistence.Migrations.Analytics.MigrationRecord)">
+            <summary>
+            The post analytic info.
+            </summary>
+            <param name="record">
+            The record.
+            </param>
         </member>
         <member name="T:Merchello.Web.Workflow.Backoffice">
             <summary>
@@ -7669,6 +7734,11 @@
             Gets or sets a value indicating whether the address is a commercial address.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.AddressDisplay.AddressType">
+            <summary>
+            Gets or sets the address type.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.AddressDetailsMappingExtensions">
             <summary>
             Mapping extensions for <see cref="!:AddressDetails"/>
@@ -9224,6 +9294,24 @@
             <summary>
             This package action will create the database tables and initial data for Merchello.
             </summary>
+        </member>
+        <member name="F:Merchello.Web.PackageActions.CreateDatabase._database">
+            <summary>
+            The _is test.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.PackageActions.CreateDatabase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.PackageActions.CreateDatabase"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.PackageActions.CreateDatabase.#ctor(Umbraco.Core.Persistence.Database)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.PackageActions.CreateDatabase"/> class.
+            </summary>
+            <param name="isTest">
+            The is test.
+            </param>
         </member>
         <member name="M:Merchello.Web.PackageActions.CreateDatabase.Alias">
             <summary>
@@ -11348,6 +11436,11 @@
             Handles the Umbraco Application "Starting" and "Started" event and initiates the Merchello startup
             </summary>
         </member>
+        <member name="F:Merchello.Web.UmbracoApplicationEventHandler._merchelloIsStarted">
+            <summary>
+            The _merchello is started.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.UmbracoApplicationEventHandler.Log">
             <summary>
             The log.
@@ -11373,6 +11466,17 @@
             </param>
             <param name="applicationContext">
             The application context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.BootManagerBaseOnMerchelloStarted(System.Object,System.EventArgs)">
+            <summary>
+            The boot manager base on merchello started.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="eventArgs">
+            The event args.
             </param>
         </member>
         <member name="M:Merchello.Web.UmbracoApplicationEventHandler.ShipmentServiceOnStatusChanged(Merchello.Core.Services.IShipmentService,Merchello.Core.Events.StatusChangeEventArgs{Merchello.Core.Models.IShipment})">
@@ -11452,6 +11556,17 @@
             <remarks>
             This process also does database schema migrations (for Merchello) if necessary
             </remarks>
+        </member>
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.MigrationManagerOnUpgraded(System.Object,Merchello.Core.Events.MerchelloMigrationEventArgs)">
+            <summary>
+            The migration manager on upgraded.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="e">
+            The merchello migration event args.
+            </param>
         </member>
         <member name="T:Merchello.Web.Validation.BasketItemInventoryValidation">
             <summary>

@@ -43,8 +43,15 @@
             return result;
         }
 
+        function clone() {
+            var dst = new AddressDisplay();
+            angular.extend(dst, this);
+            return dst;
+        }
+
         return {
-            isEmpty: isEmpty
+            isEmpty: isEmpty,
+            clone: clone
         };
     }());
 
@@ -1006,6 +1013,7 @@
         self.countries = [];
         self.selectedCountry = {};
         self.selectedProvince = {};
+        self.warning = '';
     };
 
     angular.module('merchello.models').constant('EditAddressDialogData', EditAddressDialogData);
@@ -2028,7 +2036,7 @@
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,
             setAllInventoryLowCount: setAllInventoryLowCount
-        }
+        };
     }());
 
     angular.module('merchello.models').constant('ProductVariantDisplay', ProductVariantDisplay);
@@ -2195,8 +2203,21 @@
             adr.name = this.billToName;
             adr.phone = this.billToPhone;
             adr.email = this.billToEmail;
+            adr.addressType = 'Billing';
             adr.organization = this.billToCompany;
             return adr;
+        }
+
+        function setBillingAddress(adr) {
+            this.billToAddress1 = adr.address1;
+            this.billToAddress2 = adr.address2;
+            this.billToLocality = adr.locality;
+            this.billToRegion = adr.region;
+            this.billToCountryCode = adr.countryCode;
+            this.billToPostalCode = adr.postalCode;
+            this.billToName = adr.name;
+            this.billToEmail = adr.email;
+            this.billToCompany = adr.organization;
         }
 
         // gets the invoice date as a date string
@@ -2323,6 +2344,7 @@
             hasOrder: hasOrder,
             isPaid: isPaid,
             getBillToAddress: getBillingAddress,
+            setBillingAddress: setBillingAddress,
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
             shippingTotal: shippingTotal,

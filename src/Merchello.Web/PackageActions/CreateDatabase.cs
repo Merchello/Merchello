@@ -1,17 +1,46 @@
-﻿using System;
-using Merchello.Core.Configuration;
-using Merchello.Core.Persistence.Migrations.Initial;
-using umbraco.cms.businesslogic.packager.standardPackageActions;
-using Umbraco.Core.Logging;
-using umbraco.interfaces;
-
-namespace Merchello.Web.PackageActions
+﻿namespace Merchello.Web.PackageActions
 {
+    using System;
+
+    using Merchello.Core.Configuration;
+    using Merchello.Core.Persistence.Migrations.Initial;
+
+    using umbraco.cms.businesslogic.packager.standardPackageActions;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
+
+    using umbraco.interfaces;
+
     /// <summary>
     /// This package action will create the database tables and initial data for Merchello.
     /// </summary>
     public class CreateDatabase : IPackageAction
     {
+        /// <summary>
+        /// The _is test.
+        /// </summary>
+        private readonly Database _database;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateDatabase"/> class.
+        /// </summary>
+        public CreateDatabase() : this(ApplicationContext.Current.DatabaseContext.Database)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateDatabase"/> class.
+        /// </summary>
+        /// <param name="isTest">
+        /// The is test.
+        /// </param>
+        internal CreateDatabase(Database database)
+        {
+            _database = database;
+        }
+
         /// <summary>
         /// This Alias must be unique and is used as an identifier that must match the alias in the package action XML.
         /// </summary>
@@ -29,13 +58,14 @@ namespace Merchello.Web.PackageActions
         /// <returns></returns>
         public bool Execute(string packageName, System.Xml.XmlNode xmlData)
         {
+
             try
             {
-                var creation = new DatabaseSchemaCreation(Umbraco.Core.ApplicationContext.Current.DatabaseContext.Database);
+                var creation = new DatabaseSchemaCreation(_database);
                 creation.InitializeDatabaseSchema();
 
-                var creationData = new BaseDataCreation(Umbraco.Core.ApplicationContext.Current.DatabaseContext.Database);
-                bool dataCreationResult = CreateInitialMerchelloData(creationData);
+                var creationData = new BaseDataCreation(_database);
+                var dataCreationResult = CreateInitialMerchelloData(creationData);
 
                 return true;
             }
