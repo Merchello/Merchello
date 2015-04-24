@@ -110,7 +110,7 @@
 
             InitializeObserverSubscriptions();
 
-            IsInitialized = true;            
+            IsInitialized = true;   
 
             return this;
         }

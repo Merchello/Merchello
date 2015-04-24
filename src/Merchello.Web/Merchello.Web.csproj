@@ -316,6 +316,7 @@
     <Compile Include="ProductContentEditing.cs" />
     <Compile Include="Visitors\ILineItemDisplayVisitor.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
+    <Compile Include="WebMigrationManager.cs" />
     <Compile Include="Workflow\Backoffice.cs" />
     <Compile Include="Workflow\BackofficeSalePreparation.cs" />
     <Compile Include="Workflow\BasketConversionBase.cs" />

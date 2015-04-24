@@ -66,12 +66,12 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IEnumerable<IInvoice> invoices, bool raiseEvents = true);
 
-        ///// <summary>
-        ///// Gets a <see cref="IInvoice"/> given it's unique 'key' (GUID)
-        ///// </summary>
-        ///// <param name="key">The <see cref="IInvoice"/>'s unique 'key' (GUID)</param>
-        ///// <returns><see cref="IInvoice"/></returns>
-        //IInvoice GetByKey(Guid key);
+        /// <summary>
+        /// Gets a <see cref="IInvoice"/> given it's unique 'key' (GUID)
+        /// </summary>
+        /// <param name="key">The <see cref="IInvoice"/>'s unique 'key' (GUID)</param>
+        /// <returns><see cref="IInvoice"/></returns>
+        IInvoice GetByKey(Guid key);
 
         /// <summary>
         /// Gets a <see cref="IInvoice"/> given it's unique 'InvoiceNumber'
