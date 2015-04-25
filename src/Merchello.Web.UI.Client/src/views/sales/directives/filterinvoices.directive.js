@@ -30,8 +30,8 @@
                     promises.push(loadSettings());
 
                     $q.all(promises).then(function() {
-                        $scope.filterStartDate = moment($scope.filterStartDate).format($scope.settings.dateFormat.toUpperCase());
-                        $scope.filterEndDate = moment($scope.filterEndDate).format($scope.settings.dateFormat.toUpperCase());
+                        $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth() - 1)).format($scope.settings.dateFormat.toUpperCase());
+                        $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
                     });
                 }
 
