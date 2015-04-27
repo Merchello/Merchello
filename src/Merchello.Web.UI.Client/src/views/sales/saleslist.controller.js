@@ -60,7 +60,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.changePage = function (page) {
                 $scope.preValuesLoaded = false;
                 $scope.currentPage = page;
-                var query = buildQuery($scope.filterText);
+                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
                 loadInvoices(query);
             };
 
@@ -86,7 +86,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     $scope.sortProperty = propertyToSort;
                     $scope.sortOrder = "asc";
                 }
-                var query = buildQuery($scope.filterText);
+                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
                 loadInvoices(query);
             };
 
@@ -102,20 +102,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 $scope.preValuesLoaded = false;
                 $scope.limitAmount = newVal;
                 $scope.currentPage = 0;
-                var query = buildQuery($scope.filterText);
-                loadInvoices(query);
-            };
-
-            /**
-             * @ngdoc method
-             * @name filterWithWildcard
-             * @function
-             *
-             * @description
-             * Fired when the filter button next to the filter text box at the top of the page is clicked.
-             */
-            $scope.filterWithWildcard = function (filterText) {
-                var query = buildQuery(filterText);
+                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
                 loadInvoices(query);
             };
 
