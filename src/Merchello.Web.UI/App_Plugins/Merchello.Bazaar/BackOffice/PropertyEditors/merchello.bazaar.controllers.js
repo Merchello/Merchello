@@ -3,7 +3,7 @@ angular.module('merchello.bazaar').controller('Merchello.Plugin.Bazaar.MemberTyp
 ['$scope', '$http', 'umbRequestHelper',
     function ($scope, $http, umbRequestHelper) {
 
-        var url = Umbraco.Sys.ServerVariables["merchello.bazaar"]["merchelloBazaarPropertyEditorsApiBaseUrl"] + "GetMemberTypes";
+        var url = Umbraco.Sys.ServerVariables["merchelloBazaarUrls"]["merchelloBazaarPropertyEditorsApiBaseUrl"] + "GetMemberTypes";
 
         umbRequestHelper.resourcePromise(
             $http.get(url),
@@ -18,7 +18,7 @@ angular.module('merchello.bazaar').controller('Merchello.Plugin.Bazaar.MemberTyp
 angular.module('merchello.bazaar').controller('Merchello.Plugin.Bazaar.ThemePickerController',
     ['$scope', '$http', 'umbRequestHelper',
     function ($scope, $http, umbRequestHelper) {
-        var url = Umbraco.Sys.ServerVariables["merchello.bazaar"]["merchelloBazaarPropertyEditorsApiBaseUrl"] + "GetThemes";
+        var url = Umbraco.Sys.ServerVariables["merchelloBazaarUrls"]["merchelloBazaarPropertyEditorsApiBaseUrl"] + "GetThemes";
 
         umbRequestHelper.resourcePromise(
             $http.get(url),
