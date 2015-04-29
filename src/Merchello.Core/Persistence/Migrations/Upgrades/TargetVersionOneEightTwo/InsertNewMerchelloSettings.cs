@@ -11,7 +11,7 @@
     /// <summary>
     /// The insert new type field data for Merchello version 1.8.2.
     /// </summary>
-    [Migration("1.7.0", "1.8.1.2", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.7.0", "1.8.2", 1, MerchelloConfiguration.MerchelloMigrationName)]
     public class InsertNewMerchelloSettings : MigrationBase
     {
         /// <summary>
