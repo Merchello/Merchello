@@ -53,10 +53,9 @@
         private static void ServerVariablesParserParsing(object sender, Dictionary<string, object> e)
         {
 
-            //var umbracoUrls = (Dictionary<string, object>)e["umbracoUrls"];
-
             if (HttpContext.Current == null) throw new InvalidOperationException("HttpContext is null");
 
+            if (e.ContainsKey("merchelloUrls")) return;
            
             var merchelloUrls = new Dictionary<string, object>();
 
