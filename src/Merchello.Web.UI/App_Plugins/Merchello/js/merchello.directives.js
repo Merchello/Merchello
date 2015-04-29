@@ -202,8 +202,8 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                     promises.push(loadSettings());
 
                     $q.all(promises).then(function() {
-                        $scope.filterStartDate = moment($scope.filterStartDate).format($scope.settings.dateFormat.toUpperCase());
-                        $scope.filterEndDate = moment($scope.filterEndDate).format($scope.settings.dateFormat.toUpperCase());
+                        $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth()-1)).format($scope.settings.dateFormat.toUpperCase());
+                        $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
                     });
                 }
 
@@ -995,23 +995,26 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                 filterEndDate: '=',
                 filterText: '=',
                 filterButtonText: '@filterButtonText',
-                filterCallback: '&'
+                filterCallback: '&',
+                filterTermCallback: '&'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterinvoices.tpl.html',
             controller: function($scope, $element, $q, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
 
                 $scope.settings = {};
+                $scope.dateFilterOpen = false;
 
                 // exposed methods
                 $scope.changeDateFilters = changeDateFilters;
+                $scope.changeTermFilter = changeTermFilter;
 
                 function init() {
                     var promises = loadAssets();
                     promises.push(loadSettings());
 
                     $q.all(promises).then(function() {
-                        $scope.filterStartDate = moment($scope.filterStartDate).format($scope.settings.dateFormat.toUpperCase());
-                        $scope.filterEndDate = moment($scope.filterEndDate).format($scope.settings.dateFormat.toUpperCase());
+                        $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth() - 1)).format($scope.settings.dateFormat.toUpperCase());
+                        $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
                     });
                 }
 
@@ -1090,6 +1093,17 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                     $scope.filterEndDate = end;
                     $scope.currentPage = 0;
                     $scope.filterCallback();
+                }
+
+                /**
+                 * @ngdoc method
+                 * @name changeTermFilter
+                 * @function
+                 *
+                 * @description - Triggers new API call to load the reports.
+                 */
+                function changeTermFilter() {
+                    $scope.filterTermCallback();
                 }
 
                 /*-------------------------------------------------------------------
