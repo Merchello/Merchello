@@ -115,10 +115,16 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * Fired when the filter button next to the filter text box at the top of the page is clicked.
              */
             $scope.filterInvoices = function(filterStartDate, filterEndDate, filterText) {
-                var query = buildQuery(filterStartDate, filterEndDate, filterText);
+                $scope.preValuesLoaded = false;
+                var query = buildQuery(filterText, filterStartDate, filterEndDate);
                 loadInvoices(query);
             };
 
+            $scope.termFilterInvoices = function(filterText) {
+                $scope.preValuesLoaded = false;
+                var query = buildQuery(filterText);
+                loadInvoices(query);
+            };
 
             //--------------------------------------------------------------------------------------
             // Helper Methods
@@ -248,7 +254,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description
              * Perpares a new query object for passing to the ApiController
              */
-            function buildQuery(startDate, endDate, filterText) {
+            function buildQuery(filterText, startDate, endDate) {
                 var page = $scope.currentPage;
                 var perPage = $scope.limitAmount;
                 var sortBy = $scope.sortInfo().sortBy;
@@ -263,8 +269,13 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     $scope.currentPage = 0;
                 }
 
-                $scope.filterStartDate = startDate;
-                $scope.filterEndDate = endDate;
+                var dateSearch = false;
+                if (startDate !== undefined && endDate !== undefined) {
+                    $scope.filterStartDate = startDate;
+                    $scope.filterEndDate = endDate;
+                    dateSearch = true;
+                }
+
                 $scope.filterText = filterText;
 
                 var query = queryDisplayBuilder.createDefault();
@@ -272,8 +283,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 query.itemsPerPage = perPage;
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
-                query.addInvoiceDateParam(startDate, 'start');
-                query.addInvoiceDateParam(endDate, 'end');
+                if(dateSearch) {
+                    query.addInvoiceDateParam(startDate, 'start');
+                    query.addInvoiceDateParam(endDate, 'end');
+                }
+
                 query.addFilterTermParam(filterText);
 
                 if (query.parameters.length > 0) {

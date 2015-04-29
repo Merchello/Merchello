@@ -79,6 +79,8 @@
     <key alias="saleInformation">Sale Information</key>
     <!-- actions -->
     <key alias="filter">Filter Invoices</key>
+    <key alias="addDateFilters">Add date filters</key>
+    <key alias="removeDateFilters">Remove date filters</key>
     <key alias="capturePayment">Capture Payment</key>
     <key alias="processPayment">Process Payment</key>
 

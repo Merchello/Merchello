@@ -15,15 +15,18 @@
                 filterEndDate: '=',
                 filterText: '=',
                 filterButtonText: '@filterButtonText',
-                filterCallback: '&'
+                filterCallback: '&',
+                filterTermCallback: '&'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterinvoices.tpl.html',
             controller: function($scope, $element, $q, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
 
                 $scope.settings = {};
+                $scope.dateFilterOpen = false;
 
                 // exposed methods
                 $scope.changeDateFilters = changeDateFilters;
+                $scope.changeTermFilter = changeTermFilter;
 
                 function init() {
                     var promises = loadAssets();
@@ -110,6 +113,17 @@
                     $scope.filterEndDate = end;
                     $scope.currentPage = 0;
                     $scope.filterCallback();
+                }
+
+                /**
+                 * @ngdoc method
+                 * @name changeTermFilter
+                 * @function
+                 *
+                 * @description - Triggers new API call to load the reports.
+                 */
+                function changeTermFilter() {
+                    $scope.filterTermCallback();
                 }
 
                 /*-------------------------------------------------------------------
