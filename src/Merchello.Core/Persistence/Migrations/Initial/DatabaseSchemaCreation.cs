@@ -105,9 +105,9 @@
         /// <summary>
         /// Validates the schema of the current database
         /// </summary>
-        public PluginDatabaseSchemaResult ValidateSchema()
+        public MerchelloDatabaseSchemaResult ValidateSchema()
         {
-            var result = new PluginDatabaseSchemaResult
+            var result = new MerchelloDatabaseSchemaResult
             {
                 DbIndexDefinitions = SqlSyntaxContext.SqlSyntaxProvider.GetDefinedIndexes(_database)
                     .Select(x => new DbIndexDefinition()
@@ -135,10 +135,37 @@
 
             ValidateDbConstraints(result);
 
+            if (!result.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchStoreSetting")))
+            {
+                // catch this so it doesn't kick off on an install
+                LoadMerchelloData(result);   
+            }
+
             return result;
         }
 
-        private void ValidateDbConstraints(PluginDatabaseSchemaResult result)
+        /// <summary>
+        /// The load merchello data.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        private void LoadMerchelloData(MerchelloDatabaseSchemaResult result)
+        {
+            var sqlSettings = new Sql();
+            sqlSettings.Select("*")
+                .From<StoreSettingDto>();
+
+            result.StoreSettings = _database.Fetch<StoreSettingDto>(sqlSettings);
+
+            var sqlTypeFields = new Sql();
+            sqlSettings.Select("*")
+                .From<TypeFieldDto>();
+
+            result.TypeFields = _database.Fetch<TypeFieldDto>(sqlTypeFields);
+        }
+
+        private void ValidateDbConstraints(MerchelloDatabaseSchemaResult result)
         {
             //MySql doesn't conform to the "normal" naming of constraints, so there is currently no point in doing these checks.
             //TODO: At a later point we do other checks for MySql, but ideally it should be necessary to do special checks for different providers.
@@ -225,7 +252,7 @@
             }
         }
 
-        private void ValidateDbColumns(PluginDatabaseSchemaResult result)
+        private void ValidateDbColumns(MerchelloDatabaseSchemaResult result)
         {
             //Check columns in configured database against columns in schema
             var columnsInDatabase = SqlSyntaxContext.SqlSyntaxProvider.GetColumnsInSchema(_database);
@@ -247,7 +274,7 @@
             }
         }
 
-        private void ValidateDbTables(PluginDatabaseSchemaResult result)
+        private void ValidateDbTables(MerchelloDatabaseSchemaResult result)
         {
             //Check tables in configured database against tables in schema
             var tablesInDatabase = SqlSyntaxContext.SqlSyntaxProvider.GetTablesInSchema(_database).ToList();
@@ -268,7 +295,7 @@
             }
         }
 
-        private void ValidateDbIndexes(PluginDatabaseSchemaResult result)
+        private void ValidateDbIndexes(MerchelloDatabaseSchemaResult result)
         {
             //These are just column indexes NOT constraints or Keys
             //var colIndexesInDatabase = result.DbIndexDefinitions.Where(x => x.IndexName.InvariantStartsWith("IX_")).Select(x => x.IndexName).ToList();

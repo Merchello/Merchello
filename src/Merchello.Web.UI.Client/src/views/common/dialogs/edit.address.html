@@ -1,10 +1,13 @@
 ﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Common.Dialogs.EditAddressController">
     <div class="umb-modalcolumn-header">
         <h4>Edit Address</h4>
+
     </div>
     <form name="editAddressForm" id="editAddressForm">
         <div class="umb-panel-body with-header with-footer">
-
+            <div data-ng-show="dialogData.warning !== undefined && dialogData.warning != ''">
+                <p class="text-warning">{{ dialogData.warning }}</p>
+            </div>
             <div class="form-group row-fluid">
                 <label for="name">Full Name:</label>
                 <input name="name" type="text" class="span12" data-ng-model="address.name" />

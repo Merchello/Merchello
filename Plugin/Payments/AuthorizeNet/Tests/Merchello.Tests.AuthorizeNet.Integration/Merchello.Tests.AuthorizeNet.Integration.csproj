@@ -80,16 +80,16 @@
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Core">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.0.10\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.1.4\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.0.10\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.1.4\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Tests.Base">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.0.10\lib\net40\Merchello.Tests.Base.dll</HintPath>
+      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.1.4\lib\net40\Merchello.Tests.Base.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.0.10\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.1.4\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\UmbracoCms.Core.7.2.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>

@@ -29,8 +29,8 @@
                     promises.push(loadSettings());
 
                     $q.all(promises).then(function() {
-                        $scope.filterStartDate = moment($scope.filterStartDate).format($scope.settings.dateFormat.toUpperCase());
-                        $scope.filterEndDate = moment($scope.filterEndDate).format($scope.settings.dateFormat.toUpperCase());
+                        $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth()-1)).format($scope.settings.dateFormat.toUpperCase());
+                        $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
                     });
                 }
 
@@ -44,7 +44,7 @@
                 function loadAssets() {
                     var promises = [];
                     var cssPromise = assetsService.loadCss('lib/datetimepicker/bootstrap-datetimepicker.min.css');
-                    var jsPromise = assetsService.load(['lib/moment/moment-with-locales.js', 'lib/datetimepicker/bootstrap-datetimepicker.min.js']);
+                    var jsPromise = assetsService.load(['lib/moment/moment-with-locales.js', 'lib/datetimepicker/bootstrap-datetimepicker.js']);
 
                     promises.push(cssPromise);
                     promises.push(jsPromise);

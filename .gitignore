@@ -180,4 +180,4 @@ src/Merchello.Web.UI/bin/Merchello.Core.xml
 src/Merchello.Web.UI/bin/Merchello.Examine.dll
 src/Merchello.Web.UI/bin/Merchello.Web.dll
 Plugin/Payments/BrainTree/build/Temp/
-Plugin/Payments/AuthorizeNet/src/Merchello.Plugin.Payments.AuthorizeNet/App_Plugins/Merchello.AuthorizeNet/.idea/
+Plugin/Payments/AuthorizeNet/src/Merchello.Plugin.Payments.AuthorizeNet/App_Plugins/Merchello.AuthorizeNet/.idea/Merchello.AuthorizeNet.iml

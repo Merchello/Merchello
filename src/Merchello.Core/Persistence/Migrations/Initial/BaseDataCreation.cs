@@ -233,6 +233,7 @@
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTaxableKey, Name = "globalTaxable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTrackInventoryKey, Name = "globalTrackInventory", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalShippingIsTaxableKey, Name = "globalShippingIsTaxable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.MigrationKey, Name = "migration", Value = Guid.NewGuid().ToString(), TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
     }

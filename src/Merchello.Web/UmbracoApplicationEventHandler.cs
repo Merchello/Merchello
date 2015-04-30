@@ -1,10 +1,9 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Merchello.Web
+﻿namespace Merchello.Web
 {
     using System;
     using System.Linq;
     using System.Reflection;
+
     using log4net;
     using Core;
     using Core.Configuration;
@@ -13,7 +12,9 @@ namespace Merchello.Web
     using Core.Models;
     using Core.Sales;
     using Core.Services;
+
     using Models.SaleHistory;
+
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
@@ -26,6 +27,11 @@ namespace Merchello.Web
     /// </summary>
     public class UmbracoApplicationEventHandler : ApplicationEventHandler
     {
+        /// <summary>
+        /// The _merchello is started.
+        /// </summary>
+        private static bool _merchelloIsStarted = false;
+
         /// <summary>
         /// The log.
         /// </summary>
@@ -43,6 +49,8 @@ namespace Merchello.Web
         protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationStarting(umbracoApplication, applicationContext);
+
+            BootManagerBase.MerchelloStarted += BootManagerBaseOnMerchelloStarted;
 
             // Initialize Merchello
             Log.Info("Attempting to initialize Merchello");
@@ -83,6 +91,22 @@ namespace Merchello.Web
             PaymentGatewayMethodBase.VoidAttempted += PaymentGatewayMethodBaseOnVoidAttempted;
 
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
+
+            if (_merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        /// <summary>
+        /// The boot manager base on merchello started.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="eventArgs">
+        /// The event args.
+        /// </param>
+        private void BootManagerBaseOnMerchelloStarted(object sender, EventArgs eventArgs)
+        {
+            _merchelloIsStarted = true;
         }
 
         #region Shipment Audits
@@ -267,6 +291,34 @@ namespace Merchello.Web
                     customerService.Save(customer);
                 }
             }
+        }
+
+        /// <summary>
+        /// Verifies that the Merchello Version (binary) is consistent with the configuration version.
+        /// </summary>
+        /// <remarks>
+        /// This process also does database schema migrations (for Merchello) if necessary
+        /// </remarks>
+        private void VerifyMerchelloVersion()
+        {
+            LogHelper.Info<UmbracoApplicationEventHandler>("Verifying Merchello Version.");
+            var migrationManager = new WebMigrationManager();
+            migrationManager.Upgraded += MigrationManagerOnUpgraded;
+            migrationManager.EnsureMerchelloVersion();
+        }
+
+        /// <summary>
+        /// The migration manager on upgraded.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The merchello migration event args.
+        /// </param>
+        private void MigrationManagerOnUpgraded(object sender, MerchelloMigrationEventArgs e)
+        {
+            ((WebMigrationManager)sender).PostAnalyticInfo(e.MigrationRecord);
         }
     }
 }

@@ -87,10 +87,45 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="customerOnly">
+        /// The customer Only.
+        /// </param>
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         QueryResultDisplay Search(DateTime invoiceDateStart, DateTime invoiceDateEnd, long page, long itemsPerPage, string sortBy = "invoiceDate", SortDirection sortDirection = SortDirection.Descending, bool customerOnly = false);
+
+        /// <summary>
+        /// Searches invoices that have invoice dates within a specified date range and a specific term
+        /// </summary>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="invoiceDateStart">
+        /// The invoice date start.
+        /// </param>
+        /// <param name="invoiceDateEnd">
+        /// The invoice date end.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="customerOnly">
+        /// The customer only.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        QueryResultDisplay Search(string term, DateTime invoiceDateStart, DateTime invoiceDateEnd, long page, long itemsPerPage, string sortBy = "invoiceDate", SortDirection sortDirection = SortDirection.Descending, bool customerOnly = false);
 
         /// <summary>
         /// Searches invoices that have invoice dates within a specified date range with a particular invoice status
