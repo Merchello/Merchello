@@ -56,12 +56,22 @@
             console.info(query);
             var promise = merchelloPluginReportOrderExportService.getOrdersByDateRange(query);
             promise.then(function (data) {
-                var element = angular.element('<a/>');
-                element.attr({
-                    href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
-                    target: '_blank',
-                    download: 'orders.csv'
-                })[0].click();
+                // IE fix. Must download csv via msSaveBlob
+                if (window.navigator.msSaveOrOpenBlob) {
+                    var blob = new Blob([decodeURIComponent(encodeURI(data))], {
+                        type: 'text/csv;charset=utf-8'
+                    });
+                    navigator.msSaveBlob(blob, 'orders.csv');
+                }
+                else {
+                    var hiddenElement = document.createElement('a');
+                    hiddenElement.href = 'data:attachment/csv,' + encodeURI(data);
+                    hiddenElement.target = '_blank';
+                    hiddenElement.download = 'orders.csv';
+                    // Firefox fix. Element must be on DOM for download click to work
+                    document.body.appendChild(hiddenElement);
+                    hiddenElement.click();
+                }
 
                 $scope.loaded = true;
             });
