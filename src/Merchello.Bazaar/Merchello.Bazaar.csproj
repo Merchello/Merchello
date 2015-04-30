@@ -80,14 +80,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.8.1.5\lib\net40\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.2\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.8.1.5\lib\net40\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.2\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web">
-      <HintPath>..\packages\Merchello.Core.1.8.1.5\lib\net40\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Merchello.Core.1.8.2\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.2.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -201,7 +204,6 @@
     <Compile Include="Controllers\BazaarCheckoutConfirmController.cs" />
     <Compile Include="Controllers\BazaarReceiptController.cs" />
     <Compile Include="Controllers\Surface\AccountOperationsController.cs" />
-    <Compile Include="Controllers\Surface\MembershipOperationsController.cs" />
     <Compile Include="Install\PackageActions\AddMembershipTypeAndGroup.cs" />
     <Compile Include="Models\Account\AccountProfileModel.cs" />
     <Compile Include="Models\Account\CustomerAddressModel.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Controllers\BazaarProductGroupController.cs" />
     <Compile Include="Controllers\BazaarStoreController.cs" />
     <Compile Include="Controllers\BazaarWishListController.cs" />
+    <Compile Include="Controllers\Surface\MembershipOperationsController.cs" />
     <Compile Include="Controllers\Api\PropertyEditorsController.cs" />
     <Compile Include="Controllers\RenderControllerBase.cs" />
     <Compile Include="Controllers\Surface\SurfaceControllerBase.cs" />
