@@ -13,6 +13,21 @@
              * @name getSalesHistoryByInvoiceKey
              * @description
              **/
+            getByEntityKey: function(key) {
+                return umbRequestHelper.resourcePromise(
+                $http({
+                    url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetByEntityKey'),
+                    method: "GET",
+                    params: { id: key }
+                }),
+                'Failed to audit logs for entity with following key: ' + key);
+            },
+
+            /**
+             * @ngdoc method
+             * @name getSalesHistoryByInvoiceKey
+             * @description
+             **/
             getSalesHistoryByInvoiceKey: function (key) {
                 return umbRequestHelper.resourcePromise(
                     $http({

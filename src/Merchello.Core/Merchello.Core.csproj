@@ -249,6 +249,7 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />
+    <Compile Include="Events\MerchelloMigrationEventArgs.cs" />
     <Compile Include="Events\PaymentAttemptEventArgs.cs" />
     <Compile Include="Events\SalesPreparationEventArgs.cs" />
     <Compile Include="Formatters\IPatternReplaceFormatter.cs" />
@@ -356,8 +357,11 @@
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
+    <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneOne\RecreateNotificaitonMessageTable.cs" />
+    <Compile Include="Persistence\Migrations\Initial\MerchelloDatabaseSchemaResult.cs" />
+    <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneEightTwo\InsertNewMerchelloSettings.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
@@ -432,9 +436,6 @@
     <Compile Include="Persistence\Mappers\NotificationMessageMapper.cs" />
     <Compile Include="Persistence\Mappers\NotificationMethodMapper.cs" />
     <Compile Include="Persistence\Migrations\DatabaseSchemaHelper.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\AddShippedDateColumn.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\CreateOneOneZeroTables.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneOneZero\InsertNewTypeFieldData.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IItemCacheLineItemRepository.cs" />
@@ -980,7 +981,6 @@
     <Compile Include="Persistence\DatabaseModelDefinitions\DefinitionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Persistence\Migrations\Initial\PluginDatabaseSchemaResult.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Models\TypeFields\AddressTypeField.cs" />
     <Compile Include="Models\TypeFields\ItemCacheTypeField.cs" />

@@ -10,18 +10,15 @@
 
     using umbraco;
     using umbraco.BusinessLogic.Actions;
-    using umbraco.cms.presentation;
 
     using Umbraco.Core;
     using Umbraco.Web.Models.Trees;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.Trees;
-    using Umbraco.Web.WebApi.Filters;
 
     /// <summary>
     /// The merchello tree controller.
     /// </summary>
-    [UmbracoApplicationAuthorize("merchello")]
     [Tree("merchello", "merchello", "Merchello")]
     [PluginController("Merchello")]
     public class MerchelloTreeController : TreeController

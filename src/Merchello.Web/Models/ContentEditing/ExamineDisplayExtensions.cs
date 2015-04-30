@@ -116,7 +116,7 @@
                     BillToAddress1 = FieldAsString(result, "billToAddress1"),
                     BillToAddress2 = FieldAsString(result, "billToAddress2"),
                     BillToLocality = FieldAsString(result, "billToLocality"),
-                    BillToRegion = FieldAsString(result, "billoToRegion"),
+                    BillToRegion = FieldAsString(result, "billToRegion"),
                     BillToCountryCode = FieldAsString(result, "billToCountryCode"),
                     BillToPostalCode = FieldAsString(result, "billToPostalCode"),
                     BillToCompany = FieldAsString(result, "billToCompany"),

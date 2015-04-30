@@ -5204,11 +5204,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
             'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
-            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'salesHistoryDisplayBuilder',
+            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
                  auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
-                 merchelloTabsFactory, addressDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
@@ -5240,9 +5240,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
             $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
+            $scope.openAddressAddEditDialog = openAddressAddEditDialog;
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
+
+
+            var countries = [];
 
             /**
              * @ngdoc method
@@ -5354,6 +5358,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                }, function(reason) {
                    notificationsService.error('Failed to load global settings', reason.message);
                })
+
+               var countriesPromise = settingsResource.getAllCountries();
+               countriesPromise.then(function(results) {
+                   countries = countryDisplayBuilder.transform(results);
+               });
 
                // TODO this can be refactored now that we have currency on the invoice model
                if ($scope.invoice.currency.symbol === '') {
@@ -5609,6 +5618,96 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }
             }
 
+            /**
+             * @ngdoc method
+             * @name openAddressEditDialog
+             * @function
+             *
+             * @description
+             * Opens the edit address dialog via the Umbraco dialogService.
+             */
+            function openAddressAddEditDialog(address) {
+                var dialogData = dialogDataFactory.createEditAddressDialogData();
+                // if the address is not defined we need to create a default (empty) AddressDisplay
+                if(address === null || address === undefined) {
+                    dialogData.address = addressDisplayBuilder.createDefault();
+                    dialogData.selectedCountry = countries[0];
+                } else {
+                    dialogData.address = address.clone();
+                    dialogData.selectedCountry = address.countryCode === '' ? countries[0] :
+                        _.find(countries, function(country) {
+                            return country.countryCode === address.countryCode;
+                        });
+                }
+                dialogData.countries = countries;
+
+                if (dialogData.selectedCountry.hasProvinces()) {
+                    if(dialogData.address.region !== '') {
+                        dialogData.selectedProvince = _.find(dialogData.selectedCountry.provinces, function(province) {
+                            return province.code === address.region;
+                        });
+                    }
+                    if(dialogData.selectedProvince === null || dialogData.selectedProvince === undefined) {
+                        dialogData.selectedProvince = dialogData.selectedCountry.provinces[0];
+                    }
+                }
+
+                if (address.addressType === 'Billing') {
+                    dialogData.warning = 'Note: This ONLY changes the addresses associated with THIS invoice.';
+                } else {
+                    dialogData.warning = 'Note: This will not change any existing shipment destination addresses.'
+                }
+
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/edit.address.html',
+                    show: true,
+                    callback: processAddEditAddressDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name processAddEditAddressDialog
+             * @function
+             *
+             * @description
+             * Responsible for editing an address
+             */
+            function processAddEditAddressDialog(dialogData) {
+                var adr = dialogData.address;
+
+                if (adr.addressType === 'Billing') {
+                    $scope.invoice.setBillingAddress(adr);
+                    $scope.preValuesLoaded = false;
+                    var billingPromise = invoiceResource.saveInvoice($scope.invoice);
+                    billingPromise.then(function () {
+                        notificationsService.success('Billing address successfully updated.');
+                        $timeout(function () {
+                            loadInvoice($scope.invoice.key);
+                        }, 400);
+                    }, function (reason) {
+                        notificationsService.error("Failed to update billing address", reason.message);
+                    });
+                } else {
+                    // we need to update the shipment line item on the invoice
+                    var adrData = {
+                        invoiceKey: $scope.invoice.key,
+                        address: dialogData.address
+                    };
+                    var shippingPromise = invoiceResource.saveInvoiceShippingAddress(adrData);
+                    shippingPromise.then(function () {
+                        notificationsService.success('Shipping address successfully updated.');
+                        $timeout(function () {
+                            loadInvoice($scope.invoice.key);
+                        }, 400);
+                    }, function (reason) {
+                        notificationsService.error("Failed to update shippingaddress", reason.message);
+                    });
+                }
+            }
+
             // initialize the controller
             init();
     }]);
@@ -5652,6 +5751,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             // exposed methods
             $scope.getCurrencySymbol = getCurrencySymbol;
+            $scope.resetFilters = resetFilters;
 
             // for testing
             $scope.itemCount = 0;
@@ -5674,7 +5774,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.changePage = function (page) {
                 $scope.preValuesLoaded = false;
                 $scope.currentPage = page;
-                var query = buildQuery($scope.filterText);
+                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
                 loadInvoices(query);
             };
 
@@ -5700,7 +5800,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     $scope.sortProperty = propertyToSort;
                     $scope.sortOrder = "asc";
                 }
-                var query = buildQuery($scope.filterText);
+                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
                 loadInvoices(query);
             };
 
@@ -5716,20 +5816,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 $scope.preValuesLoaded = false;
                 $scope.limitAmount = newVal;
                 $scope.currentPage = 0;
-                var query = buildQuery($scope.filterText);
-                loadInvoices(query);
-            };
-
-            /**
-             * @ngdoc method
-             * @name filterWithWildcard
-             * @function
-             *
-             * @description
-             * Fired when the filter button next to the filter text box at the top of the page is clicked.
-             */
-            $scope.filterWithWildcard = function (filterText) {
-                var query = buildQuery(filterText);
+                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
                 loadInvoices(query);
             };
 
@@ -5741,30 +5828,17 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description
              * Fired when the filter button next to the filter text box at the top of the page is clicked.
              */
-            $scope.filterWithDates = function(filterStartDate, filterEndDate) {
-                var query = buildQueryDates(filterStartDate, filterEndDate);
+            $scope.filterInvoices = function(filterStartDate, filterEndDate, filterText) {
+                $scope.preValuesLoaded = false;
+                var query = buildQuery(filterText, filterStartDate, filterEndDate);
                 loadInvoices(query);
             };
 
-            /**
-             * @ngdoc method
-             * @name resetFilters
-             * @function
-             *
-             * @description
-             * Fired when the reset filter button is clicked.
-             */
-            $scope.resetFilters = function () {
-                var query = buildQuery();
-                $scope.currentFilters = [];
-                $scope.filterText = "";
-                $scope.filterStartDate = "";
-                $scope.filterEndDate = "";
+            $scope.termFilterInvoices = function(filterText) {
+                $scope.preValuesLoaded = false;
+                var query = buildQuery(filterText);
                 loadInvoices(query);
-                $scope.filterAction = false;
             };
-
-
 
             //--------------------------------------------------------------------------------------
             // Helper Methods
@@ -5812,7 +5886,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             // PRIVATE
             function init() {
                 $scope.currencySymbol = '$';
-                loadInvoices(buildQuery());
+                resetFilters();
                 $scope.tabs = merchelloTabsFactory.createSalesListTabs();
                 $scope.tabs.setActive('saleslist');
                 $scope.loaded = true;
@@ -5838,6 +5912,22 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             }
 
+            /**
+             * @ngdoc method
+             * @name resetFilters
+             * @function
+             *
+             * @description
+             * Fired when the reset filter button is clicked.
+             */
+            function resetFilters() {
+                var query = buildQuery();
+                $scope.currentFilters = [];
+                $scope.filterText = '';
+                setDefaultDates(new Date());
+                loadInvoices(query);
+                $scope.filterAction = false;
+            };
 
             /**
              * @ngdoc method
@@ -5878,18 +5968,28 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              * @description
              * Perpares a new query object for passing to the ApiController
              */
-            function buildQuery(filterText) {
+            function buildQuery(filterText, startDate, endDate) {
                 var page = $scope.currentPage;
                 var perPage = $scope.limitAmount;
                 var sortBy = $scope.sortInfo().sortBy;
                 var sortDirection = $scope.sortInfo().sortDirection;
+
                 if (filterText === undefined) {
                     filterText = '';
                 }
-                if (filterText !== $scope.filterText) {
+                // back to page 0 if filterText or startDate change
+                if (filterText !== $scope.filterText || startDate !== $scope.filterStartDate) {
                     page = 0;
                     $scope.currentPage = 0;
                 }
+
+                var dateSearch = false;
+                if (startDate !== undefined && endDate !== undefined) {
+                    $scope.filterStartDate = startDate;
+                    $scope.filterEndDate = endDate;
+                    dateSearch = true;
+                }
+
                 $scope.filterText = filterText;
 
                 var query = queryDisplayBuilder.createDefault();
@@ -5897,69 +5997,17 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 query.itemsPerPage = perPage;
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
-                query.addFilterTermParam(filterText)
+                if(dateSearch) {
+                    query.addInvoiceDateParam(startDate, 'start');
+                    query.addInvoiceDateParam(endDate, 'end');
+                }
+
+                query.addFilterTermParam(filterText);
 
                 if (query.parameters.length > 0) {
                     $scope.currentFilters = query.parameters;
                 }
                 return query;
-            };
-
-            /**
-             * @ngdoc method
-             * @name buildQueryDates
-             * @function
-             *
-             * @description
-             * Perpares a new query object for passing to the ApiController
-             */
-             function buildQueryDates(startDate, endDate) {
-                var page = $scope.currentPage;
-                var perPage = $scope.limitAmount;
-                var sortBy = $scope.sortInfo().sortBy;
-                var sortDirection = $scope.sortInfo().sortDirection;
-                if (startDate === undefined && endDate === undefined) {
-                    $scope.currentFilters = [];
-                } else {
-                    $scope.currentFilters = [{
-                        fieldName: 'invoiceDateStart',
-                        value: startDate
-                    }, {
-                        fieldName: 'invoiceDateEnd',
-                        value: endDate
-                    }];
-                }
-                if (startDate !== $scope.filterStartDate) {
-                    page = 0;
-                    $scope.currentPage = 0;
-                }
-                $scope.filterStartDate = startDate;
-                var query = buildQuery();
-                query.addInvoiceDateParam(startDate, 'start');
-                query.addInvoiceDateParam(endDate, 'end');
-
-                return query;
-            };
-
-            /**
-             * @ngdoc method
-             * @name setupDatePicker
-             * @function
-             *
-             * @description
-             * Sets up the datepickers
-             */
-            function setupDatePicker(pickerId) {
-
-                // Open the datepicker and add a changeDate eventlistener
-                $element.find(pickerId).datetimepicker({
-                    pickTime: false
-                });
-
-                //Ensure to remove the event handler when this instance is destroyted
-                $scope.$on('$destroy', function () {
-                    $element.find(pickerId).datetimepicker("destroy");
-                });
             };
 
             /**
@@ -5987,23 +6035,21 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 }
             }
 
-
-            //// Initialize
-            assetsService.loadCss('/umbraco/lib/datetimepicker/bootstrap-datetimepicker.min.css').then(function () {
-                var filesToLoad = [
-                    'lib/moment/moment-with-locales.js',
-                    'lib/datetimepicker/bootstrap-datetimepicker.js'];
-                assetsService.load(filesToLoad).then(
-                    function () {
-                        //The Datepicker js and css files are available and all components are ready to use.
-
-                        setupDatePicker("#filterStartDate");
-                        $element.find("#filterStartDate").datetimepicker().on("changeDate", $scope.applyDateStart);
-
-                        setupDatePicker("#filterEndDate");
-                        $element.find("#filterEndDate").datetimepicker().on("changeDate", $scope.applyDateEnd);
-                    });
-            });
+            /**
+            * @ngdoc method
+            * @name setDefaultDates
+            * @function
+            *
+            * @description
+            * Sets the default dates
+            */
+            function setDefaultDates(actual) {
+                var month = actual.getMonth() == 0 ? 11 : actual.getMonth() - 1;
+                var start = new Date(actual.getFullYear(), month, actual.getDate());
+                var end = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate());
+                $scope.filterStartDate = start.toLocaleDateString();
+                $scope.filterEndDate = end.toLocaleDateString();
+            }
 
             init();
         }]);

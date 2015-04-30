@@ -21,6 +21,21 @@
              * @name getSalesHistoryByInvoiceKey
              * @description
              **/
+            getByEntityKey: function(key) {
+                return umbRequestHelper.resourcePromise(
+                $http({
+                    url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetByEntityKey'),
+                    method: "GET",
+                    params: { id: key }
+                }),
+                'Failed to audit logs for entity with following key: ' + key);
+            },
+
+            /**
+             * @ngdoc method
+             * @name getSalesHistoryByInvoiceKey
+             * @description
+             **/
             getSalesHistoryByInvoiceKey: function (key) {
                 return umbRequestHelper.resourcePromise(
                     $http({
@@ -325,6 +340,14 @@ angular.module('merchello.resources')
                         return umbRequestHelper.resourcePromise(
                             $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoice'),
                                 invoice
+                            ),
+                            'Failed to save invoice');
+                    },
+
+                    saveInvoiceShippingAddress: function (data) {
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'PutInvoiceShippingAddress'),
+                                data
                             ),
                             'Failed to save invoice');
                     },

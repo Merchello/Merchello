@@ -64,9 +64,7 @@
         /// The provinces.
         /// </param>
         protected CountryBase(string countryCode, RegionInfo regionInfo, IEnumerable<IProvince> provinces)
-        {
-            if (!countryCode.Equals(Constants.CountryCodes.EverywhereElse)) Mandate.ParameterNotNull(regionInfo, "regionInfo");
-            
+        {   
             var proviceArray = provinces as IProvince[] ?? provinces.ToArray();
 
             Mandate.ParameterNotNull(proviceArray, "provinces");

@@ -654,7 +654,52 @@
             {
                 return repository.SearchKeys(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy));
             }
-        }       
+        }
+
+        /// <summary>
+        /// Gets a page by search term and a date range
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        /// <remarks>
+        /// The search is prefabricated in the repository
+        /// </remarks>
+        internal Page<Guid> GetPagedKeys(
+            string searchTerm,
+            DateTime startDate,
+            DateTime endDate,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = (InvoiceRepository)_repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.SearchKeys(searchTerm, startDate, endDate, page, itemsPerPage, ValidateSortByField(sortBy));
+            }
+        }
 
         /// <summary>
         /// Gets a page by query.

@@ -90,9 +90,9 @@
             if (HttpContext.Current == null) throw new InvalidOperationException("HttpContext is null");
 
             var urlHelper = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
-
+            if (!e.ContainsKey("merchelloBazaarUrls"))
             e.Add(
-                "merchello.bazaar", 
+                "merchelloBazaarUrls", 
                 new Dictionary<string, object>()
                     {
                         { "merchelloBazaarPropertyEditorsApiBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<PropertyEditorsController>(controller => controller.GetThemes()) }

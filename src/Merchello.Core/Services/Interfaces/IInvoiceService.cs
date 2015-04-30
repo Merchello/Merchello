@@ -1,15 +1,9 @@
-﻿using Merchello.Core.Persistence.Querying;
-using Umbraco.Core.Persistence;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Core.Gateways.Notification;
     using Merchello.Core.Models;
-
-    using Umbraco.Core.Services;
 
     /// <summary>
     /// Defines the InvoiceService
@@ -133,25 +127,25 @@ namespace Merchello.Core.Services
         /// </returns>
         int CountInvoices();
 
-        /// <summary>
-        /// Gets a <see cref="Page{IInvoice}"/>
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{IInvoice}"/>.
-        /// </returns>
-        Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+        ///// <summary>
+        ///// Gets a <see cref="Page{IInvoice}"/>
+        ///// </summary>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The sort by.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{IInvoice}"/>.
+        ///// </returns>
+        //Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
 
         #region InvoiceStatus
 
