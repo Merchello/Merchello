@@ -98,6 +98,8 @@
     <key alias="voidPayment">Void Payment</key>
     <key alias="refundPayment">Refund Payment</key>
     <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
+    <key alias="addDateFilters">Add date filters</key>
+    <key alias="removeDateFilters">Remove date filters</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
