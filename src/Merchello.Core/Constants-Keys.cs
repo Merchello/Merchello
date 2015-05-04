@@ -373,13 +373,13 @@
             /// </summary>
             public static class CampaignActivity
             {
-                /// <summary>
-                /// Gets the key representing a sale type.
-                /// </summary>
-                public static Guid SaleKey
-                {
-                    get { return new Guid("2E8804AF-9852-4216-A3FB-A87D60C2EAF4"); }
-                }
+                ///// <summary>
+                ///// Gets the key representing a sale type.
+                ///// </summary>
+                //public static Guid SaleKey
+                //{
+                //    get { return new Guid("2E8804AF-9852-4216-A3FB-A87D60C2EAF4"); }
+                //}
 
                 /// <summary>
                 /// Gets the key representing a discount type.

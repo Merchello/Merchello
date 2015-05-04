@@ -21,7 +21,7 @@
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
     public enum CampaignActivityType
     {
-        Sale,
+        //Sale,
         Discount,
         Custom
     }
