@@ -448,7 +448,7 @@ namespace Merchello.Core.Persistence.Querying
                 //    return string.Format("{0} {1} ({2})", r, m.Method.Name, sIn.ToString());
                 //case "Desc":
                 //    return string.Format("{0} DESC", r);
-                //case "Alias":
+                //case "Code":
                 //case "As":
                 //    return string.Format("{0} As {1}", r,
                 //                                GetQuotedColumnName(RemoveQuoteFromAlias(RemoveQuote(args[0].ToString()))));

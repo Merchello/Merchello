@@ -27,7 +27,7 @@
             {
                 Key = dto.Key,
                 Name = dto.Name,
-                Alias = dto.Alias,
+                Alias = dto.Code,
                 Description = dto.Description,
                 Active = dto.Active,
                 StartDate = dto.StartDate,
@@ -57,7 +57,7 @@
                        {
                            Key = entity.Key,
                            Name = entity.Name,
-                           Alias = entity.Alias,
+                           Code = entity.Alias,
                            Description = entity.Description,
                            Active = entity.Active,
                            StartDate = entity.StartDate,

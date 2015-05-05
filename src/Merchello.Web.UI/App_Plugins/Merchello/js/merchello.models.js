@@ -1165,7 +1165,7 @@
         self.providerTfKey = '';
         self.name = '';
         self.description = '';
-        self.extendedData = [];
+        self.extendedData = {};
         self.encryptExtendedData = false;
         self.activated = false;
         self.dialogEditorView = {};
