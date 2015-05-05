@@ -270,6 +270,7 @@
     <Compile Include="PartialView\RazorEngineTests.cs" />
     <Compile Include="Payments\PaymentProcessingTests.cs" />
     <Compile Include="Reports\ReportResolutionTests.cs" />
+    <Compile Include="Scratch.cs" />
     <Compile Include="Services\Product\ProductAllinTests.cs" />
     <Compile Include="Services\Shipping\ShippingServiceTests.cs" />
     <Compile Include="Services\Warehouse\WarehhouseServiceTests.cs" />
