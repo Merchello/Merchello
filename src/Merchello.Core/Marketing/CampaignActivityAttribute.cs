@@ -23,9 +23,9 @@
         /// <param name="editorView">
         /// The editor view.
         /// </param>
-        public CampaignActivityAttribute(Guid typeKey, string title, string description, string editorView)
+        public CampaignActivityAttribute(string typeKey, string title, string description, string editorView)
         {
-            TypeKey = typeKey;
+            TypeKey = new Guid(typeKey);
             Title = title;
             Description = description;
             EditorView = editorView;
