@@ -260,7 +260,9 @@
     <Compile Include="Gateways\Notification\Monitors\OrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\PartialOrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Triggering\ShipmentResultNotifyModelFactory.cs" />
-    <Compile Include="Marketing\Coupons\CouponBase.cs" />
+    <Compile Include="Marketing\Coupons\Coupon.cs" />
+    <Compile Include="Marketing\ICampaignManager.cs" />
+    <Compile Include="Marketing\ICampaignActivityResolver.cs" />
     <Compile Include="Marketing\IDiscountActivity.cs" />
     <Compile Include="Models\MonitorModels\IShipmentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />

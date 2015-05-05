@@ -1,6 +1,6 @@
 ﻿namespace Merchello.Core.Marketing
 {
-    internal interface ICampaignActivityManager
+    internal interface ICampaignManager
     {
          
     }
