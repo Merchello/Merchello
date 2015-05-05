@@ -254,7 +254,6 @@
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
     <Compile Include="Invoices\InvoiceTests.cs" />
-    <Compile Include="Migrations\MigrationsTest.cs" />
     <Compile Include="Notifications\NotificationContextTests.cs" />
     <Compile Include="Notifications\NotificationObservationTests.cs" />
     <Compile Include="Notifications\PatternFormatterTests.cs" />
@@ -271,8 +270,7 @@
     <Compile Include="PartialView\RazorEngineTests.cs" />
     <Compile Include="Payments\PaymentProcessingTests.cs" />
     <Compile Include="Reports\ReportResolutionTests.cs" />
-    <Compile Include="Services\CampaignSettings\CampaignActivitySettingsTests.cs" />
-    <Compile Include="Services\CampaignSettings\CampaignSettingsServiceTests.cs" />
+    <Compile Include="Scratch.cs" />
     <Compile Include="Services\Product\ProductAllinTests.cs" />
     <Compile Include="Services\Shipping\ShippingServiceTests.cs" />
     <Compile Include="Services\Warehouse\WarehhouseServiceTests.cs" />
