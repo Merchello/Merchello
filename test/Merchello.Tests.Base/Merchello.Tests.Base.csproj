@@ -264,6 +264,7 @@
     <Compile Include="SqlSyntax\SqlSyntaxProviderTestHelper.cs" />
     <Compile Include="TestHelpers\DbPreTestDataWorker.cs" />
     <Compile Include="TestHelpers\MerchelloAllInTestBase.cs" />
+    <Compile Include="TestHelpers\MerchelloContextOnlyBase.cs" />
     <Compile Include="TypeFields\TypeFieldMock.cs" />
     <Compile Include="SqlSyntax\BaseUsingSqlServerSyntax.cs" />
     <Compile Include="Umbraco\ApplicationContext\FakeUmbracoApplication.cs" />
