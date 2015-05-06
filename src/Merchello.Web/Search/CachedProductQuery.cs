@@ -14,6 +14,8 @@
 
     using log4net.Util;
 
+    using Merchello.Examine.Providers;
+
     using Models.ContentEditing;
     using Models.Querying;
 
@@ -242,7 +244,7 @@
         /// </param>
         internal override void ReindexEntity(IProduct entity)
         {
-            IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
+            ((ProductIndexer)IndexProvider).AddProductToIndex(entity);
         }
 
         internal void ReindexEntity(IProductVariant entity)

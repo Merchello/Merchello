@@ -79,7 +79,7 @@
         /// <summary>
         /// Gets or sets the region.
         /// </summary>
-        [Display(Name = "Region, State or Provice")]
+        [Display(Name = "Region, State or Province")]
         public string Region { get; set; }
 
         /// <summary>

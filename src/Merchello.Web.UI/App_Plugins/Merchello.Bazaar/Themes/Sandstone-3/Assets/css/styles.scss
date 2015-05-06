@@ -53,6 +53,15 @@ span.field-validation-error {
     .extended-address { display: block; }
 }
 
+
+// checkout addresses form
+#addresses-form {
+    h2 { font-size: 1.25em; }
+    .vcard { display: none; }
+    #shipping-address { display: none; }
+    #customer-address-labels { display: none; }
+}
+
 .navbar-collapse {
 	&.collapsing {
 		ul.pull-right {

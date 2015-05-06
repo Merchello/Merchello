@@ -15,14 +15,15 @@
                 filterEndDate: '=',
                 filterText: '=',
                 filterButtonText: '@filterButtonText',
+                dateFilterOpen: '=',
                 filterCallback: '&',
-                filterTermCallback: '&'
+                filterTermCallback: '&',
+                toggleDateFilterOpen: '&'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterinvoices.tpl.html',
             controller: function($scope, $element, $q, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
 
                 $scope.settings = {};
-                $scope.dateFilterOpen = false;
 
                 // exposed methods
                 $scope.changeDateFilters = changeDateFilters;
