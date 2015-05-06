@@ -138,11 +138,8 @@
             }
             else
             {
-                    // this is a new install
-                    var migrationSetting =
-                            schemaResult.StoreSettings.FirstOrDefault(
-                                x => x.Key == Constants.StoreSettingKeys.MigrationKey);
-                    var migrationKey = migrationSetting != null ? migrationSetting.Value : Guid.NewGuid().ToString();
+                    // this is a new install                  
+                    var migrationKey = this.EnsureMigrationKey(schemaResult);
 
                     var record = new MigrationRecord()
                                      {
