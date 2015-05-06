@@ -51,18 +51,8 @@
     <Reference Include="controls">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\UmbracoCms.Core.7.2.4\lib\controls.dll</HintPath>
     </Reference>
-    <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
-    </Reference>
     <Reference Include="Examine">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Examine.0.1.60.2941\lib\Examine.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="ImageProcessor">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\ImageProcessor.1.9.5.0\lib\ImageProcessor.dll</HintPath>
@@ -76,44 +66,23 @@
     <Reference Include="log4net">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\UmbracoCms.Core.7.2.4\lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
-    </Reference>
     <Reference Include="Merchello.Core">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.1.4\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.3.1\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.1.4\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.3.1\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Tests.Base">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.1.4\lib\net40\Merchello.Tests.Base.dll</HintPath>
+      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.3.1\lib\net40\Merchello.Tests.Base.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.1.4\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Merchello.TestsBase.1.8.3.1\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\UmbracoCms.Core.7.2.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.1\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
-    </Reference>
-    <Reference Include="MiniProfiler">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
-    </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data, Version=6.6.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\MySql.Data.6.6.5\lib\net40\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
@@ -124,54 +93,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\UmbracoCms.Core.7.2.4\lib\System.Data.SqlServerCe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="TidyNet">
       <HintPath>..\..\src\Merchello.Plugin.Payments.AuthorizeNet\packages\UmbracoCms.Core.7.2.4\lib\TidyNet.dll</HintPath>
     </Reference>
