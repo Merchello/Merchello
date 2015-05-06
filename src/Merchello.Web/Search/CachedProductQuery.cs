@@ -245,7 +245,6 @@
         internal override void ReindexEntity(IProduct entity)
         {
             ((ProductIndexer)IndexProvider).AddProductToIndex(entity);
-            //IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
 
         internal void ReindexEntity(IProductVariant entity)
