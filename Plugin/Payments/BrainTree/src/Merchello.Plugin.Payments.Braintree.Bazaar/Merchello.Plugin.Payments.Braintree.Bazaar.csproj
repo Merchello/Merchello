@@ -31,16 +31,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.8.1.2\lib\net40\Merchello.Core.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Merchello.Core.1.8.3.1\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.8.1.2\lib\net40\Merchello.Examine.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Merchello.Core.1.8.3.1\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Web">
-      <HintPath>..\packages\Merchello.Core.1.8.1.2\lib\net40\Merchello.Web.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Merchello.Core.1.8.3.1\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
