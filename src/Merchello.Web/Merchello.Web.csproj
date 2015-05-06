@@ -266,6 +266,8 @@
     <Compile Include="Models\SaleHistory\DailyAuditLogDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
+    <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
+    <Compile Include="Mvc\MerchelloSurfaceController.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
