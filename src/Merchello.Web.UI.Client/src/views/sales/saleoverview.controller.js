@@ -52,6 +52,7 @@
             $scope.toggleNewPaymentOpen = toggleNewPaymentOpen;
             $scope.reload = init;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
+            $scope.setNotPreValuesLoaded = setNotPreValuesLoaded;
 
 
             // localize the sales history message
@@ -262,8 +263,26 @@
                 });
             }
 
+            /**
+             * @ngdoc method
+             * @name toggleNewPaymentOpen
+             * @function
+             *
+             * @description - Toggles the new payment open variable.
+             */
             function toggleNewPaymentOpen() {
                 $scope.newPaymentOpen = !$scope.newPaymentOpen;
+            }
+
+            /**
+             * @ngdoc method
+             * @name setNotPreValuesLoaded
+             * @function
+             *
+             * @description - Sets preValuesLoaded to false.  For use in directives.
+             */
+            function setNotPreValuesLoaded() {
+                $scope.preValuesLoaded = false;
             }
 
             /**
