@@ -934,6 +934,7 @@ angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.Notif
                     }, function (newValue, oldValue) {
                         $scope.dialogData.provider.extendedData.setValue(extendedDataKey, angular.toJson(newValue));
                     }, true);
+                    console.info($scope.dialogData);
                 }
             }
 
@@ -1765,7 +1766,7 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              */
             function providerConfigDialogConfirm(data) {
                 $scope.preValuesLoaded = false;
-                var promise = gatewayProvideerResource.saveGatewayProvider(data.provider);
+                var promise = gatewayProviderResource.saveGatewayProvider(data.provider);
                 promise.then(function (provider) {
                         notificationsService.success("Gateway Provider Saved", "");
                         init();
@@ -5650,6 +5651,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.toggleNewPaymentOpen = toggleNewPaymentOpen;
             $scope.reload = init;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
+            $scope.setNotPreValuesLoaded = setNotPreValuesLoaded;
 
 
             // localize the sales history message
@@ -5860,8 +5862,26 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 });
             }
 
+            /**
+             * @ngdoc method
+             * @name toggleNewPaymentOpen
+             * @function
+             *
+             * @description - Toggles the new payment open variable.
+             */
             function toggleNewPaymentOpen() {
                 $scope.newPaymentOpen = !$scope.newPaymentOpen;
+            }
+
+            /**
+             * @ngdoc method
+             * @name setNotPreValuesLoaded
+             * @function
+             *
+             * @description - Sets preValuesLoaded to false.  For use in directives.
+             */
+            function setNotPreValuesLoaded() {
+                $scope.preValuesLoaded = false;
             }
 
             /**

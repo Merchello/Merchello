@@ -63,7 +63,7 @@
         {
             // CampaignActivities
             var activity = new CampaignActivityTypeField();
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = activity.Sale.TypeKey, Alias = activity.Sale.Alias, Name = activity.Sale.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = activity.Sale.TypeKey, Code = activity.Sale.Code, Name = activity.Sale.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = activity.Discount.TypeKey, Alias = activity.Discount.Alias, Name = activity.Discount.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
             // address

@@ -21,7 +21,7 @@ namespace Merchello.Tests.IntegrationTests.Notifications
     {
         private SmtpNotificationGatewayProvider _provider;
 
-        private readonly Guid _key = new Guid("5F2E88D1-6D07-4809-B9AB-D4D6036473E9");
+        private readonly Guid _key = Constants.ProviderKeys.Notification.SmtpNotificationProviderKey;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()

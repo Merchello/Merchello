@@ -857,9 +857,10 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
             currencySymbol: '=',
             reload: '&',
             toggleOpen: '&',
+            showSpinner: '&',
             invoice: '=',
             payments: '=',
-            paymentMethods: '='
+            paymentMethods: '=',
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/addpaymenttable.tpl.html',
         controller: function($scope, $timeout, notificationsService, dialogService, dialogDataFactory, paymentResource) {
@@ -922,6 +923,7 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
             function openAddPaymentDialog(paymentMethod) {
 
                 var dialogData = dialogDataFactory.createAddPaymentDialogData();
+                dialogData.showSpinner = $scope.showSpinner;
                 dialogData.paymentMethod = paymentMethod;
                 dialogData.paymentMethodName = paymentMethod.name;
                 dialogData.invoiceBalance = $scope.invoice.remainingBalance($scope.payments);
@@ -946,7 +948,7 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
              * @description - Authorizes and/or captures a new payment
              */
             function addPaymentDialogConfirm(dialogData) {
-                $scope.preValuesLoaded = false;
+                $scope.showSpinner();
                 var paymentRequest = dialogData.asPaymentRequestDisplay();
                 var promise;
                 var note =  ' Authorize/Capture ';

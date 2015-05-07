@@ -1,5 +1,7 @@
-﻿namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Marketing
 {
+    using Merchello.Core.Models;
+
     using Umbraco.Core;
 
     /// <summary>
