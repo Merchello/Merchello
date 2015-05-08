@@ -185,6 +185,8 @@ namespace Merchello.Plugin.Payments.Braintree.Services
 
             if (result.IsSuccess())
             {
+                var cacheKey = MakeSubscriptionCacheKey(subscriptionId);
+                RuntimeCache.ClearCacheItem(cacheKey);
                 return true;
             }
 

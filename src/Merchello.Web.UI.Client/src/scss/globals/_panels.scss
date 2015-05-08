@@ -16,6 +16,9 @@
     .icon-loading:before { font-size: 1.15em; vertical-align: top; padding-top: 1px; }
     .clear { clear: both; }
 
+    .right { float: right; }
+    .left { float: left; }
+
     .well { position: relative;
         h3 { margin: 0; }
         h4 { margin-bottom: 5px; }
@@ -190,6 +193,14 @@
             &[class*="span"]:first-child { margin-left: 180px; }
         }
         .form-control { padding: 1px 5px; border: solid 1px #ccc; }
+    }
+
+    .limit-form {
+        width: 10%;
+    }
+
+    .invoice-filter {
+        width: 86%;
     }
 
     .edit-address {

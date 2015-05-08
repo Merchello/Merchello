@@ -19,7 +19,7 @@
         </umb-header>
         <merchello-panel>
             <div class="merchello-pane">
-                <form class="form-horizontal row-fluid">
+                <form class="form-horizontal limit-form row-fluid right">
                     <!-- Number of Orders/Invoices Per Page -->
                     <div class="controls pull-right" style="margin-left: 0;" data-ng-show="invoices.length > 0">
                         <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
@@ -29,54 +29,17 @@
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
-                    </div>
-                    <!-- Order Filters -->
-                    <div class="form-group control-group span10">
-                        <label class="control-label" for="salesFilter">Filter Orders:</label>
-                        <div class="controls">
-                            <input type="text" id="salesFilter" class="form-control span8" name="salesFilter" data-ng-model="filterText" localize="placeholder" placeholder="Search by invoice number or customer name" />
-                            <!-- ACTION: Filter Sales  -->
-                            <button id="salesFilterGo" class="btn" data-ng-click="filterWithWildcard(filterText)"><localize key="merchelloGeneral_filter" /></button>
-                            <a data-ng-click="filterAction = !filterAction" class="btn" data-ng-show="false"><localize key="merchelloOrder_filter" /></a>
-                        </div>
-                    </div>
+                    </div>    
                 </form>
-                <merchello-slide-open-panel is-open="filterAction" classes="'well row-fluid col-xs-10 span10'">
 
-                    <div>
-
-                        <p>Show all invoices where</p>
-
-                        <div class="form-inline">
-                            <div>
-                                Dates:
-                                <div class="input-append date datepicker" id="filterStartDate">
-                                    <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
-                                           data-ng-model="filterStartDate" />
-                                    <span class="add-on">
-                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                                    </span>
-                                </div>
-                                -
-                                <div class="input-append date datepicker" id="filterEndDate">
-                                    <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
-                                           data-ng-model="filterEndDate" />
-                                    <span class="add-on">
-                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                                    </span>
-                                </div>
-                                <button id="orderFilterDateGo" class="btn" data-ng-click="filterWithDates(filterStartDate,filterEndDate)"><localize key="merchelloGeneral_filter" /></button>
-                            </div>
-                        </div>
-                    </div>
-
-                </merchello-slide-open-panel>
+                <!-- Order Filters -->
+                <div class="well row-fluid left invoice-filter">
+                    <filter-invoices filter-start-date="filterStartDate" date-filter-open="dateFilterOpen" filter-end-date="filterEndDate" filter-text="filterText" filter-term-callback="termFilterInvoices(filterText)" filter-callback="filterInvoices(filterStartDate, filterEndDate, filterText)" toggle-date-filter-open="toggleDateFilterOpen()"></filter-invoices>
+                </div>
+                <div class="clear"></div>
 
                 <reset-list-filters></reset-list-filters>
-                <!--div class="form-inline" data-ng-show="currentFilters.length > 0">
-                    <strong>Current Filters</strong> <span data-ng-repeat="filter in currentFilters"> <span class="label label-inverse">{{ filter.fieldname }} '{{ filter.value }}'</span>  </span>
-                    <button class="btn" data-ng-click="resetFilters()"><localize key="merchelloOrder_resetFilters" /></button>
-                </div-->
+
             </div>
             <!-- Tabular Order List -->
             <div class="merchello-pane">

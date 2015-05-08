@@ -37,13 +37,13 @@
             }
         }
 
-        /// <summary>
-        /// Gets the sale type field.
-        /// </summary>
-        public ITypeField Sale
-        {
-            get { return GetTypeField(CampaignActivityType.Sale); }
-        }
+        ///// <summary>
+        ///// Gets the sale type field.
+        ///// </summary>
+        //public ITypeField Sale
+        //{
+        //    get { return GetTypeField(CampaignActivityType.Sale); }
+        //}
 
         /// <summary>
         /// Gets the discount type field.
@@ -61,7 +61,7 @@
         /// </summary>
         internal override void BuildCache()
         {
-            AddUpdateCache(CampaignActivityType.Sale, new TypeField("Sale", "Sale", Constants.TypeFieldKeys.CampaignActivity.SaleKey));
+            //AddUpdateCache(CampaignActivityType.Sale, new TypeField("Sale", "Sale", Constants.TypeFieldKeys.CampaignActivity.SaleKey));
             AddUpdateCache(CampaignActivityType.Discount, new TypeField("Discount", "Discount", Constants.TypeFieldKeys.CampaignActivity.DiscountKey));
             AddUpdateCache(CampaignActivityType.Custom, NotFound);
         }

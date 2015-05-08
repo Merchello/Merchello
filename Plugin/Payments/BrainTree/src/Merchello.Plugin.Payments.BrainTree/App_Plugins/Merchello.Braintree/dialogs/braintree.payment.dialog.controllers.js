@@ -77,6 +77,7 @@
                     cc.expirationMonth = invoiceHelper.padLeft($scope.selectedMonth.monthNumber + 1, '0', 2);
                     cc.expirationYear = $scope.expirationYear;
                     cc.billingAddress.postalCode = $scope.postalCode;
+                    $scope.dialogData.showSpinner();
                     $scope.braintreeClient.tokenizeCard(cc, function (err, nonce) {
                         // Send nonce to your server
                         if(err !== null) {

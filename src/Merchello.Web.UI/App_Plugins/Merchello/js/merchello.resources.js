@@ -15,6 +15,20 @@
         '$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
         return {
+            /**
+             * @ngdoc method
+             * @name getSalesHistoryByInvoiceKey
+             * @description
+             **/
+            getByEntityKey: function(key) {
+                return umbRequestHelper.resourcePromise(
+                $http({
+                    url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetByEntityKey'),
+                    method: "GET",
+                    params: { id: key }
+                }),
+                'Failed to audit logs for entity with following key: ' + key);
+            },
 
             /**
              * @ngdoc method
@@ -254,6 +268,8 @@ angular.module('merchello.resources')
             '$q', '$http', 'umbRequestHelper',
             function($q, $http, umbRequestHelper) {
 
+                var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'];
+
                 return {
 
                     /**
@@ -262,7 +278,7 @@ angular.module('merchello.resources')
                      * @description
                      **/
                     getByKey: function (id) {
-                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'GetInvoice';
+                        var url = baseUrl + 'GetInvoice';
                         return umbRequestHelper.resourcePromise(
                             $http({
                                 url: url,
@@ -297,7 +313,7 @@ angular.module('merchello.resources')
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();
                         }
-                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'SearchInvoices';
+                        var url = baseUrl + 'SearchInvoices';
                         return umbRequestHelper.resourcePromise(
                             $http.post(url, query),
                             'Failed to retreive invoices');
@@ -320,7 +336,7 @@ angular.module('merchello.resources')
                             query = queryDisplayBuilder.createDefault();
                             query.applyInvoiceQueryDefaults();
                         }
-                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'SearchByDateRange';
+                        var url = baseUrl + 'SearchByDateRange';
                         return umbRequestHelper.resourcePromise(
                             $http.post(url, query),
                             'Failed to retreive invoices');
@@ -332,10 +348,19 @@ angular.module('merchello.resources')
                      * @description
                      **/
                     saveInvoice: function (invoice) {
-                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'PutInvoice';
+                        var url = baseUrl + 'PutInvoice';
                         return umbRequestHelper.resourcePromise(
                             $http.post(url,
                                 invoice
+                            ),
+                            'Failed to save invoice');
+                    },
+
+                    saveInvoiceShippingAddress: function (data) {
+                        var url = baseUrl + 'PutInvoiceShippingAddress';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url,
+                                data
                             ),
                             'Failed to save invoice');
                     },
@@ -346,7 +371,7 @@ angular.module('merchello.resources')
                      * @description
                      **/
                     deleteInvoice: function (invoiceKey) {
-                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloInvoiceApiBaseUrl'] + 'DeleteInvoice';
+                        var url = baseUrl + 'DeleteInvoice';
                         return umbRequestHelper.resourcePromise(
                             $http({
                                 url: url,

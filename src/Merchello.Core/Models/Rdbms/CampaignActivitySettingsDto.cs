@@ -41,9 +41,9 @@
         /// <remarks>
         /// Used for easy JS referencing?
         /// </remarks>
-        [Column("alias")]
-        [Index(IndexTypes.NonClustered, Name = "IX_merchCampgaignActivitySettings_alias")]
-        public string Alias { get; set; }
+        [Column("code")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchCampgaignActivitySettings_code")]
+        public string Code { get; set; }
 
         /// <summary>
         /// Gets or sets the description.

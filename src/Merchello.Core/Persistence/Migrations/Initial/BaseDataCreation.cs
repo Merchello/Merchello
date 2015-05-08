@@ -63,7 +63,7 @@
         {
             // CampaignActivities
             var activity = new CampaignActivityTypeField();
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = activity.Sale.TypeKey, Alias = activity.Sale.Alias, Name = activity.Sale.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = activity.Sale.TypeKey, Code = activity.Sale.Code, Name = activity.Sale.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = activity.Discount.TypeKey, Alias = activity.Discount.Alias, Name = activity.Discount.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
             // address
@@ -225,6 +225,7 @@
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTaxableKey, Name = "globalTaxable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTrackInventoryKey, Name = "globalTrackInventory", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalShippingIsTaxableKey, Name = "globalShippingIsTaxable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.MigrationKey, Name = "migration", Value = Guid.NewGuid().ToString(), TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
     }

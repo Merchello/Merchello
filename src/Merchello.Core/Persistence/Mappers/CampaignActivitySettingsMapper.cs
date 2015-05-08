@@ -27,7 +27,7 @@
             CacheMap<ICampaignActivitySettings, CampaignActivitySettingsDto>(src => src.CampaignKey, dto => dto.CampaignKey);
             CacheMap<ICampaignActivitySettings, CampaignActivitySettingsDto>(src => src.CampaignActivityTfKey, dto => dto.CampaignActivityTfKey);
             CacheMap<ICampaignActivitySettings, CampaignActivitySettingsDto>(src => src.Name, dto => dto.Name);
-            CacheMap<ICampaignActivitySettings, CampaignActivitySettingsDto>(src => src.Alias, dto => dto.Alias);
+            CacheMap<ICampaignActivitySettings, CampaignActivitySettingsDto>(src => src.Alias, dto => dto.Code);
             CacheMap<ICampaignActivitySettings, CampaignActivitySettingsDto>(src => src.Description, dto => dto.Description);
             CacheMap<ICampaignActivitySettings, CampaignActivitySettingsDto>(src => src.Active, dto => dto.Active);
             CacheMap<ICampaignActivitySettings, CampaignActivitySettingsDto>(src => src.StartDate, dto => dto.StartDate);

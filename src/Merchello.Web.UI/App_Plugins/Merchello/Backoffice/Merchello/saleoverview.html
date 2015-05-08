@@ -34,7 +34,7 @@
                             <button type="button" class="btn btn-default btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
                         </div>
 
-                        <add-payment-table is-open="newPaymentOpen" payments="allPayments" toggle-open="toggleNewPaymentOpen()" reload="reload()" currency-symbol="currencySymbol" invoice="invoice" payment-methods="paymentMethods"></add-payment-table>
+                        <add-payment-table is-open="newPaymentOpen" payments="allPayments" toggle-open="toggleNewPaymentOpen()" reload="reload()" currency-symbol="currencySymbol" invoice="invoice" show-spinner="setNotPreValuesLoaded()" payment-methods="paymentMethods"></add-payment-table>
 
                         <table class="table table-striped merchello-striped-table order-items">
                             <thead>
@@ -127,12 +127,16 @@
             <div class="merchello-pane secondary span3">
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
+                    <a class="btn btn-default btn-action pull-right" data-ng-show="!invoice.isPaid()" data-ng-click="openAddressAddEditDialog(billingAddress)"><i class="icon icon-edit"></i></a>
                     <h3><localize key="merchelloOrderView_billingAddress" /></h3><br />
                     <merchello-address address="billingAddress"></merchello-address>
+
                 </div>
                 <div class="well invoice-order-info" ng-hide="shippingLineItems.length > 0">
+                    <a class="btn btn-default btn-action pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'" data-ng-click="openAddressAddEditDialog(shippingAddress)"><i class="icon icon-edit"></i></a>
                     <h3><localize key="merchelloOrderView_shippingAddress" /></h3><br />
                     <merchello-address address="shippingAddress"></merchello-address>
+
                 </div>
             </div>
             <!-- Debug -->
