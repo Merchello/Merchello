@@ -23,7 +23,8 @@
             var digitalMedia = new DigitalMedia
                          {
                              Key = dto.Key,
-                             Name = dto.Name,
+                             FirstAccessed = dto.FirstAccessed,
+                             ProductVariantKey = dto.ProductVariantKey,
                              CreateDate = dto.CreateDate,
                              UpdateDate = dto.UpdateDate
                          };
@@ -47,7 +48,8 @@
             var dto = new DigitalMediaDto()
                           {
                               Key = entity.Key,
-                              Name = entity.Name,
+                              FirstAccessed = entity.FirstAccessed,
+                              ProductVariantKey = entity.ProductVariantKey,
                               CreateDate = entity.CreateDate,
                               UpdateDate = entity.UpdateDate
                           };
