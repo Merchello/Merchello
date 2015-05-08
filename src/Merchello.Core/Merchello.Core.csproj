@@ -84,9 +84,9 @@
       <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Examine, Version=0.1.63.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Examine, Version=0.1.61.2941, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Examine.0.1.63.0\lib\Examine.dll</HintPath>
+      <HintPath>..\packages\Examine.0.1.61.2941\lib\Examine.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -120,9 +120,9 @@
       <HintPath>..\packages\UmbracoCms.Core.7.2.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.1\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
@@ -164,8 +164,7 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Helpers">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Http">
@@ -180,16 +179,14 @@
       <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Razor">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.WebPages.Deployment">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor">
@@ -263,13 +260,19 @@
     <Compile Include="Gateways\Notification\Monitors\OrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\PartialOrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Triggering\ShipmentResultNotifyModelFactory.cs" />
+    <Compile Include="Marketing\CampaignActivityBase.cs" />
+    <Compile Include="Marketing\Coupons\Coupon.cs" />
+    <Compile Include="Marketing\ICampaignActivityResolver.cs" />
+    <Compile Include="Marketing\ICampaignManager.cs" />
+    <Compile Include="Marketing\IDiscountActivity.cs" />
+    <Compile Include="Models\DigitalMedia.cs" />
+    <Compile Include="Models\Interfaces\IDigitalMedia.cs" />
     <Compile Include="Models\MonitorModels\IShipmentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />
     <Compile Include="Gateways\Payment\PaymentGatewayMethodAttribute.cs" />
     <Compile Include="Gateways\Payment\PaymentOperationData.cs" />
     <Compile Include="Marketing\CampaignActivityAttribute.cs" />
-    <Compile Include="Models\CampaignActivityBase.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\CampaignSettings.cs" />
@@ -286,6 +289,7 @@
     <Compile Include="Models\NotificationExtensions.cs" />
     <Compile Include="Models\Rdbms\CampaignSettingsDto.cs" />
     <Compile Include="Models\Rdbms\CampaignActivitySettingsDto.cs" />
+    <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
     <Compile Include="Models\MonitorModels\MonitorModelExtensions.cs" />
@@ -368,10 +372,12 @@
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\CampaignActivitySettingsFactory.cs" />
     <Compile Include="Persistence\Factories\CampaignSettingsFactory.cs" />
+    <Compile Include="Persistence\Factories\DigitalMediaFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\CampaignActivitySettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\CampaignSettingsMapper.cs" />
+    <Compile Include="Persistence\Mappers\DigitalMediaMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
@@ -385,10 +391,12 @@
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\CampaignActivitySettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\CampaignSettingsRepository.cs" />
+    <Compile Include="Persistence\Repositories\DigitalMediaRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAssertsDocumentNumber.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICampaignActivitySettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\ICampaignSettingsRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IDigitalMediaRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
@@ -939,12 +947,14 @@
     <Compile Include="Services\CampaignActivitySettingsService.cs" />
     <Compile Include="Services\CampaignSettingsService.cs" />
     <Compile Include="Services\CustomerAddressService.cs" />
+    <Compile Include="Services\DigitalMediaService.cs" />
     <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\IAuditLogService.cs" />
     <Compile Include="Services\Interfaces\ICampaignActivitySettingsService.cs" />
     <Compile Include="Services\Interfaces\ICampaignSettingsService.cs" />
     <Compile Include="Services\Interfaces\ICustomerAddressService.cs" />
+    <Compile Include="Services\Interfaces\IDigitalMediaService.cs" />
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />

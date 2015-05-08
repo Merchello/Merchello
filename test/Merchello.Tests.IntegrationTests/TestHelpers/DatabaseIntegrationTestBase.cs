@@ -42,12 +42,12 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             if (MerchelloContext.Current == null) Assert.Ignore("MerchelloContext.Current is null");
 
 
-            //if (!GatewayProviderResolver.HasCurrent)    
-            //GatewayProviderResolver.Current = new GatewayProviderResolver(
-            //PluginManager.Current.ResolveGatewayProviders(),
-            //serviceContext.GatewayProviderService,
-            //new NullCacheProvider());                
-        
+            //if (!GatewayProviderResolver.HasCurrent)
+            //    GatewayProviderResolver.Current = new GatewayProviderResolver(
+            //    PluginManager.Current.ResolveGatewayProviders(),
+            //    serviceContext.GatewayProviderService,
+            //    new NullCacheProvider());                
+
 
 
             //MerchelloContext = new MerchelloContext(serviceContext,

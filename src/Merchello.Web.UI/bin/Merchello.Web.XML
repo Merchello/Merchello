@@ -30,6 +30,11 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
+        <member name="T:Merchello.Web.DigitalDownloadHandler">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Editors.MarketingCampaignApiController">
             <summary>
             The MarketingCampaignApiController.

@@ -6,12 +6,12 @@
     using Umbraco.Core.Persistence.DatabaseAnnotations;
 
     /// <summary>
-    /// The type field DTO.
+    /// The Digital Media DTO.
     /// </summary>
-    [TableName("merchTypeField")]
+    [TableName("merchDigitalMedia")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class TypeFieldDto
+    internal class DigitalMediaDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -20,18 +20,19 @@
         [PrimaryKeyColumn(AutoIncrement = false)]
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
+      
+        /// <summary>
+        /// Used to calculate validity
+        /// </summary>
+        [Column("firstAccessed")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public DateTime? FirstAccessed { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Used to retrieve download
         /// </summary>
-        [Column("name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the alias.
-        /// </summary>
-        [Column("alias")]
-        public string Alias { get; set; }
+        [Column("productVariantKey")]
+        public Guid ProductVariantKey { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
@@ -46,5 +47,10 @@
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
+
+        [Column("extendedData")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
+        public string ExtendedData { get; set; }
     }
 }

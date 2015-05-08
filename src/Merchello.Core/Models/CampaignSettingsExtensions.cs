@@ -32,9 +32,9 @@
                 case CampaignActivityType.Discount:
                     typeField = EnumTypeFieldConverter.CampaignActivity.Discount;
                     break;
-                case CampaignActivityType.Sale:
-                    typeField = EnumTypeFieldConverter.CampaignActivity.Sale;
-                    break;
+                //case CampaignActivityType.Sale:
+                //    typeField = EnumTypeFieldConverter.CampaignActivity.Sale;
+                //    break;
             }
 
             return typeField;

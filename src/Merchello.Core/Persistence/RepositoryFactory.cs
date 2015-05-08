@@ -169,6 +169,20 @@
         }
 
         /// <summary>
+        /// The create digital media repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The <see cref="IDatabaseUnitOfWork"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDigitalMediaRepository"/>.
+        /// </returns>
+        internal virtual IDigitalMediaRepository CreateDigitalMediaRepository(IDatabaseUnitOfWork uow)
+        {
+            return new DigitalMediaRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="IItemCacheRepository"/>
         /// </summary>
         /// <param name="uow">The <see cref="IDatabaseUnitOfWork"/></param>

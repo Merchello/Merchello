@@ -665,6 +665,7 @@
         self.invoiceBalance = 0;
         self.amount = 0;
         self.currencySymbol = '';
+        self.showSpinner = function() { return true; }
         self.processorArgs = new ProcessorArgumentCollectionDisplay();
     };
 
@@ -1165,7 +1166,7 @@
         self.providerTfKey = '';
         self.name = '';
         self.description = '';
-        self.extendedData = [];
+        self.extendedData = {};
         self.encryptExtendedData = false;
         self.activated = false;
         self.dialogEditorView = {};

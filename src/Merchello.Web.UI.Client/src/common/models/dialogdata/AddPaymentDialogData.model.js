@@ -15,6 +15,7 @@
         self.invoiceBalance = 0;
         self.amount = 0;
         self.currencySymbol = '';
+        self.showSpinner = function() { return true; }
         self.processorArgs = new ProcessorArgumentCollectionDisplay();
     };
 
