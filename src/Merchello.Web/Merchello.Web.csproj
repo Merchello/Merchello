@@ -222,8 +222,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
-    <Compile Include="CustomerContextBase.cs" />
-    <Compile Include="ICustomerContext.cs" />
+    <Compile Include="Pluggable\CustomerContextBase.cs" />
+    <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Models\ContentEditing\CurrencyDisplay.cs" />
     <Compile Include="Models\ContentEditing\GateProviderSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceShippingUpdateData.cs" />
@@ -270,6 +270,7 @@
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
+    <Compile Include="Pluggable\PluggableObjectHelper.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
@@ -294,7 +295,7 @@
     <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />
     <Compile Include="Models\ContentEditing\CustomerAddressDisplay.cs" />
     <Compile Include="Models\Querying\QueryResultDisplay.cs" />
-    <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
+    <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\Customer\CustomerContextData.cs" />
     <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\FixedRateShippingApiController.cs" />

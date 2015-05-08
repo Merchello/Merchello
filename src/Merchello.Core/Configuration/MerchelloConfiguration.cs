@@ -196,6 +196,28 @@
         }
 
         /// <summary>
+        /// Gets a pluggable object configuration element.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PluggableObjectElement"/>.
+        /// </returns>
+        public PluggableObjectElement GetPluggableObjectElement(string alias)
+        {
+            try
+            {
+                return Section.Pluggable[alias];
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve pluggable object with key: " + alias, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="StrategyElement"/> by it's configuration alias
         /// </summary>
         /// <param name="alias">The alias (configuration key) of the <see cref="StrategyElement"/></param>
@@ -210,7 +232,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve strategy with key: " + alias, ex);
                 return null;
             }
         }
@@ -228,7 +250,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve task chain with key: " + alias, ex);
                 return null;
             }
         }
