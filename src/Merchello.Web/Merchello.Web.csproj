@@ -329,7 +329,7 @@
     <Compile Include="Workflow\IBackofficeSalePreparation.cs" />
     <Compile Include="Workflow\IBasketConversionBase.cs" />
     <Compile Include="Workflow\IWishList.cs" />
-    <Compile Include="Workflow\PaymentProcessor.cs" />
+    <Compile Include="Workflow\Payment\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingGatewayApiController.cs" />
     <Compile Include="Editors\ShipmentApiController.cs" />

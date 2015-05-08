@@ -13,6 +13,9 @@ namespace Merchello.Web.Editors
     using Core.Gateways.Payment;
     using Core.Models;
     using Core.Services;
+
+    using Merchello.Web.Workflow.Payment;
+
     using Models;
     using Models.ContentEditing;
     using Models.Payments;
