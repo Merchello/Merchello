@@ -63,10 +63,7 @@
             { 35, typeof(OrderIndexDto) },
             { 36, typeof(NotificationMethodDto) },
             { 37, typeof(NotificationMessageDto) },
-            { 38, typeof(AuditLogDto) },
-            { 39, typeof(CampaignSettingsDto) },
-            { 40, typeof(CampaignActivitySettingsDto) },
-            { 41, typeof(DigitalMediaDto) }
+            { 38, typeof(AuditLogDto) }
         };
 
         /// <summary>
@@ -138,7 +135,34 @@
 
             ValidateDbConstraints(result);
 
+            if (!result.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchStoreSetting")))
+            {
+                // catch this so it doesn't kick off on an install
+                LoadMerchelloData(result);   
+            }
+
             return result;
+        }
+
+        /// <summary>
+        /// The load merchello data.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        private void LoadMerchelloData(MerchelloDatabaseSchemaResult result)
+        {
+            var sqlSettings = new Sql();
+            sqlSettings.Select("*")
+                .From<StoreSettingDto>();
+
+            result.StoreSettings = _database.Fetch<StoreSettingDto>(sqlSettings);
+
+            var sqlTypeFields = new Sql();
+            sqlSettings.Select("*")
+                .From<TypeFieldDto>();
+
+            result.TypeFields = _database.Fetch<TypeFieldDto>(sqlTypeFields);
         }
 
         private void ValidateDbConstraints(MerchelloDatabaseSchemaResult result)
