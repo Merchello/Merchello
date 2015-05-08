@@ -6514,44 +6514,44 @@
             Gets a value indicating whether or not the wish list contains any items
             </summary>
         </member>
-        <member name="T:Merchello.Web.Workflow.PaymentProcessor">
+        <member name="T:Merchello.Web.Workflow.Payment.PaymentProcessor">
             <summary>
             Processes a payment
             </summary>
         </member>
-        <member name="F:Merchello.Web.Workflow.PaymentProcessor._args">
+        <member name="F:Merchello.Web.Workflow.Payment.PaymentProcessor._args">
             <summary>
             The processor argument collection.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Workflow.PaymentProcessor._merchelloContext">
+        <member name="F:Merchello.Web.Workflow.Payment.PaymentProcessor._merchelloContext">
             <summary>
             The <see cref="T:Merchello.Core.IMerchelloContext"/>.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Workflow.PaymentProcessor._invoice">
+        <member name="F:Merchello.Web.Workflow.Payment.PaymentProcessor._invoice">
             <summary>
             The <see cref="T:Merchello.Core.Models.IInvoice"/>.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Workflow.PaymentProcessor._payment">
+        <member name="F:Merchello.Web.Workflow.Payment.PaymentProcessor._payment">
             <summary>
             The <see cref="T:Merchello.Core.Models.IPayment"/>.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Workflow.PaymentProcessor._amount">
+        <member name="F:Merchello.Web.Workflow.Payment.PaymentProcessor._amount">
             <summary>
             The payment amount.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Workflow.PaymentProcessor._paymentGatewayMethod">
+        <member name="F:Merchello.Web.Workflow.Payment.PaymentProcessor._paymentGatewayMethod">
             <summary>
             The payment gateway method.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Workflow.PaymentProcessor.#ctor(Merchello.Core.IMerchelloContext,Merchello.Web.Models.Payments.PaymentRequest)">
+        <member name="M:Merchello.Web.Workflow.Payment.PaymentProcessor.#ctor(Merchello.Core.IMerchelloContext,Merchello.Web.Models.Payments.PaymentRequest)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Workflow.PaymentProcessor"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Workflow.Payment.PaymentProcessor"/> class.
             </summary>
             <param name="merchelloContext">
             The merchello context.
@@ -6560,34 +6560,53 @@
             The request.
             </param>
         </member>
-        <member name="M:Merchello.Web.Workflow.PaymentProcessor.Authorize">
+        <member name="M:Merchello.Web.Workflow.Payment.PaymentProcessor.Authorize">
             <summary>
             Performs an Authorize payment 
             </summary>
             <returns>The <see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/></returns>
         </member>
-        <member name="M:Merchello.Web.Workflow.PaymentProcessor.Capture">
+        <member name="M:Merchello.Web.Workflow.Payment.PaymentProcessor.Capture">
             <summary>
             Performs a Capture payment
             </summary>
             <returns>The <see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/></returns>
         </member>
-        <member name="M:Merchello.Web.Workflow.PaymentProcessor.AuthorizeCapture">
+        <member name="M:Merchello.Web.Workflow.Payment.PaymentProcessor.AuthorizeCapture">
             <summary>
             Performs the Authorize and Capture of a payment
             </summary>
             <returns>The <see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/></returns>
         </member>
-        <member name="M:Merchello.Web.Workflow.PaymentProcessor.Refund">
+        <member name="M:Merchello.Web.Workflow.Payment.PaymentProcessor.Refund">
             <summary>
             Performs a refund payment
             </summary>
-            <returns></returns>
+            <returns><see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/></returns>
         </member>
-        <member name="M:Merchello.Web.Workflow.PaymentProcessor.IsReady">
+        <member name="M:Merchello.Web.Workflow.Payment.PaymentProcessor.IsReady">
             <summary>
             True/false indicating whether or not the processor is ready
             </summary>
+            <returns>
+            The a value indicating whether or not the processor is ready.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Workflow.Payment.PaymentProcessor.GetFailedResult">
+            <summary>
+            The get failed result.
+            </summary>
+            <returns>
+            The <see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Workflow.Payment.PaymentProcessor.Initialize(Merchello.Web.Models.Payments.PaymentRequest)">
+            <summary>
+            Initializes "this" object
+            </summary>
+            <param name="request">
+            The incoming <see cref="T:Merchello.Web.Models.Payments.PaymentRequest"/>
+            </param>
         </member>
         <member name="T:Merchello.Web.Editors.SettingsApiController">
             <summary>
