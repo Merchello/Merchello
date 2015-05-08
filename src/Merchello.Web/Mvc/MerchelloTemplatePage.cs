@@ -12,7 +12,7 @@
         /// <summary>
         /// The customer context.
         /// </summary>
-        private CustomerContext _customerContext;
+        private ICustomerContext _customerContext;
 
         /// <summary>
         /// The MerchelloHelper class

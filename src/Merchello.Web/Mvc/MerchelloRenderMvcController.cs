@@ -67,7 +67,7 @@
         /// <summary>
         /// Gets the customer context.
         /// </summary>
-        protected CustomerContext CustomerContext { get; private set; }
+        protected ICustomerContext CustomerContext { get; private set; }
 
         /// <summary>
         /// Gets the current customer.

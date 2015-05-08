@@ -14,7 +14,7 @@
         /// <summary>
         /// The <see cref="CustomerContext"/>.
         /// </summary>
-        private CustomerContext _customerContext;
+        private ICustomerContext _customerContext;
 
         /// <summary>
         /// The <see cref="MerchelloHelper"/>
