@@ -1,4 +1,4 @@
-namespace Merchello.Web
+namespace Merchello.Web.Pluggable
 {
     using Merchello.Core.Models;
 

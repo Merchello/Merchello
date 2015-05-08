@@ -1,4 +1,4 @@
-namespace Merchello.Web
+namespace Merchello.Web.Pluggable
 {
     using System;
     using System.Collections.Generic;
@@ -61,7 +61,7 @@ namespace Merchello.Web
         /// </summary>
         protected CustomerContextBase()
             : this(UmbracoContext.Current)
-        {            
+        {
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Merchello.Web
         /// </param>
         protected CustomerContextBase(UmbracoContext umbracoContext)
             : this(MerchelloContext.Current, umbracoContext)
-        {            
+        {
         }
 
         /// <summary>
@@ -89,11 +89,11 @@ namespace Merchello.Web
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             Mandate.ParameterNotNull(umbracoContext, "umbracoContext");
            
-            _merchelloContext = merchelloContext;
-            _umbracoContext = umbracoContext;
-            _customerService = merchelloContext.Services.CustomerService;
-            _cache = merchelloContext.Cache;
-            Initialize();
+            this._merchelloContext = merchelloContext;
+            this._umbracoContext = umbracoContext;
+            this._customerService = merchelloContext.Services.CustomerService;
+            this._cache = merchelloContext.Cache;
+            this.Initialize();
         }
 
         /// <summary>
@@ -104,7 +104,18 @@ namespace Merchello.Web
         /// <summary>
         /// Gets the context data.
         /// </summary>
-        protected CustomerContextData ContextData { get; private set; }
+        protected CustomerContextData ContextData { get; private set; }        
+
+        /// <summary>
+        /// Gets the <see cref="UmbracoContext"/>.
+        /// </summary>
+        protected UmbracoContext UmbracoContext 
+        {
+            get
+            {
+                return this._umbracoContext;
+            } 
+        }
 
         /// <summary>
         /// Gets the cache.
@@ -113,7 +124,7 @@ namespace Merchello.Web
         {
             get
             {
-                return _cache;
+                return this._cache;
             }
         }
 
@@ -124,9 +135,9 @@ namespace Merchello.Web
         {
             get
             {
-                return _customerService;
+                return this._customerService;
             }
-        }
+        }       
 
         /// <summary>
         /// Sets a value in the encrypted Merchello cookie
@@ -143,15 +154,15 @@ namespace Merchello.Web
         /// </remarks>
         public void SetValue(string key, string value)
         {
-            if (ContextData.Values.Any(x => x.Key == key))
+            if (this.ContextData.Values.Any(x => x.Key == key))
             {
-                var idx = ContextData.Values.FindIndex(x => x.Key == key);
-                ContextData.Values.RemoveAt(idx);
+                var idx = this.ContextData.Values.FindIndex(x => x.Key == key);
+                this.ContextData.Values.RemoveAt(idx);
             }
 
-            ContextData.Values.Add(new KeyValuePair<string, string>(key, value));
+            this.ContextData.Values.Add(new KeyValuePair<string, string>(key, value));
 
-            this.CacheCustomer(CurrentCustomer);
+            this.CacheCustomer(this.CurrentCustomer);
         }
 
         /// <summary>
@@ -165,7 +176,7 @@ namespace Merchello.Web
         /// </returns>
         public string GetValue(string key)
         {
-            return ContextData.Values.FirstOrDefault(x => x.Key == key).Value;
+            return this.ContextData.Values.FirstOrDefault(x => x.Key == key).Value;
         }
 
         /// <summary>
@@ -180,7 +191,7 @@ namespace Merchello.Web
         public void Reinitialize(ICustomerBase customer)
         {
             // customer has logged out, so we need to go back to an anonymous customer
-            var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
+            var cookie = this._umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
 
             if (cookie == null)
             {
@@ -190,11 +201,11 @@ namespace Merchello.Web
 
             cookie.Expires = DateTime.Now.AddDays(-1);
 
-            _cache.RequestCache.ClearCacheItem(CustomerCookieName);
-            _cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key));
+            this._cache.RequestCache.ClearCacheItem(CustomerCookieName);
+            this._cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key));
 
-            Initialize();
-        }
+            this.Initialize();
+        }        
 
         /// <summary>
         /// Converts an anonymous basket to a customer basket.
@@ -243,17 +254,17 @@ namespace Merchello.Web
             // TODO decide how we want to deal with cookie persistence options
             var cookie = new HttpCookie(CustomerCookieName)
             {
-                Value = ContextData.ToJson()
+                Value = this.ContextData.ToJson()
             };
 
             // Ensure a session cookie for Anonymous customers
             // TODO - on persisted authenticcation, we need to synch the cookie expiration
             if (customer.IsAnonymous) cookie.Expires = DateTime.MinValue;
 
-            _umbracoContext.HttpContext.Response.Cookies.Add(cookie);
+            this._umbracoContext.HttpContext.Response.Cookies.Add(cookie);
 
-            _cache.RequestCache.GetCacheItem(CustomerCookieName, () => ContextData);
-            _cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
+            this._cache.RequestCache.GetCacheItem(CustomerCookieName, () => this.ContextData);
+            this._cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
         }
 
         /// <summary>
@@ -270,21 +281,21 @@ namespace Merchello.Web
         /// </param>
         protected void ConvertBasket(ICustomerBase customer, string membershipId, string customerLoginName)
         {
-            var anonymousBasket = Basket.GetBasket(_merchelloContext, customer);
+            var anonymousBasket = Basket.GetBasket(this._merchelloContext, customer);
 
-            customer = CustomerService.GetByLoginName(customerLoginName) ??
-                            CustomerService.CreateCustomerWithKey(customerLoginName);
+            customer = this.CustomerService.GetByLoginName(customerLoginName) ??
+                            this.CustomerService.CreateCustomerWithKey(customerLoginName);
 
 
-            ContextData.Key = customer.Key;
-            ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, membershipId));
-            var customerBasket = Basket.GetBasket(_merchelloContext, customer);
+            this.ContextData.Key = customer.Key;
+            this.ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, membershipId));
+            var customerBasket = Basket.GetBasket(this._merchelloContext, customer);
 
             //// convert the customer basket
-            ConvertBasket(anonymousBasket, customerBasket);
+            this.ConvertBasket(anonymousBasket, customerBasket);
 
-            CacheCustomer(customer);
-            CurrentCustomer = customer;
+            this.CacheCustomer(customer);
+            this.CurrentCustomer = customer;
         }
 
         /// <summary>
@@ -292,14 +303,14 @@ namespace Merchello.Web
         /// </summary>
         protected void CreateAnonymousCustomer()
         {
-            var customer = _customerService.CreateAnonymousCustomerWithKey();
-            CurrentCustomer = customer;
-            ContextData = new CustomerContextData()
+            var customer = this._customerService.CreateAnonymousCustomerWithKey();
+            this.CurrentCustomer = customer;
+            this.ContextData = new CustomerContextData()
             {
                 Key = customer.Key
             };
 
-            CacheCustomer(customer);
+            this.CacheCustomer(customer);
         }
 
         /// <summary>
@@ -314,9 +325,9 @@ namespace Merchello.Web
         /// </remarks>
         protected void EnsureIsLoggedInCustomer(ICustomerBase customer, string membershipId)
         {
-            if (_cache.RequestCache.GetCacheItem(CacheKeys.EnsureIsLoggedInCustomerValidated(customer.Key)) != null) return;
+            if (this._cache.RequestCache.GetCacheItem(CacheKeys.EnsureIsLoggedInCustomerValidated(customer.Key)) != null) return;
 
-            var dataValue = ContextData.Values.FirstOrDefault(x => x.Key == UmbracoMemberIdDataKey);
+            var dataValue = this.ContextData.Values.FirstOrDefault(x => x.Key == UmbracoMemberIdDataKey);
 
             // If the dataValues do not contain the umbraco member id reinitialize
             if (!string.IsNullOrEmpty(dataValue.Value))
@@ -335,35 +346,35 @@ namespace Merchello.Web
         private void Initialize()
         {
             // see if the key is already in the request cache
-            var cachedContextData = _cache.RequestCache.GetCacheItem(CustomerCookieName);
+            var cachedContextData = this._cache.RequestCache.GetCacheItem(CustomerCookieName);
 
             if (cachedContextData != null)
             {
-                ContextData = (CustomerContextData)cachedContextData;
-                var key = ContextData.Key;
-                TryGetCustomer(key);
+                this.ContextData = (CustomerContextData)cachedContextData;
+                var key = this.ContextData.Key;
+                this.TryGetCustomer(key);
                 return;
             }
 
             // retrieve the merchello consumer cookie
-            var cookie = _umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
+            var cookie = this._umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
 
             if (cookie != null)
             {
                 try
                 {
-                    ContextData = cookie.ToCustomerContextData();
-                    TryGetCustomer(ContextData.Key);
+                    this.ContextData = cookie.ToCustomerContextData();
+                    this.TryGetCustomer(this.ContextData.Key);
                 }
                 catch (Exception ex)
                 {
                     LogHelper.Error<CustomerContext>("Decrypted guid did not parse", ex);
-                    CreateAnonymousCustomer();
+                    this.CreateAnonymousCustomer();
                 }
             }
             else
             {
-                CreateAnonymousCustomer();
+                this.CreateAnonymousCustomer();
             } // a cookie was not found
         }
     }

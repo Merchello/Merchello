@@ -10,6 +10,7 @@ namespace Merchello.Web
     using Merchello.Core.Cache;
     using Merchello.Core.Configuration;
     using Merchello.Core.Models;
+    using Merchello.Web.Pluggable;
 
     using Umbraco.Core;
     using Umbraco.Core.Services;
@@ -22,14 +23,14 @@ namespace Merchello.Web
     public class CustomerContext : CustomerContextBase
     {
         /// <summary>
-        /// The member service.
+        /// The Umbraco <see cref="MembershipHelper"/>.
         /// </summary>
-        private readonly IMemberService _memberService;
+        private MembershipHelper _membershipHelper;
 
         /// <summary>
-        /// The membership helper.
+        /// The member service.
         /// </summary>
-        private readonly MembershipHelper _membershipHelper;
+        private readonly IMemberService _memberService = ApplicationContext.Current.Services.MemberService;
 
         #region Constructors
 
@@ -48,33 +49,22 @@ namespace Merchello.Web
         /// The umbraco context.
         /// </param>
         public CustomerContext(UmbracoContext umbracoContext)
-            : this(MerchelloContext.Current, ApplicationContext.Current.Services.MemberService, umbracoContext)
+            : base(MerchelloContext.Current, umbracoContext)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomerContext"/> class.
-        /// </summary>
-        /// <param name="merchelloContext">
-        /// The merchello context.
-        /// </param>
-        /// <param name="memberService">
-        /// The member Service.
-        /// </param>
-        /// <param name="umbracoContext">
-        /// The umbraco context.
-        /// </param>
-        internal CustomerContext(IMerchelloContext merchelloContext, IMemberService memberService, UmbracoContext umbracoContext)
-            : base(merchelloContext, umbracoContext)
-        {
-             Mandate.ParameterNotNull(memberService, "memberService");
-
-            _memberService = memberService;            
-            _membershipHelper = new MembershipHelper(umbracoContext);            
         }
 
         #endregion
 
+        /// <summary>
+        /// Gets the <see cref="MembershipHelper"/>.
+        /// </summary>
+        private MembershipHelper MembershipHelper
+        {
+            get
+            {
+                return _membershipHelper ?? new MembershipHelper(UmbracoContext);
+            }
+        }
 
         /// <summary>
         /// Attempts to either retrieve an anonymous customer or an existing customer
@@ -84,7 +74,7 @@ namespace Merchello.Web
         {
             var customer = (ICustomerBase)Cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(key));
 
-            var isLoggedIn = (bool)Cache.RequestCache.GetCacheItem(CacheKeys.CustomerIsLoggedIn(key), () => _membershipHelper.IsLoggedIn());
+            var isLoggedIn = (bool)Cache.RequestCache.GetCacheItem(CacheKeys.CustomerIsLoggedIn(key), () => MembershipHelper.IsLoggedIn());
 
             // Check the cache for a previously retrieved customer.
             // There can be many requests for the current customer during a single request.
@@ -100,7 +90,7 @@ namespace Merchello.Web
                     // persisted customer record.
                     if (isLoggedIn)
                     {                        
-                        var memberId = _membershipHelper.GetCurrentMemberId();
+                        var memberId = MembershipHelper.GetCurrentMemberId();
                         var member = _memberService.GetById(memberId);
                        
                         // By default, Merchello only creates Merchello Customers if the MemberType is listed in the 
@@ -117,6 +107,8 @@ namespace Merchello.Web
                 }
                 else if (customer.IsAnonymous == false && isLoggedIn == false)
                 {
+                    // The customer that was found was not anonymous and yet the member is 
+                    // not logged in.
                     CreateAnonymousCustomer();
                     return;
                 }
@@ -124,19 +116,21 @@ namespace Merchello.Web
                 {
                     // User may have logged out and logged in with a different customer
                     // Addresses issue http://issues.merchello.com/youtrack/issue/M-454
-                    this.EnsureIsLoggedInCustomer(customer, _membershipHelper.GetCurrentMemberId().ToString(CultureInfo.InvariantCulture));
+                    this.EnsureIsLoggedInCustomer(customer, MembershipHelper.GetCurrentMemberId().ToString(CultureInfo.InvariantCulture));
                 }
 
+                // The customer key MUST be set in the ContextData
                 ContextData.Key = customer.Key;
-
                 return;
             }
 
             // Customer has not been cached so we have to start from scratch.
             customer = CustomerService.GetAnyByKey(key);
-           
+                      
             if (customer != null)
             {
+                //// There is either a Customer or Anonymous Customer record
+
                 CurrentCustomer = customer;
                 ContextData.Key = customer.Key;
 
@@ -145,14 +139,15 @@ namespace Merchello.Web
                 // in member is the same as the reference we have to a previously logged in member in the same browser.
                 if (isLoggedIn) ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, _membershipHelper.GetCurrentMemberId().ToString(CultureInfo.InvariantCulture)));
                 
+                // Cache the customer so that for each request we don't have to do a bunch of
+                // DB lookups.
                 CacheCustomer(customer);
             }
             else 
             {
-                // create a new anonymous customer
+                //// No records were found - create a new Anonymous Customer
                 CreateAnonymousCustomer();
             }
         }
-
     }
 }

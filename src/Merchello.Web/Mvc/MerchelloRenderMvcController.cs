@@ -4,6 +4,7 @@
     using Merchello.Core.Gateways;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Web.Pluggable;
     using Merchello.Web.Workflow;
 
     using Umbraco.Core;
@@ -54,8 +55,6 @@
         {
             Mandate.ParameterNotNull(umbracoContext, "umbracoContext");
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-
-            this.CustomerContext = new CustomerContext(umbracoContext);
 
             this._merchelloContext = merchelloContext;
 
@@ -125,7 +124,7 @@
         {
             var storeSettingsService = this._merchelloContext.Services.StoreSettingService;
             var storeSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey);
-
+            this.CustomerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);
             this.Currency = storeSettingsService.GetCurrencyByCode(storeSetting.Value);
         }
     }

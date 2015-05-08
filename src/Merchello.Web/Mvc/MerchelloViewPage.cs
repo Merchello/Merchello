@@ -2,6 +2,7 @@
 {
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Pluggable;
 
     /// <summary>
     /// The merchello view page.
@@ -29,7 +30,7 @@
             get
             {
                 if (_customerContext == null)
-                    _customerContext = new CustomerContext(UmbracoContext);
+                    _customerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);
 
                 return _customerContext.CurrentCustomer;
             }
