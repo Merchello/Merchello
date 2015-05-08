@@ -246,6 +246,7 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />
+    <Compile Include="Events\MerchelloMigrationEventArgs.cs" />
     <Compile Include="Events\PaymentAttemptEventArgs.cs" />
     <Compile Include="Events\SalesPreparationEventArgs.cs" />
     <Compile Include="Formatters\IPatternReplaceFormatter.cs" />
@@ -259,6 +260,11 @@
     <Compile Include="Gateways\Notification\Monitors\OrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\PartialOrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Triggering\ShipmentResultNotifyModelFactory.cs" />
+    <Compile Include="Marketing\CampaignActivityBase.cs" />
+    <Compile Include="Marketing\Coupons\Coupon.cs" />
+    <Compile Include="Marketing\ICampaignActivityResolver.cs" />
+    <Compile Include="Marketing\ICampaignManager.cs" />
+    <Compile Include="Marketing\IDiscountActivity.cs" />
     <Compile Include="Models\DigitalMedia.cs" />
     <Compile Include="Models\Interfaces\IDigitalMedia.cs" />
     <Compile Include="Models\MonitorModels\IShipmentResultNotifyModel.cs" />
@@ -267,7 +273,6 @@
     <Compile Include="Gateways\Payment\PaymentGatewayMethodAttribute.cs" />
     <Compile Include="Gateways\Payment\PaymentOperationData.cs" />
     <Compile Include="Marketing\CampaignActivityAttribute.cs" />
-    <Compile Include="Models\CampaignActivityBase.cs" />
     <Compile Include="Models\AddressExtensions.cs" />
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\CampaignSettings.cs" />
@@ -375,8 +380,10 @@
     <Compile Include="Persistence\Mappers\DigitalMediaMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
+    <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
+    <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
-    <Compile Include="Persistence\Migrations\MerchelloUpgradeHelper.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneEightTwo\InsertNewMerchelloSettingsMigrationKey.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\CreateOneNineZeroTables.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\InsertNewTypeFieldData.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
