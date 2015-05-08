@@ -3,6 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="e0c8517c-4cb8-4237-b0ab-5358043bdf8d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/Umbraco.sdf" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/App_Data/Umbraco.sdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/CustomerContextBase.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/CustomerContextBase.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.XML" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/bin/Merchello.Web.XML" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Mvc/MerchelloRenderMvcController.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Mvc/MerchelloRenderMvcController.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Mvc/MerchelloSurfaceController.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Mvc/MerchelloSurfaceController.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Mvc/MerchelloTemplatePage.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Mvc/MerchelloTemplatePage.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Mvc/MerchelloViewPage.cs" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web/Mvc/MerchelloViewPage.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/web.config" afterPath="$PROJECT_DIR$/../../../../../../../src/Merchello.Web.UI/web.config" />
     </list>
     <ignored path="Merchello.Braintree.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -73,6 +80,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -93,7 +101,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>

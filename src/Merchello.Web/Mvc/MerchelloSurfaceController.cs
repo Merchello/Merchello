@@ -8,6 +8,7 @@
     using Merchello.Core.Gateways;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Web.Pluggable;
     using Merchello.Web.Workflow;
 
     using Umbraco.Core;
@@ -59,14 +60,14 @@
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
 
             _merchelloContext = merchelloContext;
-            CustomerContext = new CustomerContext(umbracoContext);
+            CustomerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", umbracoContext);
         }
 
 
         /// <summary>
         /// Gets the customer context.
         /// </summary>
-        protected CustomerContext CustomerContext { get; private set; }
+        protected ICustomerContext CustomerContext { get; private set; }
 
         /// <summary>
         /// Gets the current customer.

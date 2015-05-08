@@ -2,6 +2,8 @@
 {
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Pluggable;
+
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -12,7 +14,7 @@
         /// <summary>
         /// The customer context.
         /// </summary>
-        private CustomerContext _customerContext;
+        private ICustomerContext _customerContext;
 
         /// <summary>
         /// The MerchelloHelper class
@@ -27,7 +29,7 @@
             get
             {
                 if (_customerContext == null)
-                    _customerContext = new CustomerContext(UmbracoContext);
+                    _customerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);
 
                 return _customerContext.CurrentCustomer;
             }
