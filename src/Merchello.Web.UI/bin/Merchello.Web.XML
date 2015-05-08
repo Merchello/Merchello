@@ -30,17 +30,17 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
-        <member name="T:Merchello.Web.CustomerContextBase">
+        <member name="T:Merchello.Web.Pluggable.CustomerContextBase">
             <summary>
             A base class for defining customer contexts for various membership providers.
             </summary>
         </member>
-        <member name="T:Merchello.Web.ICustomerContext">
+        <member name="T:Merchello.Web.Pluggable.ICustomerContext">
             <summary>
             Defines a Merchello Customer Context.
             </summary>
         </member>
-        <member name="M:Merchello.Web.ICustomerContext.SetValue(System.String,System.String)">
+        <member name="M:Merchello.Web.Pluggable.ICustomerContext.SetValue(System.String,System.String)">
             <summary>
             Sets a value in the encrypted Merchello cookie
             </summary>
@@ -55,7 +55,7 @@
             small bits of information.
             </remarks>
         </member>
-        <member name="M:Merchello.Web.ICustomerContext.GetValue(System.String)">
+        <member name="M:Merchello.Web.Pluggable.ICustomerContext.GetValue(System.String)">
             <summary>
             Gets a value from the encrypted Merchello cookie
             </summary>
@@ -66,7 +66,7 @@
             The value stored in the cookie as a string.
             </returns>
         </member>
-        <member name="M:Merchello.Web.ICustomerContext.Reinitialize(Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Web.Pluggable.ICustomerContext.Reinitialize(Merchello.Core.Models.ICustomerBase)">
             <summary>
             Reinitializes the customer context
             </summary>
@@ -77,66 +77,66 @@
             Sometimes useful to clear the various caches used internally in the customer context
             </remarks>
         </member>
-        <member name="P:Merchello.Web.ICustomerContext.CurrentCustomer">
+        <member name="P:Merchello.Web.Pluggable.ICustomerContext.CurrentCustomer">
             <summary>
             Gets the current customer.
             </summary>
         </member>
-        <member name="F:Merchello.Web.CustomerContextBase.UmbracoMemberIdDataKey">
+        <member name="F:Merchello.Web.Pluggable.CustomerContextBase.UmbracoMemberIdDataKey">
             <summary>
             The key used to store the Umbraco Member Id in CustomerContextData.
             </summary>
         </member>
-        <member name="F:Merchello.Web.CustomerContextBase.CustomerCookieName">
+        <member name="F:Merchello.Web.Pluggable.CustomerContextBase.CustomerCookieName">
             <summary>
             The consumer cookie key.
             </summary>
         </member>
-        <member name="F:Merchello.Web.CustomerContextBase._merchelloContext">
+        <member name="F:Merchello.Web.Pluggable.CustomerContextBase._merchelloContext">
             <summary>
             The merchello context.
             </summary>
         </member>
-        <member name="F:Merchello.Web.CustomerContextBase._customerService">
+        <member name="F:Merchello.Web.Pluggable.CustomerContextBase._customerService">
             <summary>
             The customer service.
             </summary>
         </member>
-        <member name="F:Merchello.Web.CustomerContextBase._umbracoContext">
+        <member name="F:Merchello.Web.Pluggable.CustomerContextBase._umbracoContext">
             <summary>
-            The <see cref="T:Umbraco.Web.UmbracoContext"/>.
+            The <see cref="P:Merchello.Web.Pluggable.CustomerContextBase.UmbracoContext"/>.
             </summary>
         </member>
-        <member name="F:Merchello.Web.CustomerContextBase._cache">
+        <member name="F:Merchello.Web.Pluggable.CustomerContextBase._cache">
             <summary>
             The <see cref="T:Umbraco.Core.CacheHelper"/>.
             </summary>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.#ctor">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.CustomerContextBase"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Pluggable.CustomerContextBase"/> class.
             </summary>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.#ctor(Umbraco.Web.UmbracoContext)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.#ctor(Umbraco.Web.UmbracoContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.CustomerContextBase"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Pluggable.CustomerContextBase"/> class.
             </summary>
             <param name="umbracoContext">
-            The <see cref="T:Umbraco.Web.UmbracoContext"/>.
+            The <see cref="P:Merchello.Web.Pluggable.CustomerContextBase.UmbracoContext"/>.
             </param>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.CustomerContextBase"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Pluggable.CustomerContextBase"/> class.
             </summary>
             <param name="merchelloContext">
             The <see cref="T:Merchello.Core.IMerchelloContext"/>.
             </param>
             <param name="umbracoContext">
-            The <see cref="T:Umbraco.Web.UmbracoContext"/>.
+            The <see cref="P:Merchello.Web.Pluggable.CustomerContextBase.UmbracoContext"/>.
             </param>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.SetValue(System.String,System.String)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.SetValue(System.String,System.String)">
             <summary>
             Sets a value in the encrypted Merchello cookie
             </summary>
@@ -151,7 +151,7 @@
             small bits of information.
             </remarks>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.GetValue(System.String)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.GetValue(System.String)">
             <summary>
             Gets a value from the encrypted Merchello cookie
             </summary>
@@ -162,7 +162,7 @@
             The value stored in the cookie as a string.
             </returns>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.Reinitialize(Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.Reinitialize(Merchello.Core.Models.ICustomerBase)">
             <summary>
             Reinitializes the customer context
             </summary>
@@ -173,7 +173,7 @@
             Sometimes useful to clear the various caches used internally in the customer context
             </remarks>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.ConvertBasket(Merchello.Web.Workflow.IBasket,Merchello.Web.Workflow.IBasket)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.ConvertBasket(Merchello.Web.Workflow.IBasket,Merchello.Web.Workflow.IBasket)">
             <summary>
             Converts an anonymous basket to a customer basket.
             </summary>
@@ -184,13 +184,13 @@
             The customer basket.
             </param>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.TryGetCustomer(System.Guid)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.TryGetCustomer(System.Guid)">
             <summary>
             Attempts to either retrieve an anonymous customer or an existing customer
             </summary>
             <param name="key">The key of the customer to retrieve</param>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.CacheCustomer(Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.CacheCustomer(Merchello.Core.Models.ICustomerBase)">
             <summary>
             The caches the customer.
             </summary>
@@ -198,7 +198,7 @@
             The customer.
             </param>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.ConvertBasket(Merchello.Core.Models.ICustomerBase,System.String,System.String)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.ConvertBasket(Merchello.Core.Models.ICustomerBase,System.String,System.String)">
             <summary>
             Converts an anonymous customer's basket to a customer basket
             </summary>
@@ -212,12 +212,12 @@
             The customer login name.
             </param>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.CreateAnonymousCustomer">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.CreateAnonymousCustomer">
             <summary>
             Creates an anonymous customer
             </summary>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.EnsureIsLoggedInCustomer(Merchello.Core.Models.ICustomerBase,System.String)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.EnsureIsLoggedInCustomer(Merchello.Core.Models.ICustomerBase,System.String)">
             <summary>
             Provides an assertion that the customer cookie is associated with the correct customer Umbraco member relation.
             </summary>
@@ -229,27 +229,32 @@
             Addresses issue http://issues.merchello.com/youtrack/issue/M-454
             </remarks>
         </member>
-        <member name="M:Merchello.Web.CustomerContextBase.Initialize">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.Initialize">
             <summary>
             Initializes this class with default values
             </summary>
         </member>
-        <member name="P:Merchello.Web.CustomerContextBase.CurrentCustomer">
+        <member name="P:Merchello.Web.Pluggable.CustomerContextBase.CurrentCustomer">
             <summary>
             Gets or sets the current customer.
             </summary>
         </member>
-        <member name="P:Merchello.Web.CustomerContextBase.ContextData">
+        <member name="P:Merchello.Web.Pluggable.CustomerContextBase.ContextData">
             <summary>
             Gets the context data.
             </summary>
         </member>
-        <member name="P:Merchello.Web.CustomerContextBase.Cache">
+        <member name="P:Merchello.Web.Pluggable.CustomerContextBase.UmbracoContext">
+            <summary>
+            Gets the <see cref="P:Merchello.Web.Pluggable.CustomerContextBase.UmbracoContext"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Pluggable.CustomerContextBase.Cache">
             <summary>
             Gets the cache.
             </summary>
         </member>
-        <member name="P:Merchello.Web.CustomerContextBase.CustomerService">
+        <member name="P:Merchello.Web.Pluggable.CustomerContextBase.CustomerService">
             <summary>
             Gets the <see cref="T:Merchello.Core.Services.ICustomerService"/>.
             </summary>
@@ -1556,6 +1561,65 @@
             <summary>
             Gets the gateway context.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Pluggable.PluggableObjectHelper">
+            <summary>
+            The pluggable object helper.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.PluggableObjectHelper.GetInstance``1(System.String,System.Object)">
+            <summary>
+            Attempts to instantiate an instance of a configured "pluggable" object
+            </summary>
+            <param name="configurationAlias">
+            The configuration alias.
+            </param>
+            <param name="param1">
+            The first constructor parameter value.
+            </param>
+            <typeparam name="T">
+            The type to return
+            </typeparam>
+            <returns>
+            The <see cref="!:T"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.PluggableObjectHelper.GetInstance``1(System.String,System.Object,System.Object)">
+            <summary>
+            Attempts to instantiate an instance of a configured "pluggable" object
+            </summary>
+            <param name="configurationAlias">
+            The configuration alias.
+            </param>
+            <param name="param1">
+            The first constructor parameter value.
+            </param>
+            <param name="param2">
+            The second constructor parameter value.
+            </param>
+            <typeparam name="T">
+            The type to return
+            </typeparam>
+            <returns>
+            The <see cref="!:T"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.PluggableObjectHelper.GetInstance``1(System.String,System.Object[])">
+            <summary>
+            Attempts to instantiate an instance of a configured "pluggable" object
+            </summary>
+            <param name="configurationAlias">
+            The configuration alias.
+            </param>
+            <param name="ctrArgValues">
+            The collection of constructor argument values
+            </param>
+            <typeparam name="T">
+            The type to return
+            </typeparam>
+            <returns>
+            The <see cref="!:T"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.PluginManagerExtensions">
             <summary>
@@ -9681,14 +9745,14 @@
             Represents the customer context.
             </summary>
         </member>
+        <member name="F:Merchello.Web.CustomerContext._membershipHelper">
+            <summary>
+            The Umbraco <see cref="P:Merchello.Web.CustomerContext.MembershipHelper"/>.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.CustomerContext._memberService">
             <summary>
             The member service.
-            </summary>
-        </member>
-        <member name="F:Merchello.Web.CustomerContext._membershipHelper">
-            <summary>
-            The membership helper.
             </summary>
         </member>
         <member name="M:Merchello.Web.CustomerContext.#ctor">
@@ -9704,25 +9768,16 @@
             The umbraco context.
             </param>
         </member>
-        <member name="M:Merchello.Web.CustomerContext.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Core.Services.IMemberService,Umbraco.Web.UmbracoContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.CustomerContext"/> class.
-            </summary>
-            <param name="merchelloContext">
-            The merchello context.
-            </param>
-            <param name="memberService">
-            The member Service.
-            </param>
-            <param name="umbracoContext">
-            The umbraco context.
-            </param>
-        </member>
         <member name="M:Merchello.Web.CustomerContext.TryGetCustomer(System.Guid)">
             <summary>
             Attempts to either retrieve an anonymous customer or an existing customer
             </summary>
             <param name="key">The key of the customer to retrieve</param>
+        </member>
+        <member name="P:Merchello.Web.CustomerContext.MembershipHelper">
+            <summary>
+            Gets the <see cref="P:Merchello.Web.CustomerContext.MembershipHelper"/>.
+            </summary>
         </member>
         <member name="T:Merchello.Web.WebApi.JsonCamelCaseFormatter">
             <summary>
