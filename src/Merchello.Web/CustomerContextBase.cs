@@ -59,6 +59,14 @@ namespace Merchello.Web
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerContextBase"/> class.
         /// </summary>
+        protected CustomerContextBase()
+            : this(UmbracoContext.Current)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerContextBase"/> class.
+        /// </summary>
         /// <param name="umbracoContext">
         /// The <see cref="UmbracoContext"/>.
         /// </param>
