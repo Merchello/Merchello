@@ -10,9 +10,9 @@ namespace Merchello.Web.Models.Customer
     using Umbraco.Core.Logging;
 
     /// <summary>
-    /// The customer context data extentions.
+    /// The customer context data extensions.
     /// </summary>
-    internal static class CustomerContextDataExtentions
+    internal static class CustomerContextDataExtensions
     {
         /// <summary>
         /// Serializes the <see cref="CustomerContextData"/> to JSON
@@ -41,7 +41,7 @@ namespace Merchello.Web.Models.Customer
         {
             if (contextCookie == null || string.IsNullOrEmpty(contextCookie.Value))
             {
-                LogHelper.Debug<CustomerContext>("The CustomerContext cookie was null");
+                LogHelper.Debug(typeof(CustomerContextDataExtensions), "The CustomerContext cookie was null");
                 return null;
             }
 
