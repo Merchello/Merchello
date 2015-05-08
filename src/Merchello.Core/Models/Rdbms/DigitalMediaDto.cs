@@ -5,8 +5,6 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.DatabaseAnnotations;
 
-    ///// TODO SR - This is just a scaffold for example.  Do whatever you need to do =)
-
     /// <summary>
     /// The Digital Media DTO.
     /// </summary>

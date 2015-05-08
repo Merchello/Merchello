@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Models
+﻿using System.Collections.Specialized;
+
+namespace Merchello.Core.Models
 {
     using System;
     using System.Reflection;
@@ -23,12 +25,17 @@
         /// The name selector.
         /// </summary>
         /// <remarks>
-        /// SR - This is used for the tracks dirty
         /// </remarks>
         private static readonly PropertyInfo FirstAccessedSelector = ExpressionHelper.GetPropertyInfo<DigitalMedia, DateTime?>(x => x.FirstAccessed);
 
         private static readonly PropertyInfo ProductVariantSelector = ExpressionHelper.GetPropertyInfo<DigitalMedia, Guid>(x => x.ProductVariantKey);
 
+        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<LineItemBase, ExtendedDataCollection>(x => x.ExtendedData);
+
+        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ExtendedDataChangedSelector);
+        }
         /// <summary>
         /// This is immutable
         /// </summary>
@@ -37,8 +44,11 @@
 
         private Guid _productVariantKey;
 
+
+        private ExtendedDataCollection _extendedData;
         #endregion
-        
+
+        [DataMember]
         public Guid ProductVariantKey
         {
             get
@@ -59,6 +69,7 @@
             }
         }
 
+        [DataMember]
         public DateTime? FirstAccessed
         {
             get
@@ -79,6 +90,19 @@
             }
         }
 
-        public ExtendedDataCollection ExtendedData { get; private set; }
+
+        /// <summary>
+        /// A collection for storing custom/extended line item data
+        /// </summary>
+        [DataMember]
+        public ExtendedDataCollection ExtendedData
+        {
+            get { return _extendedData; }
+            internal set
+            {
+                _extendedData = value;
+                _extendedData.CollectionChanged += ExtendedDataChanged;
+            }
+        }
     }
 }

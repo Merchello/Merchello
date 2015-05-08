@@ -29,8 +29,13 @@
                              UpdateDate = dto.UpdateDate
                          };
 
-            digitalMedia.ResetDirtyProperties();
+            
+            //Lets check for any extended data
+            digitalMedia.ExtendedData = string.IsNullOrEmpty(dto.ExtendedData)
+                ? new ExtendedDataCollection()
+                : new ExtendedDataCollection(dto.ExtendedData);
 
+            digitalMedia.ResetDirtyProperties();
             return digitalMedia;
         }
 
@@ -51,7 +56,8 @@
                               FirstAccessed = entity.FirstAccessed,
                               ProductVariantKey = entity.ProductVariantKey,
                               CreateDate = entity.CreateDate,
-                              UpdateDate = entity.UpdateDate
+                              UpdateDate = entity.UpdateDate,
+                              ExtendedData = entity.ExtendedData.SerializeToXml()
                           };
 
             return dto;
