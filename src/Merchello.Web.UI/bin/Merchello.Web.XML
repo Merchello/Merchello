@@ -173,16 +173,32 @@
             Sometimes useful to clear the various caches used internally in the customer context
             </remarks>
         </member>
-        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.ConvertBasket(Merchello.Web.Workflow.IBasket,Merchello.Web.Workflow.IBasket)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.GetIsCurrentlyLoggedIn">
             <summary>
-            Converts an anonymous basket to a customer basket.
+            Returns true or false indicating whether or not the current membership user is logged in.
             </summary>
-            <param name="anonymousBasket">
-            The anonymous basket.
-            </param>
-            <param name="customerBasket">
-            The customer basket.
-            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/> indicating whether the current user is logged in.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.GetMembershipProviderUserName">
+            <summary>
+            Gets the member/user login or user name used to sign in
+            </summary>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+            <remarks>
+            Merchello makes the association between membership provider users and Merchello customers by username
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.GetMembershipProviderKey">
+            <summary>
+            Gets the unique ID from the Membership Provider
+            </summary>
+            <returns>
+            The ID or key from the Membership provider as a string value 
+            </returns>
         </member>
         <member name="M:Merchello.Web.Pluggable.CustomerContextBase.TryGetCustomer(System.Guid)">
             <summary>
@@ -190,9 +206,9 @@
             </summary>
             <param name="key">The key of the customer to retrieve</param>
         </member>
-        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.CacheCustomer(Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.EnsureCustomerCreationAndConvertBasket(Merchello.Core.Models.ICustomerBase)">
             <summary>
-            The caches the customer.
+            The ensure customer and convert basket.
             </summary>
             <param name="customer">
             The customer.
@@ -210,6 +226,50 @@
             </param>
             <param name="customerLoginName">
             The customer login name.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.IsLoggedIn(System.Guid)">
+            <summary>
+            Wrapper to cache the logged in status in the request cache
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.MembershipUserName(System.Guid)">
+            <summary>
+            Wrapper to cache the membership username in the request cache
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.MembershipProviderKey(System.Guid)">
+            <summary>
+            Wrapper to cache the membership provider key (id) from the request cache
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.ConvertBasket(Merchello.Web.Workflow.IBasket,Merchello.Web.Workflow.IBasket)">
+            <summary>
+            Converts an anonymous basket to a customer basket.
+            </summary>
+            <param name="anonymousBasket">
+            The anonymous basket.
+            </param>
+            <param name="customerBasket">
+            The customer basket.
             </param>
         </member>
         <member name="M:Merchello.Web.Pluggable.CustomerContextBase.CreateAnonymousCustomer">
@@ -233,6 +293,14 @@
             <summary>
             Initializes this class with default values
             </summary>
+        </member>
+        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.CacheCustomer(Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            The caches the customer.
+            </summary>
+            <param name="customer">
+            The customer.
+            </param>
         </member>
         <member name="P:Merchello.Web.Pluggable.CustomerContextBase.CurrentCustomer">
             <summary>
@@ -1430,6 +1498,21 @@
             The <see cref="T:Merchello.Core.IMerchelloContext"/>.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Mvc.MerchelloRenderMvcController._customerContext">
+            <summary>
+            The <see cref="T:Merchello.Web.Pluggable.ICustomerContext"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Mvc.MerchelloRenderMvcController._currency">
+            <summary>
+            The <see cref="T:Merchello.Core.Models.ICurrency"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Mvc.MerchelloRenderMvcController._isInitialized">
+            <summary>
+            The setting to save initialized state.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Mvc.MerchelloRenderMvcController.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloRenderMvcController"/> class.
@@ -1441,17 +1524,6 @@
             </summary>
             <param name="umbracoContext">
             The <see cref="T:Umbraco.Web.UmbracoContext"/>
-            </param>
-        </member>
-        <member name="M:Merchello.Web.Mvc.MerchelloRenderMvcController.#ctor(Umbraco.Web.UmbracoContext,Merchello.Core.IMerchelloContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloRenderMvcController"/> class.
-            </summary>
-            <param name="umbracoContext">
-            The <see cref="T:Umbraco.Web.UmbracoContext"/>
-            </param>
-            <param name="merchelloContext">
-            The <see cref="T:Merchello.Core.IMerchelloContext"/>
             </param>
         </member>
         <member name="M:Merchello.Web.Mvc.MerchelloRenderMvcController.Initialize">
@@ -1494,9 +1566,9 @@
             A <see cref="T:Umbraco.Web.Mvc.SurfaceController"/> that Merchello presentation Add-in controllers should inherit from
             </summary>
         </member>
-        <member name="F:Merchello.Web.Mvc.MerchelloSurfaceController._merchelloContext">
+        <member name="F:Merchello.Web.Mvc.MerchelloSurfaceController._customerContext">
             <summary>
-            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            The _customer context.
             </summary>
         </member>
         <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor">
@@ -1504,23 +1576,12 @@
             Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor(Merchello.Core.IMerchelloContext)">
+        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor(Umbraco.Web.UmbracoContext)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
             </summary>
-            <param name="merchelloContext">
-            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
-            </param>
-        </member>
-        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
-            </summary>
-            <param name="merchelloContext">
-            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
-            </param>
             <param name="umbracoContext">
-            The <see cref="T:Umbraco.Web.UmbracoContext"/>.
+            The umbraco Context.
             </param>
         </member>
         <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.EnsureOwner(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ILineItem},System.Guid)">
@@ -9745,15 +9806,18 @@
             Represents the customer context.
             </summary>
         </member>
-        <member name="F:Merchello.Web.CustomerContext._membershipHelper">
-            <summary>
-            The Umbraco <see cref="P:Merchello.Web.CustomerContext.MembershipHelper"/>.
-            </summary>
-        </member>
         <member name="F:Merchello.Web.CustomerContext._memberService">
             <summary>
             The member service.
             </summary>
+        </member>
+        <member name="F:Merchello.Web.CustomerContext._membershipHelper">
+            <summary>
+            The Umbraco <see cref="P:Merchello.Web.CustomerContext.MembershipHelper"/>.
+            </summary>
+            <remarks>
+            This is actually used within the property. ReSharper is just hiccuping on it.
+            </remarks>
         </member>
         <member name="M:Merchello.Web.CustomerContext.#ctor">
             <summary>
@@ -9768,11 +9832,37 @@
             The umbraco context.
             </param>
         </member>
-        <member name="M:Merchello.Web.CustomerContext.TryGetCustomer(System.Guid)">
+        <member name="M:Merchello.Web.CustomerContext.GetIsCurrentlyLoggedIn">
             <summary>
-            Attempts to either retrieve an anonymous customer or an existing customer
+            Returns true or false indicating whether or not the current membership user is logged in.
             </summary>
-            <param name="key">The key of the customer to retrieve</param>
+            <returns>
+            The <see cref="T:System.Boolean"/> indicating whether the current user is logged in.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.CustomerContext.GetMembershipProviderUserName">
+            <summary>
+            The get membership provider user name.
+            </summary>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.CustomerContext.GetMembershipProviderKey">
+            <summary>
+            The get membership provider key.
+            </summary>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.CustomerContext.EnsureCustomerCreationAndConvertBasket(Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            The ensure customer creation and convert basket.
+            </summary>
+            <param name="customer">
+            The customer.
+            </param>
         </member>
         <member name="P:Merchello.Web.CustomerContext.MembershipHelper">
             <summary>

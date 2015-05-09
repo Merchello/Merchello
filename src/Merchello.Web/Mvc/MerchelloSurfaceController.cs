@@ -11,7 +11,6 @@
     using Merchello.Web.Pluggable;
     using Merchello.Web.Workflow;
 
-    using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
@@ -22,52 +21,40 @@
     public abstract class MerchelloSurfaceController : SurfaceController
     {
         /// <summary>
-        /// The <see cref="IMerchelloContext"/>.
+        /// The _customer context.
         /// </summary>
-        private readonly IMerchelloContext _merchelloContext;
+        private ICustomerContext _customerContext; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloSurfaceController"/> class.
         /// </summary>
         protected MerchelloSurfaceController()
-            : this(MerchelloContext.Current)
+            : this(UmbracoContext.Current)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloSurfaceController"/> class.
         /// </summary>
-        /// <param name="merchelloContext">
-        /// The <see cref="IMerchelloContext"/>.
-        /// </param>
-        protected MerchelloSurfaceController(IMerchelloContext merchelloContext)
-            : this(merchelloContext, UmbracoContext.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MerchelloSurfaceController"/> class.
-        /// </summary>
-        /// <param name="merchelloContext">
-        /// The <see cref="IMerchelloContext"/>.
-        /// </param>
         /// <param name="umbracoContext">
-        /// The <see cref="UmbracoContext"/>.
+        /// The umbraco Context.
         /// </param>
-        protected MerchelloSurfaceController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
+        protected MerchelloSurfaceController(UmbracoContext umbracoContext)
             : base(umbracoContext)
         {
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-
-            _merchelloContext = merchelloContext;
-            CustomerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", umbracoContext);
         }
 
 
         /// <summary>
         /// Gets the customer context.
         /// </summary>
-        protected ICustomerContext CustomerContext { get; private set; }
+        protected ICustomerContext CustomerContext 
+        {
+            get
+            {
+                return _customerContext ?? PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);        
+            }
+        }
 
         /// <summary>
         /// Gets the current customer.
@@ -98,7 +85,7 @@
         {
             get
             {
-                return this._merchelloContext.Services;
+                return MerchelloContext.Current.Services;
             }
         }
 
@@ -109,7 +96,7 @@
         {
             get
             {
-                return _merchelloContext.Gateways;
+                return MerchelloContext.Current.Gateways;
             }
         }
 

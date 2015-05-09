@@ -2,6 +2,7 @@ namespace Merchello.Web.Pluggable
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web;
 
@@ -56,6 +57,8 @@ namespace Merchello.Web.Pluggable
 
         #endregion
 
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerContextBase"/> class.
         /// </summary>
@@ -95,6 +98,8 @@ namespace Merchello.Web.Pluggable
             this._cache = merchelloContext.Cache;
             this.Initialize();
         }
+
+        #endregion
 
         /// <summary>
         /// Gets or sets the current customer.
@@ -137,7 +142,9 @@ namespace Merchello.Web.Pluggable
             {
                 return this._customerService;
             }
-        }       
+        }
+
+        #region ContextData
 
         /// <summary>
         /// Sets a value in the encrypted Merchello cookie
@@ -179,6 +186,8 @@ namespace Merchello.Web.Pluggable
             return this.ContextData.Values.FirstOrDefault(x => x.Key == key).Value;
         }
 
+        #endregion
+
         /// <summary>
         /// Reinitializes the customer context
         /// </summary>
@@ -188,7 +197,7 @@ namespace Merchello.Web.Pluggable
         /// <remarks>
         /// Sometimes useful to clear the various caches used internally in the customer context
         /// </remarks>
-        public void Reinitialize(ICustomerBase customer)
+        public virtual void Reinitialize(ICustomerBase customer)
         {
             // customer has logged out, so we need to go back to an anonymous customer
             var cookie = this._umbracoContext.HttpContext.Request.Cookies[CustomerCookieName];
@@ -205,66 +214,118 @@ namespace Merchello.Web.Pluggable
             this._cache.RuntimeCache.ClearCacheItem(CacheKeys.CustomerCacheKey(customer.Key));
 
             this.Initialize();
-        }        
+        }
 
         /// <summary>
-        /// Converts an anonymous basket to a customer basket.
+        /// Returns true or false indicating whether or not the current membership user is logged in.
         /// </summary>
-        /// <param name="anonymousBasket">
-        /// The anonymous basket.
-        /// </param>
-        /// <param name="customerBasket">
-        /// The customer basket.
-        /// </param>
-        protected void ConvertBasket(IBasket anonymousBasket, IBasket customerBasket)
-        {
-            var type = Type.GetType(
-                            MerchelloConfiguration.Current.GetStrategyElement(
-                                "DefaultAnonymousBasketConversionStrategy").Type);
+        /// <returns>
+        /// The <see cref="bool"/> indicating whether the current user is logged in.
+        /// </returns>
+        protected abstract bool GetIsCurrentlyLoggedIn();
 
-            var attempt = ActivatorHelper.CreateInstance<BasketConversionBase>(
-                type,
-                new object[] { anonymousBasket, customerBasket });
+        /// <summary>
+        /// Gets the member/user login or user name used to sign in
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        /// <remarks>
+        /// Merchello makes the association between membership provider users and Merchello customers by username
+        /// </remarks>
+        protected abstract string GetMembershipProviderUserName();
 
-            if (!attempt.Success)
-            {
-                LogHelper.Error<CustomerContext>("Failed to convert anonymous basket to customer basket", attempt.Exception);
-                return;
-            }
+        /// <summary>
+        /// Gets the unique ID from the Membership Provider
+        /// </summary>
+        /// <returns>
+        /// The ID or key from the Membership provider as a string value 
+        /// </returns>
+        protected abstract string GetMembershipProviderKey();
 
-            attempt.Result.Merge();
-        }
 
         /// <summary>
         /// Attempts to either retrieve an anonymous customer or an existing customer
         /// </summary>
         /// <param name="key">The key of the customer to retrieve</param>
-        protected abstract void TryGetCustomer(Guid key);
+        protected virtual void TryGetCustomer(Guid key)
+        {
+            var customer = (ICustomerBase)Cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(key));
 
+            // use the IsLoggedIn method to check which gets/sets the value in the Request Cache
+            var isLoggedIn = this.IsLoggedIn(key);
+
+            // Check the cache for a previously retrieved customer.
+            // There can be many requests for the current customer during a single request.
+            if (customer != null)
+            {
+                CurrentCustomer = customer;
+
+                // No we need to assert whether or not the authentication status has changed
+                // during this request - the user either logged in or has logged out.
+                if (customer.IsAnonymous)
+                {
+                    // We have an anonymous customer but the user is now authenticated so we may want to create an 
+                    // customer and convert the basket
+                    if (isLoggedIn)
+                    {
+                        this.EnsureCustomerCreationAndConvertBasket(customer);
+                    }
+                }
+                else if (customer.IsAnonymous == false && isLoggedIn == false)
+                {
+                    // The customer that was found was not anonymous and yet the member is 
+                    // not logged in.
+                    CreateAnonymousCustomer();
+                    return;
+                }
+                else if (customer.IsAnonymous == false && isLoggedIn)
+                {
+                    // User may have logged out and logged in with a different customer
+                    // Addresses issue http://issues.merchello.com/youtrack/issue/M-454
+                    this.EnsureIsLoggedInCustomer(customer, this.GetMembershipProviderKey());                    
+                    return;
+                }
+
+                // The customer key MUST be set in the ContextData
+                ContextData.Key = customer.Key;
+                return;
+            }
+
+            // Customer has not been cached so we have to start from scratch.
+            customer = CustomerService.GetAnyByKey(key);
+
+            if (customer != null)
+            {
+                //// There is either a Customer or Anonymous Customer record
+
+                CurrentCustomer = customer;
+                ContextData.Key = customer.Key;
+
+                // The current Membership Providers "ID or Key" is stored in the ContextData so that we can "ensure" that the current logged
+                // in member is the same as the reference we have to a previously logged in member in the same browser.
+                if (isLoggedIn) ContextData.Values.Add(new KeyValuePair<string, string>(UmbracoMemberIdDataKey, this.GetMembershipProviderKey()));
+
+                // Cache the customer so that for each request we don't have to do a bunch of
+                // DB lookups.
+                CacheCustomer(customer);
+            }
+            else
+            {
+                //// No records were found - create a new Anonymous Customer
+                CreateAnonymousCustomer();
+            }
+        }
 
         /// <summary>
-        /// The caches the customer.
+        /// The ensure customer and convert basket.
         /// </summary>
         /// <param name="customer">
         /// The customer.
         /// </param>
-        protected void CacheCustomer(ICustomerBase customer)
+        protected virtual void EnsureCustomerCreationAndConvertBasket(ICustomerBase customer)
         {
-            // set/reset the cookie 
-            // TODO decide how we want to deal with cookie persistence options
-            var cookie = new HttpCookie(CustomerCookieName)
-            {
-                Value = this.ContextData.ToJson()
-            };
-
-            // Ensure a session cookie for Anonymous customers
-            // TODO - on persisted authenticcation, we need to synch the cookie expiration
-            if (customer.IsAnonymous) cookie.Expires = DateTime.MinValue;
-
-            this._umbracoContext.HttpContext.Response.Cookies.Add(cookie);
-
-            this._cache.RequestCache.GetCacheItem(CustomerCookieName, () => this.ContextData);
-            this._cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
+            ConvertBasket(customer, this.GetMembershipProviderKey(), this.GetMembershipProviderUserName());
         }
 
         /// <summary>
@@ -292,16 +353,90 @@ namespace Merchello.Web.Pluggable
             var customerBasket = Basket.GetBasket(this._merchelloContext, customer);
 
             //// convert the customer basket
-            this.ConvertBasket(anonymousBasket, customerBasket);
+            ConvertBasket(anonymousBasket, customerBasket);
 
             this.CacheCustomer(customer);
             this.CurrentCustomer = customer;
         }
 
         /// <summary>
+        /// Wrapper to cache the logged in status in the request cache
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected bool IsLoggedIn(Guid key)
+        {
+            return (bool)Cache.RequestCache.GetCacheItem(CacheKeys.CustomerIsLoggedIn(key), () => this.GetIsCurrentlyLoggedIn());
+        }
+
+        /// <summary>
+        /// Wrapper to cache the membership username in the request cache
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected string MembershipUserName(Guid key)
+        {
+            return (string)Cache.RequestCache.GetCacheItem(CacheKeys.CustomerMembershipUserName(key), this.GetMembershipProviderUserName);
+        }
+
+        /// <summary>
+        /// Wrapper to cache the membership provider key (id) from the request cache
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected string MembershipProviderKey(Guid key)
+        {
+            return (string)Cache.RequestCache.GetCacheItem(CacheKeys.CustomerMembershipProviderKey(key), this.GetMembershipProviderKey);
+        }
+
+
+        /// <summary>
+        /// Converts an anonymous basket to a customer basket.
+        /// </summary>
+        /// <param name="anonymousBasket">
+        /// The anonymous basket.
+        /// </param>
+        /// <param name="customerBasket">
+        /// The customer basket.
+        /// </param>
+        private static void ConvertBasket(IBasket anonymousBasket, IBasket customerBasket)
+        {
+            var type = Type.GetType(
+                            MerchelloConfiguration.Current.GetStrategyElement(
+                                "DefaultAnonymousBasketConversionStrategy").Type);
+
+            var attempt = ActivatorHelper.CreateInstance<BasketConversionBase>(
+                type,
+                new object[] { anonymousBasket, customerBasket });
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<CustomerContext>("Failed to convert anonymous basket to customer basket", attempt.Exception);
+                return;
+            }
+
+            attempt.Result.Merge();
+        }
+
+
+
+
+        /// <summary>
         /// Creates an anonymous customer
         /// </summary>
-        protected void CreateAnonymousCustomer()
+        private void CreateAnonymousCustomer()
         {
             var customer = this._customerService.CreateAnonymousCustomerWithKey();
             this.CurrentCustomer = customer;
@@ -323,7 +458,8 @@ namespace Merchello.Web.Pluggable
         /// <remarks>
         /// Addresses issue http://issues.merchello.com/youtrack/issue/M-454
         /// </remarks>
-        protected void EnsureIsLoggedInCustomer(ICustomerBase customer, string membershipId)
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+        private void EnsureIsLoggedInCustomer(ICustomerBase customer, string membershipId)
         {
             if (this._cache.RequestCache.GetCacheItem(CacheKeys.EnsureIsLoggedInCustomerValidated(customer.Key)) != null) return;
 
@@ -376,6 +512,31 @@ namespace Merchello.Web.Pluggable
             {
                 this.CreateAnonymousCustomer();
             } // a cookie was not found
+        }
+
+        /// <summary>
+        /// The caches the customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        private void CacheCustomer(ICustomerBase customer)
+        {
+            // set/reset the cookie 
+            // TODO decide how we want to deal with cookie persistence options
+            var cookie = new HttpCookie(CustomerCookieName)
+            {
+                Value = this.ContextData.ToJson()
+            };
+
+            // Ensure a session cookie for Anonymous customers
+            // TODO - on persisted authenticcation, we need to synch the cookie expiration
+            if (customer.IsAnonymous) cookie.Expires = DateTime.MinValue;
+
+            this._umbracoContext.HttpContext.Response.Cookies.Add(cookie);
+
+            this._cache.RequestCache.GetCacheItem(CustomerCookieName, () => this.ContextData);
+            this._cache.RuntimeCache.GetCacheItem(CacheKeys.CustomerCacheKey(customer.Key), () => customer, TimeSpan.FromMinutes(5), true);
         }
     }
 }
