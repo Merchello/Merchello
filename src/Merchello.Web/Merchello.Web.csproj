@@ -233,6 +233,7 @@
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
+    <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
     <Compile Include="Models\MapperResolvers\CampaignActivityTypeFieldResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\CapturePaymentDialogEditorViewResolver.cs" />
@@ -277,6 +278,9 @@
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
+    <Compile Include="Pluggable\CustomerContextBase.cs" />
+    <Compile Include="Pluggable\ICustomerContext.cs" />
+    <Compile Include="Pluggable\PluggableObjectHelper.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
@@ -301,7 +305,6 @@
     <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />
     <Compile Include="Models\ContentEditing\CustomerAddressDisplay.cs" />
     <Compile Include="Models\Querying\QueryResultDisplay.cs" />
-    <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
     <Compile Include="Models\Customer\CustomerContextData.cs" />
     <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\FixedRateShippingApiController.cs" />
@@ -338,7 +341,6 @@
     <Compile Include="Workflow\IBackofficeSalePreparation.cs" />
     <Compile Include="Workflow\IBasketConversionBase.cs" />
     <Compile Include="Workflow\IWishList.cs" />
-    <Compile Include="Workflow\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingGatewayApiController.cs" />
     <Compile Include="Editors\ShipmentApiController.cs" />
@@ -412,6 +414,7 @@
     <Compile Include="Validation\BasketItemInventoryValidation.cs" />
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
+    <Compile Include="Workflow\Payment\PaymentProcessor.cs" />
     <Compile Include="Workflow\Wishlist.cs" />
   </ItemGroup>
   <ItemGroup />

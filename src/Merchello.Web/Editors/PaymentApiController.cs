@@ -15,6 +15,7 @@
     using Merchello.Web.Models.SaleHistory;
     using Merchello.Web.WebApi;
     using Merchello.Web.Workflow;
+    using Merchello.Web.Workflow.Payment;
 
     using Umbraco.Web;
 
