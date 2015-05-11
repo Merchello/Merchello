@@ -112,11 +112,6 @@
             The <see cref="T:Umbraco.Core.CacheHelper"/>.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Pluggable.CustomerContextBase.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Pluggable.CustomerContextBase"/> class.
-            </summary>
-        </member>
         <member name="M:Merchello.Web.Pluggable.CustomerContextBase.#ctor(Umbraco.Web.UmbracoContext)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Pluggable.CustomerContextBase"/> class.
