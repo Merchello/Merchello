@@ -30,6 +30,68 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
+        <member name="T:Merchello.Web.Mvc.MerchelloSurfaceController">
+            <summary>
+            A <see cref="T:Umbraco.Web.Mvc.SurfaceController"/> that Merchello presentation Add-in controllers should inherit from
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Mvc.MerchelloSurfaceController._customerContext">
+            <summary>
+            The _customer context.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
+            </summary>
+            <param name="umbracoContext">
+            The umbraco Context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.EnsureOwner(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ILineItem},System.Guid)">
+            <summary>
+            Ensures the owner of the item cache.
+            </summary>
+            <param name="collection">
+            The <see cref="T:Merchello.Core.Models.LineItemCollection"/>
+            </param>
+            <param name="lineItemKey">
+            The line item key.
+            </param>
+            <exception cref="T:System.InvalidOperationException">
+            Throws an exception if the line item does not belong to the current customer
+            </exception>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.CustomerContext">
+            <summary>
+            Gets the customer context.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.CurrentCustomer">
+            <summary>
+            Gets the current customer.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.Basket">
+            <summary>
+            Gets the current customer <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.MerchelloServices">
+            <summary>
+            Gets the services.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.GatewayContext">
+            <summary>
+            Gets the gateway context.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Pluggable.CustomerContextBase">
             <summary>
             A base class for defining customer contexts for various membership providers.
@@ -1554,68 +1616,6 @@
         <member name="P:Merchello.Web.Mvc.MerchelloRenderMvcController.Currency">
             <summary>
             Gets the currency.
-            </summary>
-        </member>
-        <member name="T:Merchello.Web.Mvc.MerchelloSurfaceController">
-            <summary>
-            A <see cref="T:Umbraco.Web.Mvc.SurfaceController"/> that Merchello presentation Add-in controllers should inherit from
-            </summary>
-        </member>
-        <member name="F:Merchello.Web.Mvc.MerchelloSurfaceController._customerContext">
-            <summary>
-            The _customer context.
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.#ctor(Umbraco.Web.UmbracoContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Mvc.MerchelloSurfaceController"/> class.
-            </summary>
-            <param name="umbracoContext">
-            The umbraco Context.
-            </param>
-        </member>
-        <member name="M:Merchello.Web.Mvc.MerchelloSurfaceController.EnsureOwner(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ILineItem},System.Guid)">
-            <summary>
-            Ensures the owner of the item cache.
-            </summary>
-            <param name="collection">
-            The <see cref="T:Merchello.Core.Models.LineItemCollection"/>
-            </param>
-            <param name="lineItemKey">
-            The line item key.
-            </param>
-            <exception cref="T:System.InvalidOperationException">
-            Throws an exception if the line item does not belong to the current customer
-            </exception>
-        </member>
-        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.CustomerContext">
-            <summary>
-            Gets the customer context.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.CurrentCustomer">
-            <summary>
-            Gets the current customer.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.Basket">
-            <summary>
-            Gets the current customer <see cref="T:Merchello.Web.Workflow.IBasket"/>.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.MerchelloServices">
-            <summary>
-            Gets the services.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Mvc.MerchelloSurfaceController.GatewayContext">
-            <summary>
-            Gets the gateway context.
             </summary>
         </member>
         <member name="T:Merchello.Web.Pluggable.PluggableObjectHelper">

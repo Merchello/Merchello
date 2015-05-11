@@ -222,6 +222,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Mvc\MerchelloPaymentController.cs" />
     <Compile Include="Pluggable\CustomerContextBase.cs" />
     <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Models\ContentEditing\CurrencyDisplay.cs" />
