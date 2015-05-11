@@ -7,7 +7,6 @@
     using Merchello.Bazaar.Attributes;
     using Merchello.Bazaar.Models;
     using Merchello.Core.Gateways;
-    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;

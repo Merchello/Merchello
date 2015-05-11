@@ -19,7 +19,7 @@
         }
 
         /// <summary>
-        /// Backoffices the specified customer.
+        /// Backoffice's the specified customer.
         /// </summary>
         /// <param name="customer">The customer.</param>
         /// <returns></returns>

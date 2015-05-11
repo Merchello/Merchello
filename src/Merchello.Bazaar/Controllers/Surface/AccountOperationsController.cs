@@ -34,8 +34,8 @@
         [HttpGet]
         public ActionResult LinkToReceipt(int receiptContentId, Guid invoiceKey)
         {
-            this.CustomerContext.SetValue("invoiceKey", invoiceKey.ToString());
-            return this.RedirectToUmbracoPage(receiptContentId);
+            CustomerContext.SetValue("invoiceKey", invoiceKey.ToString());
+            return RedirectToUmbracoPage(receiptContentId);
         }
 
         /// <summary>
@@ -66,15 +66,15 @@
         [HttpPost]
         public ActionResult UpdateAccountProfile(AccountProfileModel model)
         {
-            if (model.SetPassword && !this.ModelState.IsValid) return this.CurrentUmbracoPage();
+            if (model.SetPassword && !ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            if (!(this.ModelState.IsValidField("firstName") && this.ModelState.IsValidField("lastName"))) return this.CurrentUmbracoPage();
+            if (!(ModelState.IsValidField("firstName") && ModelState.IsValidField("lastName"))) return this.CurrentUmbracoPage();
 
-            var customer = (ICustomer)this.CurrentCustomer;
+            var customer = (ICustomer)CurrentCustomer;
             customer.FirstName = model.FirstName;
             customer.LastName = model.LastName;
 
-            this.MerchelloServices.CustomerService.Save(customer);
+            MerchelloServices.CustomerService.Save(customer);
 
             if (model.SetPassword)
             {
@@ -119,11 +119,11 @@
         [HttpPost]
         public ActionResult SaveCustomerAddress(CustomerAddressModel model)
         {
-            if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
+            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
             ICustomerAddress customerAddress;
             if (!model.Key.Equals(Guid.Empty))
             {
-                var existing = this.MerchelloServices.CustomerService.GetAddressByKey(model.Key);
+                var existing = MerchelloServices.CustomerService.GetAddressByKey(model.Key);
                 customerAddress = model.AsCustomerAddress(existing);
             }
             else
@@ -131,8 +131,8 @@
                 customerAddress = model.AsCustomerAddress();
             }
 
-            this.MerchelloServices.CustomerService.Save(customerAddress);
-            this.CustomerContext.Reinitialize(this.CurrentCustomer);
+            MerchelloServices.CustomerService.Save(customerAddress);
+            CustomerContext.Reinitialize(CurrentCustomer);
             return this.SuccessfulRedirect(model.AccountPageId);
         }
 
@@ -154,12 +154,12 @@
         [HttpGet]
         public ActionResult DeleteCustomerAddress(Guid customerKey, Guid customerAddressKey, int accountPageId)
         {
-            var customer = this.MerchelloServices.CustomerService.GetByKey(customerKey);
+            var customer = MerchelloServices.CustomerService.GetByKey(customerKey);
             var address = customer.Addresses.FirstOrDefault(x => x.Key == customerAddressKey);
             if (address != null)
             {
                 customer.DeleteCustomerAddress(address);
-                this.CustomerContext.Reinitialize(customer);
+                CustomerContext.Reinitialize(customer);
             }
 
             return this.SuccessfulRedirect(accountPageId);
@@ -183,7 +183,7 @@
         [HttpGet]
         public ActionResult SetDefaultAddress(Guid customerKey, Guid customerAddressKey, int accountPageId)
         {
-            var customer = this.MerchelloServices.CustomerService.GetByKey(customerKey);
+            var customer = MerchelloServices.CustomerService.GetByKey(customerKey);
             var address = customer.Addresses.FirstOrDefault(x => x.Key == customerAddressKey);
             if (address != null)
             {
@@ -195,8 +195,8 @@
                 }
 
                 address.IsDefault = true;
-                this.MerchelloServices.CustomerService.Save(addresses);
-                this.CustomerContext.Reinitialize(customer);
+                MerchelloServices.CustomerService.Save(addresses);
+                CustomerContext.Reinitialize(customer);
             }
 
             return this.SuccessfulRedirect(accountPageId);
@@ -213,7 +213,7 @@
         /// </returns>
         private ActionResult SuccessfulRedirect(int accountPageId)
         {
-            var accountPage = this.Umbraco.TypedContent(accountPageId);
+            var accountPage = Umbraco.TypedContent(accountPageId);
 
             return this.Redirect(accountPage.Url + "#success");
         }

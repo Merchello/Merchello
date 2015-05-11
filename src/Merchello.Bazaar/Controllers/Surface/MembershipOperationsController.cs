@@ -29,7 +29,7 @@
         [ChildActionOnly]
         public ActionResult RenderSignUpForm(CustomerRegistrationModel model, string theme)
         {
-            return this.View(PathHelper.GetThemePartialViewPath(theme, "SignInSignUp"));
+            return View(PathHelper.GetThemePartialViewPath(theme, "SignInSignUp"));
         }
 
         /// <summary>
@@ -45,9 +45,9 @@
         public ActionResult HandleSignUp(CombinedRegisterLoginModel model)
         {
             // Model validation
-            if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
+            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            var registerModel = this.Members.CreateRegistrationModel(model.Registration.MemberTypeName.DecryptWithMachineKey());
+            var registerModel = Members.CreateRegistrationModel(model.Registration.MemberTypeName.DecryptWithMachineKey());
             registerModel.Name = model.Registration.EmailAddress;
             registerModel.Email = model.Registration.EmailAddress;
             registerModel.Password = model.Registration.Password;
@@ -62,37 +62,37 @@
                 registerModel.MemberProperties.Find(x => x.Alias == "lastName").Value = model.Registration.LastName;
 
             MembershipCreateStatus status;
-            var membershipUser = this.Members.RegisterMember(registerModel, out status);
+            var membershipUser = Members.RegisterMember(registerModel, out status);
 
             switch (status)
             {
                 case MembershipCreateStatus.InvalidPassword:
-                    this.ModelState.AddModelError(string.Empty, "Invalid password");
+                    ModelState.AddModelError(string.Empty, "Invalid password");
                     return this.CurrentUmbracoPage();
 
                 case MembershipCreateStatus.DuplicateEmail:
-                    this.ModelState.AddModelError(string.Empty, "The email address " + model.Registration.EmailAddress + " is already associated with a customer.");
+                    ModelState.AddModelError(string.Empty, "The email address " + model.Registration.EmailAddress + " is already associated with a customer.");
                     return this.CurrentUmbracoPage();
 
                 case MembershipCreateStatus.DuplicateUserName:
-                    this.ModelState.AddModelError(string.Empty, "The email address " + model.Registration.EmailAddress + " is already associated with a customer.");
+                    ModelState.AddModelError(string.Empty, "The email address " + model.Registration.EmailAddress + " is already associated with a customer.");
                     return this.CurrentUmbracoPage();
 
                 default:
                     // TODO should not need to do this but need to ask for a better event in Umbraco
                     // but have to resave to fire off the memberservice event to populate the Merchello customer
                     // correctly
-                    var member = this.Services.MemberService.GetByEmail(model.Registration.EmailAddress);
+                    var member = Services.MemberService.GetByEmail(model.Registration.EmailAddress);
                     if (member != null)
                     {
-                        this.Services.MemberService.Save(member);
-                        this.Services.MemberService.AssignRole(member.Id, "MerchelloCustomers");
+                        Services.MemberService.Save(member);
+                        Services.MemberService.AssignRole(member.Id, "MerchelloCustomers");
                     }
 
                     break;
             }
 
-            return this.RedirectToUmbracoPage(model.AccountPageId);
+            return RedirectToUmbracoPage(model.AccountPageId);
         }
 
         /// <summary>
@@ -107,9 +107,9 @@
         [HttpPost]
         public ActionResult HandleSignIn(CombinedRegisterLoginModel model)
         {
-            if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
+            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            if (this.Members.Login(model.Login.Username, model.Login.Password))
+            if (Members.Login(model.Login.Username, model.Login.Password))
             {
                 // successful login
                 return this.RedirectToUmbracoPage(model.AccountPageId);
@@ -128,7 +128,7 @@
         [HttpGet]
         public ActionResult HandleSignOut()
         {
-            this.Members.Logout();
+            Members.Logout();
             return this.Redirect("/");
         }
     }

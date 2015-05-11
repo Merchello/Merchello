@@ -15,6 +15,15 @@
     public abstract class RenderControllerBase : MerchelloRenderMvcController
     {
         /// <summary>
+        /// The <see cref="IMerchelloContext"/>.
+        /// </summary>
+        /// <remarks>
+        /// TODO this is a total hack but it is a quick way to subclass MerchelloRenderMvcController
+        /// Refactor for 1.9.0
+        /// </remarks>
+        private readonly IMerchelloContext _merchelloContext = Core.MerchelloContext.Current;
+
+        /// <summary>
         /// The <see cref="IViewModelFactory"/>.
         /// </summary>
         private Lazy<IViewModelFactory> _viewModelFactory;
@@ -30,38 +39,23 @@
         /// Initializes a new instance of the <see cref="RenderControllerBase"/> class.
         /// </summary>
         protected RenderControllerBase()
-            : this(UmbracoContext.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RenderControllerBase"/> class.
-        /// </summary>
-        /// <param name="umbracoContext">
-        /// The <see cref="UmbracoContext"/>
-        /// </param>
-        protected RenderControllerBase(UmbracoContext umbracoContext)
-            : this(umbracoContext, Core.MerchelloContext.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RenderControllerBase"/> class.
-        /// </summary>
-        /// <param name="umbracoContext">
-        /// The <see cref="UmbracoContext"/>
-        /// </param>
-        /// <param name="merchelloContext">
-        /// The <see cref="IMerchelloContext"/>
-        /// </param>
-        protected RenderControllerBase(UmbracoContext umbracoContext, IMerchelloContext merchelloContext)
-            : base(umbracoContext, merchelloContext)
         {
             this.Initialize();
         }
-
+        
         #endregion
+        
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenderControllerBase"/> class.
+        /// </summary>
+        protected IMerchelloContext MerchelloContext
+        {
+            get
+            {
+                return _merchelloContext;
+            }
+        }
 
         /// <summary>
         /// Gets the root shop page.
@@ -84,6 +78,7 @@
                 return _viewModelFactory.Value;
             }
         }
+
 
         /// <summary>
         /// Initializes the controller.

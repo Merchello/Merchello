@@ -11888,7 +11888,7 @@
             </summary>
             <param name="merchelloContext">
             The merchello context.
-            </param>
+            </param>e
             <param name="request">
             The request.
             </param>

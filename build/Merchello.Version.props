@@ -9,7 +9,7 @@
         <VersionMajor>1</VersionMajor>
         <VersionMinor>8</VersionMinor>
         <VersionPatch>3</VersionPatch>
-        <VersionSuffix>2</VersionSuffix>        
+        <VersionSuffix>3</VersionSuffix>        
         <BuildConfiguration>Release</BuildConfiguration>
         <ReleaseAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch)</ReleaseAssemblyInformationVersion>
         <DevAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)</DevAssemblyInformationVersion>
