@@ -30,6 +30,12 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
+        <member name="T:Merchello.Web.Mvc.CheckoutOperationControllerBase">
+            <summary>
+            An Umbraco Surface controller (abstract) that can be resolved by packages such as
+            the Merchello Bazaar to perform various checkout operations - such as capture payments or estimate shipping/taxes
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Mvc.MerchelloSurfaceController">
             <summary>
             A <see cref="T:Umbraco.Web.Mvc.SurfaceController"/> that Merchello presentation Add-in controllers should inherit from
@@ -91,6 +97,14 @@
             <summary>
             Gets the gateway context.
             </summary>
+        </member>
+        <member name="M:Merchello.Web.Mvc.CheckoutOperationControllerBase.RenderForm">
+            <summary>
+            Responsible for rendering the payment method for a payment method in a store.
+            </summary>
+            <returns>
+            The <see cref="T:System.Web.Mvc.ActionResult"/> - Partial View.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Pluggable.CustomerContextBase">
             <summary>
@@ -1618,6 +1632,99 @@
             Gets the currency.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver">
+            <summary>
+            Resolves CheckoutOperationControllers
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Ui.Payments.ICheckoutOperationControllerResolver">
+            <summary>
+            Defines the CheckoutOperationControllerResolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Ui.Payments.ICheckoutOperationControllerResolver.GetAllTypes">
+            <summary>
+            Returns a list of all types resolved.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.Payments.ICheckoutOperationControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
+            <summary>
+            Gets a type that has the 
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:System.Type"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.Payments.ICheckoutOperationControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
+            <summary>
+            Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            A value indicating whether or not a type was found with the GatewayMethodUi alias
+            </returns>
+        </member>
+        <member name="F:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver._instanceTypes">
+            <summary>
+            The instance types.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver._gatewayMethods">
+            <summary>
+            Types which have the GatewayMethodUi attribute.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver"/> class.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.GetAllTypes">
+            <summary>
+            Returns a list of all types resolved.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
+            <summary>
+            Gets a type that has the 
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:System.Type"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
+            <summary>
+            Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            A value indicating whether or not a type was found with the GatewayMethodUi alias
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.Initialize">
+            <summary>
+            The initialize.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Pluggable.PluggableObjectHelper">
             <summary>
             The pluggable object helper.
@@ -1682,12 +1789,23 @@
             Extension methods for the Plugin Manager
             </summary>
         </member>
+        <member name="M:Merchello.Web.PluginManagerExtensions.ResolveCheckoutOperationControllers(Umbraco.Core.PluginManager)">
+            <summary>
+            Returns all the resolved objects that sub-class <see cref="T:Merchello.Web.Mvc.CheckoutOperationControllerBase"/>
+            </summary>
+            <param name="pluginManager">
+            The <see cref="T:Umbraco.Core.PluginManager"/>.
+            </param>
+            <returns>
+            The collection of checkout operation controllers
+            </returns>
+        </member>
         <member name="M:Merchello.Web.PluginManagerExtensions.ResolveReportApiControllers(Umbraco.Core.PluginManager)">
             <summary>
             Returns all available report data aggregators.
             </summary>
             <param name="pluginManger">
-            The plugin manger.
+            The <see cref="T:Umbraco.Core.PluginManager"/>.
             </param>
             <returns>
             The collection of the report data aggregators resolved.

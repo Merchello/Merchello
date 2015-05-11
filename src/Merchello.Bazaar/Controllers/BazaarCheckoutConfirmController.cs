@@ -64,9 +64,11 @@
             {
                 var att = method.GetType().GetCustomAttribute<GatewayMethodUiAttribute>(false);
 
+                var alias = att == null ? string.Empty : att.Alias.Replace(".", string.Empty);
+
                 paymentMethodInfos.Add(new PaymentMethodUiInfo()
                                            {
-                                               Alias = att == null ? string.Empty : att.Alias.Replace(".", string.Empty),
+                                               Alias = alias,
                                                PaymentMethodKey = method.PaymentMethod.Key
                                            });
             }

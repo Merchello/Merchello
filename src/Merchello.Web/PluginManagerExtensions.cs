@@ -5,6 +5,7 @@ namespace Merchello.Web
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Web.Mvc;
     using Merchello.Web.Trees;
 
     using Umbraco.Core;
@@ -15,10 +16,24 @@ namespace Merchello.Web
     public static class PluginManagerExtensions
     {
         /// <summary>
+        /// Returns all the resolved objects that sub-class <see cref="CheckoutOperationControllerBase"/>
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The <see cref="PluginManager"/>.
+        /// </param>
+        /// <returns>
+        /// The collection of checkout operation controllers
+        /// </returns>
+        internal static IEnumerable<Type> ResolveCheckoutOperationControllers(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypes<CheckoutOperationControllerBase>();
+        }
+
+        /// <summary>
         /// Returns all available report data aggregators.
         /// </summary>
         /// <param name="pluginManger">
-        /// The plugin manger.
+        /// The <see cref="PluginManager"/>.
         /// </param>
         /// <returns>
         /// The collection of the report data aggregators resolved.
