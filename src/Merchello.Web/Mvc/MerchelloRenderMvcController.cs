@@ -4,6 +4,7 @@
     using Merchello.Core.Gateways;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Web.Pluggable;
     using Merchello.Web.Workflow;
 
     using Umbraco.Core;
@@ -18,7 +19,22 @@
         /// <summary>
         /// The <see cref="IMerchelloContext"/>.
         /// </summary>
-        private readonly IMerchelloContext _merchelloContext;
+        private readonly IMerchelloContext _merchelloContext = MerchelloContext.Current;
+
+        /// <summary>
+        /// The <see cref="ICustomerContext"/>.
+        /// </summary>
+        private ICustomerContext _customerContext;
+
+        /// <summary>
+        /// The <see cref="ICurrency"/>.
+        /// </summary>
+        private ICurrency _currency;
+
+        /// <summary>
+        /// The setting to save initialized state.
+        /// </summary>
+        private bool _isInitialized;        
 
         #region Constructors
 
@@ -37,29 +53,8 @@
         /// The <see cref="UmbracoContext"/>
         /// </param>
         protected MerchelloRenderMvcController(UmbracoContext umbracoContext)
-            : this(umbracoContext, Core.MerchelloContext.Current)
+            : base(umbracoContext)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MerchelloRenderMvcController"/> class.
-        /// </summary>
-        /// <param name="umbracoContext">
-        /// The <see cref="UmbracoContext"/>
-        /// </param>
-        /// <param name="merchelloContext">
-        /// The <see cref="IMerchelloContext"/>
-        /// </param>
-        protected MerchelloRenderMvcController(UmbracoContext umbracoContext, IMerchelloContext merchelloContext)
-        {
-            Mandate.ParameterNotNull(umbracoContext, "umbracoContext");
-            Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-
-            this.CustomerContext = new CustomerContext(umbracoContext);
-
-            this._merchelloContext = merchelloContext;
-
-            this.Initialize();
         }
 
         #endregion
@@ -67,7 +62,14 @@
         /// <summary>
         /// Gets the customer context.
         /// </summary>
-        protected CustomerContext CustomerContext { get; private set; }
+        protected ICustomerContext CustomerContext
+        {
+            get
+            {
+                if (!_isInitialized) this.Initialize();
+                return _customerContext;
+            }
+        }
 
         /// <summary>
         /// Gets the current customer.
@@ -116,7 +118,14 @@
         /// <summary>
         /// Gets the currency.
         /// </summary>
-        protected ICurrency Currency { get; private set; }
+        protected ICurrency Currency
+        {
+            get
+            {
+                if (!_isInitialized) this.Initialize();
+                return _currency;
+            }
+        }
 
         /// <summary>
         /// Initializes the controller.
@@ -125,8 +134,9 @@
         {
             var storeSettingsService = this._merchelloContext.Services.StoreSettingService;
             var storeSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey);
-
-            this.Currency = storeSettingsService.GetCurrencyByCode(storeSetting.Value);
+            _customerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);
+            _currency = storeSettingsService.GetCurrencyByCode(storeSetting.Value);
+            _isInitialized = true;
         }
     }
 }

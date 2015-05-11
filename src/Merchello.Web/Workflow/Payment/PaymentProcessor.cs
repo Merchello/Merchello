@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Workflow
+﻿namespace Merchello.Web.Workflow.Payment
 {
     using System;
 
@@ -8,8 +8,6 @@
     using Merchello.Web.Models.Payments;
 
     using Umbraco.Core;
-
-    //// TODO RSS - review this class
 
     /// <summary>
     /// Processes a payment
@@ -59,13 +57,13 @@
         /// <param name="request">
         /// The request.
         /// </param>
-        public PaymentProcessor(IMerchelloContext merchelloContext, PaymentRequestDisplay request)
+        public PaymentProcessor(IMerchelloContext merchelloContext, PaymentRequest request)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             
-            _merchelloContext = merchelloContext;
+            this._merchelloContext = merchelloContext;
 
-            Build(request);
+            this.Initialize(request);
         }
 
 
@@ -75,7 +73,7 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public IPaymentResult Authorize()
         {
-            return !IsReady() ? GetFailedResult() : _paymentGatewayMethod.AuthorizePayment(_invoice, _args);
+            return !this.IsReady() ? this.GetFailedResult() : this._paymentGatewayMethod.AuthorizePayment(this._invoice, this._args);
         }
 
         /// <summary>
@@ -84,9 +82,9 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public IPaymentResult Capture()
         {
-            return !IsReady() || _payment == null
-                ? GetFailedResult()
-                : _paymentGatewayMethod.CapturePayment(_invoice, _payment, _amount, _args);
+            return !this.IsReady() || this._payment == null
+                ? this.GetFailedResult()
+                : this._paymentGatewayMethod.CapturePayment(this._invoice, this._payment, this._amount, this._args);
         }
 
         /// <summary>
@@ -95,66 +93,66 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public IPaymentResult AuthorizeCapture()
         {
-            return !IsReady()
-                ? GetFailedResult()
-                : _paymentGatewayMethod.AuthorizeCapturePayment(_invoice, _amount, _args);
+            return !this.IsReady()
+                ? this.GetFailedResult()
+                : this._paymentGatewayMethod.AuthorizeCapturePayment(this._invoice, this._amount, this._args);
         }
 
         /// <summary>
         /// Performs a refund payment
         /// </summary>
-        /// <returns></returns>
+        /// <returns><see cref="IPaymentResult"/></returns>
         public IPaymentResult Refund()
         {
-            return !IsReady() || _payment == null 
-                ? GetFailedResult() 
-                : _paymentGatewayMethod.RefundPayment(_invoice, _payment, _amount, _args);
-        }
-
-        /// <summary>
-        /// Performs a void payment
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IPaymentResult"/>.
-        /// </returns>
-        public IPaymentResult Void()
-        {
-            return !this.IsReady() || _payment == null
-                       ? this.GetFailedResult()
-                       : _paymentGatewayMethod.VoidPayment(_invoice, _payment, _args);
+            return !this.IsReady() || this._payment == null 
+                ? this.GetFailedResult() 
+                : this._paymentGatewayMethod.RefundPayment(this._invoice, this._payment, this._amount, this._args);
         }
 
         /// <summary>
         /// True/false indicating whether or not the processor is ready
         /// </summary>
+        /// <returns>
+        /// The a value indicating whether or not the processor is ready.
+        /// </returns>
         private bool IsReady()
         {
-            return _invoice != null && _paymentGatewayMethod != null;
+            return this._invoice != null && this._paymentGatewayMethod != null;
         }
 
+        /// <summary>
+        /// The get failed result.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
         private IPaymentResult GetFailedResult()
         {
-            return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("PaymentProcessor is not ready")), _invoice, false);
+            return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("PaymentProcessor is not ready")), this._invoice, false);
         }
 
-        private void Build(PaymentRequestDisplay request)
+        /// <summary>
+        /// Initializes "this" object
+        /// </summary>
+        /// <param name="request">
+        /// The incoming <see cref="PaymentRequest"/>
+        /// </param>
+        private void Initialize(PaymentRequest request)
         {
-            _invoice = _merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
+            this._invoice = this._merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
 
             if (request.PaymentKey != null)
-                _payment = _merchelloContext.Services.PaymentService.GetByKey(request.PaymentKey.Value);
+                this._payment = this._merchelloContext.Services.PaymentService.GetByKey(request.PaymentKey.Value);
 
-            _paymentGatewayMethod =
-                _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(request.PaymentMethodKey);
+            this._paymentGatewayMethod =
+                this._merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(request.PaymentMethodKey);
 
-            _amount = request.Amount;
+            this._amount = request.Amount;
 
             foreach (var arg in request.ProcessorArgs)
             {
-                _args.Add(arg.Key, arg.Value);
+                this._args.Add(arg.Key, arg.Value);
             }
-
         }
-
     }
 }
