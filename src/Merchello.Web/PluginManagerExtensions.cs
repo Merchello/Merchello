@@ -16,7 +16,7 @@ namespace Merchello.Web
     public static class PluginManagerExtensions
     {
         /// <summary>
-        /// Returns all the resolved objects that sub-class <see cref="CheckoutOperationControllerBase"/>
+        /// Returns all the resolved objects that sub-class <see cref="IPaymentMethodUiController"/>
         /// </summary>
         /// <param name="pluginManager">
         /// The <see cref="PluginManager"/>.
@@ -26,7 +26,7 @@ namespace Merchello.Web
         /// </returns>
         internal static IEnumerable<Type> ResolveCheckoutOperationControllers(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypes<CheckoutOperationControllerBase>();
+            return pluginManager.ResolveTypes<IPaymentMethodUiController>();
         }
 
         /// <summary>

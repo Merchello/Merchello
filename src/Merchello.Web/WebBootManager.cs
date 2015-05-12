@@ -61,8 +61,8 @@
         {
             base.InitializeResolvers();
 
-            if (!CheckoutOperationControllerResolver.HasCurrent)
-            CheckoutOperationControllerResolver.Current = new CheckoutOperationControllerResolver(PluginManager.Current.ResolveCheckoutOperationControllers());
+            if (!PaymentMethodUiControllerResolver.HasCurrent)
+            PaymentMethodUiControllerResolver.Current = new PaymentMethodUiControllerResolver(PluginManager.Current.ResolveCheckoutOperationControllers());
 
             if (!ReportApiControllerResolver.HasCurrent)
             ReportApiControllerResolver.Current = new ReportApiControllerResolver(PluginManager.Current.ResolveReportApiControllers());

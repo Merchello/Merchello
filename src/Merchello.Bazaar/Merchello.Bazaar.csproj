@@ -80,17 +80,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.8.2.27, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Core, Version=1.8.2.31, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.8.2.27\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.8.2.27\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.8.2.27, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Web, Version=1.8.2.31, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.8.2.27\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.2.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -204,7 +204,10 @@
     <Compile Include="Controllers\BazaarCheckoutConfirmController.cs" />
     <Compile Include="Controllers\BazaarReceiptController.cs" />
     <Compile Include="Controllers\Surface\AccountOperationsController.cs" />
+    <Compile Include="Controllers\Surface\BazaarPaymentMethodFormControllerBase.cs" />
+    <Compile Include="Controllers\Surface\CashPaymentMethodController.cs" />
     <Compile Include="Install\PackageActions\AddMembershipTypeAndGroup.cs" />
+    <Compile Include="Install\PackageActions\AddPaymentFormsAppConfigKey.cs" />
     <Compile Include="Models\Account\AccountProfileModel.cs" />
     <Compile Include="Models\Account\CustomerAddressModel.cs" />
     <Compile Include="Controllers\Surface\SalePreparationOperationsController.cs" />

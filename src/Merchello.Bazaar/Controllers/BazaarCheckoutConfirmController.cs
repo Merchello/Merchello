@@ -2,14 +2,17 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Configuration;
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Attributes;
     using Merchello.Bazaar.Models;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
+    using Merchello.Web.Ui;
 
     using Umbraco.Core;
     using Umbraco.Web.Models;
@@ -57,20 +60,22 @@
                 }
             }
 
-            var paymentMethods = GatewayContext.Payment.GetPaymentGatewayMethods().ToArray();
 
+            var paymentMethods = GatewayContext.Payment.GetPaymentGatewayMethods().ToArray();
             var paymentMethodInfos = new List<PaymentMethodUiInfo>();
+
             foreach (var method in paymentMethods)
             {
                 var att = method.GetType().GetCustomAttribute<GatewayMethodUiAttribute>(false);
 
-                var alias = att == null ? string.Empty : att.Alias.Replace(".", string.Empty);
-
+                var alias = att == null ? string.Empty : att.Alias;
+               
                 paymentMethodInfos.Add(new PaymentMethodUiInfo()
-                                           {
-                                               Alias = alias,
-                                               PaymentMethodKey = method.PaymentMethod.Key
-                                           });
+                    {
+                        Alias = alias.Replace(".", string.Empty),
+                        PaymentMethodKey = method.PaymentMethod.Key,
+                        UrlActionParams = PaymentMethodUiControllerResolver.Current.GetUrlActionParamsByGatewayMethodUiAlias(alias)
+                    });
             }
 
             var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods.Select(x => x.PaymentMethod), paymentMethodInfos);

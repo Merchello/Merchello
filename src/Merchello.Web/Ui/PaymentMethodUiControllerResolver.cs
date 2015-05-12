@@ -6,15 +6,17 @@
     using System.Linq;
 
     using Merchello.Core.Gateways;
+    using Merchello.Web.Models.Ui;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.ObjectResolution;
+    using Umbraco.Web.Mvc;
 
     /// <summary>
     /// Resolves CheckoutOperationControllers
     /// </summary>
-    internal class CheckoutOperationControllerResolver : ResolverBase<CheckoutOperationControllerResolver>, ICheckoutOperationControllerResolver
+    public class PaymentMethodUiControllerResolver : ResolverBase<PaymentMethodUiControllerResolver>, IPaymentMethodUiControllerResolver
     {
         /// <summary>
         /// The instance types.
@@ -28,12 +30,12 @@
         private readonly Dictionary<string, Type> _gatewayMethods = new Dictionary<string, Type>(); 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CheckoutOperationControllerResolver"/> class.
+        /// Initializes a new instance of the <see cref="PaymentMethodUiControllerResolver"/> class.
         /// </summary>
         /// <param name="value">
         /// The value.
         /// </param>
-        public CheckoutOperationControllerResolver(IEnumerable<Type> value)
+        public PaymentMethodUiControllerResolver(IEnumerable<Type> value)
         {
             var enumerable = value as Type[] ?? value.ToArray();
 
@@ -48,7 +50,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{Type}"/>.
         /// </returns>
-        public IEnumerable<Type> GetAllTypes()
+        internal IEnumerable<Type> GetAllTypes()
         {
             return this._instanceTypes;
         }
@@ -62,9 +64,38 @@
         /// <returns>
         /// The <see cref="Type"/>.
         /// </returns>
-        public Type GetTypeByGatewayMethodUiAlias(string alias)
+        internal Type GetTypeByGatewayMethodUiAlias(string alias)
         {
             return this.HasTypeWithGatewayMethodUiAlias(alias) ? this._gatewayMethods[alias] : null;
+        }
+
+        /// <summary>
+        /// The get url action params by gateway method ui alias.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="UrlActionParams"/>.
+        /// </returns>
+        public UrlActionParams GetUrlActionParamsByGatewayMethodUiAlias(string alias)
+        {
+            var type = this.GetTypeByGatewayMethodUiAlias(alias);
+            if (type == null) return null;
+
+            var urlActionParams = new UrlActionParams()
+                                      {
+                                          Controller = type.Name.EndsWith("Controller") ? type.Name.Remove(type.Name.LastIndexOf("Controller", StringComparison.Ordinal), 10) : type.Name,
+                                          Method = "RenderForm"
+                                      };
+
+            var att = type.GetCustomAttribute<PluginControllerAttribute>(false);
+            if (att != null)
+            {
+                urlActionParams.RouteParams.Add(new Tuple<string, string>("area", att.AreaName));
+            }
+
+            return urlActionParams;
         }
 
         /// <summary>
@@ -97,7 +128,7 @@
                 }
                 else
                 {
-                    LogHelper.Info<CheckoutOperationControllerResolver>("More than one GatewayMethodUiAttribute was found with the same alias.  Aliases are intended to be unique.");
+                    LogHelper.Info<PaymentMethodUiControllerResolver>("More than one GatewayMethodUiAttribute was found with the same alias.  Aliases are intended to be unique.");
                 }
             }
         }

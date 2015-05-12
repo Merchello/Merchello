@@ -3,29 +3,23 @@ namespace Merchello.Web.Ui
     using System;
     using System.Collections.Generic;
 
-    /// <summary>
-    /// Defines the CheckoutOperationControllerResolver.
-    /// </summary>
-    internal interface ICheckoutOperationControllerResolver
-    {
-        /// <summary>
-        /// Returns a list of all types resolved.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{Type}"/>.
-        /// </returns>
-        IEnumerable<Type> GetAllTypes();
+    using Merchello.Web.Models.Ui;
 
+    /// <summary>
+    /// Defines the PaymentMethodUiControllerResolver.
+    /// </summary>
+    public interface IPaymentMethodUiControllerResolver
+    {       
         /// <summary>
-        /// Gets a type that has the 
+        /// The get url action parameters by GatewayMethodUi alias.
         /// </summary>
         /// <param name="alias">
         /// The alias.
         /// </param>
         /// <returns>
-        /// The <see cref="Type"/>.
+        /// The <see cref="UrlActionParams"/>.
         /// </returns>
-        Type GetTypeByGatewayMethodUiAlias(string alias);
+        UrlActionParams GetUrlActionParamsByGatewayMethodUiAlias(string alias);
 
         /// <summary>
         /// Returns a value indicating whether or not a type was found with the GatewayMethodUi alias

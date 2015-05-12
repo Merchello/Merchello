@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.UI.WebControls;
 
@@ -21,8 +22,6 @@
     using Umbraco.Core.Models;
     using Umbraco.Web;
     using Umbraco.Web.Models;
-
-    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// Represents a view model factory.
@@ -111,21 +110,21 @@
                 };
 
             viewModel.CustomerAddressModel = new CustomerAddressModel()
-                                                 {
-                                                     Theme = viewModel.Theme,
-                                                     CustomerKey = viewModel.CurrentCustomer.Key,
-                                                     AccountPageId =  viewModel.Id,
-                                                     ShipCountries = shipCountries.Select(x => new SelectListItem()
-                                                                                                   {
-                                                                                                       Value = x.CountryCode,
-                                                                                                       Text = x.Name
-                                                                                                   }),
-                                                     AllCountries = allCountries.Select(x => new SelectListItem()
-                                                                                                 {
-                                                                                                    Value  = x.CountryCode,
-                                                                                                    Text = x.Name
-                                                                                                 })
-                                                 };
+                {
+                    Theme = viewModel.Theme,
+                    CustomerKey = viewModel.CurrentCustomer.Key,
+                    AccountPageId = viewModel.Id,
+                    ShipCountries = shipCountries.Select(x => new SelectListItem()
+                                                                {
+                                                                    Value = x.CountryCode,
+                                                                    Text = x.Name
+                                                                }),
+                    AllCountries = allCountries.Select(x => new SelectListItem()
+                                                                {
+                                                                Value  = x.CountryCode,
+                                                                Text = x.Name
+                                                                })
+                };
 
             return viewModel;
         }
@@ -286,6 +285,19 @@
         {
             var viewModel = this.Build<CheckoutConfirmationModel>(model);
 
+            // Introduced resolvable forms in Bazaar 1.8.3
+            try
+            {
+                viewModel.ResolvePaymentForms = bool.Parse(WebConfigurationManager.AppSettings["Bazaar:ResolvePaymentForms"]);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<ViewModelFactory>("Failed to find AppSetting 'Bazaar:ResolvePaymentForms", ex);
+                viewModel.ResolvePaymentForms = false;
+            }
+
+            var paymentInfoArray = paymentMethodUiInfos as PaymentMethodUiInfo[] ?? paymentMethodUiInfos.ToArray();
+            var paymentMethodsArray = paymentMethods as IPaymentMethod[] ?? paymentMethods.ToArray();
 
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
@@ -294,19 +306,25 @@
                 CustomerToken = basket.Customer.Key.ToString().EncryptWithMachineKey(),
                 SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation()),
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
-                                                                    {
-                                                                        Value = x.ShipMethod.Key.ToString(),
-                                                                        Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency.Symbol))
-                                                                    }),
-                PaymentMethods = paymentMethods.Select(x => new SelectListItem()
-                                                                {
-                                                                    Value = x.Key.ToString(),
-                                                                    Text = x.Name
-                                                                }),
-                PaymentMethodUiInfo = paymentMethodUiInfos,
-                ReceiptPageId = viewModel.ReceiptPage.Id
-            };
+                        {
+                            Value = x.ShipMethod.Key.ToString(),
+                            Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency.Symbol))
+                        }),
 
+                PaymentMethods = (viewModel.ResolvePaymentForms
+                     ? paymentMethodsArray.Where(x => paymentInfoArray.Any(y => y.PaymentMethodKey == x.Key && y.UrlActionParams != null))
+                     : paymentMethodsArray)
+                     .Select(x => new SelectListItem() { Value = x.Key.ToString(), Text = x.Name }),
+
+                PaymentMethodUiInfo = viewModel.ResolvePaymentForms ? 
+                            paymentInfoArray.Where(x => x.UrlActionParams != null) :
+                            paymentInfoArray,
+                    
+                ReceiptPageId = viewModel.ReceiptPage.Id,
+
+                ResolvePaymentForms = viewModel.ResolvePaymentForms
+            };
+            
             return viewModel;
         }
 

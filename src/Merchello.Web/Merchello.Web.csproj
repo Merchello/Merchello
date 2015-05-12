@@ -224,7 +224,8 @@
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="Models\Ui\UrlActionParams.cs" />
-    <Compile Include="Mvc\CheckoutOperationControllerBase.cs" />
+    <Compile Include="Mvc\IPaymentMethodUiController.cs" />
+    <Compile Include="Mvc\PaymentMethodUiController.cs" />
     <Compile Include="Pluggable\CustomerContextBase.cs" />
     <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Models\ContentEditing\CurrencyDisplay.cs" />
@@ -273,7 +274,7 @@
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
-    <Compile Include="Ui\CheckoutOperationControllerResolver.cs" />
+    <Compile Include="Ui\PaymentMethodUiControllerResolver.cs" />
     <Compile Include="Pluggable\PluggableObjectHelper.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
@@ -323,7 +324,7 @@
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
-    <Compile Include="Ui\ICheckoutOperationControllerResolver.cs" />
+    <Compile Include="Ui\IPaymentMethodUiControllerResolver.cs" />
     <Compile Include="Validation\BankingValidationHelper.cs" />
     <Compile Include="Validation\IBankingValidationHelper.cs" />
     <Compile Include="Validation\IValidatationHelper.cs" />

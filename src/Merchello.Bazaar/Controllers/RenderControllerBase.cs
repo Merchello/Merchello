@@ -6,7 +6,6 @@
     using Merchello.Core;
     using Merchello.Web.Mvc;
 
-    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Web;
 

@@ -55,11 +55,19 @@
             Gets a collection of route parameters where the first is the parameter name and the second is the value.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Mvc.CheckoutOperationControllerBase">
+        <member name="T:Merchello.Web.Mvc.IPaymentMethodUiController">
+            <summary>
+            Marker interface for a PaymentMethodUiController.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Mvc.PaymentMethodUiController`1">
             <summary>
             An Umbraco Surface controller (abstract) that can be resolved by packages such as
-            the Merchello Bazaar to perform various checkout operations - such as capture payments or estimate shipping/taxes
+            the Merchello Bazaar to perform various checkout operations - such as capture payments
             </summary>
+            <typeparam name="TModel">
+            The type of the model passed to the controller
+            </typeparam>
         </member>
         <member name="T:Merchello.Web.Mvc.MerchelloSurfaceController">
             <summary>
@@ -123,7 +131,7 @@
             Gets the gateway context.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Mvc.CheckoutOperationControllerBase.RenderForm">
+        <member name="M:Merchello.Web.Mvc.PaymentMethodUiController`1.RenderForm(`0)">
             <summary>
             Responsible for rendering the payment method for a payment method in a store.
             </summary>
@@ -1657,36 +1665,28 @@
             Gets the currency.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Ui.CheckoutOperationControllerResolver">
+        <member name="T:Merchello.Web.Ui.PaymentMethodUiControllerResolver">
             <summary>
             Resolves CheckoutOperationControllers
             </summary>
         </member>
-        <member name="T:Merchello.Web.Ui.ICheckoutOperationControllerResolver">
+        <member name="T:Merchello.Web.Ui.IPaymentMethodUiControllerResolver">
             <summary>
-            Defines the CheckoutOperationControllerResolver.
+            Defines the PaymentMethodUiControllerResolver.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Ui.ICheckoutOperationControllerResolver.GetAllTypes">
+        <member name="M:Merchello.Web.Ui.IPaymentMethodUiControllerResolver.GetUrlActionParamsByGatewayMethodUiAlias(System.String)">
             <summary>
-            Returns a list of all types resolved.
-            </summary>
-            <returns>
-            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Ui.ICheckoutOperationControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
-            <summary>
-            Gets a type that has the 
+            The get url action parameters by GatewayMethodUi alias.
             </summary>
             <param name="alias">
             The alias.
             </param>
             <returns>
-            The <see cref="T:System.Type"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.UrlActionParams"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.ICheckoutOperationControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
+        <member name="M:Merchello.Web.Ui.IPaymentMethodUiControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
             <summary>
             Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
             </summary>
@@ -1697,25 +1697,25 @@
             A value indicating whether or not a type was found with the GatewayMethodUi alias
             </returns>
         </member>
-        <member name="F:Merchello.Web.Ui.CheckoutOperationControllerResolver._instanceTypes">
+        <member name="F:Merchello.Web.Ui.PaymentMethodUiControllerResolver._instanceTypes">
             <summary>
             The instance types.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Ui.CheckoutOperationControllerResolver._gatewayMethods">
+        <member name="F:Merchello.Web.Ui.PaymentMethodUiControllerResolver._gatewayMethods">
             <summary>
             Types which have the GatewayMethodUi attribute.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Ui.CheckoutOperationControllerResolver"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Ui.PaymentMethodUiControllerResolver"/> class.
             </summary>
             <param name="value">
             The value.
             </param>
         </member>
-        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.GetAllTypes">
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.GetAllTypes">
             <summary>
             Returns a list of all types resolved.
             </summary>
@@ -1723,7 +1723,7 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
             <summary>
             Gets a type that has the 
             </summary>
@@ -1734,7 +1734,18 @@
             The <see cref="T:System.Type"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.GetUrlActionParamsByGatewayMethodUiAlias(System.String)">
+            <summary>
+            The get url action params by gateway method ui alias.
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Ui.UrlActionParams"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
             <summary>
             Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
             </summary>
@@ -1745,7 +1756,7 @@
             A value indicating whether or not a type was found with the GatewayMethodUi alias
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.Initialize">
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.Initialize">
             <summary>
             The initialize.
             </summary>
@@ -1816,7 +1827,7 @@
         </member>
         <member name="M:Merchello.Web.PluginManagerExtensions.ResolveCheckoutOperationControllers(Umbraco.Core.PluginManager)">
             <summary>
-            Returns all the resolved objects that sub-class <see cref="T:Merchello.Web.Mvc.CheckoutOperationControllerBase"/>
+            Returns all the resolved objects that sub-class <see cref="T:Merchello.Web.Mvc.IPaymentMethodUiController"/>
             </summary>
             <param name="pluginManager">
             The <see cref="T:Umbraco.Core.PluginManager"/>.

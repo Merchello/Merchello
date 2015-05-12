@@ -4,9 +4,13 @@
 
     /// <summary>
     /// An Umbraco Surface controller (abstract) that can be resolved by packages such as
-    /// the Merchello Bazaar to perform various checkout operations - such as capture payments or estimate shipping/taxes
+    /// the Merchello Bazaar to perform various checkout operations - such as capture payments
     /// </summary>
-    public abstract class CheckoutOperationControllerBase : MerchelloSurfaceController
+    /// <typeparam name="TModel">
+    /// The type of the model passed to the controller
+    /// </typeparam>
+    public abstract class PaymentMethodUiController<TModel> : MerchelloSurfaceController, IPaymentMethodUiController
+        where TModel : class
     {
         /// <summary>
         /// Responsible for rendering the payment method for a payment method in a store.
@@ -15,6 +19,6 @@
         /// The <see cref="ActionResult"/> - Partial View.
         /// </returns>
         [ChildActionOnly]
-        public abstract ActionResult RenderForm();
+        public abstract ActionResult RenderForm(TModel model);
     }
 }

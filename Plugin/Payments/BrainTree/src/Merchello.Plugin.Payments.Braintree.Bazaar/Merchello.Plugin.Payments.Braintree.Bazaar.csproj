@@ -79,15 +79,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Merchello.Bazaar">
+      <HintPath>..\..\dependencies\Merchello.Bazaar.dll</HintPath>
+    </Reference>
     <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.8.2.28\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.8.2.28\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.8.2.28\lib\net40\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web">
+      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.2.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -201,12 +203,20 @@
   <ItemGroup>
     <Compile Include="Controllers\BraintreeStandardTransactionController.cs" />
     <Compile Include="Controllers\BraintreeTransactionControllerBase.cs" />
+    <Compile Include="Models\BraintreeToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Plugins\Merchello.Braintree\Views\Partials\BraintreeSetupJs.cshtml" />
     <None Include="packages.config" />
     <None Include="App_Plugins\Merchello.Braintree\Views\Partials\BraintreeStandardTransaction.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Merchello.Plugin.Payments.BrainTree\Merchello.Plugin.Payments.Braintree.csproj">
+      <Project>{97cc0f2b-d55d-481f-a614-b509ed3d76fd}</Project>
+      <Name>Merchello.Plugin.Payments.Braintree</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
