@@ -5,7 +5,7 @@
     /// <summary>
     /// Represents a ValidationHelper.
     /// </summary>
-    public class ValidationHelper : IValidationHelper
+    internal class ValidationHelper : IValidationHelper
     {
         /// <summary>
         /// The <see cref="IBankingValidationHelper"/>.
