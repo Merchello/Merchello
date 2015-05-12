@@ -5871,6 +5871,31 @@
             <see>http://en.wikipedia.org/wiki/ISO_7064</see>
             <example>See http://www.tbg5-finance.org/?ibandocs.shtml</example> 
         </member>
+        <member name="T:Merchello.Web.Validation.IValidationHelper">
+            <summary>
+            Defines a ValidationHelper.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.IValidationHelper.Banking">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.ValidationHelper">
+            <summary>
+            Represents a ValidationHelper.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ValidationHelper._banking">
+            <summary>
+            The <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.ValidationHelper.Banking">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Visitors.ILineItemDisplayVisitor">
             <summary>
             Defines a LineItemDisplayVisitor.
@@ -9795,6 +9820,11 @@
             The <see cref="T:Merchello.Web.Search.ICachedQueryProvider"/>
             </summary>
         </member>
+        <member name="F:Merchello.Web.MerchelloHelper._validationHelper">
+            <summary>
+            The <see cref="T:Merchello.Web.Validation.IValidationHelper"/>.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.MerchelloHelper.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.MerchelloHelper"/> class.
@@ -9969,6 +9999,11 @@
         <member name="P:Merchello.Web.MerchelloHelper.Query">
             <summary>
             Gets the <see cref="T:Merchello.Web.Search.ICachedQueryProvider"/>
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.MerchelloHelper.Validation">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Validation.IValidationHelper"/>.
             </summary>
         </member>
         <member name="T:Merchello.Web.CustomerContext">

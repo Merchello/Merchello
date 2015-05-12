@@ -327,6 +327,7 @@
     <Compile Include="Validation\BankingValidationHelper.cs" />
     <Compile Include="Validation\IBankingValidationHelper.cs" />
     <Compile Include="Validation\IValidatationHelper.cs" />
+    <Compile Include="Validation\ValidationHelper.cs" />
     <Compile Include="Visitors\ILineItemDisplayVisitor.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
     <Compile Include="WebMigrationManager.cs" />
