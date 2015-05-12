@@ -240,10 +240,7 @@
         /// </returns>
         public Attempt<Transaction> Find(string transactionId)
         {
-            var transaction = BraintreeGateway.Transaction.Find(transactionId);
-
-            return TryGetApiResult(() => transaction);
-
+            return TryGetApiResult(() => BraintreeGateway.Transaction.Find(transactionId));
         }
     }
 }
