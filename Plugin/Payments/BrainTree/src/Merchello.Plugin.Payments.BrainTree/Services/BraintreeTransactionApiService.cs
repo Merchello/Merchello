@@ -5,6 +5,7 @@
     using Core.Gateways.Payment;
     using Core.Models;
     using Models;
+    using Umbraco.Core;
 
     /// <summary>
     /// Represents the <see cref="BraintreeTransactionApiService"/>.
@@ -226,6 +227,23 @@
         {
             var attempt = TryGetApiResult(() => BraintreeGateway.Transaction.Refund(transactionId, amount));
             return attempt.Success ? attempt.Result : null;
+        }
+
+        /// <summary>
+        /// Find transaction
+        /// </summary>
+        /// <param name="transactionId">
+        /// The transaction id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt{Transaction}"/>.
+        /// </returns>
+        public Attempt<Transaction> Find(string transactionId)
+        {
+            var transaction = BraintreeGateway.Transaction.Find(transactionId);
+
+            return TryGetApiResult(() => transaction);
+
         }
     }
 }

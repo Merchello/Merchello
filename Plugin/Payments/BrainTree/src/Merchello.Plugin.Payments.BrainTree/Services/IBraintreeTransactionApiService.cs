@@ -4,6 +4,7 @@
     using Core.Gateways.Payment;
     using Core.Models;
     using Models;
+    using Umbraco.Core;
 
     /// <summary>
     /// Defines the BraintreeTransactionApiProvider.
@@ -143,5 +144,16 @@
         /// The <see cref="Result{Transaction}"/>.
         /// </returns>
         Result<Transaction> Refund(string transactionId, decimal amount);
+
+        /// <summary>
+        /// Find transaction
+        /// </summary>
+        /// <param name="transactionId">
+        /// The transaction id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt{Transaction}"/>.
+        /// </returns>
+        Attempt<Transaction> Find(string transactionId);
     }
 }
