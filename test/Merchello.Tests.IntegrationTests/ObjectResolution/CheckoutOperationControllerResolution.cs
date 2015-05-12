@@ -3,7 +3,8 @@
     using System.Linq;
 
     using Merchello.Tests.Base.TestHelpers;
-    using Merchello.Web.Ui.Payments;
+    using Merchello.Web.Mvc;
+    using Merchello.Web.Ui;
 
     using NUnit.Framework;
 

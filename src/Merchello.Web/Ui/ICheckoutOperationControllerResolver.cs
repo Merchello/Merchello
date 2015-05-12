@@ -1,4 +1,4 @@
-namespace Merchello.Web.Ui.Payments
+namespace Merchello.Web.Ui
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Ui.Payments
+﻿namespace Merchello.Web.Ui
 {
     using System;
     using System.Collections.Generic;
@@ -37,9 +37,9 @@
         {
             var enumerable = value as Type[] ?? value.ToArray();
 
-            _instanceTypes = enumerable.ToList();
+            this._instanceTypes = enumerable.ToList();
 
-            Initialize();
+            this.Initialize();
         }
 
         /// <summary>
@@ -50,7 +50,7 @@
         /// </returns>
         public IEnumerable<Type> GetAllTypes()
         {
-            return _instanceTypes;
+            return this._instanceTypes;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@
         /// </returns>
         public Type GetTypeByGatewayMethodUiAlias(string alias)
         {
-            return HasTypeWithGatewayMethodUiAlias(alias) ? _gatewayMethods[alias] : null;
+            return this.HasTypeWithGatewayMethodUiAlias(alias) ? this._gatewayMethods[alias] : null;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@
         /// </returns>
         public bool HasTypeWithGatewayMethodUiAlias(string alias)
         {
-            return _gatewayMethods.ContainsKey(alias);
+            return this._gatewayMethods.ContainsKey(alias);
         }
 
         /// <summary>
@@ -86,14 +86,14 @@
         /// </summary>
         private void Initialize()
         {
-            foreach (var t in _instanceTypes)
+            foreach (var t in this._instanceTypes)
             {
                 var att = t.GetCustomAttribute<GatewayMethodUiAttribute>(false);
                 if (att == null) continue;
 
-                if (!_gatewayMethods.ContainsKey(att.Alias))
+                if (!this._gatewayMethods.ContainsKey(att.Alias))
                 {
-                    _gatewayMethods.Add(att.Alias, t);
+                    this._gatewayMethods.Add(att.Alias, t);
                 }
                 else
                 {

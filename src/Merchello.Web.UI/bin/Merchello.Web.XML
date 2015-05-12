@@ -30,6 +30,31 @@
             <param name="context">The Umbraco service context</param>
             <returns>The <see cref="T:Merchello.Core.Services.ICustomerService"/></returns>
         </member>
+        <member name="T:Merchello.Web.Models.Ui.UrlActionParams">
+            <summary>
+            A utility class intended to be used in Razor views to store 
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.Ui.UrlActionParams.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.Ui.UrlActionParams"/> class.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.UrlActionParams.Controller">
+            <summary>
+            Gets or sets the controller.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.UrlActionParams.Method">
+            <summary>
+            Gets or sets the method.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.UrlActionParams.RouteParams">
+            <summary>
+            Gets a collection of route parameters where the first is the parameter name and the second is the value.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Mvc.CheckoutOperationControllerBase">
             <summary>
             An Umbraco Surface controller (abstract) that can be resolved by packages such as
@@ -1632,17 +1657,17 @@
             Gets the currency.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver">
+        <member name="T:Merchello.Web.Ui.CheckoutOperationControllerResolver">
             <summary>
             Resolves CheckoutOperationControllers
             </summary>
         </member>
-        <member name="T:Merchello.Web.Ui.Payments.ICheckoutOperationControllerResolver">
+        <member name="T:Merchello.Web.Ui.ICheckoutOperationControllerResolver">
             <summary>
             Defines the CheckoutOperationControllerResolver.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Ui.Payments.ICheckoutOperationControllerResolver.GetAllTypes">
+        <member name="M:Merchello.Web.Ui.ICheckoutOperationControllerResolver.GetAllTypes">
             <summary>
             Returns a list of all types resolved.
             </summary>
@@ -1650,7 +1675,7 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.Payments.ICheckoutOperationControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
+        <member name="M:Merchello.Web.Ui.ICheckoutOperationControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
             <summary>
             Gets a type that has the 
             </summary>
@@ -1661,7 +1686,7 @@
             The <see cref="T:System.Type"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.Payments.ICheckoutOperationControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
+        <member name="M:Merchello.Web.Ui.ICheckoutOperationControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
             <summary>
             Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
             </summary>
@@ -1672,25 +1697,25 @@
             A value indicating whether or not a type was found with the GatewayMethodUi alias
             </returns>
         </member>
-        <member name="F:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver._instanceTypes">
+        <member name="F:Merchello.Web.Ui.CheckoutOperationControllerResolver._instanceTypes">
             <summary>
             The instance types.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver._gatewayMethods">
+        <member name="F:Merchello.Web.Ui.CheckoutOperationControllerResolver._gatewayMethods">
             <summary>
             Types which have the GatewayMethodUi attribute.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Ui.CheckoutOperationControllerResolver"/> class.
             </summary>
             <param name="value">
             The value.
             </param>
         </member>
-        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.GetAllTypes">
+        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.GetAllTypes">
             <summary>
             Returns a list of all types resolved.
             </summary>
@@ -1698,7 +1723,7 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
+        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
             <summary>
             Gets a type that has the 
             </summary>
@@ -1709,7 +1734,7 @@
             The <see cref="T:System.Type"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
+        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
             <summary>
             Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
             </summary>
@@ -1720,7 +1745,7 @@
             A value indicating whether or not a type was found with the GatewayMethodUi alias
             </returns>
         </member>
-        <member name="M:Merchello.Web.Ui.Payments.CheckoutOperationControllerResolver.Initialize">
+        <member name="M:Merchello.Web.Ui.CheckoutOperationControllerResolver.Initialize">
             <summary>
             The initialize.
             </summary>
@@ -5813,6 +5838,38 @@
             <returns>
             The <see cref="T:System.Boolean"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Validation.BankingValidationHelper">
+            <summary>
+            Represents BankingValidationHelper.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.IBankingValidationHelper">
+            <summary>
+            Defines the BankingValidationHelper interface.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.IBankingValidationHelper.IbanBanknrValid(System.String)">
+            <summary>
+            Validate an International Bank Account Number (IBAN)
+            </summary>
+            <param name="iban">International Bank Account Number (IBAN) to validate</param>
+            <returns>[true|false] whether IBAN is valid or not</returns>
+            <see>http://en.wikipedia.org/wiki/International_Bank_Account_Number</see>
+            <see>http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</see>
+            <see>http://en.wikipedia.org/wiki/ISO_7064</see>
+            <example>See http://www.tbg5-finance.org/?ibandocs.shtml</example>               
+        </member>
+        <member name="M:Merchello.Web.Validation.BankingValidationHelper.IbanBanknrValid(System.String)">
+            <summary>
+            Validate an International Bank Account Number (IBAN)
+            </summary>
+            <param name="iban">International Bank Account Number (IBAN) to validate</param>
+            <returns>[true|false] whether IBAN is valid or not</returns>
+            <see>http://en.wikipedia.org/wiki/International_Bank_Account_Number</see>
+            <see>http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</see>
+            <see>http://en.wikipedia.org/wiki/ISO_7064</see>
+            <example>See http://www.tbg5-finance.org/?ibandocs.shtml</example> 
         </member>
         <member name="T:Merchello.Web.Visitors.ILineItemDisplayVisitor">
             <summary>

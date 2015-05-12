@@ -1,7 +1,8 @@
 ﻿namespace Merchello.Web
 {
+    using Merchello.Web.Mvc;
     using Merchello.Web.Reporting;
-    using Merchello.Web.Ui.Payments;
+    using Merchello.Web.Ui;
 
     using Umbraco.Core;
 
