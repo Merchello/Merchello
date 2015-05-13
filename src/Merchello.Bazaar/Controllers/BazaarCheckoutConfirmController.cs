@@ -10,6 +10,7 @@
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
+    using Merchello.Web.Ui;
 
     using Umbraco.Core;
     using Umbraco.Web.Models;
@@ -63,10 +64,14 @@
             foreach (var method in paymentMethods)
             {
                 var att = method.GetType().GetCustomAttribute<GatewayMethodUiAttribute>(false);
+
+                var alias = att == null ? string.Empty : att.Alias;
+               
                 paymentMethodInfos.Add(new PaymentMethodUiInfo()
                     {
-                        Alias = att == null ? string.Empty : att.Alias.Replace(".", string.Empty),
-                        PaymentMethodKey = method.PaymentMethod.Key
+                        Alias = alias.Replace(".", string.Empty),
+                        PaymentMethodKey = method.PaymentMethod.Key,
+                        UrlActionParams = PaymentMethodUiControllerResolver.Current.GetUrlActionParamsByGatewayMethodUiAlias(alias)
                     });
             }
 

@@ -1555,6 +1555,36 @@
             The <see cref="T:System.DateTime"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.Ui.UrlActionParams">
+            <summary>
+            A utility class intended to be used in Razor views to store 
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.Ui.UrlActionParams.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.Ui.UrlActionParams"/> class.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.UrlActionParams.Controller">
+            <summary>
+            Gets or sets the controller.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.UrlActionParams.Method">
+            <summary>
+            Gets or sets the method.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.UrlActionParams.RouteParams">
+            <summary>
+            Gets a collection of route parameters where the first is the parameter name and the second is the value.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Mvc.IPaymentMethodUiController">
+            <summary>
+            Marker interface for a PaymentMethodUiController.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Mvc.MerchelloRenderMvcController">
             <summary>
             A controller to render front-end requests for Merchello
@@ -1689,6 +1719,23 @@
             <summary>
             Gets the gateway context.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Mvc.PaymentMethodUiController`1">
+            <summary>
+            An Umbraco Surface controller (abstract) that can be resolved by packages such as
+            the Merchello Bazaar to perform various checkout operations - such as capture payments
+            </summary>
+            <typeparam name="TModel">
+            The type of the model passed to the controller
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Mvc.PaymentMethodUiController`1.RenderForm(`0)">
+            <summary>
+            Responsible for rendering the payment method for a payment method in a store.
+            </summary>
+            <returns>
+            The <see cref="T:System.Web.Mvc.ActionResult"/> - Partial View.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Pluggable.CustomerContextBase">
             <summary>
@@ -2046,12 +2093,23 @@
             Extension methods for the Plugin Manager
             </summary>
         </member>
+        <member name="M:Merchello.Web.PluginManagerExtensions.ResolveCheckoutOperationControllers(Umbraco.Core.PluginManager)">
+            <summary>
+            Returns all the resolved objects that sub-class <see cref="T:Merchello.Web.Mvc.IPaymentMethodUiController"/>
+            </summary>
+            <param name="pluginManager">
+            The <see cref="T:Umbraco.Core.PluginManager"/>.
+            </param>
+            <returns>
+            The collection of checkout operation controllers
+            </returns>
+        </member>
         <member name="M:Merchello.Web.PluginManagerExtensions.ResolveReportApiControllers(Umbraco.Core.PluginManager)">
             <summary>
             Returns all available report data aggregators.
             </summary>
             <param name="pluginManger">
-            The plugin manger.
+            The <see cref="T:Umbraco.Core.PluginManager"/>.
             </param>
             <returns>
             The collection of the report data aggregators resolved.
@@ -6035,6 +6093,159 @@
             The <see cref="T:System.Boolean"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Ui.IPaymentMethodUiControllerResolver">
+            <summary>
+            Defines the PaymentMethodUiControllerResolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Ui.IPaymentMethodUiControllerResolver.GetUrlActionParamsByGatewayMethodUiAlias(System.String)">
+            <summary>
+            The get url action parameters by GatewayMethodUi alias.
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Ui.UrlActionParams"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.IPaymentMethodUiControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
+            <summary>
+            Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            A value indicating whether or not a type was found with the GatewayMethodUi alias
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Ui.PaymentMethodUiControllerResolver">
+            <summary>
+            Resolves CheckoutOperationControllers
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Ui.PaymentMethodUiControllerResolver._instanceTypes">
+            <summary>
+            The instance types.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Ui.PaymentMethodUiControllerResolver._gatewayMethods">
+            <summary>
+            Types which have the GatewayMethodUi attribute.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Ui.PaymentMethodUiControllerResolver"/> class.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.GetAllTypes">
+            <summary>
+            Returns a list of all types resolved.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.GetTypeByGatewayMethodUiAlias(System.String)">
+            <summary>
+            Gets a type that has the 
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:System.Type"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.GetUrlActionParamsByGatewayMethodUiAlias(System.String)">
+            <summary>
+            The get url action params by gateway method ui alias.
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Ui.UrlActionParams"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.HasTypeWithGatewayMethodUiAlias(System.String)">
+            <summary>
+            Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            A value indicating whether or not a type was found with the GatewayMethodUi alias
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Ui.PaymentMethodUiControllerResolver.Initialize">
+            <summary>
+            The initialize.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.BankingValidationHelper">
+            <summary>
+            Represents BankingValidationHelper.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.IBankingValidationHelper">
+            <summary>
+            Defines the BankingValidationHelper interface.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.IBankingValidationHelper.IbanBanknrValid(System.String)">
+            <summary>
+            Validate an International Bank Account Number (IBAN)
+            </summary>
+            <param name="iban">International Bank Account Number (IBAN) to validate</param>
+            <returns>[true|false] whether IBAN is valid or not</returns>
+            <see>http://en.wikipedia.org/wiki/International_Bank_Account_Number</see>
+            <see>http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</see>
+            <see>http://en.wikipedia.org/wiki/ISO_7064</see>
+            <example>See http://www.tbg5-finance.org/?ibandocs.shtml</example>               
+        </member>
+        <member name="M:Merchello.Web.Validation.BankingValidationHelper.IbanBanknrValid(System.String)">
+            <summary>
+            Validate an International Bank Account Number (IBAN)
+            </summary>
+            <param name="iban">International Bank Account Number (IBAN) to validate</param>
+            <returns>[true|false] whether IBAN is valid or not</returns>
+            <see>http://en.wikipedia.org/wiki/International_Bank_Account_Number</see>
+            <see>http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</see>
+            <see>http://en.wikipedia.org/wiki/ISO_7064</see>
+            <example>See http://www.tbg5-finance.org/?ibandocs.shtml</example> 
+        </member>
+        <member name="T:Merchello.Web.Validation.IValidationHelper">
+            <summary>
+            Defines a ValidationHelper.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.IValidationHelper.Banking">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.ValidationHelper">
+            <summary>
+            Represents a ValidationHelper.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ValidationHelper._banking">
+            <summary>
+            The <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.ValidationHelper.Banking">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Visitors.ILineItemDisplayVisitor">
             <summary>
             Defines a LineItemDisplayVisitor.
@@ -9692,7 +9903,7 @@
         </member>
         <member name="M:Merchello.Web.CustomerExtensions.Backoffice(Merchello.Core.Models.ICustomerBase)">
             <summary>
-            Backoffices the specified customer.
+            Backoffice's the specified customer.
             </summary>
             <param name="customer">The customer.</param>
             <returns></returns>
@@ -9890,6 +10101,11 @@
             The <see cref="T:Merchello.Web.Search.ICachedQueryProvider"/>
             </summary>
         </member>
+        <member name="F:Merchello.Web.MerchelloHelper._validationHelper">
+            <summary>
+            The <see cref="T:Merchello.Web.Validation.IValidationHelper"/>.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.MerchelloHelper.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.MerchelloHelper"/> class.
@@ -10064,6 +10280,11 @@
         <member name="P:Merchello.Web.MerchelloHelper.Query">
             <summary>
             Gets the <see cref="T:Merchello.Web.Search.ICachedQueryProvider"/>
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.MerchelloHelper.Validation">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Validation.IValidationHelper"/>.
             </summary>
         </member>
         <member name="T:Merchello.Web.CustomerContext">

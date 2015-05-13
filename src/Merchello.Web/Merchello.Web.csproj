@@ -144,6 +144,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -276,8 +277,11 @@
     <Compile Include="Models\SaleHistory\DailyAuditLogDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
+    <Compile Include="Models\Ui\UrlActionParams.cs" />
+    <Compile Include="Mvc\IPaymentMethodUiController.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
+    <Compile Include="Mvc\PaymentMethodUiController.cs" />
     <Compile Include="Pluggable\CustomerContextBase.cs" />
     <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Pluggable\PluggableObjectHelper.cs" />
@@ -328,6 +332,12 @@
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
+    <Compile Include="Ui\IPaymentMethodUiControllerResolver.cs" />
+    <Compile Include="Ui\PaymentMethodUiControllerResolver.cs" />
+    <Compile Include="Validation\BankingValidationHelper.cs" />
+    <Compile Include="Validation\IBankingValidationHelper.cs" />
+    <Compile Include="Validation\IValidatationHelper.cs" />
+    <Compile Include="Validation\ValidationHelper.cs" />
     <Compile Include="Visitors\ILineItemDisplayVisitor.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
     <Compile Include="WebMigrationManager.cs" />

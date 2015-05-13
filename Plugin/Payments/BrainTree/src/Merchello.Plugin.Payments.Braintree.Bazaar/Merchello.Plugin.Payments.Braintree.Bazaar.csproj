@@ -83,13 +83,16 @@
       <HintPath>..\..\dependencies\Merchello.Bazaar.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.3.4\lib\net40\Merchello.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.3.4\lib\net40\Merchello.Examine.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Merchello.Web">
-      <HintPath>..\packages\Merchello.Core.1.8.2.31\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.3.4\lib\net40\Merchello.Web.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
       <HintPath>..\packages\UmbracoCms.Core.7.2.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
