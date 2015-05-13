@@ -36,12 +36,37 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        /// <remarks>
-        /// TODO look at if this can be introduced to the MembershipHelper (Umbraco)
-        /// </remarks>
         internal static string CustomerIsLoggedIn(Guid entityKey)
         {
             return string.Format("merchello.customer.isloggedin.{0}", entityKey);
+        }
+
+        /// <summary>
+        /// CacheKey for request cache only.  Used to store the membership username / login name
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string CustomerMembershipUserName(Guid entityKey)
+        {
+            return string.Format("merchello.customer.membershipusername.{0}", entityKey);
+        }
+
+        /// <summary>
+        /// CacheKey for request cache only.  Used to store the membership provider key or id
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string CustomerMembershipProviderKey(Guid entityKey)
+        {
+            return string.Format("merchello.customer.membershipproviderkey.{0}", entityKey);
         }
 
         /// <summary>

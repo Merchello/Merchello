@@ -17,8 +17,6 @@
     [RequireSsl("Bazaar:RequireSsl")]
     public class BazaarReceiptController : RenderControllerBase
     {
-
-
         /// <summary>
         /// The index <see cref="ActionResult"/>.
         /// </summary>

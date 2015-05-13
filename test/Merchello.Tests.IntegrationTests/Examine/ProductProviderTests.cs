@@ -31,7 +31,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         [Test]
         public void Can_Rebuild_Product_Index()
         {
-            //// Arrange
+            // Arrange
             PreTestDataWorker.DeleteAllProducts();
             var products = MockProductDataMaker.MockProductCollectionForInserting(ProductCount);
             _productService.Save(products);
@@ -53,6 +53,29 @@ namespace Merchello.Tests.IntegrationTests.Examine
             Assert.AreEqual(products.Count(), results.Count());
 
         }
+
+        // This is troubleshooting a community member issue - and data is specific to their database
+        // DO NOT USE
+        //public void Can_Add_Reindex_An_Existing_Product()
+        //{
+        //    var product = PreTestDataWorker.ProductService.GetByKey(new Guid("2f6d404b-fc0d-4305-a97c-9a5e1efe13a8"));
+        //    Assert.NotNull(product);
+
+        //    var provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
+
+        //    provider.AddProductToIndex(product);
+
+        //    var searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"];
+
+        //    //// Assert
+        //    var criteria = searcher.CreateSearchCriteria("productvariant", BooleanOperation.And);
+        //    criteria.Field("productKey", product.Key.ToString()).And().Field("master", "true");
+
+        //    ISearchResults results = searcher.Search(criteria);
+        //    Assert.IsTrue(results.Count() == 1);
+        //    var result = results.First();
+
+        //}
 
         /// <summary>
         /// Test verifies that a new product can be added to an existing index

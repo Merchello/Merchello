@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Web
 {
+    using Merchello.Web.Mvc;
     using Merchello.Web.Reporting;
+    using Merchello.Web.Ui;
 
     using Umbraco.Core;
 
@@ -58,6 +60,9 @@
         protected override void InitializeResolvers()
         {
             base.InitializeResolvers();
+
+            if (!PaymentMethodUiControllerResolver.HasCurrent)
+            PaymentMethodUiControllerResolver.Current = new PaymentMethodUiControllerResolver(PluginManager.Current.ResolveCheckoutOperationControllers());
 
             if (!ReportApiControllerResolver.HasCurrent)
             ReportApiControllerResolver.Current = new ReportApiControllerResolver(PluginManager.Current.ResolveReportApiControllers());

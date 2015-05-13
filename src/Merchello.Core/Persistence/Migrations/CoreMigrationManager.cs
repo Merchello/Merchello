@@ -5,8 +5,10 @@
 
     using Merchello.Core.Configuration;
     using Merchello.Core.Events;
+    using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
+    using Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneEightTwo;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -109,10 +111,7 @@
                     var upgraded = runner.Execute(database);
                     if (upgraded)
                     {
-                        var migrationSetting =
-                            schemaResult.StoreSettings.FirstOrDefault(
-                                x => x.Key == Constants.StoreSettingKeys.MigrationKey);
-                        var migrationKey = migrationSetting != null ? migrationSetting.Value : Guid.NewGuid().ToString();
+                        var migrationKey = this.EnsureMigrationKey(schemaResult);
 
                         var record = new MigrationRecord()
                                          {
@@ -139,11 +138,8 @@
             }
             else
             {
-                    // this is a new install
-                    var migrationSetting =
-                            schemaResult.StoreSettings.FirstOrDefault(
-                                x => x.Key == Constants.StoreSettingKeys.MigrationKey);
-                    var migrationKey = migrationSetting != null ? migrationSetting.Value : Guid.NewGuid().ToString();
+                    // this is a new install                  
+                    var migrationKey = this.EnsureMigrationKey(schemaResult);
 
                     var record = new MigrationRecord()
                                      {
@@ -160,6 +156,60 @@
             MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();
 
             return true;
+        }
+
+        /// <summary>
+        /// The ensure migration key.
+        /// </summary>
+        /// <param name="schemaResult">
+        /// The schema result.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private string EnsureMigrationKey(MerchelloDatabaseSchemaResult schemaResult)
+        {
+            var migrationSetting =
+                            schemaResult.StoreSettings.FirstOrDefault(
+                                x => x.Key == Constants.StoreSettingKeys.MigrationKey);
+
+            var nullSettingKey = Guid.NewGuid().ToString();
+            if (migrationSetting == null)
+            {
+                this.InsertMigrationKey(nullSettingKey);
+            }
+
+            var migrationKey = migrationSetting != null ? 
+                string.IsNullOrEmpty(migrationSetting.Value) ? nullSettingKey : migrationSetting.Value : 
+                nullSettingKey;
+
+            Guid validGuid;
+            if (Guid.TryParse(migrationKey, out validGuid))            
+            if (validGuid.Equals(Guid.Empty))
+            {
+                // reset the key
+                nullSettingKey = Guid.NewGuid().ToString();
+                var dto = migrationSetting;
+                if (dto != null)
+                {
+                    dto.Value = nullSettingKey;
+                    _database.Update(dto);
+                    migrationKey = nullSettingKey;
+                }
+            }
+                         
+            return migrationKey;
+        }
+
+        /// <summary>
+        /// The insert migration key.
+        /// </summary>
+        /// <param name="migrationKey">
+        /// The migration key.
+        /// </param>
+        private void InsertMigrationKey(string migrationKey)
+        {
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.MigrationKey, Name = "migration", Value = migrationKey, TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         /// <summary>

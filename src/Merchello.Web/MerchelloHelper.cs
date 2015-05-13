@@ -3,9 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using global::Examine.SearchCriteria;
     using Core;
     using Core.Services;
+
+    using Merchello.Web.Validation;
+
     using Models.ContentEditing;
     using Search;
     using Umbraco.Core;
@@ -19,6 +23,11 @@
         /// The <see cref="ICachedQueryProvider"/>
         /// </summary>
         private readonly Lazy<ICachedQueryProvider> _queryProvider;
+
+        /// <summary>
+        /// The <see cref="IValidationHelper"/>.
+        /// </summary>
+        private readonly Lazy<IValidationHelper> _validationHelper; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
@@ -39,6 +48,7 @@
             Mandate.ParameterNotNull(serviceContext, "ServiceContext cannot be null");
 
             _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(serviceContext));
+            _validationHelper = new Lazy<IValidationHelper>(() => new ValidationHelper());
         }
 
         /// <summary>
@@ -47,6 +57,17 @@
         public ICachedQueryProvider Query
         {
             get { return _queryProvider.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IValidationHelper"/>.
+        /// </summary>
+        public IValidationHelper Validation
+        {
+            get
+            {
+                return _validationHelper.Value;
+            }
         }
         
         #region Product
@@ -81,16 +102,6 @@
             return Query.Product.GetByKey(key);
         }
 
-        ///// <summary>
-        ///// Returns a collection of all <see cref="ProductDisplay"/>
-        ///// </summary>
-        ///// <returns>
-        ///// A collection of all <see cref="ProductDisplay"/> found in the index.
-        ///// </returns>
-        //public IEnumerable<ProductDisplay> AllProducts()
-        //{
-        //    return ProductQuery.GetAllProducts();
-        //}
 
         /// <summary>
         /// Retrieves a <see cref="ProductVariantDisplay"/> from the Merchello Product index.
