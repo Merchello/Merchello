@@ -4,6 +4,7 @@
     using System.Xml;
 
     using umbraco.cms.businesslogic.packager.standardPackageActions;
+    using umbraco.interfaces;
 
     /// <summary>
     /// Adds a key to the web.config app settings
@@ -14,7 +15,7 @@
     /// 
     /// Original contribution from Paul Sterling
     /// </remarks>
-    public class AddPaymentFormsAppConfigKey
+    public class AddPaymentFormsAppConfigKey : IPackageAction
     {
         #region IPackageAction Members
 
