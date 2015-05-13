@@ -5,7 +5,7 @@
 @using Umbraco.Web
 
 <!-- Cash Payment Method -->
-@using (Html.BeginUmbracoForm<SalePreparationOperationsController>("ConfirmSale", null, new { @id = "ConfirmSale" }))
+@using (Html.BeginUmbracoForm<CashPaymentMethodController>("ConfirmSale", null, new { @id = "ConfirmSale" }))
 {
     @Html.HiddenFor(x => x.ShipMethodKey, new { @class = "selected-shipmethod-key" })
     @Html.HiddenFor(x => x.PaymentMethodKey, new { @class = "selected-paymentmethod-key" })

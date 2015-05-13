@@ -4,7 +4,11 @@
 
     using Merchello.Bazaar.Models;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Models;
+    using Merchello.Core.Sales;
 
+    using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -26,6 +30,23 @@
         public override ActionResult RenderForm(CheckoutConfirmationForm model)
         {
             return this.PartialView(PathHelper.GetThemePartialViewPath(model.ThemeName, "CashPaymentMethodForm"), model);
+        }
+
+        /// <summary>
+        /// Responsible for actually processing the payment with the PaymentProvider
+        /// </summary>
+        /// <param name="preparation">
+        /// The preparation.
+        /// </param>
+        /// <param name="paymentMethod">
+        /// The payment method.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
+        protected override IPaymentResult PerformProcessPayment(SalePreparationBase preparation, IPaymentMethod paymentMethod)
+        {
+            return preparation.AuthorizePayment(paymentMethod.Key);
         }
     }
 }
