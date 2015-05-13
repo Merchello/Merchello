@@ -54,6 +54,26 @@ namespace Merchello.Tests.Braintree.Integration.Api
             Assert.IsTrue(result.IsSuccess());
         }
 
+        /// <summary>
+        /// Verifies that a transaction request can be created. Does not touch 
+        /// Umbraco/Merchello database. 
+        /// </summary>
+        [Test]
+        public void Can_Find_A_Transaction()
+        {
+            //// Arrange
+            var service = new BraintreeTransactionApiService(BraintreeProviderSettings);
+
+            // set to sandbox transaction id
+            string transactionId = "86xqrd";
+
+            //// Act
+            var attempt = service.Find(transactionId);
+
+            //// Assert
+            Assert.IsTrue(attempt.Success);
+        }
+
         [Test]
         public void Can_Create_A_Customer()
         {
