@@ -1703,7 +1703,7 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              */
             function providerConfigDialogConfirm(data) {
                 $scope.preValuesLoaded = false;
-                var promise = gatewayProvideerResource.saveGatewayProvider(data.provider);
+                var promise = gatewayProviderResource.saveGatewayProvider(data.provider);
                 promise.then(function (provider) {
                         notificationsService.success("Gateway Provider Saved", "");
                         init();
