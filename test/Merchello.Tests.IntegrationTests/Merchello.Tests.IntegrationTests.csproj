@@ -79,9 +79,9 @@
       <HintPath>..\..\src\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Examine, Version=0.1.61.2941, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Examine, Version=0.1.62.2941, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\src\packages\Examine.0.1.61.2941\lib\Examine.dll</HintPath>
+      <HintPath>..\..\src\packages\Examine.0.1.62.2941\lib\Examine.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\src\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -258,6 +258,7 @@
     <Compile Include="Notifications\NotificationObservationTests.cs" />
     <Compile Include="Notifications\PatternFormatterTests.cs" />
     <Compile Include="Notifications\SmtpNotificationProviderTests.cs" />
+    <Compile Include="ObjectResolution\PaymentMethodUiControllerResolution.cs" />
     <Compile Include="ObjectResolution\GatewayProviderResolution.cs" />
     <Compile Include="ObjectResolution\MockInvoiceObservableTrigger.cs" />
     <Compile Include="ObjectResolution\MockJohnObservableTrigger.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="PartialView\RazorEngineTests.cs" />
     <Compile Include="Payments\PaymentProcessingTests.cs" />
     <Compile Include="Reports\ReportResolutionTests.cs" />
+    <Compile Include="Scratch.cs" />
     <Compile Include="Services\Product\ProductAllinTests.cs" />
     <Compile Include="Services\Shipping\ShippingServiceTests.cs" />
     <Compile Include="Services\Warehouse\WarehhouseServiceTests.cs" />

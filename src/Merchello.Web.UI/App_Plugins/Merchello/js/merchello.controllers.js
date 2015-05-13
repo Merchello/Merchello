@@ -5748,10 +5748,12 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.visible = {};
             $scope.visible.bulkActionDropdown = false;
             $scope.currentFilters = [];
+            $scope.dateFilterOpen = false;
 
             // exposed methods
             $scope.getCurrencySymbol = getCurrencySymbol;
             $scope.resetFilters = resetFilters;
+            $scope.toggleDateFilterOpen = toggleDateFilterOpen;
 
             // for testing
             $scope.itemCount = 0;
@@ -5774,7 +5776,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.changePage = function (page) {
                 $scope.preValuesLoaded = false;
                 $scope.currentPage = page;
-                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
+                var query = $scope.dateFilterOpen ? buildQuery($scope.filterText, $scope.filterStartDate, $scope.filterEndDate) : buildQuery($scope.filterText);
                 loadInvoices(query);
             };
 
@@ -5800,7 +5802,8 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     $scope.sortProperty = propertyToSort;
                     $scope.sortOrder = "asc";
                 }
-                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
+                $scope.currentPage = 0;
+                var query = $scope.dateFilterOpen ? buildQuery($scope.filterText, $scope.filterStartDate, $scope.filterEndDate) : buildQuery($scope.filterText);
                 loadInvoices(query);
             };
 
@@ -5816,7 +5819,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 $scope.preValuesLoaded = false;
                 $scope.limitAmount = newVal;
                 $scope.currentPage = 0;
-                var query = buildQuery($scope.filterStartDate, $scope.filterEndDate, $scope.filterText);
+                var query = $scope.dateFilterOpen ? buildQuery($scope.filterText, $scope.filterStartDate, $scope.filterEndDate) : buildQuery($scope.filterText);
                 loadInvoices(query);
             };
 
@@ -5890,6 +5893,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 $scope.tabs = merchelloTabsFactory.createSalesListTabs();
                 $scope.tabs.setActive('saleslist');
                 $scope.loaded = true;
+                $scope.dateFilterOpen = false;
             }
 
             function loadInvoices(query) {
@@ -5922,11 +5926,24 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              */
             function resetFilters() {
                 var query = buildQuery();
+                toggleDateFilterOpen();
                 $scope.currentFilters = [];
                 $scope.filterText = '';
                 setDefaultDates(new Date());
                 loadInvoices(query);
                 $scope.filterAction = false;
+            };
+
+            /**
+             * @ngdoc method
+             * @name resetFilters
+             * @function
+             *
+             * @description
+             * Fired when the open date filter button is clicked.
+             */
+            function toggleDateFilterOpen() {
+                $scope.dateFilterOpen = !$scope.dateFilterOpen;
             };
 
             /**
@@ -5978,7 +5995,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     filterText = '';
                 }
                 // back to page 0 if filterText or startDate change
-                if (filterText !== $scope.filterText || startDate !== $scope.filterStartDate) {
+                if (filterText !== $scope.filterText || (startDate !== $scope.filterStartDate && $scope.dateFilterOpen)) {
                     page = 0;
                     $scope.currentPage = 0;
                 }

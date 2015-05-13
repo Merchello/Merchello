@@ -98,6 +98,18 @@
         }
 
         /// <summary>
+        /// Gets the pluggable collection.
+        /// </summary>
+        [ConfigurationProperty("pluggable", IsRequired = true), ConfigurationCollection(typeof(PluggableCollection), AddItemName = "object")]
+        public PluggableCollection Pluggable
+        {
+            get
+            {
+                return (PluggableCollection)this["pluggable"];
+            }
+        }
+
+        /// <summary>
         /// Gets the strategies collection
         /// </summary>
         [ConfigurationProperty("strategies", IsRequired = true), ConfigurationCollection(typeof(StrategiesCollection), AddItemName = "strategy")]

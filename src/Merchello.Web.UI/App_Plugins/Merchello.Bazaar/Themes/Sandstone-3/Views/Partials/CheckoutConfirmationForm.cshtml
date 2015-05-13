@@ -1,5 +1,6 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationForm>
 @using System.Web.Mvc.Html
+@using System.Web.Routing
 @using Merchello.Bazaar.Controllers
 @using Merchello.Bazaar.Models
 @using Merchello.Bazaar
@@ -34,22 +35,34 @@
                 </div>
             </div>
         </form>
-        
-        <!-- Cash Payment Method -->
-        <div id="CashPaymentMethod" class="payment-method-form">
-            @using (Html.BeginUmbracoForm<SalePreparationOperationsController>("ConfirmSale", null, new { @id = "ConfirmSale" }))
+       @*
+    Bazaar 1.8.3
+    Added payment form resolution to make it easier to integrate forms for various payment provider.
+    Controllers must inherit from BazaarPaymentMethodFormControllerBase.
+    *@
+    @if (Model.ResolvePaymentForms)
+    {
+        foreach (var frm in Model.PaymentMethodUiInfo)
+        {
+            var rvd = new RouteValueDictionary { { "model", Model } };
+            if (frm.UrlActionParams.RouteParams.Any())
             {
-                @Html.HiddenFor(x => x.ShipMethodKey, new { @class = "selected-shipmethod-key" })
-                @Html.HiddenFor(x => x.PaymentMethodKey, new { @class = "selected-paymentmethod-key" })
-                @Html.HiddenFor(x => x.CustomerToken, new { @id = "customer-token" })
-                @Html.HiddenFor(x => x.ReceiptPageId)
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Confirm Sale</button>
-                </div>
+                foreach (var val in frm.UrlActionParams.RouteParams)
+                {
+                    rvd.Add(val.Item1, val.Item2);
+                }
             }
+            <div id="@frm.Alias" class="payment-method-form">
+                @Html.Action(frm.UrlActionParams.Method, frm.UrlActionParams.Controller, rvd)
+            </div>
+        }
+    }
+    else
+    {
+        <div id="CashPaymentMethod" class="payment-method-form">
+            @Html.Action("RenderForm", "CashPaymentMethod", new { area = "Bazaar", model = Model })
         </div>
-        
-        <!-- Merchello Introduction Course - Braintree Exercise -->
+    }
 
     </div>
         

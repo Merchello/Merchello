@@ -63,5 +63,10 @@
         /// Gets or sets the receipt page id.
         /// </summary>
         public int ReceiptPageId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to resolve payment forms.
+        /// </summary>
+        public bool ResolvePaymentForms { get; set; }
     }
 }

@@ -65,9 +65,9 @@
       <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Examine, Version=0.1.61.2941, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Examine, Version=0.1.62.2941, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Examine.0.1.61.2941\lib\Examine.dll</HintPath>
+      <HintPath>..\packages\Examine.0.1.62.2941\lib\Examine.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -144,6 +144,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -222,6 +223,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Models\Ui\UrlActionParams.cs" />
+    <Compile Include="Mvc\IPaymentMethodUiController.cs" />
+    <Compile Include="Mvc\PaymentMethodUiController.cs" />
+    <Compile Include="Pluggable\CustomerContextBase.cs" />
+    <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Models\ContentEditing\CurrencyDisplay.cs" />
     <Compile Include="Models\ContentEditing\GateProviderSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceShippingUpdateData.cs" />
@@ -266,6 +272,10 @@
     <Compile Include="Models\SaleHistory\DailyAuditLogDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
+    <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
+    <Compile Include="Mvc\MerchelloSurfaceController.cs" />
+    <Compile Include="Ui\PaymentMethodUiControllerResolver.cs" />
+    <Compile Include="Pluggable\PluggableObjectHelper.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
@@ -290,7 +300,7 @@
     <Compile Include="Models\ContentEditing\BackofficeOrderSummary.cs" />
     <Compile Include="Models\ContentEditing\CustomerAddressDisplay.cs" />
     <Compile Include="Models\Querying\QueryResultDisplay.cs" />
-    <Compile Include="Models\Customer\CustomerContextDataExtentions.cs" />
+    <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\Customer\CustomerContextData.cs" />
     <Compile Include="Editors\CustomerApiController.cs" />
     <Compile Include="Editors\FixedRateShippingApiController.cs" />
@@ -314,6 +324,11 @@
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
     <Compile Include="ProductContentEditing.cs" />
+    <Compile Include="Ui\IPaymentMethodUiControllerResolver.cs" />
+    <Compile Include="Validation\BankingValidationHelper.cs" />
+    <Compile Include="Validation\IBankingValidationHelper.cs" />
+    <Compile Include="Validation\IValidatationHelper.cs" />
+    <Compile Include="Validation\ValidationHelper.cs" />
     <Compile Include="Visitors\ILineItemDisplayVisitor.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
     <Compile Include="WebMigrationManager.cs" />
@@ -327,7 +342,7 @@
     <Compile Include="Workflow\IBackofficeSalePreparation.cs" />
     <Compile Include="Workflow\IBasketConversionBase.cs" />
     <Compile Include="Workflow\IWishList.cs" />
-    <Compile Include="Workflow\PaymentProcessor.cs" />
+    <Compile Include="Workflow\Payment\PaymentProcessor.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingGatewayApiController.cs" />
     <Compile Include="Editors\ShipmentApiController.cs" />

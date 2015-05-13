@@ -12,6 +12,8 @@
     using global::Examine.LuceneEngine.Providers;
     using Lucene.Net.Analysis;
 
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// The base merchello indexer.
     /// </summary>
@@ -160,7 +162,14 @@
         {           
             if (!SupportedTypes.Contains(type))
                 return;
-            base.ReIndexNode(node, type);            
+            //try
+            //{
+                base.ReIndexNode(node, type);   
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogHelper.Error<BaseMerchelloIndexer>("Failed to index node of type: " + type, ex);
+            //}         
         }
 
 

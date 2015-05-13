@@ -175,6 +175,17 @@ namespace Merchello.Tests.IntegrationTests.Examine
         }
 
         //[Test]
+        //public void Can_Get_A_ProductFrom_The_IndexByKey()
+        //{
+        //    var key = new Guid("2f6d404b-fc0d-4305-a97c-9a5e1efe13a8");
+        //    var merchello = new MerchelloHelper(MerchelloContext.Services);
+
+        //    var product = merchello.Query.Product.GetByKey(key);
+
+        //    Assert.NotNull(product);
+        //}
+
+        //[Test]
         //public void Can_GetGetIguanas_From_Index()
         //{
         //    //// Arrange

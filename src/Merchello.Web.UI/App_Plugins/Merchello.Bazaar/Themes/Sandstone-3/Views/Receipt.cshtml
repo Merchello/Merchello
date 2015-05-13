@@ -35,9 +35,9 @@ else
                             {
                                 <tr>
                                     <td>@item.Name</td>
-                                    <td>@item.Price.ToString("C")</td>
+                                    <td>@ModelExtensions.FormatPrice(item.Price, Model.Currency.Symbol)</td>
                                     <td class="text-center">@item.Quantity</td>
-                                    <td class="text-right">@ModelExtensions.FormatPrice(item.Price, Model.Currency.Symbol)</td>
+                                    <td class="text-right">@ModelExtensions.FormatPrice(item.TotalPrice, Model.Currency.Symbol)</td>
                                 </tr>
                             }
                             <tr>
