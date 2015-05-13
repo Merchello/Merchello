@@ -106,69 +106,69 @@
             return RedirectToUmbracoPage(model.ConfirmSalePageId);
         }
 
-        /// <summary>
-        /// The confirm sale.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        [HttpPost]
-        public ActionResult ConfirmSale(CheckoutConfirmationForm model)
-        {
-            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
+        ///// <summary>
+        ///// The confirm sale.
+        ///// </summary>
+        ///// <param name="model">
+        ///// The model.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="ActionResult"/>.
+        ///// </returns>
+        //[HttpPost]
+        //public ActionResult ConfirmSale(CheckoutConfirmationForm model)
+        //{
+        //    if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            var preparation = Basket.SalePreparation();
-            preparation.RaiseCustomerEvents = false;
+        //    var preparation = Basket.SalePreparation();
+        //    preparation.RaiseCustomerEvents = false;
            
 
-            preparation.ClearShipmentRateQuotes();
-            var shippingAddress = Basket.SalePreparation().GetShipToAddress();
+        //    preparation.ClearShipmentRateQuotes();
+        //    var shippingAddress = Basket.SalePreparation().GetShipToAddress();
 
-            // Get the shipment again
-            var shipment = Basket.PackageBasket(shippingAddress).FirstOrDefault();
+        //    // Get the shipment again
+        //    var shipment = Basket.PackageBasket(shippingAddress).FirstOrDefault();
 
-            // get the quote using the "approved shipping method"
-            var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey);
+        //    // get the quote using the "approved shipping method"
+        //    var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey);
 
-            // save the quote
-            Basket.SalePreparation().SaveShipmentRateQuote(quote);
+        //    // save the quote
+        //    Basket.SalePreparation().SaveShipmentRateQuote(quote);
 
-            var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
-            preparation.SavePaymentMethod(paymentMethod);
+        //    var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
+        //    preparation.SavePaymentMethod(paymentMethod);
 
-            // AuthorizePayment will save the invoice with an Invoice Number.
-            var attempt = preparation.AuthorizePayment(paymentMethod.Key);
+        //    // AuthorizePayment will save the invoice with an Invoice Number.
+        //    var attempt = preparation.AuthorizePayment(paymentMethod.Key);
 
-            if (!attempt.Payment.Success)
-            {
-                return this.CurrentUmbracoPage();   
-            }
+        //    if (!attempt.Payment.Success)
+        //    {
+        //        return this.CurrentUmbracoPage();   
+        //    }
 
-            // Trigger the order confirmation notification
-            var billingAddress = attempt.Invoice.GetBillingAddress();
-            string contactEmail;
-            if (string.IsNullOrEmpty(billingAddress.Email) && !CurrentCustomer.IsAnonymous)
-            {
-                contactEmail = ((ICustomer)CurrentCustomer).Email;
-            }
-            else
-            {
-                contactEmail = billingAddress.Email;
-            }
+        //    // Trigger the order confirmation notification
+        //    var billingAddress = attempt.Invoice.GetBillingAddress();
+        //    string contactEmail;
+        //    if (string.IsNullOrEmpty(billingAddress.Email) && !CurrentCustomer.IsAnonymous)
+        //    {
+        //        contactEmail = ((ICustomer)CurrentCustomer).Email;
+        //    }
+        //    else
+        //    {
+        //        contactEmail = billingAddress.Email;
+        //    }
 
-            if (!string.IsNullOrEmpty(contactEmail))
-            {
-                Notification.Trigger("OrderConfirmation", attempt, new[] { contactEmail });
-            }
+        //    if (!string.IsNullOrEmpty(contactEmail))
+        //    {
+        //        Notification.Trigger("OrderConfirmation", attempt, new[] { contactEmail });
+        //    }
             
-            // store the invoice key in the CustomerContext for use on the receipt page.
-            CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
+        //    // store the invoice key in the CustomerContext for use on the receipt page.
+        //    CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
 
-            return RedirectToUmbracoPage(model.ReceiptPageId);
+        //    return RedirectToUmbracoPage(model.ReceiptPageId);
             
-        }
+        //}
     }
 }
