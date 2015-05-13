@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Configuration;
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Models;
@@ -109,21 +110,21 @@
                 };
 
             viewModel.CustomerAddressModel = new CustomerAddressModel()
-                                                 {
-                                                     Theme = viewModel.Theme,
-                                                     CustomerKey = viewModel.CurrentCustomer.Key,
-                                                     AccountPageId = viewModel.Id,
-                                                     ShipCountries = shipCountries.Select(x => new SelectListItem()
-                                                                                                   {
-                                                                                                       Value = x.CountryCode,
-                                                                                                       Text = x.Name
-                                                                                                   }),
-                                                     AllCountries = allCountries.Select(x => new SelectListItem()
-                                                                                                 {
-                                                                                                    Value  = x.CountryCode,
-                                                                                                    Text = x.Name
-                                                                                                 })
-                                                 };
+                {
+                    Theme = viewModel.Theme,
+                    CustomerKey = viewModel.CurrentCustomer.Key,
+                    AccountPageId = viewModel.Id,
+                    ShipCountries = shipCountries.Select(x => new SelectListItem()
+                                                                {
+                                                                    Value = x.CountryCode,
+                                                                    Text = x.Name
+                                                                }),
+                    AllCountries = allCountries.Select(x => new SelectListItem()
+                                                                {
+                                                                Value  = x.CountryCode,
+                                                                Text = x.Name
+                                                                })
+                };
 
             return viewModel;
         }
@@ -284,13 +285,27 @@
         {
             var viewModel = this.Build<CheckoutConfirmationModel>(model);
 
+            // Introduced resolvable forms in Bazaar 1.8.3
+            try
+            {
+                viewModel.ResolvePaymentForms = bool.Parse(WebConfigurationManager.AppSettings["Bazaar:ResolvePaymentForms"]);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<ViewModelFactory>("Failed to find AppSetting 'Bazaar:ResolvePaymentForms", ex);
+                viewModel.ResolvePaymentForms = false;
+            }
+
+            var paymentInfoArray = paymentMethodUiInfos as PaymentMethodUiInfo[] ?? paymentMethodUiInfos.ToArray();
+            var paymentMethodsArray = paymentMethods as IPaymentGatewayMethod[] ?? paymentMethods.ToArray();
+
             var isAnonymous = basket.Customer.IsAnonymous;
             var allowedMethods = new List<IPaymentGatewayMethod>();
 
             // Payment methods, such as vaulted/stored credit cards may not be available to anonymous customers
             if (isAnonymous)
             {
-                foreach (var method in paymentMethods.ToArray())
+                foreach (var method in paymentMethodsArray.ToArray())
                 {
                     var addMethod = true;
 
@@ -301,8 +316,10 @@
             }
             else
             {
-                allowedMethods.AddRange(paymentMethods);
+                allowedMethods.AddRange(paymentMethodsArray);
             }
+
+
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
@@ -314,13 +331,18 @@
                                                                         Value = x.ShipMethod.Key.ToString(),
                                                                         Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency.Symbol))
                                                                     }),
-                PaymentMethods = allowedMethods.Select(x => new SelectListItem()
-                                                                {
-                                                                    Value = x.PaymentMethod.Key.ToString(),
-                                                                    Text = x.PaymentMethod.Name
-                                                                }),
-                PaymentMethodUiInfo = paymentMethodUiInfos,
-                ReceiptPageId = viewModel.ReceiptPage.Id
+                PaymentMethods = (viewModel.ResolvePaymentForms
+                     ? allowedMethods.Where(x => paymentInfoArray.Any(y => y.PaymentMethodKey == x.PaymentMethod.Key && y.UrlActionParams != null))
+                     : paymentMethodsArray)
+                     .Select(x => new SelectListItem() { Value = x.PaymentMethod.Key.ToString(), Text = x.PaymentMethod.Name }),
+
+                PaymentMethodUiInfo = viewModel.ResolvePaymentForms ? 
+                            paymentInfoArray.Where(x => x.UrlActionParams != null) :
+                            paymentInfoArray,
+
+                ReceiptPageId = viewModel.ReceiptPage.Id,
+
+                ResolvePaymentForms = viewModel.ResolvePaymentForms
             };
 
             return viewModel;

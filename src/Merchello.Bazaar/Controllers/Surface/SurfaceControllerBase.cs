@@ -2,7 +2,6 @@
 {
     using System;
 
-    using Merchello.Core;
     using Merchello.Web.Mvc;
 
     using Umbraco.Core.Models;
@@ -30,32 +29,6 @@
         /// Initializes a new instance of the <see cref="SurfaceControllerBase"/> class. 
         /// </summary>
         protected SurfaceControllerBase()
-            : this(UmbracoContext.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SurfaceControllerBase"/> class. 
-        /// </summary>
-        /// <param name="umbracoContext">
-        /// The <see cref="UmbracoContext"/>
-        /// </param>
-        protected SurfaceControllerBase(UmbracoContext umbracoContext)
-            : this(umbracoContext, MerchelloContext.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SurfaceControllerBase"/> class. 
-        /// </summary>
-        /// <param name="umbracoContext">
-        /// The <see cref="UmbracoContext"/>
-        /// </param>
-        /// <param name="merchelloContext">
-        /// The <see cref="IMerchelloContext"/>
-        /// </param>
-        protected SurfaceControllerBase(UmbracoContext umbracoContext, IMerchelloContext merchelloContext)
-            : base(merchelloContext, umbracoContext)
         {
             this.Initialize();
         }

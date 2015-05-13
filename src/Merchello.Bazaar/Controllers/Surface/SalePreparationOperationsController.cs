@@ -34,22 +34,22 @@
             var isValid = true;
             if (model.BillingAddressKey.Equals(Guid.Empty))
             {
-                isValid = this.ModelState.IsValidField("BillingName") && this.ModelState.IsValidField("BillingEmail")
-                          && this.ModelState.IsValidField("BillingAddress1") && this.ModelState.IsValidField("BillingLocality")
-                          && this.ModelState.IsValidField("BillingPostalCode");
+                isValid = ModelState.IsValidField("BillingName") && ModelState.IsValidField("BillingEmail")
+                          && ModelState.IsValidField("BillingAddress1") && ModelState.IsValidField("BillingLocality")
+                          && ModelState.IsValidField("BillingPostalCode");
             }
             if (!isValid) return this.CurrentUmbracoPage();
 
             if (model.ShippingAddressKey.Equals(Guid.Empty))
             {
-                isValid = this.ModelState.IsValidField("ShippingName") && this.ModelState.IsValidField("ShippingEmail")
-                          && this.ModelState.IsValidField("ShippingAddress1") && this.ModelState.IsValidField("ShippingLocality")
-                          && this.ModelState.IsValidField("ShippingPostalCode");
+                isValid = ModelState.IsValidField("ShippingName") && ModelState.IsValidField("ShippingEmail")
+                          && ModelState.IsValidField("ShippingAddress1") && ModelState.IsValidField("ShippingLocality")
+                          && ModelState.IsValidField("ShippingPostalCode");
             }
 
             if (!isValid) return this.CurrentUmbracoPage();
 
-            var preparation = this.Basket.SalePreparation();
+            var preparation = Basket.SalePreparation();
             preparation.RaiseCustomerEvents = false;
 
             var saveBilling = false;
@@ -58,7 +58,7 @@
             IAddress billingAddress;
             if (!model.BillingAddressKey.Equals(Guid.Empty))
             {
-                var billing = this.MerchelloServices.CustomerService.GetAddressByKey(model.BillingAddressKey);
+                var billing = MerchelloServices.CustomerService.GetAddressByKey(model.BillingAddressKey);
                 billingAddress = billing.AsAddress(billing.FullName);
             }
             else
@@ -70,7 +70,7 @@
             IAddress shippingAddress;
             if (!model.ShippingAddressKey.Equals(Guid.Empty))
             {
-                var shipping = this.MerchelloServices.CustomerService.GetAddressByKey(model.ShippingAddressKey);
+                var shipping = MerchelloServices.CustomerService.GetAddressByKey(model.ShippingAddressKey);
                 shippingAddress = shipping.AsAddress(shipping.FullName);
             }
             else
@@ -86,7 +86,7 @@
                 if (redirect) return this.CurrentUmbracoPage();
                 
                 //// at this point we know the customer is an ICustomer 
-                var customer = (ICustomer)this.CurrentCustomer;
+                var customer = (ICustomer)CurrentCustomer;
                 
                 if (saveBilling)
                 {
@@ -103,72 +103,72 @@
             preparation.SaveBillToAddress(billingAddress);
             preparation.SaveShipToAddress(shippingAddress);
             
-            return this.RedirectToUmbracoPage(model.ConfirmSalePageId);
+            return RedirectToUmbracoPage(model.ConfirmSalePageId);
         }
 
-        /// <summary>
-        /// The confirm sale.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        [HttpPost]
-        public ActionResult ConfirmSale(CheckoutConfirmationForm model)
-        {
-            if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
+        ///// <summary>
+        ///// The confirm sale.
+        ///// </summary>
+        ///// <param name="model">
+        ///// The model.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="ActionResult"/>.
+        ///// </returns>
+        //[HttpPost]
+        //public ActionResult ConfirmSale(CheckoutConfirmationForm model)
+        //{
+        //    if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            var preparation = this.Basket.SalePreparation();
-            preparation.RaiseCustomerEvents = false;
+        //    var preparation = Basket.SalePreparation();
+        //    preparation.RaiseCustomerEvents = false;
            
 
-            preparation.ClearShipmentRateQuotes();
-            var shippingAddress = this.Basket.SalePreparation().GetShipToAddress();
+        //    preparation.ClearShipmentRateQuotes();
+        //    var shippingAddress = Basket.SalePreparation().GetShipToAddress();
 
-            // Get the shipment again
-            var shipment = this.Basket.PackageBasket(shippingAddress).FirstOrDefault();
+        //    // Get the shipment again
+        //    var shipment = Basket.PackageBasket(shippingAddress).FirstOrDefault();
 
-            // get the quote using the "approved shipping method"
-            var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey);
+        //    // get the quote using the "approved shipping method"
+        //    var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey);
 
-            // save the quote
-            this.Basket.SalePreparation().SaveShipmentRateQuote(quote);
+        //    // save the quote
+        //    Basket.SalePreparation().SaveShipmentRateQuote(quote);
 
-            var paymentMethod = this.GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
-            preparation.SavePaymentMethod(paymentMethod);
+        //    var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
+        //    preparation.SavePaymentMethod(paymentMethod);
 
-            // AuthorizePayment will save the invoice with an Invoice Number.
-            var attempt = preparation.AuthorizePayment(paymentMethod.Key);
+        //    // AuthorizePayment will save the invoice with an Invoice Number.
+        //    var attempt = preparation.AuthorizePayment(paymentMethod.Key);
 
-            if (!attempt.Payment.Success)
-            {
-                return this.CurrentUmbracoPage();   
-            }
+        //    if (!attempt.Payment.Success)
+        //    {
+        //        return this.CurrentUmbracoPage();   
+        //    }
 
-            // Trigger the order confirmation notification
-            var billingAddress = attempt.Invoice.GetBillingAddress();
-            string contactEmail;
-            if (string.IsNullOrEmpty(billingAddress.Email) && !this.CurrentCustomer.IsAnonymous)
-            {
-                contactEmail = ((ICustomer)this.CurrentCustomer).Email;
-            }
-            else
-            {
-                contactEmail = billingAddress.Email;
-            }
+        //    // Trigger the order confirmation notification
+        //    var billingAddress = attempt.Invoice.GetBillingAddress();
+        //    string contactEmail;
+        //    if (string.IsNullOrEmpty(billingAddress.Email) && !CurrentCustomer.IsAnonymous)
+        //    {
+        //        contactEmail = ((ICustomer)CurrentCustomer).Email;
+        //    }
+        //    else
+        //    {
+        //        contactEmail = billingAddress.Email;
+        //    }
 
-            if (!string.IsNullOrEmpty(contactEmail))
-            {
-                Notification.Trigger("OrderConfirmation", attempt, new[] { contactEmail });
-            }
+        //    if (!string.IsNullOrEmpty(contactEmail))
+        //    {
+        //        Notification.Trigger("OrderConfirmation", attempt, new[] { contactEmail });
+        //    }
             
-            // store the invoice key in the CustomerContext for use on the receipt page.
-            this.CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
+        //    // store the invoice key in the CustomerContext for use on the receipt page.
+        //    CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
 
-            return this.RedirectToUmbracoPage(model.ReceiptPageId);
+        //    return RedirectToUmbracoPage(model.ReceiptPageId);
             
-        }
+        //}
     }
 }

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<umbPackage>
+	<info>
+		<package>
+			<name>Merchello.Braintree.Payment</name>
+			<version>2.1.1</version>
+            <license url="https://github.com/Merchello/Merchello/blob/master/License.md">MIT license</license>
+            <url>http://our.umbraco.org/projects/website-utilities/merchello</url>
+			<requirements>
+				<major>7</major>
+				<minor>2</minor>
+				<patch>2</patch>
+			</requirements>
+		</package>
+        <author>
+            <name>Rusty Swayne</name>
+            <website>http://www.merchello.com/</website>
+        </author>
+		<readme><![CDATA[Merchello.Plugin.Payments.BrainTree
+
+Plugin Payment Gateway Provider for Merchello.]]></readme>
+	</info>
+	<DocumentTypes />
+	<Templates />
+	<Stylesheets />
+	<Macros />
+	<DictionaryItems />
+	<Languages />
+	<DataTypes />
+	<Actions />
+	<control />
+	<files><file><guid>7d7ae5f8-e0a7-4198-87b4-42ad85f21ab4.name</guid><orgPath>/App_Plugins/Merchello.Braintree/.idea</orgPath><orgName>.name</orgName></file><file><guid>a5e8e692-3f3e-4d9a-a638-2ce56da4671b.xml</guid><orgPath>/App_Plugins/Merchello.Braintree/.idea</orgPath><orgName>encodings.xml</orgName></file><file><guid>73c55380-110e-4ab9-9ce0-452c3d3ca35c.iml</guid><orgPath>/App_Plugins/Merchello.Braintree/.idea</orgPath><orgName>Merchello.Braintree.iml</orgName></file><file><guid>e2aa26d8-6cd7-42cf-8a47-d863f9a7ae9f.xml</guid><orgPath>/App_Plugins/Merchello.Braintree/.idea</orgPath><orgName>misc.xml</orgName></file><file><guid>75721333-0c08-449c-b2b0-ac5e4cb748eb.xml</guid><orgPath>/App_Plugins/Merchello.Braintree/.idea</orgPath><orgName>modules.xml</orgName></file><file><guid>bf5a4907-74f4-40a0-a2c6-604c0a517956.xml</guid><orgPath>/App_Plugins/Merchello.Braintree/.idea/scopes</orgPath><orgName>scope_settings.xml</orgName></file><file><guid>a42917d6-810e-43a1-a30a-0de729f2664b.xml</guid><orgPath>/App_Plugins/Merchello.Braintree/.idea</orgPath><orgName>vcs.xml</orgName></file><file><guid>4918af90-15f9-4284-8078-e637edfdc82d.xml</guid><orgPath>/App_Plugins/Merchello.Braintree/.idea</orgPath><orgName>workspace.xml</orgName></file><file><guid>7957a4d7-26c3-4572-bef7-6008a4a18bc5.js</guid><orgPath>/App_Plugins/Merchello.Braintree/dialogs</orgPath><orgName>braintree.payment.dialog.controllers.js</orgName></file><file><guid>ea0cfdf6-fde9-4641-b0e1-d23a21305b6f.html</guid><orgPath>/App_Plugins/Merchello.Braintree/dialogs</orgPath><orgName>payment.standard.authorizecapturepayment.html</orgName></file><file><guid>e0013fe1-0e05-451f-9fb2-19f3701d9d42.html</guid><orgPath>/App_Plugins/Merchello.Braintree/dialogs</orgPath><orgName>payment.standard.authorizepayment.html</orgName></file><file><guid>8a079a8a-5f4a-493f-a67a-1a9b35377ee8.html</guid><orgPath>/App_Plugins/Merchello.Braintree/dialogs</orgPath><orgName>payment.standard.capturepayment.html</orgName></file><file><guid>cd0d2ebd-45da-4d96-8673-d3e0530bf2e7.html</guid><orgPath>/App_Plugins/Merchello.Braintree/dialogs</orgPath><orgName>payment.standard.refundpayment.html</orgName></file><file><guid>1cd83d7d-1c10-4300-bd5f-b36bd70f0e7a.html</guid><orgPath>/App_Plugins/Merchello.Braintree/dialogs</orgPath><orgName>payment.standard.voidpayment.html</orgName></file><file><guid>4c08b60c-9e78-4c01-872c-ce769981b9a2.js</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>merchello.plugins.braintree.models.js</orgName></file><file><guid>9dcd4805-bd3e-4d40-aa39-019a634032a1.js</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>merchello.plugins.braintree.module.js</orgName></file><file><guid>da544668-64f8-430b-8324-8f974d101b25.js</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>merchello.plugins.braintree.providersettings.controller.js</orgName></file><file><guid>9067d528-85fc-4447-8482-9a6bec24ce0e.html</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>merchello.plugins.braintree.providersettings.html</orgName></file><file><guid>89394d2d-67bb-4cb9-b26c-7fea7cbaf326.js</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>merchello.plugins.braintree.resources.js</orgName></file><file><guid>7e369069-b9d5-448b-8ed8-9c49b4bb1f2d.manifest</guid><orgPath>/App_Plugins/Merchello.Braintree</orgPath><orgName>package.manifest</orgName></file><file><guid>0c975324-d5a0-4397-a6be-55c104b0caf2.dll</guid><orgPath>/bin</orgPath><orgName>Braintree-2.40.0.dll</orgName></file><file><guid>b19e4db7-63dd-4c63-a2f2-376bbe3b60d2.dll</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll</orgName></file><file><guid>de63b006-1583-41e0-8b46-b81861f9e0e7.config</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.dll.config</orgName></file><file><guid>a427d8a9-17d5-4cff-b1bb-1cfb4b6a2d01.pdb</guid><orgPath>/bin</orgPath><orgName>Merchello.Plugin.Payments.Braintree.pdb</orgName></file></files>
+</umbPackage>

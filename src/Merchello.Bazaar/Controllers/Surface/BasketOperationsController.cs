@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Web.Workflow;
 
+    using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -126,7 +127,7 @@
         [HttpGet]
         public ActionResult RemoveItemFromBasket(Guid lineItemKey, int basketPageId)
         {
-            EnsureOwner(this.Basket.Items, lineItemKey);
+            EnsureOwner(Basket.Items, lineItemKey);
 
             // remove the item by it's pk.  
             this.Basket.RemoveItem(lineItemKey);
@@ -154,13 +155,13 @@
         [HttpGet]
         public ActionResult MoveItemToWishList(Guid lineItemKey, int basketPageId, int wishListPageId)
         {
-            if (this.CurrentCustomer.IsAnonymous) return this.RedirectToUmbracoPage(basketPageId);
+            if (CurrentCustomer.IsAnonymous) return this.RedirectToUmbracoPage(basketPageId);
 
-            EnsureOwner(this.Basket.Items, lineItemKey);
+            EnsureOwner(Basket.Items, lineItemKey);
 
-            this.Basket.MoveItemToWishList(lineItemKey);
+            Basket.MoveItemToWishList(lineItemKey);
 
-            return this.RedirectToUmbracoPage(wishListPageId);
+            return RedirectToUmbracoPage(wishListPageId);
         }
     }
 }

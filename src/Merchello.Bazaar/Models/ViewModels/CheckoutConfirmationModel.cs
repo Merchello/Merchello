@@ -39,5 +39,10 @@
                 return _receiptPage ?? StorePage.Descendant("BazaarReceipt");
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the Bazaar is configured to resolve the payment collection forms.
+        /// </summary>
+        public bool ResolvePaymentForms { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -96,6 +95,16 @@
             }
         }
 
+        /// <summary>
+        /// Gets the gateway context.
+        /// </summary>
+        protected IGatewayContext GatewayContext
+        {
+            get
+            {
+                return _gatewayContext;
+            }
+        }
 
         /// <summary>
         /// Responsible for initializing the controller.

@@ -98,13 +98,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Merchello.Core">
-      <HintPath>..\packages\Merchello.Core.1.8.3.1\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.3.4\lib\net40\Merchello.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Merchello.Examine">
-      <HintPath>..\packages\Merchello.Core.1.8.3.1\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.3.4\lib\net40\Merchello.Examine.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Merchello.Web">
-      <HintPath>..\packages\Merchello.Core.1.8.3.1\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.8.3.4\lib\net40\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
