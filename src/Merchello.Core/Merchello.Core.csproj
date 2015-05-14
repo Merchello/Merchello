@@ -248,6 +248,17 @@
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
+    <Compile Include="Discounts\Coupon.cs" />
+    <Compile Include="Discounts\DiscountOfferBase.cs" />
+    <Compile Include="Discounts\ICoupon.cs" />
+    <Compile Include="Discounts\IDiscountConstraint.cs" />
+    <Compile Include="Discounts\IDiscountOffer.cs" />
+    <Compile Include="Discounts\Rules\IDiscountRuleSettings.cs" />
+    <Compile Include="Discounts\Rewards\IDiscountReward.cs" />
+    <Compile Include="Discounts\Rules\DiscountOnePerCustomerRule.cs" />
+    <Compile Include="Discounts\Rules\DiscountRuleEditorAttribute.cs" />
+    <Compile Include="Discounts\Rules\DiscountRuleBase.cs" />
+    <Compile Include="Discounts\Rules\IDiscountRule.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />
     <Compile Include="Events\MerchelloMigrationEventArgs.cs" />
     <Compile Include="Events\PaymentAttemptEventArgs.cs" />

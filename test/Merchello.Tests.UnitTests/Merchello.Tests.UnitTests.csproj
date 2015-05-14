@@ -239,6 +239,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\RegionalProvinceConfigurationCollectionTest.cs" />
+    <Compile Include="Discounts\Coupon.cs" />
+    <Compile Include="Discounts\IDiscountConstraint.cs" />
+    <Compile Include="Discounts\DiscountOfferBase.cs" />
+    <Compile Include="Discounts\IDiscountRuleSettings.cs" />
+    <Compile Include="Discounts\Rewards\IDiscountReward.cs" />
+    <Compile Include="Discounts\Rules\IDiscountRule.cs" />
+    <Compile Include="Discounts\Rules\DiscountRuleBase.cs" />
+    <Compile Include="Discounts\Rules\DiscountOnePerCustomerRule.cs" />
+    <Compile Include="Discounts\Rules\DiscountRuleAttribute.cs" />
+    <Compile Include="Discounts\ICoupon.cs" />
+    <Compile Include="Discounts\IDiscountOffer.cs" />
     <Compile Include="ExtendedData\ExtendedDataExtensionTests.cs" />
     <Compile Include="Localization\LocalizationFileTests.cs" />
     <Compile Include="Mappers\AutoMapperTests.cs" />
