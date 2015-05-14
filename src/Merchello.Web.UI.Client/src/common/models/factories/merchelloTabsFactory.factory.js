@@ -97,19 +97,6 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
-            function createCampaignTabs() {
-                var tabs = new Constructor();
-                tabs.addTab('campaignlist', 'Campaign Listing', '#/merchello/merchello/campaignlist/manage');
-                return tabs;
-            }
-
-            function createCampaignEditTabs(campaignKey) {
-                var tabs = new Constructor();
-                tabs.addTab('campaignlist', 'Campaign Listing', '#/merchello/merchello/campaignlist/manage');
-                tabs.addTab('campaignedit', 'Campaign Overview', '#/merchello/merchello/campaignedit/' + campaignKey === '' ? 'create' : campaignKey);
-                return tabs;
-            }
-
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
@@ -121,9 +108,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs,
-                createProductVariantEditorTabs: createProductVariantEditorTabs,
-                createCampaignTabs: createCampaignTabs,
-                createCampaignEditTabs: createCampaignEditTabs
+                createProductVariantEditorTabs: createProductVariantEditorTabs
             };
 
 }]);

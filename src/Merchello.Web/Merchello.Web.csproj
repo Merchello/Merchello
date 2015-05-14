@@ -224,9 +224,6 @@
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="DigitalDownloadHandler.cs" />
-    <Compile Include="Editors\MarketingCampaignApiController.cs" />
-    <Compile Include="Models\ContentEditing\CampaignActivitySettingsDisplay.cs" />
-    <Compile Include="Models\ContentEditing\CampaignSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\CurrencyDisplay.cs" />
     <Compile Include="Models\ContentEditing\GateProviderSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceShippingUpdateData.cs" />
@@ -236,7 +233,6 @@
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
-    <Compile Include="Models\MapperResolvers\CampaignActivityTypeFieldResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\CapturePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizeCapturePaymentDialogEditorViewResolver.cs" />

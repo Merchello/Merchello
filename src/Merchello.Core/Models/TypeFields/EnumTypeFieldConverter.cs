@@ -13,16 +13,6 @@
             get { return new AddressTypeField(); } 
         }
 
-        /// <summary>
-        /// Gets the <see cref="ICampaignActivityTypeField"/>.
-        /// </summary>
-        public static ICampaignActivityTypeField CampaignActivity
-        {
-            get
-            {
-                return new CampaignActivityTypeField();
-            }
-        }
 
         /// <summary>
         /// Gets the <see cref="IItemCacheTypeField"/>

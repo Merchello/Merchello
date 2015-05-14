@@ -43,39 +43,6 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.AreSame(expected, resolved.Result.GetType());   
         }
 
-        /// <summary>
-        /// Test to verify <see cref="MerchelloMapper"/> correctly maps ICampaignSetting to CampaignSettingMapper
-        /// </summary>
-        [Test]
-        public void Mapper_Resolves_ICampaignSettings_To_CampaignSettingsMapper()
-        {
-            //// Arrage
-            var expected = typeof(CampaignSettingsMapper);
-
-            //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICampaignSettings));
-
-            //// Assert
-            Assert.IsTrue(resolved.Success);
-            Assert.AreSame(expected, resolved.Result.GetType());
-        }
-
-        /// <summary>
-        /// Test to verify <see cref="MerchelloMapper"/> correctly maps ICampaignActivitySetting to CampaignActivitySettingMapper
-        /// </summary>
-        [Test]
-        public void Mapper_Resolves_ICampaignActivitySettings_CampaignActivitySettingsMapper()
-        {
-            //// Arrage
-            var expected = typeof(CampaignActivitySettingsMapper);
-
-            //// Act
-            var resolved = MerchelloMapper.Current.ResolveByType(typeof(ICampaignActivitySettings));
-
-            //// Assert
-            Assert.IsTrue(resolved.Success);
-            Assert.AreSame(expected, resolved.Result.GetType());
-        }
 
         /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps ICustomer to CustomerMapper

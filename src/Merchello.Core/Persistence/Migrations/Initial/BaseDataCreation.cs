@@ -61,11 +61,6 @@
         /// </summary>
         private void CreateDbTypeFieldData()
         {
-            // CampaignActivities
-            var activity = new CampaignActivityTypeField();
-            //_database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = activity.Sale.TypeKey, Code = activity.Sale.Code, Name = activity.Sale.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = activity.Discount.TypeKey, Alias = activity.Discount.Alias, Name = activity.Discount.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
-
             // address
             var address = new AddressTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = address.Shipping.TypeKey, Alias = address.Shipping.Alias, Name = address.Shipping.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now});

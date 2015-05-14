@@ -33,16 +33,6 @@
         private Lazy<IAuditLogService> _auditLogService;
 
         /// <summary>
-        /// The campaign settings service.
-        /// </summary>
-        private Lazy<ICampaignSettingsService> _campaignSettingsService;
-
-        /// <summary>
-        /// The campaign activity settings service.
-        /// </summary>
-        private Lazy<ICampaignActivitySettingsService> _campaignActivitySettingsService; 
-
-        /// <summary>
         /// The country tax rate service.
         /// </summary>
         private Lazy<ITaxMethodService> _countryTaxRateService;
@@ -172,17 +162,6 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="ICampaignSettingsService"/>.
-        /// </summary>
-        public ICampaignSettingsService CampaignSettingsService
-        {
-            get
-            {
-                return _campaignSettingsService.Value; 
-            }
-        }
-
-        /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
         public ICustomerService CustomerService
@@ -307,17 +286,6 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="ICampaignActivitySettingsService"/>.
-        /// </summary>
-        internal ICampaignActivitySettingsService CampaignActivitySettingsService
-        {
-            get
-            {
-                return _campaignActivitySettingsService.Value;
-            }
-        }
-
-        /// <summary>
         /// Gets the <see cref="ITaxMethodService"/>
         /// </summary>
         internal ITaxMethodService TaxMethodService
@@ -398,12 +366,6 @@
 
             if (_auditLogService == null)
                 _auditLogService = new Lazy<IAuditLogService>(() => new AuditLogService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
-            if (_campaignActivitySettingsService == null)
-                _campaignActivitySettingsService = new Lazy<ICampaignActivitySettingsService>(() => new CampaignActivitySettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
-            if (_campaignSettingsService == null)
-                _campaignSettingsService = new Lazy<ICampaignSettingsService>(() => new CampaignSettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _campaignActivitySettingsService.Value));
 
             if (_customerAddressService == null)
                 _customerAddressService = new Lazy<ICustomerAddressService>(() => new CustomerAddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

@@ -138,37 +138,6 @@
         }
 
         /// <summary>
-        /// The create campaign settings repository.
-        /// </summary>
-        /// <param name="uow">
-        /// The <see cref="IDatabaseUnitOfWork"/>.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ICampaignSettingsRepository"/>.
-        /// </returns>
-        internal virtual ICampaignSettingsRepository CreateCampaignSettingsRepository(IDatabaseUnitOfWork uow)
-        {
-            return new CampaignSettingsRepository(
-                uow, 
-                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
-                this.CreateCampaignActivitySettingsRepository(uow));
-        }
-
-        /// <summary>
-        /// The create campaign activity settings repository.
-        /// </summary>
-        /// <param name="uow">
-        /// The <see cref="IDatabaseUnitOfWork"/>.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ICampaignActivitySettingsRepository"/>.
-        /// </returns>
-        internal virtual ICampaignActivitySettingsRepository CreateCampaignActivitySettingsRepository(IDatabaseUnitOfWork uow)
-        {
-            return new CampaignActivitySettingsRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
-        }
-
-        /// <summary>
         /// The create digital media repository.
         /// </summary>
         /// <param name="uow">
