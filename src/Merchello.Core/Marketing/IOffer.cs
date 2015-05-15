@@ -1,9 +1,9 @@
 ﻿namespace Merchello.Core.Marketing
 {
     /// <summary>
-    /// The Discount interface.
+    /// Marker interface for Offers.
     /// </summary>
-    public interface IDiscountActivity
-    {
+    public interface IOffer
+    {         
     }
 }

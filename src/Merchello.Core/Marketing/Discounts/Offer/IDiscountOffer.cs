@@ -1,8 +1,8 @@
-﻿namespace Merchello.Core.Discounts
+﻿namespace Merchello.Core.Marketing.Discounts.Offer
 {
     using System;
 
-    using Merchello.Core.Discounts.Rewards;
+    using Merchello.Core.Marketing.Discounts.Rewards;
     using Merchello.Core.Models;
 
     using Umbraco.Core;

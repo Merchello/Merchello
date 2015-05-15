@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Discounts.Rules
+﻿namespace Merchello.Core.Marketing.Discounts.Rules
 {
     using System;
 
@@ -26,7 +26,7 @@
         {
             Mandate.ParameterNotNull(settings, "settings");
 
-            _settings = settings;
+            this._settings = settings;
         }
 
         /// <summary>
@@ -45,13 +45,18 @@
         public abstract string Description { get; }
 
         /// <summary>
+        /// Gets the category.
+        /// </summary>
+        public abstract DiscountRuleCategory Category { get; }
+
+        /// <summary>
         /// Gets the <see cref="IDiscountRuleSettings"/>.
         /// </summary>
         protected IDiscountRuleSettings Settings
         {
             get
             {
-                return _settings;
+                return this._settings;
             }
         }
 

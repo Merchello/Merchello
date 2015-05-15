@@ -1,9 +1,11 @@
-﻿namespace Merchello.Core.Discounts
+﻿namespace Merchello.Core.Marketing.Discounts.Coupons
 {
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Core.Discounts.Rewards;
+    using Merchello.Core.Discounts;
+    using Merchello.Core.Marketing.Discounts.Offer;
+    using Merchello.Core.Marketing.Discounts.Rewards;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -41,7 +43,7 @@
         /// <returns>
         /// The <see cref="Attempt"/> indicating whether or not the application was successful.
         /// </returns>
-        protected override Attempt<IDiscountReward> ApplyReward(ILineItemContainer collection)
+        protected override Attempt<IDiscountReward> DoApplyReward(ILineItemContainer collection)
         {
             throw new NotImplementedException();
         }

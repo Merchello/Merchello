@@ -1,7 +1,8 @@
-﻿namespace Merchello.Core.Discounts.Rules
+﻿namespace Merchello.Core.Marketing.Discounts.Rules.Customer
 {
     using System;
 
+    using Merchello.Core.Marketing.Discounts.Rules;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -9,15 +10,15 @@
     /// <summary>
     /// A rule to enforce one discount per customer.
     /// </summary>
-    public class DiscountOnePerCustomerRule : DiscountRuleBase
+    public class OnePerCustomerRule : DiscountRuleBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DiscountOnePerCustomerRule"/> class.
+        /// Initializes a new instance of the <see cref="OnePerCustomerRule"/> class.
         /// </summary>
         /// <param name="settings">
         /// The settings.
         /// </param>
-        public DiscountOnePerCustomerRule(IDiscountRuleSettings settings)
+        public OnePerCustomerRule(IDiscountRuleSettings settings)
             : base(settings)
         {
         }
@@ -52,6 +53,17 @@
             get
             {
                 return "The customer may only ever use this coupon once.";
+            }
+        }
+
+        /// <summary>
+        /// Gets the category.
+        /// </summary>
+        public override DiscountRuleCategory Category
+        {
+            get
+            {
+                return DiscountRuleCategory.Customer;
             }
         }
 

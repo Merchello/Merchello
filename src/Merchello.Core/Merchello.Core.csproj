@@ -248,17 +248,21 @@
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
-    <Compile Include="Discounts\Coupon.cs" />
-    <Compile Include="Discounts\DiscountOfferBase.cs" />
-    <Compile Include="Discounts\ICoupon.cs" />
-    <Compile Include="Discounts\IDiscountConstraint.cs" />
-    <Compile Include="Discounts\IDiscountOffer.cs" />
-    <Compile Include="Discounts\Rules\IDiscountRuleSettings.cs" />
-    <Compile Include="Discounts\Rewards\IDiscountReward.cs" />
-    <Compile Include="Discounts\Rules\DiscountOnePerCustomerRule.cs" />
-    <Compile Include="Discounts\Rules\DiscountRuleEditorAttribute.cs" />
-    <Compile Include="Discounts\Rules\DiscountRuleBase.cs" />
-    <Compile Include="Discounts\Rules\IDiscountRule.cs" />
+    <Compile Include="Marketing\Discounts\Coupons\Coupon.cs" />
+    <Compile Include="Marketing\Discounts\Offer\DiscountOfferBase.cs" />
+    <Compile Include="Marketing\Discounts\Coupons\ICoupon.cs" />
+    <Compile Include="Marketing\Discounts\IDiscountConstraint.cs" />
+    <Compile Include="Marketing\Discounts\Offer\IDiscountOffer.cs" />
+    <Compile Include="Marketing\Discounts\Offer\IDiscountOfferProvider.cs" />
+    <Compile Include="Marketing\Discounts\Rules\DiscountRuleCategory.cs" />
+    <Compile Include="Marketing\Discounts\Rules\IDiscountRuleSettings.cs" />
+    <Compile Include="Marketing\Discounts\Rewards\IDiscountReward.cs" />
+    <Compile Include="Marketing\Discounts\Rules\Customer\OnePerCustomerRule.cs" />
+    <Compile Include="Marketing\Discounts\Rules\DiscountRuleEditorAttribute.cs" />
+    <Compile Include="Marketing\Discounts\Rules\DiscountRuleBase.cs" />
+    <Compile Include="Marketing\Discounts\Rules\IDiscountRule.cs" />
+    <Compile Include="Marketing\Discounts\Rules\Product\RestrictToProductSelectionRule.cs" />
+    <Compile Include="Marketing\Discounts\Rules\Sale\NotUsableWithOtherDiscountsRule.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />
     <Compile Include="Events\MerchelloMigrationEventArgs.cs" />
     <Compile Include="Events\PaymentAttemptEventArgs.cs" />
@@ -274,8 +278,7 @@
     <Compile Include="Gateways\Notification\Monitors\OrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Monitors\PartialOrderShippedMonitor.cs" />
     <Compile Include="Gateways\Notification\Triggering\ShipmentResultNotifyModelFactory.cs" />
-    <Compile Include="Marketing\IDiscountActivity.cs" />
-    <Compile Include="Marketing\IMarketingProvider.cs" />
+    <Compile Include="Marketing\IOffer.cs" />
     <Compile Include="Models\DigitalMedia.cs" />
     <Compile Include="Models\Interfaces\IDigitalMedia.cs" />
     <Compile Include="Models\MonitorModels\IShipmentResultNotifyModel.cs" />
@@ -1047,9 +1050,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Marketing\Coupons\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

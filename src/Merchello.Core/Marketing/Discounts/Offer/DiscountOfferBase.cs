@@ -1,11 +1,11 @@
-﻿namespace Merchello.Core.Discounts
+﻿namespace Merchello.Core.Marketing.Discounts.Offer
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Merchello.Core;
-    using Merchello.Core.Discounts.Rewards;
+    using Merchello.Core.Discounts;
+    using Merchello.Core.Marketing.Discounts.Rewards;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -61,11 +61,11 @@
         /// </summary>
         protected IEnumerable<IDiscountConstraint> Constraints { get; private set; }
 
-        protected abstract Attempt<IDiscountReward> ApplyReward(ILineItemContainer collection);
+        protected abstract Attempt<IDiscountReward> DoApplyReward(ILineItemContainer collection);
 
         public Attempt<IDiscountReward> TryApply(ILineItemContainer collection)
         {
-            var applied = this.ApplyReward(collection);
+            var applied = this.DoApplyReward(collection);
 
             // TODO record this discount application for reporting
             throw new NotImplementedException();

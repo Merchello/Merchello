@@ -1,5 +1,8 @@
-﻿namespace Merchello.Core.Discounts
+﻿namespace Merchello.Core.Marketing.Discounts.Coupons
 {
+    using Merchello.Core.Discounts;
+    using Merchello.Core.Marketing.Discounts.Offer;
+
     /// <summary>
     /// Defines a Coupon.
     /// </summary>

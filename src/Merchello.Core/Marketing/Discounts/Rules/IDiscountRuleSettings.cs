@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Discounts.Rules
+﻿namespace Merchello.Core.Marketing.Discounts.Rules
 {
     /// <summary>
     /// Marker interface for discount rule settings.

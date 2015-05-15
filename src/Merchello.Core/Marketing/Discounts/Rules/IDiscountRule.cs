@@ -1,6 +1,8 @@
-﻿namespace Merchello.Core.Discounts.Rules
+﻿namespace Merchello.Core.Marketing.Discounts.Rules
 {
     using System;
+
+    using Merchello.Core.Discounts;
 
     /// <summary>
     /// Defines a Discount Rule.
@@ -21,5 +23,10 @@
         /// Gets the description.
         /// </summary>
         string Description { get; }
+
+        /// <summary>
+        /// Gets the category.
+        /// </summary>
+        DiscountRuleCategory Category { get; }
     }
 }
