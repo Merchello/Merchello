@@ -5,8 +5,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
-    using Merchello.Web.Models.Payments;
-
     /// <summary>
     /// The checkout confirmation form.
     /// </summary>
