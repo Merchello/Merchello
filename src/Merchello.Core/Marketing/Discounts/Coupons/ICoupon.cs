@@ -1,16 +1,18 @@
 ﻿namespace Merchello.Core.Marketing.Discounts.Coupons
 {
-    using Merchello.Core.Discounts;
-    using Merchello.Core.Marketing.Discounts.Offer;
+    using System.Collections.Generic;
+
+    using Merchello.Core.Marketing.Discounts.Coupons.Constraints;
+    using Merchello.Core.Marketing.Offer;
 
     /// <summary>
     /// Defines a Coupon.
     /// </summary>
-    public interface ICoupon : IDiscountOffer
+    public interface ICoupon : IOffer
     {
         /// <summary>
-        /// Gets or sets the redeem code.
+        /// Gets the constraints.
         /// </summary>
-        string RedeemCode { get; set; }
+        IEnumerable<DiscountConstraintBase> Constraints { get; }
     }
 }

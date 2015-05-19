@@ -8,6 +8,8 @@
     using Configuration;
     using Gateways;
 
+    using Merchello.Core.Marketing.Discounts.Constraints;
+    using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.Persistence.Migrations.Initial;
 
@@ -182,6 +184,9 @@
         /// </summary>
         protected virtual void InitializeResolvers()
         {
+            if (!OfferComponentResolver.HasCurrent)
+            OfferComponentResolver.Current = new OfferComponentResolver(PluginManager.Current.ResolveDiscountConstraints());
+
             if (!TriggerResolver.HasCurrent)
             TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
 
