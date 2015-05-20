@@ -49,7 +49,7 @@
         /// <summary>
         /// Gets or sets the offer ends date.
         /// </summary>
-        [Column("offerStartsDate")]
+        [Column("offerEndsDate")]
         public DateTime OfferEndsDate { get; set; }
 
         /// <summary>
