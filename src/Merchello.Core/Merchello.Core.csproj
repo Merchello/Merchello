@@ -250,7 +250,6 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="Marketing\Discounts\Coupons\CouponLineItemReward.cs" />
     <Compile Include="Marketing\Discounts\DiscountLineItemReward.cs" />
-    <Compile Include="Marketing\Offer\IOfferConfigurationDataSerilizer.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinitionExtensions.cs" />
     <Compile Include="Marketing\Offer\OfferComponentBase.cs" />
@@ -301,6 +300,8 @@
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />
+    <Compile Include="Models\OfferComponentConfigurationCollection.cs" />
+    <Compile Include="Models\OfferSettings.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
@@ -382,9 +383,11 @@
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\DigitalMediaFactory.cs" />
+    <Compile Include="Persistence\Factories\OfferSettingsFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\DigitalMediaMapper.cs" />
+    <Compile Include="Persistence\Mappers\OfferSettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
@@ -564,7 +567,6 @@
     <Compile Include="Models\ExtendedDataExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\GatewayProviderCollection.cs" />
     <Compile Include="Gateways\GatewayResource.cs" />
     <Compile Include="Models\GatewayProviderSettings.cs" />
     <Compile Include="Gateways\IGatewayResource.cs" />

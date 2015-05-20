@@ -4,12 +4,14 @@
     using System.Collections.Specialized;
     using System.Threading;
 
+    using Merchello.Core.Marketing.Offer;
+
     using Umbraco.Core;
 
     /// <summary>
-    /// The gateway provider collection.
+    /// A collection of <see cref="OfferComponentConfiguration"/>s.
     /// </summary>
-    public class GatewayProviderCollection : NotifiyCollectionBase<Guid, IGatewayProviderSettings>
+    public class OfferComponentConfigurationCollection : NotifiyCollectionBase<Guid, OfferComponentConfiguration>
     {
         /// <summary>
         /// The add locker.
@@ -17,46 +19,48 @@
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
         /// <summary>
-        /// Gets the index of a key in the collection.
+        /// Returns the index of the key in the collection or -1 if not found
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="int"/>.
+        /// The index of the key in the collection or -1 if not found.
         /// </returns>
         public override int IndexOfKey(Guid key)
         {
             for (var i = 0; i < Count; i++)
             {
-                if (this[i].Key == key)
+                if (GetKeyForItem(this[i]) == key)
                 {
                     return i;
                 }
             }
+
             return -1;
         }
 
         /// <summary>
-        /// Adds an item to the collection.
+        /// The add.
         /// </summary>
         /// <param name="item">
         /// The item.
         /// </param>
-        internal new void Add(IGatewayProviderSettings item)
+        internal new void Add(OfferComponentConfiguration item)
         {
             using (new WriteLock(_addLocker))
             {
                 var key = GetKeyForItem(item);
-                if (Guid.Empty != key)
+                if (!Guid.Empty.Equals(key))
                 {
-                    var exists = Contains(item.Key);
+                    var exists = Contains(GetKeyForItem(item));
                     if (exists)
                     {
                         return;
                     }
                 }
 
+                // set the sort order to the next highest
                 base.Add(item);
 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
@@ -64,7 +68,7 @@
         }
 
         /// <summary>
-        /// Gets the key for an item in the collection.
+        /// Returns the ComponentKey for the item.
         /// </summary>
         /// <param name="item">
         /// The item.
@@ -72,9 +76,9 @@
         /// <returns>
         /// The <see cref="Guid"/>.
         /// </returns>
-        protected override Guid GetKeyForItem(IGatewayProviderSettings item)
+        protected override Guid GetKeyForItem(OfferComponentConfiguration item)
         {
-            return item.Key;
+            return item.ComponentKey;
         }
     }
 }
