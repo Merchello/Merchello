@@ -11,7 +11,7 @@
     /// <summary>
     /// A collection of <see cref="OfferComponentConfiguration"/>s.
     /// </summary>
-    public class OfferComponentConfigurationCollection : NotifiyCollectionBase<Guid, OfferComponentConfiguration>
+    public class OfferComponentDefinitionCollection : NotifiyCollectionBase<Guid, OfferComponentDefinition>
     {
         /// <summary>
         /// The add locker.
@@ -46,7 +46,7 @@
         /// <param name="item">
         /// The item.
         /// </param>
-        internal new void Add(OfferComponentConfiguration item)
+        internal new void Add(OfferComponentDefinition item)
         {
             using (new WriteLock(_addLocker))
             {
@@ -76,7 +76,7 @@
         /// <returns>
         /// The <see cref="Guid"/>.
         /// </returns>
-        protected override Guid GetKeyForItem(OfferComponentConfiguration item)
+        protected override Guid GetKeyForItem(OfferComponentDefinition item)
         {
             return item.ComponentKey;
         }

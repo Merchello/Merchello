@@ -37,16 +37,5 @@
                 return this._definition;
             }
         }
-
-        /// <summary>
-        /// The get offer component configuration.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        internal string GetOfferComponentConfigurationJson()
-        {
-            return JsonConvert.SerializeObject(this._definition.AsOfferComponentConfiguration(this.GetType().Name));
-        }
     }
 }

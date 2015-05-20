@@ -58,6 +58,6 @@
         /// Gets or sets the component configurations.
         /// </summary>
         [DataMember]
-        OfferComponentConfigurationCollection ComponentConfigurations { get; set; }
+        OfferComponentDefinitionCollection ComponentDefinitions { get; set; }
     }
 }

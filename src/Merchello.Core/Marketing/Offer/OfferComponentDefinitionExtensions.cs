@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Core.Marketing.Offer
 {
+    using System;
     using System.Linq;
+
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Utility extensions for the <see cref="OfferComponentDefinition"/> class.
@@ -14,20 +17,27 @@
         /// <param name="definition">
         /// The definition.
         /// </param>
-        /// <param name="typeName">
-        /// The type Name.
-        /// </param>
         /// <returns>
         /// The <see cref="OfferComponentConfiguration"/>.
         /// </returns>
-        internal static OfferComponentConfiguration AsOfferComponentConfiguration(this OfferComponentDefinition definition, string typeName)
+        internal static OfferComponentConfiguration AsOfferComponentConfiguration(this OfferComponentDefinition definition)
         {
-            return new OfferComponentConfiguration()
-                {
-                    ComponentKey = definition.ComponentKey,
-                    TypeName = typeName,
-                    Values = definition.ExtendedData.AsEnumerable()
-                };
+            if (!OfferComponentResolver.HasCurrent) throw new NullReferenceException("The OfferComponentResolver singleton has not been instantiated");
+
+            var type = OfferComponentResolver.Current.GetTypeByComponentKey(definition.ComponentKey);
+            if (type != null)
+            {                
+                return new OfferComponentConfiguration()
+                           {
+                               ComponentKey = definition.ComponentKey,
+                               TypeName = type.Name,
+                               Values = definition.ExtendedData.AsEnumerable()
+                           };
+            }
+
+            var nullRef = new NullReferenceException("Was not able to resolve the OfferComponentType with key: " + definition.ComponentKey);
+            LogHelper.Error(typeof(OfferComponentDefinitionExtensions), "Unable to resolve OfferCompoent", nullRef);
+            throw nullRef;
         }
     }
 }

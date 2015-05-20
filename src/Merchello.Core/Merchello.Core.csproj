@@ -300,7 +300,7 @@
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />
-    <Compile Include="Models\OfferComponentConfigurationCollection.cs" />
+    <Compile Include="Models\OfferComponentDefinitionCollection.cs" />
     <Compile Include="Models\OfferSettings.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />

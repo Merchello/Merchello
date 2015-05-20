@@ -52,7 +52,7 @@
         /// <summary>
         /// The component configurations changed selector.
         /// </summary>
-        private static readonly PropertyInfo ComponentConfigurationsChangedSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, OfferComponentConfigurationCollection>(x => x.ComponentConfigurations);
+        private static readonly PropertyInfo ComponentDefinitionsChangedSelector = ExpressionHelper.GetPropertyInfo<OfferSettings, OfferComponentDefinitionCollection>(x => x.ComponentDefinitions);
 
         /// <summary>
         /// The offer name.
@@ -85,9 +85,9 @@
         private bool _active;
 
         /// <summary>
-        /// The <see cref="OfferComponentConfigurationCollection"/>.
+        /// The <see cref="OfferComponentDefinitionCollection"/>.
         /// </summary>
-        private OfferComponentConfigurationCollection _componentConfigurations;
+        private OfferComponentDefinitionCollection _componentDefinitions;
 
 
         #endregion
@@ -105,7 +105,7 @@
         /// The offer Provider Key.
         /// </param>
         public OfferSettings(string name, string offerCode, Guid offerProviderKey)
-            : this(name, offerCode, offerProviderKey, new OfferComponentConfigurationCollection())
+            : this(name, offerCode, offerProviderKey, new OfferComponentDefinitionCollection())
         {            
         }
 
@@ -121,22 +121,22 @@
         /// <param name="offerProviderKey">
         /// The offer Provider Key.
         /// </param>
-        /// <param name="componentConfigurations">
-        /// The <see cref="OfferComponentConfigurationCollection"/>.
+        /// <param name="componentDefinitions">
+        /// The <see cref="OfferComponentDefinitionCollection"/>.
         /// </param>
-        internal OfferSettings(string name, string offerCode, Guid offerProviderKey, OfferComponentConfigurationCollection componentConfigurations)
+        internal OfferSettings(string name, string offerCode, Guid offerProviderKey, OfferComponentDefinitionCollection componentDefinitions)
         {
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(offerCode, "offerCode");
             Mandate.ParameterCondition(!Guid.Empty.Equals(offerProviderKey), "offerProviderKey");
-            Mandate.ParameterNotNull(componentConfigurations, "componentConfigurations");
+            Mandate.ParameterNotNull(componentDefinitions, "ComponentDefinitions");
             _name = name;
             _offerCode = offerCode;
             _offerProviderKey = OfferProviderKey;
             _offerStartsDate = DateTime.MinValue;
             _offerEndsDate = DateTime.MaxValue;
             _active = true;
-            _componentConfigurations = componentConfigurations;
+            this._componentDefinitions = componentDefinitions;
         }
 
         /// <summary>
@@ -296,25 +296,25 @@
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="OfferComponentConfigurationCollection"/>.
+        /// Gets or sets the <see cref="OfferComponentDefinitionCollection"/>.
         /// </summary>
         [DataMember]
-        public OfferComponentConfigurationCollection ComponentConfigurations
+        public OfferComponentDefinitionCollection ComponentDefinitions
         {
             get
             {
-                return _componentConfigurations;
+                return this._componentDefinitions;
             }
 
             set
             {
-                _componentConfigurations = value;
-                _componentConfigurations.CollectionChanged += ComponentConfigurationsOnCollectionChanged;
+                this._componentDefinitions = value;
+                this._componentDefinitions.CollectionChanged += this.ComponentDefinitionsOnCollectionChanged;
             }
         }
 
         /// <summary>
-        /// Event handler for the <see cref="OfferComponentConfigurationCollection"/>.
+        /// Event handler for the <see cref="OfferComponentDefinitionCollection"/>.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -322,9 +322,9 @@
         /// <param name="notifyCollectionChangedEventArgs">
         /// The notify collection changed event args.
         /// </param>
-        private void ComponentConfigurationsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        private void ComponentDefinitionsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            OnPropertyChanged(ComponentConfigurationsChangedSelector);
+            OnPropertyChanged(ComponentDefinitionsChangedSelector);
         }
     }
 }
