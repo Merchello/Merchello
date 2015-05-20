@@ -403,9 +403,11 @@
     <Compile Include="Persistence\Repositories\Interfaces\IAssertsDocumentNumber.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IDigitalMediaRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IOfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
+    <Compile Include="Persistence\Repositories\OfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\PagedRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\ShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseCatalogRepository.cs" />
@@ -958,6 +960,7 @@
     <Compile Include="Services\Interfaces\IDigitalMediaService.cs" />
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
+    <Compile Include="Services\Interfaces\IOfferSettingsService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
     <Compile Include="Services\Interfaces\IPageCachedService.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
@@ -965,6 +968,7 @@
     <Compile Include="Services\Interfaces\IWarehouseCatalogService.cs" />
     <Compile Include="Services\NotificationMessageService.cs" />
     <Compile Include="Services\NotificationMethodService.cs" />
+    <Compile Include="Services\OfferSettingsService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PageCachedServiceBase.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />

@@ -264,6 +264,20 @@
         }
 
         /// <summary>
+        /// The create offer settings repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOfferSettingsRepository"/>.
+        /// </returns>
+        internal virtual IOfferSettingsRepository CreateOfferSettingsRepository(IDatabaseUnitOfWork uow)
+        {
+            return new OfferSettingsRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="IOrderRepository"/>
         /// </summary>
         /// <param name="uow">
