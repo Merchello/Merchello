@@ -6,6 +6,8 @@
 
     using Newtonsoft.Json;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The constraint settings.
     /// </summary>
@@ -16,7 +18,7 @@
         /// </summary>
         public OfferComponentDefinition()
         {
-            ExtendedData = new ExtendedDataCollection();
+            this.ExtendedData = new ExtendedDataCollection();
         }
 
         /// <summary>
@@ -26,10 +28,21 @@
         /// The component config JSON.
         /// </param>
         public OfferComponentDefinition(string jsonConfiguration)
+            : this(JsonConvert.DeserializeObject<OfferComponentConfiguration>(jsonConfiguration))
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OfferComponentDefinition"/> class.
+        /// </summary>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        internal OfferComponentDefinition(OfferComponentConfiguration configuration)
         {
-            var config = JsonConvert.DeserializeObject<OfferComponentConfiguration>(jsonConfiguration);
-            ComponentKey = config.ComponentKey;
-            ExtendedData = config.Values.AsExtendedDataCollection();
+            Mandate.ParameterNotNull(configuration, "configuration");
+            this.ComponentKey = configuration.ComponentKey;
+            this.ExtendedData = configuration.Values.AsExtendedDataCollection();
         }
 
         /// <summary>

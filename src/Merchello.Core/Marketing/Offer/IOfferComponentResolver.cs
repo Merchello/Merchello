@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Core.Marketing.Offer
 {
+    using System;
     using System.Collections.Generic;
+
+    using Lucene.Net.Search.Function;
 
     using Merchello.Core.Marketing.Discounts.Constraints;
 
@@ -9,6 +12,17 @@
     /// </summary>
     internal interface IOfferComponentResolver
     {
+        /// <summary>
+        /// Gets the resolved type by component key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Type"/> of component.
+        /// </returns>
+        Type GetTypeByComponentKey(Guid key);
+
         /// <summary>
         /// Gets a <see cref="IDiscountConstraint"/> by it's key.
         /// </summary>

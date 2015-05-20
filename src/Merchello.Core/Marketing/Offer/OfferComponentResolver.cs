@@ -24,7 +24,7 @@
         /// </param>
         public OfferComponentResolver(IEnumerable<Type> values)
         {
-            this._instanceTypes = values.ToList();
+            _instanceTypes = values.ToList();
         }
 
         /// <summary>
@@ -37,8 +37,13 @@
         {
             get
             {
-                return this._instanceTypes;
+                return _instanceTypes;
             }
+        }
+
+        public Type GetTypeByComponentKey(Guid key)
+        {
+            throw new NotImplementedException();
         }
 
         public T GetComponent<T>(OfferComponentDefinition definition) where T : OfferComponentBase
