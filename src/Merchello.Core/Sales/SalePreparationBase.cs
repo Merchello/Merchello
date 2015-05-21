@@ -245,7 +245,8 @@
         public IPaymentMethod GetPaymentMethod()
         {
             var paymentMethodKey = _customer.ExtendedData.GetPaymentMethodKey();
-            return paymentMethodKey.Equals(Guid.Empty) ? null : _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey).PaymentMethod;
+            var paymentMethod = _merchelloContext.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
+            return paymentMethodKey.Equals(Guid.Empty) || paymentMethod == null ? null : paymentMethod.PaymentMethod;
         }
 
         /// <summary>
