@@ -119,7 +119,11 @@
         [HttpPost]
         public ActionResult SaveCustomerAddress(CustomerAddressModel model)
         {
-            if (!ModelState.IsValid) return this.CurrentUmbracoPage();
+            var isValid = ModelState.IsValidField("FullName") && ModelState.IsValidField("Label")
+                          && ModelState.IsValidField("Address1") && ModelState.IsValidField("Locality")
+                          && ModelState.IsValidField("PostalCode") && ModelState.IsValidField("CountryCode");
+
+            if (!isValid) return this.CurrentUmbracoPage();
             ICustomerAddress customerAddress;
             if (!model.Key.Equals(Guid.Empty))
             {
