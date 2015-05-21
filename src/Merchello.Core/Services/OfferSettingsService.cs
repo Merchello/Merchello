@@ -5,15 +5,11 @@
     using System.Linq;
     using System.Threading;
 
-    using Lucene.Net.Search;
-
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
-
-    using StackExchange.Profiling;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;

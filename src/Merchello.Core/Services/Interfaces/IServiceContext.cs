@@ -42,6 +42,11 @@
         IOrderService OrderService { get; }
 
         /// <summary>
+        /// Gets the offer settings service.
+        /// </summary>
+        IOfferSettingsService OfferSettingsService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IPaymentService"/>
         /// </summary>
         IPaymentService PaymentService { get; }

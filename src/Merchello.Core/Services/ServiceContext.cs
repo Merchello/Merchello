@@ -73,6 +73,11 @@
         private Lazy<IOrderService> _orderService;
 
         /// <summary>
+        /// The offer settings service.
+        /// </summary>
+        private Lazy<IOfferSettingsService> _offerSettingsService;
+
+        /// <summary>
         /// The notification method service.
         /// </summary>
         private Lazy<INotificationMethodService> _notificationMethodService;
@@ -210,6 +215,17 @@
         public IOrderService OrderService
         {
             get { return _orderService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IOfferSettingsService"/>.
+        /// </summary>
+        public IOfferSettingsService OfferSettingsService
+        {
+            get
+            {
+                return _offerSettingsService.Value;
+            }
         }
 
         /// <summary>
@@ -384,6 +400,9 @@
 
             if (_notificationMessageService == null)
                 _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_offerSettingsService == null)
+                _offerSettingsService = new Lazy<IOfferSettingsService>(() => new OfferSettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_paymentService == null)
                 _paymentService = new Lazy<IPaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));
