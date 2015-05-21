@@ -33,16 +33,6 @@
         private Lazy<IAuditLogService> _auditLogService;
 
         /// <summary>
-        /// The campaign settings service.
-        /// </summary>
-        private Lazy<ICampaignSettingsService> _campaignSettingsService;
-
-        /// <summary>
-        /// The campaign activity settings service.
-        /// </summary>
-        private Lazy<ICampaignActivitySettingsService> _campaignActivitySettingsService; 
-
-        /// <summary>
         /// The country tax rate service.
         /// </summary>
         private Lazy<ITaxMethodService> _countryTaxRateService;
@@ -81,6 +71,11 @@
         /// The order service.
         /// </summary>
         private Lazy<IOrderService> _orderService;
+
+        /// <summary>
+        /// The offer settings service.
+        /// </summary>
+        private Lazy<IOfferSettingsService> _offerSettingsService;
 
         /// <summary>
         /// The notification method service.
@@ -172,17 +167,6 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="ICampaignSettingsService"/>.
-        /// </summary>
-        public ICampaignSettingsService CampaignSettingsService
-        {
-            get
-            {
-                return _campaignSettingsService.Value; 
-            }
-        }
-
-        /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
         public ICustomerService CustomerService
@@ -231,6 +215,17 @@
         public IOrderService OrderService
         {
             get { return _orderService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IOfferSettingsService"/>.
+        /// </summary>
+        public IOfferSettingsService OfferSettingsService
+        {
+            get
+            {
+                return _offerSettingsService.Value;
+            }
         }
 
         /// <summary>
@@ -304,17 +299,6 @@
         internal IAnonymousCustomerService AnonymousCustomerService
         {
             get { return _anonymousCustomerService.Value; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ICampaignActivitySettingsService"/>.
-        /// </summary>
-        internal ICampaignActivitySettingsService CampaignActivitySettingsService
-        {
-            get
-            {
-                return _campaignActivitySettingsService.Value;
-            }
         }
 
         /// <summary>
@@ -399,12 +383,6 @@
             if (_auditLogService == null)
                 _auditLogService = new Lazy<IAuditLogService>(() => new AuditLogService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
-            if (_campaignActivitySettingsService == null)
-                _campaignActivitySettingsService = new Lazy<ICampaignActivitySettingsService>(() => new CampaignActivitySettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
-
-            if (_campaignSettingsService == null)
-                _campaignSettingsService = new Lazy<ICampaignSettingsService>(() => new CampaignSettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _campaignActivitySettingsService.Value));
-
             if (_customerAddressService == null)
                 _customerAddressService = new Lazy<ICustomerAddressService>(() => new CustomerAddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -422,6 +400,9 @@
 
             if (_notificationMessageService == null)
                 _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_offerSettingsService == null)
+                _offerSettingsService = new Lazy<IOfferSettingsService>(() => new OfferSettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_paymentService == null)
                 _paymentService = new Lazy<IPaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));

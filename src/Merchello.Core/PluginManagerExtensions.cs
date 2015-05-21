@@ -3,6 +3,10 @@
     using System;
     using System.Collections.Generic;
     using Gateways;
+
+    using Merchello.Core.Marketing.Discounts.Constraints;
+    using Merchello.Core.Marketing.Offer;
+
     using Observation;
     using Umbraco.Core;
 
@@ -12,17 +16,31 @@
     internal static class PluginManagerExtensions
     {
         /// <summary>
-        /// Returns a collection of all <see cref="ITrigger"/> types decorated with the <see cref="TriggerForAttribute"/>
+        /// Returns all <see cref="IDiscountConstraint"/> types.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Type}"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveDiscountConstraints(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<OfferComponentBase, OfferComponentAttribute>();
+        } 
+
+        /// <summary>
+        /// Returns all available GatewayProvider
         /// </summary>
         /// <param name="pluginManager">
         /// The plugin Manager.
         /// </param>
         /// <returns>
-        /// The collection of trigger types resolved
+        /// The collection of gateway providers resolved
         /// </returns>
-        internal static IEnumerable<Type> ResolveObservableTriggers(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolveGatewayProviders(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<GatewayProviderBase, GatewayProviderActivationAttribute>();
         }
 
         /// <summary>
@@ -40,17 +58,17 @@
         }
 
         /// <summary>
-        /// Returns all available GatewayProvider
+        /// Returns a collection of all <see cref="ITrigger"/> types decorated with the <see cref="TriggerForAttribute"/>
         /// </summary>
         /// <param name="pluginManager">
         /// The plugin Manager.
         /// </param>
         /// <returns>
-        /// The collection of gateway providers resolved
+        /// The collection of trigger types resolved
         /// </returns>
-        internal static IEnumerable<Type> ResolveGatewayProviders(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolveObservableTriggers(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<GatewayProviderBase, GatewayProviderActivationAttribute>();
-        }
+            return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
+        }        
     }
 }

@@ -76,10 +76,6 @@
                         Parameters = new QueryDisplayParameter[] { }
                     })));
 
-            merchelloUrls.Add(
-                "merchelloMarketingCampaignApiBaseUrl",
-                url.GetUmbracoApiServiceBaseUrl<MarketingCampaignApiController>(
-                controller => controller.GetActiveCampaigns()));
 
             merchelloUrls.Add(
                 "merchelloCustomerApiBaseUrl",

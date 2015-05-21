@@ -76,6 +76,10 @@
                                 <td colspan="4" class="text-right"><localize key="merchelloShipping_shipping" /></td>
                                 <td class="text-right">{{shippingTotal | currency : currencySymbol}}</td>
                             </tr>
+                            <tr>
+                                <td colspan="4" class="text-right"><localize key="merchelloGeneral_total" /></td>
+                                <td class="text-right">{{invoice.total | currency : currencySymbol}}</td>
+                            </tr>
                             <tr data-ng-repeat="payment in payments" data-ng-hide="payments.length == 0">
                                 <td colspan="2"><i data-ng-class="{ 'icon-credit-card': payment.paymentMethodType === 'CreditCard', 'icon-receipt-dollar': payment.paymentMethodType === 'Cash' }"></i></td>
                                 <td>
@@ -83,13 +87,13 @@
                                     <span class="payment-method"><localize key="merchelloOrderView_paymentProcessedBy" /> {{payment.paymentMethodName}}</span>
                                 </td>
                                 <td class="text-right"><localize key="{{authorizedCapturedLabel}}" />:</td>
-                                <td class="text-right">{{invoice.total | currency : currencySymbol}}</td>
+                                <td class="text-right">{{payment.amount | currency : currencySymbol}}</td>
                             </tr>
                             <tr ng-hide="remainingBalance == 0">
                                 <td colspan="4" class="text-right">Collected:</td>
                                 <td class="text-right">{{invoice.total - remainingBalance | currency : currencySymbol }}</td>
                             </tr>
-                            <tr ng-hide="remainingBalance == 0">
+                            <tr>
                                 <td colspan="4" class="text-right">Balance due:</td>
                                 <td class="text-right">{{remainingBalance | currency : currencySymbol }}</td>
                             </tr>

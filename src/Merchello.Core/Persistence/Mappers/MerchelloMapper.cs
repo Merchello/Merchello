@@ -47,8 +47,6 @@ namespace Merchello.Core.Persistence.Mappers
         {
             CacheMapper(typeof(IAuditLog), typeof(AuditLogMapper));
             CacheMapper(typeof(ITaxMethod), typeof(TaxMethodMapper));
-            CacheMapper(typeof(ICampaignSettings), typeof(CampaignSettingsMapper));
-            CacheMapper(typeof(ICampaignActivitySettings), typeof(CampaignActivitySettingsMapper));
             CacheMapper(typeof(ICustomerAddress), typeof(CustomerAddressMapper));
             CacheMapper(typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper));
             CacheMapper(typeof(IItemCache), typeof(ItemCacheMapper));
