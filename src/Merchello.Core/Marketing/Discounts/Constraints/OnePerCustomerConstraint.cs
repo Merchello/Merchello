@@ -1,8 +1,8 @@
-﻿namespace Merchello.Core.Marketing.Discounts.Coupons.Constraints.Customer
+﻿namespace Merchello.Core.Marketing.Discounts.Constraints
 {
     using System;
 
-    using Merchello.Core.Marketing.Discounts.Constraints;
+    using Merchello.Core.Marketing.Discounts.Coupons.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 

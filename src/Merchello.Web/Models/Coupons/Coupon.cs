@@ -1,8 +1,7 @@
-﻿namespace Merchello.Core.Marketing.Discounts.Coupons
+﻿namespace Merchello.Web.Models.Coupons
 {
     using System.Collections.Generic;
 
-    using Merchello.Core.Marketing.Discounts.Constraints;
     using Merchello.Core.Marketing.Discounts.Coupons.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;

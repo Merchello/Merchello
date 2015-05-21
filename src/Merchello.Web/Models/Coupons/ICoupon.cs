@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Marketing.Discounts.Coupons
+﻿namespace Merchello.Web.Models.Coupons
 {
     using System.Collections.Generic;
 

@@ -6917,6 +6917,42 @@
             The line Item.
             </param>
         </member>
+        <member name="T:Merchello.Web.Models.Coupons.Coupon">
+            <summary>
+            Represents a discount Coupon.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.Coupons.ICoupon">
+            <summary>
+            Defines a Coupon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Coupons.ICoupon.Constraints">
+            <summary>
+            Gets the constraints.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.Coupons.Coupon.#ctor(Merchello.Core.Models.Interfaces.IOfferSettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.Coupons.Coupon"/> class.
+            </summary>
+            <param name="settings">
+            The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Models.Coupons.CouponLineItemReward">
+            <summary>
+            Defines a coupon line item reward.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.Coupons.CouponLineItemReward.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.Coupons.CouponLineItemReward"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
         <member name="T:Merchello.Web.Workflow.IWishList">
             <summary>
             Defines a wish list.
