@@ -14,14 +14,20 @@
         /// Initializes a new instance of the <see cref="CouponLineItemReward"/> class.
         /// </summary>
         /// <param name="definition">
-        /// The definition.
+        /// The <see cref="OfferComponentDefinition"/>.
         /// </param>
-        public CouponLineItemReward(OfferComponentDefinition definition)
-            : base(definition)
+        /// <param name="customer">
+        /// The <see cref="ICustomerBase"/>.
+        /// </param>
+        /// <param name="container">
+        /// The <see cref="ILineItemContainer"/>.
+        /// </param>
+        public CouponLineItemReward(OfferComponentDefinition definition, ICustomerBase customer, ILineItemContainer container)
+            : base(definition, customer, container)
         {
         }
 
-        public override void Apply(ICustomerBase customer, ILineItemContainer container)
+        public override bool Award()
         {
             throw new System.NotImplementedException();
         }

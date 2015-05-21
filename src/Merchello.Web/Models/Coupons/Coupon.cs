@@ -4,6 +4,7 @@
 
     using Merchello.Core.Marketing.Discounts.Coupons.Constraints;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>
@@ -24,6 +25,6 @@
 
         public IEnumerable<DiscountConstraintBase> Constraints { get; private set; }
 
-        public CouponLineItemReward Reward { get; private set; }
+        public IEnumerable<RewardBase> Rewards { get; private set; }
     }
 }
