@@ -15,7 +15,7 @@
     /// <summary>
     /// Represents the OfferProviderResolver.
     /// </summary>
-    internal class OfferProviderResolver : MerchelloManyObjectsResolverBase<OfferProviderResolver, OfferProviderBase>, IOfferProviderResolver
+    internal class OfferProviderResolver : MerchelloManyObjectsResolverBase<OfferProviderResolver, IOfferProvider>, IOfferProviderResolver
     {
         /// <summary>
         /// The lock.
@@ -25,7 +25,7 @@
         /// <summary>
         /// The activated gateway provider cache.
         /// </summary>
-        private readonly ConcurrentDictionary<Guid, OfferProviderBase> _offerProviderCache = new ConcurrentDictionary<Guid, OfferProviderBase>();
+        private readonly ConcurrentDictionary<Guid, IOfferProvider> _offerProviderCache = new ConcurrentDictionary<Guid, IOfferProvider>();
 
         /// <summary>
         /// The <see cref="IOfferSettingsService"/>.
@@ -53,7 +53,7 @@
         /// <summary>
         /// Gets the collection of instantiated OfferProviders.
         /// </summary>
-        protected override IEnumerable<OfferProviderBase> Values
+        protected override IEnumerable<IOfferProvider> Values
         {
             get
             {
@@ -68,9 +68,9 @@
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="OfferProviderBase"/>.
+        /// The <see cref="IOfferProvider"/>.
         /// </returns>
-        public OfferProviderBase GetByKey(Guid key)
+        public IOfferProvider GetByKey(Guid key)
         {
             return _offerProviderCache.Values.FirstOrDefault(x => x.Key == key);
         }
@@ -81,7 +81,7 @@
         /// <returns>
         /// <seealso cref="Values"/>.
         /// </returns>
-        public IEnumerable<OfferProviderBase> GetOfferProviders()
+        public IEnumerable<IOfferProvider> GetOfferProviders()
         {
             return Values;
         }
@@ -95,9 +95,9 @@
         /// <returns>
         /// The <see cref="T"/>.
         /// </returns>
-        public T GetOfferProvider<T>() where T : OfferProviderBase
+        public T GetOfferProvider<T>() where T : IOfferProvider
         {
-            return (from value in _offerProviderCache.Values let t = value.GetType() where typeof(T).IsAssignableFrom(t) select value as T).FirstOrDefault();
+            return (T)(from value in _offerProviderCache.Values let t = value.GetType() where typeof(T).IsAssignableFrom(t) select value).FirstOrDefault();
         }
 
         /// <summary>
@@ -107,7 +107,7 @@
         {
             foreach (var type in InstanceTypes)
             {                
-                var attempt = ActivatorHelper.CreateInstance<OfferProviderBase>(type, new object[] { _offerSettingsService });
+                var attempt = ActivatorHelper.CreateInstance<IOfferProvider>(type, new object[] { _offerSettingsService });
                 if (attempt.Success)
                 {
                     AddOrUpdateCache(attempt.Result);
@@ -125,7 +125,7 @@
         /// <param name="provider">
         /// The provider.
         /// </param>
-        private void AddOrUpdateCache(OfferProviderBase provider)
+        private void AddOrUpdateCache(IOfferProvider provider)
         {
             _offerProviderCache.AddOrUpdate(provider.Key, provider, (x, y) => provider);
         }

@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
 
     using Umbraco.Core;
@@ -10,10 +12,14 @@
     /// <summary>
     /// A base class to be implemented by resolved OfferProviders.
     /// </summary>
+    /// <typeparam name="TOffer">
+    /// The type of the offer to be managed
+    /// </typeparam>
     /// <remarks>
     /// This is used in provider resolution
     /// </remarks>
-    public abstract class OfferProviderBase : IOfferProvider
+    public abstract class OfferProviderBase<TOffer> : IOfferBaseManager<TOffer>, IOfferProvider
+        where TOffer : OfferBase
     {
         /// <summary>
         /// The <see cref="IOfferSettingsService"/>.
@@ -41,54 +47,195 @@
         /// </remarks>
         public abstract Guid Key { get; }
 
-        public OfferBase CreateOffer(
+        #region implementation of IOfferBaseManager
+
+        /// <summary>
+        /// Creates a <see cref="IOffer"/> without saving it's settings to the database.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <param name="active">
+        /// The active.
+        /// </param>
+        /// <returns>
+        /// The <see cref="OfferBase"/>.
+        /// </returns>
+        public virtual TOffer CreateOffer(string name, string offerCode, bool active = true)
+        {
+            return CreateOffer(name, offerCode, DateTime.MinValue, DateTime.MaxValue, active);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IOffer"/> without saving it's settings to the database.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the offer.
+        /// </param>
+        /// <param name="offerCode">
+        /// The offer code
+        /// </param>
+        /// <param name="offerStartDate">
+        /// The start of the offer valid period.
+        /// </param>
+        /// <param name="offerEndsDate">
+        /// The offer expires date.
+        /// </param>
+        /// <param name="active">
+        /// A value indicating whether or not this offer is active.  Overrides the valid date period.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOffer"/>.
+        /// </returns>
+        public virtual TOffer CreateOffer(
             string name,
             string offerCode,
             DateTime offerStartDate,
-            DateTime offerExpiresDate,
+            DateTime offerEndsDate,
             bool active = true)
         {
-            throw new NotImplementedException();
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Mandate.ParameterNotNullOrEmpty(offerCode, "offerCode");
+
+            var settings = _offerSettingsService.CreateOfferSettings(name, offerCode, Key);
+            settings.OfferStartsDate = offerStartDate;
+            settings.OfferStartsDate = offerEndsDate;
+            settings.Active = active;
+
+            return this.GetInstance(settings);
         }
 
-        public OfferBase CreateOfferWithKey(
+        /// <summary>
+        /// Creates a <see cref="IOffer"/> without saving it's settings to the database.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <param name="active">
+        /// The active.
+        /// </param>
+        /// <returns>
+        /// The <see cref="OfferBase"/>.
+        /// </returns>
+        public virtual TOffer CreateOfferWithKey(string name, string offerCode, bool active = true)
+        {
+            return CreateOfferWithKey(name, offerCode, DateTime.MinValue, DateTime.MinValue, active);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IOffer"/> and saves its settings to the database.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the offer.
+        /// </param>
+        /// <param name="offerCode">
+        /// The offer code
+        /// </param>
+        /// <param name="offerStartDate">
+        /// The start of the offer valid period.
+        /// </param>
+        /// <param name="offerEndsDate">
+        /// The offer expires date.
+        /// </param>
+        /// <param name="active">
+        /// A value indicating whether or not this offer is active.  Overrides the valid date period.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOffer"/>.
+        /// </returns>
+        public virtual TOffer CreateOfferWithKey(
             string name,
             string offerCode,
             DateTime offerStartDate,
-            DateTime offerExpiresDate,
+            DateTime offerEndsDate,
             bool active = true)
         {
-            throw new NotImplementedException();
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Mandate.ParameterNotNullOrEmpty(offerCode, "offerCode");
+
+            var settings = _offerSettingsService.CreateOfferSettingsWithKey(name, offerCode, Key);
+
+            if (!(offerStartDate.Equals(DateTime.MinValue) && offerEndsDate.Equals(DateTime.MaxValue)) || !active)
+            {
+                settings.OfferStartsDate = offerStartDate;
+                settings.OfferStartsDate = offerEndsDate;
+                settings.Active = active;
+                _offerSettingsService.Save(settings);
+            }
+            
+            return this.GetInstance(settings);
         }
 
-        public void Save(OfferBase offer)
+        /// <summary>
+        /// Saves the offer
+        /// </summary>
+        /// <param name="offer">
+        /// The offer to be saved
+        /// </param>
+        public void Save(TOffer offer)
         {
-            throw new NotImplementedException();
+            _offerSettingsService.Save(offer.Settings);
         }
 
-        public void Delete(OfferBase offer)
+        /// <summary>
+        /// Deletes the offer
+        /// </summary>
+        /// <param name="offer">
+        /// The offer to be deleted
+        /// </param>
+        public void Delete(TOffer offer)
         {
-            throw new NotImplementedException();
+            _offerSettingsService.Delete(offer.Settings);
         }
 
-        public IEnumerable<OfferBase> GetOffers(bool activeOnly = true)
+        /// <summary>
+        /// Gets all of the offers managed by this provider
+        /// </summary>
+        /// <param name="activeOnly">
+        /// The active only.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{TOffer}"/>.
+        /// </returns>
+        public IEnumerable<TOffer> GetOffers(bool activeOnly = true)
         {
-            throw new NotImplementedException();
+            var settingsCollection = _offerSettingsService.GetByOfferProviderKey(Key, activeOnly);
+
+            return settingsCollection.Select(GetInstance);
         }
 
-        public IEnumerable<T> GetOffers<T>(bool activeOnly = true) where T : OfferBase
+        /// <summary>
+        /// The get by key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TOffer"/>.
+        /// </returns>
+        public TOffer GetByKey(Guid key)
         {
-            throw new NotImplementedException();
+            var settings = _offerSettingsService.GetByKey(key);
+            return GetInstance(settings);
         }
 
-        public OfferBase GetByKey(Guid key)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
-        public T GetByKey<T>(Guid key)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Instantiates an offer given it's settings
+        /// </summary>
+        /// <param name="offerSettings">
+        /// The offer settings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TOffer"/>.
+        /// </returns>
+        protected abstract TOffer GetInstance(IOfferSettings offerSettings);
     }
 }

@@ -4,7 +4,7 @@
     using System.Linq;
 
     using Merchello.Core.Marketing.Offer;
-    using Merchello.Tests.Base.Discounts;
+    using Merchello.Tests.Base.Offers;
     using Merchello.Tests.Base.TestHelpers;
 
     using NUnit.Framework;

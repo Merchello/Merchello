@@ -139,7 +139,7 @@
         /// <summary>
         /// Gets the settings.
         /// </summary>
-        protected IOfferSettings Settings { get; private set; }
+        internal IOfferSettings Settings { get; private set; }
 
         #endregion
 
@@ -164,5 +164,6 @@
         {
             Settings.ComponentDefinitions.Add(definition);
         }
+
     }
 }

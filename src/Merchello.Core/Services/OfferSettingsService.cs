@@ -408,14 +408,20 @@
         /// <param name="offerProviderKey">
         /// The offer provider key.
         /// </param>
+        /// <param name="activeOnly">
+        /// Optional value indicating whether or not to only return active Offers settings marked as active
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IOfferSettings}"/>.
         /// </returns>
-        public IEnumerable<IOfferSettings> GetByOfferProviderKey(Guid offerProviderKey)
+        public IEnumerable<IOfferSettings> GetByOfferProviderKey(Guid offerProviderKey, bool activeOnly = true)
         {
             using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
             {
-                var query = Query<IOfferSettings>.Builder.Where(x => x.OfferProviderKey == offerProviderKey);
+                var query = activeOnly ? 
+                    Query<IOfferSettings>.Builder.Where(x => x.OfferProviderKey == offerProviderKey && x.Active) :
+                    Query<IOfferSettings>.Builder.Where(x => x.OfferProviderKey == offerProviderKey);
+
                 return repository.GetByQuery(query);
             }
         }

@@ -82,7 +82,7 @@
         /// </returns>
         internal static IEnumerable<Type> ResolveOfferProviders(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypes<OfferProviderBase>();
+            return pluginManager.ResolveTypes<IOfferProvider>();
         }
     }
 }

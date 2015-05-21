@@ -249,6 +249,7 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="Marketing\Discounts\DiscountLineItemReward.cs" />
+    <Compile Include="Marketing\Offer\IOfferBaseManager.cs" />
     <Compile Include="Marketing\Offer\IOfferProviderResolver.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinitionExtensions.cs" />
