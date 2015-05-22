@@ -11,7 +11,7 @@
     /// <summary>
     /// Defines an offer settings service
     /// </summary>
-    public interface IOfferSettingsService : IService
+    public interface IOfferSettingsService : IPageCachedService<IOfferSettings>
     {
         /// <summary>
         /// Creates a <see cref="IOfferSettings"/> without saving it to the database

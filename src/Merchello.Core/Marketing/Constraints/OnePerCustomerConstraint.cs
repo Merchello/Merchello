@@ -2,25 +2,25 @@
 {
     using System;
 
-    using Merchello.Core.Marketing.Discounts.Coupons.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
 
     /// <summary>
-    /// A discount validation rule to restrict this discount to a selection of products.
+    /// A rule to enforce one discount per customer.
     /// </summary>
-    public class RestrictToProductSelectionConstraint : DiscountConstraintBase
+    [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One per customer", "The customer may only ever use this coupon once.")]
+    public class OnePerCustomerConstraint : DiscountConstraintBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RestrictToProductSelectionConstraint"/> class.
+        /// Initializes a new instance of the <see cref="OnePerCustomerConstraint"/> class.
         /// </summary>
-        /// <param name="settings">
-        /// The settings.
+        /// <param name="definition">
+        /// The <see cref="OfferComponentDefinition"/>.
         /// </param>
-        public RestrictToProductSelectionConstraint(OfferComponentDefinition settings)
-            : base(settings)
+        public OnePerCustomerConstraint(OfferComponentDefinition definition)
+            : base(definition)
         {
         }
 
@@ -31,7 +31,7 @@
         {
             get
             {
-                return DiscountCategory.Product;
+                return DiscountCategory.Customer;
             }
         }
 
@@ -49,7 +49,13 @@
         /// </returns>
         public override Attempt<ILineItemContainer> Validate(ICustomerBase customer, ILineItemContainer collection)
         {
+            if (customer.IsAnonymous)
+            {
+                var anonymousException = new Exception("Customer must be signed in to use this discount.");
+                return Attempt<ILineItemContainer>.Fail(collection, anonymousException);
+            }
+
             throw new NotImplementedException();
-        }
+        }        
     }
 }

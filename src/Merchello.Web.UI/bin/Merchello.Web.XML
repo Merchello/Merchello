@@ -304,6 +304,14 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponProvider.#ctor(Merchello.Core.Services.IOfferSettingsService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponProvider"/> class.
+            </summary>
+            <param name="offerSettingsService">
+            The offer settings service.
+            </param>
+        </member>
         <member name="T:Merchello.Web.Models.Customer.CustomerContextDataExtensions">
             <summary>
             The customer context data extensions.
@@ -6917,42 +6925,42 @@
             The line Item.
             </param>
         </member>
-        <member name="T:Merchello.Web.Models.Coupons.Coupon">
+        <member name="T:Merchello.Web.Discounts.Coupons.Coupon">
             <summary>
             Represents a discount Coupon.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Models.Coupons.ICoupon">
+        <member name="T:Merchello.Web.Discounts.Coupons.ICoupon">
             <summary>
             Defines a Coupon.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Coupons.ICoupon.Constraints">
+        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Constraints">
             <summary>
             Gets the constraints.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Coupons.ICoupon.Rewards">
+        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Rewards">
             <summary>
             Gets the rewards.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.Coupons.Coupon.#ctor(Merchello.Core.Models.Interfaces.IOfferSettings)">
+        <member name="M:Merchello.Web.Discounts.Coupons.Coupon.#ctor(Merchello.Core.Models.Interfaces.IOfferSettings)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Models.Coupons.Coupon"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Coupon"/> class.
             </summary>
             <param name="settings">
             The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
             </param>
         </member>
-        <member name="T:Merchello.Web.Models.Coupons.CouponLineItemReward">
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponLineItemReward">
             <summary>
             Defines a coupon line item reward.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.Coupons.CouponLineItemReward.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition,Merchello.Core.Models.ICustomerBase,Merchello.Core.Models.ILineItemContainer)">
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponLineItemReward.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition,Merchello.Core.Models.ICustomerBase,Merchello.Core.Models.ILineItemContainer)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Models.Coupons.CouponLineItemReward"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponLineItemReward"/> class.
             </summary>
             <param name="definition">
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.

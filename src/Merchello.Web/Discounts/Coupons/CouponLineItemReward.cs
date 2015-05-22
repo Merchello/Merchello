@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Models.Coupons
+﻿namespace Merchello.Web.Discounts.Coupons
 {
     using Merchello.Core.Marketing.Discounts;
     using Merchello.Core.Marketing.Offer;

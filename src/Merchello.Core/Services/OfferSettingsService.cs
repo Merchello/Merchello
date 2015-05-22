@@ -7,12 +7,14 @@
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
-    using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents the OfferSettingsService.
@@ -403,6 +405,34 @@
         }
 
         /// <summary>
+        /// Returns a page of <see cref="IOfferSettings"/>.
+        /// </summary>
+        /// <param name="page">
+        /// The page number.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IOfferSettings}"/>.
+        /// </returns>
+        public Page<IOfferSettings> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            {
+               var query = Query<IOfferSettings>.Builder.Where(x => x.Key != Guid.Empty);
+
+               return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="IOfferSettings"/> for a given offer provider.
         /// </summary>
         /// <param name="offerProviderKey">
@@ -463,6 +493,12 @@
 
                 return repository.GetByQuery(query);
             }
+        }
+
+        private string ValidateSortByField(string sortBy)
+        {
+            var valid = new[] { "name", "offerCode", "offerStartsDate", "offerEndsDate" };
+            return !valid.Contains(sortBy, StringComparer.CurrentCultureIgnoreCase) ? "name" : sortBy;
         }
     }
 }

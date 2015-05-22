@@ -5,6 +5,7 @@
 
     using Lucene.Net.Search.Function;
 
+    using Merchello.Core.Marketing.Discounts;
     using Merchello.Core.Marketing.Discounts.Constraints;
 
     /// <summary>

@@ -20,7 +20,7 @@
     /// <summary>
     /// Represents an offer settings repository.
     /// </summary>
-    internal class OfferSettingsRepository : MerchelloPetaPocoRepositoryBase<IOfferSettings>, IOfferSettingsRepository
+    internal class OfferSettingsRepository : PagedRepositoryBase<IOfferSettings, OfferSettingsDto>, IOfferSettingsRepository
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OfferSettingsRepository"/> class.
@@ -35,6 +35,40 @@
             : base(work, cache)
         {
         }
+
+        /// <summary>
+        /// Searches for a set of keys that match the term submitted.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public override Page<Guid> SearchKeys(
+           string searchTerm,
+           long page,
+           long itemsPerPage,
+           string orderExpression,
+           SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = this.BuildOfferSearchSql(searchTerm);
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
 
         /// <summary>
         /// Performs the get by key operation.
@@ -190,6 +224,34 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+        }
+       
+        /// <summary>
+        /// Builds an offer search query.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        private Sql BuildOfferSearchSql(string searchTerm)
+        {
+            searchTerm = searchTerm.Replace(",", " ");
+            var terms = searchTerm.Split(' ').Select(x => x.Trim()).ToArray();
+
+            var sql = new Sql();
+            sql.Select("*").From<OfferSettingsDto>();
+            if (terms.Any())
+            {
+                sql.Where("name LIKE @term OR offerCode LIKE @offerCode", new { @term = string.Format("%{0}%", string.Join("%", terms)), offerCode = string.Format("%{0}%", string.Join("%", terms)) });
+            }
+            else
+            {
+                sql.Where("name LIKE @term OR offerCode LIKE @term", new { @term = string.Format("%{0}%", string.Join("%", terms)) });
+            }
+
+            return sql;
         }
     }
 }

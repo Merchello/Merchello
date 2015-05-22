@@ -13,14 +13,14 @@
     <key alias="alias">Alias</key>
     <key alias="startDate">Start Date</key>
     <key alias="endDate">End Date</key>
+    <key alias="active">Active</key>
   </area>
     <area alias="merchelloMarketing">
-      <key alias="campaigns">Marketing Campaigns</key>
-      <key alias="btnNewCampaign">New Campaign</key>
-      <key alias="isActive">Active</key>
-      <key alias="activities">Activities</key>
-      <key alias="campaignInfo">Campaign Info</key>
-      <key alias="configCampaign">Configure the Marketing Campaign</key>
+      <key alias="currentOffers">Current Offers</key>
+      <key alias="offerCode">Offer Code</key>
+      <key alias="newOffer">New Offer</key>
+      <key alias="noOffer">No current offers</key>
+      <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
     </area>
   <area alias="merchelloVariant">
     <!-- things -->

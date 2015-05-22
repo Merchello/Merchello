@@ -231,6 +231,7 @@
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
+    <Compile Include="Discounts\Coupons\CouponProvider.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\CapturePaymentDialogEditorViewResolver.cs" />
@@ -343,9 +344,9 @@
     <Compile Include="Workflow\BasketConversionByCombiningAnonymousBasket.cs" />
     <Compile Include="Workflow\BasketConversionByDiscardingPreviousCustomerBasket.cs" />
     <Compile Include="Workflow\BasketWishListExtensions.cs" />
-    <Compile Include="Models\Coupons\Coupon.cs" />
-    <Compile Include="Models\Coupons\CouponLineItemReward.cs" />
-    <Compile Include="Models\Coupons\ICoupon.cs" />
+    <Compile Include="Discounts\Coupons\Coupon.cs" />
+    <Compile Include="Discounts\Coupons\CouponLineItemReward.cs" />
+    <Compile Include="Discounts\Coupons\ICoupon.cs" />
     <Compile Include="Workflow\IBackoffice.cs" />
     <Compile Include="Workflow\IBackofficeSalePreparation.cs" />
     <Compile Include="Workflow\IBasketConversionBase.cs" />
