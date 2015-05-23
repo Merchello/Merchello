@@ -18,5 +18,12 @@
         {
         }
 
+        /// <summary>
+        /// Awards the reward.
+        /// </summary>
+        /// <returns>
+        /// A value indicating whether or not the awarding process was successful.
+        /// </returns>
+        public abstract bool Award();
     }
 }

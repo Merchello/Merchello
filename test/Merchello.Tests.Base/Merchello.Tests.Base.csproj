@@ -249,6 +249,8 @@
     <Compile Include="DataMakers\MockCustomerDataMaker.cs" />
     <Compile Include="DataMakers\MockTransactionDataMaker.cs" />
     <Compile Include="DataMakers\MockWarehouseDataMaker.cs" />
+    <Compile Include="Offers\TestOffer.cs" />
+    <Compile Include="Offers\TestOfferProvider.cs" />
     <Compile Include="Mocks\MockPaymentMethodUiController.cs" />
     <Compile Include="Mocks\ShipmentMock.cs" />
     <Compile Include="Mocks\ShipmentStatusMock.cs" />

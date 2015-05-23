@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Marketing.Discounts.Constraints
+﻿namespace Merchello.Core.Marketing.Discounts
 {
     using Merchello.Core.Models;
 

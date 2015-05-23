@@ -11,7 +11,7 @@
     /// <summary>
     /// Defines an offer settings service
     /// </summary>
-    public interface IOfferSettingsService : IService
+    public interface IOfferSettingsService : IPageCachedService<IOfferSettings>
     {
         /// <summary>
         /// Creates a <see cref="IOfferSettings"/> without saving it to the database
@@ -160,11 +160,14 @@
         /// <param name="offerProviderKey">
         /// The offer provider key.
         /// </param>
+        /// <param name="activeOnly">
+        /// Optional value indicating whether or not to only return active Offers settings marked as active
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IOfferSettings}"/>.
         /// </returns>
-        IEnumerable<IOfferSettings> GetByOfferProviderKey(Guid offerProviderKey);
-
+        IEnumerable<IOfferSettings> GetByOfferProviderKey(Guid offerProviderKey, bool activeOnly = true);
+        
         /// <summary>
         /// Gets a <see cref="OfferSettings"/> by the offer code value.
         /// </summary>

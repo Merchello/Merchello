@@ -258,6 +258,7 @@
     <Compile Include="Notifications\PatternFormatterTests.cs" />
     <Compile Include="Notifications\SmtpNotificationProviderTests.cs" />
     <Compile Include="ObjectResolution\OfferComponentResolution.cs" />
+    <Compile Include="ObjectResolution\OfferProviderResolutionTests.cs" />
     <Compile Include="ObjectResolution\PaymentMethodUiControllerResolution.cs" />
     <Compile Include="ObjectResolution\GatewayProviderResolution.cs" />
     <Compile Include="ObjectResolution\MockInvoiceObservableTrigger.cs" />

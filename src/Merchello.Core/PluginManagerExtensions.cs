@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Gateways;
 
+    using Merchello.Core.Marketing.Discounts;
     using Merchello.Core.Marketing.Discounts.Constraints;
     using Merchello.Core.Marketing.Offer;
 
@@ -69,6 +70,20 @@
         internal static IEnumerable<Type> ResolveObservableTriggers(this PluginManager pluginManager)
         {
             return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
-        }        
+        }
+
+        /// <summary>
+        /// Resolves any <see cref="OfferProviderBase"/> types.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The <see cref="PluginManager"/>.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="OfferProviderBase"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveOfferProviders(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypes<IOfferProvider>();
+        }
     }
 }

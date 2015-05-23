@@ -1,27 +1,25 @@
-﻿namespace Merchello.Core.Marketing.Discounts.Coupons.Constraints.Customer
+﻿namespace Merchello.Core.Marketing.Discounts.Constraints
 {
     using System;
 
-    using Merchello.Core.Marketing.Discounts.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
 
     /// <summary>
-    /// A rule to enforce one discount per customer.
+    /// A discount validation rule to restrict this discount to a selection of products.
     /// </summary>
-    [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One per customer", "The customer may only ever use this coupon once.")]
-    public class OnePerCustomerConstraint : DiscountConstraintBase
+    public class RestrictToProductSelectionConstraint : DiscountConstraintBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OnePerCustomerConstraint"/> class.
+        /// Initializes a new instance of the <see cref="RestrictToProductSelectionConstraint"/> class.
         /// </summary>
-        /// <param name="definition">
-        /// The <see cref="OfferComponentDefinition"/>.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        public OnePerCustomerConstraint(OfferComponentDefinition definition)
-            : base(definition)
+        public RestrictToProductSelectionConstraint(OfferComponentDefinition settings)
+            : base(settings)
         {
         }
 
@@ -32,7 +30,7 @@
         {
             get
             {
-                return DiscountCategory.Customer;
+                return DiscountCategory.Product;
             }
         }
 
@@ -50,13 +48,7 @@
         /// </returns>
         public override Attempt<ILineItemContainer> Validate(ICustomerBase customer, ILineItemContainer collection)
         {
-            if (customer.IsAnonymous)
-            {
-                var anonymousException = new Exception("Customer must be signed in to use this discount.");
-                return Attempt<ILineItemContainer>.Fail(collection, anonymousException);
-            }
-
             throw new NotImplementedException();
-        }        
+        }
     }
 }
