@@ -1234,6 +1234,47 @@
     }());
 
     angular.module('merchello.models').constant('OrderLineItemDisplay', OrderLineItemDisplay);
+/**
+ * @ngdoc model
+ * @name OfferComponentDefinitionDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's OfferComponentDefinitionDisplay object
+ */
+var OfferComponentDefinitionDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.compoentKey = '';
+    self.name = '';
+    self.description = '';
+    self.typeName = '';
+    self.extendedData = {};
+    self.editorView = {};
+};
+
+angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', OfferComponentDefinitionDisplay);
+    /**
+     * @ngdoc model
+     * @name OfferSettingsDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's OfferSettingsDisplay object
+     */
+    var OfferSettingsDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.offerCode = '';
+        self.offerProviderKey = '';
+        self.offerStartsDate = '';
+        self.offerEndsDate = '';
+        self.active = true;
+        self.componentDefinitions = [];
+    };
+
+    angular.module('merchello.models').constant('OfferSettingsDisplay', OfferSettingsDisplay);
     /**
      * @ngdoc model
      * @name NotificationGatewayProviderDisplay
@@ -3529,6 +3570,74 @@ angular.module('merchello.models').factory('dialogDataFactory',
             }]);
 
 
+    /**
+     * @ngdoc service
+     * @name merchello.models.offerComponentDefinitionDisplayBuilder
+     *
+     * @description
+     * A utility service that builds OfferComponentDefinitionDisplay models
+     */
+    angular.module('merchello.models').factory('offerComponentDefinitionDisplay',
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'dialogEditorViewDisplayBuilder', 'OfferComponentDefinitionDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, dialogEditorViewDisplayBuilder, OfferComponentDefinitionDisplay) {
+
+            var Constructor = OfferComponentDefinitionDisplay;
+
+            return {
+                createDefault: function() {
+                    var definition = new Constructor();
+                    definition.extendedData = extendedDataDisplayBuilder.createDefault();
+                    return definition;
+                },
+                transform: function(jsonResult) {
+                    var definitions = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var definition = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            definition.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                            definition.editorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].editorView);
+                            definitions.push(definition);
+                        }
+                    } else {
+                        definitions = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        definitions.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                        definitions.editorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].editorView);
+                    }
+                    return definitions;
+                }
+            };
+        }]);
+/**
+ * @ngdoc service
+ * @name merchello.models.offerSettingsDisplayBuilder
+ *
+ * @description
+ * A utility service that builds OfferSettingsDisplay models
+ */
+angular.module('merchello.models').factory('offerSettingsDisplayBuilder',
+    ['genericModelBuilder', 'offerComponentDefinitionDisplayBuilder', 'OfferSettingsDisplay',
+    function(genericModelBuilder, offerComponentDefinitionDisplayBuilder, OfferSettingsDisplay) {
+        var Constructor = OfferSettingsDisplay;
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                var settings = [];
+                if(angular.isArray(jsonResult)) {
+                    angular.forEach(jsonResult, function(json) {
+                        var setting = genericModelBuilder.transform(json, Constructor);
+                        setting.componentDefinitions = offerComponentDefinitionDisplayBuilder.transform(json.componentDefinitions);
+                        settings.push(setting);
+                    });
+                } else {
+                    settings = genericModelBuilder.transform(jsonResult,Constructor);
+                    settings.componentDefinitions = offerComponentDefinitionDisplayBuilder.transform(jsonResult.componentDefinitions);
+                }
+                return settings;
+            }
+        };
+    }]);
 angular.module('merchello.models').factory('merchelloTabsFactory',
     ['MerchelloTabCollection',
         function(MerchelloTabCollection) {
@@ -3622,6 +3731,13 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates the tabs for the marketing section
+            function createMarketingTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('offers', 'Offers Listing', '#/merchello/merchello/offerslist/manage');
+                return tabs;
+            }
+
             function createReportsTabs() {
                 var tabs = new Constructor();
                 tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
@@ -3639,7 +3755,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs,
-                createProductVariantEditorTabs: createProductVariantEditorTabs
+                createProductVariantEditorTabs: createProductVariantEditorTabs,
+                createMarketingTabs: createMarketingTabs
             };
 
 }]);

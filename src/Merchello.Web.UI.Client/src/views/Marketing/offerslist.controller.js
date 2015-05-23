@@ -30,7 +30,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
 
 
         function init() {
-
+            $scope.tabs = merchelloTabsFactory.createMarketingTabs();
+            $scope.tabs.setActive('offers');
         }
 
         function loadOffers() {

@@ -35,6 +35,250 @@
             
             </summary>
         </member>
+        <member name="T:Merchello.Web.Editors.MarketingApiController">
+            <summary>
+            An API controller for the Merchello marketing section.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.WebApi.MerchelloApiController">
+            <summary>
+            The base Merchello back office API controller.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="umbracoContext">
+            The umbraco context.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.WebApi.MerchelloApiController.MerchelloContext">
+            <summary>
+            Gets the current <see cref="T:Merchello.Core.IMerchelloContext"/>
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.WebApi.MerchelloApiController.InstanceId">
+            <summary>
+            Gets the instance id
+            </summary>
+            <remarks>
+            Useful for debugging
+            </remarks>
+        </member>
+        <member name="F:Merchello.Web.Editors.MarketingApiController._offerSettingsService">
+            <summary>
+            The offer settings service.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Editors.MarketingApiController._resolver">
+            <summary>
+            The offer provider resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.MarketingApiController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.MarketingApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.MarketingApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="umbracoContext">
+            The umbraco context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.GetOfferSettings">
+            <summary>
+            Gets the collection of all active offer settings.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.PostAddOfferSettings(Merchello.Web.Models.ContentEditing.OfferSettingsDisplay)">
+            <summary>
+            Adds a new offer settings record to the database.
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay">
+            <summary>
+            The offer component definition display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentKey">
+            <summary>
+            Gets or sets the component key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.TypeName">
+            <summary>
+            Gets or sets the type name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ExtendedData">
+            <summary>
+            Gets or sets the extended data.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.EditorView">
+            <summary>
+            Gets or sets the editor view.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplayExtensions">
+            <summary>
+            Utility class for mapping <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplayExtensions.ToOfferComponentDefinitionDisplay(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            The to offer component definition display.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplayExtensions.ToOfferComponentDefinition(Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay)">
+            <summary>
+            Maps a <see cref="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay"/> to a <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplayExtensions.AsOfferComponentDefinitionCollection(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay})">
+            <summary>
+            Creates an <see cref="T:Merchello.Core.Models.OfferComponentDefinitionCollection"/> from a collection of <see cref="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay"/>.
+            </summary>
+            <param name="definitions">
+            The definitions.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.OfferComponentDefinitionCollection"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay">
+            <summary>
+            The offer settings display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.OfferCode">
+            <summary>
+            Gets or sets the offer code.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.OfferProviderKey">
+            <summary>
+            Gets or sets the offer provider key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.OfferStartsDate">
+            <summary>
+            Gets or sets the offer starts date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.OfferEndsDate">
+            <summary>
+            Gets or sets the offer ends date.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.Active">
+            <summary>
+            Gets or sets a value indicating whether active.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.DateDependent">
+            <summary>
+            Gets or sets a value indicating whether date dependent.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.ComponentDefinitions">
+            <summary>
+            Gets or sets the component definitions.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.OfferSettingDisplayExtensions">
+            <summary>
+            Utility extensions to map <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/> to/from display classes.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.OfferSettingDisplayExtensions.ToOfferSettingsDisplay(Merchello.Core.Models.Interfaces.IOfferSettings)">
+            <summary>
+            Maps <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/> to <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.CurrencyDisplay">
             <summary>
             The currency display.
@@ -509,6 +753,35 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.OfferComponentAttributeValueResolver">
+            <summary>
+            The offer component attribute value resolver.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.MapperResolvers.OfferComponentAttributeValueResolver._fieldName">
+            <summary>
+            The _field name.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.OfferComponentAttributeValueResolver.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.MapperResolvers.OfferComponentAttributeValueResolver"/> class.
+            </summary>
+            <param name="fieldName">
+            The field name.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.OfferComponentAttributeValueResolver.ResolveCore(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Object"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay">
@@ -1022,48 +1295,6 @@
             <summary>
             The audit log api controller.
             </summary>
-        </member>
-        <member name="T:Merchello.Web.WebApi.MerchelloApiController">
-            <summary>
-            The base Merchello back office API controller.
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor(Merchello.Core.IMerchelloContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
-            </summary>
-            <param name="merchelloContext">
-            The merchello context.
-            </param>
-        </member>
-        <member name="M:Merchello.Web.WebApi.MerchelloApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.MerchelloApiController"/> class.
-            </summary>
-            <param name="merchelloContext">
-            The merchello context.
-            </param>
-            <param name="umbracoContext">
-            The umbraco context.
-            </param>
-        </member>
-        <member name="P:Merchello.Web.WebApi.MerchelloApiController.MerchelloContext">
-            <summary>
-            Gets the current <see cref="T:Merchello.Core.IMerchelloContext"/>
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.WebApi.MerchelloApiController.InstanceId">
-            <summary>
-            Gets the instance id
-            </summary>
-            <remarks>
-            Useful for debugging
-            </remarks>
         </member>
         <member name="F:Merchello.Web.Editors.AuditLogApiController._auditLogService">
             <summary>
@@ -11634,13 +11865,13 @@
         </member>
         <member name="M:Merchello.Web.Trees.ServerVariablesParsingEvents.ServerVariablesParserParsing(System.Object,System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
-            The server variables parser parsing.
+            Updates Umbraco's server variables collection with Merchello server variable values.
             </summary>
             <param name="sender">
             The sender.
             </param>
-            <param name="items">
-            The items.
+            <param name="e">
+            The dictionary of server variables.
             </param>
         </member>
         <member name="T:Merchello.Web.UmbracoApplicationEventHandler">

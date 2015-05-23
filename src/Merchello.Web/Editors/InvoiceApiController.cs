@@ -1,9 +1,7 @@
-﻿using System.Globalization;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -17,6 +15,7 @@ namespace Merchello.Web.Editors
     using Merchello.Web.WebApi;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
 

@@ -169,6 +169,7 @@
     <key alias="enterProduct">Enter a product name</key>
     <key alias="enterOrder">Start typing an order number or name...</key>to
     <key alias="addStyle">Add a style...</key>
+    <key alias="enterOffer">Enter a name for the offer</key>
   </area>
   <area alias="merchelloGeneral">
     <key alias="apply">Apply</key>
