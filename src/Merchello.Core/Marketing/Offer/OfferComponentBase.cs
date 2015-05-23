@@ -30,7 +30,7 @@
         /// <summary>
         /// Gets the <see cref="OfferComponentDefinition"/>.
         /// </summary>
-        protected OfferComponentDefinition OfferComponentDefinition
+        internal OfferComponentDefinition OfferComponentDefinition
         {
             get
             {

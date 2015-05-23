@@ -1,10 +1,9 @@
 ﻿namespace Merchello.Web
 {
-    using System.Web.UI;
-
     using Core.Gateways;
     using Core.Models;
 
+    using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Web.Models.SaleHistory;
 
@@ -78,6 +77,32 @@
 
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
             
+            // Offer
+            AutoMapper.Mapper.CreateMap<IOfferSettings, OfferSettingsDisplay>();
+            AutoMapper.Mapper.CreateMap<OfferComponentDefinition, OfferComponentDefinitionDisplay>()
+                .ForMember(
+                    dest => dest.ExtendedData,
+                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(
+                    dest => dest.Name,
+                    opt =>
+                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
+                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("name")))
+                .ForMember(
+                    dest => dest.Description,
+                    opt =>
+                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
+                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("description")))
+                .ForMember(
+                    dest => dest.Key,
+                    opt =>
+                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
+                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("key")))
+                .ForMember(
+                    dest => dest.EditorView,
+                    opt =>
+                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
+                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorVeiw")));
             
 
             // setup the other mappings

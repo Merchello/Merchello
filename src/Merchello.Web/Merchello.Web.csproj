@@ -224,6 +224,9 @@
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="DigitalDownloadHandler.cs" />
+    <Compile Include="Editors\MarketingApiController.cs" />
+    <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />
+    <Compile Include="Models\ContentEditing\OfferSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\CurrencyDisplay.cs" />
     <Compile Include="Models\ContentEditing\GateProviderSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\InvoiceShippingUpdateData.cs" />
@@ -231,6 +234,7 @@
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
+    <Compile Include="Discounts\Coupons\CouponProvider.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\CapturePaymentDialogEditorViewResolver.cs" />
@@ -241,6 +245,7 @@
     <Compile Include="Models\MapperResolvers\DialogEditorViews\RequiresCustomerResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\VoidPaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\LineItemTypeFieldResolver.cs" />
+    <Compile Include="Models\MapperResolvers\Offers\OfferComponentAttributeValueResolver.cs" />
     <Compile Include="Models\Shipping\ShipmentRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodsQueryDisplay.cs" />
@@ -343,6 +348,9 @@
     <Compile Include="Workflow\BasketConversionByCombiningAnonymousBasket.cs" />
     <Compile Include="Workflow\BasketConversionByDiscardingPreviousCustomerBasket.cs" />
     <Compile Include="Workflow\BasketWishListExtensions.cs" />
+    <Compile Include="Discounts\Coupons\Coupon.cs" />
+    <Compile Include="Discounts\Coupons\CouponLineItemReward.cs" />
+    <Compile Include="Discounts\Coupons\ICoupon.cs" />
     <Compile Include="Workflow\IBackoffice.cs" />
     <Compile Include="Workflow\IBackofficeSalePreparation.cs" />
     <Compile Include="Workflow\IBasketConversionBase.cs" />

@@ -11,7 +11,7 @@
     [TableName("merchOfferSettings")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class OfferSettingsDto : IPageableDto
+    public class OfferSettingsDto : IPageableDto
     {
         /// <summary>
         /// Gets or sets the key.
