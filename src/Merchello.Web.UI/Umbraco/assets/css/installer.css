@@ -891,7 +891,8 @@ textarea::-webkit-input-placeholder {
 .radio input[type="radio"],
 .checkbox input[type="checkbox"] {
   float: left;
-  margin-left: -20px;
+  margin-right: 5px;
+  margin-left: 0;
 }
 
 .controls > .radio:first-child,

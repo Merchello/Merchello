@@ -1936,6 +1936,13 @@ angular.module('umbraco.services')
                 template: 'views/common/dialogs/ysod.html',
                 show: true
             });
+        },
+
+        confirmDialog: function (ysodError) {
+
+            options.template = 'views/common/dialogs/confirm.html';
+            options.show = true;
+            return openDialog(options);
         }
     };
 });
@@ -3654,6 +3661,11 @@ function mediaHelper(umbRequestHelper) {
          * @param {string} imagePath Image path, ex: /media/1234/my-image.jpg
          */
         detectIfImageByExtension: function (imagePath) {
+
+            if (!imagePath) {
+                return false;
+            }
+            
             var lowered = imagePath.toLowerCase();
             var ext = lowered.substr(lowered.lastIndexOf(".") + 1);
             return ("," + Umbraco.Sys.ServerVariables.umbracoSettings.imageFileTypes + ",").indexOf("," + ext + ",") !== -1;
@@ -4254,23 +4266,26 @@ function navigationService($rootScope, $routeParams, $log, $location, $q, $timeo
          * Opens the user dialog, next to the sections navigation
          * template is located in views/common/dialogs/user.html
          */
-        showUserDialog: function() {
+        showUserDialog: function () {
+            // hide tray and close help dialog
+            if (service.helpDialog) {
+                service.helpDialog.close();
+            }
+            service.hideTray();
 
-            if(userDialog){
-                userDialog.close();
-                userDialog = null;
+            if (service.userDialog) {
+                service.userDialog.close();
+                service.userDialog = undefined;
             }
 
-            userDialog = dialogService.open(
-                {
-                    template: "views/common/dialogs/user.html",
-                    modalClass: "umb-modal-left",
-                    show: true
-                });
-        
-            
+            service.userDialog = dialogService.open(
+            {
+                template: "views/common/dialogs/user.html",
+                modalClass: "umb-modal-left",
+                show: true
+            });
 
-            return userDialog;
+            return service.userDialog;
         },
 
         /**
@@ -4282,7 +4297,13 @@ function navigationService($rootScope, $routeParams, $log, $location, $q, $timeo
          * Opens the user dialog, next to the sections navigation
          * template is located in views/common/dialogs/user.html
          */
-        showHelpDialog: function() {
+        showHelpDialog: function () {
+            // hide tray and close user dialog
+            service.hideTray();
+            if (service.userDialog) {
+                service.userDialog.close();
+            }
+
             if(service.helpDialog){
                 service.helpDialog.close();
                 service.helpDialog = undefined;
@@ -7413,7 +7434,7 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
         },
 
         /** builds an image grid row */
-        buildRow: function(imgs, maxRowHeight, minDisplayHeight, maxRowWidth, idealImgPerRow, margin) {
+        buildRow: function(imgs, maxRowHeight, minDisplayHeight, maxRowWidth, idealImgPerRow, margin, totalRemaining) {
             var currRowWidth = 0;
             var row = { images: [] };
 
@@ -7460,8 +7481,8 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
                 this.setImageStyle(row.images[j], sizes[j].width, sizes[j].height, margin, bottomMargin);
             }
 
-            if (row.images.length === 1) {
-                //if there's only one image on the row, set the container to max width
+            if (row.images.length === 1 && totalRemaining > 1) {
+                //if there's only one image on the row and there are more images remaining, set the container to max width
                 row.images[0].style.width = maxRowWidth + "px"; 
             }
             
@@ -7485,7 +7506,7 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
         buildGrid: function(images, maxRowWidth, maxRowHeight, startingIndex, minDisplayHeight, idealImgPerRow, margin,imagesOnly) {
 
             var rows = [];
-            var imagesProcessed = 0;
+            var imagesProcessed = 0; 
 
             //first fill in all of the original image sizes and URLs
             for (var i = startingIndex; i < images.length; i++) {
@@ -7505,7 +7526,8 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
                 var currImgs = images.slice(imagesProcessed);
 
                 //build the row
-                var row = this.buildRow(currImgs, maxRowHeight, minDisplayHeight, maxRowWidth, idealImgPerRow, margin);
+                var remaining = images.length - imagesProcessed;
+                var row = this.buildRow(currImgs, maxRowHeight, minDisplayHeight, maxRowWidth, idealImgPerRow, margin, remaining);
                 if (row.images.length > 0) {
                     rows.push(row);
                     imagesProcessed += row.images.length;
