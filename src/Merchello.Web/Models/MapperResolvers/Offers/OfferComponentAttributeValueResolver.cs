@@ -57,6 +57,8 @@
                         Description = att.Description,
                         EditorView = att.EditorView.StartsWith("~/") ? IOHelper.ResolveUrl(att.EditorView) : att.EditorView
                     };
+                case "restrictToType":
+                    return att.RestrictToType == null ? string.Empty : att.RestrictToType.Name;
             }
 
             return null;

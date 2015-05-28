@@ -1,0 +1,30 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Marketing.Dialogs.OfferProviderSelectionController" data-ng-show="loaded">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloButtons_select" /> <localize key="merchelloMarketing_offerType" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <h3><localize key="merchelloButtons_select" /> <localize key="merchelloMarketing_offerType" /></h3>
+        <div class="control-group row-fluid">
+
+            <table class="table settings-table col-xs-12 span12">
+                <tr>
+                <th colspan="3">Offer Provider</th>
+                </tr>
+                <tr data-ng-repeat="provider in dialogData.offerProviders">
+                    <td class="col-xs-1 span1"><i data-ng-class="provider.backOfficeTree.icon" data-ng-show="provider.backOfficeTree.icon !== ''"></i></td>
+                    <td class="col-xs-9 span9">{{provider.backOfficeTree.title}}</td>
+                    <td class="col-xs-2 span2 text-right"><button type="button" class="btn btn-primary" data-ng-click="setSelection(provider)"><localize key="merchelloButtons_select" /></button> </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+            </div>
+        </div>
+    </div>
+</div>

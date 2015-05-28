@@ -9,7 +9,7 @@
             <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <a href="#/merchello/merchello/offeredit/create" class="btn btn-primary"><localize key="merchelloMarketing_newOffer" /></a>
+                        <a data-ng-click="providerSelectDialogOpen()" class="btn btn-primary"><localize key="merchelloMarketing_newOffer" /></a>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                 <div class="pager well" data-ng-show="offers.length == 0">
                     <h5><localize key="merchelloMarketing_noOffer"/></h5>
                     <p><localize key="merchelloMarketing_newOfferPrompt"/></p>
-                    <a href="#/merchello/merchello/offeredit/create" class="btn btn-primary"><localize key="merchelloMarketing_newOffer" /></a>
+                    <button data-ng-click="providerSelectDialogOpen()" class="btn btn-primary"><localize key="merchelloMarketing_newOffer" /></button>
                 </div>
 
             </div>

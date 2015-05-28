@@ -5,7 +5,12 @@
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
+    using Merchello.Web.Trees;
 
+    /// <summary>
+    /// The provider responsible for managing coupon offers
+    /// </summary>
+    [BackOfficeTree("coupons", "marketing", "Coupon", "icon-receipt-alt", "merchello/merchello/couponeditor/{0}", 1)]
     public class CouponProvider : OfferProviderBase<Coupon>
     {
         /// <summary>
@@ -19,6 +24,9 @@
         {
         }
 
+        /// <summary>
+        /// Gets the key.
+        /// </summary>
         public override Guid Key
         {
             get
@@ -27,6 +35,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets an instance of a coupon from the <see cref="IOfferSettings"/>        
+        /// /// </summary>
+        /// <param name="offerSettings">
+        /// The offer settings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Coupon"/>.
+        /// </returns>
         protected override Coupon GetInstance(IOfferSettings offerSettings)
         {
             return new Coupon(offerSettings);

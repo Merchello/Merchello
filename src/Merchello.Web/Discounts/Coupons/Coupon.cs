@@ -23,8 +23,14 @@
         {
         }
 
+        /// <summary>
+        /// Gets the collection discount constraints.
+        /// </summary>
         public IEnumerable<DiscountConstraintBase> Constraints { get; private set; }
 
+        /// <summary>
+        /// Gets the collection offer rewards.
+        /// </summary>
         public IEnumerable<RewardBase> Rewards { get; private set; }
     }
 }

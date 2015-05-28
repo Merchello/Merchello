@@ -3,7 +3,7 @@
     <umb-panel val-show-validation>
         <umb-header>
             <div class="span7">
-                <umb-content-name ng-model="offer.name" localize="placeholder" placeholder="@merchelloPlaceholders_enterOffer">
+                <umb-content-name ng-model="offerSettings.name" localize="placeholder" placeholder="@merchelloPlaceholders_enterOffer">
                 </umb-content-name>
             </div>
             <div class="span5">
@@ -21,6 +21,16 @@
             <div class="tab-content row-fluid" data-ng-show="preValuesLoaded">
                 <div class="merchello-pane">
 
+                    <div class="control-group umb-control-group">
+                        <label class="merchello-control-label">
+                            <localize key="merchelloMarketing_offerInfo"/>
+                            <small><localize key="merchelloMarketing_configOffer" /></small>
+                        </label>
+                        <div class="merchello-controls">
+                            <offer-main-properties settings="settings" offer="offerSettings" context="context"></offer-main-properties>
+
+                        </div>
+                    </div>
 
 
 

@@ -1,25 +1,26 @@
-﻿namespace Merchello.Core.Marketing.Discounts.Constraints
+﻿namespace Merchello.Web.Discounts.Coupons.Constraints
 {
     using System;
 
+    using Merchello.Core.Marketing.Discounts;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
 
     /// <summary>
-    /// A discount rule to prohibit a discount from being used with other discounts.
+    /// A rule to enforce one discount per customer.
     /// </summary>
-    [OfferComponent("BDFEF8AC-B572-43E6-AB42-C07678500C87", "Not usable with other discounts", "This discount cannot be used with other discounts.")]
-    public class NotUsableWithOtherDiscountsConstraint : DiscountConstraintBase
+    [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One coupon per customer", "The customer may only ever use this coupon once.", RestrictToType = typeof(Coupon))]
+    public class OneCouponPerCustomerConstraint : DiscountConstraintBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotUsableWithOtherDiscountsConstraint"/> class.
+        /// Initializes a new instance of the <see cref="OneCouponPerCustomerConstraint"/> class.
         /// </summary>
         /// <param name="definition">
         /// The <see cref="OfferComponentDefinition"/>.
         /// </param>
-        public NotUsableWithOtherDiscountsConstraint(OfferComponentDefinition definition)
+        public OneCouponPerCustomerConstraint(OfferComponentDefinition definition)
             : base(definition)
         {
         }
@@ -31,7 +32,7 @@
         {
             get
             {
-                return DiscountCategory.Sale;                
+                return DiscountCategory.Customer;
             }
         }
 
@@ -49,7 +50,13 @@
         /// </returns>
         public override Attempt<ILineItemContainer> Validate(ICustomerBase customer, ILineItemContainer collection)
         {
+            if (customer.IsAnonymous)
+            {
+                var anonymousException = new Exception("Customer must be signed in to use this discount.");
+                return Attempt<ILineItemContainer>.Fail(collection, anonymousException);
+            }
+
             throw new NotImplementedException();
-        }
+        }        
     }
 }

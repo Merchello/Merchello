@@ -18,7 +18,7 @@ namespace Merchello.Core.Marketing.Offer
         /// The required key (GUID).  This should be a new GUID to represent this class.
         /// </param>
         /// <param name="name">
-        /// The name of the constraint.
+        /// The name of the component.
         /// </param>
         public OfferComponentAttribute(string key, string name)
             : this(key, name, string.Empty)
@@ -32,10 +32,10 @@ namespace Merchello.Core.Marketing.Offer
         /// The required key (GUID).  This should be a new GUID to represent this class.
         /// </param>
         /// <param name="name">
-        /// The name of the constraint.
+        /// The name of the component.
         /// </param>
         /// <param name="description">
-        /// A description of the constraint.
+        /// A description of the component.
         /// </param>
         public OfferComponentAttribute(string key, string name, string description)
             : this(key, name, description, string.Empty)
@@ -49,15 +49,38 @@ namespace Merchello.Core.Marketing.Offer
         /// The required key (GUID).  This should be a new GUID to represent this class.
         /// </param>
         /// <param name="name">
+        /// The name of the component.
+        /// </param>
+        /// <param name="description">
+        /// A description of the component.
+        /// </param>
+        /// <param name="editorView">
+        /// The editor view for the component
+        /// </param>
+        public OfferComponentAttribute(string key, string name, string description, string editorView)
+            : this(key, name, description, editorView, null)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OfferComponentAttribute"/> class.
+        /// </summary>
+        /// <param name="key">
+        /// The required key (GUID).  This should be a new GUID to represent this class.
+        /// </param>
+        /// <param name="name">
         /// The name.
         /// </param>
         /// <param name="description">
-        /// A description of the constraint.
+        /// A description of the component.
         /// </param>
         /// <param name="editorView">
-        /// The editor view.  If set the back office will assume that a dialog should be added to associate additional configuration values with the constraint.
+        /// The editor view.  If set the back office will assume that a dialog should be added to associate additional configuration values with the component.
         /// </param>
-        public OfferComponentAttribute(string key, string name, string description, string editorView)
+        /// <param name="restrictToType">
+        /// Restricts usage of the component to a particular type of <see cref="OfferComponentBase"/>.
+        /// </param>
+        public OfferComponentAttribute(string key, string name, string description, string editorView, Type restrictToType)
         {
             Mandate.ParameterNotNullOrEmpty(key, "key");
             Mandate.ParameterNotNullOrEmpty(name, "name");
@@ -66,6 +89,7 @@ namespace Merchello.Core.Marketing.Offer
             this.Name = name;
             this.Description = description;
             this.EditorView = editorView;
+            this.RestrictToType = restrictToType;
         }
 
         #endregion
@@ -89,5 +113,10 @@ namespace Merchello.Core.Marketing.Offer
         /// Gets or sets the editor view.
         /// </summary>
         public string EditorView { get; set; }
+
+        /// <summary>
+        /// Gets or sets the restrict to type.
+        /// </summary>
+        public Type RestrictToType { get; set; }
     }
 }

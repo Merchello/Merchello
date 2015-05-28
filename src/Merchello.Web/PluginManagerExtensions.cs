@@ -5,6 +5,7 @@ namespace Merchello.Web
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Marketing.Offer;
     using Merchello.Web.Mvc;
     using Merchello.Web.Trees;
 
@@ -41,6 +42,21 @@ namespace Merchello.Web
         internal static IEnumerable<Type> ResolveReportApiControllers(this PluginManager pluginManger)
         {
             return pluginManger.ResolveTypesWithAttribute<ReportController, BackOfficeTreeAttribute>();
-        } 
+        }
+
+
+        /// <summary>
+        /// Resolves any <see cref="OfferProviderBase{TOffer}"/> types.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The <see cref="PluginManager"/>.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="OfferProviderBase{TOffer}"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveOfferProviders(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<IOfferProvider, BackOfficeTreeAttribute>();
+        }
     }
 }

@@ -5,6 +5,7 @@
 
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Web.Models.MapperResolvers.Offers;
     using Merchello.Web.Models.SaleHistory;
 
     using Models.ContentEditing;
@@ -102,8 +103,19 @@
                     dest => dest.EditorView,
                     opt =>
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorVeiw")));
-            
+                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorVeiw")))
+                .ForMember(
+                    dest => dest.RestictToType,
+                    opt =>
+                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
+                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("restrictToType")));
+
+            AutoMapper.Mapper.CreateMap<IOfferProvider, OfferProviderDisplay>()
+                .ForMember(
+                    dest => dest.BackOfficeTree,
+                    opt =>
+                    opt.ResolveUsing<OfferProviderBackOfficeAttributeValueResolver>()
+                        .ConstructedBy(() => new OfferProviderBackOfficeAttributeValueResolver()));
 
             // setup the other mappings
             CreateShippingMappings();

@@ -47,6 +47,20 @@
         /// </remarks>
         public abstract Guid Key { get; }
 
+        /// <summary>
+        /// Gets the type name of type managed by this provider.
+        /// </summary>
+        /// <remarks>
+        /// This is used by the UI when determining what restricted offer components (if any) can be assigned
+        /// </remarks>
+        public virtual string ManagesTypeName
+        {
+            get
+            {
+                return typeof(TOffer).Name;
+            } 
+        }
+
         #region implementation of IOfferBaseManager
 
         /// <summary>
