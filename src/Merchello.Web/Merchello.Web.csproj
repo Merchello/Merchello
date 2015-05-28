@@ -224,8 +224,12 @@
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="DigitalDownloadHandler.cs" />
+    <Compile Include="Discounts\Coupons\Constraints\NotUsableWithOtherCouponsConstraint.cs" />
+    <Compile Include="Discounts\Coupons\Constraints\OneCouponPerCustomerConstraint.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
+    <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />
+    <Compile Include="Models\ContentEditing\OfferProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferSettingsDisplay.cs" />
     <Compile Include="Models\ContentEditing\CurrencyDisplay.cs" />
     <Compile Include="Models\ContentEditing\GateProviderSettingsDisplay.cs" />
@@ -237,6 +241,7 @@
     <Compile Include="Discounts\Coupons\CouponProvider.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\Offers\OfferProviderBackOfficeAttributeValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\CapturePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizeCapturePaymentDialogEditorViewResolver.cs" />

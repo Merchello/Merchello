@@ -1045,6 +1045,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
     <key alias="delete">Delete</key>
+    <key alias="select">Select</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
@@ -1062,6 +1063,10 @@ To manage your website, simply open the Umbraco back office and start adding con
       <key alias="newOffer">New Offer</key>
       <key alias="noOffer">No current offers</key>
       <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
+      <key alias="offerInfo">Offer Information</key>
+      <key alias="configOffer">Configure this offer</key>
+      <key alias="offerType">Type of Offer</key>
+    <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
     </area>
   <area alias="merchelloVariant">
     <!-- things -->

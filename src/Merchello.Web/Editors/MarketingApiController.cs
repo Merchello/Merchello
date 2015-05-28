@@ -74,6 +74,20 @@
         #endregion
 
         /// <summary>
+        /// Gets a collection of all offer providers.
+        /// </summary>
+        /// <returns>
+        /// The collection of <see cref="OfferProviderDisplay"/>.
+        /// </returns>
+        public IEnumerable<OfferProviderDisplay> GetOfferProviders()
+        {
+            return
+                OfferProviderResolver.Current.GetOfferProviders()
+                    .Select(x => x.ToOfferProviderDisplay())
+                    .OrderBy(x => x.BackOfficeTree.SortOrder);
+        }
+
+            /// <summary>
         /// Gets the collection of all active offer settings.
         /// </summary>
         /// <returns>

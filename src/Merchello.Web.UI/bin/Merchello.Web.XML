@@ -35,6 +35,70 @@
             
             </summary>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint">
+            <summary>
+            A discount rule to prohibit a discount from being used with other discounts.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.Validate(Merchello.Core.Models.ICustomerBase,Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.Category">
+            <summary>
+            Gets the category.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint">
+            <summary>
+            A rule to enforce one discount per customer.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.Validate(Merchello.Core.Models.ICustomerBase,Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.Category">
+            <summary>
+            Gets the category.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Editors.MarketingApiController">
             <summary>
             An API controller for the Merchello marketing section.
@@ -116,6 +180,14 @@
             The umbraco context.
             </param>
         </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.GetOfferProviders">
+            <summary>
+            Gets a collection of all offer providers.
+            </summary>
+            <returns>
+            The collection of <see cref="T:Merchello.Web.Models.ContentEditing.OfferProviderDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.MarketingApiController.GetOfferSettings">
             <summary>
             Gets the collection of all active offer settings.
@@ -134,6 +206,41 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay">
+            <summary>
+            The back office tree display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.RouteId">
+            <summary>
+            Gets or sets the route id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.ParentRouteId">
+            <summary>
+            Gets or sets the parent route id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.Title">
+            <summary>
+            Gets or sets the title.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.Icon">
+            <summary>
+            Gets or sets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.RoutePath">
+            <summary>
+            Gets or sets the route path.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.SortOrder">
+            <summary>
+            Gets or sets the sort order.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay">
             <summary>
@@ -175,6 +282,11 @@
             Gets or sets the editor view.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.RestictToType">
+            <summary>
+            Gets or sets the type to which this component is restricted (if any)
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplayExtensions">
             <summary>
             Utility class for mapping <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
@@ -211,6 +323,42 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Core.Models.OfferComponentDefinitionCollection"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.OfferProviderDisplay">
+            <summary>
+            The offer provider display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferProviderDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferProviderDisplay.ManagesTypeName">
+            <summary>
+            Gets or sets the name of the type managed by this provider.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferProviderDisplay.BackOfficeTree">
+            <summary>
+            Gets or sets the back office tree configurations.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.OfferProviderDisplayExtensions">
+            <summary>
+            Utility mapping extensions for <see cref="T:Merchello.Web.Models.ContentEditing.OfferProviderDisplay"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.OfferProviderDisplayExtensions.ToOfferProviderDisplay(Merchello.Core.Marketing.Offer.IOfferProvider)">
+            <summary>
+            Maps a <see cref="T:Merchello.Core.Marketing.Offer.IOfferProvider"/> to a <see cref="T:Merchello.Web.Models.ContentEditing.OfferProviderDisplay"/>.
+            </summary>
+            <param name="provider">
+            The provider.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferProviderDisplay"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay">
@@ -548,6 +696,11 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponProvider">
+            <summary>
+            The provider responsible for managing coupon offers
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Discounts.Coupons.CouponProvider.#ctor(Merchello.Core.Services.IOfferSettingsService)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponProvider"/> class.
@@ -555,6 +708,22 @@
             <param name="offerSettingsService">
             The offer settings service.
             </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponProvider.GetInstance(Merchello.Core.Models.Interfaces.IOfferSettings)">
+            <summary>
+            Gets an instance of a coupon from the <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>        
+            /// </summary>
+            <param name="offerSettings">
+            The offer settings.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.Coupon"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.CouponProvider.Key">
+            <summary>
+            Gets the key.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Models.Customer.CustomerContextDataExtensions">
             <summary>
@@ -625,6 +794,22 @@
             </param>
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.Offers.OfferProviderBackOfficeAttributeValueResolver">
+            <summary>
+            The offer provider back office attribute value resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.Offers.OfferProviderBackOfficeAttributeValueResolver.ResolveCore(Merchello.Core.Marketing.Offer.IOfferProvider)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Object"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.CapturePaymentDialogEditorViewResolver">
@@ -2112,6 +2297,17 @@
             </param>
             <returns>
             The collection of the report data aggregators resolved.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.PluginManagerExtensions.ResolveOfferProviders(Umbraco.Core.PluginManager)">
+            <summary>
+            Resolves any <see cref="T:Merchello.Core.Marketing.Offer.OfferProviderBase`1"/> types.
+            </summary>
+            <param name="pluginManager">
+            The <see cref="T:Umbraco.Core.PluginManager"/>.
+            </param>
+            <returns>
+            The collection of <see cref="T:Merchello.Core.Marketing.Offer.OfferProviderBase`1"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.PropertyConverters.ProductDisplayValueConverter">
@@ -7183,6 +7379,16 @@
             <param name="settings">
             The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
             </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Constraints">
+            <summary>
+            Gets the collection discount constraints.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Rewards">
+            <summary>
+            Gets the collection offer rewards.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.CouponLineItemReward">
             <summary>

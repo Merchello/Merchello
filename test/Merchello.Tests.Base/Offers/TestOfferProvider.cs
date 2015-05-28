@@ -5,7 +5,9 @@
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
+    using Merchello.Web.Trees;
 
+    [BackOfficeTree("offers", "tests", "Test Title", "Test Icon", "/fictious/path", 1)]
     public class TestOfferProvider : OfferProviderBase<TestOffer> 
     {
         public TestOfferProvider(IOfferSettingsService offerSettingsService)

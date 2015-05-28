@@ -5,7 +5,7 @@
      * @description
      * A utility service that builds OfferComponentDefinitionDisplay models
      */
-    angular.module('merchello.models').factory('offerComponentDefinitionDisplay',
+    angular.module('merchello.models').factory('offerComponentDefinitionDisplayBuilder',
         ['genericModelBuilder', 'extendedDataDisplayBuilder', 'dialogEditorViewDisplayBuilder', 'OfferComponentDefinitionDisplay',
         function(genericModelBuilder, extendedDataDisplayBuilder, dialogEditorViewDisplayBuilder, OfferComponentDefinitionDisplay) {
 

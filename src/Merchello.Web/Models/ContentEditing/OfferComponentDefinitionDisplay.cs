@@ -47,6 +47,11 @@ namespace Merchello.Web.Models.ContentEditing
         /// Gets or sets the editor view.
         /// </summary>
         public DialogEditorViewDisplay EditorView { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type to which this component is restricted (if any)
+        /// </summary>
+        public string RestictToType { get; set; }
     }
 
     /// <summary>

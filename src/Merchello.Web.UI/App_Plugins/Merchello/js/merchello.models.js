@@ -57,6 +57,25 @@
 
     angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);
 
+/**
+ * @ngdoc model
+ * @name BackOfficeTreeDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of  BackOfficeTreeDisplay object
+ */
+var BackOfficeTreeDisplay = function() {
+    var self = this;
+    self.routeId = '';
+    self.parentRouteId = '';
+    self.title = '';
+    self.icon = '';
+    self.routePath = '';
+    self.sortOrder = 0;
+};
+
+angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeTreeDisplay);
     /**
      * @ngdoc model
      * @name CountryDisplay
@@ -277,11 +296,26 @@
             }
         }
 
+        function appendOfferTab(offerKey, backOfficeTree) {
+            var title = '';
+            if(backOfficeTree.title === undefined || backOfficeTree.title === '') {
+                title = 'Offer';
+            } else {
+                title = backOfficeTree.title;
+            }
+            if(offerKey !== '00000000-0000-0000-0000-000000000000' && offerKey !== 'create') {
+                addTab.call(this, 'offer', title, '#' + backOfficeTree.routePath.replace('{0}', offerKey));
+            } else {
+                addTab.call(this, 'offer', 'New ' + title, '#' +backOfficeTree.routePath.replace('{0}', 'create'));
+            }
+        }
+
         return {
             addTab: addTab,
             setActive: setActive,
             insertTab: insertTab,
-            appendCustomerTab: appendCustomerTab
+            appendCustomerTab: appendCustomerTab,
+            appendOfferTab: appendOfferTab
         };
     }());
 
@@ -1118,6 +1152,23 @@
 
     angular.module('merchello.models').constant('ProductSelectorDialogData', ProductSelectorDialogData);
 
+/**
+ * @ngdoc model
+ * @name SelectOfferProviderDialogData
+ * @function
+ *
+ * @description
+ * A dialogData model for use in the selecting an offer provider
+ *
+ */
+var SelectOfferProviderDialogData = function() {
+    var self = this;
+    self.offerProviders = [];
+    self.selectedProvider = {};
+    self.warning = '';
+};
+
+angular.module('merchello.models').constant('SelectOfferProviderDialogData', SelectOfferProviderDialogData);
     /**
      * @ngdoc model
      * @name GatewayProviderDisplay
@@ -1251,9 +1302,27 @@ var OfferComponentDefinitionDisplay = function() {
     self.typeName = '';
     self.extendedData = {};
     self.editorView = {};
+    self.restrictToType = '';
 };
 
 angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', OfferComponentDefinitionDisplay);
+/**
+ * @ngdoc model
+ * @name OfferProviderDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's OfferProviderDisplay object
+ */
+var OfferProviderDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.managesTypeName = '';
+    self.backOfficeTree = {};
+};
+
+
+angular.module('merchello.models').constant('OfferProviderDisplay', OfferProviderDisplay);
     /**
      * @ngdoc model
      * @name OfferSettingsDisplay
@@ -3137,6 +3206,28 @@ angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', O
                 };
         }]);
 
+/**
+ * @ngdoc service
+ * @name backOfficeTreeDisplayBuilder
+ *
+ * @description
+ * A utility service that builds backOfficeTreeDisplay models
+ */
+angular.module('merchello.models').factory('backOfficeTreeDisplayBuilder',
+    ['genericModelBuilder', 'BackOfficeTreeDisplay',
+    function(genericModelBuilder, BackOfficeTreeDisplay) {
+        var Constructor = BackOfficeTreeDisplay;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                return genericModelBuilder.transform(jsonResult, Constructor);
+            }
+        };
+    }]);
+
     /**
      * @ngdoc service
      * @name merchello.models.countryDisplayBuilder
@@ -3408,9 +3499,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
         }
 
         // Marketing
-        function createAddEditCampaignSettingsDialogData() {
-            return new AddEditCampaignSettingsDialogData();
+        function createSelectOfferProviderDialogData() {
+            return new SelectOfferProviderDialogData();
         }
+
 
         /*----------------------------------------------------------------------------------------
         Property Editors
@@ -3451,7 +3543,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
             createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
             createAddPaymentDialogData: createAddPaymentDialogData,
-            createAddEditCampaignSettingsDialogData: createAddEditCampaignSettingsDialogData
+            createSelectOfferProviderDialogData: createSelectOfferProviderDialogData
         };
 }]);
 
@@ -3577,7 +3669,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
      * @description
      * A utility service that builds OfferComponentDefinitionDisplay models
      */
-    angular.module('merchello.models').factory('offerComponentDefinitionDisplay',
+    angular.module('merchello.models').factory('offerComponentDefinitionDisplayBuilder',
         ['genericModelBuilder', 'extendedDataDisplayBuilder', 'dialogEditorViewDisplayBuilder', 'OfferComponentDefinitionDisplay',
         function(genericModelBuilder, extendedDataDisplayBuilder, dialogEditorViewDisplayBuilder, OfferComponentDefinitionDisplay) {
 
@@ -3607,6 +3699,39 @@ angular.module('merchello.models').factory('dialogDataFactory',
                 }
             };
         }]);
+/**
+ * @ngdoc service
+ * @name offerProviderDisplayBuilder
+ *
+ * @description
+ * A utility service that builds OfferProviderDisplay models
+ */
+angular.module('merchello.models').factory('offerProviderDisplayBuilder', [
+    'genericModelBuilder', 'backOfficeTreeDisplayBuilder', 'OfferProviderDisplay',
+    function(genericModelBuilder, backOfficeTreeDisplayBuilder, OfferProviderDisplay) {
+
+        var Constructor = OfferProviderDisplay;
+
+        return {
+            createDefault: function () {
+                var provider = new Constructor();
+                provider.backOfficeTree = backOfficeTreeDisplayBuilder.createDefault();
+                return provider;
+            },
+            transform: function (jsonResult) {
+                var providers = genericModelBuilder.transform(jsonResult, Constructor);
+                if (angular.isArray(providers)) {
+                    for (var i = 0; i < providers.length; i++) {
+                        providers[i].backOfficeTree = backOfficeTreeDisplayBuilder.transform(jsonResult[i].backOfficeTree);
+                    }
+                } else {
+                    providers.backOfficeTree = backOfficeTreeDisplayBuilder.transform(jsonResult.backOfficeTree);
+                }
+                return providers;
+            }
+        };
+
+    }]);
 /**
  * @ngdoc service
  * @name merchello.models.offerSettingsDisplayBuilder

@@ -71,19 +71,5 @@
         {
             return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
         }
-
-        /// <summary>
-        /// Resolves any <see cref="OfferProviderBase"/> types.
-        /// </summary>
-        /// <param name="pluginManager">
-        /// The <see cref="PluginManager"/>.
-        /// </param>
-        /// <returns>
-        /// The collection of <see cref="OfferProviderBase"/>.
-        /// </returns>
-        internal static IEnumerable<Type> ResolveOfferProviders(this PluginManager pluginManager)
-        {
-            return pluginManager.ResolveTypes<IOfferProvider>();
-        }
     }
 }

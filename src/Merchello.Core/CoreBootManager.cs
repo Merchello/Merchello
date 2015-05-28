@@ -191,10 +191,7 @@
             TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
 
             if (!MonitorResolver.HasCurrent)
-            MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());
-
-            if (!OfferProviderResolver.HasCurrent)
-            OfferProviderResolver.Current = new OfferProviderResolver(PluginManager.Current.ResolveOfferProviders(), MerchelloContext.Current.Services.OfferSettingsService);
+            MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());            
         }
 
         /// <summary>

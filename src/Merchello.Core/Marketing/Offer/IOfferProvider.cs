@@ -13,10 +13,9 @@
         /// </summary>
         Guid Key { get; }
 
-        #region removed
-
-        
-
-        #endregion
+        /// <summary>
+        /// Gets the name of the type this provider manages.
+        /// </summary>
+        string ManagesTypeName { get; }
     }
 }

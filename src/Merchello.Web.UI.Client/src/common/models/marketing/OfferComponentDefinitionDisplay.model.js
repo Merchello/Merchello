@@ -15,6 +15,7 @@ var OfferComponentDefinitionDisplay = function() {
     self.typeName = '';
     self.extendedData = {};
     self.editorView = {};
+    self.restrictToType = '';
 };
 
 angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', OfferComponentDefinitionDisplay);
