@@ -251,6 +251,7 @@
     <Compile Include="Models\MapperResolvers\DialogEditorViews\VoidPaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\LineItemTypeFieldResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferComponentAttributeValueResolver.cs" />
+    <Compile Include="Models\MapperResolvers\Offers\OfferSettingsOfferExpiresResolver.cs" />
     <Compile Include="Models\Shipping\ShipmentRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodRequestDisplay.cs" />
     <Compile Include="Models\Shipping\ShipMethodsQueryDisplay.cs" />

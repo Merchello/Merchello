@@ -156,7 +156,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<OfferSettingsRepository>();
+                .From<OfferSettingsDto>();
 
             return sql;
         }

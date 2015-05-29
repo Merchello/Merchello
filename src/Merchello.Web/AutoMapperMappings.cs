@@ -79,7 +79,13 @@
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
             
             // Offer
-            AutoMapper.Mapper.CreateMap<IOfferSettings, OfferSettingsDisplay>();
+            AutoMapper.Mapper.CreateMap<IOfferSettings, OfferSettingsDisplay>()
+                .ForMember(
+                    dest => dest.OfferExpires,
+                    opt =>
+                    opt.ResolveUsing<OfferSettingsOfferExpiresResolver>()
+                        .ConstructedBy(() => new OfferSettingsOfferExpiresResolver()));
+
             AutoMapper.Mapper.CreateMap<OfferComponentDefinition, OfferComponentDefinitionDisplay>()
                 .ForMember(
                     dest => dest.ExtendedData,

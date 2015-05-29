@@ -132,7 +132,7 @@
             Mandate.ParameterNotNull(componentDefinitions, "ComponentDefinitions");
             _name = name;
             _offerCode = offerCode;
-            _offerProviderKey = OfferProviderKey;
+            _offerProviderKey = offerProviderKey;
             _offerStartsDate = DateTime.MinValue;
             _offerEndsDate = DateTime.MaxValue;
             _active = true;

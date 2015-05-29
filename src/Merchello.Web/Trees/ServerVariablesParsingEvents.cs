@@ -99,7 +99,7 @@
             merchelloUrls.Add(
                 "merchelloMarketingApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<MarketingApiController>(
-                controller => controller.GetOfferSettings()));
+                controller => controller.GetAllOfferSettings()));
 
             merchelloUrls.Add(
                 "merchelloNotificationApiBaseUrl",

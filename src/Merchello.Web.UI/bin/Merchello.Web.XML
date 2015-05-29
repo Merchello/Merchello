@@ -188,7 +188,18 @@
             The collection of <see cref="T:Merchello.Web.Models.ContentEditing.OfferProviderDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Editors.MarketingApiController.GetOfferSettings">
+        <member name="M:Merchello.Web.Editors.MarketingApiController.GetOfferSettings(System.Guid)">
+            <summary>
+            Gets an offer settings by it's unique key
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.GetAllOfferSettings">
             <summary>
             Gets the collection of all active offer settings.
             </summary>
@@ -206,6 +217,33 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.PutUpdateOfferSettings(Merchello.Web.Models.ContentEditing.OfferSettingsDisplay)">
+            <summary>
+            Saves the offer settings
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the offer setting can not be found in the database.
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.DeleteOfferSettings(System.Guid)">
+            <summary>
+            The delete offer settings.
+            
+            DELETE /umbraco/Merchello/MarketingApi/{guid}
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>       
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay">
             <summary>
@@ -386,6 +424,11 @@
             Gets or sets the offer provider key.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.OfferExpires">
+            <summary>
+            Gets or sets a value indicating whether the offer expires.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.OfferStartsDate">
             <summary>
             Gets or sets the offer starts date.
@@ -425,6 +468,34 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.OfferSettingDisplayExtensions.ToOfferSettings(Merchello.Web.Models.ContentEditing.OfferSettingsDisplay,Merchello.Core.Models.Interfaces.IOfferSettings)">
+            <summary>
+            Maps a <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> to a <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+            <param name="destination">
+            The destination.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.OfferSettingDisplayExtensions.ApplySafeDates(Merchello.Core.Models.Interfaces.IOfferSettings,Merchello.Web.Models.ContentEditing.OfferSettingsDisplay)">
+            <summary>
+            The ensure dates passed from the <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> are applied safely
+            </summary>
+            <param name="offerSettings">
+            The offer settings.
+            </param>
+            <param name="settings">
+            The settings.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.CurrencyDisplay">
@@ -967,6 +1038,22 @@
             </param>
             <returns>
             The <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.Offers.OfferSettingsOfferExpiresResolver">
+            <summary>
+            Adds the value OfferExpires to the Display model based on offerStartDate and offerEndDate values
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.Offers.OfferSettingsOfferExpiresResolver.ResolveCore(Merchello.Core.Models.Interfaces.IOfferSettings)">
+            <summary>
+            Override of AutoMapper ValueResolver ResolveCore method.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay">

@@ -6,6 +6,13 @@
 
 (function() { 
 
+/**
+ * @ngdoc directive
+ * @name offerMainProperties
+ *
+ * @description
+ * Common form elements for Merchello's OfferSettings
+ */
 angular.module('merchello.directives').directive('offerMainProperties', function() {
 
     return {
@@ -14,12 +21,10 @@ angular.module('merchello.directives').directive('offerMainProperties', function
         scope: {
             offer: '=',
             context: '=',
-            settings: '='
+            settings: '=',
+            toggleOfferExpires: '&'
         },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html',
-        controller: function() {
-
-        }
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html'
     }
 })
 
@@ -201,10 +206,12 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
             restrict: 'E',
             replace: true,
             scope: {
+                hideDatesLabel: '=',
                 filterStartDate: '=',
                 filterEndDate: '=',
                 filterButtonText: '@filterButtonText',
-                filterWithDates: '&'
+                filterWithDates: '&',
+                hideFilterButton: '='
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterbydaterange.tpl.html',
             controller: function($scope, $element, $q, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
@@ -219,8 +226,8 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                     promises.push(loadSettings());
 
                     $q.all(promises).then(function() {
-                        $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth()-1)).format($scope.settings.dateFormat.toUpperCase());
-                        $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
+                       // $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth()-1)).format($scope.settings.dateFormat.toUpperCase());
+                       // $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
                     });
                 }
 
@@ -254,7 +261,6 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 function loadSettings() {
                     var promise = settingsResource.getAllSettings();
                     return promise.then(function(allSettings) {
-                        console.info(allSettings);
                         $scope.settings = settingDisplayBuilder.transform(allSettings);
                     }, function(reason) {
                         notificationsService.error('Failed to load settings', reason.message);

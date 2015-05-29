@@ -19,13 +19,49 @@ angular.module('merchello.resources')
                         }),
                         'Failed to get offer providers');
                 },
-                getOfferSettings: function() {
+                getOfferSettings: function(key) {
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: baseUrl + 'GetOfferSettings',
+                            method: "GET",
+                            params: { id: key }
+                        }),
+                        'Failed to get offer settings');
+                },
+                getOffersByQuery: function(query) {
+
+                },
+                getAllOfferSettings: function() {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetAllOfferSettings',
                             method: "GET"
                         }),
                         'Failed to get offer settings');
+                },
+                newOfferSettings: function (offerSettings) {
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(baseUrl + "PostAddOfferSettings",
+                            offerSettings
+                        ),
+                        'Failed to create offer');
+                },
+                saveOfferSettings: function(offerSettings) {
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(baseUrl + "PutUpdateOfferSettings",
+                            offerSettings
+                        ),
+                        'Failed to create offer');
+                },
+                deleteOfferSettings: function(offerSettings) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'DeleteOfferSettings',
+                            method: "GET",
+                            params: { id: offerSettings.key }
+                        }),
+                        'Failed to delete offer settings');
                 }
+
             };
         }]);
