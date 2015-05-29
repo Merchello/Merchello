@@ -12,6 +12,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
     function($scope, $location, assetsService, dialogService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
              settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
 
+        $scope.testing = true;
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
         $scope.filterText = '';
@@ -32,9 +33,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         $scope.limitChanged = limitChanged;
         $scope.numberOfPages = numberOfPages;
         $scope.changePage = changePage;
+        $scope.getFilteredOffers = getFilteredOffers;
         $scope.providerSelectDialogOpen = providerSelectDialogOpen;
         $scope.getOfferType = getOfferType;
-
+        $scope.resetFilters = resetFilters;
 
         function init() {
             $scope.tabs = merchelloTabsFactory.createMarketingTabs();
@@ -71,10 +73,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         }
 
         function loadOffers() {
-           // var query = buildQuery();
-            var offersPromise = marketingResource.getAllOfferSettings();
+           var query = buildQuery($scope.filterText);
+            var offersPromise = marketingResource.searchOffers(query);
             offersPromise.then(function(result) {
-                $scope.offers = offerSettingsDisplayBuilder.transform(result);
+                var queryResult = queryResultDisplayBuilder.transform(result, offerSettingsDisplayBuilder);
+                $scope.offers = queryResult.items;
+                $scope.maxPages = queryResult.totalPages;
+                $scope.itemCount = queryResult.totalItems;
                 $scope.preValuesLoaded = true;
             });
         }

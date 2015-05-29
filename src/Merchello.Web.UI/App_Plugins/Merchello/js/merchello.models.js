@@ -1350,6 +1350,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.offerExpires = false;
         self.offerStartsDate = '';
         self.offerEndsDate = '';
+        self.expired = false;
         self.active = true;
         self.componentDefinitions = [];
     };

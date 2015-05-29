@@ -466,9 +466,9 @@
             Gets or sets a value indicating whether active.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.DateDependent">
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.Expired">
             <summary>
-            Gets or sets a value indicating whether date dependent.
+            Gets or sets a value indicating whether the offer has expired.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.ComponentDefinitions">

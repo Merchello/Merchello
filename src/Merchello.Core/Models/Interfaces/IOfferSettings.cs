@@ -50,9 +50,9 @@
         bool Active { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether the offer is date dependent.
+        /// Gets a value indicating whether the offer has expired.
         /// </summary>
-        bool DateDependent { get; }
+        bool Expired { get; }
 
         /// <summary>
         /// Gets or sets the component configurations.

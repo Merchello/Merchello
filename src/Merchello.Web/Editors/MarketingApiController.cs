@@ -126,17 +126,8 @@
             var hasSearchTerm = term != null && !string.IsNullOrEmpty(term.Value);
 
             var page = hasSearchTerm ? 
-                _offerSettingsService.GetPage(
-                    term.Value,
-                    query.CurrentPage + 1, 
-                    query.ItemsPerPage, 
-                    query.SortBy, 
-                    query.SortDirection) : 
-                _offerSettingsService.GetPage(
-                query.CurrentPage + 1,
-                query.ItemsPerPage,
-                query.SortBy,
-                query.SortDirection);
+                _offerSettingsService.GetPage(term.Value, query.CurrentPage + 1, query.ItemsPerPage, query.SortBy, query.SortDirection) : 
+                _offerSettingsService.GetPage(query.CurrentPage + 1, query.ItemsPerPage, query.SortBy, query.SortDirection);
 
             return this.GetQueryResultDisplay(page);
         }

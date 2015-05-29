@@ -28,8 +28,12 @@ angular.module('merchello.resources')
                         }),
                         'Failed to get offer settings');
                 },
-                getOffersByQuery: function(query) {
-
+                searchOffers: function(query) {
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(baseUrl + "SearchOffers",
+                            query
+                        ),
+                        'Failed to search offers');
                 },
                 getAllOfferSettings: function() {
                     return umbRequestHelper.resourcePromise(

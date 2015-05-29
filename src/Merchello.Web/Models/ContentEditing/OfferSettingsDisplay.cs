@@ -52,9 +52,9 @@
         public bool Active { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether date dependent.
+        /// Gets or sets a value indicating whether the offer has expired.
         /// </summary>
-        public bool DateDependent { get; set; }
+        public bool Expired { get; set; }
 
         /// <summary>
         /// Gets or sets the component definitions.

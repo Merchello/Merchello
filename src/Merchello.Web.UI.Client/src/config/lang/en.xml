@@ -206,6 +206,7 @@
     <key alias="select">Select</key>
     <key alias="all">All</key>
     <key alias="none">None</key>
+    <key alias="expired">Expired</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Store Defaults</key>

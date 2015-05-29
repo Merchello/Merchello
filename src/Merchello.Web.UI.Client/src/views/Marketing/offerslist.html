@@ -22,6 +22,7 @@
                     <div class="controls pull-right" style="margin-left: 0;" data-ng-show="offers.length > 0">
                         <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
                         <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
+                            <option value="2" data-ng-show="testing">2</option>
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -31,19 +32,13 @@
                     <div class="form-group control-group span10">
                         <label class="control-label" for="offerFilter">Filter Offers:</label>
                         <div class="controls">
-                            <input type="text" id="offerFilter" class="form-control span8" name="productFilter" data-ng-model="filterText" localize="placeholder" placeholder="@placeholders_filter" />
+                            <input type="text" id="offerFilter" class="form-control span8" name="offerFilter" data-ng-model="filterText" localize="placeholder" placeholder="@placeholders_filter" />
                             <!-- ACTION: Filter Sales  -->
                             <button type="submit" id="offersFilterGo" class="btn" data-ng-click="getFilteredOffers(filterText)"><localize key="merchelloGeneral_filter" /></button>
                         </div>
                     </div>
-                    <div class="form-group control-group span10">
-                        <label class="label-checkbox">
-                        <input name="expires" type="checkbox" data-ng-model="includeInactive">
-                            <span>Include inactive offers</span></label>
-                    </div>
-
                 </form>
-
+                <reset-list-filters></reset-list-filters>
             </div>
             <div class="merchello-pane" data-ng-show="preValuesLoaded">
 
@@ -53,14 +48,14 @@
                     <thead>
                     <tr>
                         <!--<th></th>-->
-                        <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name' ||  sortProperty == '-name'}">
-                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty == '-name'}"></i> <localize key="merchelloTableCaptions_name"/>
+                        <th>
+                           <localize key="merchelloTableCaptions_name"/>
+                        </th>
+                        <th>
+                            <localize key="merchelloMarketing_offerCode"/>
                         </th>
                         <th>
                             <localize key="merchelloMarketing_offerType" />
-                        </th>
-                        <th data-ng-click="changeSortOrder('offerCode')" data-ng-class="{'sorted': sortProperty == 'offerCode' ||  sortProperty == '-offerCode'}">
-                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'offerCode', 'icon-navigation-down': sortProperty == '-offerCode'}"></i> <localize key="merchelloMarketing_offerCode"/>
                         </th>
                         <th>
                             <localize key="merchelloTableCaptions_startDate" />
@@ -76,13 +71,15 @@
                     <tbody>
                     <tr data-ng-repeat="offer in offers">
                         <td><a data-ng-href="{{getEditUrl(offer)}}">{{offer.name}}</a></td>
-                        <td>{{ getOfferType(offer) }}</td>
                         <td>{{ offer.offerCode }}</td>
+                        <td>{{ getOfferType(offer) }}</td>
                         <td data-ng-show="offer.offerExpires">{{ offer.offerStartsDate | date : settings.dateFormat }}</td>
                         <td data-ng-show="offer.offerExpires">{{ offer.offerEndsDate | date : settings.dateFormat }}</td>
                         <td data-ng-hide="offer.offerExpires">-</td>
                         <td data-ng-hide="offer.offerExpires">-</td>
-                        <td>{{ offer.active }}</td>
+                        <td data-ng-show="offer.active && !offer.expired"><localize key="general_yes" /></td>
+                        <td data-ng-show="!offer.active"><localize key="general_no" /></td>
+                        <td data-ng-show="offer.active && offer.expired"><localize key="merchelloGeneral_expired" /></td>
                     </tr>
                     </tbody>
                 </table>
