@@ -12,7 +12,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
     function($scope, $location, assetsService, dialogService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
              settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
 
-        $scope.testing = true;
+        $scope.testing = false;
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
         $scope.filterText = '';
