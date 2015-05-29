@@ -24,6 +24,17 @@
         }
 
         /// <summary>
+        /// Gets the component type.
+        /// </summary>
+        public override OfferComponentType ComponentType
+        {
+            get
+            {
+                return OfferComponentType.Constraint;
+            }
+        }
+
+        /// <summary>
         /// Validates the constraint against the <see cref="ILineItemContainer"/>
         /// </summary>
         /// <param name="customer">

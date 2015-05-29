@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core.Marketing.Offer;
@@ -48,6 +49,24 @@
 
             Assert.IsTrue(components.Any());
             Assert.IsFalse(components.Any(x => x.GetType() == typeof(OneCouponPerCustomerConstraint)));
+        }
+
+        [Test]
+        public void Can_Resolve_An_OfferComponent_By_Type()
+        {
+            var config = new OfferComponentConfiguration()
+                             {
+                                 ComponentKey =
+                                     new Guid("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2"),
+                                 TypeName = typeof(OneCouponPerCustomerConstraint).Name,
+                                 Values =   Enumerable.Empty<KeyValuePair<string, string>>()
+                             };
+
+            var definition = new OfferComponentDefinition(config);
+
+            var resolved = _resolver.GetOfferComponent<OneCouponPerCustomerConstraint>(definition);
+
+            Assert.NotNull(resolved);
         }
     }
 }

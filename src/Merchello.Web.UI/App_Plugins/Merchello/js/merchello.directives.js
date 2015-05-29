@@ -19,8 +19,9 @@ angular.module('merchello.directives').directive('offerComponents', function() {
         restrict: 'E',
         replace: true,
         scope: {
-            offer: '=',
+            offerSettings: '=',
             settings: '=',
+            componentType: '@'
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.components.tpl.html',
         controller:  'Merchello.Directives.OfferComponentsDirectiveController'

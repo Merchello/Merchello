@@ -146,6 +146,11 @@
             The offer provider resolver.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Editors.MarketingApiController._componentResolver">
+            <summary>
+            The offer component resolver.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Editors.MarketingApiController.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Editors.MarketingApiController"/> class.
@@ -333,12 +338,17 @@
             Gets or sets the type name.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentType">
+            <summary>
+            Gets or sets the component type.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ExtendedData">
             <summary>
             Gets or sets the extended data.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.EditorView">
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.DialogEditorView">
             <summary>
             Gets or sets the editor view.
             </summary>

@@ -35,6 +35,9 @@
         /// </summary>
         private readonly IOfferProviderResolver _providerResolver;
 
+        /// <summary>
+        /// The offer component resolver.
+        /// </summary>
         private readonly IOfferComponentResolver _componentResolver;
 
         #region Constructors
@@ -121,6 +124,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{OfferComponentDefinitionDisplay}"/>.
         /// </returns>
+        [HttpGet]
         public IEnumerable<OfferComponentDefinitionDisplay> GetAvailableOfferComponents(Guid offerProviderKey)
         {
             return

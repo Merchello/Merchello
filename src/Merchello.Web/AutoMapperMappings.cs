@@ -106,7 +106,7 @@
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
                         .ConstructedBy(() => new OfferComponentAttributeValueResolver("key")))
                 .ForMember(
-                    dest => dest.EditorView,
+                    dest => dest.DialogEditorView,
                     opt =>
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
                         .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorVeiw")))

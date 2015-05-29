@@ -9,12 +9,13 @@
 var OfferComponentDefinitionDisplay = function() {
     var self = this;
     self.key = '';
-    self.compoentKey = '';
+    self.componentKey = '';
     self.name = '';
     self.description = '';
     self.typeName = '';
     self.extendedData = {};
-    self.editorView = {};
+    self.componentType = '';
+    self.dialogEditorView = {};
     self.restrictToType = '';
 };
 

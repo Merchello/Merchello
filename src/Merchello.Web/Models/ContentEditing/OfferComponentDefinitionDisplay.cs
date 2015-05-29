@@ -8,6 +8,9 @@ namespace Merchello.Web.Models.ContentEditing
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// The offer component definition display.
     /// </summary>
@@ -39,6 +42,12 @@ namespace Merchello.Web.Models.ContentEditing
         public string TypeName { get; set; }
 
         /// <summary>
+        /// Gets or sets the component type.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public OfferComponentType ComponentType { get; set; }
+
+        /// <summary>
         /// Gets or sets the extended data.
         /// </summary>
         public ExtendedDataCollection ExtendedData { get; set; }
@@ -46,7 +55,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Gets or sets the editor view.
         /// </summary>
-        public DialogEditorViewDisplay EditorView { get; set; }
+        public DialogEditorViewDisplay DialogEditorView { get; set; }
 
         /// <summary>
         /// Gets or sets the type to which this component is restricted (if any)

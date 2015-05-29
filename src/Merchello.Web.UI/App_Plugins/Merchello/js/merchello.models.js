@@ -1296,12 +1296,13 @@ angular.module('merchello.models').constant('SelectOfferProviderDialogData', Sel
 var OfferComponentDefinitionDisplay = function() {
     var self = this;
     self.key = '';
-    self.compoentKey = '';
+    self.componentKey = '';
     self.name = '';
     self.description = '';
     self.typeName = '';
     self.extendedData = {};
-    self.editorView = {};
+    self.componentType = '';
+    self.dialogEditorView = {};
     self.restrictToType = '';
 };
 
@@ -3720,13 +3721,13 @@ angular.module('merchello.models').factory('dialogDataFactory',
                         for(var i = 0; i < jsonResult.length; i++) {
                             var definition = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             definition.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                            definition.editorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].editorView);
+                            definition.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
                             definitions.push(definition);
                         }
                     } else {
                         definitions = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                         definitions.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                        definitions.editorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].editorView);
+                        definitions.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
                     }
                     return definitions;
                 }

@@ -63,6 +63,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="OfferComponentBase"/> by the provider key.
+        /// </summary>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{OfferComponentBase}"/>.
+        /// </returns>
         public IEnumerable<OfferComponentBase> GetOfferComponentsByProviderKey(Guid providerKey)
         {
             var provider = _offerProviderResolver.GetByKey(providerKey);
@@ -73,22 +82,15 @@
             return types.Select(x => GetOfferComponent(CreateEmptyOfferComponentDefinition(x))).Where(x => x != null);
         }
 
-
-        public T GetOfferComponent<T>(OfferComponentDefinition definition) where T : OfferComponentBase
-        {
-            var typeOfT = typeof(T);
-            var type = _instanceTypes.FirstOrDefault(x => x.IsAssignableFrom(typeOfT));
-
-            if (type == null) return null;
-
-            var ctlArgs = new object[] { definition };
-
-            var attempt = ActivatorHelper.CreateInstance<OfferComponentBase>(type, ctlArgs);
-
-            return attempt.Success ? attempt.Result as T : null;
-
-        }
-
+        /// <summary>
+        /// Gets an instantiated offer component by it's definition.
+        /// </summary>
+        /// <param name="definition">
+        /// The definition.
+        /// </param>
+        /// <returns>
+        /// The <see cref="OfferComponentBase"/>.
+        /// </returns>
         public OfferComponentBase GetOfferComponent(OfferComponentDefinition definition)
         {
             var type = this.GetTypeByComponentKey(definition.ComponentKey);
@@ -100,7 +102,7 @@
         }
 
         /// <summary>
-        /// Gets the collection of offer compe.
+        /// Gets the collection of offer components.
         /// </summary>
         /// <param name="definitions">
         /// The definitions.
@@ -110,7 +112,7 @@
         /// </returns>
         public IEnumerable<OfferComponentBase> GetOfferComponents(IEnumerable<OfferComponentDefinition> definitions)
         {
-            return definitions.Select(this.GetOfferComponent<OfferComponentBase>);
+            return definitions.Select(this.GetOfferComponent);
         }
 
         /// <summary>
@@ -125,6 +127,37 @@
         public Type GetTypeByComponentKey(Guid key)
         {
             return _instanceTypes.FirstOrDefault(x => x.GetCustomAttribute<OfferComponentAttribute>(false).Key == key);
+        }
+
+        /// <summary>
+        /// The get offer component.
+        /// </summary>
+        /// <param name="definition">
+        /// The definition.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of component to be returned
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO decide if this should be removed - probably be more useful if it did not require a definition
+        /// and simply returned an new instantion of the type T
+        /// </remarks>
+        internal T GetOfferComponent<T>(OfferComponentDefinition definition) where T : OfferComponentBase
+        {
+            var typeOfT = typeof(T);
+            var type = _instanceTypes.FirstOrDefault(x => x.IsAssignableFrom(typeOfT));
+
+            if (type == null) return null;
+
+            var ctlArgs = new object[] { definition };
+
+            var attempt = ActivatorHelper.CreateInstance<OfferComponentBase>(type, ctlArgs);
+
+            return attempt.Success ? attempt.Result as T : null;
+
         }
 
         /// <summary>
