@@ -1063,10 +1063,14 @@ To manage your website, simply open the Umbraco back office and start adding con
       <key alias="newOffer">New Offer</key>
       <key alias="noOffer">No current offers</key>
       <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
-      <key alias="offerInfo">Offer Information</key>
+      <key alias="offerInfo">Offer Settings</key>
       <key alias="configOffer">Configure this offer</key>
       <key alias="offerType">Type of Offer</key>
+      <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
     <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
+      <key alias="offerValidDates">Offer Valid Dates</key>
+      <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
+      <key alias="offerNeverExpires">Does not expire.</key>
     </area>
   <area alias="merchelloVariant">
     <!-- things -->

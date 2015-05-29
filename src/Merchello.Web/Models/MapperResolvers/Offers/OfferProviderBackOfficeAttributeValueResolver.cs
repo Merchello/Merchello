@@ -7,7 +7,6 @@
     using Merchello.Web.Trees;
 
     using Umbraco.Core;
-    using Umbraco.Core.IO;
 
     /// <summary>
     /// The offer provider back office attribute value resolver.

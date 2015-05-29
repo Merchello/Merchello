@@ -1,12 +1,23 @@
-<div class="row-fluid">
-    <div class="form-group col-xs-6 span6">
-        <label for="sku"><localize key="merchelloMarketing_offerCode" /> <small><localize key="merchelloMarketing_mustUniqueOfferCode" /></small></label>
-        <input id="sku" data-ng-required="true" name="offerCode" required type="text" class="form-control col-xs-8 span8" data-ng-model="offer.offerCode" placeholder="eg. 10OFF" />
+<div  id="offer-settings">
+    <div class="row-fluid">
+        <div class="form-group col-xs-6 span6">
+            <label for="offerCode"><localize key="merchelloMarketing_offerCode" /> <small><localize key="merchelloMarketing_mustUniqueOfferCode" /></small></label>
+            <input id="offerCode" data-ng-required="true" name="offerCode" required type="text" class="form-control col-xs-8 span8" data-ng-model="offer.offerCode" placeholder="eg. 10OFF" />
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="form-group col-xs-6 span6">
+            <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.offerExpires" data-ng-click="toggleOfferExpires()"> <span><localize key="merchelloMarketing_offerSetExpires" /></span></label>
+        </div>
+        <div class="form-group col-xs-6 span6">
+            <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.active"> <span>This offer is active</span></label>
+        </div>
     </div>
 
-    <div class="form-group col-xs-6 span6">
-       <!-- <label for="barcode"><localize key="merchelloVariant_barcode" /> <small><localize key="merchelloVariant_barcodeExamples" /></small></label>
-        <input id="barcode" name="barcode" type="text" class="form-control col-xs-8 span8" data-ng-model="productVariant.barcode" />
-        -->
+    <merchello-slide-open-panel hide-close="true" is-open="offer.offerExpires">
+    <div class="row-fluid date-settings">
+        <label><localize key="merchelloMarketing_offerValidDates"></localize><small><localize key="merchelloMarketing_offerValidDatesInfo"></localize></small></label>
+        <filter-by-date-range filter-start-date="offer.offerStartsDate" filter-end-date="offer.offerEndsDate" hide-dates-label="true" hide-filter-button="true"></filter-by-date-range>
     </div>
+    </merchello-slide-open-panel>
 </div>

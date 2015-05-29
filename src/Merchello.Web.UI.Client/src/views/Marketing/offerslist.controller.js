@@ -8,9 +8,9 @@
  */
 angular.module('merchello').controller('Merchello.Backoffice.OffersListController',
     ['$scope', '$location', 'assetsService', 'dialogService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory', 'dialogDataFactory',
-        'settingDisplayBuilder', 'offerProviderDisplayBuilder',
+        'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
     function($scope, $location, assetsService, dialogService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
-             settingDisplayBuilder, offerProviderDisplayBuilder) {
+             settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
@@ -25,6 +25,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         $scope.maxPages = 0;
         $scope.settings = {};
         $scope.offerProviders = [];
+        $scope.includeInactive = false;
 
         // exposed methods
         $scope.getEditUrl = getEditUrl;
@@ -32,13 +33,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         $scope.numberOfPages = numberOfPages;
         $scope.changePage = changePage;
         $scope.providerSelectDialogOpen = providerSelectDialogOpen;
+        $scope.getOfferType = getOfferType;
 
 
         function init() {
             $scope.tabs = merchelloTabsFactory.createMarketingTabs();
             $scope.tabs.setActive('offers');
             loadSettings();
-            loadOfferProviders();
         }
 
         /**
@@ -53,6 +54,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
             var promiseSettings = settingsResource.getAllSettings();
             promiseSettings.then(function(settings) {
                 $scope.settings = settingDisplayBuilder.transform(settings);
+                loadOfferProviders();
             }, function (reason) {
                 notificationsService.error("Settings Load Failed", reason.message);
             });
@@ -62,15 +64,78 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
             var providersPromise = marketingResource.getOfferProviders();
             providersPromise.then(function(providers) {
                 $scope.offerProviders = offerProviderDisplayBuilder.transform(providers);
-                console.info($scope.offerProviders);
+                resetFilters();
             }, function(reason) {
                 notificationsService.error("Offer providers load failed", reason.message);
             });
         }
 
         function loadOffers() {
-
+           // var query = buildQuery();
+            var offersPromise = marketingResource.getAllOfferSettings();
+            offersPromise.then(function(result) {
+                $scope.offers = offerSettingsDisplayBuilder.transform(result);
+                $scope.preValuesLoaded = true;
+            });
         }
+
+        function resetFilters() {
+            $scope.filterText = '';
+            $scope.currentPage = 0;
+            loadOffers();
+        }
+
+
+        function buildQuery(filterText) {
+            var page = $scope.currentPage;
+            var perPage = $scope.limitAmount;
+            var sortBy = sortInfo().sortBy;
+            var sortDirection = sortInfo().sortDirection;
+
+
+            if (filterText === undefined) {
+                filterText = '';
+            }
+            $scope.filterText = filterText;
+            var query = queryDisplayBuilder.createDefault();
+            query.currentPage = page;
+            query.itemsPerPage = perPage;
+            query.sortBy = sortBy;
+            query.sortDirection = sortDirection;
+            query.addFilterTermParam(filterText);
+
+            if (query.parameters.length > 0) {
+                $scope.currentFilters = query.parameters;
+            }
+            return query;
+        }
+
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         *
+         * @description
+         * Returns sort information based off the current $scope.sortProperty.
+         */
+        function sortInfo() {
+            var sortDirection, sortBy;
+            // If the sortProperty starts with '-', it's representing a descending value.
+            if ($scope.sortProperty.indexOf('-') > -1) {
+                // Get the text after the '-' for sortBy
+                sortBy = $scope.sortProperty.split('-')[1];
+                sortDirection = 'Descending';
+                // Otherwise it is ascending.
+            } else {
+                sortBy = $scope.sortProperty;
+                sortDirection = 'Ascending';
+            }
+            return {
+                sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
+                sortDirection: sortDirection
+            }
+        };
+
 
         //--------------------------------------------------------------------------------------
         // Events methods
@@ -188,7 +253,20 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         }
 
         function getEditUrl(offer) {
-            return '#';
+            var url = '#';
+            var provider = _.find($scope.offerProviders, function(p) { return p.key === offer.offerProviderKey; });
+            if (provider === null || provider === undefined) {
+                return url;
+            }
+            return url + '/' + provider.editorUrl(offer.key);
+        }
+
+        function getOfferType(offer) {
+            var provider = _.find($scope.offerProviders, function(p) { return p.key === offer.offerProviderKey; });
+            if (provider === null || provider === undefined) {
+                return 'could not find';
+            }
+            return provider.backOfficeTree.title;
         }
 
         // Initialize the controller

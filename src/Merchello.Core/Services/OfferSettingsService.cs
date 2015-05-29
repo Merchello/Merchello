@@ -10,6 +10,8 @@
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
+    using umbraco.cms.presentation;
+
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Persistence;
@@ -432,6 +434,18 @@
             }
         }
 
+
+        public Page<IOfferSettings> GetPage(
+            string filterTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending,
+            bool activeOnly = true)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Gets a collection of <see cref="IOfferSettings"/> for a given offer provider.
         /// </summary>
@@ -495,6 +509,49 @@
             }
         }
 
+        /// <summary>
+        /// Searches the offer settings by a term.
+        /// </summary>
+        /// <param name="filterTerm">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IOfferSettings}"/>.
+        /// </returns>
+        public Page<IOfferSettings> GetPage(
+            string filterTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.Search(filterTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Validates the sort field.
+        /// </summary>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         private string ValidateSortByField(string sortBy)
         {
             var valid = new[] { "name", "offerCode", "offerStartsDate", "offerEndsDate" };

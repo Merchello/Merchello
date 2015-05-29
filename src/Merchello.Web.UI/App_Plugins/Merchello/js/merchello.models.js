@@ -1321,6 +1321,16 @@ var OfferProviderDisplay = function() {
     self.backOfficeTree = {};
 };
 
+OfferProviderDisplay.prototype = (function() {
+
+    function editorUrl(key) {
+        return this.backOfficeTree.routePath.replace('{0}', key);
+    }
+
+    return {
+        editorUrl : editorUrl
+    }
+}());
 
 angular.module('merchello.models').constant('OfferProviderDisplay', OfferProviderDisplay);
     /**
@@ -1337,11 +1347,33 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.name = '';
         self.offerCode = '';
         self.offerProviderKey = '';
+        self.offerExpires = false;
         self.offerStartsDate = '';
         self.offerEndsDate = '';
         self.active = true;
         self.componentDefinitions = [];
     };
+
+    OfferSettingsDisplay.prototype = (function() {
+        function localDateString(val) {
+            var raw = new Date(val);
+            return new Date(raw.getTime() + raw.getTimezoneOffset()*60000).toLocaleDateString();
+        }
+
+        function offerStartsDateLocalDateString() {
+            return localDateString(this.offerStartsDate);
+        }
+
+        function offerEndsDateLocalDateString() {
+            return localDateString(this.offerEndsDate);
+        }
+
+        return {
+            offerStartsDateLocalDateString: offerStartsDateLocalDateString,
+            offerEndsDateLocalDateString: offerEndsDateLocalDateString
+        }
+
+    }());
 
     angular.module('merchello.models').constant('OfferSettingsDisplay', OfferSettingsDisplay);
     /**
@@ -3743,6 +3775,12 @@ angular.module('merchello.models').factory('offerSettingsDisplayBuilder',
     ['genericModelBuilder', 'offerComponentDefinitionDisplayBuilder', 'OfferSettingsDisplay',
     function(genericModelBuilder, offerComponentDefinitionDisplayBuilder, OfferSettingsDisplay) {
         var Constructor = OfferSettingsDisplay;
+
+        function formatDateString(val) {
+            var raw = new Date(val.split('T')[0]);
+            return new Date(raw.getTime() + raw.getTimezoneOffset()*60000);
+        }
+
         return {
             createDefault: function() {
                 return new Constructor();
@@ -3752,11 +3790,15 @@ angular.module('merchello.models').factory('offerSettingsDisplayBuilder',
                 if(angular.isArray(jsonResult)) {
                     angular.forEach(jsonResult, function(json) {
                         var setting = genericModelBuilder.transform(json, Constructor);
+                        setting.offerStartsDate = formatDateString(setting.offerStartsDate);
+                        setting.offerEndsDate = formatDateString(setting.offerEndsDate);
                         setting.componentDefinitions = offerComponentDefinitionDisplayBuilder.transform(json.componentDefinitions);
                         settings.push(setting);
                     });
                 } else {
                     settings = genericModelBuilder.transform(jsonResult,Constructor);
+                    settings.offerStartsDate = formatDateString(settings.offerStartsDate);
+                    settings.offerEndsDate = formatDateString(settings.offerEndsDate);
                     settings.componentDefinitions = offerComponentDefinitionDisplayBuilder.transform(jsonResult.componentDefinitions);
                 }
                 return settings;

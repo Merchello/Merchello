@@ -38,8 +38,8 @@
                 {
                     Key = dto.Key,
                     Active = dto.Active,
-                    OfferStartsDate = dto.OfferStartsDate,
-                    OfferEndsDate = dto.OfferEndsDate,
+                    OfferStartsDate = dto.OfferStartsDate.SqlDateTimeMinValueAsDateTimeMinValue(),
+                    OfferEndsDate = dto.OfferEndsDate.SqlDateTimeMaxValueAsSqlDateTimeMaxValue(),
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -67,8 +67,8 @@
                            Name = entity.Name,
                            OfferCode = entity.OfferCode,
                            OfferProviderKey = entity.OfferProviderKey,
-                           OfferStartsDate = entity.OfferStartsDate,
-                           OfferEndsDate = entity.OfferEndsDate,
+                           OfferStartsDate = entity.OfferStartsDate.AsSqlDateTimeMinValue(),
+                           OfferEndsDate = entity.OfferEndsDate.AsSqlDateTimeMaxValue(),
                            Active = entity.Active,
                            ConfigurationData = JsonConvert.SerializeObject(configurations),
                            UpdateDate = entity.UpdateDate,

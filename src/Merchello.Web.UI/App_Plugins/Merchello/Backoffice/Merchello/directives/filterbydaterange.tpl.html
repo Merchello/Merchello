@@ -1,6 +1,6 @@
 <div class="form-inline">
     <div>
-        Dates:
+        <span data-ng-show="!hideDatesLabel">Dates:</span>
         <div class="input-append date datepicker" id="filterStartDate">
             <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
                    data-ng-model="filterStartDate" />
@@ -16,6 +16,6 @@
                 <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
             </span>
         </div>
-        <button id="orderFilterDateGo" class="btn" data-ng-click="changeDateFilters(filterStartDate, filterEndDate)">{{filterButtonText}}</button>
+        <button data-ng-hide="hideFilterButton" id="orderFilterDateGo" class="btn" data-ng-click="changeDateFilters(filterStartDate, filterEndDate)">{{filterButtonText}}</button>
     </div>
 </div>

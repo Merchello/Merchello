@@ -68,14 +68,7 @@
 
             var p = GetDtoPage(page, itemsPerPage, sql, orderExpression, sortDirection);
 
-            return new Page<TEntity>()
-            {
-                CurrentPage = p.CurrentPage,
-                ItemsPerPage = p.ItemsPerPage,
-                TotalItems = p.TotalItems,
-                TotalPages = p.TotalPages,
-                Items = p.Items.Select(x => Get(x.Key)).ToList()
-            };
+            return this.MapPageDtoToPageEntity(p);
         }
 
         /// <summary>
@@ -189,7 +182,7 @@
         /// <returns>
         /// The <see cref="Page{TDto}"/>.
         /// </returns>
-        private Page<TDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        protected Page<TDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
             if (!string.IsNullOrEmpty(orderExpression))
             {
@@ -200,5 +193,26 @@
 
             return Database.Page<TDto>(page, itemsPerPage, sql);
         }
+
+        /// <summary>
+        /// The map page dto to page entity.
+        /// </summary>
+        /// <param name="dtoPage">
+        /// The <see cref="Page{TDto}"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{TEntity}"/>.
+        /// </returns>
+        protected Page<TEntity> MapPageDtoToPageEntity(Page<TDto> dtoPage)
+        {
+            return new Page<TEntity>()
+            {
+                CurrentPage = dtoPage.CurrentPage,
+                ItemsPerPage = dtoPage.ItemsPerPage,
+                TotalItems = dtoPage.TotalItems,
+                TotalPages = dtoPage.TotalPages,
+                Items = dtoPage.Items.Select(x => Get(x.Key)).ToList()
+            };
+        } 
     }
 }

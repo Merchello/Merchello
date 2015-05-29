@@ -32,6 +32,11 @@
         public Guid OfferProviderKey { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the offer expires.
+        /// </summary>
+        public bool OfferExpires { get; set; }
+
+        /// <summary>
         /// Gets or sets the offer starts date.
         /// </summary>
         public DateTime OfferStartsDate { get; set; }
@@ -75,6 +80,62 @@
         public static OfferSettingsDisplay ToOfferSettingsDisplay(this IOfferSettings settings)
         {
             return AutoMapper.Mapper.Map<IOfferSettings, OfferSettingsDisplay>(settings);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="OfferSettingsDisplay"/> to a <see cref="IOfferSettings"/>
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOfferSettings"/>.
+        /// </returns>
+        public static IOfferSettings ToOfferSettings(this OfferSettingsDisplay settings, IOfferSettings destination)
+        {
+            destination.Active = settings.Active;
+            destination.Name = settings.Name;
+            destination.OfferCode = settings.OfferCode;
+            destination.ApplySafeDates(settings);
+            destination.ComponentDefinitions = settings.ComponentDefinitions.AsOfferComponentDefinitionCollection();
+            return destination;
+        }
+
+        /// <summary>
+        /// The ensure dates passed from the <see cref="OfferSettingsDisplay"/> are applied safely
+        /// </summary>
+        /// <param name="offerSettings">
+        /// The offer settings.
+        /// </param>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOfferSettings"/>.
+        /// </returns>
+        public static void ApplySafeDates(this IOfferSettings offerSettings, OfferSettingsDisplay settings)
+        {
+            if (!settings.OfferExpires)
+            {
+                offerSettings.OfferStartsDate = DateTime.MinValue;
+                offerSettings.OfferEndsDate = DateTime.MaxValue;
+            }
+            else
+            {
+                // make sure the ends date is after the start date
+                if (settings.OfferEndsDate < settings.OfferStartsDate)
+                {
+                    var temp = settings.OfferEndsDate;
+                    settings.OfferEndsDate = settings.OfferStartsDate;
+                    settings.OfferStartsDate = temp;
+                }
+
+                offerSettings.OfferStartsDate = settings.OfferStartsDate;
+                offerSettings.OfferEndsDate = settings.OfferEndsDate;
+            }
         }
     }
 }
