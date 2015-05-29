@@ -5,19 +5,18 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Web.Caching;
     using System.Web.Http;
 
     using Merchello.Core;
     using Merchello.Core.Marketing.Offer;
-    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
+    using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
-    using umbraco.cms.businesslogic.datatype;
-
+    using Umbraco.Core.Persistence;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
 
@@ -110,17 +109,37 @@
             return _offerSettingsService.GetByKey(id).ToOfferSettingsDisplay();
         }
 
-        //[HttpPost]
-        //public QueryResultDisplay SearchOffers(QueryDisplay query)
-        //{
-        //    var page = _offerSettingsService.GetPage(
-        //        query.CurrentPage + 1,
-        //        query.ItemsPerPage,
-        //        query.SortBy,
-        //        query.SortDirection);
-
+        /// <summary>
+        /// Returns a paged set of offers.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public QueryResultDisplay SearchOffers(QueryDisplay query)
+        {
+            var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
             
-        //}
+            var hasSearchTerm = term != null && !string.IsNullOrEmpty(term.Value);
+
+            var page = hasSearchTerm ? 
+                _offerSettingsService.GetPage(
+                    term.Value,
+                    query.CurrentPage + 1, 
+                    query.ItemsPerPage, 
+                    query.SortBy, 
+                    query.SortDirection) : 
+                _offerSettingsService.GetPage(
+                query.CurrentPage + 1,
+                query.ItemsPerPage,
+                query.SortBy,
+                query.SortDirection);
+
+            return this.GetQueryResultDisplay(page);
+        }
 
             /// <summary>
         /// Gets the collection of all active offer settings.
@@ -213,6 +232,25 @@
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        //private OfferSettingsDisplay 
+        /// <summary>
+        /// Maps a <see cref="Page{IOfferSetting}" /> to a <see cref="QueryResultDisplay"/>.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        private QueryResultDisplay GetQueryResultDisplay(Page<IOfferSettings> page)
+        {
+            return new QueryResultDisplay()
+                       {
+                           CurrentPage = page.CurrentPage - 1,
+                           ItemsPerPage = page.ItemsPerPage,
+                           TotalItems = page.TotalItems,
+                           TotalPages = page.TotalPages,
+                           Items = page.Items.Select(x => x.ToOfferSettingsDisplay())
+                       };
+        }
     }
 }

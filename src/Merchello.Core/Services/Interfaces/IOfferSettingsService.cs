@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Web.UI;
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Persistence.Querying;
 
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
 
     /// <summary>
@@ -189,5 +192,7 @@
         /// The <see cref="IEnumerable{IOfferSettings"/>.
         /// </returns>
         IEnumerable<IOfferSettings> GetAllActive(bool excludeExpired = true);
+
+        Page<IOfferSettings> GetPage(string filterTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
     }
 }

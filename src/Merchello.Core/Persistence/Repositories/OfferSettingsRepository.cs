@@ -12,6 +12,8 @@
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
+    using umbraco;
+
     using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Persistence;
@@ -69,6 +71,38 @@
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// Searches the offer settings by a term.
+        /// </summary>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IOfferSettings}"/>.
+        /// </returns>
+        public Page<IOfferSettings> Search(
+            string term,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = this.BuildOfferSearchSql(term);
+            var p = this.GetDtoPage(page, itemsPerPage, sql, sortBy, sortDirection);
+            return this.MapPageDtoToPageEntity(p);
+        }
 
         /// <summary>
         /// Performs the get by key operation.

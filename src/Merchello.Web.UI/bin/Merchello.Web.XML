@@ -199,6 +199,17 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.SearchOffers(Merchello.Web.Models.Querying.QueryDisplay)">
+            <summary>
+            Returns a paged set of offers.
+            </summary>
+            <param name="query">
+            The query.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.MarketingApiController.GetAllOfferSettings">
             <summary>
             Gets the collection of all active offer settings.
@@ -244,6 +255,17 @@
             <returns>
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
             </returns>       
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.GetQueryResultDisplay(Umbraco.Core.Persistence.Page{Merchello.Core.Models.Interfaces.IOfferSettings})">
+            <summary>
+            Maps a <see cref="T:Umbraco.Core.Persistence.Page`1"/> to a <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </summary>
+            <param name="page">
+            The page.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay">
             <summary>
