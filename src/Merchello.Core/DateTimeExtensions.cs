@@ -18,22 +18,31 @@
         /// </summary>
         private const string SqlDateTimeMaxValueString = "9999-12-31";
 
-        public static DateTime? DateTimeMinValueAsNull(this DateTime value)
+        /// <summary>
+        /// Converts a date time min value to null.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime? ConverDateTimeMinValueToNull(this DateTime value)
         {
             return !value.Equals(DateTime.MinValue) ? value : (DateTime?)null;
         }
 
-        public static DateTime? DateTimeMaxValueAsNull(this DateTime value)
+        public static DateTime? ConvertDateTimeMaxValueToNull(this DateTime value)
         {
             return !value.Equals(DateTime.MaxValue) ? value : (DateTime?)null;
         }
 
-        public static DateTime DateTimeNullAsMinValue(this DateTime? dt)
+        public static DateTime ConvertDateTimeNullToMinValue(this DateTime? dt)
         {
             return dt == null ? DateTime.MinValue : dt.Value;
         }
 
-        public static DateTime DateTimeNullAsMaxValue(this DateTime? dt)
+        public static DateTime ConvertDateTimeNullToMaxValue(this DateTime? dt)
         {
             return dt == null ? DateTime.MaxValue : dt.Value;
         }
