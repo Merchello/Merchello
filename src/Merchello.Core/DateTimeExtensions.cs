@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core
 {
     using System;
+    using System.Runtime.Remoting.Messaging;
 
     /// <summary>
     /// Extension methods for <see cref="DateTime"/>
@@ -16,6 +17,26 @@
         /// The SQL date time max value string.
         /// </summary>
         private const string SqlDateTimeMaxValueString = "9999-12-31";
+
+        public static DateTime? DateTimeMinValueAsNull(this DateTime value)
+        {
+            return !value.Equals(DateTime.MinValue) ? value : (DateTime?)null;
+        }
+
+        public static DateTime? DateTimeMaxValueAsNull(this DateTime value)
+        {
+            return !value.Equals(DateTime.MaxValue) ? value : (DateTime?)null;
+        }
+
+        public static DateTime DateTimeNullAsMinValue(this DateTime? dt)
+        {
+            return dt == null ? DateTime.MinValue : dt.Value;
+        }
+
+        public static DateTime DateTimeNullAsMaxValue(this DateTime? dt)
+        {
+            return dt == null ? DateTime.MaxValue : dt.Value;
+        }
 
         /// <summary>
         /// Checks if parameter is a min SQL DateTime value and return the .NET DateTime Min.
