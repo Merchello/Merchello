@@ -8,6 +8,28 @@
 
 /**
  * @ngdoc directive
+ * @name offerComponents
+ *
+ * @description
+ * Common form elements for Merchello's OfferComponents
+ */
+angular.module('merchello.directives').directive('offerComponents', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offer: '=',
+            settings: '=',
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.components.tpl.html',
+        controller:  'Merchello.Directives.OfferComponentsDirectiveController'
+    }
+})
+
+
+/**
+ * @ngdoc directive
  * @name offerMainProperties
  *
  * @description

@@ -12,7 +12,7 @@
     /// A discount rule to prohibit a discount from being used with other discounts.
     /// </summary>
     [OfferComponent("BDFEF8AC-B572-43E6-AB42-C07678500C87", "Not usable with other discounts", "This discount cannot be used with other discounts.", RestrictToType = typeof(Coupon))]
-    public class NotUsableWithOtherCouponsConstraint : DiscountConstraintBase
+    public class NotUsableWithOtherCouponsConstraint : OfferConstraintComponentBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NotUsableWithOtherCouponsConstraint"/> class.
@@ -23,17 +23,6 @@
         public NotUsableWithOtherCouponsConstraint(OfferComponentDefinition definition)
             : base(definition)
         {
-        }
-
-        /// <summary>
-        /// Gets the category.
-        /// </summary>
-        public override DiscountCategory Category
-        {
-            get
-            {
-                return DiscountCategory.Sale;                
-            }
         }
 
         /// <summary>

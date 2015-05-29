@@ -1,9 +1,9 @@
-﻿namespace Merchello.Core.Marketing.Discounts
+﻿namespace Merchello.Core.Marketing.Offer
 {
     /// <summary>
     /// The discount constraint category.
     /// </summary>        
-    public enum DiscountCategory
+    internal enum OfferComponentCategory
     {        
         /// <summary>
         /// Customer related

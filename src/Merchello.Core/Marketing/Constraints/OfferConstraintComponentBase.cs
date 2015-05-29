@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Marketing.Discounts
 {
+    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Discounts.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
@@ -9,24 +10,18 @@
     /// <summary>
     /// A base class for Discount Rules
     /// </summary>
-    public abstract class DiscountConstraintBase : OfferComponentBase, IDiscountConstraint
+    public abstract class OfferConstraintComponentBase : OfferComponentBase, IOfferConstraintComponent
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DiscountConstraintBase"/> class.
+        /// Initializes a new instance of the <see cref="OfferConstraintComponentBase"/> class.
         /// </summary>
         /// <param name="definition">
         /// The <see cref="OfferComponentDefinition"/>.
         /// </param>
-        protected DiscountConstraintBase(OfferComponentDefinition definition)
+        protected OfferConstraintComponentBase(OfferComponentDefinition definition)
             : base(definition)
         {
         }
-
-        /// <summary>
-        /// Gets the category.
-        /// </summary>
-        public abstract DiscountCategory Category { get; }
-
 
         /// <summary>
         /// Validates the constraint against the <see cref="ILineItemContainer"/>

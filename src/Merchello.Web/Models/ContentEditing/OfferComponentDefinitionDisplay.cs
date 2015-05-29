@@ -63,15 +63,15 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// The to offer component definition display.
         /// </summary>
-        /// <param name="definition">
-        /// The definition.
+        /// <param name="component">
+        /// The offer component
         /// </param>
         /// <returns>
         /// The <see cref="OfferComponentDefinitionDisplay"/>.
         /// </returns>
-        public static OfferComponentDefinitionDisplay ToOfferComponentDefinitionDisplay(this OfferComponentDefinition definition)
+        public static OfferComponentDefinitionDisplay ToOfferComponentDefinitionDisplay(this OfferComponentBase component)
         {
-            return AutoMapper.Mapper.Map<OfferComponentDefinition, OfferComponentDefinitionDisplay>(definition);
+            return AutoMapper.Mapper.Map<OfferComponentBase, OfferComponentDefinitionDisplay>(component);
         }
 
         /// <summary>

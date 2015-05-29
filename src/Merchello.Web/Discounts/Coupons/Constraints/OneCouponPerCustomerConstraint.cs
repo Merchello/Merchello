@@ -12,7 +12,7 @@
     /// A rule to enforce one discount per customer.
     /// </summary>
     [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One coupon per customer", "The customer may only ever use this coupon once.", RestrictToType = typeof(Coupon))]
-    public class OneCouponPerCustomerConstraint : DiscountConstraintBase
+    public class OneCouponPerCustomerConstraint : OfferConstraintComponentBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCouponPerCustomerConstraint"/> class.
@@ -23,17 +23,6 @@
         public OneCouponPerCustomerConstraint(OfferComponentDefinition definition)
             : base(definition)
         {
-        }
-
-        /// <summary>
-        /// Gets the category.
-        /// </summary>
-        public override DiscountCategory Category
-        {
-            get
-            {
-                return DiscountCategory.Customer;
-            }
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
-﻿namespace Merchello.Core.Marketing.Discounts
+﻿namespace Merchello.Core.Marketing.Rewards
 {
     using Merchello.Core.Marketing.Offer;
-    using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -39,8 +38,8 @@
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(container, "container");
 
-            _customer = customer;
-            _container = container;
+            this._customer = customer;
+            this._container = container;
         }
     }
 }

@@ -4,41 +4,20 @@
 
     using Merchello.Core.Models;
 
-    using Newtonsoft.Json;
-
     using Umbraco.Core;
 
     /// <summary>
     /// The constraint settings.
     /// </summary>
-    public class OfferComponentDefinition
+    public class OfferComponentDefinition : IHasExtendedData
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OfferComponentDefinition"/> class.
-        /// </summary>
-        public OfferComponentDefinition()
-        {
-            this.ExtendedData = new ExtendedDataCollection();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OfferComponentDefinition"/> class.
-        /// </summary>
-        /// <param name="jsonConfiguration">
-        /// The component config JSON.
-        /// </param>
-        public OfferComponentDefinition(string jsonConfiguration)
-            : this(JsonConvert.DeserializeObject<OfferComponentConfiguration>(jsonConfiguration))
-        {            
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OfferComponentDefinition"/> class.
         /// </summary>
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        internal OfferComponentDefinition(OfferComponentConfiguration configuration)
+        public OfferComponentDefinition(OfferComponentConfiguration configuration)
         {
             Mandate.ParameterNotNull(configuration, "configuration");
             this.ComponentKey = configuration.ComponentKey;
@@ -46,9 +25,18 @@
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="OfferComponentDefinition"/> class.
+        /// </summary>
+        internal OfferComponentDefinition()
+        {
+            this.ExtendedData = new ExtendedDataCollection();
+        }
+
+        /// <summary>
         /// Gets or sets the component key.
         /// </summary>
         public Guid ComponentKey { get; set; }
+
 
         /// <summary>
         /// Gets or sets the <see cref="ExtendedDataCollection"/>.

@@ -31,6 +31,20 @@ namespace Merchello.Web
         }
 
         /// <summary>
+        /// Returns all <see cref="OfferComponentBase"/> types.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Type}"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveOfferComponents(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<OfferComponentBase, OfferComponentAttribute>();
+        }
+
+        /// <summary>
         /// Returns all available report data aggregators.
         /// </summary>
         /// <param name="pluginManger">

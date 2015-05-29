@@ -2,6 +2,7 @@
 {
     using Merchello.Core.Marketing.Discounts;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
 
     /// <summary>

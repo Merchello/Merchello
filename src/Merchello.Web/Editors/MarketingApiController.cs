@@ -13,7 +13,6 @@
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
-    using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
     using Umbraco.Core.Persistence;
@@ -34,7 +33,9 @@
         /// <summary>
         /// The offer provider resolver.
         /// </summary>
-        private IOfferProviderResolver _resolver;
+        private readonly IOfferProviderResolver _providerResolver;
+
+        private readonly IOfferComponentResolver _componentResolver;
 
         #region Constructors
 
@@ -56,7 +57,9 @@
             : base(merchelloContext)
         {
             _offerSettingsService = merchelloContext.Services.OfferSettingsService;
-            _resolver = OfferProviderResolver.Current;
+            this._providerResolver = OfferProviderResolver.Current;
+
+            this._componentResolver = OfferComponentResolver.Current;
         }
         
         /// <summary>
@@ -74,7 +77,7 @@
             _offerSettingsService = merchelloContext.Services.OfferSettingsService;
 
             // TODO - this need to be fixed to make testable
-            _resolver = OfferProviderResolver.Current;
+            this._providerResolver = OfferProviderResolver.Current;
         }
 
         #endregion
@@ -107,6 +110,22 @@
         public OfferSettingsDisplay GetOfferSettings(Guid id)
         {
             return _offerSettingsService.GetByKey(id).ToOfferSettingsDisplay();
+        }
+
+        /// <summary>
+        /// The get the available <see cref="OfferComponentDefinitionDisplay"/>s for a given offer provider key.
+        /// </summary>
+        /// <param name="offerProviderKey">
+        /// The offer provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{OfferComponentDefinitionDisplay}"/>.
+        /// </returns>
+        public IEnumerable<OfferComponentDefinitionDisplay> GetAvailableOfferComponents(Guid offerProviderKey)
+        {
+            return
+                _componentResolver.GetOfferComponentsByProviderKey(offerProviderKey)
+                    .Select(x => x.ToOfferComponentDefinitionDisplay());
         }
 
         /// <summary>

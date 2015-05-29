@@ -241,6 +241,7 @@
     <Compile Include="Discounts\Coupons\CouponProvider.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\Offers\OfferComponentExtendedDataResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferProviderBackOfficeAttributeValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\CapturePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizePaymentDialogEditorViewResolver.cs" />

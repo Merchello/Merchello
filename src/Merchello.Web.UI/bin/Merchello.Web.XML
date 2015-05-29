@@ -62,11 +62,6 @@
             The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
             </returns>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.Category">
-            <summary>
-            Gets the category.
-            </summary>
-        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint">
             <summary>
             A rule to enforce one discount per customer.
@@ -93,11 +88,6 @@
             <returns>
             The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
             </returns>
-        </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.Category">
-            <summary>
-            Gets the category.
-            </summary>
         </member>
         <member name="T:Merchello.Web.Editors.MarketingApiController">
             <summary>
@@ -151,7 +141,7 @@
             The offer settings service.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Editors.MarketingApiController._resolver">
+        <member name="F:Merchello.Web.Editors.MarketingApiController._providerResolver">
             <summary>
             The offer provider resolver.
             </summary>
@@ -197,6 +187,17 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.GetAvailableOfferComponents(System.Guid)">
+            <summary>
+            The get the available <see cref="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay"/>s for a given offer provider key.
+            </summary>
+            <param name="offerProviderKey">
+            The offer provider key.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.MarketingApiController.SearchOffers(Merchello.Web.Models.Querying.QueryDisplay)">
@@ -352,12 +353,12 @@
             Utility class for mapping <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplayExtensions.ToOfferComponentDefinitionDisplay(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+        <member name="M:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplayExtensions.ToOfferComponentDefinitionDisplay(Merchello.Core.Marketing.Offer.OfferComponentBase)">
             <summary>
             The to offer component definition display.
             </summary>
-            <param name="definition">
-            The definition.
+            <param name="component">
+            The offer component
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay"/>.
@@ -889,6 +890,22 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.Offers.OfferComponentExtendedDataResolver">
+            <summary>
+            The offer component extended data resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.Offers.OfferComponentExtendedDataResolver.ResolveCore(Merchello.Core.Marketing.Offer.OfferComponentBase)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+             A collection of key value pairs that represent an <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.Offers.OfferProviderBackOfficeAttributeValueResolver">
             <summary>
             The offer provider back office attribute value resolver.
@@ -1051,7 +1068,7 @@
             The field name.
             </param>
         </member>
-        <member name="M:Merchello.Web.Models.MapperResolvers.OfferComponentAttributeValueResolver.ResolveCore(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+        <member name="M:Merchello.Web.Models.MapperResolvers.OfferComponentAttributeValueResolver.ResolveCore(Merchello.Core.Marketing.Offer.OfferComponentBase)">
             <summary>
             The resolve core.
             </summary>
@@ -2395,6 +2412,17 @@
             </param>
             <returns>
             The collection of checkout operation controllers
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.PluginManagerExtensions.ResolveOfferComponents(Umbraco.Core.PluginManager)">
+            <summary>
+            Returns all <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentBase"/> types.
+            </summary>
+            <param name="pluginManager">
+            The plugin manager.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.PluginManagerExtensions.ResolveReportApiControllers(Umbraco.Core.PluginManager)">
