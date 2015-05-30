@@ -34,9 +34,9 @@
 
 
         /// <summary>
-        /// Gets the Type this component is responsible for building
+        /// Gets the Type to which this component can be grouped with
         /// </summary>
-        internal abstract Type BuilderFor { get; }
+        internal abstract Type TypeGrouping { get; }
 
         /// <summary>
         /// Gets the <see cref="OfferComponentDefinition"/>.

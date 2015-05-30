@@ -26,7 +26,7 @@
         /// <returns>
         /// The <see cref="OfferBase"/>.
         /// </returns>
-        TOffer CreateOffer(string name, string offerCode, bool active = true);
+        TOffer Create(string name, string offerCode, bool active = true);
 
         /// <summary>
         /// Creates a <see cref="IOffer"/> without saving it's settings to the database.
@@ -49,7 +49,7 @@
         /// <returns>
         /// The <see cref="IOffer"/>.
         /// </returns>
-        TOffer CreateOffer(string name, string offerCode, DateTime offerStartDate, DateTime offerEndsDate, bool active = true);
+        TOffer Create(string name, string offerCode, DateTime offerStartDate, DateTime offerEndsDate, bool active = true);
 
         /// <summary>
         /// Creates a <see cref="IOffer"/> without saving it's settings to the database.
@@ -66,7 +66,7 @@
         /// <returns>
         /// The <see cref="OfferBase"/>.
         /// </returns>
-        TOffer CreateOfferWithKey(string name, string offerCode, bool active = true);
+        TOffer CreateWithKey(string name, string offerCode, bool active = true);
 
         /// <summary>
         /// Creates a <see cref="IOffer"/> and saves its settings to the database.
@@ -89,7 +89,7 @@
         /// <returns>
         /// The <see cref="IOffer"/>.
         /// </returns>
-        TOffer CreateOfferWithKey(string name, string offerCode, DateTime offerStartDate, DateTime offerEndsDate, bool active = true);
+        TOffer CreateWithKey(string name, string offerCode, DateTime offerStartDate, DateTime offerEndsDate, bool active = true);
 
         /// <summary>
         /// Saves the offer
@@ -116,7 +116,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{TOffer}"/>.
         /// </returns>
-        IEnumerable<TOffer> GetOffers(bool activeOnly = true);
+        IEnumerable<TOffer> Get(bool activeOnly = true);
 
         /// <summary>
         /// Gets an offer by it's unique key.

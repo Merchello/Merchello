@@ -15,15 +15,15 @@
         /// <summary>
         /// Validates the constraint against the <see cref="ILineItemContainer"/>
         /// </summary>
+        /// <param name="value">
+        /// The value to object to which the constraint is to be applied.
+        /// </param>
         /// <param name="customer">
         /// The <see cref="ICustomerBase"/>.
         /// </param>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
         /// <returns>
-        /// The <see cref="Attempt{T}"/> indicating whether or not the constraint can be enforced.
+        /// The <see cref="Attempt{ILineItemContainer}"/> indicating whether or not the constraint can be enforced.
         /// </returns>
-        Attempt<T> Validate(ICustomerBase customer, ILineItemContainer collection);
+        Attempt<T> Apply(T value, ICustomerBase customer);
     }
 }

@@ -18,7 +18,6 @@
         {
         }
 
-
         /// <summary>
         /// Gets the component type.
         /// </summary>

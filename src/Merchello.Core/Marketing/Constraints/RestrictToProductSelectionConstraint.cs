@@ -24,20 +24,7 @@
         {
         }
 
-
-        /// <summary>
-        /// Validates the constraint against the <see cref="ILineItemContainer"/>
-        /// </summary>
-        /// <param name="customer">
-        /// The <see cref="ICustomerBase"/>.
-        /// </param>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attempt{ILineItemContainer}"/> indicating whether or not the constraint can be enforced.
-        /// </returns>
-        public override Attempt<ILineItemContainer> Validate(ICustomerBase customer, ILineItemContainer collection)
+        public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
         {
             throw new NotImplementedException();
         }

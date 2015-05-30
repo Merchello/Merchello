@@ -21,7 +21,7 @@
         /// Gets or sets the type name.
         /// </summary>
         [DataMember]
-        public string TypeName { get; set; }
+        public string TypeFullName { get; set; }
 
         /// <summary>
         /// Gets or sets the values.

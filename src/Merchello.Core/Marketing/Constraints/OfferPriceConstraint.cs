@@ -23,7 +23,7 @@
         {
         }
 
-        public override Attempt<ILineItemContainer> Validate(ICustomerBase customer, ILineItemContainer collection)
+        public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
         {
             throw new System.NotImplementedException();
         }

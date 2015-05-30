@@ -149,7 +149,7 @@
         /// <param name="component">
         /// The component.
         /// </param>
-        public virtual void AddComponent(OfferComponentBase component)
+        internal virtual void AddComponent(OfferComponentBase component)
         {
             AddComponent(component.OfferComponentDefinition);
         }
@@ -160,7 +160,7 @@
         /// <param name="definition">
         /// The component definition.
         /// </param>
-        public void AddComponent(OfferComponentDefinition definition)
+        internal void AddComponent(OfferComponentDefinition definition)
         {
             Settings.ComponentDefinitions.Add(definition);
         }

@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Marketing.Rewards
 {
+    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -7,23 +8,26 @@
     /// <summary>
     /// Defines a reward.
     /// </summary>
-    /// <typeparam name="T">
-    /// The type of reward to be constructed and returned
+    /// <typeparam name="TConstraint">
+    /// The type to be passed to the constraints collection to validate if the reward should be awarded
     /// </typeparam>
-    public interface IOfferRewardComponent<T>
+    /// <typeparam name="TReward">
+    /// The type of award to be returned
+    /// </typeparam>
+    public interface IOfferRewardComponent<in TConstraint, TReward>
     {
         /// <summary>
         /// Awards the reward.
         /// </summary>
+        /// <param name="validate">
+        /// The object to pass to the constraints collection
+        /// </param>
         /// <param name="customer">
         /// The customer.
-        /// </param>
-        /// <param name="container">
-        /// The container.
         /// </param>
         /// <returns>
         /// A value indicating whether or not the awarding process was successful.
         /// </returns>
-        Attempt<T> Award(ICustomerBase customer, ILineItemContainer container);
+        Attempt<TReward> Award(TConstraint validate, ICustomerBase customer);
     }
 }

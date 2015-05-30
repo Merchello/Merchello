@@ -29,7 +29,7 @@
         /// <summary>
         /// Gets the Type this component is responsible for building
         /// </summary>
-        internal override Type BuilderFor
+        internal override Type TypeGrouping
         {
             get
             {
@@ -40,15 +40,16 @@
         /// <summary>
         /// Validates the constraint against the <see cref="ILineItemContainer"/>
         /// </summary>
+        /// <param name="value">
+        /// The value to object to which the constraint is to be applied.
+        /// </param>
         /// <param name="customer">
         /// The <see cref="ICustomerBase"/>.
-        /// </param>
-        /// <param name="collection">
-        /// The collection.
         /// </param>
         /// <returns>
         /// The <see cref="Attempt{ILineItemContainer}"/> indicating whether or not the constraint can be enforced.
         /// </returns>
-        public abstract Attempt<T> Validate(ICustomerBase customer, ILineItemContainer collection);
+        public abstract Attempt<T> Apply(T value, ICustomerBase customer);
+
     }
 }

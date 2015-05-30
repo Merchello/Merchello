@@ -58,7 +58,7 @@
                              {
                                  ComponentKey =
                                      new Guid("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2"),
-                                 TypeName = typeof(OneCouponPerCustomerConstraint).Name,
+                                 TypeFullName = typeof(OneCouponPerCustomerConstraint).Name,
                                  Values =   Enumerable.Empty<KeyValuePair<string, string>>()
                              };
 

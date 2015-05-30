@@ -253,7 +253,6 @@
     <Compile Include="Marketing\Constraints\OfferPriceConstraint.cs" />
     <Compile Include="Marketing\Constraints\LineItemQuantityConstraint.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
-    <Compile Include="Marketing\Rewards\DiscountLineItemReward.cs" />
     <Compile Include="Marketing\Offer\IOfferBaseManager.cs" />
     <Compile Include="Marketing\Offer\IOfferProviderResolver.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />

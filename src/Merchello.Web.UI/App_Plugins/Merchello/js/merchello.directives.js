@@ -20,6 +20,8 @@ angular.module('merchello.directives').directive('offerComponents', function() {
         replace: true,
         scope: {
             offerSettings: '=',
+            components: '=',
+            preValuesLoaded: '=',
             settings: '=',
             componentType: '@'
         },

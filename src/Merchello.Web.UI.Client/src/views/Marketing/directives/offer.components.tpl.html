@@ -1,14 +1,17 @@
 <div  id="offer-components" data-ng-show="componentsLoaded">
-
     <div class="row-fluid">
+
         <div class="form-group col-xs-5 span5">
           <table class="table table-striped offer-components-table span12">
               <tr>
               <th colspan="2" class="span12">Available {{componentType}}s</th>
               </tr>
-              <tr data-ng-repeat="component in avalailableComponents">
+              <tr data-ng-repeat="component in availableComponents" data-ng-show="availableComponents.length > 0">
                   <td class="span11">{{component.name}}<small data-ng-show="component.description !== ''">{{component.description}}</small></td>
                   <td class="span1 text-right"><a class="btn btn-warning btn-xs btn-mini" data-ng-click="assignComponent(component)">Add</a></td>
+              </tr>
+              <tr data-ng-show="availableComponents.length === 0">
+                  <td colspan="2">No {{componentType}}s avaliable</td>
               </tr>
           </table>
         </div>
@@ -17,7 +20,7 @@
                 <tr>
                     <th colspan="3" class="span12">Assigned {{componentType}}s</th>
                 </tr>
-                <tr data-ng-repeat="component in assignedComponents">
+                <tr data-ng-repeat="component in assignedComponents" data-ng-show="assignedComponents.length > 0">
                     <td class="span10">{{component.name}}<small data-ng-show="component.description !== ''">{{component.description}}</small></td>
                     <td class="span2 text-right">
                         <!-- ACTION: Edit constraint -->
@@ -25,6 +28,9 @@
                         <!-- ACTION: Remove constraint-->
                         <a data-ng-click="removeComponentOpen(component)" class="btn btn-warning btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
                     </td>
+                </tr>
+                <tr data-ng-show="assignedComponents.length === 0">
+                    <td colspan="2">No {{componentType}}s assigned</td>
                 </tr>
             </table>
         </div>

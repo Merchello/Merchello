@@ -30,7 +30,7 @@
                 return new OfferComponentConfiguration()
                            {
                                ComponentKey = definition.ComponentKey,
-                               TypeName = type.Name,
+                               TypeFullName = type.FullName,
                                Values = definition.ExtendedData.AsEnumerable().ToArray()
                            };
             }

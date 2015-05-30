@@ -39,7 +39,12 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Gets or sets the type name.
         /// </summary>
-        public string TypeName { get; set; }
+        public string TypeFullName { get; set; }
+
+        /// <summary>
+        /// Gets the Type to which this component can be grouped with
+        /// </summary>
+        public string TypeGrouping { get; set; }
 
         /// <summary>
         /// Gets or sets the component type.
@@ -60,7 +65,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Gets or sets the type to which this component is restricted (if any)
         /// </summary>
-        public string RestictToType { get; set; }
+        public string RestrictToType { get; set; } 
     }
 
     /// <summary>
@@ -99,7 +104,7 @@ namespace Merchello.Web.Models.ContentEditing
                     new OfferComponentConfiguration()
                         {
                             ComponentKey = definition.ComponentKey,
-                            TypeName = definition.TypeName,
+                            TypeFullName = definition.TypeFullName,
                             Values = definition.ExtendedData.AsEnumerable()
                         });
         }

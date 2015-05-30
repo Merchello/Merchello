@@ -116,10 +116,15 @@
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
                         .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorView")))
                 .ForMember(
-                    dest => dest.RestictToType,
+                    dest => dest.RestrictToType,
                     opt =>
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("restrictToType")));
+                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("restrictToType")))
+                 .ForMember(
+                    dest => dest.TypeGrouping,
+                    opt =>
+                    opt.ResolveUsing<OfferComponentTypeGroupingResolver>()
+                       .ConstructedBy(() => new OfferComponentTypeGroupingResolver()));
 
             AutoMapper.Mapper.CreateMap<IOfferProvider, OfferProviderDisplay>()
                 .ForMember(

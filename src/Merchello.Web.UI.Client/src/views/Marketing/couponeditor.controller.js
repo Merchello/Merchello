@@ -7,10 +7,10 @@
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
-    ['$scope', '$routeParams', '$location', 'assetsService', 'dialogService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
-        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder',
-    function($scope, $routeParams, $location, assetsService, dialogService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
-             dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder) {
+    ['$scope', '$routeParams', '$location', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, $routeParams, $location, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
+             dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -19,11 +19,14 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.tabs = {};
         $scope.settings = {};
         $scope.offerProvider = {};
+        $scope.allComponents = [];
 
         // exposed methods
         $scope.save = saveOffer;
         $scope.toggleOfferExpires = toggleOfferExpires;
         $scope.openDeleteOfferDialog = openDeleteOfferDialog;
+
+        var eventName = 'merchello.offercomponentcollection.changed';
 
         /**
          * @ngdoc method
@@ -34,6 +37,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
          * Initializes the controller
          */
         function init() {
+            eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
             loadSettings();
         }
 
@@ -71,9 +75,21 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                     return provider.backOfficeTree.routeId === 'coupons';
                 });
                 var key = $routeParams.id;
-               loadOffer(key);
+               loadOfferComponents($scope.offerProvider.key, key);
             }, function(reason) {
                 notificationsService.error("Offer providers load failed", reason.message);
+            });
+        }
+
+        function loadOfferComponents(offerProviderKey, key) {
+
+            var componentPromise = marketingResource.getAvailableOfferComponents(offerProviderKey);
+            componentPromise.then(function(components) {
+                $scope.allComponents = offerComponentDefinitionDisplayBuilder.transform(components);
+                console.info($scope.allComponents);
+                loadOffer(key);
+            }, function(reason) {
+                notificationsService.error("Failted to load offer offer components", reason.message);
             });
         }
 
@@ -86,6 +102,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
          * Loads in offer (in this case a coupon)
          */
         function loadOffer(key) {
+
             if (key === 'create' || key === '' || key === undefined) {
                 $scope.context = 'create';
                 $scope.offerSettings = offerSettingsDisplayBuilder.createDefault();
@@ -114,6 +131,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 });
             }
         }
+
+
 
         function createTabs(key) {
             $scope.tabs = merchelloTabsFactory.createMarketingTabs();
@@ -146,6 +165,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 notificationsService.error("Failed to save coupon", reason.message);
             });
         }
+
 
         function openDeleteOfferDialog() {
             var dialogData = {};
@@ -182,6 +202,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
 
             $scope.offerSettings.offerStartsDate = start.toLocaleDateString();
             $scope.offerSettings.offerEndsDate = end.toLocaleDateString();
+        }
+
+        function onComponentCollectionChanged() {
+            if(!$scope.offerSettings.hasRewards()) {
+                $scope.offerSettings.active = false;
+            }
         }
 
         // Initializes the controller

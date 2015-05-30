@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
@@ -10,16 +11,19 @@
     /// <summary>
     /// The reward base.
     /// </summary>
-    /// <typeparam name="T">
-    /// The type of reward to return
+    /// <typeparam name="TConstraint">
+    /// The type to be passed to the constraints collection to validate if the reward should be awarded
     /// </typeparam>
-    public abstract class OfferRewardComponentBase<T> : OfferRewardComponentBase, IOfferRewardComponent<T>
+    /// <typeparam name="TReward">
+    /// The type of award to be returned
+    /// </typeparam>
+    public abstract class OfferRewardComponentBase<TConstraint, TReward> : OfferRewardComponentBase, IOfferRewardComponent<TConstraint, TReward>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OfferRewardComponentBase{T}"/> class. 
+        /// Initializes a new instance of the <see cref="OfferRewardComponentBase{TConstraint,TReward}"/> class.
         /// </summary>
         /// <param name="definition">
-        /// The <see cref="OfferComponentDefinition"/>.
+        /// The definition.
         /// </param>
         protected OfferRewardComponentBase(OfferComponentDefinition definition)
             : base(definition)
@@ -29,27 +33,26 @@
         /// <summary>
         /// Gets the Type this component is responsible for building
         /// </summary>
-        internal override Type BuilderFor
+        internal override Type TypeGrouping
         {
             get
             {
-                return typeof(T);
+                return typeof(TConstraint);
             }
         }
 
         /// <summary>
         /// Awards the reward.
         /// </summary>
+        /// <param name="validate">
+        /// The object to pass to the constraints collection
+        /// </param>
         /// <param name="customer">
         /// The customer.
-        /// </param>
-        /// <param name="container">
-        /// The container.
         /// </param>
         /// <returns>
         /// A value indicating whether or not the awarding process was successful.
         /// </returns>
-        public abstract Attempt<T> Award(ICustomerBase customer, ILineItemContainer container);
-
+        public abstract Attempt<TReward> Award(TConstraint validate, ICustomerBase customer);
     }
 }

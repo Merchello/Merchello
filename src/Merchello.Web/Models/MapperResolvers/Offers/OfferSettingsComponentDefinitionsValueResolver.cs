@@ -34,7 +34,7 @@
         /// </returns>
         protected override IEnumerable<OfferComponentDefinitionDisplay> ResolveCore(IOfferSettings source)
         {
-            var components = _resolver.Value.GetOfferComponents(source.ComponentDefinitions);
+            var components = _resolver.Value.GetOfferComponents(source.ComponentDefinitions).Where(x => x != null);
             return components.Select(Mapper.Map<OfferComponentBase, OfferComponentDefinitionDisplay>);
         }
     }

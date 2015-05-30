@@ -226,6 +226,10 @@
     <Compile Include="DigitalDownloadHandler.cs" />
     <Compile Include="Discounts\Coupons\Constraints\NotUsableWithOtherCouponsConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\OneCouponPerCustomerConstraint.cs" />
+    <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemReward.cs" />
+    <Compile Include="Discounts\Coupons\Rewards\TestDiscountReward.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Editors\MarketingApiController.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />
@@ -242,6 +246,7 @@
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferComponentExtendedDataResolver.cs" />
+    <Compile Include="Models\MapperResolvers\Offers\OfferComponentTypeGroupingResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferProviderBackOfficeAttributeValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\CapturePaymentDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\AuthorizePaymentDialogEditorViewResolver.cs" />
