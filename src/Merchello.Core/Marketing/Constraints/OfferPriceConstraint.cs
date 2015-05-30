@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Core.Marketing.Constraints
 {
-    using Merchello.Core.Marketing.Discounts;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
@@ -11,7 +10,7 @@
     /// </summary>
     [OfferComponent("66957C56-8A5E-4ECD-BDEB-565F8777A38F", "Restrict by price", "This discount is only offered matching configured price rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.price.html")]
-    public class OfferPriceConstraint : OfferConstraintComponentBase
+    public class OfferPriceConstraint : OfferConstraintComponentBase<ILineItemContainer>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OfferPriceConstraint"/> class.

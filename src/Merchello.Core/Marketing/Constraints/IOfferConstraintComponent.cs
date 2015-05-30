@@ -7,9 +7,11 @@
     /// <summary>
     /// Defines a Discount Constraint.
     /// </summary>
-    public interface IOfferConstraintComponent
+    /// <typeparam name="T">
+    /// The type of object to attempt to return
+    /// </typeparam>
+    public interface IOfferConstraintComponent<T>
     {
-
         /// <summary>
         /// Validates the constraint against the <see cref="ILineItemContainer"/>
         /// </summary>
@@ -22,6 +24,6 @@
         /// <returns>
         /// The <see cref="Attempt{T}"/> indicating whether or not the constraint can be enforced.
         /// </returns>
-        Attempt<ILineItemContainer> Validate(ICustomerBase customer, ILineItemContainer collection);
+        Attempt<T> Validate(ICustomerBase customer, ILineItemContainer collection);
     }
 }

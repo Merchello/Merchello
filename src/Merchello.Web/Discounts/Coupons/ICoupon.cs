@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using Merchello.Core.Marketing.Discounts;
+    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Marketing.Rewards;
 

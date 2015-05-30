@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Merchello.Core.Marketing.Discounts;
+    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
@@ -12,7 +12,7 @@
     /// A rule to enforce one discount per customer.
     /// </summary>
     [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One coupon per customer", "The customer may only ever use this coupon once.", RestrictToType = typeof(Coupon))]
-    public class OneCouponPerCustomerConstraint : OfferConstraintComponentBase
+    public class OneCouponPerCustomerConstraint : OfferConstraintComponentBase<ILineItemContainer>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCouponPerCustomerConstraint"/> class.

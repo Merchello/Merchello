@@ -1,6 +1,6 @@
 ﻿namespace Merchello.Core.Marketing.Offer
 {
-    using Newtonsoft.Json;
+    using System;
 
     using Umbraco.Core;
 
@@ -32,6 +32,11 @@
         /// </summary>
         public abstract OfferComponentType ComponentType { get; }
 
+
+        /// <summary>
+        /// Gets the Type this component is responsible for building
+        /// </summary>
+        internal abstract Type BuilderFor { get; }
 
         /// <summary>
         /// Gets the <see cref="OfferComponentDefinition"/>.

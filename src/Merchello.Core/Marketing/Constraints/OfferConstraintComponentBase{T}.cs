@@ -1,28 +1,40 @@
-﻿namespace Merchello.Web.Discounts.Coupons.Constraints
+﻿namespace Merchello.Core.Marketing.Constraints
 {
     using System;
 
-    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
 
     /// <summary>
-    /// A discount rule to prohibit a discount from being used with other discounts.
+    /// A base class for offer constraints
     /// </summary>
-    [OfferComponent("BDFEF8AC-B572-43E6-AB42-C07678500C87", "Not usable with other discounts", "This discount cannot be used with other discounts.", RestrictToType = typeof(Coupon))]
-    public class NotUsableWithOtherCouponsConstraint : OfferConstraintComponentBase<ILineItemContainer>
+    /// <typeparam name="T">
+    /// The type of object to return
+    /// </typeparam>
+    public abstract class OfferConstraintComponentBase<T> : OfferConstraintComponentBase, IOfferConstraintComponent<T>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotUsableWithOtherCouponsConstraint"/> class.
+        /// Initializes a new instance of the <see cref="OfferConstraintComponentBase{T}"/> class. 
         /// </summary>
         /// <param name="definition">
         /// The <see cref="OfferComponentDefinition"/>.
         /// </param>
-        public NotUsableWithOtherCouponsConstraint(OfferComponentDefinition definition)
+        protected OfferConstraintComponentBase(OfferComponentDefinition definition)
             : base(definition)
         {
+        }
+
+        /// <summary>
+        /// Gets the Type this component is responsible for building
+        /// </summary>
+        internal override Type BuilderFor
+        {
+            get
+            {
+                return typeof(T);
+            }
         }
 
         /// <summary>
@@ -37,9 +49,6 @@
         /// <returns>
         /// The <see cref="Attempt{ILineItemContainer}"/> indicating whether or not the constraint can be enforced.
         /// </returns>
-        public override Attempt<ILineItemContainer> Validate(ICustomerBase customer, ILineItemContainer collection)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Attempt<T> Validate(ICustomerBase customer, ILineItemContainer collection);
     }
 }

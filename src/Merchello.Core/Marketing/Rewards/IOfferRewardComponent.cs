@@ -2,10 +2,15 @@
 {
     using Merchello.Core.Models;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a reward.
     /// </summary>
-    public interface IOfferRewardComponent
+    /// <typeparam name="T">
+    /// The type of reward to be constructed and returned
+    /// </typeparam>
+    public interface IOfferRewardComponent<T>
     {
         /// <summary>
         /// Awards the reward.
@@ -19,6 +24,6 @@
         /// <returns>
         /// A value indicating whether or not the awarding process was successful.
         /// </returns>
-        bool Award(ICustomerBase customer, ILineItemContainer container);
+        Attempt<T> Award(ICustomerBase customer, ILineItemContainer container);
     }
 }
