@@ -31,6 +31,6 @@
         /// <summary>
         /// Gets the collection offer rewards.
         /// </summary>
-        public IEnumerable<RewardBase> Rewards { get; private set; }
+        public IEnumerable<OfferRewardComponentBase> Rewards { get; private set; }
     }
 }

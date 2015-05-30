@@ -196,6 +196,28 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         init();
     }]);
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController
+ * @function
+ *
+ * @description
+ * The controller to configure the line item quantity component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController',
+    ['$scope',
+    function($scope) {
+
+    }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferProviderSelectionController
+ * @function
+ *
+ * @description
+ * The controller to handle offer provider selection
+ */
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferProviderSelectionController',
     ['$scope', function($scope) {
         $scope.loaded = true;
@@ -248,7 +270,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             componentPromise.then(function(components) {
 
                 allComponents = offerComponentDefinitionDisplayBuilder.transform(components);
-
+                console.info(allComponents);
                 $scope.avalailableComponents = _.filter(allComponents, function(c) {
                     var ac = _.find($scope.assignedComponents, function(ac) { return ac.componentKey === c.componentKey; });
                     if (ac === undefined && c.componentType === $scope.componentType) {

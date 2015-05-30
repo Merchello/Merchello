@@ -129,7 +129,7 @@
         {
             return
                 _componentResolver.GetOfferComponentsByProviderKey(offerProviderKey)
-                    .Select(x => x.ToOfferComponentDefinitionDisplay());
+                    .Select(x => x.ToOfferComponentDefinitionDisplay()).OrderBy(x => x.Name);
         }
 
         /// <summary>

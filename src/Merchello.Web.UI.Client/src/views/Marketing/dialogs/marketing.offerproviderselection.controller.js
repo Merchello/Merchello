@@ -1,3 +1,11 @@
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferProviderSelectionController
+ * @function
+ *
+ * @description
+ * The controller to handle offer provider selection
+ */
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferProviderSelectionController',
     ['$scope', function($scope) {
         $scope.loaded = true;

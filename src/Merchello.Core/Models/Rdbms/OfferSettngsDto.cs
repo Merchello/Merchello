@@ -68,6 +68,7 @@
         /// </remarks>
         [Column("configurationData")]
         [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
         public string ConfigurationData { get; set; }
 
         /// <summary>
