@@ -8,7 +8,6 @@
  */
 var OfferComponentDefinitionDisplay = function() {
     var self = this;
-    self.key = '';
     self.componentKey = '';
     self.name = '';
     self.description = '';

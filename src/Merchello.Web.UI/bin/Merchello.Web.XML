@@ -313,11 +313,6 @@
             The offer component definition display.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.Key">
-            <summary>
-            Gets or sets the key.
-            </summary>
-        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentKey">
             <summary>
             Gets or sets the component key.
@@ -1087,6 +1082,30 @@
             </param>
             <returns>
             The <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.Offers.OfferSettingsComponentDefinitionsValueResolver">
+            <summary>
+            The offer settings component definitions value resolver.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.MapperResolvers.Offers.OfferSettingsComponentDefinitionsValueResolver._resolver">
+            <summary>
+            The <see cref="T:Merchello.Core.Marketing.Offer.IOfferComponentResolver"/>.
+            </summary>
+            <remarks>
+            This is lazy to allow for instantiation of the resolver in the boot manager.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.Offers.OfferSettingsComponentDefinitionsValueResolver.ResolveCore(Merchello.Core.Models.Interfaces.IOfferSettings)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.Offers.OfferSettingsOfferExpiresResolver">

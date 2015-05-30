@@ -84,7 +84,12 @@
                     dest => dest.OfferExpires,
                     opt =>
                     opt.ResolveUsing<OfferSettingsOfferExpiresResolver>()
-                        .ConstructedBy(() => new OfferSettingsOfferExpiresResolver()));
+                        .ConstructedBy(() => new OfferSettingsOfferExpiresResolver()))
+                .ForMember(
+                    dest => dest.ComponentDefinitions,
+                    opt =>
+                    opt.ResolveUsing<OfferSettingsComponentDefinitionsValueResolver>()
+                        .ConstructedBy(() => new OfferSettingsComponentDefinitionsValueResolver()));
 
             AutoMapper.Mapper.CreateMap<OfferComponentBase, OfferComponentDefinitionDisplay>()
                 .ForMember(
@@ -101,7 +106,7 @@
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
                         .ConstructedBy(() => new OfferComponentAttributeValueResolver("description")))
                 .ForMember(
-                    dest => dest.Key,
+                    dest => dest.ComponentKey,
                     opt =>
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
                         .ConstructedBy(() => new OfferComponentAttributeValueResolver("key")))

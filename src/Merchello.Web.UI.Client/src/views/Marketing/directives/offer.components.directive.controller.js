@@ -23,7 +23,6 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         function init() {
             $scope.$watch('offerSettings', function(offer) {
                 if (offer.offerProviderKey !== undefined && offer.offerProviderKey !== '') {
-                    console.info($scope.componentType);
                   loadComponents();
                 }
             });
@@ -35,11 +34,11 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
 
             var componentPromise = marketingResource.getAvailableOfferComponents($scope.offerSettings.offerProviderKey);
             componentPromise.then(function(components) {
-                console.info(components);
+
                 allComponents = offerComponentDefinitionDisplayBuilder.transform(components);
-                console.info(allComponents);
+
                 $scope.avalailableComponents = _.filter(allComponents, function(c) {
-                    var ac = _.find($scope.assignedComponents, function(ac) { return ac.key === c.key; });
+                    var ac = _.find($scope.assignedComponents, function(ac) { return ac.componentKey === c.componentKey; });
                     if (ac === undefined && c.componentType === $scope.componentType) {
                         return c;
                     }
@@ -51,7 +50,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function assignComponent(component) {
-            var assert = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.key === component.key; });
+            var assert = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
             if (assert === undefined) {
                 $scope.offerSettings.componentDefinitions.push(component);
                 loadComponents();
@@ -61,6 +60,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         function removeComponentOpen(component) {
                 var dialogData = {};
                 dialogData.name = 'Component: ' + component.name;
+                dialogData.componentKey = component.componentKey;
                 if(!component.extendedData.isEmpty()) {
                     dialogData.warning = 'This will any delete any configurations for this component if saved.';
                 }
@@ -74,7 +74,8 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function processRemoveComponent(dialogData) {
-            
+            $scope.offerSettings.componentDefinitions = _.reject($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === dialogData.componentKey; })
+            loadComponents();
         };
 
         // Initialize the controller

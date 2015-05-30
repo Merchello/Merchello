@@ -16,10 +16,10 @@ namespace Merchello.Web.Models.ContentEditing
     /// </summary>
     public class OfferComponentDefinitionDisplay
     {
-        /// <summary>
-        /// Gets or sets the key.
-        /// </summary>
-        public Guid Key { get; set; }
+        ///// <summary>
+        ///// Gets or sets the key.
+        ///// </summary>
+        //public Guid Key { get; set; }
 
         /// <summary>
         /// Gets or sets the component key.
@@ -50,7 +50,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Gets or sets the extended data.
         /// </summary>
-        public ExtendedDataCollection ExtendedData { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }
 
         /// <summary>
         /// Gets or sets the editor view.

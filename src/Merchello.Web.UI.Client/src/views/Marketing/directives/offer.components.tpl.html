@@ -2,23 +2,23 @@
 
     <div class="row-fluid">
         <div class="form-group col-xs-5 span5">
-          <table class="table table-striped  span12">
+          <table class="table table-striped offer-components-table span12">
               <tr>
               <th colspan="2" class="span12">Available Constraints</th>
               </tr>
               <tr data-ng-repeat="component in avalailableComponents">
-                  <td class="span11">{{component.name}}</td>
+                  <td class="span11">{{component.name}}<small data-ng-show="component.description !== ''">{{component.description}}</small></td>
                   <td class="span1 text-right"><a class="btn btn-warning btn-xs btn-mini" data-ng-click="assignComponent(component)">Add</a></td>
               </tr>
           </table>
         </div>
         <div class="form-group col-xs-5 span5 offset1">
-            <table class="table table-striped span12">
+            <table class="table table-striped offer-components-table span12">
                 <tr>
                     <th colspan="3" class="span12">Assigned Constraints</th>
                 </tr>
                 <tr data-ng-repeat="component in assignedComponents">
-                    <td class="span10">{{component.name}}</td>
+                    <td class="span10">{{component.name}}<small data-ng-show="component.description !== ''">{{component.description}}</small></td>
                     <td class="span2 text-right">
                         <!-- ACTION: Edit constraint -->
                         <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="component.dialogEditorView.editorView !== ''" data-ng-click="openConfigureComponent(component)"><i class="icon-edit"></i></a>

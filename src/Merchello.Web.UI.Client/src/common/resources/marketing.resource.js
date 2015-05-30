@@ -44,7 +44,6 @@ angular.module('merchello.resources')
                         'Failed to get offer settings');
                 },
                 getAvailableOfferComponents: function(offerProviderKey) {
-                    console.info(offerProviderKey);
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: baseUrl + 'GetAvailableOfferComponents',
@@ -61,6 +60,8 @@ angular.module('merchello.resources')
                         'Failed to create offer');
                 },
                 saveOfferSettings: function(offerSettings) {
+                    offerSettings.componentDefinitionExtendedDataToArray();
+                    console.info(offerSettings);
                     return umbRequestHelper.resourcePromise(
                         $http.post(baseUrl + "PutUpdateOfferSettings",
                             offerSettings
