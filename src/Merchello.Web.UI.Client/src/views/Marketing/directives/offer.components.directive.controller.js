@@ -36,7 +36,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             componentPromise.then(function(components) {
 
                 allComponents = offerComponentDefinitionDisplayBuilder.transform(components);
-
+                console.info(allComponents);
                 $scope.avalailableComponents = _.filter(allComponents, function(c) {
                     var ac = _.find($scope.assignedComponents, function(ac) { return ac.componentKey === c.componentKey; });
                     if (ac === undefined && c.componentType === $scope.componentType) {

@@ -7556,25 +7556,6 @@
             Gets the collection offer rewards.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Discounts.Coupons.CouponLineItemReward">
-            <summary>
-            Defines a coupon line item reward.
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.CouponLineItemReward.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition,Merchello.Core.Models.ICustomerBase,Merchello.Core.Models.ILineItemContainer)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponLineItemReward"/> class.
-            </summary>
-            <param name="definition">
-            The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
-            </param>
-            <param name="customer">
-            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
-            </param>
-            <param name="container">
-            The <see cref="T:Merchello.Core.Models.ILineItemContainer"/>.
-            </param>
-        </member>
         <member name="T:Merchello.Web.Workflow.IWishList">
             <summary>
             Defines a wish list.

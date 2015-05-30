@@ -9,10 +9,10 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// A discount validation rule to restrict this discount to a selection of products.
+    /// A discount validation constraint to restrict this discount to a selection of products.
     /// </summary>
     [OfferComponent("15DDF0EA-9C60-489A-96A8-D2AAADBEF328", "Restrict to certain products", "This discount is only offered for certain products.")]
-    public class RestrictToProductSelectionConstraint : OfferConstraintComponentBase
+    public sealed class RestrictToProductSelectionConstraint : OfferConstraintComponentBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RestrictToProductSelectionConstraint"/> class.

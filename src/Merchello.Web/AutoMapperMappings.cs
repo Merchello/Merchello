@@ -114,7 +114,7 @@
                     dest => dest.DialogEditorView,
                     opt =>
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorVeiw")))
+                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorView")))
                 .ForMember(
                     dest => dest.RestictToType,
                     opt =>

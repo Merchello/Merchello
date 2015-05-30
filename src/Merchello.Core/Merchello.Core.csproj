@@ -249,6 +249,8 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Marketing\Constraints\OfferPriceConstraint.cs" />
+    <Compile Include="Marketing\Constraints\LineItemQuantityConstraint.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
     <Compile Include="Marketing\Rewards\DiscountLineItemReward.cs" />
     <Compile Include="Marketing\Offer\IOfferBaseManager.cs" />
@@ -269,9 +271,9 @@
     <Compile Include="Marketing\Offer\IOfferProvider.cs" />
     <Compile Include="Marketing\Offer\OfferProviderBase.cs" />
     <Compile Include="Marketing\Offer\OfferProviderResolver.cs" />
-    <Compile Include="Marketing\Rewards\RewardBase.cs" />
+    <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Models\Interfaces\IOfferSettings.cs" />
-    <Compile Include="Marketing\Rewards\IReward.cs" />
+    <Compile Include="Marketing\Rewards\IOfferRewardComponent.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />
     <Compile Include="Events\MerchelloMigrationEventArgs.cs" />
     <Compile Include="Events\PaymentAttemptEventArgs.cs" />

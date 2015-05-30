@@ -439,6 +439,7 @@ angular.module('merchello.resources')
                         'Failed to get offer components for the provider');
                 },
                 newOfferSettings: function (offerSettings) {
+                    offerSettings.componentDefinitionExtendedDataToArray();
                     return umbRequestHelper.resourcePromise(
                         $http.post(baseUrl + "PostAddOfferSettings",
                             offerSettings

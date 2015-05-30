@@ -19,6 +19,6 @@
         /// <summary>
         /// Gets the rewards.
         /// </summary>
-        IEnumerable<RewardBase> Rewards { get; }
+        IEnumerable<OfferRewardComponentBase> Rewards { get; }
     }
 }
