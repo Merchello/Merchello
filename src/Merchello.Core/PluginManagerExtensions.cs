@@ -4,9 +4,6 @@
     using System.Collections.Generic;
     using Gateways;
 
-    using Merchello.Core.Marketing.Discounts;
-    using Merchello.Core.Marketing.Offer;
-
     using Observation;
     using Umbraco.Core;
 

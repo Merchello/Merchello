@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Merchello.Core.Marketing.Discounts;
+    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
@@ -12,7 +12,7 @@
     /// A rule to enforce one discount per customer.
     /// </summary>
     [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One coupon per customer", "The customer may only ever use this coupon once.", RestrictToType = typeof(Coupon))]
-    public class OneCouponPerCustomerConstraint : OfferConstraintComponentBase
+    public class OneCouponPerCustomerConstraint : OfferConstraintComponentBase<ILineItemContainer>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCouponPerCustomerConstraint"/> class.
@@ -25,27 +25,17 @@
         {
         }
 
-        /// <summary>
-        /// Validates the constraint against the <see cref="ILineItemContainer"/>
-        /// </summary>
-        /// <param name="customer">
-        /// The <see cref="ICustomerBase"/>.
-        /// </param>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attempt{ILineItemContainer}"/> indicating whether or not the constraint can be enforced.
-        /// </returns>
-        public override Attempt<ILineItemContainer> Validate(ICustomerBase customer, ILineItemContainer collection)
+
+
+        public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
         {
             if (customer.IsAnonymous)
             {
                 var anonymousException = new Exception("Customer must be signed in to use this discount.");
-                return Attempt<ILineItemContainer>.Fail(collection, anonymousException);
+                return Attempt<ILineItemContainer>.Fail(value, anonymousException);
             }
 
             throw new NotImplementedException();
-        }        
+        }
     }
 }

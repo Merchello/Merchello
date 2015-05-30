@@ -48,20 +48,6 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.Validate(Merchello.Core.Models.ICustomerBase,Merchello.Core.Models.ILineItemContainer)">
-            <summary>
-            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
-            </summary>
-            <param name="customer">
-            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
-            </param>
-            <param name="collection">
-            The collection.
-            </param>
-            <returns>
-            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
-            </returns>
-        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint">
             <summary>
             A rule to enforce one discount per customer.
@@ -75,19 +61,18 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.Validate(Merchello.Core.Models.ICustomerBase,Merchello.Core.Models.ILineItemContainer)">
+        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward">
             <summary>
-            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            Represents a discount line item reward.
             </summary>
-            <param name="customer">
-            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward"/> class.
+            </summary>
+            <param name="definition">
+            The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
-            <param name="collection">
-            The collection.
-            </param>
-            <returns>
-            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
-            </returns>
         </member>
         <member name="T:Merchello.Web.Editors.MarketingApiController">
             <summary>
@@ -328,9 +313,14 @@
             Gets or sets the description.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.TypeName">
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.TypeFullName">
             <summary>
             Gets or sets the type name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.TypeGrouping">
+            <summary>
+            Gets the Type to which this component can be grouped with
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentType">
@@ -348,7 +338,7 @@
             Gets or sets the editor view.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.RestictToType">
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.RestrictToType">
             <summary>
             Gets or sets the type to which this component is restricted (if any)
             </summary>
@@ -909,6 +899,22 @@
             </param>
             <returns>
              A collection of key value pairs that represent an <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.Offers.OfferComponentTypeGroupingResolver">
+            <summary>
+            The offer component type grouping resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.Offers.OfferComponentTypeGroupingResolver.ResolveCore(Merchello.Core.Marketing.Offer.OfferComponentBase)">
+            <summary>
+            Maps the TypeGrouping Type full name.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.Offers.OfferProviderBackOfficeAttributeValueResolver">

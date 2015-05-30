@@ -21,7 +21,7 @@
         {
             Mandate.ParameterNotNull(configuration, "configuration");
             this.ComponentKey = configuration.ComponentKey;
-            this.TypeName = configuration.TypeName;
+            this.TypeFullName = configuration.TypeFullName;
             this.ExtendedData = configuration.Values.AsExtendedDataCollection();
         }
 
@@ -41,7 +41,7 @@
         /// <summary>
         /// Gets the component type name.
         /// </summary>
-        public string TypeName { get; private set; }
+        public string TypeFullName { get; private set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ExtendedDataCollection"/>.

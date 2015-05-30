@@ -194,7 +194,7 @@
 
             var configuration = new OfferComponentConfiguration()
                                     {
-                                        TypeName = type.Name,
+                                        TypeFullName = type.FullName,
                                         ComponentKey = att.Key,
                                         Values = Enumerable.Empty<KeyValuePair<string, string>>()
                                     };

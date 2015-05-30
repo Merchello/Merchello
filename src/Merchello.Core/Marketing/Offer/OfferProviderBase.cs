@@ -78,9 +78,9 @@
         /// <returns>
         /// The <see cref="OfferBase"/>.
         /// </returns>
-        public virtual TOffer CreateOffer(string name, string offerCode, bool active = true)
+        public virtual TOffer Create(string name, string offerCode, bool active = true)
         {
-            return CreateOffer(name, offerCode, DateTime.MinValue, DateTime.MaxValue, active);
+            return this.Create(name, offerCode, DateTime.MinValue, DateTime.MaxValue, active);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@
         /// <returns>
         /// The <see cref="IOffer"/>.
         /// </returns>
-        public virtual TOffer CreateOffer(
+        public virtual TOffer Create(
             string name,
             string offerCode,
             DateTime offerStartDate,
@@ -137,9 +137,9 @@
         /// <returns>
         /// The <see cref="OfferBase"/>.
         /// </returns>
-        public virtual TOffer CreateOfferWithKey(string name, string offerCode, bool active = true)
+        public virtual TOffer CreateWithKey(string name, string offerCode, bool active = true)
         {
-            return CreateOfferWithKey(name, offerCode, DateTime.MinValue, DateTime.MinValue, active);
+            return this.CreateWithKey(name, offerCode, DateTime.MinValue, DateTime.MinValue, active);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@
         /// <returns>
         /// The <see cref="IOffer"/>.
         /// </returns>
-        public virtual TOffer CreateOfferWithKey(
+        public virtual TOffer CreateWithKey(
             string name,
             string offerCode,
             DateTime offerStartDate,
@@ -217,7 +217,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{TOffer}"/>.
         /// </returns>
-        public IEnumerable<TOffer> GetOffers(bool activeOnly = true)
+        public IEnumerable<TOffer> Get(bool activeOnly = true)
         {
             var settingsCollection = _offerSettingsService.GetByOfferProviderKey(Key, activeOnly);
 

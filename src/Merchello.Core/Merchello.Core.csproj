@@ -249,17 +249,17 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
     <Compile Include="Marketing\Constraints\OfferPriceConstraint.cs" />
     <Compile Include="Marketing\Constraints\LineItemQuantityConstraint.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
-    <Compile Include="Marketing\Rewards\DiscountLineItemReward.cs" />
     <Compile Include="Marketing\Offer\IOfferBaseManager.cs" />
     <Compile Include="Marketing\Offer\IOfferProviderResolver.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinitionExtensions.cs" />
     <Compile Include="Marketing\Offer\OfferComponentBase.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinition.cs" />
-    <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
+    <Compile Include="Marketing\Constraints\OfferConstraintComponentBase{T}.cs" />
     <Compile Include="Marketing\Offer\OfferComponentResolver.cs" />
     <Compile Include="Marketing\Offer\OfferComponentCategory.cs" />
     <Compile Include="Marketing\Offer\OfferComponentAttribute.cs" />
@@ -272,6 +272,7 @@
     <Compile Include="Marketing\Offer\OfferProviderBase.cs" />
     <Compile Include="Marketing\Offer\OfferProviderResolver.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
+    <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
     <Compile Include="Models\Interfaces\IOfferSettings.cs" />
     <Compile Include="Marketing\Rewards\IOfferRewardComponent.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />

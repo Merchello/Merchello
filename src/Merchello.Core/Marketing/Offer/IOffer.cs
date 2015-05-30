@@ -45,20 +45,5 @@
         /// </summary>
         bool Active { get; set; }
 
-        /// <summary>
-        /// Adds an <see cref="OfferComponentBase"/> such as a constraint or a reward
-        /// </summary>
-        /// <param name="component">
-        /// The <see cref="OfferComponentBase"/>
-        /// </param>
-        void AddComponent(OfferComponentBase component);
-
-        /// <summary>
-        /// Adds an offer component by it's component definition
-        /// </summary>
-        /// <param name="definition">
-        /// The <see cref="OfferComponentDefinition"/>
-        /// </param>
-        void AddComponent(OfferComponentDefinition definition);
     }
 }
