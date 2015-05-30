@@ -11,7 +11,7 @@
     /// <summary>
     /// The offer component attribute value resolver.
     /// </summary>
-    internal class OfferComponentAttributeValueResolver : ValueResolver<OfferComponentDefinition, object>
+    internal class OfferComponentAttributeValueResolver : ValueResolver<OfferComponentBase, object>
     {
         /// <summary>
         /// The _field name.
@@ -38,7 +38,7 @@
         /// <returns>
         /// The <see cref="object"/>.
         /// </returns>
-        protected override object ResolveCore(OfferComponentDefinition source)
+        protected override object ResolveCore(OfferComponentBase source)
         {
             var att = source.GetType().GetCustomAttribute<OfferComponentAttribute>(false);
             if (att == null) return null;

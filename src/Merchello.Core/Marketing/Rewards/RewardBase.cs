@@ -19,6 +19,17 @@
         }
 
         /// <summary>
+        /// Gets the component type.
+        /// </summary>
+        public override OfferComponentType ComponentType
+        {
+            get
+            {
+                return OfferComponentType.Reward;
+            }
+        }
+
+        /// <summary>
         /// Awards the reward.
         /// </summary>
         /// <returns>

@@ -31,7 +31,7 @@
                            {
                                ComponentKey = definition.ComponentKey,
                                TypeName = type.Name,
-                               Values = definition.ExtendedData.AsEnumerable()
+                               Values = definition.ExtendedData.AsEnumerable().ToArray()
                            };
             }
 

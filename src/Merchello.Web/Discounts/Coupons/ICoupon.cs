@@ -14,7 +14,7 @@
         /// <summary>
         /// Gets the constraints.
         /// </summary>
-        IEnumerable<DiscountConstraintBase> Constraints { get; }
+        IEnumerable<OfferConstraintComponentBase> Constraints { get; }
 
         /// <summary>
         /// Gets the rewards.

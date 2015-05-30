@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core
 {
     using System;
+    using System.Runtime.Remoting.Messaging;
 
     /// <summary>
     /// Extension methods for <see cref="DateTime"/>
@@ -16,6 +17,62 @@
         /// The SQL date time max value string.
         /// </summary>
         private const string SqlDateTimeMaxValueString = "9999-12-31";
+
+        /// <summary>
+        /// Converts a date time min value to null.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The nullable <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime? ConverDateTimeMinValueToNull(this DateTime value)
+        {
+            return !value.Equals(DateTime.MinValue) ? value : (DateTime?)null;
+        }
+
+        /// <summary>
+        /// The convert date time max value to null.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The nullable <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime? ConvertDateTimeMaxValueToNull(this DateTime value)
+        {
+            return !value.Equals(DateTime.MaxValue) ? value : (DateTime?)null;
+        }
+
+        /// <summary>
+        /// The convert date time null to min value.
+        /// </summary>
+        /// <param name="dt">
+        /// The date time value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime ConvertDateTimeNullToMinValue(this DateTime? dt)
+        {
+            return dt == null ? DateTime.MinValue : dt.Value;
+        }
+
+        /// <summary>
+        /// The convert date time null to max value.
+        /// </summary>
+        /// <param name="dt">
+        /// The date time value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime ConvertDateTimeNullToMaxValue(this DateTime? dt)
+        {
+            return dt == null ? DateTime.MaxValue : dt.Value;
+        }
 
         /// <summary>
         /// Checks if parameter is a min SQL DateTime value and return the .NET DateTime Min.

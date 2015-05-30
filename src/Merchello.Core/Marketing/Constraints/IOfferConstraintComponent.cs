@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Marketing.Discounts
+﻿namespace Merchello.Core.Marketing.Constraints
 {
     using Merchello.Core.Models;
 
@@ -7,12 +7,8 @@
     /// <summary>
     /// Defines a Discount Constraint.
     /// </summary>
-    public interface IDiscountConstraint
+    public interface IOfferConstraintComponent
     {
-        /// <summary>
-        /// Gets the category.
-        /// </summary>
-        DiscountCategory Category { get; }
 
         /// <summary>
         /// Validates the constraint against the <see cref="ILineItemContainer"/>

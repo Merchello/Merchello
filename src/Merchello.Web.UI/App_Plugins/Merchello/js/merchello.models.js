@@ -1295,13 +1295,13 @@ angular.module('merchello.models').constant('SelectOfferProviderDialogData', Sel
  */
 var OfferComponentDefinitionDisplay = function() {
     var self = this;
-    self.key = '';
-    self.compoentKey = '';
+    self.componentKey = '';
     self.name = '';
     self.description = '';
     self.typeName = '';
     self.extendedData = {};
-    self.editorView = {};
+    self.componentType = '';
+    self.dialogEditorView = {};
     self.restrictToType = '';
 };
 
@@ -1350,27 +1350,39 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.offerExpires = false;
         self.offerStartsDate = '';
         self.offerEndsDate = '';
+        self.expired = false;
         self.active = true;
         self.componentDefinitions = [];
     };
 
     OfferSettingsDisplay.prototype = (function() {
+
+        // adjusts date with timezone
         function localDateString(val) {
             var raw = new Date(val);
             return new Date(raw.getTime() + raw.getTimezoneOffset()*60000).toLocaleDateString();
         }
 
+        // gets the local start date string
         function offerStartsDateLocalDateString() {
             return localDateString(this.offerStartsDate);
         }
 
+        // gets the local end date string
         function offerEndsDateLocalDateString() {
             return localDateString(this.offerEndsDate);
         }
 
+        function componentDefinitionExtendedDataToArray() {
+            angular.forEach(this.componentDefinitions, function(cd) {
+                cd.extendedData = cd.extendedData.toArray();
+            });
+        }
+
         return {
             offerStartsDateLocalDateString: offerStartsDateLocalDateString,
-            offerEndsDateLocalDateString: offerEndsDateLocalDateString
+            offerEndsDateLocalDateString: offerEndsDateLocalDateString,
+            componentDefinitionExtendedDataToArray: componentDefinitionExtendedDataToArray
         }
 
     }());
@@ -3719,13 +3731,13 @@ angular.module('merchello.models').factory('dialogDataFactory',
                         for(var i = 0; i < jsonResult.length; i++) {
                             var definition = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             definition.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                            definition.editorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].editorView);
+                            definition.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
                             definitions.push(definition);
                         }
                     } else {
                         definitions = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                         definitions.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                        definitions.editorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].editorView);
+                        definitions.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
                     }
                     return definitions;
                 }

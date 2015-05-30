@@ -44,13 +44,15 @@
         /// Gets or sets the offer starts date.
         /// </summary>
         [Column("offerStartsDate")]
-        public DateTime OfferStartsDate { get; set; }
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public DateTime? OfferStartsDate { get; set; }
 
         /// <summary>
         /// Gets or sets the offer ends date.
         /// </summary>
         [Column("offerEndsDate")]
-        public DateTime OfferEndsDate { get; set; }
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public DateTime? OfferEndsDate { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether active.

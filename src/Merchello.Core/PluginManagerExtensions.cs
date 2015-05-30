@@ -5,7 +5,6 @@
     using Gateways;
 
     using Merchello.Core.Marketing.Discounts;
-    using Merchello.Core.Marketing.Discounts.Constraints;
     using Merchello.Core.Marketing.Offer;
 
     using Observation;
@@ -16,20 +15,6 @@
     /// </summary>
     internal static class PluginManagerExtensions
     {
-        /// <summary>
-        /// Returns all <see cref="IDiscountConstraint"/> types.
-        /// </summary>
-        /// <param name="pluginManager">
-        /// The plugin manager.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{Type}"/>.
-        /// </returns>
-        internal static IEnumerable<Type> ResolveDiscountConstraints(this PluginManager pluginManager)
-        {
-            return pluginManager.ResolveTypesWithAttribute<OfferComponentBase, OfferComponentAttribute>();
-        } 
-
         /// <summary>
         /// Returns all available GatewayProvider
         /// </summary>

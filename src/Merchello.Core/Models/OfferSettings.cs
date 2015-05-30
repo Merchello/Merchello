@@ -284,14 +284,15 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether date dependent.
+        /// Gets a value indicating whether the offer has expired.
         /// </summary>
         [DataMember]
-        public bool DateDependent
+        public bool Expired
         {
             get
             {
-                return !(_offerStartsDate == DateTime.MinValue && _offerEndsDate == DateTime.MaxValue);
+                return !(_offerStartsDate == DateTime.MinValue && _offerEndsDate == DateTime.MaxValue) && 
+                    DateTime.Now > _offerEndsDate.AddDays(1); // add one to the days since we are using midnight
             }
         }
 

@@ -28,6 +28,12 @@
         }
 
         /// <summary>
+        /// Gets the component type.
+        /// </summary>
+        public abstract OfferComponentType ComponentType { get; }
+
+
+        /// <summary>
         /// Gets the <see cref="OfferComponentDefinition"/>.
         /// </summary>
         internal OfferComponentDefinition OfferComponentDefinition

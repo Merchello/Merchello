@@ -248,6 +248,7 @@
     <Compile Include="Builders\OrderBuilderTests.cs" />
     <Compile Include="Builders\ShipmentBuilderTests.cs" />
     <Compile Include="DisplayClasses\GatewayProviderDisplayTests.cs" />
+    <Compile Include="DisplayClasses\OfferComponentDefinitionDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferProviderTests.cs" />
     <Compile Include="Examine\CachedQueryTests.cs" />
     <Compile Include="Examine\CustomerProviderTests.cs" />

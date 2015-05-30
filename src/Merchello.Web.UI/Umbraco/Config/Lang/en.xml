@@ -1071,6 +1071,8 @@ To manage your website, simply open the Umbraco back office and start adding con
       <key alias="offerValidDates">Offer Valid Dates</key>
       <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
       <key alias="offerNeverExpires">Does not expire.</key>
+      <key alias="offerConstraintsInfo">Constraints</key>
+      <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
     </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -1247,6 +1249,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="select">Select</key>
     <key alias="all">All</key>
     <key alias="none">None</key>
+    <key alias="expired">Expired</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Store Defaults</key>

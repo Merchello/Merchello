@@ -71,6 +71,9 @@
 
             if (!OfferProviderResolver.HasCurrent)
                 OfferProviderResolver.Current = new OfferProviderResolver(PluginManager.Current.ResolveOfferProviders(), MerchelloContext.Current.Services.OfferSettingsService);
+
+            if(!OfferComponentResolver.HasCurrent)
+                OfferComponentResolver.Current = new OfferComponentResolver(PluginManager.Current.ResolveOfferComponents(), OfferProviderResolver.Current);
         }
     }
 }

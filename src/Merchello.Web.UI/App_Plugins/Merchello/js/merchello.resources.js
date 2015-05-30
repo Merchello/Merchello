@@ -414,8 +414,12 @@ angular.module('merchello.resources')
                         }),
                         'Failed to get offer settings');
                 },
-                getOffersByQuery: function(query) {
-
+                searchOffers: function(query) {
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(baseUrl + "SearchOffers",
+                            query
+                        ),
+                        'Failed to search offers');
                 },
                 getAllOfferSettings: function() {
                     return umbRequestHelper.resourcePromise(
@@ -425,6 +429,15 @@ angular.module('merchello.resources')
                         }),
                         'Failed to get offer settings');
                 },
+                getAvailableOfferComponents: function(offerProviderKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetAvailableOfferComponents',
+                            method: "GET",
+                            params: { offerProviderKey: offerProviderKey}
+                        }),
+                        'Failed to get offer components for the provider');
+                },
                 newOfferSettings: function (offerSettings) {
                     return umbRequestHelper.resourcePromise(
                         $http.post(baseUrl + "PostAddOfferSettings",
@@ -433,6 +446,8 @@ angular.module('merchello.resources')
                         'Failed to create offer');
                 },
                 saveOfferSettings: function(offerSettings) {
+                    offerSettings.componentDefinitionExtendedDataToArray();
+                    console.info(offerSettings);
                     return umbRequestHelper.resourcePromise(
                         $http.post(baseUrl + "PutUpdateOfferSettings",
                             offerSettings

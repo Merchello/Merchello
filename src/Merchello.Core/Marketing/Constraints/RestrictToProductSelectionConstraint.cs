@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Marketing.Discounts.Constraints
 {
     using System;
+    using System.ComponentModel;
 
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
@@ -10,7 +11,8 @@
     /// <summary>
     /// A discount validation rule to restrict this discount to a selection of products.
     /// </summary>
-    public class RestrictToProductSelectionConstraint : DiscountConstraintBase
+    [OfferComponent("15DDF0EA-9C60-489A-96A8-D2AAADBEF328", "Restrict to certain products", "This discount is only offered for certain products.")]
+    public class RestrictToProductSelectionConstraint : OfferConstraintComponentBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RestrictToProductSelectionConstraint"/> class.
@@ -23,16 +25,6 @@
         {
         }
 
-        /// <summary>
-        /// Gets the category.
-        /// </summary>
-        public override DiscountCategory Category
-        {
-            get
-            {
-                return DiscountCategory.Product;
-            }
-        }
 
         /// <summary>
         /// Validates the constraint against the <see cref="ILineItemContainer"/>

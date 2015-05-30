@@ -34,7 +34,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
          * Initializes the controller
          */
         function init() {
-            console.info('got here');
             loadSettings();
         }
 
@@ -108,14 +107,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                         $scope.offerSettings.offerStartsDate = $scope.offerSettings.offerStartsDateLocalDateString();
                         $scope.offerSettings.offerEndsDate = $scope.offerSettings.offerEndsDateLocalDateString();
                     }
-                    console.info($scope.offerSettings);
                     $scope.preValuesLoaded = true;
                     $scope.loaded = true;
                 }, function(reason) {
                     notificationsService.error("Failted to load offer settings", reason.message);
                 });
             }
-            console.info($scope.offerSettings);
         }
 
         function createTabs(key) {

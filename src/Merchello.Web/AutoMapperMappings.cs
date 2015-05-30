@@ -84,12 +84,17 @@
                     dest => dest.OfferExpires,
                     opt =>
                     opt.ResolveUsing<OfferSettingsOfferExpiresResolver>()
-                        .ConstructedBy(() => new OfferSettingsOfferExpiresResolver()));
+                        .ConstructedBy(() => new OfferSettingsOfferExpiresResolver()))
+                .ForMember(
+                    dest => dest.ComponentDefinitions,
+                    opt =>
+                    opt.ResolveUsing<OfferSettingsComponentDefinitionsValueResolver>()
+                        .ConstructedBy(() => new OfferSettingsComponentDefinitionsValueResolver()));
 
-            AutoMapper.Mapper.CreateMap<OfferComponentDefinition, OfferComponentDefinitionDisplay>()
+            AutoMapper.Mapper.CreateMap<OfferComponentBase, OfferComponentDefinitionDisplay>()
                 .ForMember(
                     dest => dest.ExtendedData,
-                    opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                    opt => opt.ResolveUsing<OfferComponentExtendedDataResolver>().ConstructedBy(() => new OfferComponentExtendedDataResolver()))
                 .ForMember(
                     dest => dest.Name,
                     opt =>
@@ -101,12 +106,12 @@
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
                         .ConstructedBy(() => new OfferComponentAttributeValueResolver("description")))
                 .ForMember(
-                    dest => dest.Key,
+                    dest => dest.ComponentKey,
                     opt =>
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
                         .ConstructedBy(() => new OfferComponentAttributeValueResolver("key")))
                 .ForMember(
-                    dest => dest.EditorView,
+                    dest => dest.DialogEditorView,
                     opt =>
                     opt.ResolveUsing<OfferComponentAttributeValueResolver>()
                         .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorVeiw")))
