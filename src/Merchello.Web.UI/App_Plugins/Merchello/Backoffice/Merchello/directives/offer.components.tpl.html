@@ -24,7 +24,7 @@
                     <td class="span10">{{component.name}}<small data-ng-show="component.description !== ''">{{component.description}}</small></td>
                     <td class="span2 text-right">
                         <!-- ACTION: Edit constraint -->
-                        <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="component.dialogEditorView.editorView !== ''" data-ng-click="openConfigureComponent(component)"><i class="icon-edit"></i></a>
+                        <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="component.dialogEditorView.editorView !== ''" data-ng-click="configureComponentOpen(component)"><i class="icon-edit"></i></a>
                         <!-- ACTION: Remove constraint-->
                         <a data-ng-click="removeComponentOpen(component)" class="btn btn-warning btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
                     </td>

@@ -10,7 +10,7 @@
     /// Represents a discount line item reward.
     /// </summary>
     [OfferComponent("A1CCE36A-C5AA-4C50-B659-CC2FBDEAA7B3", "Discount the price", "Applies a discount according to configured price rules.",
-        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerreward.discountprice.html", typeof(Coupon))]
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.couponreward.discountprice.html", typeof(Coupon))]
     public class CouponDiscountLineItemReward : OfferRewardComponentBase<ILineItemContainer, ILineItem>
     {
         /// <summary>

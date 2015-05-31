@@ -1306,6 +1306,17 @@ var OfferComponentDefinitionDisplay = function() {
     self.restrictToType = '';
 };
 
+OfferComponentDefinitionDisplay.prototype = (function() {
+
+    function clone() {
+        return angular.extend(new OfferComponentDefinitionDisplay(), this);
+    }
+
+    return {
+        clone: clone
+    }
+}());
+
 angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', OfferComponentDefinitionDisplay);
 /**
  * @ngdoc model
@@ -1358,6 +1369,11 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
 
     OfferSettingsDisplay.prototype = (function() {
 
+        // private methods
+        function getAssignedComponent(componentKey) {
+            return _.find(this.componentDefinitions, function (cd) { return cd.componentKey === componentKey; });
+        }
+
         // adjusts date with timezone
         function localDateString(val) {
             var raw = new Date(val);
@@ -1406,6 +1422,14 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return this.componentDefinitions[0].typeGrouping === typeGrouping;
         }
 
+        function updateAssignedComponent(component) {
+            console.info(component);
+            var assigned = getAssignedComponent.call(this, component.componentKey);
+            if (assigned !== undefined && assigned !== null) {
+                assigned.extendedData = component.extendedData;
+            }
+        }
+
         return {
             offerStartsDateLocalDateString: offerStartsDateLocalDateString,
             offerEndsDateLocalDateString: offerEndsDateLocalDateString,
@@ -1413,7 +1437,9 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             hasComponents: hasComponents,
             getComponentsTypeGrouping: getComponentsTypeGrouping,
             ensureTypeGrouping: ensureTypeGrouping,
-            hasRewards: hasRewards
+            hasRewards: hasRewards,
+            updateAssignedComponent: updateAssignedComponent,
+            getAssignedComponent: getAssignedComponent
         }
 
     }());

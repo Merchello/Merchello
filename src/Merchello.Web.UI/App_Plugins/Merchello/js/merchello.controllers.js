@@ -94,7 +94,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
             var componentPromise = marketingResource.getAvailableOfferComponents(offerProviderKey);
             componentPromise.then(function(components) {
                 $scope.allComponents = offerComponentDefinitionDisplayBuilder.transform(components);
-                console.info($scope.allComponents);
                 loadOffer(key);
             }, function(reason) {
                 notificationsService.error("Failted to load offer offer components", reason.message);
@@ -224,6 +223,23 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
 
 /**
  * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferRewardCouponDiscountPriceController
+ * @function
+ *
+ * @description
+ * The controller to configure the discount for a coupon line item reward
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardCouponDiscountPriceController',
+    ['$scope',
+        function($scope) {
+
+            $scope.loaded = true;
+
+        }]);
+
+
+/**
+ * @ngdoc controller
  * @name Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController
  * @function
  *
@@ -233,8 +249,229 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController',
     ['$scope',
     function($scope) {
-
+        $scope.loaded = true;
     }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintPriceController
+ * @function
+ *
+ * @description
+ * The controller to configure the price component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintPriceController',
+    ['$scope',
+        function($scope) {
+
+            $scope.loaded = true;
+            
+        }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintPriceController
+ * @function
+ *
+ * @description
+ * The controller to configure the price component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintRestrictToProductSelectionController',
+    ['$scope', 'notificationsService', 'productResource', 'settingsResource', 'productDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+        function($scope, notificationsService, productResource, settingsResource, productDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.filterText = "";
+            $scope.products = [];
+            $scope.filteredproducts = [];
+            $scope.watchCount = 0;
+            $scope.sortProperty = "name";
+            $scope.sortOrder = "Ascending";
+            $scope.limitAmount = 10;
+            $scope.currentPage = 0;
+            $scope.maxPages = 0;
+
+            // exposed methods
+            $scope.changePage = changePage;
+            $scope.limitChanged = limitChanged;
+            $scope.changeSortOrder = changeSortOrder;
+            $scope.getFilteredProducts = getFilteredProducts;
+            $scope.numberOfPages = numberOfPages;
+
+            //--------------------------------------------------------------------------------------
+            // Initialization methods
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Method called on intial page load.  Loads in data from server and sets up scope.
+             */
+            function init() {
+                $scope.dialogData.component.extendedData.setValue('test', 'test');
+                loadProducts();
+                loadSettings();
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProducts
+             * @function
+             *
+             * @description
+             * Load the products from the product service, then wrap the results
+             * in Merchello models and add to the scope via the products collection.
+             */
+            function loadProducts() {
+
+                var page = $scope.currentPage;
+                var perPage = $scope.limitAmount;
+                var sortBy = $scope.sortProperty.replace("-", "");
+                var sortDirection = $scope.sortOrder;
+
+                var query = queryDisplayBuilder.createDefault();
+                query.currentPage = page;
+                query.itemsPerPage = perPage;
+                query.sortBy = sortBy;
+                query.sortDirection = sortDirection;
+                query.addFilterTermParam($scope.filterText);
+
+                var promise = productResource.searchProducts(query);
+                promise.then(function (response) {
+                    var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
+
+                    $scope.products = queryResult.items;
+
+                    $scope.maxPages = queryResult.totalPages;
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.success("Products Load Failed:", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Events methods
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name limitChanged
+             * @function
+             *
+             * @description
+             * Helper function to set the amount of items to show per page for the paging filters and calculations
+             */
+            function limitChanged(newVal) {
+                $scope.limitAmount = newVal;
+                $scope.currentPage = 0;
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name changePage
+             * @function
+             *
+             * @description
+             * Helper function re-search the products after the page has changed
+             */
+            function changePage (newPage) {
+                $scope.currentPage = newPage;
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name changeSortOrder
+             * @function
+             *
+             * @description
+             * Helper function to set the current sort on the table and switch the
+             * direction if the property is already the current sort column.
+             */
+            function changeSortOrder(propertyToSort) {
+
+                if ($scope.sortProperty == propertyToSort) {
+                    if ($scope.sortOrder == "Ascending") {
+                        $scope.sortProperty = "-" + propertyToSort;
+                        $scope.sortOrder = "Descending";
+                    } else {
+                        $scope.sortProperty = propertyToSort;
+                        $scope.sortOrder = "Ascending";
+                    }
+                } else {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "Ascending";
+                }
+
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name getFilteredProducts
+             * @function
+             *
+             * @description
+             * Calls the product service to search for products via a string search
+             * param.  This searches the Examine index in the core.
+             */
+            function getFilteredProducts(filter) {
+                $scope.filterText = filter;
+                $scope.currentPage = 0;
+                loadProducts();
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Helper methods
+            //--------------------------------------------------------------------------------------
+
+
+
+            //--------------------------------------------------------------------------------------
+            // Calculations
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name numberOfPages
+             * @function
+             *
+             * @description
+             * Helper function to get the amount of items to show per page for the paging
+             */
+            function numberOfPages() {
+                return $scope.maxPages;
+            }
+
+
+            // Initialize the controller
+            init();
+
+        }]);
+
 
 /**
  * @ngdoc controller
@@ -277,25 +514,41 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         // exposed components
         $scope.assignComponent = assignComponent;
         $scope.removeComponentOpen = removeComponentOpen;
+        $scope.configureComponentOpen = configureComponentOpen;
 
         var eventName = 'merchello.offercomponentcollection.changed';
 
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         *
+         * @description
+         * Initializes the controller
+         */
         function init() {
             eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
 
             $scope.$watch('preValuesLoaded', function(pvl) {
-                console.info(pvl);
                 if(pvl === true) {
                     loadComponents();
                 }
             });
         }
 
+        /**
+         * @ngdoc method
+         * @name loadComponents
+         * @function
+         *
+         * @description
+         * Loads the components for this offer
+         */
         function loadComponents() {
             // either assigned constraints or rewards
             $scope.assignedComponents = _.filter($scope.offerSettings.componentDefinitions, function(osc) { return osc.componentType === $scope.componentType; });
             var typeGrouping = $scope.offerSettings.getComponentsTypeGrouping();
-            console.info(typeGrouping);
+
             $scope.availableComponents = _.filter($scope.components, function(c) {
                 var ac = _.find($scope.assignedComponents, function(ac) { return ac.componentKey === c.componentKey; });
                 if (ac === undefined && c.componentType === $scope.componentType && (typeGrouping === '' | typeGrouping === c.typeGrouping)) {
@@ -307,17 +560,55 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
 
-
+        /**
+         * @ngdoc method
+         * @name assignComponent
+         * @function
+         *
+         * @description
+         * Adds a component from the offer
+         */
         function assignComponent(component) {
             var assertComponent = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
             if (assertComponent === undefined && $scope.offerSettings.ensureTypeGrouping(component.typeGrouping)) {
                 $scope.offerSettings.componentDefinitions.push(component);
-                //loadComponents();
                 eventsService.emit(eventName);
             }
         }
 
+        /**
+         * @ngdoc method
+         * @name configureComponentOpen
+         * @function
+         *
+         * @description
+         * Opens the component configuration dialog
+         */
+        function configureComponentOpen(component) {
+            var dialogData = {};
+            dialogData.component = component.clone();
+            dialogService.open({
+                template: component.dialogEditorView.editorView,
+                show: true,
+                callback: processConfigureComponent,
+                dialogData: dialogData
+            });
 
+        }
+
+        function processConfigureComponent(dialogData) {
+            $scope.offerSettings.updateAssignedComponent(dialogData.component);
+            console.info($scope.offerSettings.componentDefinitions);
+        }
+
+        /**
+         * @ngdoc method
+         * @name removeComponentOpen
+         * @function
+         *
+         * @description
+         * Opens the confirm dialog to a component from the offer
+         */
         function removeComponentOpen(component) {
                 var dialogData = {};
                 dialogData.name = 'Component: ' + component.name;
@@ -334,14 +625,20 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
                 });
         }
 
+        /**
+         * @ngdoc method
+         * @name processRemoveComponent
+         * @function
+         *
+         * @description
+         * Removes a component from the offer
+         */
         function processRemoveComponent(dialogData) {
             $scope.offerSettings.componentDefinitions = _.reject($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === dialogData.componentKey; })
-            //loadComponents();
             eventsService.emit(eventName);
         };
 
         function onComponentCollectionChanged() {
-            console.info('change called');
             loadComponents();
         }
         // Initialize the controller
@@ -2341,6 +2638,31 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Calls the merchelloGatewayProviderService to deactivate the provider.
              */
             function deactivateProvider(provider) {
+                var dialogData = {};
+                dialogData.name = 'Provider: ' + provider.name;
+                dialogData.provider = provider;
+
+                dialogData.warning = 'This will any delete any configurations, methods and messages you currently have saved.';
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeactivateProvider,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name deactivateProvider
+             * @param {GatewayProvider} provider The GatewayProvider to deactivate
+             * @function
+             *
+             * @description
+             * Calls the merchelloGatewayProviderService to deactivate the provider.
+             */
+            function processDeactivateProvider(dialogData) {
+                var provider = dialogData.provider;
                 var promiseDeactivate = gatewayProviderResource.deactivateGatewayProvider(provider);
                 promiseDeactivate.then(function () {
                     provider.activated = false;
