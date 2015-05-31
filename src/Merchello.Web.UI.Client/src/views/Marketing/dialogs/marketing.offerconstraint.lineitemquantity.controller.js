@@ -9,5 +9,5 @@
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController',
     ['$scope',
     function($scope) {
-
+        $scope.loaded = true;
     }]);
