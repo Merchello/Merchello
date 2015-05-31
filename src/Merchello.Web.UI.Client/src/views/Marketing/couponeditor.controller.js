@@ -86,7 +86,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
             var componentPromise = marketingResource.getAvailableOfferComponents(offerProviderKey);
             componentPromise.then(function(components) {
                 $scope.allComponents = offerComponentDefinitionDisplayBuilder.transform(components);
-                console.info($scope.allComponents);
                 loadOffer(key);
             }, function(reason) {
                 notificationsService.error("Failted to load offer offer components", reason.message);

@@ -75,7 +75,6 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             var assertComponent = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
             if (assertComponent === undefined && $scope.offerSettings.ensureTypeGrouping(component.typeGrouping)) {
                 $scope.offerSettings.componentDefinitions.push(component);
-                //loadComponents();
                 eventsService.emit(eventName);
             }
         }
@@ -90,8 +89,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          */
         function configureComponentOpen(component) {
             var dialogData = {};
-            dialogData.component = component;
-            console.info(component);
+            dialogData.component = component.clone();
             dialogService.open({
                 template: component.dialogEditorView.editorView,
                 show: true,
@@ -102,7 +100,8 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function processConfigureComponent(dialogData) {
-            console.info(dialogData);
+            $scope.offerSettings.updateAssignedComponent(dialogData.component);
+            console.info($scope.offerSettings.componentDefinitions);
         }
 
         /**
@@ -139,12 +138,10 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          */
         function processRemoveComponent(dialogData) {
             $scope.offerSettings.componentDefinitions = _.reject($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === dialogData.componentKey; })
-            //loadComponents();
             eventsService.emit(eventName);
         };
 
         function onComponentCollectionChanged() {
-            console.info('change called');
             loadComponents();
         }
         // Initialize the controller

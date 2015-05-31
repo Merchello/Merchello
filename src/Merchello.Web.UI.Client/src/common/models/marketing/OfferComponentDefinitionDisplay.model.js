@@ -19,4 +19,15 @@ var OfferComponentDefinitionDisplay = function() {
     self.restrictToType = '';
 };
 
+OfferComponentDefinitionDisplay.prototype = (function() {
+
+    function clone() {
+        return angular.extend(new OfferComponentDefinitionDisplay(), this);
+    }
+
+    return {
+        clone: clone
+    }
+}());
+
 angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', OfferComponentDefinitionDisplay);
