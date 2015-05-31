@@ -17,6 +17,7 @@ var OfferComponentDefinitionDisplay = function() {
     self.componentType = '';
     self.dialogEditorView = {};
     self.restrictToType = '';
+    self.updated = false;
 };
 
 OfferComponentDefinitionDisplay.prototype = (function() {

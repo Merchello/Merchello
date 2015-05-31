@@ -41,12 +41,19 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
                 });
             }
 
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description
+             * Saves the configuration
+             */
             function save() {
-                console.info('got here');
-                //$scope.dialogData.component.extendedData.setValue('price', $scope.price);
-                //$scope.dialogData.component.extendedData.setValue('operator', $scope.operator);
-                //console.info($scope.dialogData.component.extendedData);
-                //$scope.submit(dialogData);
+                $scope.dialogData.setValue('price', $scope.price);
+                $scope.dialogData.setValue('operator', $scope.operator);
+
+                $scope.submit($scope.dialogData);
             }
 
             // Initialize the controller

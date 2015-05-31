@@ -102,7 +102,6 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
 
         function processConfigureComponent(dialogData) {
             $scope.offerSettings.updateAssignedComponent(dialogData.component);
-            console.info($scope.offerSettings.componentDefinitions);
         }
 
         /**

@@ -1334,6 +1334,7 @@ var OfferComponentDefinitionDisplay = function() {
     self.componentType = '';
     self.dialogEditorView = {};
     self.restrictToType = '';
+    self.updated = false;
 };
 
 OfferComponentDefinitionDisplay.prototype = (function() {
@@ -1453,10 +1454,10 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         }
 
         function updateAssignedComponent(component) {
-            console.info(component);
             var assigned = getAssignedComponent.call(this, component.componentKey);
             if (assigned !== undefined && assigned !== null) {
                 assigned.extendedData = component.extendedData;
+                assigned.updated = true;
             }
         }
 

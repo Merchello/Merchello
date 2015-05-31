@@ -21,7 +21,10 @@
                     <th colspan="3" class="span12">Assigned {{componentType}}s</th>
                 </tr>
                 <tr data-ng-repeat="component in assignedComponents" data-ng-show="assignedComponents.length > 0">
-                    <td class="span10">{{component.name}}<small data-ng-show="component.description !== ''">{{component.description}}</small></td>
+                    <td class="span10">
+                        {{component.name}}<small data-ng-show="component.description !== ''">{{component.description}}</small>
+                        <smal data-ng-hide="!component.updated" class="component-updated">Not saved</smal>
+                    </td>
                     <td class="span2 text-right">
                         <!-- ACTION: Edit constraint -->
                         <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="component.dialogEditorView.editorView !== ''" data-ng-click="configureComponentOpen(component)"><i class="icon-edit"></i></a>
