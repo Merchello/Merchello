@@ -157,6 +157,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new SelectOfferProviderDialogData();
         }
 
+        // offer components
+        function createConfigureOfferComponentDialogData() {
+            return new ConfigureOfferComponentDialogData();
+        }
 
         /*----------------------------------------------------------------------------------------
         Property Editors
@@ -197,6 +201,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
             createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
             createAddPaymentDialogData: createAddPaymentDialogData,
-            createSelectOfferProviderDialogData: createSelectOfferProviderDialogData
+            createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
+            createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData
         };
 }]);

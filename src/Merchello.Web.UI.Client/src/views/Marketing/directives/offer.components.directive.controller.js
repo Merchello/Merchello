@@ -7,8 +7,8 @@
  * The controller to handle offer component association and configuration
  */
 angular.module('merchello').controller('Merchello.Directives.OfferComponentsDirectiveController',
-    ['$scope', 'notificationsService', 'dialogService', 'eventsService', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, notificationsService, dialogService, eventsService, marketingResource, offerComponentDefinitionDisplayBuilder) {
+    ['$scope', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
 
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
@@ -88,8 +88,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          * Opens the component configuration dialog
          */
         function configureComponentOpen(component) {
-            var dialogData = {};
+            var dialogData = dialogDataFactory.createConfigureOfferComponentDialogData();
             dialogData.component = component.clone();
+
             dialogService.open({
                 template: component.dialogEditorView.editorView,
                 show: true,

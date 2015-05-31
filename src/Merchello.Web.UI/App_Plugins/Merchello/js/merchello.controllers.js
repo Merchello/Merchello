@@ -261,11 +261,50 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
  * The controller to configure the price component constraint
  */
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintPriceController',
-    ['$scope',
-        function($scope) {
+    ['$scope', 'settingsResource',
+        function($scope, settingsResource) {
 
-            $scope.loaded = true;
-            
+            $scope.loaded = false;
+            $scope.operator = 'gt';
+            $scope.price = 0;
+            $scope.currencySymbol = '';
+
+            // exposed methods
+            $scope.save = save;
+
+            function init() {
+                loadSettings();
+                console.info($scope.dialogData);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                    $scope.loaded = true;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            function save() {
+                console.info('got here');
+                //$scope.dialogData.component.extendedData.setValue('price', $scope.price);
+                //$scope.dialogData.component.extendedData.setValue('operator', $scope.operator);
+                //console.info($scope.dialogData.component.extendedData);
+                //$scope.submit(dialogData);
+            }
+
+            // Initialize the controller
+            init();
         }]);
 
 /**
@@ -504,8 +543,8 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferProvide
  * The controller to handle offer component association and configuration
  */
 angular.module('merchello').controller('Merchello.Directives.OfferComponentsDirectiveController',
-    ['$scope', 'notificationsService', 'dialogService', 'eventsService', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, notificationsService, dialogService, eventsService, marketingResource, offerComponentDefinitionDisplayBuilder) {
+    ['$scope', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
 
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
@@ -585,8 +624,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          * Opens the component configuration dialog
          */
         function configureComponentOpen(component) {
-            var dialogData = {};
+            var dialogData = dialogDataFactory.createConfigureOfferComponentDialogData();
             dialogData.component = component.clone();
+
             dialogService.open({
                 template: component.dialogEditorView.editorView,
                 show: true,

@@ -1,20 +1,35 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Marketing.Dialogs.OfferConstraintPriceController" data-ng-show="loaded">
     <div class="umb-modalcolumn-header">
-        <h4><localize key="merchelloButtons_select" /> <localize key="merchelloMarketing_offerType" /></h4>
+        <h4>Configure price constraint</h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
-        <h3><localize key="merchelloButtons_select" /> <localize key="merchelloMarketing_offerType" /></h3>
-        <div class="control-group row-fluid">
+        <!-- Flyout when Change Prices is clicked -->
 
-
-
-        </div>
+            <div class="form-group row-fluid input-prepend">
+                <label for="new-price">Price of matching items</label>
+                <span class="add-on">{{currencySymbol}}</span>
+                <input name="new-price" data-ng-model="price" class=" col-xs-5 span5" type="number" />
+            </div>
+            <div class="form-group row-fluid offer-constraint-controls">
+                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="e" /> is <strong>Equal to</strong> (=)</label>
+                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="lt" /> is <strong>Less Than</strong> (<)</label>
+                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="lte" /> is <strong>Less Than or Equal to</strong> (<=)</label>
+                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="gt" /> is <strong>Greater Than</strong> (>)</label>
+                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="gte" /> is <strong>Greater Than or Equal to</strong> (>=)</label>
+            </div>
     </div>
+
+</div>
     <div class="umb-panel-footer" >
         <div class="umb-el-wrap umb-panel-buttons">
             <div class="btn-toolbar umb-btn-toolbar pull-right">
                 <!-- ACTION: Cancel -->
                 <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="save()">
+                    <localize key="buttons_save">Save</localize>
+                </button>
             </div>
         </div>
     </div>
