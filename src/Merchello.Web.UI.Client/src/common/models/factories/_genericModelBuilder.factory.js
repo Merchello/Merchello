@@ -29,9 +29,24 @@
                 return transformObject(jsonResult, Constructor);
             }
         }
+        /**
+         * @ngdoc method
+         * @name isStringifyJson
+         * @function
+         *
+         * @description
+         * Checks the value to determine if it is a stringified Json value
+         */
+        function isStringifyJson(value) {
+            return (/^[\],:{}\s]*$/.test(value.replace(/\\["\\\/bfnrtu]/g, '@').
+                replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+                replace(/(?:^|:|,)(?:\s*\[)+/g, '')));
+        }
+
 
         // public
         return {
-            transform : transform
+            transform : transform,
+            isStringifyJson: isStringifyJson
         };
     }]);
