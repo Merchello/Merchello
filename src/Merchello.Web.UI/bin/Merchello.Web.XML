@@ -7539,7 +7539,7 @@
             Gets the constraints.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Rewards">
+        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Reward">
             <summary>
             Gets the rewards.
             </summary>
@@ -7557,9 +7557,9 @@
             Gets the collection discount constraints.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Rewards">
+        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Reward">
             <summary>
-            Gets the collection offer rewards.
+            Gets the coupon reward.
             </summary>
         </member>
         <member name="T:Merchello.Web.Workflow.IWishList">

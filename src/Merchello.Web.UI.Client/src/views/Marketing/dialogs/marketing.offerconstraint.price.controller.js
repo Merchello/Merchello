@@ -52,7 +52,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
             function save() {
                 $scope.dialogData.setValue('price', $scope.price);
                 $scope.dialogData.setValue('operator', $scope.operator);
-
                 $scope.submit($scope.dialogData);
             }
 

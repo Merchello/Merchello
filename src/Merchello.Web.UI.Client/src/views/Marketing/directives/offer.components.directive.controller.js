@@ -52,6 +52,13 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             $scope.assignedComponents = _.filter($scope.offerSettings.componentDefinitions, function(osc) { return osc.componentType === $scope.componentType; });
             var typeGrouping = $scope.offerSettings.getComponentsTypeGrouping();
 
+            // there can only be one reward.
+            if ($scope.componentType === 'Reward' && $scope.offerSettings.hasRewards()) {
+                $scope.availableComponents = [];
+                $scope.componentsLoaded = true;
+                return;
+            }
+
             $scope.availableComponents = _.filter($scope.components, function(c) {
                 var ac = _.find($scope.assignedComponents, function(ac) { return ac.componentKey === c.componentKey; });
                 if (ac === undefined && c.componentType === $scope.componentType && (typeGrouping === '' | typeGrouping === c.typeGrouping)) {
@@ -73,6 +80,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          */
         function assignComponent(component) {
             var assertComponent = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
+
             if (assertComponent === undefined && $scope.offerSettings.ensureTypeGrouping(component.typeGrouping)) {
                 $scope.offerSettings.componentDefinitions.push(component);
                 eventsService.emit(eventName);
@@ -102,6 +110,8 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
 
         function processConfigureComponent(dialogData) {
             $scope.offerSettings.updateAssignedComponent(dialogData.component);
+            console.info('saving');
+            $scope.saveOfferSettings();
         }
 
         /**

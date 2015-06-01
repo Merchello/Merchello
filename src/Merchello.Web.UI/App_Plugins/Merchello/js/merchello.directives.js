@@ -23,6 +23,7 @@ angular.module('merchello.directives').directive('offerComponents', function() {
             components: '=',
             preValuesLoaded: '=',
             settings: '=',
+            saveOfferSettings: '&',
             componentType: '@'
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.components.tpl.html',
