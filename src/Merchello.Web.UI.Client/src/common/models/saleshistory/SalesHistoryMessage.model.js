@@ -10,6 +10,7 @@
         var self = this;
         self.area = '';
         self.key = '';
+        self.formattedMessage = '';
     };
 
     SalesHistoryMessageDisplay.prototype = (function() {
