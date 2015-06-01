@@ -6473,9 +6473,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                             $scope.salesHistory = history.dailyLogs;
                             angular.forEach(history.dailyLogs, function(daily) {
                               angular.forEach(daily.logs, function(log) {
-                                 localizationService.localize(log.message.localizationKey(), log.message.localizationTokens()).then(function(value) {
-                                    log.message.formattedMessage = value;
-                                 });
+                                  if (log.message.formattedMessage ==='') {
+                                     localizationService.localize(log.message.localizationKey(), log.message.localizationTokens()).then(function(value) {
+                                        log.message.formattedMessage = value;
+                                     });
+                                  }
                               });
                             });
                         }
