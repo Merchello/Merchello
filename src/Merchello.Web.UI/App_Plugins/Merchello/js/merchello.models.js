@@ -4200,7 +4200,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             // otherwise we assume the developer simply put a note into the audit logs and thus
                             // we can't localize.
                             auditLogDisplay.message = salesHistoryMessageDisplayBuilder.createDefault();
-                            auditLogDisplay.formattedMessage = jsonResult.message;
+                            auditLogDisplay.message.formattedMessage = jsonResult.message;
                         }
                         return auditLogDisplay;
                     }
