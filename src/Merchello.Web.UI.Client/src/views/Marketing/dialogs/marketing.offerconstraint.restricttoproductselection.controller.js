@@ -41,7 +41,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
              * Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init() {
-                $scope.dialogData.component.extendedData.setValue('test', 'test');
                 loadProducts();
                 loadSettings();
             }

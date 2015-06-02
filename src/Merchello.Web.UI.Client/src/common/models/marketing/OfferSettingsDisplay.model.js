@@ -22,6 +22,10 @@
 
     OfferSettingsDisplay.prototype = (function() {
 
+        function clone() {
+            return angular.extend(new OfferSettingsDisplay(), this);
+        }
+
         // private methods
         function getAssignedComponent(componentKey) {
             return _.find(this.componentDefinitions, function (cd) { return cd.componentKey === componentKey; });
@@ -58,6 +62,14 @@
             return reward !== undefined && reward !== null;
         }
 
+        function componentsConfigured() {
+            if (!hasComponents.call(this)) {
+                return true;
+            }
+            var notConfigured = _.find(this.componentDefinitions, function(c) { return c.isConfigured() === false});
+            return notConfigured === undefined;
+        }
+
         function hasComponents() {
             return this.componentDefinitions.length > 0;
         }
@@ -76,6 +88,7 @@
         }
 
         function updateAssignedComponent(component) {
+            console.info(component);
             var assigned = getAssignedComponent.call(this, component.componentKey);
             if (assigned !== undefined && assigned !== null) {
                 assigned.extendedData = component.extendedData;
@@ -84,6 +97,7 @@
         }
 
         return {
+            clone: clone,
             offerStartsDateLocalDateString: offerStartsDateLocalDateString,
             offerEndsDateLocalDateString: offerEndsDateLocalDateString,
             componentDefinitionExtendedDataToArray: componentDefinitionExtendedDataToArray,
@@ -92,7 +106,8 @@
             ensureTypeGrouping: ensureTypeGrouping,
             hasRewards: hasRewards,
             updateAssignedComponent: updateAssignedComponent,
-            getAssignedComponent: getAssignedComponent
+            getAssignedComponent: getAssignedComponent,
+            componentsConfigured: componentsConfigured
         }
 
     }());

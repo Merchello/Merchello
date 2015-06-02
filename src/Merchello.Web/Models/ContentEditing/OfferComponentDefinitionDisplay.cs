@@ -37,12 +37,17 @@ namespace Merchello.Web.Models.ContentEditing
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether requires configuration.
+        /// </summary>
+        public bool RequiresConfiguration { get; set; }
+
+        /// <summary>
         /// Gets or sets the type name.
         /// </summary>
         public string TypeFullName { get; set; }
 
         /// <summary>
-        /// Gets the Type to which this component can be grouped with
+        /// Gets or sets the Type to which this component can be grouped with
         /// </summary>
         public string TypeGrouping { get; set; }
 

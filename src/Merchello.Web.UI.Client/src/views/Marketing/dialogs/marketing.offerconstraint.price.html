@@ -12,11 +12,7 @@
                 <input name="new-price" data-ng-model="price" class=" col-xs-5 span5" type="number" />
             </div>
             <div class="form-group row-fluid offer-constraint-controls">
-                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="e" /> is <strong>Equal to</strong> (=)</label>
-                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="lt" /> is <strong>Less Than</strong> (<)</label>
-                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="lte" /> is <strong>Less Than or Equal to</strong> (<=)</label>
-                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="gt" /> is <strong>Greater Than</strong> (>)</label>
-                <label class="col-xs-12 span12"><input type="radio" data-ng-model="operator" value="gte" /> is <strong>Greater Than or Equal to</strong> (>=)</label>
+                <comparison-operator-radio-buttons operator="operator"></comparison-operator-radio-buttons>
             </div>
     </div>
 

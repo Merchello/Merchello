@@ -17,6 +17,7 @@ var OfferComponentDefinitionDisplay = function() {
     self.componentType = '';
     self.dialogEditorView = {};
     self.restrictToType = '';
+    self.requiresConfiguration = true;
     self.updated = false;
 };
 
@@ -26,8 +27,23 @@ OfferComponentDefinitionDisplay.prototype = (function() {
         return angular.extend(new OfferComponentDefinitionDisplay(), this);
     }
 
+    function isConfigured() {
+
+        if(!this.requiresConfiguration) {
+            return true;
+        }
+        // hack catch for save call where there's a context switch on this to window
+        // happens when saving the offer settings
+        if (this.extendedData.items !== undefined) {
+            return !this.extendedData.isEmpty();
+        } else {
+            return true;
+        }
+    }
+
     return {
-        clone: clone
+        clone: clone,
+        isConfigured: isConfigured
     }
 }());
 

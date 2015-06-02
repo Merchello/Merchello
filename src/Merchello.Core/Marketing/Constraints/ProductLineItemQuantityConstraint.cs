@@ -8,20 +8,21 @@
     /// <summary>
     /// A discount validation constraint to restrict this offer to line item quantity related rules.
     /// </summary>
-    [OfferComponent("C679A9F7-ED13-4166-90D1-8126E314E07B", "Restrict by quantity", "This discount is only offered for line items that match configured quantity rules.",
-        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.lineitemquantity.html")]
-    public class LineItemQuantityConstraint : OfferConstraintComponentBase<ILineItemContainer>
+    [OfferComponent("C679A9F7-ED13-4166-90D1-8126E314E07B", "Restrict by product quantity", "This discount is only offered for product line items that match configured quantity rules.",
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.productlineitemquantity.html")]
+    public class ProductLineItemQuantityConstraint : OfferConstraintComponentBase<ILineItemContainer>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LineItemQuantityConstraint"/> class.
+        /// Initializes a new instance of the <see cref="ProductLineItemQuantityConstraint"/> class.
         /// </summary>
         /// <param name="definition">
         /// The definition.
         /// </param>
-        public LineItemQuantityConstraint(OfferComponentDefinition definition)
+        public ProductLineItemQuantityConstraint(OfferComponentDefinition definition)
             : base(definition)
         {
         }
+
 
         public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
         {

@@ -48,6 +48,11 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.RequiresConfiguration">
+            <summary>
+            Gets a value indicating that this component does not require configuration.
+            </summary>        
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint">
             <summary>
             A rule to enforce one discount per customer.
@@ -60,6 +65,11 @@
             <param name="definition">
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.RequiresConfiguration">
+            <summary>
+            Gets a value indicating that this component does not require configuration.
+            </summary>        
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward">
             <summary>
@@ -313,6 +323,11 @@
             Gets or sets the description.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.RequiresConfiguration">
+            <summary>
+            Gets or sets a value indicating whether requires configuration.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.TypeFullName">
             <summary>
             Gets or sets the type name.
@@ -320,7 +335,7 @@
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.TypeGrouping">
             <summary>
-            Gets the Type to which this component can be grouped with
+            Gets or sets the Type to which this component can be grouped with
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentType">

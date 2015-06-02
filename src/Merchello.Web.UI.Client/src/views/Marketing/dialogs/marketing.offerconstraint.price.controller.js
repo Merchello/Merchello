@@ -7,8 +7,8 @@
  * The controller to configure the price component constraint
  */
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintPriceController',
-    ['$scope', 'settingsResource',
-        function($scope, settingsResource) {
+    ['$scope', 'settingsResource', 'invoiceHelper',
+        function($scope, settingsResource, invoiceHelper) {
 
             $scope.loaded = false;
             $scope.operator = 'gt';
@@ -20,7 +20,14 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
             function init() {
                 loadSettings();
-                console.info($scope.dialogData);
+                loadExistingConfigurations()
+            }
+
+            function loadExistingConfigurations() {
+                var operator = $scope.dialogData.getValue('operator');
+                var price = $scope.dialogData.getValue('price');
+                $scope.operator = operator === '' ? 'gt' : operator;
+                $scope.price = price === '' ? 0 : invoiceHelper.round(price, 2);
             }
 
             /**
@@ -50,7 +57,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
              * Saves the configuration
              */
             function save() {
-                $scope.dialogData.setValue('price', $scope.price);
+                $scope.dialogData.setValue('price', invoiceHelper.round($scope.price, 2));
                 $scope.dialogData.setValue('operator', $scope.operator);
                 $scope.submit($scope.dialogData);
             }

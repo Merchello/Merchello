@@ -22,7 +22,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.allComponents = [];
 
         // exposed methods
-        $scope.save = saveOffer;
+        $scope.saveOffer = saveOffer;
         $scope.toggleOfferExpires = toggleOfferExpires;
         $scope.openDeleteOfferDialog = openDeleteOfferDialog;
 
@@ -144,6 +144,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function saveOffer() {
+
             var offerPromise;
             var isNew = false;
             $scope.preValuesLoaded = false;
@@ -151,7 +152,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 isNew = true;
                 offerPromise = marketingResource.newOfferSettings($scope.offerSettings);
             } else {
-                offerPromise = marketingResource.saveOfferSettings($scope.offerSettings);
+                var os = $scope.offerSettings.clone();
+                offerPromise = marketingResource.saveOfferSettings(os);
             }
             offerPromise.then(function(settings) {
                 notificationsService.success("Successfully saved the coupon.");
@@ -204,7 +206,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function onComponentCollectionChanged() {
-            if(!$scope.offerSettings.hasRewards()) {
+            if(!$scope.offerSettings.hasRewards() || !$scope.offerSettings.componentsConfigured()) {
                 $scope.offerSettings.active = false;
             }
         }

@@ -1334,6 +1334,7 @@ var OfferComponentDefinitionDisplay = function() {
     self.componentType = '';
     self.dialogEditorView = {};
     self.restrictToType = '';
+    self.requiresConfiguration = true;
     self.updated = false;
 };
 
@@ -1343,8 +1344,23 @@ OfferComponentDefinitionDisplay.prototype = (function() {
         return angular.extend(new OfferComponentDefinitionDisplay(), this);
     }
 
+    function isConfigured() {
+
+        if(!this.requiresConfiguration) {
+            return true;
+        }
+        // hack catch for save call where there's a context switch on this to window
+        // happens when saving the offer settings
+        if (this.extendedData.items !== undefined) {
+            return !this.extendedData.isEmpty();
+        } else {
+            return true;
+        }
+    }
+
     return {
-        clone: clone
+        clone: clone,
+        isConfigured: isConfigured
     }
 }());
 
@@ -1400,6 +1416,10 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
 
     OfferSettingsDisplay.prototype = (function() {
 
+        function clone() {
+            return angular.extend(new OfferSettingsDisplay(), this);
+        }
+
         // private methods
         function getAssignedComponent(componentKey) {
             return _.find(this.componentDefinitions, function (cd) { return cd.componentKey === componentKey; });
@@ -1436,6 +1456,14 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return reward !== undefined && reward !== null;
         }
 
+        function componentsConfigured() {
+            if (!hasComponents.call(this)) {
+                return true;
+            }
+            var notConfigured = _.find(this.componentDefinitions, function(c) { return c.isConfigured() === false});
+            return notConfigured === undefined;
+        }
+
         function hasComponents() {
             return this.componentDefinitions.length > 0;
         }
@@ -1454,6 +1482,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         }
 
         function updateAssignedComponent(component) {
+            console.info(component);
             var assigned = getAssignedComponent.call(this, component.componentKey);
             if (assigned !== undefined && assigned !== null) {
                 assigned.extendedData = component.extendedData;
@@ -1462,6 +1491,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         }
 
         return {
+            clone: clone,
             offerStartsDateLocalDateString: offerStartsDateLocalDateString,
             offerEndsDateLocalDateString: offerEndsDateLocalDateString,
             componentDefinitionExtendedDataToArray: componentDefinitionExtendedDataToArray,
@@ -1470,7 +1500,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             ensureTypeGrouping: ensureTypeGrouping,
             hasRewards: hasRewards,
             updateAssignedComponent: updateAssignedComponent,
-            getAssignedComponent: getAssignedComponent
+            getAssignedComponent: getAssignedComponent,
+            componentsConfigured: componentsConfigured
         }
 
     }());

@@ -54,6 +54,7 @@ angular.module('merchello.resources')
                 },
                 newOfferSettings: function (offerSettings) {
                     offerSettings.componentDefinitionExtendedDataToArray();
+
                     return umbRequestHelper.resourcePromise(
                         $http.post(baseUrl + "PostAddOfferSettings",
                             offerSettings
@@ -62,7 +63,6 @@ angular.module('merchello.resources')
                 },
                 saveOfferSettings: function(offerSettings) {
                     offerSettings.componentDefinitionExtendedDataToArray();
-                    console.info(offerSettings);
                     return umbRequestHelper.resourcePromise(
                         $http.post(baseUrl + "PutUpdateOfferSettings",
                             offerSettings

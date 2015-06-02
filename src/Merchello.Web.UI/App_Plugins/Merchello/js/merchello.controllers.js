@@ -30,7 +30,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.allComponents = [];
 
         // exposed methods
-        $scope.save = saveOffer;
+        $scope.saveOffer = saveOffer;
         $scope.toggleOfferExpires = toggleOfferExpires;
         $scope.openDeleteOfferDialog = openDeleteOfferDialog;
 
@@ -152,6 +152,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function saveOffer() {
+
             var offerPromise;
             var isNew = false;
             $scope.preValuesLoaded = false;
@@ -159,7 +160,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 isNew = true;
                 offerPromise = marketingResource.newOfferSettings($scope.offerSettings);
             } else {
-                offerPromise = marketingResource.saveOfferSettings($scope.offerSettings);
+                var os = $scope.offerSettings.clone();
+                offerPromise = marketingResource.saveOfferSettings(os);
             }
             offerPromise.then(function(settings) {
                 notificationsService.success("Successfully saved the coupon.");
@@ -212,7 +214,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function onComponentCollectionChanged() {
-            if(!$scope.offerSettings.hasRewards()) {
+            if(!$scope.offerSettings.hasRewards() || !$scope.offerSettings.componentsConfigured()) {
                 $scope.offerSettings.active = false;
             }
         }
@@ -240,20 +242,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
 
 /**
  * @ngdoc controller
- * @name Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController
- * @function
- *
- * @description
- * The controller to configure the line item quantity component constraint
- */
-angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController',
-    ['$scope',
-    function($scope) {
-        $scope.loaded = true;
-    }]);
-
-/**
- * @ngdoc controller
  * @name Merchello.Marketing.Dialogs.OfferConstraintPriceController
  * @function
  *
@@ -261,8 +249,8 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
  * The controller to configure the price component constraint
  */
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintPriceController',
-    ['$scope', 'settingsResource',
-        function($scope, settingsResource) {
+    ['$scope', 'settingsResource', 'invoiceHelper',
+        function($scope, settingsResource, invoiceHelper) {
 
             $scope.loaded = false;
             $scope.operator = 'gt';
@@ -274,7 +262,14 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
             function init() {
                 loadSettings();
-                console.info($scope.dialogData);
+                loadExistingConfigurations()
+            }
+
+            function loadExistingConfigurations() {
+                var operator = $scope.dialogData.getValue('operator');
+                var price = $scope.dialogData.getValue('price');
+                $scope.operator = operator === '' ? 'gt' : operator;
+                $scope.price = price === '' ? 0 : invoiceHelper.round(price, 2);
             }
 
             /**
@@ -304,7 +299,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
              * Saves the configuration
              */
             function save() {
-                $scope.dialogData.setValue('price', $scope.price);
+                $scope.dialogData.setValue('price', invoiceHelper.round($scope.price, 2));
                 $scope.dialogData.setValue('operator', $scope.operator);
                 $scope.submit($scope.dialogData);
             }
@@ -312,6 +307,55 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
             // Initialize the controller
             init();
         }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController
+ * @function
+ *
+ * @description
+ * The controller to configure the line item quantity component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintProductLineItemQuantityController',
+    ['$scope',
+    function($scope) {
+        $scope.loaded = true;
+
+        $scope.operator = 'gt';
+        $scope.quantity = 0;
+
+        // exposed methods
+        $scope.save = save;
+
+        function init() {
+            loadExistingConfigurations()
+        }
+
+        function loadExistingConfigurations() {
+            var operator = $scope.dialogData.getValue('operator');
+            var quantity = $scope.dialogData.getValue('quantity');
+            $scope.operator = operator === '' ? 'gt' : operator;
+            $scope.quantity = quantity;
+            loaded = true;
+        }
+
+        /**
+         * @ngdoc method
+         * @name save
+         * @function
+         *
+         * @description
+         * Saves the configuration
+         */
+        function save() {
+            $scope.dialogData.setValue('quantity', $scope.quantity);
+            $scope.dialogData.setValue('operator', $scope.operator);
+            $scope.submit($scope.dialogData);
+        }
+
+        // Initialize the controller
+        init();
+    }]);
 
 /**
  * @ngdoc controller
@@ -356,7 +400,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
              * Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init() {
-                $scope.dialogData.component.extendedData.setValue('test', 'test');
                 loadProducts();
                 loadSettings();
             }
@@ -549,8 +592,8 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferProvide
  * The controller to handle offer component association and configuration
  */
 angular.module('merchello').controller('Merchello.Directives.OfferComponentsDirectiveController',
-    ['$scope', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
+    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, $timeout, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
 
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
@@ -560,6 +603,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         $scope.assignComponent = assignComponent;
         $scope.removeComponentOpen = removeComponentOpen;
         $scope.configureComponentOpen = configureComponentOpen;
+        $scope.isComponentConfigured = isComponentConfigured;
 
         var eventName = 'merchello.offercomponentcollection.changed';
 
@@ -651,9 +695,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function processConfigureComponent(dialogData) {
+            dialogData.component.updated = true;
             $scope.offerSettings.updateAssignedComponent(dialogData.component);
-            console.info('saving');
-            $scope.saveOfferSettings();
+                saveOffer();
         }
 
         /**
@@ -693,8 +737,20 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             eventsService.emit(eventName);
         };
 
+        function isComponentConfigured(component) {
+            if(!component.updated) {
+                return component.isConfigured();
+            }
+        }
+
         function onComponentCollectionChanged() {
             loadComponents();
+        }
+
+        function saveOffer() {
+            $timeout(function() {
+                $scope.saveOfferSettings();
+            }, 500);
         }
         // Initialize the controller
         init();

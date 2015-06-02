@@ -7,8 +7,8 @@
  * The controller to handle offer component association and configuration
  */
 angular.module('merchello').controller('Merchello.Directives.OfferComponentsDirectiveController',
-    ['$scope', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
+    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, $timeout, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
 
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
@@ -18,6 +18,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         $scope.assignComponent = assignComponent;
         $scope.removeComponentOpen = removeComponentOpen;
         $scope.configureComponentOpen = configureComponentOpen;
+        $scope.isComponentConfigured = isComponentConfigured;
 
         var eventName = 'merchello.offercomponentcollection.changed';
 
@@ -109,9 +110,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function processConfigureComponent(dialogData) {
+            dialogData.component.updated = true;
             $scope.offerSettings.updateAssignedComponent(dialogData.component);
-            console.info('saving');
-            $scope.saveOfferSettings();
+                saveOffer();
         }
 
         /**
@@ -151,8 +152,20 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             eventsService.emit(eventName);
         };
 
+        function isComponentConfigured(component) {
+            if(!component.updated) {
+                return component.isConfigured();
+            }
+        }
+
         function onComponentCollectionChanged() {
             loadComponents();
+        }
+
+        function saveOffer() {
+            $timeout(function() {
+                $scope.saveOfferSettings();
+            }, 500);
         }
         // Initialize the controller
         init();

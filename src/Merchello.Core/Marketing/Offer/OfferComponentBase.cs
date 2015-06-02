@@ -32,6 +32,16 @@
         /// </summary>
         public abstract OfferComponentType ComponentType { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this component requires configuration.
+        /// </summary>
+        public virtual bool RequiresConfiguration
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         /// <summary>
         /// Gets the Type to which this component can be grouped with

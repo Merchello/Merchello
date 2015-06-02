@@ -10,9 +10,9 @@
             <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.offerExpires" data-ng-click="toggleOfferExpires()"> <span><localize key="merchelloMarketing_offerSetExpires" /></span></label>
         </div>
         <div class="form-group col-xs-6 span6">
-            <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.active" data-ng-disabled="!offer.hasRewards()"> <span>This offer is active</span></label>
-            <div class="alert alert-success" role="alert" data-ng-show="!offer.hasRewards()">
-                <strong>To set active:</strong> Assign a reward.
+            <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.active" data-ng-disabled="!offer.hasRewards() || !offer.componentsConfigured()"> <span>This offer is active</span></label>
+            <div class="well well-active" data-ng-show="!offer.hasRewards() || !offer.isConfigured()">
+                <strong>To set active:</strong> Assign and configure rewards and any constraints.
             </div>
         </div>
     </div>
