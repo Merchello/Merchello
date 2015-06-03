@@ -9,7 +9,7 @@
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintProductLineItemQuantityController',
     ['$scope',
     function($scope) {
-        $scope.loaded = true;
+        $scope.loaded = false;
 
         $scope.operator = 'gt';
         $scope.quantity = 0;
@@ -18,15 +18,20 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
         $scope.save = save;
 
         function init() {
-            loadExistingConfigurations()
+            if ($scope.dialogData.component.isConfigured()) {
+                loadExistingConfigurations()
+            } else {
+                $scope.loaded = true;
+            }
+
         }
 
         function loadExistingConfigurations() {
             var operator = $scope.dialogData.getValue('operator');
             var quantity = $scope.dialogData.getValue('quantity');
             $scope.operator = operator === '' ? 'gt' : operator;
-            $scope.quantity = quantity;
-            loaded = true;
+            $scope.quantity = quantity === '' ? 0 : quantity * 1;
+            $scope.loaded = true;
         }
 
         /**
@@ -38,7 +43,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
          * Saves the configuration
          */
         function save() {
-            $scope.dialogData.setValue('quantity', $scope.quantity);
+            $scope.dialogData.setValue('quantity', Math.abs($scope.quantity*1));
             $scope.dialogData.setValue('operator', $scope.operator);
             $scope.submit($scope.dialogData);
         }

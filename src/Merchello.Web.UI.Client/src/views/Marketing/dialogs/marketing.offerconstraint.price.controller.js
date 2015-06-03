@@ -57,7 +57,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
              * Saves the configuration
              */
             function save() {
-                $scope.dialogData.setValue('price', invoiceHelper.round($scope.price, 2));
+                $scope.dialogData.setValue('price', Math.abs(invoiceHelper.round($scope.price*1, 2)));
                 $scope.dialogData.setValue('operator', $scope.operator);
                 $scope.submit($scope.dialogData);
             }

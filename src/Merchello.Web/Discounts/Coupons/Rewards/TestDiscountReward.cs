@@ -6,13 +6,20 @@
 
     using Umbraco.Core;
 
-    [OfferComponent("A1CCE36A-C5AA-4C50-B659-CC2FBDEAA713", "Test reward", "REMOVE THIS.",
-        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerreward.discountprice.html", typeof(Coupon))]
+    [OfferComponent("A1CCE36A-C5AA-4C50-B659-CC2FBDEAA713", "Test reward", "REMOVE THIS.", RestrictToType = typeof(Coupon))]
     public class TestDiscountReward :  OfferRewardComponentBase<IInvoice, ILineItem>
     {
         public TestDiscountReward(OfferComponentDefinition definition)
             : base(definition)
         {
+        }
+
+        public override bool RequiresConfiguration
+        {
+            get
+            {
+                return false;
+            }
         }
 
         public override Attempt<ILineItem> Award(IInvoice validate, ICustomerBase customer)

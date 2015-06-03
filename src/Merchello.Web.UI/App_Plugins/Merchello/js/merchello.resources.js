@@ -438,6 +438,15 @@ angular.module('merchello.resources')
                         }),
                         'Failed to get offer components for the provider');
                 },
+                checkOfferCodeIsUnique: function(offerCode) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'OfferCodeIsUnique',
+                            method: "GET",
+                            params: { offerCode: offerCode }
+                        }),
+                        'Failed to get offer components for the provider');
+                },
                 newOfferSettings: function (offerSettings) {
                     offerSettings.componentDefinitionExtendedDataToArray();
 
@@ -925,6 +934,16 @@ angular.module('merchello.resources')
                             method: "GET"
                         }),
                         'Failed to retreive data for product key ' + key);
+                },
+
+                getByKeys: function(keys) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetByKeys';
+                    console.info(keys);
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            keys
+                        ),
+                        'Failed to retreive data for product key ' + keys);
                 },
 
                 /**

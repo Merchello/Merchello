@@ -26,8 +26,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.toggleOfferExpires = toggleOfferExpires;
         $scope.openDeleteOfferDialog = openDeleteOfferDialog;
 
-        var eventName = 'merchello.offercomponentcollection.changed';
-
+        var eventComponentsName = 'merchello.offercomponentcollection.changed';
+        var eventOfferSavingName = 'merchello.offercoupon.saving';
         /**
          * @ngdoc method
          * @name init
@@ -37,7 +37,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
          * Initializes the controller
          */
         function init() {
-            eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
+            eventsService.on(eventComponentsName, onComponentCollectionChanged);
             loadSettings();
         }
 
@@ -144,27 +144,30 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function saveOffer() {
+            eventsService.emit(eventOfferSavingName, $scope.offerForm);
 
-            var offerPromise;
-            var isNew = false;
-            $scope.preValuesLoaded = false;
-            if ($scope.context === 'create' || $scope.offerSettings.key === '') {
-                isNew = true;
-                offerPromise = marketingResource.newOfferSettings($scope.offerSettings);
-            } else {
-                var os = $scope.offerSettings.clone();
-                offerPromise = marketingResource.saveOfferSettings(os);
-            }
-            offerPromise.then(function(settings) {
-                notificationsService.success("Successfully saved the coupon.");
-                if (isNew) {
-                    $location.url($scope.offerProvider.editorUrl(settings.key), true);
+            if($scope.offerForm.$valid) {
+                var offerPromise;
+                var isNew = false;
+                $scope.preValuesLoaded = false;
+                if ($scope.context === 'create' || $scope.offerSettings.key === '') {
+                    isNew = true;
+                    offerPromise = marketingResource.newOfferSettings($scope.offerSettings);
                 } else {
-                    loadOffer(settings.key);
+                    var os = $scope.offerSettings.clone();
+                    offerPromise = marketingResource.saveOfferSettings(os);
                 }
-            }, function(reason) {
-                notificationsService.error("Failed to save coupon", reason.message);
-            });
+                offerPromise.then(function (settings) {
+                    notificationsService.success("Successfully saved the coupon.");
+                    if (isNew) {
+                        $location.url($scope.offerProvider.editorUrl(settings.key), true);
+                    } else {
+                        loadOffer(settings.key);
+                    }
+                }, function (reason) {
+                    notificationsService.error("Failed to save coupon", reason.message);
+                });
+            }
         }
 
 

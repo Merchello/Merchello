@@ -247,6 +247,22 @@
         }
 
         /// <summary>
+        /// Checks if the offer code is unique.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// A valid indicating whether or not the offer code is unique.
+        /// </returns>
+        [HttpGet]
+        public bool OfferCodeIsUnique(string offerCode = "")
+        {
+            if (string.IsNullOrEmpty(offerCode)) return false;
+            return _offerSettingsService.OfferCodeIsUnique(offerCode);
+        }
+
+        /// <summary>
         /// Maps a <see cref="Page{IOfferSetting}" /> to a <see cref="QueryResultDisplay"/>.
         /// </summary>
         /// <param name="page">

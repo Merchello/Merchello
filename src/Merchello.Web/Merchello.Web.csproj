@@ -227,6 +227,7 @@
     <Compile Include="Discounts\Coupons\Constraints\NotUsableWithOtherCouponsConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\OneCouponPerCustomerConstraint.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemReward.cs" />
+    <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
     <Compile Include="Discounts\Coupons\Rewards\TestDiscountReward.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -84,6 +84,24 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward">
+            <summary>
+            A coupon reward for free shipping.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.RequiresConfiguration">
+            <summary>
+            Gets a value indicating that this component does not require configuration.
+            </summary>      
+        </member>
         <member name="T:Merchello.Web.Editors.MarketingApiController">
             <summary>
             An API controller for the Merchello marketing section.
@@ -256,6 +274,17 @@
             <returns>
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
             </returns>       
+        </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.OfferCodeIsUnique(System.String)">
+            <summary>
+            Checks if the offer code is unique.
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <returns>
+            A valid indicating whether or not the offer code is unique.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Editors.MarketingApiController.GetQueryResultDisplay(Umbraco.Core.Persistence.Page{Merchello.Core.Models.Interfaces.IOfferSettings})">
             <summary>
@@ -10428,6 +10457,17 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.ProductApiController.GetByKeys(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            The get by ids.
+            </summary>
+            <param name="keys">
+            The product keys.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.ProductApiController.SearchProducts(Merchello.Web.Models.Querying.QueryDisplay)">

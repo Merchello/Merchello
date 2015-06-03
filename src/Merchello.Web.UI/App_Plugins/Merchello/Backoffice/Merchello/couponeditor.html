@@ -20,7 +20,7 @@
         <merchello-panel>
             <div class="tab-content row-fluid" data-ng-show="preValuesLoaded">
                 <div class="merchello-pane">
-
+                    <form id="offerForm" name="offerForm">
                     <div class="control-group umb-control-group">
                         <label class="merchello-control-label">
                             <localize key="merchelloMarketing_offerInfo"/>
@@ -34,16 +34,6 @@
 
                     <div class="control-group umb-control-group">
                         <label class="merchello-control-label">
-                            <localize key="merchelloMarketing_offerConstraintsInfo"/>
-                            <small><localize key="merchelloMarketing_offerConstraintsConfig" /></small>
-                        </label>
-                        <div class="merchello-controls">
-                            <offer-components settings="settings" offer-settings="offerSettings"  save-offer-settings="saveOffer()" pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Constraint"></offer-components>
-                        </div>
-                    </div>
-
-                    <div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
                             <localize key="merchelloMarketing_offerRewardsInfo"/>
                             <small><localize key="merchelloMarketing_offerRewardsConfig" /></small>
                         </label>
@@ -52,6 +42,16 @@
                         </div>
                     </div>
 
+                    <div class="control-group umb-control-group">
+                        <label class="merchello-control-label">
+                            <localize key="merchelloMarketing_offerConstraintsInfo"/>
+                            <small><localize key="merchelloMarketing_offerConstraintsConfig" /></small>
+                        </label>
+                        <div class="merchello-controls">
+                            <offer-components settings="settings" offer-settings="offerSettings"  save-offer-settings="saveOffer()" pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Constraint"></offer-components>
+                        </div>
+                    </div>
+                    </form>
                 </div>
                 <!-- /merchello-pane -->
             </div>
