@@ -510,6 +510,25 @@
         }
 
         /// <summary>
+        /// Checks if the offer code is unique.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// A valid indicating whether or not the offer code is unique.
+        /// </returns>
+        public bool OfferCodeIsUnique(string offerCode)
+        {
+            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IOfferSettings>.Builder.Where(x => x.OfferCode == offerCode);
+                var result = repository.GetByQuery(query);
+                return !result.Any();
+            }
+        }
+
+        /// <summary>
         /// Searches the offer settings by a term.
         /// </summary>
         /// <param name="filterTerm">

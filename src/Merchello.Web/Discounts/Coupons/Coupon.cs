@@ -29,8 +29,8 @@
         public IEnumerable<OfferConstraintComponentBase> Constraints { get; private set; }
 
         /// <summary>
-        /// Gets the collection offer rewards.
+        /// Gets the coupon reward.
         /// </summary>
-        public IEnumerable<OfferRewardComponentBase> Rewards { get; private set; }
+        public OfferRewardComponentBase Reward { get; private set; }
     }
 }

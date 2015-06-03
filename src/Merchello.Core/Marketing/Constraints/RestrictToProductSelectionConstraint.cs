@@ -28,6 +28,6 @@
         public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
         {
             throw new NotImplementedException();
-        }
+        }        
     }
 }

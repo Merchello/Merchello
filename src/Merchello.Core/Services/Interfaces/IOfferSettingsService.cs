@@ -193,6 +193,17 @@
         /// </returns>
         IEnumerable<IOfferSettings> GetAllActive(bool excludeExpired = true);
 
+        /// <summary>
+        /// Checks if the offer code is unique.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// A valid indicating whether or not the offer code is unique.
+        /// </returns>
+        bool OfferCodeIsUnique(string offerCode);
+
         Page<IOfferSettings> GetPage(string filterTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
     }
 }

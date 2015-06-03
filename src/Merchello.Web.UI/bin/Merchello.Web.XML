@@ -48,6 +48,11 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.RequiresConfiguration">
+            <summary>
+            Gets a value indicating that this component does not require configuration.
+            </summary>        
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint">
             <summary>
             A rule to enforce one discount per customer.
@@ -61,6 +66,11 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.RequiresConfiguration">
+            <summary>
+            Gets a value indicating that this component does not require configuration.
+            </summary>        
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward">
             <summary>
             Represents a discount line item reward.
@@ -73,6 +83,24 @@
             <param name="definition">
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward">
+            <summary>
+            A coupon reward for free shipping.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.RequiresConfiguration">
+            <summary>
+            Gets a value indicating that this component does not require configuration.
+            </summary>      
         </member>
         <member name="T:Merchello.Web.Editors.MarketingApiController">
             <summary>
@@ -247,6 +275,17 @@
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
             </returns>       
         </member>
+        <member name="M:Merchello.Web.Editors.MarketingApiController.OfferCodeIsUnique(System.String)">
+            <summary>
+            Checks if the offer code is unique.
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <returns>
+            A valid indicating whether or not the offer code is unique.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.MarketingApiController.GetQueryResultDisplay(Umbraco.Core.Persistence.Page{Merchello.Core.Models.Interfaces.IOfferSettings})">
             <summary>
             Maps a <see cref="T:Umbraco.Core.Persistence.Page`1"/> to a <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
@@ -313,6 +352,11 @@
             Gets or sets the description.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.RequiresConfiguration">
+            <summary>
+            Gets or sets a value indicating whether requires configuration.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.TypeFullName">
             <summary>
             Gets or sets the type name.
@@ -320,7 +364,7 @@
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.TypeGrouping">
             <summary>
-            Gets the Type to which this component can be grouped with
+            Gets or sets the Type to which this component can be grouped with
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentType">
@@ -7539,7 +7583,7 @@
             Gets the constraints.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Rewards">
+        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Reward">
             <summary>
             Gets the rewards.
             </summary>
@@ -7557,9 +7601,9 @@
             Gets the collection discount constraints.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Rewards">
+        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Reward">
             <summary>
-            Gets the collection offer rewards.
+            Gets the coupon reward.
             </summary>
         </member>
         <member name="T:Merchello.Web.Workflow.IWishList">
@@ -10413,6 +10457,17 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.ProductApiController.GetByKeys(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            The get by ids.
+            </summary>
+            <param name="keys">
+            The product keys.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.ProductApiController.SearchProducts(Merchello.Web.Models.Querying.QueryDisplay)">

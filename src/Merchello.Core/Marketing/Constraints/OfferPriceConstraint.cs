@@ -8,7 +8,7 @@
     /// <summary>
     /// A discount validation constraint to restrict this offer to line item price related rules.
     /// </summary>
-    [OfferComponent("66957C56-8A5E-4ECD-BDEB-565F8777A38F", "Restrict by price", "This discount is only offered matching configured price rules.",
+    [OfferComponent("66957C56-8A5E-4ECD-BDEB-565F8777A38F", "Restrict by price", "This discount is only offered to line item collections matching configured price rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.price.html")]
     public class OfferPriceConstraint : OfferConstraintComponentBase<ILineItemContainer>
     {

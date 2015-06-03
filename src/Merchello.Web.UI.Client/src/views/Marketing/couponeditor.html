@@ -10,7 +10,7 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
                         <a data-ng-click="openDeleteOfferDialog()" data-ng-show="context !== 'create'" class="btn btn-danger"><localize key="merchelloButtons_delete" /></a>
-                        <a data-ng-disabled="offerForm.$invalid" data-ng-click="save(offerForm)" class="btn btn-success"><localize key="buttons_save" /></a>
+                        <a data-ng-disabled="offerForm.$invalid" data-ng-click="saveOffer(offerForm)" class="btn btn-success"><localize key="buttons_save" /></a>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
         <merchello-panel>
             <div class="tab-content row-fluid" data-ng-show="preValuesLoaded">
                 <div class="merchello-pane">
-
+                    <form id="offerForm" name="offerForm">
                     <div class="control-group umb-control-group">
                         <label class="merchello-control-label">
                             <localize key="merchelloMarketing_offerInfo"/>
@@ -34,24 +34,24 @@
 
                     <div class="control-group umb-control-group">
                         <label class="merchello-control-label">
-                            <localize key="merchelloMarketing_offerConstraintsInfo"/>
-                            <small><localize key="merchelloMarketing_offerConstraintsConfig" /></small>
+                            <localize key="merchelloMarketing_offerRewardsInfo"/>
+                            <small><localize key="merchelloMarketing_offerRewardsConfig" /></small>
                         </label>
                         <div class="merchello-controls">
-                            <offer-components settings="settings" offer-settings="offerSettings" pre-values-loaded="preValuesLoaded" components="allComponents" refresh="flicker()" component-type="Constraint"></offer-components>
+                            <offer-components settings="settings" offer-settings="offerSettings" save-offer-settings="saveOffer()"  pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Reward"></offer-components>
                         </div>
                     </div>
 
                     <div class="control-group umb-control-group">
                         <label class="merchello-control-label">
-                            <localize key="merchelloMarketing_offerRewardsInfo"/>
-                            <small><localize key="merchelloMarketing_offerRewardsConfig" /></small>
+                            <localize key="merchelloMarketing_offerConstraintsInfo"/>
+                            <small><localize key="merchelloMarketing_offerConstraintsConfig" /></small>
                         </label>
                         <div class="merchello-controls">
-                            <offer-components settings="settings" offer-settings="offerSettings"  pre-values-loaded="preValuesLoaded" components="allComponents"  refresh="flicker()" component-type="Reward"></offer-components>
+                            <offer-components settings="settings" offer-settings="offerSettings"  save-offer-settings="saveOffer()" pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Constraint"></offer-components>
                         </div>
                     </div>
-
+                    </form>
                 </div>
                 <!-- /merchello-pane -->
             </div>

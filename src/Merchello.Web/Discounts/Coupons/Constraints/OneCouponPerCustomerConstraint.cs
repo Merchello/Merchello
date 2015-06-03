@@ -25,7 +25,16 @@
         {
         }
 
-
+        /// <summary>
+        /// Gets a value indicating that this component does not require configuration.
+        /// </summary>        
+        public override bool RequiresConfiguration
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
         {

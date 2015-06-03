@@ -7,8 +7,8 @@
  * The controller to handle offer component association and configuration
  */
 angular.module('merchello').controller('Merchello.Directives.OfferComponentsDirectiveController',
-    ['$scope', 'notificationsService', 'dialogService', 'eventsService', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, notificationsService, dialogService, eventsService, marketingResource, offerComponentDefinitionDisplayBuilder) {
+    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, $timeout, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
 
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
@@ -18,6 +18,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         $scope.assignComponent = assignComponent;
         $scope.removeComponentOpen = removeComponentOpen;
         $scope.configureComponentOpen = configureComponentOpen;
+        $scope.isComponentConfigured = isComponentConfigured;
 
         var eventName = 'merchello.offercomponentcollection.changed';
 
@@ -52,6 +53,13 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             $scope.assignedComponents = _.filter($scope.offerSettings.componentDefinitions, function(osc) { return osc.componentType === $scope.componentType; });
             var typeGrouping = $scope.offerSettings.getComponentsTypeGrouping();
 
+            // there can only be one reward.
+            if ($scope.componentType === 'Reward' && $scope.offerSettings.hasRewards()) {
+                $scope.availableComponents = [];
+                $scope.componentsLoaded = true;
+                return;
+            }
+
             $scope.availableComponents = _.filter($scope.components, function(c) {
                 var ac = _.find($scope.assignedComponents, function(ac) { return ac.componentKey === c.componentKey; });
                 if (ac === undefined && c.componentType === $scope.componentType && (typeGrouping === '' | typeGrouping === c.typeGrouping)) {
@@ -73,6 +81,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          */
         function assignComponent(component) {
             var assertComponent = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
+
             if (assertComponent === undefined && $scope.offerSettings.ensureTypeGrouping(component.typeGrouping)) {
                 $scope.offerSettings.componentDefinitions.push(component);
                 eventsService.emit(eventName);
@@ -88,8 +97,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          * Opens the component configuration dialog
          */
         function configureComponentOpen(component) {
-            var dialogData = {};
+            var dialogData = dialogDataFactory.createConfigureOfferComponentDialogData();
             dialogData.component = component.clone();
+
             dialogService.open({
                 template: component.dialogEditorView.editorView,
                 show: true,
@@ -100,8 +110,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function processConfigureComponent(dialogData) {
+            dialogData.component.updated = true;
             $scope.offerSettings.updateAssignedComponent(dialogData.component);
-            console.info($scope.offerSettings.componentDefinitions);
+                saveOffer();
         }
 
         /**
@@ -141,8 +152,20 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             eventsService.emit(eventName);
         };
 
+        function isComponentConfigured(component) {
+            if(!component.updated) {
+                return component.isConfigured();
+            }
+        }
+
         function onComponentCollectionChanged() {
             loadComponents();
+        }
+
+        function saveOffer() {
+            $timeout(function() {
+                $scope.saveOfferSettings();
+            }, 500);
         }
         // Initialize the controller
         init();

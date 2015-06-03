@@ -2,7 +2,6 @@
 {
     using System;
 
-    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
@@ -31,7 +30,8 @@
         }
 
         /// <summary>
-        /// Gets the Type this component is responsible for building
+        /// Gets the Type of object this group uses to validate constraints.
+        /// The to which this component can be grouped with
         /// </summary>
         internal override Type TypeGrouping
         {

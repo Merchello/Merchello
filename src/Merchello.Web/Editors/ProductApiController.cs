@@ -138,6 +138,21 @@
         }
 
         /// <summary>
+        /// The get by ids.
+        /// </summary>
+        /// <param name="keys">
+        /// The product keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ProductDisplay}"/>.
+        /// </returns>
+        [HttpPost]
+        public IEnumerable<ProductDisplay> GetByKeys(IEnumerable<Guid> keys)
+        {
+            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay());
+        }
+
+            /// <summary>
         /// Searches all products with an optional term.
         /// </summary>
         /// <param name="query">

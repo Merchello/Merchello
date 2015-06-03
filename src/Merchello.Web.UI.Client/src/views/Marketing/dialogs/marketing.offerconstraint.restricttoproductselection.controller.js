@@ -7,10 +7,11 @@
  * The controller to configure the price component constraint
  */
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintRestrictToProductSelectionController',
-    ['$scope', 'notificationsService', 'productResource', 'settingsResource', 'productDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-        function($scope, notificationsService, productResource, settingsResource, productDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$q', '$scope', 'notificationsService', 'productResource', 'settingsResource', 'productDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+        function($q, $scope, notificationsService, productResource, settingsResource, productDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
 
             $scope.loaded = false;
+            $scope.context = 'display';
             $scope.filterText = "";
             $scope.products = [];
             $scope.filteredproducts = [];
@@ -21,12 +22,19 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
             $scope.currentPage = 0;
             $scope.maxPages = 0;
 
+            // dialog properties
+            $scope.selectedProducts = [];
+
             // exposed methods
+            $scope.addProduct = addProduct;
+            $scope.removeProduct = removeProduct;
             $scope.changePage = changePage;
             $scope.limitChanged = limitChanged;
             $scope.changeSortOrder = changeSortOrder;
             $scope.getFilteredProducts = getFilteredProducts;
             $scope.numberOfPages = numberOfPages;
+            $scope.productIsSelected = productIsSelected;
+            $scope.save = save;
 
             //--------------------------------------------------------------------------------------
             // Initialization methods
@@ -41,8 +49,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
              * Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init() {
-                $scope.dialogData.component.extendedData.setValue('test', 'test');
-                loadProducts();
                 loadSettings();
             }
 
@@ -96,9 +102,38 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
                     $scope.currencySymbol = currencySymbol;
+
+                    loadExistingConfigurations();
                 }, function (reason) {
                     notificationsService.error("Settings Load Failed", reason.message);
                 });
+            }
+
+            function loadExistingConfigurations() {
+                var existing = $scope.dialogData.getValue('productConstraints');
+                if (existing !== '')
+                {
+                    var parsed = JSON.parse(existing);
+                    console.info(parsed);
+                    var productKeys = _.pluck(parsed, 'productKey');
+
+                    var    productsPromise = productResource.getByKeys(productKeys);
+                    productsPromise.then(function(result) {
+                     var products = productDisplayBuilder.transform(result);
+                        angular.forEach(products, function(p) {
+                            var constrainData = _.find(parsed, function(cd) { return cd.productKey === p.key; });
+                            if(constrainData.specifiedVariants) {
+                                addProduct(p, constrainData.variantKeys);
+                            } else {
+                                addProduct(p);
+                            }
+                        });
+                     loadProducts();
+                    });
+                } else {
+                    loadProducts();
+                }
+
             }
 
             //--------------------------------------------------------------------------------------
@@ -174,11 +209,40 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
                 loadProducts();
             }
 
-            //--------------------------------------------------------------------------------------
-            // Helper methods
-            //--------------------------------------------------------------------------------------
+            function addProduct(product, variantKeys) {
+                var pc = new ProductConstraint();
+                pc.product = product;
+                if (product.hasVariants()) {
+                    angular.forEach(product.productVariants, function(pv) {
+                        var checked = true;
+                        if (variantKeys !== undefined) {
+                            var found = _.find(variantKeys, function(key) { return key === pv.key; });
+                            if (found) {
+                                checked = true;
+                            } else {
+                                checked = false;
+                            }
+                        }
+                      var vc = new VariantConstraint();
+                        vc.key = pv.key;
+                        vc.name = pv.name;
+                        vc.sku = pv.sku;
+                        vc.checked = checked;
+                        pc.selectedVariants.push(vc);
+                    });
+                }
+                $scope.selectedProducts.push(pc);
+                $scope.context = 'display';
+            }
 
+            function removeProduct(constraint) {
+                $scope.selectedProducts = _.reject($scope.selectedProducts, function(sp) { return sp.product.key === constraint.product.key; });
+            }
 
+            function productIsSelected(product) {
+                var pc = _.find($scope.selectedProducts, function(p) { return p.product.key === product.key; });
+                return pc !== undefined;
+            }
 
             //--------------------------------------------------------------------------------------
             // Calculations
@@ -196,6 +260,50 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
                 return $scope.maxPages;
             }
 
+            // ---------------------------------------------------------------------------------------
+            // Local scope models
+            // ---------------------------------------------------------------------------------------
+            var ProductConstraint = function() {
+                var self = this;
+                self.product = {};
+                self.variantSpecific = false;
+                self.selectedVariants = [];
+                self.editorOpen = false;
+            };
+
+            var VariantConstraint = function() {
+                var self = this;
+                self.name = '';
+                self.key = '';
+                self.sku = '';
+                self.checked = false;
+            };
+
+
+            function save() {
+                if ($scope.selectedProducts.length === 0) {
+                    return;
+                }
+                var saveData = [];
+                angular.forEach($scope.selectedProducts, function(sp) {
+                    var product = {};
+                    product.productKey = sp.product.key;
+                    product.variantKeys = [];
+                    var variants = _.filter(sp.selectedVariants, function(sv) { return sv.checked; });
+                    if (variants.length !== sp.product.productVariants.length) {
+                        product.specifiedVariants = true;
+                        angular.forEach(variants, function(v) {
+                            product.variantKeys.push(v.key);
+                        });
+                    } else {
+                        product.specifiedVariants = false;
+                    }
+
+                    saveData.push(product);
+                });
+                $scope.dialogData.setValue('productConstraints', JSON.stringify(saveData));
+                $scope.submit($scope.dialogData);
+            }
 
             // Initialize the controller
             init();

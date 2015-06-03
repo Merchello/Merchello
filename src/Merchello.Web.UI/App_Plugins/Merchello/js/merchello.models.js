@@ -833,6 +833,36 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
     };
 
     angular.module('merchello.models').constant('ChangeWarehouseCatalogDialogData', ChangeWarehouseCatalogDialogData);
+/**
+ * @ngdoc model
+ * @name ConfigureOfferComponentDialogData
+ * @function
+ *
+ * @description
+ * A back office dialogData model used for configuring offer components.
+ */
+var ConfigureOfferComponentDialogData = function() {
+    var self = this;
+    self.component = {};
+}
+
+ConfigureOfferComponentDialogData.prototype = (function() {
+
+    function setValue(key, value) {
+        this.component.extendedData.setValue(key, value);
+    }
+
+    function getValue(key) {
+        return this.component.extendedData.getValue(key);
+    }
+
+    return {
+        setValue: setValue,
+        getValue: getValue
+    }
+}());
+
+angular.module('merchello.models').constant('ConfigureOfferComponentDialogData');
     /**
      * @ngdoc model
      * @name CreateShipmentDialogData
@@ -1304,6 +1334,8 @@ var OfferComponentDefinitionDisplay = function() {
     self.componentType = '';
     self.dialogEditorView = {};
     self.restrictToType = '';
+    self.requiresConfiguration = true;
+    self.updated = false;
 };
 
 OfferComponentDefinitionDisplay.prototype = (function() {
@@ -1312,8 +1344,23 @@ OfferComponentDefinitionDisplay.prototype = (function() {
         return angular.extend(new OfferComponentDefinitionDisplay(), this);
     }
 
+    function isConfigured() {
+
+        if(!this.requiresConfiguration) {
+            return true;
+        }
+        // hack catch for save call where there's a context switch on this to window
+        // happens when saving the offer settings
+        if (this.extendedData.items !== undefined) {
+            return !this.extendedData.isEmpty();
+        } else {
+            return true;
+        }
+    }
+
     return {
-        clone: clone
+        clone: clone,
+        isConfigured: isConfigured
     }
 }());
 
@@ -1363,11 +1410,15 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.offerStartsDate = '';
         self.offerEndsDate = '';
         self.expired = false;
-        self.active = true;
+        self.active = false;
         self.componentDefinitions = [];
     };
 
     OfferSettingsDisplay.prototype = (function() {
+
+        function clone() {
+            return angular.extend(new OfferSettingsDisplay(), this);
+        }
 
         // private methods
         function getAssignedComponent(componentKey) {
@@ -1405,6 +1456,14 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return reward !== undefined && reward !== null;
         }
 
+        function componentsConfigured() {
+            if (!hasComponents.call(this)) {
+                return true;
+            }
+            var notConfigured = _.find(this.componentDefinitions, function(c) { return c.isConfigured() === false});
+            return notConfigured === undefined;
+        }
+
         function hasComponents() {
             return this.componentDefinitions.length > 0;
         }
@@ -1427,10 +1486,12 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             var assigned = getAssignedComponent.call(this, component.componentKey);
             if (assigned !== undefined && assigned !== null) {
                 assigned.extendedData = component.extendedData;
+                assigned.updated = true;
             }
         }
 
         return {
+            clone: clone,
             offerStartsDateLocalDateString: offerStartsDateLocalDateString,
             offerEndsDateLocalDateString: offerEndsDateLocalDateString,
             componentDefinitionExtendedDataToArray: componentDefinitionExtendedDataToArray,
@@ -1439,7 +1500,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             ensureTypeGrouping: ensureTypeGrouping,
             hasRewards: hasRewards,
             updateAssignedComponent: updateAssignedComponent,
-            getAssignedComponent: getAssignedComponent
+            getAssignedComponent: getAssignedComponent,
+            componentsConfigured: componentsConfigured
         }
 
     }());
@@ -2669,6 +2731,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         var self = this;
         self.area = '';
         self.key = '';
+        self.formattedMessage = '';
     };
 
     SalesHistoryMessageDisplay.prototype = (function() {
@@ -3277,10 +3340,25 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
                 return transformObject(jsonResult, Constructor);
             }
         }
+        /**
+         * @ngdoc method
+         * @name isStringifyJson
+         * @function
+         *
+         * @description
+         * Checks the value to determine if it is a stringified Json value
+         */
+        function isStringifyJson(value) {
+            return (/^[\],:{}\s]*$/.test(value.replace(/\\["\\\/bfnrtu]/g, '@').
+                replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+                replace(/(?:^|:|,)(?:\s*\[)+/g, '')));
+        }
+
 
         // public
         return {
-            transform : transform
+            transform : transform,
+            isStringifyJson: isStringifyJson
         };
     }]);
     /**
@@ -3604,6 +3682,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new SelectOfferProviderDialogData();
         }
 
+        // offer components
+        function createConfigureOfferComponentDialogData() {
+            return new ConfigureOfferComponentDialogData();
+        }
 
         /*----------------------------------------------------------------------------------------
         Property Editors
@@ -3644,7 +3726,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
             createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
             createAddPaymentDialogData: createAddPaymentDialogData,
-            createSelectOfferProviderDialogData: createSelectOfferProviderDialogData
+            createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
+            createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData
         };
 }]);
 
@@ -4776,9 +4859,17 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         var auditLogDisplay = genericModelBuilder.transform(jsonResult, Constructor);
                         auditLogDisplay.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
 
-                        // this is a bit brittle - and we should look at the construction of this in the ApiController
-                        var message = JSON.parse(jsonResult.message);
-                        auditLogDisplay.message = salesHistoryMessageDisplayBuilder.transform(message);
+                        // this checks to see if the message in the result is a JSON object
+                        if (genericModelBuilder.isStringifyJson(jsonResult.message)) {
+                            // if so, this is going to be something we can localize later (get from the lang files)
+                            var message = JSON.parse(jsonResult.message);
+                            auditLogDisplay.message = salesHistoryMessageDisplayBuilder.transform(message);
+                        } else {
+                            // otherwise we assume the developer simply put a note into the audit logs and thus
+                            // we can't localize.
+                            auditLogDisplay.message = salesHistoryMessageDisplayBuilder.createDefault();
+                            auditLogDisplay.message.formattedMessage = jsonResult.message;
+                        }
                         return auditLogDisplay;
                     }
                 };

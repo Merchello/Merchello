@@ -22,12 +22,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.allComponents = [];
 
         // exposed methods
-        $scope.save = saveOffer;
+        $scope.saveOffer = saveOffer;
         $scope.toggleOfferExpires = toggleOfferExpires;
         $scope.openDeleteOfferDialog = openDeleteOfferDialog;
 
-        var eventName = 'merchello.offercomponentcollection.changed';
-
+        var eventComponentsName = 'merchello.offercomponentcollection.changed';
+        var eventOfferSavingName = 'merchello.offercoupon.saving';
         /**
          * @ngdoc method
          * @name init
@@ -37,7 +37,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
          * Initializes the controller
          */
         function init() {
-            eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
+            eventsService.on(eventComponentsName, onComponentCollectionChanged);
             loadSettings();
         }
 
@@ -144,25 +144,30 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function saveOffer() {
-            var offerPromise;
-            var isNew = false;
-            $scope.preValuesLoaded = false;
-            if ($scope.context === 'create' || $scope.offerSettings.key === '') {
-                isNew = true;
-                offerPromise = marketingResource.newOfferSettings($scope.offerSettings);
-            } else {
-                offerPromise = marketingResource.saveOfferSettings($scope.offerSettings);
-            }
-            offerPromise.then(function(settings) {
-                notificationsService.success("Successfully saved the coupon.");
-                if (isNew) {
-                    $location.url($scope.offerProvider.editorUrl(settings.key), true);
+            eventsService.emit(eventOfferSavingName, $scope.offerForm);
+
+            if($scope.offerForm.$valid) {
+                var offerPromise;
+                var isNew = false;
+                $scope.preValuesLoaded = false;
+                if ($scope.context === 'create' || $scope.offerSettings.key === '') {
+                    isNew = true;
+                    offerPromise = marketingResource.newOfferSettings($scope.offerSettings);
                 } else {
-                    loadOffer(settings.key);
+                    var os = $scope.offerSettings.clone();
+                    offerPromise = marketingResource.saveOfferSettings(os);
                 }
-            }, function(reason) {
-                notificationsService.error("Failed to save coupon", reason.message);
-            });
+                offerPromise.then(function (settings) {
+                    notificationsService.success("Successfully saved the coupon.");
+                    if (isNew) {
+                        $location.url($scope.offerProvider.editorUrl(settings.key), true);
+                    } else {
+                        loadOffer(settings.key);
+                    }
+                }, function (reason) {
+                    notificationsService.error("Failed to save coupon", reason.message);
+                });
+            }
         }
 
 
@@ -204,7 +209,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function onComponentCollectionChanged() {
-            if(!$scope.offerSettings.hasRewards()) {
+            if(!$scope.offerSettings.hasRewards() || !$scope.offerSettings.componentsConfigured()) {
                 $scope.offerSettings.active = false;
             }
         }

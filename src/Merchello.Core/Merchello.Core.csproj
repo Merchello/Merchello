@@ -251,7 +251,7 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
     <Compile Include="Marketing\Constraints\OfferPriceConstraint.cs" />
-    <Compile Include="Marketing\Constraints\LineItemQuantityConstraint.cs" />
+    <Compile Include="Marketing\Constraints\ProductLineItemQuantityConstraint.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
     <Compile Include="Marketing\Offer\IOfferBaseManager.cs" />
     <Compile Include="Marketing\Offer\IOfferProviderResolver.cs" />
