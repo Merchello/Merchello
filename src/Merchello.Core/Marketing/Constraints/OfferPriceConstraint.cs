@@ -23,6 +23,27 @@
         {
         }
 
+
+        /// <summary>
+        /// Gets the display configuration format.
+        /// This text is used by the back office UI to display configured values
+        /// </summary>
+        public override string DisplayConfigurationFormat
+        {
+            get
+            {
+                var price = this.GetConfigurationValue("price");
+                var op = this.GetConfigurationValue("operator");
+
+                var operatorText = StringOperatorHelper.TextForOperatorString(op);
+
+                // price and operator
+                if (string.IsNullOrEmpty(price) || string.IsNullOrEmpty(operatorText)) return string.Empty;
+
+                return string.Format("'Price is {0} ' +  $filter('currency')({1}, $scope.currencySymbol)", operatorText, price);
+            }
+        }
+
         public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
         {
             throw new System.NotImplementedException();

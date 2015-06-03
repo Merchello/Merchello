@@ -58,6 +58,12 @@ namespace Merchello.Web.Models.ContentEditing
         public OfferComponentType ComponentType { get; set; }
 
         /// <summary>
+        /// Gets or sets the display configuration format.
+        /// This text is used by the back office UI to display configured values
+        /// </summary>
+        public string DisplayConfigurationFormat { get; set; }
+
+        /// <summary>
         /// Gets or sets the extended data.
         /// </summary>
         public IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }

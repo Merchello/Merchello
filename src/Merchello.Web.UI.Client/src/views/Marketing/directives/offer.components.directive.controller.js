@@ -7,18 +7,20 @@
  * The controller to handle offer component association and configuration
  */
 angular.module('merchello').controller('Merchello.Directives.OfferComponentsDirectiveController',
-    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, $timeout, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
+    ['$scope', '$timeout', '$filter', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'settingsResource', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, $timeout, $filter, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, settingsResource, offerComponentDefinitionDisplayBuilder) {
 
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
         $scope.assignedComponents = [];
+        $scope.currencySymbol = '';
 
-        // exposed components
+        // exposed components methods
         $scope.assignComponent = assignComponent;
         $scope.removeComponentOpen = removeComponentOpen;
         $scope.configureComponentOpen = configureComponentOpen;
         $scope.isComponentConfigured = isComponentConfigured;
+        $scope.applyDisplayConfigurationFormat = applyDisplayConfigurationFormat;
 
         var eventName = 'merchello.offercomponentcollection.changed';
 
@@ -35,8 +37,27 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
 
             $scope.$watch('preValuesLoaded', function(pvl) {
                 if(pvl === true) {
-                    loadComponents();
+                   loadSettings();
                 }
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         *
+         * @description
+         * Load the settings from the settings service to get the currency symbol
+         */
+        function loadSettings() {
+            var currencySymbolPromise = settingsResource.getCurrencySymbol();
+            currencySymbolPromise.then(function (currencySymbol) {
+                $scope.currencySymbol = currencySymbol;
+
+                loadComponents();
+            }, function (reason) {
+                notificationsService.error("Settings Load Failed", reason.message);
             });
         }
 
@@ -70,6 +91,17 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             $scope.componentsLoaded = true;
         }
 
+        function applyDisplayConfigurationFormat(component) {
+            console.info(component);
+            if(component.displayConfigurationFormat !== undefined && component.displayConfigurationFormat !== '') {
+                var value = eval(component.displayConfigurationFormat);
+                if (value === undefined) {
+                    return '';
+                } else {
+                    return value;
+                }
+            }
+        }
 
         /**
          * @ngdoc method
@@ -110,9 +142,10 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function processConfigureComponent(dialogData) {
-            dialogData.component.updated = true;
             $scope.offerSettings.updateAssignedComponent(dialogData.component);
-                saveOffer();
+            saveOffer();
+            var component = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.key === dialogData.component.key; } );
+            component.updated = false;
         }
 
         /**

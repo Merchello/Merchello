@@ -106,21 +106,29 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
             }
             function checkUniqueOfferCode(offerCode) {
                 $scope.checking = true;
-                container.show();
-                if (offerCode === currentCode) {
+                if (offerCode === '') {
                     $scope.checking = false;
-                    return true;
+                } else {
+                    container.show();
+                    if (offerCode === currentCode) {
+                        $scope.checking = false;
+                        return true;
+                    }
+                    var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
+                    checkPromise.then(function(result) {
+                        $scope.checking = false;
+                        $scope.isUnique = result;
+                    });
                 }
-                var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
-                checkPromise.then(function(result) {
-                    $scope.checking = false;
-                    $scope.isUnique = result;
-
-                });
             }
 
             function onOfferSaving(e, frm) {
-                frm.offerCode.$setValidity('offerCode', checkUniqueOfferCode($scope.offerCode));
+                var valid = $scope.offerCode !== '';
+                if (valid) {
+                    checkUniqueOfferCode($scope.offerCode);
+                    valid = $scope.isUnique;
+                }
+                frm.offerCode.$setValidity('offerCode', valid);
             }
             // Initialize
             init();

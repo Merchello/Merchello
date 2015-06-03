@@ -228,9 +228,6 @@
     <Compile Include="Discounts\Coupons\Constraints\OneCouponPerCustomerConstraint.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemReward.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
-    <Compile Include="Discounts\Coupons\Rewards\TestDiscountReward.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Editors\MarketingApiController.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />

@@ -24,6 +24,28 @@
         {
         }
 
+        /// <summary>
+        /// Gets the display configuration format.
+        /// This text is used by the back office UI to display configured values
+        /// </summary>
+        public override string DisplayConfigurationFormat
+        {
+            get
+            {
+                var amount = this.GetConfigurationValue("amount");
+                var adjustmentType = this.GetConfigurationValue("adjustmentType");
+
+                if (string.IsNullOrEmpty("amount") || string.IsNullOrEmpty("adjustmentType")) return "''";
+
+                return
+                    string.Format(
+                        adjustmentType == "percent"
+                            ? "'Discount price: {0}%'"
+                            : "'Discount price: ' + $filter('currency')({0}, $scope.currencySymbol)",
+                        amount);
+            }
+        }
+
         public override Attempt<ILineItem> Award(ILineItemContainer validate, ICustomerBase customer)
         {
             throw new System.NotImplementedException();

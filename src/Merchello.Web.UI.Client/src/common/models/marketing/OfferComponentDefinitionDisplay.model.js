@@ -13,6 +13,7 @@ var OfferComponentDefinitionDisplay = function() {
     self.description = '';
     self.typeFullName = '';
     self.typeGrouping = '';
+    self.displayConfigurationFormat = '';
     self.extendedData = {};
     self.componentType = '';
     self.dialogEditorView = {};

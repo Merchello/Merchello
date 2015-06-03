@@ -11,7 +11,7 @@
     [TableName("merchOfferSettings")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class OfferSettingsDto : IPageableDto
+    public class OfferRedeemedDto : IPageableDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -31,7 +31,6 @@
         /// Gets or sets the offer code.
         /// </summary>
         [Column("offerCode")]
-        [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchOfferSettingsOfferCode")]
         public string OfferCode { get; set; }
 
         /// <summary>
@@ -41,35 +40,17 @@
         public Guid OfferProviderKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the offer starts date.
+        /// Gets or sets the redeemed date.
         /// </summary>
-        [Column("offerStartsDate")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public DateTime? OfferStartsDate { get; set; }
+        [Column("redeemedDate")]
+        public DateTime RedeemedDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the offer ends date.
+        /// Gets or sets the extended data serialization.
         /// </summary>
-        [Column("offerEndsDate")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public DateTime? OfferEndsDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether active.
-        /// </summary>
-        [Column("active")]
-        public bool Active { get; set; }
-
-        /// <summary>
-        /// Gets or sets the configuration data.
-        /// </summary>
-        /// <remarks>
-        /// This field stores JSON for constraints and reward fields
-        /// </remarks>
-        [Column("configurationData")]
         [NullSetting(NullSetting = NullSettings.Null)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]
-        public string ConfigurationData { get; set; }
+        public string ExtendedData { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
@@ -83,6 +64,6 @@
         /// </summary>
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }         
     }
 }
