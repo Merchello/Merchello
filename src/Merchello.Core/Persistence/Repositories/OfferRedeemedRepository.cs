@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
@@ -12,20 +11,18 @@
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
-    using umbraco;
-
     using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
 
     /// <summary>
-    /// Represents an offer settings repository.
+    /// The offer redeemed repository.
     /// </summary>
-    internal class OfferSettingsRepository : PagedRepositoryBase<IOfferSettings, OfferSettingsDto>, IOfferSettingsRepository
+    internal class OfferRedeemedRepository : PagedRepositoryBase<IOfferRedeemed, OfferRedeemedDto>, IOfferRedeemedRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OfferSettingsRepository"/> class.
+        /// Initializes a new instance of the <see cref="OfferRedeemedRepository"/> class.
         /// </summary>
         /// <param name="work">
         /// The work.
@@ -33,7 +30,7 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public OfferSettingsRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
+        public OfferRedeemedRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
             : base(work, cache)
         {
         }
@@ -60,48 +57,15 @@
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
         public override Page<Guid> SearchKeys(
-           string searchTerm,
-           long page,
-           long itemsPerPage,
-           string orderExpression,
-           SortDirection sortDirection = SortDirection.Descending)
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
         {
             var sql = this.BuildOfferSearchSql(searchTerm);
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-        }
-
-        /// <summary>
-        /// Searches the offer settings by a term.
-        /// </summary>
-        /// <param name="term">
-        /// The term.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{IOfferSettings}"/>.
-        /// </returns>
-        public Page<IOfferSettings> Search(
-            string term,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
-        {
-            var sql = this.BuildOfferSearchSql(term);
-            var p = this.GetDtoPage(page, itemsPerPage, sql, sortBy, sortDirection);
-            return this.MapPageDtoToPageEntity(p);
         }
 
         /// <summary>
@@ -111,19 +75,19 @@
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="IOfferSettings"/>.
+        /// The <see cref="IOfferRedeemed"/>.
         /// </returns>
-        protected override IOfferSettings PerformGet(Guid key)
+        protected override IOfferRedeemed PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
-                .Where(GetBaseWhereClause(), new { Key = key });
+               .Where(GetBaseWhereClause(), new { Key = key });
 
-            var dto = Database.Fetch<OfferSettingsDto>(sql).FirstOrDefault();
+            var dto = Database.Fetch<OfferRedeemedDto>(sql).FirstOrDefault();
 
             if (dto == null)
                 return null;
 
-            var factory = new OfferSettingsFactory();
+            var factory = new OfferRedeemedFactory();
             return factory.BuildEntity(dto);
         }
 
@@ -134,9 +98,9 @@
         /// The keys.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IOfferSettings}"/>.
+        /// The <see cref="IEnumerable{IOfferRedeemed}"/>.
         /// </returns>
-        protected override IEnumerable<IOfferSettings> PerformGetAll(params Guid[] keys)
+        protected override IEnumerable<IOfferRedeemed> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
             {
@@ -147,8 +111,8 @@
             }
             else
             {
-                var factory = new OfferSettingsFactory();
-                var dtos = Database.Fetch<OfferSettingsDto>(GetBaseQuery(false));
+                var factory = new OfferRedeemedFactory();
+                var dtos = Database.Fetch<OfferRedeemedDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
                     yield return factory.BuildEntity(dto);
@@ -157,28 +121,28 @@
         }
 
         /// <summary>
-        /// The perform get by query.
+        /// Performs the get by query operation.
         /// </summary>
         /// <param name="query">
         /// The query.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IOfferSettings}"/>.
+        /// The <see cref="IEnumerable{IOfferRedeemed}"/>.
         /// </returns>
-        protected override IEnumerable<IOfferSettings> PerformGetByQuery(IQuery<IOfferSettings> query)
+        protected override IEnumerable<IOfferRedeemed> PerformGetByQuery(IQuery<IOfferRedeemed> query)
         {
             var sqlClause = GetBaseQuery(false);
-            var translator = new SqlTranslator<IOfferSettings>(sqlClause, query);
+            var translator = new SqlTranslator<IOfferRedeemed>(sqlClause, query);
 
             var sql = translator.Translate();
 
-            var dtos = Database.Fetch<OfferSettingsDto>(sql);
+            var dtos = Database.Fetch<OfferRedeemedDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
 
         /// <summary>
-        /// Constructs a base SQL query
+        /// Gets the base SQL query.
         /// </summary>
         /// <param name="isCount">
         /// The is count.
@@ -190,7 +154,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<OfferSettingsDto>();
+                .From<OfferRedeemedDto>();
 
             return sql;
         }
@@ -203,7 +167,7 @@
         /// </returns>
         protected override string GetBaseWhereClause()
         {
-            return "merchOfferSettings.pk = @Key";
+            return "merchOfferRedeemed.pk = @Key";
         }
 
         /// <summary>
@@ -216,24 +180,23 @@
         {
             var list = new List<string>
             {
-                "UPDATE merchOfferRedeemed SET offerSettingsKey = NULL WHERE offerSettingsKey = @Key",
-                "DELETE FROM merchOfferSettings WHERE pk = @Key"                        
+                "DELETE FROM merchOfferRedeemed WHERE pk = @Key"                        
             };
 
             return list;
         }
 
         /// <summary>
-        /// Adds a new offer settings entity to the database.
+        /// The persist new item.
         /// </summary>
         /// <param name="entity">
         /// The entity.
         /// </param>
-        protected override void PersistNewItem(IOfferSettings entity)
+        protected override void PersistNewItem(IOfferRedeemed entity)
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new OfferSettingsFactory();
+            var factory = new OfferRedeemedFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
@@ -244,23 +207,23 @@
         }
 
         /// <summary>
-        /// Updates an offer settings entity in the database.
+        /// The persist updated item.
         /// </summary>
         /// <param name="entity">
         /// The entity.
         /// </param>
-        protected override void PersistUpdatedItem(IOfferSettings entity)
+        protected override void PersistUpdatedItem(IOfferRedeemed entity)
         {
             ((Entity)entity).AddingEntity();
 
-            var factory = new OfferSettingsFactory();
+            var factory = new OfferRedeemedFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
         }
-       
+
         /// <summary>
         /// Builds an offer search query.
         /// </summary>
@@ -276,15 +239,9 @@
             var terms = searchTerm.Split(' ').Select(x => x.Trim()).ToArray();
 
             var sql = new Sql();
-            sql.Select("*").From<OfferSettingsDto>();
-            if (terms.Any())
-            {
-                sql.Where("name LIKE @term OR offerCode LIKE @offerCode", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), offerCode = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
-            }
-            else
-            {
-                sql.Where("name LIKE @term OR offerCode LIKE @term", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
-            }
+            sql.Select("*").From<OfferRedeemedDto>();
+
+            sql.Where("offerCode LIKE @term", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
 
             return sql;
         }

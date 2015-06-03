@@ -19,6 +19,6 @@
         /// <summary>
         /// Gets the rewards.
         /// </summary>
-        OfferRewardComponentBase Reward { get; }
+        OfferRewardComponentBase Reward { get; }        
     }
 }

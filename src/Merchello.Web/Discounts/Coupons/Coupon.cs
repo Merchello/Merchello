@@ -5,7 +5,10 @@
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Marketing.Rewards;
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// Represents a discount Coupon.
@@ -32,5 +35,10 @@
         /// Gets the coupon reward.
         /// </summary>
         public OfferRewardComponentBase Reward { get; private set; }
+
+        public override Attempt<IOfferAwardResult<object>> TryToAward(object constrainBy, ICustomerBase customer)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

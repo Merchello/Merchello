@@ -249,10 +249,12 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="MandateWrapperExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
     <Compile Include="Marketing\Constraints\OfferPriceConstraint.cs" />
     <Compile Include="Marketing\Constraints\ProductConstraintDataSet.cs" />
     <Compile Include="Marketing\Constraints\ProductLineItemQuantityConstraint.cs" />
+    <Compile Include="Marketing\Offer\IOfferAwardResult.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
     <Compile Include="Marketing\Offer\IOfferBaseManager.cs" />
     <Compile Include="Marketing\Offer\IOfferProviderResolver.cs" />
@@ -272,9 +274,11 @@
     <Compile Include="Marketing\Offer\IOfferProvider.cs" />
     <Compile Include="Marketing\Offer\OfferProviderBase.cs" />
     <Compile Include="Marketing\Offer\OfferProviderResolver.cs" />
+    <Compile Include="Marketing\Offer\OfferRewardResult.cs" />
     <Compile Include="Marketing\Offer\StringOperatorHelper.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
+    <Compile Include="Models\Interfaces\IOfferRedeemed.cs" />
     <Compile Include="Models\Interfaces\IOfferSettings.cs" />
     <Compile Include="Marketing\Rewards\IOfferRewardComponent.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />
@@ -307,6 +311,7 @@
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />
     <Compile Include="Models\OfferComponentDefinitionCollection.cs" />
+    <Compile Include="Models\OfferRedeemed.cs" />
     <Compile Include="Models\OfferSettings.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\Rdbms\OfferRedeemedDto.cs" />
@@ -390,10 +395,12 @@
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\DigitalMediaFactory.cs" />
+    <Compile Include="Persistence\Factories\OfferRedeemedFactory.cs" />
     <Compile Include="Persistence\Factories\OfferSettingsFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\DigitalMediaMapper.cs" />
+    <Compile Include="Persistence\Mappers\OfferRedeemedMapper.cs" />
     <Compile Include="Persistence\Mappers\OfferSettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
@@ -410,10 +417,12 @@
     <Compile Include="Persistence\Repositories\Interfaces\IAssertsDocumentNumber.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IDigitalMediaRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IOfferRedeemedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IOfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
+    <Compile Include="Persistence\Repositories\OfferRedeemedRepository.cs" />
     <Compile Include="Persistence\Repositories\OfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\PagedRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\ShipmentStatusRepository.cs" />
@@ -967,6 +976,7 @@
     <Compile Include="Services\Interfaces\IDigitalMediaService.cs" />
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
+    <Compile Include="Services\Interfaces\IOfferRedeemedService.cs" />
     <Compile Include="Services\Interfaces\IOfferSettingsService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
     <Compile Include="Services\Interfaces\IPageCachedService.cs" />
@@ -975,6 +985,7 @@
     <Compile Include="Services\Interfaces\IWarehouseCatalogService.cs" />
     <Compile Include="Services\NotificationMessageService.cs" />
     <Compile Include="Services\NotificationMethodService.cs" />
+    <Compile Include="Services\OfferRedeemedService.cs" />
     <Compile Include="Services\OfferSettingsService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PageCachedServiceBase.cs" />

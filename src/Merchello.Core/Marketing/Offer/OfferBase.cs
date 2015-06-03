@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
 
     using Umbraco.Core;
@@ -140,6 +141,88 @@
         /// Gets the settings.
         /// </summary>
         internal IOfferSettings Settings { get; private set; }
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of offer award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// </returns>
+        public Attempt<IOfferAwardResult<T>> TryToAward<T>(ICustomerBase customer) where T : class
+        {
+            return TryToAward<T>(null, customer);
+        }
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="constraintBy">
+        /// An object passed to the offer constraints.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of offer award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// </returns>
+        public Attempt<IOfferAwardResult<T>> TryToAward<T>(object constraintBy, ICustomerBase customer) where T : class
+        {
+            var attempt = TryToAward(constraintBy, customer);
+
+            if (!attempt.Success)
+            {
+                var failed = Attempt<IOfferAwardResult<T>>.Fail(attempt.Exception);
+                if (attempt.Result != null)
+                {
+                    failed.Result.Messages = attempt.Result.Messages;
+                }
+
+                return failed;
+            }
+            
+            var success = Attempt<IOfferAwardResult<T>>.Succeed(new OfferRewardResult<T>());
+            success.Result.Award = attempt.Result as T;
+            success.Result.Messages = attempt.Result.Messages;
+            return success;
+        }
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public Attempt<IOfferAwardResult<object>> TryToAward(ICustomerBase customer)
+        {
+            return TryToAward(null, customer);
+        }
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="constrainBy">
+        /// The constrain by.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public abstract Attempt<IOfferAwardResult<object>> TryToAward(object constrainBy, ICustomerBase customer);
+        
 
         #endregion
 

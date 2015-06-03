@@ -264,6 +264,20 @@
         }
 
         /// <summary>
+        /// The create redeemed repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOfferRedeemedRepository"/>.
+        /// </returns>
+        internal virtual IOfferRedeemedRepository CreateOfferRedeemedRepository(IDatabaseUnitOfWork uow)
+        {
+            return new OfferRedeemedRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// The create offer settings repository.
         /// </summary>
         /// <param name="uow">
