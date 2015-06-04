@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Discounts.Coupons
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Core.Marketing.Constraints;
@@ -26,19 +27,8 @@
         {
         }
 
-        /// <summary>
-        /// Gets the collection discount constraints.
-        /// </summary>
         public IEnumerable<OfferConstraintComponentBase> Constraints { get; private set; }
 
-        /// <summary>
-        /// Gets the coupon reward.
-        /// </summary>
         public OfferRewardComponentBase Reward { get; private set; }
-
-        public override Attempt<IOfferAwardResult<object>> TryToAward(object constrainBy, ICustomerBase customer)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

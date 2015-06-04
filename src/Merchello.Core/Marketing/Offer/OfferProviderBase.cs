@@ -78,6 +78,21 @@
             return GetInstance(settings);
         }
 
+        /// <summary>
+        /// Gets an offer by it's offer code.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TOffer"/>.
+        /// </returns>
+        public TOffer GetByOfferCode(string offerCode)
+        {
+            var settings = _offerSettingsService.GetByOfferCode(offerCode);
+            return this.GetInstance(settings);
+        }
+
         #endregion
 
         /// <summary>

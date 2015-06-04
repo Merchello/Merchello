@@ -8,7 +8,7 @@
     /// <typeparam name="T">
     /// The type of Award
     /// </typeparam>
-    public class OfferRewardResult<T> : IOfferAwardResult<T> where T : class
+    public class OfferAwardResult<T> : IOfferAwardResult<T> where T : class
     {
         /// <summary>
         /// Gets or sets the award.

@@ -274,7 +274,7 @@
     <Compile Include="Marketing\Offer\IOfferProvider.cs" />
     <Compile Include="Marketing\Offer\OfferProviderBase.cs" />
     <Compile Include="Marketing\Offer\OfferProviderResolver.cs" />
-    <Compile Include="Marketing\Offer\OfferRewardResult.cs" />
+    <Compile Include="Marketing\Offer\OfferAwardResult.cs" />
     <Compile Include="Marketing\Offer\StringOperatorHelper.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />

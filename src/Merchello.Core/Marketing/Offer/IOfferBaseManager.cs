@@ -21,5 +21,16 @@
         /// The <see cref="TOffer"/>.
         /// </returns>
         TOffer GetByKey(Guid key);
+
+        /// <summary>
+        /// Gets an offer by it's offer code.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TOffer"/>.
+        /// </returns>
+        TOffer GetByOfferCode(string offerCode);
     }
 }

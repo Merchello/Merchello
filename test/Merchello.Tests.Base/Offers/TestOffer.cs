@@ -13,9 +13,5 @@
         {
         }
 
-        public override Attempt<IOfferAwardResult<object>> TryToAward(object constrainBy, ICustomerBase customer)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

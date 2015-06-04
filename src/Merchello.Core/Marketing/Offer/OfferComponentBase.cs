@@ -82,6 +82,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value from the extended data configuration.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetConfigurationValue(string key)
         {
             return OfferComponentDefinition.ExtendedData.GetValue(key);

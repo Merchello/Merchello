@@ -53,10 +53,9 @@
             }
         }
 
-        public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
+        public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
             throw new NotImplementedException();
-        }        
-
+        }
     }
 }

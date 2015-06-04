@@ -7614,16 +7614,6 @@
             The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
             </param>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Constraints">
-            <summary>
-            Gets the collection discount constraints.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Reward">
-            <summary>
-            Gets the coupon reward.
-            </summary>
-        </member>
         <member name="T:Merchello.Web.Workflow.IWishList">
             <summary>
             Defines a wish list.
