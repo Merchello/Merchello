@@ -24,6 +24,18 @@
         }
 
         /// <summary>
+        /// Gets the display configuration format.
+        /// This text is used by the back office UI to display configured values
+        /// </summary>
+        public override string DisplayConfigurationFormat
+        {
+            get
+            {
+                return "'FREE shipping'";
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating that this component does not require configuration.
         /// </summary>      
         public override bool RequiresConfiguration

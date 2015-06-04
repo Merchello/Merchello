@@ -111,7 +111,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
             function loadExistingConfigurations() {
                 var existing = $scope.dialogData.getValue('productConstraints');
-                if (existing !== '')
+                if (existing !== undefined && existing !== '')
                 {
                     var parsed = JSON.parse(existing);
                     console.info(parsed);

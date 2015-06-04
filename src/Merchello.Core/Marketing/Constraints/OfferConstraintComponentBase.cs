@@ -5,6 +5,9 @@
     using Lucene.Net.Search.Function;
 
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Models;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// The offer constraint component base.
@@ -32,5 +35,6 @@
                 return OfferComponentType.Constraint;
             }
         }
+
     }
 }

@@ -83,7 +83,7 @@
 
             if (terms.Any())
             {
-                var preparedTerms = string.Format("%{0}%", string.Join("%", terms));
+                var preparedTerms = string.Format("%{0}%", string.Join("% ", terms)).Trim();
 
                 sql.Where("lastName LIKE @ln OR firstName LIKE @fn OR email LIKE @email", new { @ln = preparedTerms, @fn = preparedTerms, @email = preparedTerms });
             }

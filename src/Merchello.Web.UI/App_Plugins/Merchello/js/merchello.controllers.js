@@ -152,8 +152,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function saveOffer() {
+            console.info($scope.offerForm.$valid);
             eventsService.emit(eventOfferSavingName, $scope.offerForm);
-
+            console.info($scope.offerForm.$valid);
             if($scope.offerForm.$valid) {
                 var offerPromise;
                 var isNew = false;
@@ -527,7 +528,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
             function loadExistingConfigurations() {
                 var existing = $scope.dialogData.getValue('productConstraints');
-                if (existing !== '')
+                if (existing !== undefined && existing !== '')
                 {
                     var parsed = JSON.parse(existing);
                     console.info(parsed);
@@ -758,18 +759,20 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferProvide
  * The controller to handle offer component association and configuration
  */
 angular.module('merchello').controller('Merchello.Directives.OfferComponentsDirectiveController',
-    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'offerComponentDefinitionDisplayBuilder',
-    function($scope, $timeout, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, offerComponentDefinitionDisplayBuilder) {
+    ['$scope', '$timeout', '$filter', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'settingsResource', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, $timeout, $filter, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, settingsResource, offerComponentDefinitionDisplayBuilder) {
 
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
         $scope.assignedComponents = [];
+        $scope.currencySymbol = '';
 
-        // exposed components
+        // exposed components methods
         $scope.assignComponent = assignComponent;
         $scope.removeComponentOpen = removeComponentOpen;
         $scope.configureComponentOpen = configureComponentOpen;
         $scope.isComponentConfigured = isComponentConfigured;
+        $scope.applyDisplayConfigurationFormat = applyDisplayConfigurationFormat;
 
         var eventName = 'merchello.offercomponentcollection.changed';
 
@@ -786,8 +789,27 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
 
             $scope.$watch('preValuesLoaded', function(pvl) {
                 if(pvl === true) {
-                    loadComponents();
+                   loadSettings();
                 }
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         *
+         * @description
+         * Load the settings from the settings service to get the currency symbol
+         */
+        function loadSettings() {
+            var currencySymbolPromise = settingsResource.getCurrencySymbol();
+            currencySymbolPromise.then(function (currencySymbol) {
+                $scope.currencySymbol = currencySymbol;
+
+                loadComponents();
+            }, function (reason) {
+                notificationsService.error("Settings Load Failed", reason.message);
             });
         }
 
@@ -821,6 +843,17 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             $scope.componentsLoaded = true;
         }
 
+        function applyDisplayConfigurationFormat(component) {
+            console.info(component);
+            if(component.displayConfigurationFormat !== undefined && component.displayConfigurationFormat !== '') {
+                var value = eval(component.displayConfigurationFormat);
+                if (value === undefined) {
+                    return '';
+                } else {
+                    return value;
+                }
+            }
+        }
 
         /**
          * @ngdoc method
@@ -861,9 +894,10 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function processConfigureComponent(dialogData) {
-            dialogData.component.updated = true;
             $scope.offerSettings.updateAssignedComponent(dialogData.component);
-                saveOffer();
+            saveOffer();
+            var component = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.key === dialogData.component.key; } );
+            component.updated = false;
         }
 
         /**
@@ -930,9 +964,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OffersListController',
-    ['$scope', '$location', 'assetsService', 'dialogService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory', 'dialogDataFactory',
+    ['$scope', '$location', '$filter', 'assetsService', 'dialogService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory', 'dialogDataFactory',
         'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($scope, $location, assetsService, dialogService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
+    function($scope, $location, $filter, assetsService, dialogService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
              settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
 
         $scope.testing = false;
@@ -950,6 +984,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         $scope.settings = {};
         $scope.offerProviders = [];
         $scope.includeInactive = false;
+        $scope.currencySymbol = '';
 
         // exposed methods
         $scope.getEditUrl = getEditUrl;
@@ -960,6 +995,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         $scope.providerSelectDialogOpen = providerSelectDialogOpen;
         $scope.getOfferType = getOfferType;
         $scope.resetFilters = resetFilters;
+        $scope.getOfferReward = getOfferReward;
 
         function init() {
             $scope.tabs = merchelloTabsFactory.createMarketingTabs();
@@ -979,7 +1015,15 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
             var promiseSettings = settingsResource.getAllSettings();
             promiseSettings.then(function(settings) {
                 $scope.settings = settingDisplayBuilder.transform(settings);
-                loadOfferProviders();
+
+                var promiseCurrency = settingsResource.getCurrencySymbol();
+                promiseCurrency.then(function(symbol) {
+                    $scope.currencySymbol = symbol;
+                    loadOfferProviders();
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+
             }, function (reason) {
                 notificationsService.error("Settings Load Failed", reason.message);
             });
@@ -1013,6 +1057,18 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
             loadOffers();
         }
 
+        function getOfferReward(offerSettings) {
+            if (offerSettings.hasRewards()) {
+                var reward = offerSettings.getReward();
+                if (reward.isConfigured()) {
+                    return eval(reward.displayConfigurationFormat);
+                } else {
+                    return 'Not configured';
+                }
+            } else {
+                return '-';
+            }
+        }
 
         function buildQuery(filterText) {
             var page = $scope.currentPage;

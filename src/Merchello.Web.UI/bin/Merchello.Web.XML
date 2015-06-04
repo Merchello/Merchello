@@ -84,6 +84,12 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward">
             <summary>
             A coupon reward for free shipping.
@@ -96,6 +102,12 @@
             <param name="definition">
             The definition.
             </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
         </member>
         <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.RequiresConfiguration">
             <summary>
@@ -370,6 +382,12 @@
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentType">
             <summary>
             Gets or sets the component type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.DisplayConfigurationFormat">
+            <summary>
+            Gets or sets the display configuration format.
+            This text is used by the back office UI to display configured values
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ExtendedData">
@@ -7595,16 +7613,6 @@
             <param name="settings">
             The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
             </param>
-        </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Constraints">
-            <summary>
-            Gets the collection discount constraints.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Reward">
-            <summary>
-            Gets the coupon reward.
-            </summary>
         </member>
         <member name="T:Merchello.Web.Workflow.IWishList">
             <summary>

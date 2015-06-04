@@ -78,6 +78,11 @@
         private Lazy<IOfferSettingsService> _offerSettingsService;
 
         /// <summary>
+        /// The offer redeemed service.
+        /// </summary>
+        private Lazy<IOfferRedeemedService> _offerRedeemedService; 
+
+        /// <summary>
         /// The notification method service.
         /// </summary>
         private Lazy<INotificationMethodService> _notificationMethodService;
@@ -334,6 +339,17 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="IOfferRedeemedService"/>
+        /// </summary>
+        internal IOfferRedeemedService OfferRedeemedService
+        {
+            get
+            {
+                return _offerRedeemedService.Value;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="IPaymentMethodService"/>
         /// </summary>
         internal IPaymentMethodService PaymentMethodService
@@ -403,6 +419,9 @@
 
             if (_offerSettingsService == null)
                 _offerSettingsService = new Lazy<IOfferSettingsService>(() => new OfferSettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_offerRedeemedService == null)
+                _offerRedeemedService = new Lazy<IOfferRedeemedService>(() => new OfferRedeemedService(DatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_paymentService == null)
                 _paymentService = new Lazy<IPaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));

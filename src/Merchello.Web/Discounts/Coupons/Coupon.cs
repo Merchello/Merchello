@@ -1,11 +1,15 @@
 ﻿namespace Merchello.Web.Discounts.Coupons
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Marketing.Rewards;
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// Represents a discount Coupon.
@@ -23,14 +27,8 @@
         {
         }
 
-        /// <summary>
-        /// Gets the collection discount constraints.
-        /// </summary>
         public IEnumerable<OfferConstraintComponentBase> Constraints { get; private set; }
 
-        /// <summary>
-        /// Gets the coupon reward.
-        /// </summary>
         public OfferRewardComponentBase Reward { get; private set; }
     }
 }

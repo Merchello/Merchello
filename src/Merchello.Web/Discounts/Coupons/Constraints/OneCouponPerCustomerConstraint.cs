@@ -36,12 +36,14 @@
             }
         }
 
-        public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
+
+
+        public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
             if (customer.IsAnonymous)
             {
                 var anonymousException = new Exception("Customer must be signed in to use this discount.");
-                return Attempt<ILineItemContainer>.Fail(value, anonymousException);
+                //return Attempt<ILineItemContainer>.Fail((ILineItemContainer)value, anonymousException);
             }
 
             throw new NotImplementedException();

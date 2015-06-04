@@ -2,6 +2,10 @@
 {
     using System;
 
+    using Merchello.Core.Models;
+
+    using Umbraco.Core;
+
     /// <summary>
     /// Marker interface for an offer.
     /// </summary>
@@ -45,5 +49,61 @@
         /// </summary>
         bool Active { get; set; }
 
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of offer award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// </returns>
+        Attempt<IOfferAwardResult<T>> TryToAward<T>(ICustomerBase customer) where T : class;
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="constraintBy">
+        /// An object passed to the offer constraints.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of offer award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// </returns>
+        Attempt<IOfferAwardResult<T>> TryToAward<T>(object constraintBy, ICustomerBase customer) where T : class;
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        Attempt<IOfferAwardResult<object>> TryToAward(ICustomerBase customer);
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="constrainBy">
+        /// The constrain by.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        Attempt<IOfferAwardResult<object>> TryToAward(object constrainBy, ICustomerBase customer);
     }
 }

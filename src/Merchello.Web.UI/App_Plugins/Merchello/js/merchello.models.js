@@ -1330,6 +1330,7 @@ var OfferComponentDefinitionDisplay = function() {
     self.description = '';
     self.typeFullName = '';
     self.typeGrouping = '';
+    self.displayConfigurationFormat = '';
     self.extendedData = {};
     self.componentType = '';
     self.dialogEditorView = {};
@@ -1456,6 +1457,10 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return reward !== undefined && reward !== null;
         }
 
+        function getReward() {
+            return _.find(this.componentDefinitions, function(c) { return c.componentType === 'Reward'; } );
+        }
+
         function componentsConfigured() {
             if (!hasComponents.call(this)) {
                 return true;
@@ -1499,6 +1504,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             getComponentsTypeGrouping: getComponentsTypeGrouping,
             ensureTypeGrouping: ensureTypeGrouping,
             hasRewards: hasRewards,
+            getReward: getReward,
             updateAssignedComponent: updateAssignedComponent,
             getAssignedComponent: getAssignedComponent,
             componentsConfigured: componentsConfigured

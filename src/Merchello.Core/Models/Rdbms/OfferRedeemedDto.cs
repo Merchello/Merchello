@@ -8,10 +8,10 @@
     /// <summary>
     /// The offer settings dto.
     /// </summary>
-    [TableName("merchOfferSettings")]
+    [TableName("merchOfferRedeemed")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    public class OfferSettingsDto : IPageableDto
+    internal class OfferRedeemedDto : IPageableDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -22,54 +22,65 @@
         public Guid Key { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the offer settings key.
         /// </summary>
-        [Column("name")]
-        public string Name { get; set; }
-
+        /// <remarks>
+        /// This accepts a null so that the offer can be deleted without having to 
+        /// delete this reference
+        /// </remarks>
+        [Column("offerSettingsKey")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [ForeignKey(typeof(OfferSettingsDto), Name = "FK_merchOfferRedeemed_merchOfferSettings", Column = "pk")]
+        public Guid? OfferSettingsKey { get; set; }
+        
         /// <summary>
         /// Gets or sets the offer code.
         /// </summary>
         [Column("offerCode")]
-        [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchOfferSettingsOfferCode")]
         public string OfferCode { get; set; }
 
         /// <summary>
         /// Gets or sets the offer provider key.
         /// </summary>
+        /// <remarks>
+        /// This does not need to allow nulls since the key is not associated
+        /// with a database constraint.
+        /// </remarks>
         [Column("offerProviderKey")]
         public Guid OfferProviderKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the offer starts date.
-        /// </summary>
-        [Column("offerStartsDate")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public DateTime? OfferStartsDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the offer ends date.
-        /// </summary>
-        [Column("offerEndsDate")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public DateTime? OfferEndsDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether active.
-        /// </summary>
-        [Column("active")]
-        public bool Active { get; set; }
-
-        /// <summary>
-        /// Gets or sets the configuration data.
+        /// Gets or sets the customer key.
         /// </summary>
         /// <remarks>
-        /// This field stores JSON for constraints and reward fields
+        /// Not all offers will be associated with known customers (could be anonymous)
         /// </remarks>
-        [Column("configurationData")]
+        [Column("customerKey")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? CustomerKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice key.
+        /// </summary>
+        /// <remarks>
+        /// If the invoice is deleted - so will this record
+        /// </remarks>
+        [Column("invoiceKey")]
+        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchOfferRedeemed_merchInvoice", Column = "pk")]
+        public Guid InvoiceKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the redeemed date.
+        /// </summary>
+        [Column("redeemedDate")]
+        public DateTime RedeemedDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extended data serialization.
+        /// </summary>
         [NullSetting(NullSetting = NullSettings.Null)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]
-        public string ConfigurationData { get; set; }
+        public string ExtendedData { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
@@ -83,6 +94,6 @@
         /// </summary>
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }         
     }
 }

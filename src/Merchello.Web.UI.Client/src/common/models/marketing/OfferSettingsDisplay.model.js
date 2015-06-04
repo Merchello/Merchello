@@ -62,6 +62,10 @@
             return reward !== undefined && reward !== null;
         }
 
+        function getReward() {
+            return _.find(this.componentDefinitions, function(c) { return c.componentType === 'Reward'; } );
+        }
+
         function componentsConfigured() {
             if (!hasComponents.call(this)) {
                 return true;
@@ -105,6 +109,7 @@
             getComponentsTypeGrouping: getComponentsTypeGrouping,
             ensureTypeGrouping: ensureTypeGrouping,
             hasRewards: hasRewards,
+            getReward: getReward,
             updateAssignedComponent: updateAssignedComponent,
             getAssignedComponent: getAssignedComponent,
             componentsConfigured: componentsConfigured

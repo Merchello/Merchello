@@ -1,16 +1,32 @@
 ﻿namespace Merchello.Core.Marketing.Offer
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
+    using Merchello.Core.Marketing.Constraints;
+    using Merchello.Core.Marketing.Rewards;
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
 
     using Umbraco.Core;
+    using Umbraco.Core.Media;
 
     /// <summary>
     /// A base for Offer classes
     /// </summary>
-    public abstract class OfferBase : IOffer 
-    {       
+    public abstract class OfferBase : IOffer
+    {
+        /// <summary>
+        /// The offer component resolver.
+        /// </summary>
+        private IOfferComponentResolver _componentResolver;
+
+        /// <summary>
+        /// The resolved offer components.
+        /// </summary>
+        private IEnumerable<OfferComponentBase> _components;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OfferBase"/> class.
         /// </summary>
@@ -20,9 +36,13 @@
         protected OfferBase(IOfferSettings settings)
         {
             Mandate.ParameterNotNull(settings, "settings");
-
+            
             this.Settings = settings;
+
+            // set the offer component resolver
+            this.Initialize();
         }
+
 
         #region Properties
 
@@ -141,28 +161,162 @@
         /// </summary>
         internal IOfferSettings Settings { get; private set; }
 
-        #endregion
 
         /// <summary>
-        /// Adds a <see cref="OfferComponentBase"/> to the offer.
+        /// Gets the collection constraints.
         /// </summary>
-        /// <param name="component">
-        /// The component.
-        /// </param>
-        internal virtual void AddComponent(OfferComponentBase component)
+        protected IEnumerable<OfferConstraintComponentBase> Constraints
         {
-            AddComponent(component.OfferComponentDefinition);
+            get
+            {
+                return _components.Where(x => x.ComponentType == OfferComponentType.Constraint).Select(x => (OfferConstraintComponentBase)x);
+            }
         }
 
         /// <summary>
-        /// Adds a <see cref="OfferComponentDefinition"/> to the offer.
+        /// Gets the offer reward.
         /// </summary>
-        /// <param name="definition">
-        /// The component definition.
-        /// </param>
-        internal void AddComponent(OfferComponentDefinition definition)
+        protected OfferRewardComponentBase Reward
         {
-            Settings.ComponentDefinitions.Add(definition);
+            get
+            {
+                return _components.FirstOrDefault(x => x.ComponentType == OfferComponentType.Reward) as OfferRewardComponentBase;
+            }
+        }
+
+        /// <summary>
+        /// Gets the resolved components.
+        /// </summary>
+        private IEnumerable<OfferComponentBase> ResolvedComponents
+        {
+            get
+            {
+                return _components ?? _componentResolver.GetOfferComponents(Settings.ComponentDefinitions);
+            }            
+        } 
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of offer award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// </returns>
+        public Attempt<IOfferAwardResult<T>> TryToAward<T>(ICustomerBase customer) where T : class
+        {
+            return TryToAward<T>(null, customer);
+        }
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="constraintBy">
+        /// An object passed to the offer constraints.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of offer award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// </returns>
+        public Attempt<IOfferAwardResult<T>> TryToAward<T>(object constraintBy, ICustomerBase customer) where T : class
+        {
+            var attempt = TryToAward(constraintBy, customer);
+
+            if (!attempt.Success)
+            {
+                var failed = Attempt<IOfferAwardResult<T>>.Fail(attempt.Exception);
+                if (attempt.Result != null)
+                {
+                    failed.Result.Messages = attempt.Result.Messages;
+                }
+
+                return failed;
+            }
+            
+            var success = Attempt<IOfferAwardResult<T>>.Succeed(new OfferAwardResult<T>());
+            success.Result.Award = attempt.Result as T;
+            success.Result.Messages = attempt.Result.Messages;
+            return success;
+        }
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public Attempt<IOfferAwardResult<object>> TryToAward(ICustomerBase customer)
+        {
+            return TryToAward(null, customer);
+        }
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="constrainBy">
+        /// The constrain by.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public Attempt<IOfferAwardResult<object>> TryToAward(object constrainBy, ICustomerBase customer)
+        {
+            string msg;
+
+            // assert there is a reward
+            if (Reward == null)
+            {
+                msg = "A reward has not been set for this offer.";
+                var nullReference = new NullReferenceException(msg);
+                var result = new OfferAwardResult<object>() { Award = null, Messages = new List<string> { msg } };
+                return Attempt<IOfferAwardResult<object>>.Fail(result, nullReference);
+            }
+
+            // assert the constraining type (seed) is the same as the type passed in as a parameter
+            if (Reward.TypeGrouping != constrainBy.GetType())
+            {
+                msg = "This offer cannot be constrained by the paramter 'constrainBy' passed.  Type should be "
+                      + Reward.TypeGrouping.FullName;
+                var typeException = new InvalidOperationException(msg);
+                var result = new OfferAwardResult<object>() { Award = null, Messages = new List<string> { msg } };
+                return Attempt<IOfferAwardResult<object>>.Fail(result, typeException);
+            }
+
+            foreach (var constraint in Constraints)
+            {
+                
+            }
+            throw new NotImplementedException();
+        }
+        
+
+        #endregion
+
+        /// <summary>
+        /// The initialize.
+        /// </summary>
+        /// <exception cref="Exception">
+        /// Throws an exception if the offer component resolver has not been instantiated
+        /// </exception>
+        private void Initialize()
+        {
+            if (!OfferComponentResolver.HasCurrent) throw new Exception("OfferComponentResolver has not been instantiated.");
+            _componentResolver = OfferComponentResolver.Current;
         }
 
     }

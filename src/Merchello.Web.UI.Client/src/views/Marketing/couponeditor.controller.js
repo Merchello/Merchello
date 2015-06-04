@@ -144,8 +144,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function saveOffer() {
+            console.info($scope.offerForm.$valid);
             eventsService.emit(eventOfferSavingName, $scope.offerForm);
-
+            console.info($scope.offerForm.$valid);
             if($scope.offerForm.$valid) {
                 var offerPromise;
                 var isNew = false;

@@ -23,8 +23,26 @@
         {
         }
 
+        /// <summary>
+        /// Gets the display configuration format.
+        /// This text is used by the back office UI to display configured values
+        /// </summary>
+        public override string DisplayConfigurationFormat
+        {
+            get
+            {
+                var quantity = this.GetConfigurationValue("quantity");
+                var op = this.GetConfigurationValue("operator");
 
-        public override Attempt<ILineItemContainer> Apply(ILineItemContainer value, ICustomerBase customer)
+                var operatorText = StringOperatorHelper.TextForOperatorString(op);
+
+                if (string.IsNullOrEmpty(quantity) || string.IsNullOrEmpty(operatorText)) return "''";
+
+                return string.Format("'Quantity is {0} {1}'", operatorText, quantity);
+            }
+        }
+
+        public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
             throw new System.NotImplementedException();
         }
