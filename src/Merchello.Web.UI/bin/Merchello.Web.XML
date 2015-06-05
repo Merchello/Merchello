@@ -84,10 +84,54 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.TryAward(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Tries to apply the discount line item reward
+            </summary>
+            <param name="validate">
+            The <see cref="T:Merchello.Core.Models.ILineItemContainer"/> to validate against
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.IsConfigured">
+            <summary>
+            Gets a value indicating whether is configured.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.Amount">
+            <summary>
+            Gets the configured amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.AdjustmentType">
+            <summary>
+            Gets the adjustment type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.MaxQuantity">
+            <summary>
+            Gets the max quantity.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.ApplyToEachMatching">
+            <summary>
+            Gets a value indicating whether apply to discount to each matching item
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.DisplayConfigurationFormat">
             <summary>
             Gets the display configuration format.
             This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.Adjustment">
+            <summary>
+            The adjustment.
             </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward">
@@ -847,20 +891,30 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay"/>.
             </returns>
         </member>
-        <member name="T:Merchello.Web.Discounts.Coupons.CouponProvider">
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponManager">
             <summary>
             The provider responsible for managing coupon offers
             </summary>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.CouponProvider.#ctor(Merchello.Core.Services.IOfferSettingsService)">
+        <member name="F:Merchello.Web.Discounts.Coupons.CouponManager._instance">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponProvider"/> class.
+            The _instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.#ctor(Merchello.Core.Services.IOfferSettingsService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/> class.
             </summary>
             <param name="offerSettingsService">
             The offer settings service.
             </param>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.CouponProvider.GetInstance(Merchello.Core.Models.Interfaces.IOfferSettings)">
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.GetInstance(Merchello.Core.Models.Interfaces.IOfferSettings)">
             <summary>
             Gets an instance of a coupon from the <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>        
             /// </summary>
@@ -871,7 +925,12 @@
             The <see cref="T:Merchello.Web.Discounts.Coupons.Coupon"/>.
             </returns>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.CouponProvider.Key">
+        <member name="P:Merchello.Web.Discounts.Coupons.CouponManager.Instance">
+            <summary>
+            Gets the instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.CouponManager.Key">
             <summary>
             Gets the key.
             </summary>
@@ -7596,15 +7655,39 @@
             Defines a Coupon.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Constraints">
+        <member name="M:Merchello.Web.Discounts.Coupons.ICoupon.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
             <summary>
-            Gets the constraints.
+            Tries to apply the coupon
             </summary>
+            <param name="container">
+            The container.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Reward">
+        <member name="M:Merchello.Web.Discounts.Coupons.ICoupon.TryApply``2(``0,Merchello.Core.Models.ICustomerBase)">
             <summary>
-            Gets the rewards.
+            Tries to apply the coupon
             </summary>
+            <param name="validateAgainst">
+            The validate against.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <typeparam name="TConstraint">
+            The type of constraint
+            </typeparam>
+            <typeparam name="TReward">
+            The type of reward
+            </typeparam>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Discounts.Coupons.Coupon.#ctor(Merchello.Core.Models.Interfaces.IOfferSettings)">
             <summary>
@@ -7613,6 +7696,40 @@
             <param name="settings">
             The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
             </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Coupon.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Tries to apply the coupon
+            </summary>
+            <param name="container">
+            The container.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Coupon.TryApply``2(``0,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Tries to apply the coupon
+            </summary>
+            <param name="validateAgainst">
+            The validate against.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <typeparam name="TConstraint">
+            The type of constraint
+            </typeparam>
+            <typeparam name="TReward">
+            The type of reward
+            </typeparam>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Workflow.IWishList">
             <summary>

@@ -53,57 +53,23 @@
         /// <summary>
         /// Attempts to award the reward defined by the offer
         /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <typeparam name="T">
-        /// The type of offer award
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="Attempt{IOfferAwardResult}"/>.
-        /// </returns>
-        Attempt<IOfferAwardResult<T>> TryToAward<T>(ICustomerBase customer) where T : class;
-
-        /// <summary>
-        /// Attempts to award the reward defined by the offer
-        /// </summary>
-        /// <param name="constraintBy">
+        /// <param name="validatedAgainst">
         /// An object passed to the offer constraints.
         /// </param>
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <typeparam name="T">
+        /// <typeparam name="TAward">
         /// The type of offer award
         /// </typeparam>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
         /// <returns>
-        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// The <see cref="Attempt{IOfferResult}"/>.
         /// </returns>
-        Attempt<IOfferAwardResult<T>> TryToAward<T>(object constraintBy, ICustomerBase customer) where T : class;
-
-        /// <summary>
-        /// Attempts to award the reward defined by the offer
-        /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attempt"/>.
-        /// </returns>
-        Attempt<IOfferAwardResult<object>> TryToAward(ICustomerBase customer);
-
-        /// <summary>
-        /// Attempts to award the reward defined by the offer
-        /// </summary>
-        /// <param name="constrainBy">
-        /// The constrain by.
-        /// </param>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attempt"/>.
-        /// </returns>
-        Attempt<IOfferAwardResult<object>> TryToAward(object constrainBy, ICustomerBase customer);
+        Attempt<IOfferResult<TAward, TConstraint>> TryToAward<TAward, TConstraint>(object validatedAgainst, ICustomerBase customer) 
+            where TAward : class
+            where TConstraint : class;
     }
 }

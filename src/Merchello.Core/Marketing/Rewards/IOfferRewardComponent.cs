@@ -28,6 +28,6 @@
         /// <returns>
         /// A value indicating whether or not the awarding process was successful.
         /// </returns>
-        Attempt<TReward> Award(TConstraint validate, ICustomerBase customer);
+        Attempt<TReward> TryAward(TConstraint validate, ICustomerBase customer);
     }
 }

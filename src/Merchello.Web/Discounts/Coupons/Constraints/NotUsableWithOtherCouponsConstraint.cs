@@ -36,7 +36,6 @@
             }
         }
 
-
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
             throw new NotImplementedException();

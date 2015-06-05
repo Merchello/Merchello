@@ -36,16 +36,8 @@
             }
         }
 
-
-
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
-            if (customer.IsAnonymous)
-            {
-                var anonymousException = new Exception("Customer must be signed in to use this discount.");
-                //return Attempt<ILineItemContainer>.Fail((ILineItemContainer)value, anonymousException);
-            }
-
             throw new NotImplementedException();
         }
     }

@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
+    using Merchello.Core.Chains.OfferConstraints;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
@@ -21,6 +23,11 @@
         /// The offer component resolver.
         /// </summary>
         private IOfferComponentResolver _componentResolver;
+
+        /// <summary>
+        /// The offer chain resolver.
+        /// </summary>
+        private IOfferChainResolver _offerChainResolver;
 
         /// <summary>
         /// The resolved offer components.
@@ -193,7 +200,11 @@
             {
                 return _components ?? _componentResolver.GetOfferComponents(Settings.ComponentDefinitions);
             }            
-        } 
+        }
+
+        #endregion
+
+        #region lineitemoffer
 
         /// <summary>
         /// Attempts to award the reward defined by the offer
@@ -201,109 +212,109 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <typeparam name="T">
+        /// <typeparam name="TAward">
         /// The type of offer award
         /// </typeparam>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
         /// <returns>
-        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// The <see cref="Attempt{IOfferResult}"/>.
         /// </returns>
-        public Attempt<IOfferAwardResult<T>> TryToAward<T>(ICustomerBase customer) where T : class
+        public Attempt<IOfferResult<TAward, TConstraint>> TryToAward<TAward, TConstraint>(ICustomerBase customer) 
+            where TAward : class
+            where TConstraint : class
         {
-            return TryToAward<T>(null, customer);
+            return TryToAward<TAward, TConstraint>(null, customer);
         }
 
         /// <summary>
         /// Attempts to award the reward defined by the offer
         /// </summary>
-        /// <param name="constraintBy">
+        /// <param name="validatedAgainst">
         /// An object passed to the offer constraints.
         /// </param>
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <typeparam name="T">
+        /// <typeparam name="TAward">
         /// The type of offer award
         /// </typeparam>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
         /// <returns>
-        /// The <see cref="Attempt{IOfferAwardResult}"/>.
+        /// The <see cref="Attempt{IOfferResult}"/>.
         /// </returns>
-        public Attempt<IOfferAwardResult<T>> TryToAward<T>(object constraintBy, ICustomerBase customer) where T : class
+        public Attempt<IOfferResult<TAward, TConstraint>> TryToAward<TAward, TConstraint>(object validatedAgainst, ICustomerBase customer) 
+            where TAward : class
+            where TConstraint : class
         {
-            var attempt = TryToAward(constraintBy, customer);
-
-            if (!attempt.Success)
-            {
-                var failed = Attempt<IOfferAwardResult<T>>.Fail(attempt.Exception);
-                if (attempt.Result != null)
-                {
-                    failed.Result.Messages = attempt.Result.Messages;
-                }
-
-                return failed;
-            }
-            
-            var success = Attempt<IOfferAwardResult<T>>.Succeed(new OfferAwardResult<T>());
-            success.Result.Award = attempt.Result as T;
-            success.Result.Messages = attempt.Result.Messages;
-            return success;
+            return TryToAward(validatedAgainst, customer).As<TAward, TConstraint>();           
         }
+
 
         /// <summary>
         /// Attempts to award the reward defined by the offer
         /// </summary>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attempt"/>.
-        /// </returns>
-        public Attempt<IOfferAwardResult<object>> TryToAward(ICustomerBase customer)
-        {
-            return TryToAward(null, customer);
-        }
-
-        /// <summary>
-        /// Attempts to award the reward defined by the offer
-        /// </summary>
-        /// <param name="constrainBy">
+        /// <param name="validatedAgainst">
         /// The constrain by.
         /// </param>
         /// <param name="customer">
         /// The customer.
         /// </param>
         /// <returns>
+        /// 
         /// The <see cref="Attempt"/>.
         /// </returns>
-        public Attempt<IOfferAwardResult<object>> TryToAward(object constrainBy, ICustomerBase customer)
+        public Attempt<IOfferResult<object, object>> TryToAward(object validatedAgainst, ICustomerBase customer)
         {
-            string msg;
+            var result = new OfferResult<object, object>
+                             {   
+                                 Customer = customer,
+                                 Messages = new List<string>()
+                             };
 
             // assert there is a reward
             if (Reward == null)
             {
-                msg = "A reward has not been set for this offer.";
-                var nullReference = new NullReferenceException(msg);
-                var result = new OfferAwardResult<object>() { Award = null, Messages = new List<string> { msg } };
-                return Attempt<IOfferAwardResult<object>>.Fail(result, nullReference);
+                var nullReference = new NullReferenceException("Reward property was null");
+                result.Award = null;
+                result.Messages.Add("A reward has not been set for this offer.");
+                return Attempt<IOfferResult<object, object>>.Fail(result, nullReference);
             }
 
-            // assert the constraining type (seed) is the same as the type passed in as a parameter
-            if (Reward.TypeGrouping != constrainBy.GetType())
+
+            var offerChain = this._offerChainResolver.BuildChain(Constraints, Reward.RewardType);
+            
+            // apply the constraints
+            var constraintAttempt = offerChain.TryApplyConstraints(validatedAgainst, customer);
+            if (!constraintAttempt.Success)
             {
-                msg = "This offer cannot be constrained by the paramter 'constrainBy' passed.  Type should be "
-                      + Reward.TypeGrouping.FullName;
-                var typeException = new InvalidOperationException(msg);
-                var result = new OfferAwardResult<object>() { Award = null, Messages = new List<string> { msg } };
-                return Attempt<IOfferAwardResult<object>>.Fail(result, typeException);
+                var exception = new Exception("Offer constraint validation failed.");
+                result.Award = null;
+                result.ValidatedAgainst = constraintAttempt.Result;
+                result.Messages.AddRange(
+                            new[] 
+                            {
+                                "Did not pass constraint validation.",
+                                constraintAttempt.Exception.Message 
+                            });
+                return Attempt<IOfferResult<object, object>>.Fail(result, exception);
             }
 
-            foreach (var constraint in Constraints)
-            {
-                
+            // get the reward
+            var awardAttempt = offerChain.TryAward(constraintAttempt.Result, customer);
+            result.Award = awardAttempt.Result;
+            result.ValidatedAgainst = constraintAttempt.Result;
+            if (awardAttempt.Success)
+            {                
+                result.Messages.Add("Success");
+                return Attempt<IOfferResult<object, object>>.Succeed(result);
             }
-            throw new NotImplementedException();
+
+            return Attempt<IOfferResult<object, object>>.Fail(result, awardAttempt.Exception);
         }
-        
 
         #endregion
 
@@ -317,6 +328,10 @@
         {
             if (!OfferComponentResolver.HasCurrent) throw new Exception("OfferComponentResolver has not been instantiated.");
             _componentResolver = OfferComponentResolver.Current;
+
+            if (!OfferChainResolver.HasCurrent) throw new Exception("OfferChainResolver has not been instantiated");
+            this._offerChainResolver = OfferChainResolver.Current;
+
         }
 
     }

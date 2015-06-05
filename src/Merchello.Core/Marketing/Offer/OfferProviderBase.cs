@@ -1,8 +1,6 @@
 ﻿namespace Merchello.Core.Marketing.Offer
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
