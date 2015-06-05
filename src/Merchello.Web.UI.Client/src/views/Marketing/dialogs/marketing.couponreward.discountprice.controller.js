@@ -11,7 +11,9 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
         function($scope, settingsResource, invoiceHelper) {
             $scope.loaded = false;
             $scope.adjustmentType = 'flat';
+            $scope.applyToEachMatching = true;
             $scope.currencySymbol = '';
+            $scope.maxQuantity = 0;
             $scope.amount = 0;
 
             // exposed methods
@@ -55,6 +57,11 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
                 if ($scope.priceAdjustForm.$valid) {
                     $scope.dialogData.setValue('amount', Math.abs(invoiceHelper.round($scope.amount*1, 2)));
                     $scope.dialogData.setValue('adjustmentType', $scope.adjustmentType);
+                    $scope.dialogData.setValue('maxQuantity', Math.floor($scope.maxQuantity * 1))
+                    if ($scope.adjustmentType !== 'flat') {
+                        $scope.applyToEachMatching = false;
+                    }
+                    $scope.dialogData.setValue('applyToEachMatching', $scope.applyToEachMatching);
                     $scope.submit($scope.dialogData);
                 }
             }

@@ -152,9 +152,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function saveOffer() {
-            console.info($scope.offerForm.$valid);
             eventsService.emit(eventOfferSavingName, $scope.offerForm);
-            console.info($scope.offerForm.$valid);
             if($scope.offerForm.$valid) {
                 var offerPromise;
                 var isNew = false;
@@ -240,7 +238,9 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
         function($scope, settingsResource, invoiceHelper) {
             $scope.loaded = false;
             $scope.adjustmentType = 'flat';
+            $scope.applyToEachMatching = true;
             $scope.currencySymbol = '';
+            $scope.maxQuantity = 0;
             $scope.amount = 0;
 
             // exposed methods
@@ -284,6 +284,11 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
                 if ($scope.priceAdjustForm.$valid) {
                     $scope.dialogData.setValue('amount', Math.abs(invoiceHelper.round($scope.amount*1, 2)));
                     $scope.dialogData.setValue('adjustmentType', $scope.adjustmentType);
+                    $scope.dialogData.setValue('maxQuantity', Math.floor($scope.maxQuantity * 1))
+                    if ($scope.adjustmentType !== 'flat') {
+                        $scope.applyToEachMatching = false;
+                    }
+                    $scope.dialogData.setValue('applyToEachMatching', $scope.applyToEachMatching);
                     $scope.submit($scope.dialogData);
                 }
             }
@@ -844,7 +849,6 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function applyDisplayConfigurationFormat(component) {
-            console.info(component);
             if(component.displayConfigurationFormat !== undefined && component.displayConfigurationFormat !== '') {
                 var value = eval(component.displayConfigurationFormat);
                 if (value === undefined) {

@@ -4,6 +4,7 @@
 
     using Lucene.Net.Search.Function;
 
+    using Merchello.Core.Chains.OfferConstraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 

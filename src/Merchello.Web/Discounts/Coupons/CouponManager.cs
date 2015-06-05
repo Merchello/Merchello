@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Core;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
@@ -11,17 +12,41 @@
     /// The provider responsible for managing coupon offers
     /// </summary>
     [BackOfficeTree("coupons", "marketing", "Coupon", "icon-receipt-alt", "merchello/merchello/couponeditor/{0}", 1)]
-    public class CouponProvider : OfferProviderBase<Coupon>
+    public class CouponManager : OfferProviderBase<Coupon>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CouponProvider"/> class.
+        /// The _instance.
+        /// </summary>
+        private static CouponManager _instance;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CouponManager"/> class.
+        /// </summary>
+        public CouponManager()
+            : this(MerchelloContext.Current.Services.OfferSettingsService)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CouponManager"/> class.
         /// </summary>
         /// <param name="offerSettingsService">
         /// The offer settings service.
         /// </param>
-        public CouponProvider(IOfferSettingsService offerSettingsService)
+        public CouponManager(IOfferSettingsService offerSettingsService)
             : base(offerSettingsService)
         {
+        }
+
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        public static CouponManager Instance
+        {
+            get
+            {
+                return _instance ?? new CouponManager();
+            }
         }
 
         /// <summary>

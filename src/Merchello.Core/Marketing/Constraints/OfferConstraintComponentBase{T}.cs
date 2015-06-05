@@ -1,9 +1,8 @@
 ﻿namespace Merchello.Core.Marketing.Constraints
 {
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
 
+    using Merchello.Core.Chains.OfferConstraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
@@ -40,6 +39,7 @@
             }
         }
 
+
         /// <summary>
         /// Validates the constraint against the <see cref="ILineItemContainer"/>
         /// </summary>
@@ -53,6 +53,5 @@
         /// The <see cref="Attempt{ILineItemContainer}"/> indicating whether or not the constraint can be enforced.
         /// </returns>
         public abstract Attempt<T> TryApply(T value, ICustomerBase customer);
-      
     }
 }

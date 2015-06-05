@@ -92,7 +92,6 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function applyDisplayConfigurationFormat(component) {
-            console.info(component);
             if(component.displayConfigurationFormat !== undefined && component.displayConfigurationFormat !== '') {
                 var value = eval(component.displayConfigurationFormat);
                 if (value === undefined) {

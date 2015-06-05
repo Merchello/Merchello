@@ -7,6 +7,7 @@
     using Configuration;
     using Gateways;
 
+    using Merchello.Core.Chains.OfferConstraints;
     using Merchello.Core.Marketing.Offer;
 
     using Observation;
@@ -182,6 +183,9 @@
 
             if (!MonitorResolver.HasCurrent)
             MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());            
+
+            if (!OfferChainResolver.HasCurrent)
+            OfferChainResolver.Current = new OfferChainResolver(PluginManager.Current.ResolveOfferConstraintChains());
         }
 
         /// <summary>

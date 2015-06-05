@@ -35,6 +35,7 @@
             }
         }
 
+
         /// <summary>
         /// Gets a value indicating that this component does not require configuration.
         /// </summary>      
@@ -46,7 +47,7 @@
             }
         }
 
-        public override Attempt<ILineItem> Award(ILineItemContainer validate, ICustomerBase customer)
+        public override Attempt<ILineItem> TryAward(ILineItemContainer validate, ICustomerBase customer)
         {
             throw new System.NotImplementedException();
         }

@@ -42,6 +42,18 @@
         }
 
         /// <summary>
+        /// Gets the reward type.
+        /// This is used by the OfferChainResolver
+        /// </summary>
+        internal override Type RewardType
+        {
+            get
+            {
+                return typeof(TReward);
+            }
+        }
+
+        /// <summary>
         /// Awards the reward.
         /// </summary>
         /// <param name="validate">
@@ -53,6 +65,6 @@
         /// <returns>
         /// A value indicating whether or not the awarding process was successful.
         /// </returns>
-        public abstract Attempt<TReward> Award(TConstraint validate, ICustomerBase customer);
+        public abstract Attempt<TReward> TryAward(TConstraint validate, ICustomerBase customer);
     }
 }
