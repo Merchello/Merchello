@@ -1,7 +1,12 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Rewards
 {
+    using System;
     using System.Globalization;
+    using System.Linq;
+    using System.Web.Mvc;
 
+    using Merchello.Core;
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
@@ -13,7 +18,7 @@
     /// </summary>
     [OfferComponent("A1CCE36A-C5AA-4C50-B659-CC2FBDEAA7B3", "Discount the price", "Applies a discount according to configured price rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.couponreward.discountprice.html", typeof(Coupon))]
-    public class CouponDiscountLineItemReward : OfferRewardComponentBase<ILineItemContainer, ILineItem>
+    public class CouponDiscountLineItemReward : CouponDiscountLineItemRewardBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CouponDiscountLineItemReward"/> class.
@@ -29,7 +34,7 @@
         /// <summary>
         /// The adjustment.
         /// </summary>
-        private enum Adjustment
+        internal enum Adjustment
         {
             Flat,
             Percent,
@@ -133,8 +138,40 @@
         /// The <see cref="Attempt{ILinetItem}"/>.
         /// </returns>
         public override Attempt<ILineItem> TryAward(ILineItemContainer validate, ICustomerBase customer)
-        {            
-            throw new System.NotImplementedException();
+        {
+            if (!IsConfigured) return Attempt<ILineItem>.Fail(new OfferRedemptionException("The coupon reward is not configured."));
+
+            // Get the item template
+            var discountLineItem = CreateTemplateDiscountLineItem();
+
+            var discount = 0M;
+
+            // filter the lines items for product line items and apply max quantity rules
+            var visitor = new CouponDiscountLineItemRewardVisitor(MaxQuantity);
+            validate.Items.Accept(visitor);
+
+            if (!ApplyToEachMatching)
+            {
+                // apply to the entire collection
+                var qualifyingTotal = visitor.AllLineItems.Sum(x => x.TotalPrice);
+
+                discount = AdjustmentType == Adjustment.Flat
+                               ? Amount > qualifyingTotal ? qualifyingTotal : Amount
+                               : qualifyingTotal * (Amount / 100);
+            }
+            else
+            {
+                // only apply to filtered items
+                var qualifyingTotal = visitor.FilteredItems.Sum(x => x.TotalPrice);
+
+                discount = AdjustmentType == Adjustment.Flat
+                               ? Amount > qualifyingTotal ? qualifyingTotal : Amount
+                               : qualifyingTotal * (Amount / 100);
+            }
+
+            discountLineItem.Price = discount;
+
+            return Attempt<ILineItem>.Succeed(discountLineItem);
         }
     }
 }

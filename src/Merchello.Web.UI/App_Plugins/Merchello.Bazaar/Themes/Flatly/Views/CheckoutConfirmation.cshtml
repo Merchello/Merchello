@@ -1,7 +1,9 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationModel>
 @using System.Web.Mvc.Html
 @using Merchello.Bazaar
+@using Merchello.Bazaar.Controllers.Surface
 @using Merchello.Bazaar.Models.ViewModels
+@using Umbraco.Web
 @{
     Layout = "Master.cshtml";
 }
@@ -12,10 +14,7 @@
     </div>
 
     @Html.ThemedPartial(Model, "CheckoutConfirmationForm", Model.CheckoutConfirmationForm)
-
+    
+    @Html.ThemedPartial(Model, "ApplyCouponForm", Model.ApplyCouponForm)
+    
 </div>
-
-@section AdditionalScripts
-{
-  
-}

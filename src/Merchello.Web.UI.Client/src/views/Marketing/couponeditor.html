@@ -21,36 +21,49 @@
             <div class="tab-content row-fluid" data-ng-show="preValuesLoaded">
                 <div class="merchello-pane">
                     <form id="offerForm" name="offerForm">
-                    <div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
-                            <localize key="merchelloMarketing_offerInfo"/>
-                            <small><localize key="merchelloMarketing_configOffer" /></small>
-                        </label>
-                        <div class="merchello-controls">
-                            <offer-main-properties settings="settings" offer="offerSettings" context="context"></offer-main-properties>
-
+                        <div class="control-group umb-control-group">
+                            <label class="merchello-control-label">
+                                <localize key="merchelloMarketing_offerInfo"/>
+                                <small><localize key="merchelloMarketing_configOffer" /></small>
+                            </label>
+                            <div class="merchello-controls">
+                                <offer-main-properties settings="settings" offer="offerSettings" context="context"></offer-main-properties>
+                            </div>
                         </div>
-                    </div>
+                        <div data-ng-show="offerSettings.key !== ''">
+                            <div class="control-group umb-control-group">
+                                <label class="merchello-control-label">
+                                    <localize key="merchelloMarketing_offerRewardsInfo"/>
+                                    <small><localize key="merchelloMarketing_offerRewardsConfig" /></small>
+                                </label>
+                                <div class="merchello-controls">
 
-                    <div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
-                            <localize key="merchelloMarketing_offerRewardsInfo"/>
-                            <small><localize key="merchelloMarketing_offerRewardsConfig" /></small>
-                        </label>
-                        <div class="merchello-controls">
-                            <offer-components settings="settings" offer-settings="offerSettings" save-offer-settings="saveOffer()"  pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Reward"></offer-components>
-                        </div>
-                    </div>
+                                    <offer-components settings="settings" offer-settings="offerSettings" save-offer-settings="saveOffer()"  pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Reward"></offer-components>
 
-                    <div class="control-group umb-control-group">
-                        <label class="merchello-control-label">
-                            <localize key="merchelloMarketing_offerConstraintsInfo"/>
-                            <small><localize key="merchelloMarketing_offerConstraintsConfig" /></small>
-                        </label>
-                        <div class="merchello-controls">
-                            <offer-components settings="settings" offer-settings="offerSettings"  save-offer-settings="saveOffer()" pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Constraint"></offer-components>
+                                    <div class="row-fluid" data-ng-show="showApplyToEachMatching">
+                                        <div class="form-group col-xs-5 span5 offset6 each-matching">
+                                            <label for="lineItemName">Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small></label>
+                                            <input type="text" class="form-control col-xs-8 span8" ng-model="lineItemName" data-ng-change="setLineItemName(lineItemName)" />
+                                            <label><input type="checkbox" id="applyToMatching" data-ng-model="applyToEachMatching" data-ng-change="toggleApplyToEachMatching()" />
+                                                <span>Apply to each matching item
+                                                    <small>If checked, the reward will be awarded to <b>ONLY</b> items filtered by constraint rules.</small>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group umb-control-group">
+                                <label class="merchello-control-label">
+                                    <localize key="merchelloMarketing_offerConstraintsInfo"/>
+                                    <small><localize key="merchelloMarketing_offerConstraintsConfig" /></small>
+                                </label>
+                                <div class="merchello-controls">
+                                    <offer-components settings="settings" offer-settings="offerSettings"  save-offer-settings="saveOffer()" pre-values-loaded="preValuesLoaded" components="allComponents" component-type="Constraint"></offer-components>
+                                </div>
+                            </div>
                         </div>
-                    </div>
                     </form>
                 </div>
                 <!-- /merchello-pane -->

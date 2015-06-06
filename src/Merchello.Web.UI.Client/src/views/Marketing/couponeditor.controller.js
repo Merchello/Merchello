@@ -18,16 +18,21 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.context = 'create';
         $scope.tabs = {};
         $scope.settings = {};
+        $scope.applyToEachMatching = false;
         $scope.offerProvider = {};
         $scope.allComponents = [];
+        $scope.showApplyToEachMatching = false;
+        $scope.lineItemName = '';
 
         // exposed methods
         $scope.saveOffer = saveOffer;
         $scope.toggleOfferExpires = toggleOfferExpires;
         $scope.openDeleteOfferDialog = openDeleteOfferDialog;
-
+        $scope.toggleApplyToEachMatching = toggleApplyToEachMatching;
+        $scope.setLineItemName = setLineItemName;
         var eventComponentsName = 'merchello.offercomponentcollection.changed';
         var eventOfferSavingName = 'merchello.offercoupon.saving';
+
         /**
          * @ngdoc method
          * @name init
@@ -116,6 +121,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 var offerSettingsPromise = marketingResource.getOfferSettings(key);
                 offerSettingsPromise.then(function(settings) {
                     $scope.offerSettings = offerSettingsDisplayBuilder.transform(settings);
+                    $scope.applyToEachMatching = ($scope.offerSettings.getApplyToEachMatching() === true);
+                    $scope.lineItemName = $scope.offerSettings.getLineItemName();
+                    if ($scope.lineItemName === '' && $scope.offerSettings.hasRewards()) {
+                        var reward = $scope.offerSettings.getReward();
+                        $scope.lineItemName = reward.name;
+                    }
+                    $scope.showApplyToEachMatching = $scope.offerSettings.hasRewards();
                     createTabs(key);
                     if ($scope.offerSettings.offerStartsDate === '0001-01-01' || !$scope.offerSettings.offerExpires) {
                         setDefaultDates(new Date());
@@ -143,7 +155,18 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
             $scope.offerSettings.offerExpires = !$scope.offerSettings.offerExpires;
         }
 
+
+        function toggleApplyToEachMatching() {
+            $scope.applyToEachMatching = !$scope.applyToEachMatching;
+        }
+
+        function setLineItemName(value) {
+            $scope.offerSettings.setLineItemName(value);
+        }
+
         function saveOffer() {
+            $scope.offerSettings.setApplyToEachMatching($scope.applyToEachMatching);
+            $scope.offerSettings.setRewardOfferCode();
             eventsService.emit(eventOfferSavingName, $scope.offerForm);
             if($scope.offerForm.$valid) {
                 var offerPromise;
@@ -168,7 +191,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 });
             }
         }
-
 
         function openDeleteOfferDialog() {
             var dialogData = {};

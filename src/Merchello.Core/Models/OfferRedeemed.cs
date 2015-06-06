@@ -116,6 +116,7 @@
             _offerProviderKey = offerProviderKey;
             _offerCode = offerCode;
             _invoiceKey = invoiceKey;
+            _extendedData = new ExtendedDataCollection();
         }
 
         /// <summary>

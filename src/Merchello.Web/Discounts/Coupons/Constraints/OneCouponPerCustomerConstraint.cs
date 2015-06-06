@@ -1,10 +1,14 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Constraints
 {
     using System;
+    using System.Linq;
 
+    using Merchello.Core;
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
+    using Merchello.Core.Services;
 
     using Umbraco.Core;
 
@@ -36,9 +40,36 @@
             }
         }
 
+        /// <summary>
+        /// Validates the constraint against the <see cref="ILineItemContainer"/>
+        /// </summary>
+        /// <param name="value">
+        /// The value to object to which the constraint is to be applied.
+        /// </param>
+        /// <param name="customer">
+        /// The <see cref="ICustomerBase"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt{ILineItemContainer}"/> indicating whether or not the constraint can be enforced.
+        /// </returns>
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
-            throw new NotImplementedException();
+            if (customer.IsAnonymous) return Attempt<ILineItemContainer>.Fail(new OfferRedemptionException("Cannot be applied by anonymous customers."));
+
+            if (MerchelloContext.Current != null)
+            {
+                var offerRedeemedService = ((ServiceContext)MerchelloContext.Current.Services).OfferRedeemedService;
+                var offerSettingsKey = this.OfferComponentDefinition.OfferSettingsKey;
+                var remptions = offerRedeemedService.GetByOfferSettingsKeyAndCustomerKey(offerSettingsKey, customer.Key);
+
+                return remptions.Any()
+                           ? Attempt<ILineItemContainer>.Fail(
+                               new OfferRedemptionException("Customer has already redeemed this offer."))
+                           : Attempt.Succeed(value);
+
+            }
+           
+            return Attempt<ILineItemContainer>.Fail(new NullReferenceException("MerchelloContext was null"));
         }
     }
 }

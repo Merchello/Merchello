@@ -7,11 +7,18 @@
     using Gateways.Shipping;
     using Models;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a sales preparation base class
     /// </summary>
     public interface ISalePreparationBase
     {
+        /// <summary>
+        /// Gets the item cache.
+        /// </summary>
+        IItemCache ItemCache { get; }
+
         /// <summary>
         /// Gets or sets a value indicating whether raise customer events when saving customer data.
         /// </summary>
@@ -38,6 +45,8 @@
         /// </summary>
         /// <param name="shipToAddress">The shipping <see cref="IAddress"/></param>
         void SaveShipToAddress(IAddress shipToAddress);
+
+        //void SaveOfferCode(string offerCode);
 
         /// <summary>
         /// Gets the bill to address

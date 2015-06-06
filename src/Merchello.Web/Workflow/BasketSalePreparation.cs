@@ -1,16 +1,30 @@
 ﻿namespace Merchello.Web.Workflow
 {
+    using System;
     using System.Linq;
     using Merchello.Core;
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
+    using Merchello.Web.Discounts.Coupons;
+    using Merchello.Web.Models.ContentEditing;
+
+    using Newtonsoft.Json;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// Represents the basket sale preparation.
     /// </summary>
     public class BasketSalePreparation : SalePreparationBase, IBasketSalePreparation
     {
+        /// <summary>
+        /// The <see cref="CouponManager"/>.
+        /// </summary>
+        private readonly Lazy<CouponManager> _couponManager = new Lazy<CouponManager>(() => CouponManager.Instance);
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketSalePreparation"/> class.
         /// </summary>
@@ -56,6 +70,81 @@
             if (result.Payment.Success) Customer.Basket().Empty();
 
             return result;
+        }
+
+        /// <summary>
+        /// Attempts to apply an offer to the the checkout.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <param name="autoAddOnSuccess">
+        /// A value indicating whether or not the reward should be added to the <see cref="ILineItemContainer"/> on success
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public Attempt<IOfferResult<ILineItemContainer, ILineItem>> TryAwardOffer(string offerCode, bool autoAddOnSuccess = true)
+        {
+            // Check to make certain the customer did not already add this coupon before.  The default behavior of the 
+            // line item collections will update the quantity by matching skus.
+            if (ItemCache.Items.Contains(offerCode)) return Attempt<IOfferResult<ILineItemContainer, ILineItem>>.Fail(new OfferRedemptionException("This offer has already been added."));
+
+            var foundOffer = _couponManager.Value.GetByOfferCode(offerCode, Customer);
+            if (!foundOffer.Success) return Attempt<IOfferResult<ILineItemContainer, ILineItem>>.Fail(foundOffer.Exception);
+
+            var coupon = foundOffer.Result;
+            var attempt = coupon.TryApply(ItemCache, Customer);
+
+            if (!attempt.Success) return attempt;
+
+            if (!autoAddOnSuccess) return attempt;
+
+            // stuff the coupon configuration into extended data
+            // this will be used to audit the redeemed offer in the Finalizing handler
+            attempt.Result.Award.ExtendedData
+                .SetValue(
+                    Core.Constants.ExtendedDataKeys.OfferReward, 
+                    JsonConvert.SerializeObject(coupon.Settings.ToOfferSettingsDisplay()));
+
+            // save the coupon
+            ItemCache.AddItem(attempt.Result.Award.AsLineItemOf<ItemCacheLineItem>());
+
+            MerchelloContext.Services.ItemCacheService.Save(ItemCache);               
+            return attempt;
+        }
+
+        /// <summary>
+        /// Attempts to apply an offer to the the checkout.
+        /// </summary>
+        /// <param name="validateAgainst">
+        /// The object to validate against
+        /// </param>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
+        /// <typeparam name="TAward">
+        /// The type of award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        /// <remarks>
+        /// Custom offer types
+        /// </remarks>
+        public Attempt<IOfferResult<TConstraint, TAward>> TryApplyOffer<TConstraint, TAward>(TConstraint validateAgainst, string offerCode)
+            where TConstraint : class
+            where TAward : class
+        {
+            var foundOffer = _couponManager.Value.GetByOfferCode(offerCode, Customer);
+            if (!foundOffer.Success) return Attempt<IOfferResult<TConstraint, TAward>>.Fail(foundOffer.Exception);
+
+            var coupon = foundOffer.Result;
+
+            return coupon.TryApply<TConstraint, TAward>(validateAgainst, Customer);
         }
 
         /// <summary>

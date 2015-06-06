@@ -158,6 +158,17 @@
         IOfferSettings GetByKey(Guid key);
 
         /// <summary>
+        /// Gets a collection of <see cref="IOfferSettings"/> by their unique keys
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IOfferSettings}"/>.
+        /// </returns>
+        IEnumerable<IOfferSettings> GetByKeys(IEnumerable<Guid> keys); 
+            
+        /// <summary>
         /// Gets a collection of <see cref="IOfferSettings"/> for a given offer provider.
         /// </summary>
         /// <param name="offerProviderKey">

@@ -1,6 +1,10 @@
 ﻿namespace Merchello.Web.Discounts.Coupons
 {
+    using System;
+
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
 
@@ -61,6 +65,21 @@
             where TConstraint : class
             where TReward : class
         {
+            var noReward = new OfferRedemptionException("The reward for this coupon has not been configured.");
+            
+            if (Reward == null) return Attempt<IOfferResult<TConstraint, TReward>>.Fail(noReward);
+
+            // determine how to apply the reward
+            var applyRewardForEachMatching = Reward.GetApplyAwardToEachMatching();
+
+            if (!applyRewardForEachMatching)
+            {
+                var constraintValidation = this.TryApplyConstraints<TConstraint, TReward>(validateAgainst, customer);
+                return !constraintValidation.Success ? 
+                    constraintValidation : 
+                    this.TryToAward<TConstraint, TReward>(validateAgainst, customer, false);
+            }
+
             return this.TryToAward<TConstraint, TReward>(validateAgainst, customer);
         }
     }

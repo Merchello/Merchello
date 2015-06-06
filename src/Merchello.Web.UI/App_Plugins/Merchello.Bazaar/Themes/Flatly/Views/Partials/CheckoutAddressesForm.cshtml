@@ -10,9 +10,9 @@
 <div class="row-fluid">
 
     @using (Html.BeginUmbracoForm<SalePreparationOperationsController>("SaveAddresses", null, new { @id = "addresses-form" }))
-    {
+    {        
         <div class="span8">
-
+            @Html.AntiForgeryToken()
             <div class="row-fluid">
                 <div class="span6">
                     <h2>Billing Address</h2>

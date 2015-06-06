@@ -184,8 +184,8 @@
             if (!MonitorResolver.HasCurrent)
             MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());            
 
-            if (!OfferChainResolver.HasCurrent)
-            OfferChainResolver.Current = new OfferChainResolver(PluginManager.Current.ResolveOfferConstraintChains());
+            if (!OfferProcessorFactory.HasCurrent)
+            OfferProcessorFactory.Current = new OfferProcessorFactory(PluginManager.Current.ResolveOfferConstraintChains());
         }
 
         /// <summary>

@@ -63,11 +63,11 @@
         /// The plugin manager.
         /// </param>
         /// <returns>
-        /// The collection of <see cref="IOfferAttemptChain"/> types
+        /// The collection of <see cref="IOfferProcessor"/> types
         /// </returns>
         internal static IEnumerable<Type> ResolveOfferConstraintChains(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<IOfferAttemptChain, OfferConstraintChainForAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<IOfferProcessor, OfferConstraintChainForAttribute>();
         } 
     }
 }

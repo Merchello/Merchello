@@ -57,6 +57,9 @@
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
         /// <returns>A <see cref="IBasketSalePreparation"/></returns>
+        /// <remarks>
+        /// TODO change this to return IBasketSalePreparation
+        /// </remarks>
         public static BasketSalePreparation SalePreparation(this IBasket basket)
         {
             return basket.SalePreparation(MerchelloContext.Current);

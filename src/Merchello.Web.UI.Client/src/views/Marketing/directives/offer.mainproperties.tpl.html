@@ -8,7 +8,7 @@
         <div class="form-group col-xs-6 span6">
             <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.offerExpires" data-ng-click="toggleOfferExpires()"> <span><localize key="merchelloMarketing_offerSetExpires" /></span></label>
         </div>
-        <div class="form-group col-xs-6 span6">
+        <div class="form-group col-xs-6 span6" data-ng-show="offer.key !== ''">
             <label class="label-checkbox"><input name="expires" type="checkbox" data-ng-model="offer.active" data-ng-disabled="!offer.hasRewards() || !offer.componentsConfigured()"> <span>This offer is active</span></label>
             <div class="well well-active" data-ng-hide="offer.hasRewards() && offer.componentsConfigured()">
                 <strong>To set active:</strong> Assign and configure rewards and any constraints.

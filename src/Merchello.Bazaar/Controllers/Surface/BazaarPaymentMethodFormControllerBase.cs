@@ -28,6 +28,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ConfirmSale(CheckoutConfirmationForm model)
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();

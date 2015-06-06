@@ -51,7 +51,7 @@
 
             //// Assert
             Assert.NotNull(testProvider);
-            Assert.AreEqual(typeof(TestOfferProvider), testProvider.GetType());
+            Assert.AreEqual(typeof(TestOfferManager), testProvider.GetType());
 
         }
 
@@ -61,11 +61,11 @@
             //// Arrange
             
             //// Act
-            var testProvider = OfferProviderResolver.Current.GetOfferProvider<TestOfferProvider>();
+            var testProvider = OfferProviderResolver.Current.GetOfferProvider<TestOfferManager>();
 
             //// Assert
             Assert.NotNull(testProvider);
-            Assert.AreEqual(typeof(TestOfferProvider), testProvider.GetType());
+            Assert.AreEqual(typeof(TestOfferManager), testProvider.GetType());
         }
     }
 }

@@ -30,6 +30,11 @@
         public CheckoutConfirmationForm CheckoutConfirmationForm { get; set; }
 
         /// <summary>
+        /// Gets or sets the apply coupon form.
+        /// </summary>
+        public ApplyCouponForm ApplyCouponForm { get; set; }
+
+        /// <summary>
         /// Gets the receipt page.
         /// </summary>
         public IPublishedContent ReceiptPage

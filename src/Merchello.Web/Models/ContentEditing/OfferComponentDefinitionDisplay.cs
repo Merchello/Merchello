@@ -22,6 +22,11 @@ namespace Merchello.Web.Models.ContentEditing
         //public Guid Key { get; set; }
 
         /// <summary>
+        /// Gets or sets the offer settings key.
+        /// </summary>
+        public Guid OfferSettingsKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the component key.
         /// </summary>
         public Guid ComponentKey { get; set; }
@@ -114,6 +119,7 @@ namespace Merchello.Web.Models.ContentEditing
                 new OfferComponentDefinition(
                     new OfferComponentConfiguration()
                         {
+                            OfferSettingsKey = definition.OfferSettingsKey,
                             ComponentKey = definition.ComponentKey,
                             TypeFullName = definition.TypeFullName,
                             Values = definition.ExtendedData.AsEnumerable()

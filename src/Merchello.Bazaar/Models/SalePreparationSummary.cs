@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Bazaar.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// The confirmation pre sale summary.

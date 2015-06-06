@@ -9,6 +9,7 @@
     using Merchello.Core.Events;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
@@ -45,7 +46,7 @@
         /// <remarks>
         /// Determined by the global back office setting.
         /// </remarks>
-        private Lazy<bool> _shippingTaxable;
+        private Lazy<bool> _shippingTaxable; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SalePreparationBase"/> class.
@@ -156,6 +157,7 @@
             _customer.ExtendedData.AddAddress(shipToAddress, AddressType.Shipping);
             SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
+
 
         /// <summary>
         /// Gets the bill to address

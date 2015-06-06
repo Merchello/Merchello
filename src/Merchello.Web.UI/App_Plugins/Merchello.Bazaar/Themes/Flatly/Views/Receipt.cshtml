@@ -12,6 +12,7 @@
 }
 else
 {
+    var discounts = Model.Invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).ToArray();
     <div class="container-fluid">
 
 
@@ -50,6 +51,21 @@ else
                                 <td colspan="3" class="text-right"><b>Tax Total:</b></td>
                                 <td class="text-right">@ModelExtensions.FormatPrice(Model.Invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.Price), Model.Currency.Symbol)</td>
                             </tr>
+                            @if (discounts.Any())
+                            {
+                                <tr>
+                                    <td colspan="4"><em>Less Discounts</em></td>
+                                </tr>
+                           
+                            foreach (var item in discounts)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td colspan ="2"><b>Offer Code:</b> @item.Sku</td>                                    
+                                    <td class="text-right">(@ModelExtensions.FormatPrice(item.TotalPrice, Model.Currency.Symbol))</td>
+                                </tr>
+                            }
+                            }
                             <tr>
                                 <td colspan="3" class="text-right"><b>Total:</b></td>
                                 <td class="text-right">@ModelExtensions.FormatPrice(Model.Invoice.Total, Model.Currency.Symbol)</td>
