@@ -232,7 +232,6 @@
             }
 
             viewModel.SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation());
-            viewModel.SaleSummary.ShowApplyOfferCodeForm = false;
             viewModel.CheckoutAddressForm = new CheckoutAddressForm()
                 {
                     IsAnonymous = viewModel.CurrentCustomer.IsAnonymous,
@@ -320,13 +319,13 @@
                 allowedMethods.AddRange(paymentMethodsArray);
             }
 
-
+            var salesPreparation = basket.SalePreparation();
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
                 ThemeName = viewModel.Theme,
                 CustomerToken = basket.Customer.Key.ToString().EncryptWithMachineKey(),
-                SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation()),                
+                SaleSummary = _salePreparationSummaryFactory.Value.Build(salesPreparation),                
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
                                                                     {
                                                                         Value = x.ShipMethod.Key.ToString(),
@@ -346,7 +345,22 @@
                 ResolvePaymentForms = viewModel.ResolvePaymentForms
             };
 
-            viewModel.CheckoutConfirmationForm.SaleSummary.ShowApplyOfferCodeForm = true;
+
+            viewModel.ApplyCouponForm = new ApplyCouponForm()
+                {
+                    ThemeName = viewModel.Theme,
+                    CurrencySymbol = viewModel.Currency.Symbol,
+                    Messages = new List<string>(),
+                    Items = salesPreparation.ItemCache.Items
+                        .Where(x => x.LineItemType == LineItemType.Discount)
+                        .Select(x => new DiscountLineItem()
+                                         {
+                                            Key = x.Key,
+                                            Name = x.Name,
+                                            OfferCode = x.Sku,
+                                            Price = x.Price
+                                         })
+                };
 
             return viewModel;
         }

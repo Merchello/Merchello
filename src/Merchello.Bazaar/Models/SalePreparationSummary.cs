@@ -9,14 +9,6 @@
     public class SalePreparationSummary
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SalePreparationSummary"/> class.
-        /// </summary>
-        public SalePreparationSummary()
-        {
-            Messages = new List<string>();
-        }
-
-        /// <summary>
         /// Gets or sets the total label.
         /// </summary>
         public string TotalLabel { get; set; }
@@ -55,27 +47,5 @@
         /// Gets or sets the currency symbol.
         /// </summary>
         public string CurrencySymbol { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether show the apply offer code form.
-        /// </summary>
-        public bool ShowApplyOfferCodeForm { get; set; }
-
-
-        /// <summary>
-        /// Gets or sets the offer code.
-        /// </summary>
-        [Required(ErrorMessage = "Required")]
-        public string OfferCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the application was successful.
-        /// </summary>
-        public bool Success { get; set; }
-
-        /// <summary>
-        /// Gets or sets the offer attempt messages
-        /// </summary>
-        public List<string> Messages { get; set; }
     }
 }

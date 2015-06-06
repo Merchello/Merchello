@@ -41,7 +41,7 @@
         /// <summary>
         /// Gets a value indicating whether is initialized.
         /// </summary>
-        internal bool IsInitialized
+        public bool IsInitialized
         {
             get { return _constraints != null && _reward != null; }
         }
@@ -77,6 +77,7 @@
                 var invalid =
                     new InvalidOperationException(
                         "validatedAgainst parameter could not be converted to type " + typeof(TConstraint).FullName);
+                return Attempt<object>.Fail(invalid);
             }
 
             if (TaskHandlers.Any()) TaskHandlers.Clear();
@@ -149,19 +150,16 @@
         public void Initialize(IEnumerable<OfferConstraintComponentBase> constraints, OfferRewardComponentBase reward)
         {
             var converted = new List<OfferConstraintComponentBase<TConstraint>>();
-            foreach (var baseType in constraints.ToArray())
+            try
             {
-                var convert = baseType.TryConvertTo<TConstraint>();
-                if (convert.Success)
-                {
-                    converted.Add(convert.Result as OfferConstraintComponentBase<TConstraint>);
-                }
-                else
-                {
-                    LogHelper.Debug<OfferProcessorBase<TConstraint, TAward>>("Failed to convert offer constraint to typed version.");
-                    return;
-                }
+                converted.AddRange(constraints.ToArray().Select(constraint => constraint as OfferConstraintComponentBase<TConstraint>));
             }
+            catch (Exception ex)
+            {
+                LogHelper.Error<OfferProcessorBase<TConstraint, TAward>>("Failed to convert offer constraint to typed version.", ex);
+                throw;
+            }
+
 
             _constraints = converted;
             _reward = reward;

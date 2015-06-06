@@ -16,6 +16,20 @@
     /// </summary>
     public interface IOfferProcessor
     {
+        /// <summary>
+        /// Gets a value indicating whether offer processor is initialized.
+        /// </summary>
+        bool IsInitialized { get; }
+
+        /// <summary>
+        /// Initializes the processor
+        /// </summary>
+        /// <param name="constraints">
+        /// The constraints.
+        /// </param>
+        /// <param name="reward">
+        /// The reward.
+        /// </param>
         void Initialize(IEnumerable<OfferConstraintComponentBase> constraints, OfferRewardComponentBase reward);
 
         /// <summary>

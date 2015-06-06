@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Marketing.Offer
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
 
     using Merchello.Core.Models;
 
@@ -25,6 +27,17 @@
         /// The <see cref="TOffer"/>.
         /// </returns>
         TOffer GetByKey(Guid key);
+
+        /// <summary>
+        /// Gets a collection of <see cref="TOffer"/> by their unique keys
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{TOffer}"/>.
+        /// </returns>
+        IEnumerable<TOffer> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
         /// Gets an offer by it's offer code.

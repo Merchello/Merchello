@@ -12,6 +12,12 @@
     public class OfferComponentConfiguration
     {
         /// <summary>
+        /// Gets or sets the offer settings key.
+        /// </summary>
+        [DataMember]
+        public Guid OfferSettingsKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the component key.
         /// </summary>
         [DataMember]

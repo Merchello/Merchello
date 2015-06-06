@@ -80,6 +80,7 @@
         /// </summary>
         [NullSetting(NullSetting = NullSettings.Null)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]
+        [Column("extendedData")]
         public string ExtendedData { get; set; }
 
         /// <summary>

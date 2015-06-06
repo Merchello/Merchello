@@ -1,7 +1,10 @@
 ﻿namespace Merchello.Core.Marketing.Offer
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
@@ -78,6 +81,21 @@
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="TOffer"/> by their unique keys
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{TOffer}"/>.
+        /// </returns>
+        public IEnumerable<TOffer> GetByKeys(IEnumerable<Guid> keys)
+        {
+            var settings = _offerSettingsService.GetByKeys(keys);
+            return settings.Select(this.GetInstance);
+        }
+
+        /// <summary>
         /// Gets an offer by it's offer code (with manager defaults).
         /// </summary>
         /// <param name="offerCode">
@@ -114,7 +132,12 @@
             where TConstraint : class 
             where TAward : class
         {
+            if (string.IsNullOrEmpty(offerCode)) return Attempt<TOffer>.Fail(new OfferRedemptionException("Offer code was not provided"));
+
             var settings = _offerSettingsService.GetByOfferCode(offerCode);
+
+            if (settings == null) return Attempt<TOffer>.Fail(new OfferRedemptionException("Offer not found by offer code."));
+
             var instance = this.GetInstance(settings);
 
             var ensure = instance.EnsureOfferIsValid<TConstraint, TAward>(customer);

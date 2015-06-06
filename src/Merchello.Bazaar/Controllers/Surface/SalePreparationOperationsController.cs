@@ -10,6 +10,7 @@
     using Merchello.Core.Models;
     using Merchello.Web;
     using Merchello.Web.Discounts.Coupons;
+    using Merchello.Web.Workflow;
 
     using Umbraco.Web.Mvc;
 
@@ -28,26 +29,11 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ApplyOfferCode(SalePreparationSummary model)
+        public ActionResult ApplyOfferCode(ApplyCouponForm model)
         {
             if (string.IsNullOrEmpty(model.OfferCode)) return this.CurrentUmbracoPage();
 
-            var couponManager = CouponManager.Instance;
-            var attempt = couponManager.GetByOfferCode(model.OfferCode, CurrentCustomer);
-
-            if (attempt.Success)
-            {
-                var coupon = attempt.Result;
-
-                // TODO move all of this stuff into sales preparation
-                var collection = Basket.SalePreparation().ItemCache;
-
-                var apply = coupon.TryApply(collection, CurrentCustomer);
-                if (apply.Success)
-                {
-                    collection.Items.Add(apply.Result.Award);
-                }
-            }
+            var attempt = Basket.SalePreparation().TryAwardOffer(model.OfferCode);
 
             return this.CurrentUmbracoPage();
         }

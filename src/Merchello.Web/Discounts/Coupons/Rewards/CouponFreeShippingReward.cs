@@ -1,7 +1,8 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Rewards
 {
+    using System.Linq;
+
     using Merchello.Core.Marketing.Offer;
-    using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -10,7 +11,7 @@
     /// A coupon reward for free shipping.
     /// </summary>
     [OfferComponent("A9375BF1-4125-4B0C-ACB9-BAD4E1BA17BE", "FREE shipping", "Applies a discount equal to the shipping charges.", RestrictToType = typeof(Coupon))]
-    public class CouponFreeShippingReward : OfferRewardComponentBase<ILineItemContainer, ILineItem>
+    public class CouponFreeShippingReward : CouponDiscountLineItemRewardBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CouponFreeShippingReward"/> class.
@@ -47,9 +48,28 @@
             }
         }
 
+        /// <summary>
+        /// Tries to apply the discount line item reward
+        /// </summary>
+        /// <param name="validate">
+        /// The <see cref="ILineItemContainer"/> to validate against
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt{ILinetItem}"/>.
+        /// </returns>
         public override Attempt<ILineItem> TryAward(ILineItemContainer validate, ICustomerBase customer)
         {
-            throw new System.NotImplementedException();
+            // Get the item template
+            var discountLineItem = CreateTemplateDiscountLineItem();
+
+            var discount = validate.ShippingLineItems().Sum(x => x.TotalPrice);
+
+            discountLineItem.Price = discount;
+
+            return Attempt<ILineItem>.Succeed(discountLineItem);
         }
     }
 }

@@ -33,7 +33,7 @@
         /// <summary>
         /// The offer processor.
         /// </summary>
-        private IOfferProcessor _offerProcessor;
+        private Lazy<IOfferProcessor> _offerProcessor;
 
         /// <summary>
         /// The resolved offer components.
@@ -204,7 +204,7 @@
         {
             get
             {
-                return _offerProcessor ?? _offerProcessorFactory.Build(this);
+                return _offerProcessor.Value; 
             }
         }
 
@@ -389,8 +389,7 @@
 
                 if (!constraintAttempt.Success)
                 {
-                    var exception = new Exception("Offer constraint validation failed.");
-                    return Attempt<IOfferResult<object, object>>.Fail(result, exception);
+                    return Attempt<IOfferResult<object, object>>.Fail(result, constraintAttempt.Exception);
                 }
 
                 awardAttempt = OfferProcessor.TryAward(constraintAttempt.Result, customer);
@@ -530,6 +529,9 @@
 
             if (!OfferProcessorFactory.HasCurrent) throw new Exception("OfferProcessorFactory has not been instantiated");
             this._offerProcessorFactory = OfferProcessorFactory.Current;
+
+            // wire up the offer processor
+            _offerProcessor = new Lazy<IOfferProcessor>(() => _offerProcessorFactory.Build(this));
         }
 
     }

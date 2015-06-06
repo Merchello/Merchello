@@ -226,7 +226,10 @@
     <Compile Include="DigitalDownloadHandler.cs" />
     <Compile Include="Discounts\Coupons\Constraints\NotUsableWithOtherCouponsConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\OneCouponPerCustomerConstraint.cs" />
+    <Compile Include="Discounts\Coupons\CouponRedemptionEventHandler.cs" />
+    <Compile Include="Discounts\Coupons\CouponRedemptionLineItemVisitor.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemReward.cs" />
+    <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemRewardBase.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemRewardVisitor.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />

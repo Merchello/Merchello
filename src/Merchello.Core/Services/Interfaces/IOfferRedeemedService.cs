@@ -119,6 +119,20 @@
         IEnumerable<IOfferRedeemed> GetByOfferSettingsKey(Guid offerSettingsKey);
 
         /// <summary>
+        /// The get by offer settings key and customer key.
+        /// </summary>
+        /// <param name="offerSettingsKey">
+        /// The offer settings key.
+        /// </param>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IOfferRedeemed}"/>.
+        /// </returns>
+        IEnumerable<IOfferRedeemed> GetByOfferSettingsKeyAndCustomerKey(Guid offerSettingsKey, Guid customerKey); 
+            
+        /// <summary>
         /// Gets a collection of <see cref="IOfferRedeemed"/> records by an offer provider key.
         /// </summary>
         /// <param name="offerProviderKey">

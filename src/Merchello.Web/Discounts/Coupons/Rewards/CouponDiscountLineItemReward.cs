@@ -2,6 +2,7 @@
 {
     using System;
     using System.Globalization;
+    using System.Linq;
     using System.Web.Mvc;
 
     using Merchello.Core;
@@ -17,7 +18,7 @@
     /// </summary>
     [OfferComponent("A1CCE36A-C5AA-4C50-B659-CC2FBDEAA7B3", "Discount the price", "Applies a discount according to configured price rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.couponreward.discountprice.html", typeof(Coupon))]
-    public class CouponDiscountLineItemReward : OfferRewardComponentBase<ILineItemContainer, ILineItem>
+    public class CouponDiscountLineItemReward : CouponDiscountLineItemRewardBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CouponDiscountLineItemReward"/> class.
@@ -91,16 +92,16 @@
             }
         }
 
-        ///// <summary>
-        ///// Gets a value indicating whether apply to discount to each matching item
-        ///// </summary>
-        //private bool ApplyToEachMatching
-        //{
-        //    get
-        //    {
-        //        return string.Equals("True", this.GetConfigurationValue("applyToEachMatching"));
-        //    }
-        //}
+        /// <summary>
+        /// Gets a value indicating whether apply to discount to each matching item
+        /// </summary>
+        private bool ApplyToEachMatching
+        {
+            get
+            {
+                return string.Equals("True", this.GetConfigurationValue("applyToEachMatching"));
+            }
+        }
 
         /// <summary>
         /// Gets the display configuration format.
@@ -140,20 +141,35 @@
         {
             if (!IsConfigured) return Attempt<ILineItem>.Fail(new OfferRedemptionException("The coupon reward is not configured."));
 
+            // Get the item template
+            var discountLineItem = CreateTemplateDiscountLineItem();
 
-            var visitor = new CouponDiscountLineItemRewardVisitor(Amount, MaxQuantity, AdjustmentType);
+            var discount = 0M;
+
+            // filter the lines items for product line items and apply max quantity rules
+            var visitor = new CouponDiscountLineItemRewardVisitor(MaxQuantity);
             validate.Items.Accept(visitor);
 
-            var ed = new ExtendedDataCollection();
-            ed.SetValue(Core.Constants.ExtendedDataKeys.OfferReward, this.OfferComponentDefinition.ExtendedDataAsJson());
+            if (!ApplyToEachMatching)
+            {
+                // apply to the entire collection
+                var qualifyingTotal = visitor.AllLineItems.Sum(x => x.TotalPrice);
 
-            var discountLineItem = new InvoiceLineItem(
-                LineItemType.Discount,
-                this.GetRewardLineItemName(),
-                this.GetRewardOfferCode(),
-                1,
-                visitor.Discount, 
-                ed);
+                discount = AdjustmentType == Adjustment.Flat
+                               ? Amount > qualifyingTotal ? qualifyingTotal : Amount
+                               : qualifyingTotal * (Amount / 100);
+            }
+            else
+            {
+                // only apply to filtered items
+                var qualifyingTotal = visitor.FilteredItems.Sum(x => x.TotalPrice);
+
+                discount = AdjustmentType == Adjustment.Flat
+                               ? Amount > qualifyingTotal ? qualifyingTotal : Amount
+                               : qualifyingTotal * (Amount / 100);
+            }
+
+            discountLineItem.Price = discount;
 
             return Attempt<ILineItem>.Succeed(discountLineItem);
         }
