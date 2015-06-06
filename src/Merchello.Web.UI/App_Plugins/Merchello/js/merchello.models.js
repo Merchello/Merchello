@@ -1495,6 +1495,46 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             }
         }
 
+        function setApplyToEachMatching(value) {
+            if (hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                reward.extendedData.setValue('applyToEachMatching', value);
+            }
+        }
+
+        function getApplyToEachMatching() {
+            if(hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                var value = reward.extendedData.getValue('applyToEachMatching');
+                return value === 'True';
+            } else {
+                return true;
+            }
+        }
+
+        function setLineItemName(value) {
+            if (hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                reward.extendedData.setValue('lineItemName', value);
+            }
+        }
+
+        function getLineItemName() {
+            if(hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                return reward.extendedData.getValue('lineItemName');
+            } else {
+                return '';
+            }
+        }
+
+        function setRewardOfferCode() {
+            if (hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                reward.extendedData.setValue('offerCode', this.offerCode);
+            }
+        }
+
         return {
             clone: clone,
             offerStartsDateLocalDateString: offerStartsDateLocalDateString,
@@ -1507,7 +1547,12 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             getReward: getReward,
             updateAssignedComponent: updateAssignedComponent,
             getAssignedComponent: getAssignedComponent,
-            componentsConfigured: componentsConfigured
+            componentsConfigured: componentsConfigured,
+            getApplyToEachMatching: getApplyToEachMatching,
+            setApplyToEachMatching: setApplyToEachMatching,
+            getLineItemName: getLineItemName,
+            setLineItemName: setLineItemName,
+            setRewardOfferCode: setRewardOfferCode
         }
 
     }());

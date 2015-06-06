@@ -60,6 +60,13 @@
   }
 }
 
+.each-matching {
+  padding-left: .5em;
+  input[type=checkbox] {
+    margin-right: .5em;
+  }
+}
+
 .constraint-product-selector {
   strong { display: inline; }
   .product-selection-form {

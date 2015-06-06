@@ -1,6 +1,10 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SalePreparationSummary>
+@using System.Activities.Statements
+@using System.Web.Mvc.Html
 @using Merchello.Bazaar
+@using Merchello.Bazaar.Controllers.Surface
 @using Merchello.Bazaar.Models
+@using Umbraco.Web
 
 <div class="row">
     <table class="table table-striped">
@@ -41,4 +45,30 @@
         </tbody>
 
     </table>
+    
+    @if (Model.ShowApplyOfferCodeForm)
+    {        
+        using (Html.BeginUmbracoForm<SalePreparationOperationsController>("ApplyOfferCode", new { area = "Bazaar" }))
+        {
+            <div class="row-fluid">
+                @Html.AntiForgeryToken()
+                <h2>Special offers</h2>
+                <div class="control-group">
+                    @Html.Label("Offer code") @Html.ValidationMessageFor(x => x.OfferCode)
+                    @Html.TextBoxFor(x => x.OfferCode, new { placeholder = "Offer code" })
+                    <input type="submit" class="btn btn-primary" value="Apply" />
+                </div>
+                @if (Model.Messages.Any())
+                {
+                    <ul>
+                        @foreach (var msg in Model.Messages)
+                        {
+                            <li>@msg</li>
+                        }
+                    </ul>
+                }
+            </div>
+        }        
+    }    
+
 </div>

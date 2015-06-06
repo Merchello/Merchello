@@ -1,9 +1,12 @@
 ﻿namespace Merchello.Core.Chains.OfferConstraints
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Chains.InvoiceCreation;
+    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -11,8 +14,10 @@
     /// <summary>
     /// The OfferAttemptChain interface.
     /// </summary>
-    public interface IOfferAttemptChain
+    public interface IOfferProcessor
     {
+        void Initialize(IEnumerable<OfferConstraintComponentBase> constraints, OfferRewardComponentBase reward);
+
         /// <summary>
         /// Executes the task chain to apply the constraints
         /// </summary>

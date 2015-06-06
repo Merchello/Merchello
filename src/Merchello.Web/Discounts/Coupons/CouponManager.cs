@@ -4,15 +4,18 @@
 
     using Merchello.Core;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
     using Merchello.Web.Trees;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// The provider responsible for managing coupon offers
     /// </summary>
     [BackOfficeTree("coupons", "marketing", "Coupon", "icon-receipt-alt", "merchello/merchello/couponeditor/{0}", 1)]
-    public class CouponManager : OfferProviderBase<Coupon>
+    public class CouponManager : OfferManagerBase<Coupon>
     {
         /// <summary>
         /// The _instance.
@@ -58,6 +61,23 @@
             {
                 return new Guid("1EED2CCB-4146-44BE-A5EB-DA3D2E3992A7");
             }
+        }
+
+        /// <summary>
+        /// Gets an offer by it's offer code (with manager defaults).
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public override Attempt<Coupon> GetByOfferCode(string offerCode, ICustomerBase customer)
+        {
+            return GetByOfferCode<ILineItemContainer, ILineItem>(offerCode, customer);
         }
 
         /// <summary>

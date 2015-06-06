@@ -12,6 +12,7 @@
         @{
             using (Html.BeginUmbracoForm<MembershipOperationsController>("HandleSignIn", new { area = "Bazaar" }, new { @class = "form-horizontal" }))
             {
+                @Html.AntiForgeryToken()
                 <fieldset>
                     <legend>Login</legend>
                     <div class="control-group">

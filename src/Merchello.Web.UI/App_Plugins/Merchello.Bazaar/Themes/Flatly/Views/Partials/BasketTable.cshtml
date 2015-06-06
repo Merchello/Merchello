@@ -9,6 +9,7 @@
     
     using (Html.BeginUmbracoForm<BasketOperationsController>("UpdateBasket", new { area = "Bazaar" }))
     {
+        @Html.AntiForgeryToken()
         <table class="table basket">
             <thead>
                 <tr>

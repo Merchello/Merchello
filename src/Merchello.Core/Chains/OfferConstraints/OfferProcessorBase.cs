@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
@@ -20,7 +21,7 @@
     /// <typeparam name="TConstraint">
     /// The type of constraints
     /// </typeparam>
-    public abstract class OfferAttemptChainBase<TConstraint, TAward> : IOfferAttemptChain
+    public abstract class OfferProcessorBase<TConstraint, TAward> : IOfferProcessor
     {
         /// <summary>
         /// The _task handlers.
@@ -30,28 +31,20 @@
         /// <summary>
         /// The constraints.
         /// </summary>
-        private readonly IEnumerable<OfferConstraintComponentBase<TConstraint>> _constraints;
+        private IEnumerable<OfferConstraintComponentBase<TConstraint>> _constraints;
 
         /// <summary>
         /// The reward.
         /// </summary>
-        private readonly OfferRewardComponentBase _reward;
+        private OfferRewardComponentBase _reward;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OfferAttemptChainBase{TConstraint,TAward}"/> class. 
+        /// Gets a value indicating whether is initialized.
         /// </summary>
-        /// <param name="constraints">
-        /// The constraints.
-        /// </param>
-        /// <param name="reward">
-        /// The reward.
-        /// </param>
-        protected OfferAttemptChainBase(IEnumerable<OfferConstraintComponentBase<TConstraint>> constraints, OfferRewardComponentBase reward)
+        internal bool IsInitialized
         {
-            this._constraints = constraints;
-            this._reward = reward;
+            get { return _constraints != null && _reward != null; }
         }
-
 
         /// <summary>
         /// Gets the list of task handlers
@@ -68,11 +61,16 @@
         /// <param name="validatedAgainst">
         /// The constrain by.
         /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
         /// <returns>
         /// The <see cref="Attempt"/>.
         /// </returns>
         public Attempt<object> TryApplyConstraints(object validatedAgainst, ICustomerBase customer)
         {
+            if (!this.IsInitialized) return Attempt<object>.Fail(new OfferRedemptionException("Offer processor not initialized."));
+
             var convert = validatedAgainst.TryConvertTo<TConstraint>();
             if (!convert.Success)
             {
@@ -94,8 +92,22 @@
                        : Attempt<object>.Fail(attempt.Result, attempt.Exception);
         }
 
+        /// <summary>
+        /// Try to apply the award
+        /// </summary>
+        /// <param name="validatedAgainst">
+        /// The validated against.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
         public Attempt<object> TryAward(object validatedAgainst, ICustomerBase customer)
         {
+            if (!this.IsInitialized) return Attempt<object>.Fail(new OfferRedemptionException("Offer processor not initialized."));
+
             var attempt = _reward.TryConvertTo(typeof(OfferRewardComponentBase<TConstraint, TAward>));
 
             if (attempt.Success)
@@ -117,11 +129,45 @@
                     return Attempt<object>.Fail(new NullReferenceException("Converted reward was null"));
                 }
 
-                LogHelper.Error(typeof(OfferAttemptChainBase<TConstraint, TAward>), "Failed to convert validation object", converted.Exception);
+                LogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert validation object", converted.Exception);
             }
 
-            LogHelper.Error(typeof(OfferAttemptChainBase<TConstraint, TAward>), "Failed to convert reward type", attempt.Exception);
+            LogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert reward type", attempt.Exception);
             throw attempt.Exception;
+        }
+
+
+        /// <summary>
+        /// Initializes the processor.
+        /// </summary>
+        /// <param name="constraints">
+        /// The constraints.
+        /// </param>
+        /// <param name="reward">
+        /// The reward.
+        /// </param>
+        /// <remarks>
+        /// We need this for because we don't know the types upfront
+        /// </remarks>
+        public void Initialize(IEnumerable<OfferConstraintComponentBase> constraints, OfferRewardComponentBase reward)
+        {
+            var converted = new List<OfferConstraintComponentBase<TConstraint>>();
+            foreach (var baseType in constraints.ToArray())
+            {
+                var convert = baseType.TryConvertTo<TConstraint>();
+                if (convert.Success)
+                {
+                    converted.Add(convert.Result as OfferConstraintComponentBase<TConstraint>);
+                }
+                else
+                {
+                    LogHelper.Debug<OfferProcessorBase<TConstraint, TAward>>("Failed to convert offer constraint to typed version.");
+                    return;
+                }
+            }
+
+            _constraints = converted;
+            _reward = reward;
         }
 
         /// <summary>

@@ -240,14 +240,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="Chains\OfferConstraints\IOfferAttemptChain.cs" />
-    <Compile Include="Chains\OfferConstraints\IOfferChainResolver.cs" />
+    <Compile Include="Chains\OfferConstraints\IOfferProcessor.cs" />
+    <Compile Include="Chains\OfferConstraints\IOfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferConstraintChainTask.cs" />
-    <Compile Include="Chains\OfferConstraints\LineItemContainerOfferAttemptChain.cs" />
+    <Compile Include="Chains\OfferConstraints\LineItemContainerOfferProcessor.cs" />
     <Compile Include="Chains\OfferConstraints\LineItemContainerOfferConstraintTask.cs" />
-    <Compile Include="Chains\OfferConstraints\OfferAttemptChainBase.cs" />
+    <Compile Include="Chains\OfferConstraints\OfferProcessorBase.cs" />
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainForAttribute.cs" />
-    <Compile Include="Chains\OfferConstraints\OfferChainResolver.cs" />
+    <Compile Include="Chains\OfferConstraints\OfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainTask.cs" />
     <Compile Include="Configuration\Outline\CustomerElement.cs" />
     <Compile Include="Configuration\Outline\PluggableCollection.cs" />
@@ -258,6 +258,7 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="MandateWrapperExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
     <Compile Include="Marketing\Constraints\OfferPriceConstraint.cs" />
@@ -266,7 +267,7 @@
     <Compile Include="Marketing\Offer\IOfferResult.cs" />
     <Compile Include="Marketing\Offer\OfferComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
-    <Compile Include="Marketing\Offer\IOfferBaseManager.cs" />
+    <Compile Include="Marketing\Offer\IOfferManagerBase.cs" />
     <Compile Include="Marketing\Offer\IOfferProviderResolver.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinitionExtensions.cs" />
@@ -282,11 +283,12 @@
     <Compile Include="Marketing\Offer\OfferBase.cs" />
     <Compile Include="Marketing\Offer\IOffer.cs" />
     <Compile Include="Marketing\Offer\IOfferProvider.cs" />
-    <Compile Include="Marketing\Offer\OfferProviderBase.cs" />
+    <Compile Include="Marketing\Offer\OfferManagerBase.cs" />
     <Compile Include="Marketing\Offer\OfferProviderResolver.cs" />
     <Compile Include="Marketing\Offer\OfferResult.cs" />
     <Compile Include="Marketing\Offer\StringOperatorHelper.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
+    <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
     <Compile Include="Models\Interfaces\IOfferRedeemed.cs" />
     <Compile Include="Models\Interfaces\IOfferSettings.cs" />

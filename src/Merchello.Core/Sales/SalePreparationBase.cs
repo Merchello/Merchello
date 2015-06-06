@@ -157,6 +157,7 @@
             SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
 
+
         /// <summary>
         /// Gets the bill to address
         /// </summary>

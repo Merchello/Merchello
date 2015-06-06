@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Bazaar.Controllers.Surface
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -8,6 +9,7 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Web;
+    using Merchello.Web.Discounts.Coupons;
 
     using Umbraco.Web.Mvc;
 
@@ -17,6 +19,35 @@
     [PluginController("Bazaar")]
     public class SalePreparationOperationsController : SurfaceControllerBase
     {
+
+        //[ChildActionOnly]
+        //public ActionResult RenderApplyOfferCodeForm(ApplyOfferCodeForm model)
+        //{
+        //    return this.PartialView(PathHelper.GetThemePartialViewPath(model.Theme, "ApplyOfferCodeForm"), model);
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ApplyOfferCode(SalePreparationSummary model)
+        {
+            if (string.IsNullOrEmpty(model.OfferCode)) return this.CurrentUmbracoPage();
+
+            var couponManager = CouponManager.Instance;
+            var attempt = couponManager.GetByOfferCode(model.OfferCode, CurrentCustomer);
+
+            if (attempt.Success)
+            {
+                var coupon = attempt.Result;
+
+                var collection = Basket.SalePreparation().ItemCache;
+
+                //var lineItem = coupon.TryApply()
+            }
+
+            return this.CurrentUmbracoPage();
+        }
+
+
         /// <summary>
         /// Saves addresses during the checkout process.
         /// </summary>

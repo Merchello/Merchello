@@ -1,7 +1,11 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Rewards
 {
+    using System;
     using System.Globalization;
+    using System.Web.Mvc;
 
+    using Merchello.Core;
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
@@ -29,7 +33,7 @@
         /// <summary>
         /// The adjustment.
         /// </summary>
-        private enum Adjustment
+        internal enum Adjustment
         {
             Flat,
             Percent,
@@ -87,16 +91,16 @@
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether apply to discount to each matching item
-        /// </summary>
-        private bool ApplyToEachMatching
-        {
-            get
-            {
-                return string.Equals("True", this.GetConfigurationValue("applyToEachMatching"));
-            }
-        }
+        ///// <summary>
+        ///// Gets a value indicating whether apply to discount to each matching item
+        ///// </summary>
+        //private bool ApplyToEachMatching
+        //{
+        //    get
+        //    {
+        //        return string.Equals("True", this.GetConfigurationValue("applyToEachMatching"));
+        //    }
+        //}
 
         /// <summary>
         /// Gets the display configuration format.
@@ -133,8 +137,25 @@
         /// The <see cref="Attempt{ILinetItem}"/>.
         /// </returns>
         public override Attempt<ILineItem> TryAward(ILineItemContainer validate, ICustomerBase customer)
-        {            
-            throw new System.NotImplementedException();
+        {
+            if (!IsConfigured) return Attempt<ILineItem>.Fail(new OfferRedemptionException("The coupon reward is not configured."));
+
+
+            var visitor = new CouponDiscountLineItemRewardVisitor(Amount, MaxQuantity, AdjustmentType);
+            validate.Items.Accept(visitor);
+
+            var ed = new ExtendedDataCollection();
+            ed.SetValue(Core.Constants.ExtendedDataKeys.OfferReward, this.OfferComponentDefinition.ExtendedDataAsJson());
+
+            var discountLineItem = new InvoiceLineItem(
+                LineItemType.Discount,
+                this.GetRewardLineItemName(),
+                this.GetRewardOfferCode(),
+                1,
+                visitor.Discount, 
+                ed);
+
+            return Attempt<ILineItem>.Succeed(discountLineItem);
         }
     }
 }

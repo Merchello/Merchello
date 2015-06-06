@@ -43,7 +43,7 @@
 
         /// <summary>
         /// Gets the reward type.
-        /// This is used by the OfferChainResolver
+        /// This is used by the OfferProcessorFactory
         /// </summary>
         internal override Type RewardType
         {

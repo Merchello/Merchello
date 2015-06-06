@@ -232,6 +232,7 @@
             }
 
             viewModel.SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation());
+            viewModel.SaleSummary.ShowApplyOfferCodeForm = false;
             viewModel.CheckoutAddressForm = new CheckoutAddressForm()
                 {
                     IsAnonymous = viewModel.CurrentCustomer.IsAnonymous,
@@ -325,7 +326,7 @@
             {
                 ThemeName = viewModel.Theme,
                 CustomerToken = basket.Customer.Key.ToString().EncryptWithMachineKey(),
-                SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation()),
+                SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation()),                
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
                                                                     {
                                                                         Value = x.ShipMethod.Key.ToString(),
@@ -344,6 +345,8 @@
 
                 ResolvePaymentForms = viewModel.ResolvePaymentForms
             };
+
+            viewModel.CheckoutConfirmationForm.SaleSummary.ShowApplyOfferCodeForm = true;
 
             return viewModel;
         }

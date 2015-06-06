@@ -112,9 +112,11 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          */
         function assignComponent(component) {
             var assertComponent = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
-
             if (assertComponent === undefined && $scope.offerSettings.ensureTypeGrouping(component.typeGrouping)) {
                 $scope.offerSettings.componentDefinitions.push(component);
+                if ($scope.componentType === 'Reward') {
+                    $scope.$parent.showApplyToEachMatching = true;
+                }
                 eventsService.emit(eventName);
             }
         }

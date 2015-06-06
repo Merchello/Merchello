@@ -10,11 +10,11 @@
     /// <summary>
     /// The offer reward result.
     /// </summary>
-    /// <typeparam name="TAward">
-    /// The type of Award
-    /// </typeparam>
     /// <typeparam name="TConstraint">
     /// The type of constraint
+    /// </typeparam>
+    /// <typeparam name="TAward">
+    /// The type of Award
     /// </typeparam>
     public class OfferResult<TConstraint, TAward> : IOfferResult<TConstraint, TAward> 
         where TConstraint : class
@@ -68,7 +68,7 @@
         {
             if (!attempt.Success)
             {
-                var failed = Attempt<IOfferResult<TConstraint, TAward>>.Fail(attempt.Exception);
+                var failed = Attempt<IOfferResult<TConstraint, TAward>>.Fail(new OfferResult<TConstraint, TAward>(), attempt.Exception);
                 if (attempt.Result != null)
                 {
                     failed.Result.Customer = attempt.Result.Customer;

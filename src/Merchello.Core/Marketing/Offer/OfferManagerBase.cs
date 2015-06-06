@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
 
@@ -16,7 +17,7 @@
     /// <remarks>
     /// This is used in provider resolution
     /// </remarks>
-    public abstract class OfferProviderBase<TOffer> : IOfferBaseManager<TOffer>, IOfferProvider
+    public abstract class OfferManagerBase<TOffer> : IOfferManagerBase<TOffer>, IOfferProvider
         where TOffer : OfferBase
     {
         /// <summary>
@@ -25,12 +26,12 @@
         private readonly IOfferSettingsService _offerSettingsService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OfferProviderBase{TOffer}"/> class.
+        /// Initializes a new instance of the <see cref="OfferManagerBase{TOffer}"/> class.
         /// </summary>
         /// <param name="offerSettingsService">
         /// The <see cref="IOfferSettingsService"/>.
         /// </param>
-        protected OfferProviderBase(IOfferSettingsService offerSettingsService)
+        protected OfferManagerBase(IOfferSettingsService offerSettingsService)
         {
             Mandate.ParameterNotNull(offerSettingsService, "offerSettingsService");
 
@@ -59,7 +60,7 @@
             } 
         }
 
-        #region implementation of IOfferBaseManager       
+        #region implementation of IOfferManagerBase       
 
         /// <summary>
         /// The get by key.
@@ -77,18 +78,48 @@
         }
 
         /// <summary>
-        /// Gets an offer by it's offer code.
+        /// Gets an offer by it's offer code (with manager defaults).
         /// </summary>
         /// <param name="offerCode">
         /// The offer code.
         /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public abstract Attempt<TOffer> GetByOfferCode(string offerCode, ICustomerBase customer);
+        
+
+        /// <summary>
+        /// Gets an offer by it's offer code.
+        /// </summary>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
+        /// <typeparam name="TAward">
+        /// The type of award
+        /// </typeparam>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <param name="customer">
+        /// The customer
+        /// </param>
         /// <returns>
         /// The <see cref="TOffer"/>.
         /// </returns>
-        public TOffer GetByOfferCode(string offerCode)
+        public Attempt<TOffer> GetByOfferCode<TConstraint, TAward>(string offerCode, ICustomerBase customer)
+            where TConstraint : class 
+            where TAward : class
         {
             var settings = _offerSettingsService.GetByOfferCode(offerCode);
-            return this.GetInstance(settings);
+            var instance = this.GetInstance(settings);
+
+            var ensure = instance.EnsureOfferIsValid<TConstraint, TAward>(customer);
+
+            return !ensure.Success ? Attempt<TOffer>.Fail(ensure.Exception) : Attempt<TOffer>.Succeed(instance);
         }
 
         #endregion

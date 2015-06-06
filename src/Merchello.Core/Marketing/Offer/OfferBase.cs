@@ -3,16 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using Merchello.Core.Chains.OfferConstraints;
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
 
+    using umbraco.cms.businesslogic.datatype;
+
     using Umbraco.Core;
-    using Umbraco.Core.Media;
 
     /// <summary>
     /// A base for Offer classes
@@ -27,7 +28,12 @@
         /// <summary>
         /// The offer chain resolver.
         /// </summary>
-        private IOfferChainResolver _offerChainResolver;
+        private IOfferProcessorFactory _offerProcessorFactory;
+
+        /// <summary>
+        /// The offer processor.
+        /// </summary>
+        private IOfferProcessor _offerProcessor;
 
         /// <summary>
         /// The resolved offer components.
@@ -172,22 +178,33 @@
         /// <summary>
         /// Gets the collection constraints.
         /// </summary>
-        protected IEnumerable<OfferConstraintComponentBase> Constraints
+        internal IEnumerable<OfferConstraintComponentBase> Constraints
         {
             get
             {
-                return _components.Where(x => x.ComponentType == OfferComponentType.Constraint).Select(x => (OfferConstraintComponentBase)x);
+                return ResolvedComponents.Where(x => x.ComponentType == OfferComponentType.Constraint).Select(x => (OfferConstraintComponentBase)x);
             }
         }
 
         /// <summary>
         /// Gets the offer reward.
         /// </summary>
-        protected OfferRewardComponentBase Reward
+        internal OfferRewardComponentBase Reward
         {
             get
             {
-                return _components.FirstOrDefault(x => x.ComponentType == OfferComponentType.Reward) as OfferRewardComponentBase;
+                return ResolvedComponents.FirstOrDefault(x => x.ComponentType == OfferComponentType.Reward) as OfferRewardComponentBase;
+            }
+        }
+
+        /// <summary>
+        /// Gets the offer processor.
+        /// </summary>
+        internal IOfferProcessor OfferProcessor
+        {
+            get
+            {
+                return _offerProcessor ?? _offerProcessorFactory.Build(this);
             }
         }
 
@@ -204,28 +221,53 @@
 
         #endregion
 
-        #region lineitemoffer
+        #region lineitemoffer      
 
         /// <summary>
-        /// Attempts to award the reward defined by the offer
+        /// Attempts to apply the constraints against the offer.
         /// </summary>
+        /// <param name="validatedAgainst">
+        /// The validated against.
+        /// </param>
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <typeparam name="TAward">
-        /// The type of offer award
-        /// </typeparam>
         /// <typeparam name="TConstraint">
         /// The type of constraint
         /// </typeparam>
+        /// <typeparam name="TAward">
+        /// The type of offer award
+        /// </typeparam>
         /// <returns>
-        /// The <see cref="Attempt{IOfferResult}"/>.
+        /// The <see cref="Attempt"/>.
         /// </returns>
-        public Attempt<IOfferResult<TAward, TConstraint>> TryToAward<TAward, TConstraint>(ICustomerBase customer) 
-            where TAward : class
-            where TConstraint : class
+        public Attempt<IOfferResult<TConstraint, TAward>> TryApplyConstraints<TConstraint, TAward>(object validatedAgainst, ICustomerBase customer) where TConstraint : class where TAward : class
         {
-            return TryToAward<TAward, TConstraint>(null, customer);
+            var result = new OfferResult<object, object>
+            {
+                Customer = customer,
+                Messages = new List<string>()
+            };
+
+            // ensure the offer is valid
+            var ensureOffer = this.EnsureValidOffer(result);
+            if (!ensureOffer.Success) return ensureOffer.As<TConstraint, TAward>();
+            result = ensureOffer.Result as OfferResult<object, object>;
+            if (result == null) throw new NullReferenceException("EnsureValidOffer returned a null Result");
+
+            var constraintAttempt = TryApplyConstraints(validatedAgainst, customer);
+            result = PopulateConstraintOfferResult(result, constraintAttempt) as OfferResult<object, object>;
+            if (result == null) throw new NullReferenceException("EnsureValidOffer returned a null Result");
+
+            if (!constraintAttempt.Success)
+            {
+                var exception = new Exception("Offer constraint validation failed.");
+                return Attempt<IOfferResult<object, object>>.Fail(result, exception).As<TConstraint, TAward>();
+            }
+
+            result.ValidatedAgainst = validatedAgainst as TConstraint;
+            result.Messages.Add("PASSED - Constraint validation");
+            return Attempt<IOfferResult<object, object>>.Succeed(result).As<TConstraint, TAward>();
         }
 
         /// <summary>
@@ -237,22 +279,74 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <typeparam name="TAward">
-        /// The type of offer award
-        /// </typeparam>
+        /// <param name="applyConstraints">
+        /// Optional parameter indicating whether or not to apply constraints before attempting to award the reward.
+        /// Defaults to true.
+        /// </param>
         /// <typeparam name="TConstraint">
         /// The type of constraint
+        /// </typeparam>
+        /// <typeparam name="TAward">
+        /// The type of offer award
         /// </typeparam>
         /// <returns>
         /// The <see cref="Attempt{IOfferResult}"/>.
         /// </returns>
-        public Attempt<IOfferResult<TAward, TConstraint>> TryToAward<TAward, TConstraint>(object validatedAgainst, ICustomerBase customer) 
+        public Attempt<IOfferResult<TConstraint, TAward>> TryToAward<TConstraint, TAward>(object validatedAgainst, ICustomerBase customer, bool applyConstraints = true) 
             where TAward : class
             where TConstraint : class
         {
-            return TryToAward(validatedAgainst, customer).As<TAward, TConstraint>();           
+            return TryToAward(validatedAgainst, customer).As<TConstraint, TAward>();           
         }
 
+
+        /// <summary>
+        /// Tries to apply the constraints
+        /// </summary>
+        /// <param name="validatedAgainst">
+        /// The validated against.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="applyConstraints">
+        /// Optional parameter indicating whether or not to apply constraints before attempting to award the reward.
+        /// Defaults to true.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        internal Attempt<object> TryApplyConstraints(object validatedAgainst, ICustomerBase customer, bool applyConstraints = true)
+        {
+            // apply the constraints
+            return OfferProcessor.TryApplyConstraints(validatedAgainst, customer);
+        }
+
+        /// <summary>
+        /// Attempts to award the reward defined by the offer
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="applyConstraints">
+        /// Optional parameter indicating whether or not to apply constraints before attempting to award the reward.
+        /// Defaults to true.
+        /// </param>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
+        /// <typeparam name="TAward">
+        /// The type of offer award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt{IOfferResult}"/>.
+        /// </returns>
+        internal Attempt<IOfferResult<TConstraint, TAward>> TryToAward<TConstraint, TAward>(ICustomerBase customer, bool applyConstraints = true)
+            where TAward : class
+            where TConstraint : class
+        {
+            return TryToAward<TConstraint, TAward>(null, customer);
+        }
 
         /// <summary>
         /// Attempts to award the reward defined by the offer
@@ -263,11 +357,15 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
+        /// <param name="applyConstraints">
+        /// Optional parameter indicating whether or not to apply constraints before attempting to award the reward.
+        /// Defaults to true.
+        /// </param>
         /// <returns>
         /// 
         /// The <see cref="Attempt"/>.
         /// </returns>
-        public Attempt<IOfferResult<object, object>> TryToAward(object validatedAgainst, ICustomerBase customer)
+        internal Attempt<IOfferResult<object, object>> TryToAward(object validatedAgainst, ICustomerBase customer, bool applyConstraints = true)
         {
             var result = new OfferResult<object, object>
                              {   
@@ -275,48 +373,150 @@
                                  Messages = new List<string>()
                              };
 
-            // assert there is a reward
-            if (Reward == null)
-            {
-                var nullReference = new NullReferenceException("Reward property was null");
-                result.Award = null;
-                result.Messages.Add("A reward has not been set for this offer.");
-                return Attempt<IOfferResult<object, object>>.Fail(result, nullReference);
-            }
+            // ensure the offer is valid
+            var ensureOffer = this.EnsureValidOffer(result);
+            if (!ensureOffer.Success) return ensureOffer;
+            result = ensureOffer.Result as OfferResult<object, object>;
+            if (result == null) throw new NullReferenceException("EnsureValidOffer returned a null Result");
 
+            Attempt<object> awardAttempt;
 
-            var offerChain = this._offerChainResolver.BuildChain(Constraints, Reward.RewardType);
-            
-            // apply the constraints
-            var constraintAttempt = offerChain.TryApplyConstraints(validatedAgainst, customer);
-            if (!constraintAttempt.Success)
+            if (applyConstraints)
             {
-                var exception = new Exception("Offer constraint validation failed.");
-                result.Award = null;
+                // apply the constraints
+                var constraintAttempt = this.TryApplyConstraints(validatedAgainst, customer);
+                result = PopulateConstraintOfferResult(result, constraintAttempt) as OfferResult<object, object>;
+                if (result == null) throw new NullReferenceException("PopulateConstraintOfferResult returned null");
+
+                if (!constraintAttempt.Success)
+                {
+                    var exception = new Exception("Offer constraint validation failed.");
+                    return Attempt<IOfferResult<object, object>>.Fail(result, exception);
+                }
+
+                awardAttempt = OfferProcessor.TryAward(constraintAttempt.Result, customer);
                 result.ValidatedAgainst = constraintAttempt.Result;
-                result.Messages.AddRange(
-                            new[] 
-                            {
-                                "Did not pass constraint validation.",
-                                constraintAttempt.Exception.Message 
-                            });
-                return Attempt<IOfferResult<object, object>>.Fail(result, exception);
+            }
+            else
+            {
+                awardAttempt = OfferProcessor.TryAward(validatedAgainst, customer);
+                result.ValidatedAgainst = validatedAgainst;
             }
 
-            // get the reward
-            var awardAttempt = offerChain.TryAward(constraintAttempt.Result, customer);
+            // get the reward            
             result.Award = awardAttempt.Result;
-            result.ValidatedAgainst = constraintAttempt.Result;
-            if (awardAttempt.Success)
-            {                
-                result.Messages.Add("Success");
-                return Attempt<IOfferResult<object, object>>.Succeed(result);
+            if (!awardAttempt.Success)
+            {
+                return Attempt<IOfferResult<object, object>>.Fail(result, awardAttempt.Exception);
             }
 
-            return Attempt<IOfferResult<object, object>>.Fail(result, awardAttempt.Exception);
+            result.Messages.Add("AWARD - Success");
+            return Attempt<IOfferResult<object, object>>.Succeed(result);
         }
 
         #endregion
+
+        /// <summary>
+        /// The ensure offer is valid.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
+        /// <typeparam name="TAward">
+        /// The type of award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        internal Attempt<IOfferResult<TConstraint, TAward>> EnsureOfferIsValid<TConstraint, TAward>(ICustomerBase customer)
+            where TConstraint :
+            class
+            where TAward : class
+        {
+            var result = new OfferResult<object, object>
+            {
+                Customer = customer,
+                Messages = new List<string>()
+            };
+
+            return this.EnsureValidOffer(result).As<TConstraint, TAward>();
+        }
+
+        /// <summary>
+        /// The populate constraint offer result.
+        /// </summary>
+        /// <param name="seed">
+        /// The seed.
+        /// </param>
+        /// <param name="constraintAttempt">
+        /// The constraint attempt.
+        /// </param>
+        /// <returns>
+        /// The offer result.
+        /// </returns>
+        private static IOfferResult<object, object> PopulateConstraintOfferResult(IOfferResult<object, object> seed, Attempt<object> constraintAttempt)
+        {
+            if (!constraintAttempt.Success)
+            {
+                seed.Award = null;
+                seed.ValidatedAgainst = constraintAttempt.Result;
+                seed.Messages.AddRange(
+                    new[] { "Did not pass constraint validation.", constraintAttempt.Exception.Message });
+            }
+            else
+            {
+                seed.Messages.Add("PASSED - Constraint validation");
+            }
+
+            return seed;
+        }
+
+        /// <summary>
+        /// Ensures the offer is valid.
+        /// </summary>
+        /// <param name="seed">
+        /// The seed.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        private Attempt<IOfferResult<object, object>> EnsureValidOffer(IOfferResult<object, object> seed)
+        {
+            // verify a reward has been configured
+            if (Reward == null)
+            {
+                seed.Messages.Add("This offer does not have a reward configured");
+                return Attempt<IOfferResult<object, object>>.Fail(seed, new OfferRedemptionException("Offer does not have a configured award"));
+            }
+
+            // ensure the offer is active
+            if (!Settings.Active)
+            {
+                seed.Messages.Add("Offer is not active");
+                return Attempt<IOfferResult<object, object>>.Fail(seed, new OfferRedemptionException("Offer is not active"));
+            }
+
+            // ensure the offer has not expired
+            if (Settings.Expired)
+            {
+                seed.Messages.Add("Offer has expired.");
+                return Attempt<IOfferResult<object, object>>.Fail(seed, new OfferRedemptionException("Offer has expired."));
+            }
+
+            // verify an offer processor is available for the offer
+            if (OfferProcessor == null)
+            {
+                seed.Messages.Add("An offer processor could not be resolved for this offer.  Custom offers must have custom offer processors defined.");
+                return Attempt<IOfferResult<object, object>>.Fail(seed, new OfferRedemptionException("Offer processor was not resolved"));
+            }
+
+            // success
+            return Attempt<IOfferResult<object, object>>.Succeed(seed);
+        } 
+
 
         /// <summary>
         /// The initialize.
@@ -329,9 +529,8 @@
             if (!OfferComponentResolver.HasCurrent) throw new Exception("OfferComponentResolver has not been instantiated.");
             _componentResolver = OfferComponentResolver.Current;
 
-            if (!OfferChainResolver.HasCurrent) throw new Exception("OfferChainResolver has not been instantiated");
-            this._offerChainResolver = OfferChainResolver.Current;
-
+            if (!OfferProcessorFactory.HasCurrent) throw new Exception("OfferProcessorFactory has not been instantiated");
+            this._offerProcessorFactory = OfferProcessorFactory.Current;
         }
 
     }
