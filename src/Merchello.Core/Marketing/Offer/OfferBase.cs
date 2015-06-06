@@ -241,7 +241,9 @@
         /// <returns>
         /// The <see cref="Attempt"/>.
         /// </returns>
-        public Attempt<IOfferResult<TConstraint, TAward>> TryApplyConstraints<TConstraint, TAward>(object validatedAgainst, ICustomerBase customer) where TConstraint : class where TAward : class
+        public Attempt<IOfferResult<TConstraint, TAward>> TryApplyConstraints<TConstraint, TAward>(object validatedAgainst, ICustomerBase customer) 
+            where TConstraint : class 
+            where TAward : class
         {
             var result = new OfferResult<object, object>
             {
@@ -255,6 +257,7 @@
             result = ensureOffer.Result as OfferResult<object, object>;
             if (result == null) throw new NullReferenceException("EnsureValidOffer returned a null Result");
 
+            // attempt to validate against any constraints that have been configured
             var constraintAttempt = TryApplyConstraints(validatedAgainst, customer);
             result = PopulateConstraintOfferResult(result, constraintAttempt) as OfferResult<object, object>;
             if (result == null) throw new NullReferenceException("EnsureValidOffer returned a null Result");
@@ -296,7 +299,7 @@
             where TAward : class
             where TConstraint : class
         {
-            return TryToAward(validatedAgainst, customer).As<TConstraint, TAward>();           
+            return TryToAward(validatedAgainst, customer, applyConstraints).As<TConstraint, TAward>();           
         }
 
 
@@ -309,14 +312,10 @@
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <param name="applyConstraints">
-        /// Optional parameter indicating whether or not to apply constraints before attempting to award the reward.
-        /// Defaults to true.
-        /// </param>
         /// <returns>
         /// The <see cref="Attempt"/>.
         /// </returns>
-        internal Attempt<object> TryApplyConstraints(object validatedAgainst, ICustomerBase customer, bool applyConstraints = true)
+        internal Attempt<object> TryApplyConstraints(object validatedAgainst, ICustomerBase customer)
         {
             // apply the constraints
             return OfferProcessor.TryApplyConstraints(validatedAgainst, customer);
@@ -345,7 +344,7 @@
             where TAward : class
             where TConstraint : class
         {
-            return TryToAward<TConstraint, TAward>(null, customer);
+            return TryToAward<TConstraint, TAward>(null, customer, applyConstraints);
         }
 
         /// <summary>

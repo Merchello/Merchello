@@ -83,8 +83,8 @@
             this.BuildConstraintChain(this._constraints.Select(x => this.ConvertConstraintToTask(x, customer)));
 
             var attempt = TaskHandlers.Any()
-                      ? TaskHandlers.First().Execute(convert.Result)
-                      : Attempt<TConstraint>.Fail(new InvalidOperationException("The chain Task List could not be instantiated.  TaskHandlers array was empty."));
+                              ? TaskHandlers.First().Execute(convert.Result)
+                              : Attempt<TConstraint>.Succeed(convert.Result); // there were no constraints
 
             // convert bask to an object
             return attempt.Success
@@ -108,32 +108,29 @@
         {
             if (!this.IsInitialized) return Attempt<object>.Fail(new OfferRedemptionException("Offer processor not initialized."));
 
-            var attempt = _reward.TryConvertTo(typeof(OfferRewardComponentBase<TConstraint, TAward>));
-
-            if (attempt.Success)
+            try
             {
-                var reward = attempt.Result as OfferRewardComponentBase<TConstraint, TAward>;
+                var reward = _reward as OfferRewardComponentBase<TConstraint, TAward>;
                 var converted = validatedAgainst.TryConvertTo<TConstraint>();
                 if (converted.Success)
                 {
-                    if (reward != null)
-                    {
-                                           
+                    if (reward == null) return Attempt<object>.Fail(new NullReferenceException("Converted reward was null"));
+
                     var rewardAttempt = reward.TryAward(converted.Result, customer);
 
                     return !rewardAttempt.Success ? 
-                        Attempt<object>.Fail(rewardAttempt.Result, rewardAttempt.Exception) : 
-                        Attempt<object>.Succeed(rewardAttempt.Result);
-                    }
-
-                    return Attempt<object>.Fail(new NullReferenceException("Converted reward was null"));
+                               Attempt<object>.Fail(rewardAttempt.Result, rewardAttempt.Exception) : 
+                               Attempt<object>.Succeed(rewardAttempt.Result);
                 }
 
                 LogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert validation object", converted.Exception);
+                throw converted.Exception;
             }
-
-            LogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert reward type", attempt.Exception);
-            throw attempt.Exception;
+            catch (Exception ex)
+            {             
+                LogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert reward type", ex);
+                throw;                   
+            }                           
         }
 
 

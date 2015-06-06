@@ -39,9 +39,14 @@
             {
                 var coupon = attempt.Result;
 
+                // TODO move all of this stuff into sales preparation
                 var collection = Basket.SalePreparation().ItemCache;
 
-                //var lineItem = coupon.TryApply()
+                var apply = coupon.TryApply(collection, CurrentCustomer);
+                if (apply.Success)
+                {
+                    collection.Items.Add(apply.Result.Award);
+                }
             }
 
             return this.CurrentUmbracoPage();
