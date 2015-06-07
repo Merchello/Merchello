@@ -94,7 +94,15 @@
             if (!foundOffer.Success) return Attempt<IOfferResult<ILineItemContainer, ILineItem>>.Fail(foundOffer.Exception);
 
             var coupon = foundOffer.Result;
-            var attempt = coupon.TryApply(ItemCache, Customer);
+
+            // The ItemCache needs to be cloned as line items may be altered while applying constraints
+            var newItemCache = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
+            foreach (var item in ItemCache.Items)
+            {
+                newItemCache.Items.Add(item.AsLineItemOf<ItemCacheLineItem>());
+            }
+
+            var attempt = coupon.TryApply(newItemCache, Customer);
 
             if (!attempt.Success) return attempt;
 
@@ -107,7 +115,7 @@
                     Core.Constants.ExtendedDataKeys.OfferReward, 
                     JsonConvert.SerializeObject(coupon.Settings.ToOfferSettingsDisplay()));
 
-            // save the coupon
+            // save the coupon into the original item cache
             ItemCache.AddItem(attempt.Result.Award.AsLineItemOf<ItemCacheLineItem>());
 
             MerchelloContext.Services.ItemCacheService.Save(ItemCache);               

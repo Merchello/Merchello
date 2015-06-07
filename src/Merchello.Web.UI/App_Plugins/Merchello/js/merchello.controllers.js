@@ -26,10 +26,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         $scope.context = 'create';
         $scope.tabs = {};
         $scope.settings = {};
-        $scope.applyToEachMatching = false;
         $scope.offerProvider = {};
         $scope.allComponents = [];
-        $scope.showApplyToEachMatching = false;
+        $scope.hasReward = false;
         $scope.lineItemName = '';
 
         // exposed methods
@@ -129,13 +128,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                 var offerSettingsPromise = marketingResource.getOfferSettings(key);
                 offerSettingsPromise.then(function(settings) {
                     $scope.offerSettings = offerSettingsDisplayBuilder.transform(settings);
-                    $scope.applyToEachMatching = ($scope.offerSettings.getApplyToEachMatching() === true);
                     $scope.lineItemName = $scope.offerSettings.getLineItemName();
-                    if ($scope.lineItemName === '' && $scope.offerSettings.hasRewards()) {
-                        var reward = $scope.offerSettings.getReward();
-                        $scope.lineItemName = reward.name;
-                    }
-                    $scope.showApplyToEachMatching = $scope.offerSettings.hasRewards();
+                    $scope.hasReward = $scope.offerSettings.hasRewards();
                     createTabs(key);
                     if ($scope.offerSettings.offerStartsDate === '0001-01-01' || !$scope.offerSettings.offerExpires) {
                         setDefaultDates(new Date());
@@ -173,13 +167,16 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
         }
 
         function saveOffer() {
-            $scope.offerSettings.setApplyToEachMatching($scope.applyToEachMatching);
-            $scope.offerSettings.setRewardOfferCode();
+
             eventsService.emit(eventOfferSavingName, $scope.offerForm);
             if($scope.offerForm.$valid) {
                 var offerPromise;
                 var isNew = false;
                 $scope.preValuesLoaded = false;
+
+                // validate the components
+                $scope.offerSettings.validateComponents();
+
                 if ($scope.context === 'create' || $scope.offerSettings.key === '') {
                     isNew = true;
                     offerPromise = marketingResource.newOfferSettings($scope.offerSettings);
@@ -192,6 +189,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
                     if (isNew) {
                         $location.url($scope.offerProvider.editorUrl(settings.key), true);
                     } else {
+                        $scope.offerSettings = undefined;
                         loadOffer(settings.key);
                     }
                 }, function (reason) {
@@ -261,7 +259,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
             $scope.loaded = false;
             $scope.adjustmentType = 'flat';
             $scope.currencySymbol = '';
-            $scope.maxQuantity = 0;
             $scope.amount = 0;
 
             // exposed methods
@@ -305,7 +302,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
                 if ($scope.priceAdjustForm.$valid) {
                     $scope.dialogData.setValue('amount', Math.abs(invoiceHelper.round($scope.amount*1, 2)));
                     $scope.dialogData.setValue('adjustmentType', $scope.adjustmentType);
-                    $scope.dialogData.setValue('maxQuantity', Math.floor($scope.maxQuantity * 1))
                     $scope.submit($scope.dialogData);
                 }
             }
@@ -323,7 +319,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
  * @description
  * The controller to configure the price component constraint
  */
-angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintPriceController',
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintFilterPriceRulesController',
     ['$scope', 'settingsResource', 'invoiceHelper',
         function($scope, settingsResource, invoiceHelper) {
 
@@ -385,13 +381,13 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
 /**
  * @ngdoc controller
- * @name Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController
+ * @name Merchello.Marketing.Dialogs.OfferConstraintFilterQuantityRulesController
  * @function
  *
  * @description
  * The controller to configure the line item quantity component constraint
  */
-angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintProductLineItemQuantityController',
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintFilterQuantityRulesController',
     ['$scope',
     function($scope) {
         $scope.loaded = false;
@@ -439,13 +435,54 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
 /**
  * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintMaximumQuantityController
+ * @function
+ *
+ * @description
+ * The controller to configure the line item quantity component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintMaximumQuantityController',
+    ['$scope',
+    function($scope) {
+
+    $scope.loaded = false;
+    $scope.maximum = 1;
+
+    // exposed
+    $scope.save = save;
+
+    function init() {
+        console.info($scope.dialogData);
+        if ($scope.dialogData.component.isConfigured()) {
+            loadExistingConfigurations();
+            $scope.loaded = true;
+        } else {
+            $scope.loaded = true;
+        }
+    }
+
+    function loadExistingConfigurations() {
+        var maximum = $scope.dialogData.getValue('maximum')
+        $scope.maximum = maximum === '' ? 1 : maximum * 1;
+    }
+
+    function save() {
+        $scope.dialogData.setValue('maximum', $scope.maximum);
+        $scope.submit($scope.dialogData);
+    }
+
+    // Initialize the controller
+    init();
+}]);
+/**
+ * @ngdoc controller
  * @name Merchello.Marketing.Dialogs.OfferConstraintPriceController
  * @function
  *
  * @description
  * The controller to configure the price component constraint
  */
-angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintRestrictToProductSelectionController',
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintProductSelectionFilterController',
     ['$q', '$scope', 'notificationsService', 'productResource', 'settingsResource', 'productDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
         function($q, $scope, notificationsService, productResource, settingsResource, productDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
 
@@ -553,7 +590,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
                 if (existing !== undefined && existing !== '')
                 {
                     var parsed = JSON.parse(existing);
-                    console.info(parsed);
                     var productKeys = _.pluck(parsed, 'productKey');
 
                     var    productsPromise = productResource.getByKeys(productKeys);
@@ -885,13 +921,10 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          * Adds a component from the offer
          */
         function assignComponent(component) {
-            var assertComponent = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
-            if (assertComponent === undefined && $scope.offerSettings.ensureTypeGrouping(component.typeGrouping)) {
-                component.offerSettingsKey = $scope.offerSettings.key;
-                console.info(component);
-                $scope.offerSettings.componentDefinitions.push(component);
+            if($scope.offerSettings.assignComponent(component))
+            {
                 if ($scope.componentType === 'Reward') {
-                    $scope.$parent.showApplyToEachMatching = true;
+                    $scope.$parent.hasReward = true;
                 }
                 eventsService.emit(eventName);
             }

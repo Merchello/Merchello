@@ -7,7 +7,7 @@
               <th colspan="2" class="span12">Available {{componentType}}s</th>
               </tr>
               <tr data-ng-repeat="component in availableComponents" data-ng-show="availableComponents.length > 0">
-                  <td class="span11">{{component.name}}<small data-ng-show="component.description !== ''">{{component.description}}</small></td>
+                  <td class="span11"><strong><em>{{component.name}}</em></strong><small data-ng-show="component.description !== ''">{{component.description}}</small></td>
                   <td class="span1 text-right"><a class="btn btn-warning btn-xs btn-mini" data-ng-click="assignComponent(component)">Add</a></td>
               </tr>
               <tr data-ng-show="availableComponents.length === 0">
@@ -22,7 +22,7 @@
                 </tr>
                 <tr data-ng-repeat="component in assignedComponents" data-ng-show="assignedComponents.length > 0">
                     <td class="span10">
-                        {{component.name}}
+                        <strong><em>{{component.name}}</em></strong>
                         <small data-ng-show="component.description !== ''">{{component.description}}</small>
                         <small data-ng-show="component.updated" class="component-not-ready">Component updated - auto saving</small>
                         <small data-ng-show="component.isConfigured() && !component.updated" class="component-configured">Configured</small>

@@ -35,6 +35,131 @@
             
             </summary>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionAlterationCouponConstraintBase">
+            <summary>
+            A base class for coupon constraints that alter the validation collection
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionAlterationCouponConstraintBase.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionAlterationCouponConstraintBase"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionAlterationCouponConstraintBase.CreateNewLineContainer(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ILineItem})">
+            <summary>
+            Creates a new <see cref="T:Merchello.Core.Models.ILineItemContainer"/> with filtered items.
+            </summary>
+            <param name="filteredItems">
+            The line items.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.ILineItemContainer"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint">
+            <summary>
+            The exclude shipping cost constraint.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint.RequiresConfiguration">
+            <summary>
+            Gets a value indicating this reward does not require configuration.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint">
+            <summary>
+            The maximum quantity constraint.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint.MaximumQuantity">
+            <summary>
+            Gets the maximum quantity.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor">
+            <summary>
+            The maximum quantity constraint visitor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor._maximum">
+            <summary>
+            The maximum quantity.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor"/> class.
+            </summary>
+            <param name="max">
+            The max.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Visits the line item an asserts the maximum quantity.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor.ModifiedItems">
+            <summary>
+            Gets or sets the modified items.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint">
             <summary>
             A discount rule to prohibit a discount from being used with other discounts.
@@ -52,6 +177,99 @@
             <summary>
             Gets a value indicating that this component does not require configuration.
             </summary>        
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueConstraintVisitor">
+            <summary>
+            The numerical value constraint visitor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueConstraintVisitor._target">
+            <summary>
+            The target value configured in the back office editor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueConstraintVisitor._operator">
+            <summary>
+            The string based operator.
+            </summary>
+            <remarks>
+            eg. eq, lt, lte, gt, gte
+            </remarks>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueConstraintVisitor._property">
+            <summary>
+            The property.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueConstraintVisitor.#ctor(System.Decimal,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueConstraintVisitor"/> class.
+            </summary>
+            <param name="target">
+            The target.
+            </param>
+            <param name="op">
+            The op.
+            </param>
+            <param name="property">
+            The property - either quantity or price
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueConstraintVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Visits the line items to apply expression.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>        
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueConstraintVisitor.FilteredLineItems">
+            <summary>
+            Gets the filtered line items.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint">
+            <summary>
+            Filters the line item collection for configured price rules."
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.Price">
+            <summary>
+            Gets the amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.Operator">
+            <summary>
+            Gets the operator.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint">
             <summary>
@@ -84,6 +302,123 @@
             <summary>
             Gets a value indicating that this component does not require configuration.
             </summary>        
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor">
+            <summary>
+            The product selection constraint visitor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor._constraints">
+            <summary>
+            The product constraints.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor._filteredItems">
+            <summary>
+            The filtered items.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor.#ctor(System.Collections.Generic.IEnumerable{Merchello.Core.Marketing.Constraints.ProductConstraintData})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor"/> class.
+            </summary>
+            <param name="productContraints">
+            The product constraints.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Visits the line items to apply expression.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param> 
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor.FilteredItems">
+            <summary>
+            Gets the filtered items.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.QuantityFilterRulesConstraint">
+            <summary>
+            A discount validation constraint to restrict this offer to line item quantity related rules.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.QuantityFilterRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.QuantityFilterRulesConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.QuantityFilterRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.QuantityFilterRulesConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.QuantityFilterRulesConstraint.Quantity">
+            <summary>
+            Gets the amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.QuantityFilterRulesConstraint.Operator">
+            <summary>
+            Gets the operator.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint">
+            <summary>
+            A discount validation constraint to restrict this discount to a selection of products.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint"/> class.
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint.ProductConstraintDataSet">
+            <summary>
+            Gets the product constraint data set.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionEventHandler">
             <summary>
@@ -211,16 +546,6 @@
             Gets the adjustment type.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.MaxQuantity">
-            <summary>
-            Gets the max quantity.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.ApplyToEachMatching">
-            <summary>
-            Gets a value indicating whether apply to discount to each matching item
-            </summary>
-        </member>
         <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.DisplayConfigurationFormat">
             <summary>
             Gets the display configuration format.
@@ -230,52 +555,6 @@
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.Adjustment">
             <summary>
             The adjustment.
-            </summary>
-        </member>
-        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor">
-            <summary>
-            The coupon discount line item reward visitor.
-            </summary>
-        </member>
-        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._maxQuantity">
-            <summary>
-            The max quantity configured in the reward.
-            </summary>
-        </member>
-        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._filteredItems">
-            <summary>
-            The list of matching items.
-            </summary>
-        </member>
-        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._allLineItems">
-            <summary>
-            The all line items.
-            </summary>
-        </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.#ctor(System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor"/> class.
-            </summary>
-            <param name="maxQuantity">
-            The max quantity.
-            </param>
-        </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.Visit(Merchello.Core.Models.ILineItem)">
-            <summary>
-            Visits the line item.
-            </summary>
-            <param name="lineItem">
-            The line item.
-            </param>
-        </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.FilteredItems">
-            <summary>
-            Gets the filtered items.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.AllLineItems">
-            <summary>
-            Gets the modified collection of all line items.
             </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward">
@@ -554,6 +833,11 @@
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.OfferSettingsKey">
             <summary>
             Gets or sets the offer settings key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.OfferCode">
+            <summary>
+            Gets or sets the offer code.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentKey">

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text;
 
@@ -33,13 +34,38 @@
         public bool SpecifiedVariants { get; set; }
     }
 
+    /// <summary>
+    /// The product constraint data extensions.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements", Justification = "Reviewed. Suppression is OK here."),SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements", Justification = "Reviewed. Suppression is OK here.")]
     internal static class ProductConstraintDataExtensions
     {
+        /// <summary>
+        /// Gets display text for the back office UI.
+        /// </summary>
+        /// <param name="constraints">
+        /// The constraints.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string GetUiDisplayText(this IEnumerable<ProductConstraintData> constraints)
         {
             return constraints.GetUiDisplayText(MerchelloContext.Current);
         }
 
+        /// <summary>
+        /// Gets display text for the back office UI.
+        /// </summary>
+        /// <param name="constraints">
+        /// The constraints.
+        /// </param>
+        /// <param name="mc">
+        /// The mc.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string GetUiDisplayText(this IEnumerable<ProductConstraintData> constraints, IMerchelloContext mc)
         {
             if (mc == null)

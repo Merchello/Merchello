@@ -34,7 +34,7 @@
             var discountLineItem = new ItemCacheLineItem(
                 LineItemType.Discount,
                 this.GetRewardLineItemName(),
-                this.GetRewardOfferCode(),
+                this.OfferCode,
                 1,
                 0);
 

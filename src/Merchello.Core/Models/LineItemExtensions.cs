@@ -16,7 +16,7 @@
     public static class LineItemExtensions
     {
         #region LineItemContainer
-
+        
         /// <summary>
         /// Gets the tax line items.
         /// </summary>

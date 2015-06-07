@@ -30,6 +30,10 @@
             var configurations = JsonConvert.DeserializeObject<IEnumerable<OfferComponentConfiguration>>(dto.ConfigurationData);
 
             var definitionCollection = new OfferComponentDefinitionCollection();
+            foreach (var config in configurations)
+            {
+                definitionCollection.Add(new OfferComponentDefinition(config));
+            }
 
             var settings = new OfferSettings(dto.Name, dto.OfferCode, dto.OfferProviderKey, definitionCollection)
                 {

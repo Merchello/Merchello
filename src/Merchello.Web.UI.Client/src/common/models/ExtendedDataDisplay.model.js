@@ -19,7 +19,7 @@
 
         function getValue(key) {
             if (isEmpty.call(this)) {
-                return;
+                return '';
             }
             var found = false;
             var i = 0;

@@ -49,7 +49,9 @@
 
         function componentDefinitionExtendedDataToArray() {
             angular.forEach(this.componentDefinitions, function(cd) {
-                cd.extendedData = cd.extendedData.toArray();
+                if (!angular.isArray(cd.extendedData)) {
+                    cd.extendedData = cd.extendedData.toArray();
+                }
             });
         }
 
@@ -91,29 +93,22 @@
             return this.componentDefinitions[0].typeGrouping === typeGrouping;
         }
 
+        function assignComponent(component) {
+            var exists =_.find(this.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
+            if (exists === undefined && ensureTypeGrouping.call(this, component.typeGrouping)) {
+                component.offerCode = this.offerCode;
+                component.offerSettingsKey = this.key;
+                this.componentDefinitions.push(component);
+                return true;
+            }
+            return false;
+        }
+
         function updateAssignedComponent(component) {
-            console.info(component);
             var assigned = getAssignedComponent.call(this, component.componentKey);
             if (assigned !== undefined && assigned !== null) {
                 assigned.extendedData = component.extendedData;
                 assigned.updated = true;
-            }
-        }
-
-        function setApplyToEachMatching(value) {
-            if (hasRewards.call(this)) {
-                var reward = getReward.call(this);
-                reward.extendedData.setValue('applyToEachMatching', value);
-            }
-        }
-
-        function getApplyToEachMatching() {
-            if(hasRewards.call(this)) {
-                var reward = getReward.call(this);
-                var value = reward.extendedData.getValue('applyToEachMatching');
-                return value === 'True';
-            } else {
-                return true;
             }
         }
 
@@ -127,16 +122,25 @@
         function getLineItemName() {
             if(hasRewards.call(this)) {
                 var reward = getReward.call(this);
-                return reward.extendedData.getValue('lineItemName');
+                var name = reward.extendedData.getValue('lineItemName');
+                if (name === '') {
+                    name = reward.name;
+                }
+                return name;
             } else {
                 return '';
             }
         }
 
-        function setRewardOfferCode() {
-            if (hasRewards.call(this)) {
-                var reward = getReward.call(this);
-                reward.extendedData.setValue('offerCode', this.offerCode);
+        function validateComponents() {
+            var offerCode = this.offerCode;
+            var offerSettingsKey = this.key;
+            var invalid = _.filter(this.componentDefinitions, function (cd) { return cd.offerSettingsKey !== this.key || cd.offerCode !== this.offerCode; });
+            if (invalid !== undefined) {
+                angular.forEach(invalid, function(fix) {
+                    fix.offerSettingsKey = offerSettingsKey;
+                    fix.offerCode = offerCode;
+                });
             }
         }
 
@@ -150,14 +154,13 @@
             ensureTypeGrouping: ensureTypeGrouping,
             hasRewards: hasRewards,
             getReward: getReward,
+            assignComponent: assignComponent,
             updateAssignedComponent: updateAssignedComponent,
             getAssignedComponent: getAssignedComponent,
             componentsConfigured: componentsConfigured,
-            getApplyToEachMatching: getApplyToEachMatching,
-            setApplyToEachMatching: setApplyToEachMatching,
             getLineItemName: getLineItemName,
             setLineItemName: setLineItemName,
-            setRewardOfferCode: setRewardOfferCode
+            validateComponents: validateComponents
         }
 
     }());

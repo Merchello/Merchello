@@ -1,12 +1,12 @@
 /**
  * @ngdoc controller
- * @name Merchello.Marketing.Dialogs.OfferConstraintLineItemQuantityController
+ * @name Merchello.Marketing.Dialogs.OfferConstraintFilterQuantityRulesController
  * @function
  *
  * @description
  * The controller to configure the line item quantity component constraint
  */
-angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintProductLineItemQuantityController',
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintFilterQuantityRulesController',
     ['$scope',
     function($scope) {
         $scope.loaded = false;
