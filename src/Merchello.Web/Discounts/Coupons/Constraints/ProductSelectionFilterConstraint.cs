@@ -16,7 +16,7 @@
     /// <summary>
     /// A discount validation constraint to restrict this discount to a selection of products.
     /// </summary>
-    [OfferComponent("15DDF0EA-9C60-489A-96A8-D2AAADBEF328", "Restrict to certain products", "This discount is only offered for certain products.",
+    [OfferComponent("15DDF0EA-9C60-489A-96A8-D2AAADBEF328", "Product rules", "This discount is only offered for certain products.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.productselectionfilter.html")]
     public class ProductSelectionFilterConstraint : CollectionAlterationCouponConstraintBase
     {

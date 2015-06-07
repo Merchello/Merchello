@@ -54,7 +54,11 @@
         /// </param> 
         public void Visit(ILineItem lineItem)
         {
-            if (lineItem.LineItemType != LineItemType.Product) return;
+            if (lineItem.LineItemType != LineItemType.Product)
+            {
+                _filteredItems.Add(lineItem);
+                return;
+            }
 
             // gets the product key from the line item extended data
             var productKey = lineItem.ExtendedData.GetProductKey();

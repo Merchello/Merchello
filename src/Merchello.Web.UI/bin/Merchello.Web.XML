@@ -59,6 +59,39 @@
             The <see cref="T:Merchello.Core.Models.ILineItemContainer"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint">
+            <summary>
+            Price constraint rules for the entire qualifying collection
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint">
             <summary>
             The exclude shipping cost constraint.
@@ -228,20 +261,20 @@
             Gets the filtered line items.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint">
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint">
             <summary>
             Filters the line item collection for configured price rules."
             </summary>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint"/> class.
             </summary>
             <param name="definition">
             The definition.
             </param>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
             <summary>
             Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
             </summary>
@@ -255,18 +288,18 @@
             The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
             </returns>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.DisplayConfigurationFormat">
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.DisplayConfigurationFormat">
             <summary>
             Gets the display configuration format.
             This text is used by the back office UI to display configured values
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.Price">
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.Price">
             <summary>
             Gets the amount.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.PriceFilterRulesConstraint.Operator">
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.Operator">
             <summary>
             Gets the operator.
             </summary>

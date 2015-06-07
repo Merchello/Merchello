@@ -13,7 +13,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
         $scope.assignedComponents = [];
+        $scope.partition = [];
         $scope.currencySymbol = '';
+        $scope.sortComponent = {};
 
         // exposed components methods
         $scope.assignComponent = assignComponent;
@@ -21,6 +23,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         $scope.configureComponentOpen = configureComponentOpen;
         $scope.isComponentConfigured = isComponentConfigured;
         $scope.applyDisplayConfigurationFormat = applyDisplayConfigurationFormat;
+
 
         var eventName = 'merchello.offercomponentcollection.changed';
 
@@ -35,6 +38,14 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         function init() {
             eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
 
+            // if these are constraints, enable the sort
+            if ($scope.componentType === 'Constraint') {
+                $scope.sortableOptions.disabled = false;
+
+                // TODO remove the move cursor from the reward
+            }
+
+            // ensure that the parent scope promises have been resolved
             $scope.$watch('preValuesLoaded', function(pvl) {
                 if(pvl === true) {
                    loadSettings();
@@ -72,6 +83,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         function loadComponents() {
             // either assigned constraints or rewards
             $scope.assignedComponents = _.filter($scope.offerSettings.componentDefinitions, function(osc) { return osc.componentType === $scope.componentType; });
+
             var typeGrouping = $scope.offerSettings.getComponentsTypeGrouping();
 
             // there can only be one reward.
@@ -86,7 +98,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
                 if (ac === undefined && c.componentType === $scope.componentType && (typeGrouping === '' | typeGrouping === c.typeGrouping)) {
                     return c;
                 }
-            });
+            })
 
             $scope.componentsLoaded = true;
         }
@@ -200,6 +212,42 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
                 $scope.saveOfferSettings();
             }, 500);
         }
+
+        // Sortable available offers
+        /// -------------------------------------------------------------------
+
+        $scope.sortableOptions = {
+            start : function(e, ui) {
+               ui.item.data('start', ui.item.index());
+            },
+            update: function(e, ui) {
+                var component = ui.item.scope().component;
+                var start = ui.item.data('start');
+
+                var end = ui.item.index(); //<- this should work but it's returning the start index???
+                // pos = myArray.map(function(e) { return e.hello; }).indexOf('stevie');
+                //var end = $scope.assignedComponents.map(function(d) { return d.componentKey; }).indexOf(component.componentKey);
+                //console.info(start + '->' + end);
+                console.info($scope.assignedComponents);
+
+                /*
+                var end = 0;
+                var found = false;
+                while(end < $scope.assignedComponents.length && !found) {
+                    if($scope.assignedComponents[end].componentKey === component.compoentKey) {
+                        found = true;
+                    } else {
+                        end++;
+                    }
+                }
+*/
+                console.info(start + ' -> ' + end);
+
+            },
+            disabled: true,
+            cursor: "move"
+        }
+
         // Initialize the controller
         init();
     }]);

@@ -11,7 +11,7 @@
     /// <summary>
     /// A discount validation constraint to restrict this offer to line item quantity related rules.
     /// </summary>
-    [OfferComponent("C679A9F7-ED13-4166-90D1-8126E314E07B", "Filter by product quantity rules", "Filters the line item collection for individual product line items quantities matching configured rules.",
+    [OfferComponent("C679A9F7-ED13-4166-90D1-8126E314E07B", "Filter by product line item quantity rules", "Filters the line item collection for individual product line items quantities matching configured rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.filterquantityrules.html", typeof(Coupon))]
     public class QuantityFilterRulesConstraint : CollectionAlterationCouponConstraintBase
     {

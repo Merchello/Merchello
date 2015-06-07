@@ -98,7 +98,14 @@
             if (exists === undefined && ensureTypeGrouping.call(this, component.typeGrouping)) {
                 component.offerCode = this.offerCode;
                 component.offerSettingsKey = this.key;
-                this.componentDefinitions.push(component);
+                if (component.componentType === 'Reward') {
+                    this.componentDefinitions.unshift(component);
+                }
+                else
+                {
+                    this.componentDefinitions.push(component);
+                }
+
                 return true;
             }
             return false;
@@ -144,6 +151,10 @@
             }
         }
 
+        function reorderComponent(oldIndex, newIndex) {
+            this.componentDefinitions.splice(newIndex, 0, this.componentDefinitions.splice(oldIndex, 1)[0]);
+        }
+
         return {
             clone: clone,
             offerStartsDateLocalDateString: offerStartsDateLocalDateString,
@@ -160,7 +171,8 @@
             componentsConfigured: componentsConfigured,
             getLineItemName: getLineItemName,
             setLineItemName: setLineItemName,
-            validateComponents: validateComponents
+            validateComponents: validateComponents,
+            reorderComponent: reorderComponent
         }
 
     }());

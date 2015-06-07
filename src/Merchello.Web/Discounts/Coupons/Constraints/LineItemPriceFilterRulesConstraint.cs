@@ -3,28 +3,25 @@
     using System.Linq;
 
     using Merchello.Core.Exceptions;
-    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
 
-    using umbraco.editorControls.SettingControls;
-
     /// <summary>
     /// Filters the line item collection for configured price rules."
     /// </summary>
-    [OfferComponent("66957C56-8A5E-4ECD-BDEB-565F8777A38F", "Filter by product price rules", "Filters the line item collection for individual product line items with prices matching configured rules.",
+    [OfferComponent("66957C56-8A5E-4ECD-BDEB-565F8777A38F", "Filter by product line item price rules", "Filters the line item collection for individual product line items with prices matching configured rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.filterpricerules.html", typeof(Coupon))]
-    public class PriceFilterRulesConstraint : CollectionAlterationCouponConstraintBase
+    public class LineItemPriceFilterRulesConstraint : CollectionAlterationCouponConstraintBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PriceFilterRulesConstraint"/> class.
+        /// Initializes a new instance of the <see cref="LineItemPriceFilterRulesConstraint"/> class.
         /// </summary>
         /// <param name="definition">
         /// The definition.
         /// </param>
-        public PriceFilterRulesConstraint(OfferComponentDefinition definition)
+        public LineItemPriceFilterRulesConstraint(OfferComponentDefinition definition)
             : base(definition)
         {
         }
