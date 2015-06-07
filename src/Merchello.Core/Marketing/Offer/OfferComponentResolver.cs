@@ -193,7 +193,7 @@
             var att = type.GetCustomAttribute<OfferComponentAttribute>(false);
 
             var configuration = new OfferComponentConfiguration()
-                                    {
+                                    {                                        
                                         TypeFullName = type.FullName,
                                         ComponentKey = att.Key,
                                         Values = Enumerable.Empty<KeyValuePair<string, string>>()

@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel.Design;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
     using Merchello.Core.Models;
 
@@ -30,6 +31,29 @@
 
             this._definition = definition;
         }
+
+        /// <summary>
+        /// Gets the offer settings key.
+        /// </summary>
+        public Guid OfferSettingsKey
+        {
+            get
+            {
+                return _definition.OfferSettingsKey;
+            }
+        }
+
+        /// <summary>
+        /// Gets the offer code.
+        /// </summary>
+        public string OfferCode
+        {
+            get
+            {
+                return _definition.OfferCode;
+            }
+        }
+
 
         /// <summary>
         /// Gets the component type.

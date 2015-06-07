@@ -30,6 +30,7 @@
                 return new OfferComponentConfiguration()
                            {
                                OfferSettingsKey = definition.OfferSettingsKey,
+                               OfferCode = definition.OfferCode,
                                ComponentKey = definition.ComponentKey,
                                TypeFullName = type.FullName,
                                Values = definition.ExtendedData.AsEnumerable().ToArray()

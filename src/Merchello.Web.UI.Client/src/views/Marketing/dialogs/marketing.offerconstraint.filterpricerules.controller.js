@@ -6,7 +6,7 @@
  * @description
  * The controller to configure the price component constraint
  */
-angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintPriceController',
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintFilterPriceRulesController',
     ['$scope', 'settingsResource', 'invoiceHelper',
         function($scope, settingsResource, invoiceHelper) {
 

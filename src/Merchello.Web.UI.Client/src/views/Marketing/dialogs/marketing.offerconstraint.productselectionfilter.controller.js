@@ -6,7 +6,7 @@
  * @description
  * The controller to configure the price component constraint
  */
-angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintRestrictToProductSelectionController',
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintProductSelectionFilterController',
     ['$q', '$scope', 'notificationsService', 'productResource', 'settingsResource', 'productDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
         function($q, $scope, notificationsService, productResource, settingsResource, productDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
 
@@ -114,7 +114,6 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
                 if (existing !== undefined && existing !== '')
                 {
                     var parsed = JSON.parse(existing);
-                    console.info(parsed);
                     var productKeys = _.pluck(parsed, 'productKey');
 
                     var    productsPromise = productResource.getByKeys(productKeys);

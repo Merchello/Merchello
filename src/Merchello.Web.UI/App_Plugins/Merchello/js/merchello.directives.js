@@ -51,7 +51,7 @@ angular.module('merchello.directives').directive('offerMainProperties', function
             toggleOfferExpires: '&'
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html'
-    }
+    };
 })
 
 angular.module('merchello.directives').directive('uniqueOfferCode', function() {
@@ -87,6 +87,7 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
                         $scope.$apply(function () {
                             if ($scope.offerCode !== '') {
                                 checkUniqueOfferCode($scope.offerCode);
+                                currentCode = $scope.offerCode;
                             }
                         });
                     } else {
@@ -98,8 +99,8 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
                     if($scope.offerCode !== undefined) {
                         if (!$scope.loaded) {
                             $scope.loaded = true;
-                            currentCode = $scope.offerCode;
-                            checkUniqueOfferCode($scope.offerCode);
+                            currentCode = $scope.offer.offerCode;
+                            checkUniqueOfferCode($scope.offer.offerCode);
                         }
                     }
                 });
@@ -123,10 +124,11 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
             }
 
             function onOfferSaving(e, frm) {
-                var valid = $scope.offerCode !== '';
+                var valid = $scope.offer.offerCode !== '';
                 if (valid) {
-                    checkUniqueOfferCode($scope.offerCode);
+                    checkUniqueOfferCode($scope.offer.offerCode);
                     valid = $scope.isUnique;
+                    $scope.offerCode = $scope.offer.offerCode
                 }
                 frm.offerCode.$setValidity('offerCode', valid);
             }

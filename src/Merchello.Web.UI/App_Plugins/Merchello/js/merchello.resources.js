@@ -938,7 +938,6 @@ angular.module('merchello.resources')
 
                 getByKeys: function(keys) {
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetByKeys';
-                    console.info(keys);
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             keys

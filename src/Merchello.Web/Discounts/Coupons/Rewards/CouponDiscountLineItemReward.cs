@@ -80,28 +80,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets the max quantity.
-        /// </summary>
-        private int MaxQuantity
-        {
-            get
-            {
-                int converted;
-                return int.TryParse(this.GetConfigurationValue("maxQuantity"), out converted) ? converted : 0;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether apply to discount to each matching item
-        /// </summary>
-        private bool ApplyToEachMatching
-        {
-            get
-            {
-                return string.Equals("True", this.GetConfigurationValue("applyToEachMatching"));
-            }
-        }
 
         /// <summary>
         /// Gets the display configuration format.
@@ -146,29 +124,14 @@
 
             var discount = 0M;
 
-            // filter the lines items for product line items and apply max quantity rules
-            var visitor = new CouponDiscountLineItemRewardVisitor(MaxQuantity);
-            validate.Items.Accept(visitor);
+            // apply to the entire collection
+            var qualifyingTotal = validate.Items.Sum(x => x.TotalPrice);
 
-            if (!ApplyToEachMatching)
-            {
-                // apply to the entire collection
-                var qualifyingTotal = visitor.AllLineItems.Sum(x => x.TotalPrice);
 
                 discount = AdjustmentType == Adjustment.Flat
                                ? Amount > qualifyingTotal ? qualifyingTotal : Amount
                                : qualifyingTotal * (Amount / 100);
-            }
-            else
-            {
-                // only apply to filtered items
-                var qualifyingTotal = visitor.FilteredItems.Sum(x => x.TotalPrice);
-
-                discount = AdjustmentType == Adjustment.Flat
-                               ? Amount > qualifyingTotal ? qualifyingTotal : Amount
-                               : qualifyingTotal * (Amount / 100);
-            }
-
+          
             discountLineItem.Price = discount;
 
             return Attempt<ILineItem>.Succeed(discountLineItem);

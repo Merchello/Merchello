@@ -67,20 +67,9 @@
         {
             var noReward = new OfferRedemptionException("The reward for this coupon has not been configured.");
             
-            if (Reward == null) return Attempt<IOfferResult<TConstraint, TReward>>.Fail(noReward);
-
-            // determine how to apply the reward
-            var applyRewardForEachMatching = Reward.GetApplyAwardToEachMatching();
-
-            if (!applyRewardForEachMatching)
-            {
-                var constraintValidation = this.TryApplyConstraints<TConstraint, TReward>(validateAgainst, customer);
-                return !constraintValidation.Success ? 
-                    constraintValidation : 
-                    this.TryToAward<TConstraint, TReward>(validateAgainst, customer, false);
-            }
-
-            return this.TryToAward<TConstraint, TReward>(validateAgainst, customer);
+            return this.Reward == null ? 
+                Attempt<IOfferResult<TConstraint, TReward>>.Fail(noReward) : 
+                this.TryToAward<TConstraint, TReward>(validateAgainst, customer);
         }
     }
 }

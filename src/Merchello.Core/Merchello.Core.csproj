@@ -261,9 +261,7 @@
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="MandateWrapperExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
-    <Compile Include="Marketing\Constraints\OfferPriceConstraint.cs" />
     <Compile Include="Marketing\Constraints\ProductConstraintDataSet.cs" />
-    <Compile Include="Marketing\Constraints\ProductLineItemQuantityConstraint.cs" />
     <Compile Include="Marketing\Offer\IOfferResult.cs" />
     <Compile Include="Marketing\Offer\OfferComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
@@ -279,7 +277,6 @@
     <Compile Include="Marketing\Offer\OfferComponentAttribute.cs" />
     <Compile Include="Marketing\Constraints\IOfferConstraintComponent.cs" />
     <Compile Include="Marketing\Offer\IOfferComponentResolver.cs" />
-    <Compile Include="Marketing\Constraints\RestrictToProductSelectionConstraint.cs" />
     <Compile Include="Marketing\Offer\OfferBase.cs" />
     <Compile Include="Marketing\Offer\IOffer.cs" />
     <Compile Include="Marketing\Offer\IOfferProvider.cs" />

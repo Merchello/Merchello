@@ -58,6 +58,63 @@
             return operatorText;
         }
 
+        /// <summary>
+        /// Constructs a conditional expression based on the string operator
+        /// </summary>
+        /// <param name="left">
+        /// The left.
+        /// </param>
+        /// <param name="right">
+        /// The right.
+        /// </param>
+        /// <param name="op">
+        /// The op.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool Evaluate(decimal left, decimal right, string op)
+        {
+            bool result;
 
+            switch (op)
+            {
+                case "<":
+                    result = left < right;
+                    break;
+                case "lt":
+                    result = left < right;
+                    break;
+                case "<=":
+                    result = left <= right;
+                    break;
+                case "lte":
+                    result = left <= right;
+                    break;
+                case "=":
+                    result = left == right;
+                    break;
+                case "eq":
+                    result = left == right;
+                    break;
+                case ">":
+                    result = left > right;
+                    break;
+                case "gt":
+                    result = left > right;
+                    break;
+                case ">=":
+                    result = left >= right;
+                    break;
+                case "gte":
+                    result = left >= right;
+                    break;
+                default:
+                    result = false;
+                    break;
+            }
+
+            return result;
+        }
     }
 }
