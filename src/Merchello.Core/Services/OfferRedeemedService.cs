@@ -16,6 +16,9 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
 
+    /// <summary>
+    /// The offer redeemed service.
+    /// </summary>
     internal class OfferRedeemedService : IOfferRedeemedService
     {
         /// <summary>
@@ -394,6 +397,24 @@
             {
                 var query = Query<IOfferRedeemed>.Builder.Where(x => x.OfferProviderKey == offerProviderKey);
                 return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// Gets the redemption count for an offer.
+        /// </summary>
+        /// <param name="offerSettingsKey">
+        /// The offer settings key.
+        /// </param>
+        /// <returns>
+        /// The current count of offer redemptions.
+        /// </returns>
+        public int GetOfferRedeemedCount(Guid offerSettingsKey)
+        {
+            using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IOfferRedeemed>.Builder.Where(x => x.OfferSettingsKey == offerSettingsKey);
+                return repository.Count(query);
             }
         }
     }

@@ -11,7 +11,7 @@
     /// <summary>
     /// Filters the line item collection for configured price rules."
     /// </summary>
-    [OfferComponent("66957C56-8A5E-4ECD-BDEB-565F8777A38F", "Filter by product line item price rules", "Filters the line item collection for individual product line items with prices matching configured rules.",
+    [OfferComponent("66957C56-8A5E-4ECD-BDEB-565F8777A38F", "Line item price rules", "Filters the line item collection for individual product line items with prices matching configured rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.filterpricerules.html", typeof(Coupon))]
     public class LineItemPriceFilterRulesConstraint : CollectionAlterationCouponConstraintBase
     {
@@ -85,13 +85,12 @@
         /// </returns>
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
-            var visitor = new NumericalValueConstraintVisitor(this.Price, Operator, "price");
+            var visitor = new NumericalValueFilterConstraintVisitor(this.Price, Operator, "price");
             value.Items.Accept(visitor);
 
             return visitor.FilteredLineItems.Any()
-                       ? Attempt<ILineItemContainer>.Succeed(CreateNewLineContainer(visitor.FilteredLineItems))
-                       : Attempt<ILineItemContainer>.Fail(
-                           new OfferRedemptionException("Price filter removes all items."));
+                       ? this.Success(CreateNewLineContainer(visitor.FilteredLineItems))
+                       : this.Fail(value, "No items qualify. Quantity filter removes all items");
         }
     }
 }

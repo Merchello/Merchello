@@ -313,6 +313,128 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
 
 /**
  * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController
+ * @function
+ *
+ * @description
+ * The controller to configure the collection price component
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController',
+    ['$scope', 'settingsResource', 'invoiceHelper',
+        function($scope, settingsResource, invoiceHelper) {
+
+            $scope.loaded = false;
+            $scope.operator = 'gt';
+            $scope.price = 0;
+            $scope.currencySymbol = '';
+
+            // exposed methods
+            $scope.save = save;
+
+            function init() {
+                loadSettings();
+                loadExistingConfigurations()
+            }
+
+            function loadExistingConfigurations() {
+                var operator = $scope.dialogData.getValue('operator');
+                var price = $scope.dialogData.getValue('price');
+                $scope.operator = operator === '' ? 'gt' : operator;
+                $scope.price = price === '' ? 0 : invoiceHelper.round(price, 2);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                    $scope.loaded = true;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description
+             * Saves the configuration
+             */
+            function save() {
+                $scope.dialogData.setValue('price', Math.abs(invoiceHelper.round($scope.price*1, 2)));
+                $scope.dialogData.setValue('operator', $scope.operator);
+                $scope.submit($scope.dialogData);
+            }
+
+            // Initialize the controller
+            init();
+        }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintCollectionQuantityRulesController
+ * @function
+ *
+ * @description
+ * The controller to configure the collection quantity constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintCollectionQuantityRulesController',
+    ['$scope',
+    function($scope) {
+        $scope.loaded = false;
+
+        $scope.operator = 'gt';
+        $scope.quantity = 0;
+
+        // exposed methods
+        $scope.save = save;
+
+        function init() {
+            if ($scope.dialogData.component.isConfigured()) {
+                loadExistingConfigurations()
+            } else {
+                $scope.loaded = true;
+            }
+
+        }
+
+        function loadExistingConfigurations() {
+            var operator = $scope.dialogData.getValue('operator');
+            var quantity = $scope.dialogData.getValue('quantity');
+            $scope.operator = operator === '' ? 'gt' : operator;
+            $scope.quantity = quantity === '' ? 0 : quantity * 1;
+            $scope.loaded = true;
+        }
+
+        /**
+         * @ngdoc method
+         * @name save
+         * @function
+         *
+         * @description
+         * Saves the configuration
+         */
+        function save() {
+            $scope.dialogData.setValue('quantity', Math.abs($scope.quantity*1));
+            $scope.dialogData.setValue('operator', $scope.operator);
+            $scope.submit($scope.dialogData);
+        }
+
+        // Initialize the controller
+        init();
+    }]);
+
+/**
+ * @ngdoc controller
  * @name Merchello.Marketing.Dialogs.OfferConstraintPriceController
  * @function
  *
@@ -789,6 +911,48 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
 /**
  * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintRedemptionLimitController
+ * @function
+ *
+ * @description
+ * The controller to configure the maximum number of redemptions allowed.
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintRedemptionLimitController',
+    ['$scope',
+        function($scope) {
+
+            $scope.loaded = false;
+            $scope.maximum = 0;
+
+            // exposed
+            $scope.save = save;
+
+            function init() {
+                console.info($scope.dialogData);
+                if ($scope.dialogData.component.isConfigured()) {
+                    loadExistingConfigurations();
+                    $scope.loaded = true;
+                } else {
+                    $scope.loaded = true;
+                }
+            }
+
+            function loadExistingConfigurations() {
+                var maximum = $scope.dialogData.getValue('maximum')
+                $scope.maximum = maximum === '' ? 0 : maximum * 1;
+            }
+
+            function save() {
+                $scope.dialogData.setValue('maximum', $scope.maximum);
+                $scope.submit($scope.dialogData);
+            }
+
+            // Initialize the controller
+            init();
+        }]);
+
+/**
+ * @ngdoc controller
  * @name Merchello.Marketing.Dialogs.OfferProviderSelectionController
  * @function
  *
@@ -849,19 +1013,18 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         function init() {
             eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
 
-            // if these are constraints, enable the sort
-            if ($scope.componentType === 'Constraint') {
-                $scope.sortableOptions.disabled = false;
-
-                // TODO remove the move cursor from the reward
-            }
-
             // ensure that the parent scope promises have been resolved
             $scope.$watch('preValuesLoaded', function(pvl) {
                 if(pvl === true) {
                    loadSettings();
                 }
             });
+
+            // if these are constraints, enable the sort
+            if ($scope.componentType === 'Constraint') {
+                $scope.sortableOptions.disabled = false;
+                console.info($scope.sortableOptions);
+            }
         }
 
         /**
@@ -909,7 +1072,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
                 if (ac === undefined && c.componentType === $scope.componentType && (typeGrouping === '' | typeGrouping === c.typeGrouping)) {
                     return c;
                 }
-            })
+            });
 
             $scope.componentsLoaded = true;
         }
@@ -1031,28 +1194,17 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             start : function(e, ui) {
                ui.item.data('start', ui.item.index());
             },
-            update: function(e, ui) {
-                var component = ui.item.scope().component;
-                var start = ui.item.data('start');
-
-                var end = ui.item.index(); //<- this should work but it's returning the start index???
-                // pos = myArray.map(function(e) { return e.hello; }).indexOf('stevie');
-                //var end = $scope.assignedComponents.map(function(d) { return d.componentKey; }).indexOf(component.componentKey);
-                //console.info(start + '->' + end);
-                console.info($scope.assignedComponents);
-
-                var end = 0;
-                var found = false;
-                while(end < $scope.assignedComponents.length && !found) {
-                    if($scope.assignedComponents[end].componentKey === component.compoentKey) {
-                        found = true;
-                    } else {
-                        end++;
-                    }
-                }
-
-                console.info(start + ' -> ' + end);
-
+           stop: function (e, ui) {
+               var component = ui.item.scope().component;
+               var start = ui.item.data('start'),
+                   end =  ui.item.index();
+               // reorder the offerSettings.componentDefinitions
+               if ($scope.offerSettings.hasRewards()) {
+                   // the reward is always in position 0
+                   start++;
+                   end++;
+               }
+               $scope.offerSettings.reorderComponent(start, end);
             },
             disabled: true,
             cursor: "move"

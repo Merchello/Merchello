@@ -38,19 +38,18 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         function init() {
             eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
 
-            // if these are constraints, enable the sort
-            if ($scope.componentType === 'Constraint') {
-                $scope.sortableOptions.disabled = false;
-
-                // TODO remove the move cursor from the reward
-            }
-
             // ensure that the parent scope promises have been resolved
             $scope.$watch('preValuesLoaded', function(pvl) {
                 if(pvl === true) {
                    loadSettings();
                 }
             });
+
+            // if these are constraints, enable the sort
+            if ($scope.componentType === 'Constraint') {
+                $scope.sortableOptions.disabled = false;
+                console.info($scope.sortableOptions);
+            }
         }
 
         /**
@@ -98,7 +97,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
                 if (ac === undefined && c.componentType === $scope.componentType && (typeGrouping === '' | typeGrouping === c.typeGrouping)) {
                     return c;
                 }
-            })
+            });
 
             $scope.componentsLoaded = true;
         }
@@ -220,29 +219,17 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             start : function(e, ui) {
                ui.item.data('start', ui.item.index());
             },
-            update: function(e, ui) {
-                var component = ui.item.scope().component;
-                var start = ui.item.data('start');
-
-                var end = ui.item.index(); //<- this should work but it's returning the start index???
-                // pos = myArray.map(function(e) { return e.hello; }).indexOf('stevie');
-                //var end = $scope.assignedComponents.map(function(d) { return d.componentKey; }).indexOf(component.componentKey);
-                //console.info(start + '->' + end);
-                console.info($scope.assignedComponents);
-
-                /*
-                var end = 0;
-                var found = false;
-                while(end < $scope.assignedComponents.length && !found) {
-                    if($scope.assignedComponents[end].componentKey === component.compoentKey) {
-                        found = true;
-                    } else {
-                        end++;
-                    }
-                }
-*/
-                console.info(start + ' -> ' + end);
-
+           stop: function (e, ui) {
+               var component = ui.item.scope().component;
+               var start = ui.item.data('start'),
+                   end =  ui.item.index();
+               // reorder the offerSettings.componentDefinitions
+               if ($scope.offerSettings.hasRewards()) {
+                   // the reward is always in position 0
+                   start++;
+                   end++;
+               }
+               $scope.offerSettings.reorderComponent(start, end);
             },
             disabled: true,
             cursor: "move"

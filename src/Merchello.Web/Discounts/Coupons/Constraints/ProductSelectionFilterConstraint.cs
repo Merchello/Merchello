@@ -4,7 +4,6 @@
     using System.Linq;
 
     using Merchello.Core;
-    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
@@ -88,9 +87,8 @@
             value.Items.Accept(visitor);
 
             return visitor.FilteredItems.Any()
-                       ? Attempt<ILineItemContainer>.Succeed(this.CreateNewLineContainer(visitor.FilteredItems))
-                       : Attempt<ILineItemContainer>.Fail(
-                           new OfferRedemptionException("Product selection filter did not match any items."));
+                       ? this.Success(this.CreateNewLineContainer(visitor.FilteredItems))
+                       : this.Fail(value, "No products matched the configured filter.");
         }
     }
 }

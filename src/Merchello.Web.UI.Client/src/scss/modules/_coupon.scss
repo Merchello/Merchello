@@ -7,10 +7,15 @@
 }
 
 .offer-components-table {
+  caption {
+    font-weight: bold;
+  }
+  thead em {
+    color: $green;
+  }
   td small {
     display: block;
   }
-
   .sortable {
     cursor: move
   }

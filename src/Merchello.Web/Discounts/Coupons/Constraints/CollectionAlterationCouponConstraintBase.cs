@@ -12,7 +12,7 @@
     /// <summary>
     /// A base class for coupon constraints that alter the validation collection
     /// </summary>
-    public abstract class CollectionAlterationCouponConstraintBase : OfferConstraintComponentBase<ILineItemContainer>
+    public abstract class CollectionAlterationCouponConstraintBase : CouponConstraintBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionAlterationCouponConstraintBase"/> class.

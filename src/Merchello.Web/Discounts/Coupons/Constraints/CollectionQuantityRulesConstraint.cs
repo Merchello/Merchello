@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Constraints
 {
+    using System;
     using System.Linq;
 
     using Merchello.Core.Exceptions;
@@ -11,17 +12,17 @@
     /// <summary>
     /// A discount validation constraint to restrict this offer to line item quantity related rules.
     /// </summary>
-    [OfferComponent("C679A9F7-ED13-4166-90D1-8126E314E07B", "Filter by product line item quantity rules", "Filters the line item collection for individual product line items quantities matching configured rules.",
-        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.filterquantityrules.html", typeof(Coupon))]
-    public class QuantityFilterRulesConstraint : CollectionAlterationCouponConstraintBase
+    [OfferComponent("C7F0B590-11E7-4986-A52E-F18D0382E07E", "Total quantity of items rules", "Tests the total price all line items against configured rules.",
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.collectionquantityrules.html", typeof(Coupon))]
+    public class CollectionQuantityRulesConstraint : CouponConstraintBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="QuantityFilterRulesConstraint"/> class.
+        /// Initializes a new instance of the <see cref="CollectionQuantityRulesConstraint"/> class. 
         /// </summary>
         /// <param name="definition">
         /// The definition.
         /// </param>
-        public QuantityFilterRulesConstraint(OfferComponentDefinition definition)
+        public CollectionQuantityRulesConstraint(OfferComponentDefinition definition)
             : base(definition)
         {
         }
@@ -41,7 +42,7 @@
 
                 if (string.IsNullOrEmpty(quantity) || string.IsNullOrEmpty(operatorText)) return "''";
 
-                return string.Format("'Quantity is {0} {1}'", operatorText, quantity);
+                return string.Format("'Total quantity is {0} {1}'", operatorText, quantity);
             }
         }
 
@@ -83,13 +84,13 @@
         /// </returns>
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
-            var visitor = new NumericalValueConstraintVisitor(Quantity, Operator, "quantity");
-            value.Items.Accept(visitor);
+            if (Quantity <= 0) return Attempt<ILineItemContainer>.Succeed(value);
 
-            return visitor.FilteredLineItems.Any()
-                       ? Attempt<ILineItemContainer>.Succeed(CreateNewLineContainer(visitor.FilteredLineItems))
-                       : Attempt<ILineItemContainer>.Fail(
-                           new OfferRedemptionException("Quantity filter removes all items"));
+            var total = value.Items.Sum(x => x.Quantity);
+
+            return StringOperatorHelper.Evaluate(Quantity, total, Operator) ?
+                this.Success(value) :
+                this.Fail(value, "The total quantity of items failed to pass the configured condition.");
         }
     }
 }
