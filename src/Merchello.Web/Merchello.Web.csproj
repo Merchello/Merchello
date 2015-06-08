@@ -240,8 +240,11 @@
     <Compile Include="Discounts\Coupons\Constraints\LineItemQuantityFilterRulesConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\ProductSelectionFilterConstraint.cs" />
     <Compile Include="Discounts\Coupons\CouponExtendedDataExtensions.cs" />
+    <Compile Include="Discounts\Coupons\CouponRedemptionResult.cs" />
     <Compile Include="Discounts\Coupons\CouponRedemptionEventHandler.cs" />
     <Compile Include="Discounts\Coupons\CouponRedemptionLineItemVisitor.cs" />
+    <Compile Include="Discounts\Coupons\CouponRedemptionResultExtensions.cs" />
+    <Compile Include="Discounts\Coupons\ICouponRedemptionResult.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemReward.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemRewardBase.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
@@ -381,6 +384,7 @@
     <Compile Include="Workflow\IBackoffice.cs" />
     <Compile Include="Workflow\IBackofficeSalePreparation.cs" />
     <Compile Include="Workflow\IBasketConversionBase.cs" />
+    <Compile Include="Workflow\InvoiceCreation\AddCouponDiscountsToInvoiceTask.cs" />
     <Compile Include="Workflow\IWishList.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingGatewayApiController.cs" />

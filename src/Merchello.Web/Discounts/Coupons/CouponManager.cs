@@ -81,6 +81,34 @@
         }
 
         /// <summary>
+        /// The safe add coupon attempt container.
+        /// </summary>
+        /// <typeparam name="TLineItem">
+        /// The type of line item
+        /// </typeparam>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        internal void SafeAddCouponAttemptContainer<TLineItem>(ILineItemContainer container, ICouponRedemptionResult result)
+            where TLineItem : class, ILineItem
+        {
+            if (!result.Success) return;
+
+            // the award is the line item
+            var lineItem = result.Award;
+
+            // TODO if there is to be line items of types other than discount line items, this is where they should be added.
+
+            if (container.Items.Contains(lineItem.Sku)) return;
+            lineItem.ExtendedData.SetCouponValue(result.Coupon);
+
+            container.Items.Add(lineItem.AsLineItemOf<TLineItem>());
+        }
+
+        /// <summary>
         /// Gets an instance of a coupon from the <see cref="IOfferSettings"/>        
         /// /// </summary>
         /// <param name="offerSettings">
@@ -93,5 +121,6 @@
         {
             return new Coupon(offerSettings);
         }
+
     }
 }

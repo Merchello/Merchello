@@ -240,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Chains\InvoiceCreation\AddCouponDiscountsToInvoiceTask.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessor.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferConstraintChainTask.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="MandateWrapperExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
     <Compile Include="Marketing\Constraints\ProductConstraintDataSet.cs" />
+    <Compile Include="Marketing\Offer\IOfferRedemptionResult.cs" />
     <Compile Include="Marketing\Offer\IOfferResult.cs" />
     <Compile Include="Marketing\Offer\OfferComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
@@ -282,7 +284,9 @@
     <Compile Include="Marketing\Offer\IOfferProvider.cs" />
     <Compile Include="Marketing\Offer\OfferManagerBase.cs" />
     <Compile Include="Marketing\Offer\OfferProviderResolver.cs" />
+    <Compile Include="Marketing\Offer\OfferRedemptionResultBase.cs" />
     <Compile Include="Marketing\Offer\OfferResult.cs" />
+    <Compile Include="Marketing\Offer\OfferResultExtensions.cs" />
     <Compile Include="Marketing\Offer\StringOperatorHelper.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
