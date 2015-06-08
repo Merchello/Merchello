@@ -8,8 +8,10 @@
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
     using Merchello.Web.Trees;
+    using Merchello.Web.Workflow.InvoiceCreation;
 
     using Umbraco.Core;
+    using Umbraco.Core.Events;
 
     /// <summary>
     /// The provider responsible for managing coupon offers
@@ -40,6 +42,20 @@
             : base(offerSettingsService)
         {
         }
+
+        #region Events
+
+        /// <summary>
+        /// Occurs before redeeming the coupon
+        /// </summary>
+        public static event TypedEventHandler<CouponManager, RedeemCouponEventArgs> Redeeming;
+
+        /// <summary>
+        /// Occurs after redeeming the coupon.
+        /// </summary>
+        public static event TypedEventHandler<CouponManager, RedeemCouponEventArgs> Redeemed;
+
+        #endregion
 
         /// <summary>
         /// Gets the instance.
@@ -92,7 +108,10 @@
         /// <param name="result">
         /// The result.
         /// </param>
-        internal void SafeAddCouponAttemptContainer<TLineItem>(ILineItemContainer container, ICouponRedemptionResult result)
+        /// <param name="raiseEvents">
+        /// Optional parameter indicating whether or not to raise events.  Defaults to false.
+        /// </param>
+        internal void SafeAddCouponAttemptContainer<TLineItem>(ILineItemContainer container, ICouponRedemptionResult result, bool raiseEvents = false)
             where TLineItem : class, ILineItem
         {
             if (!result.Success) return;
@@ -105,7 +124,13 @@
             if (container.Items.Contains(lineItem.Sku)) return;
             lineItem.ExtendedData.SetCouponValue(result.Coupon);
 
+            if (raiseEvents)
+            Redeeming.RaiseEvent(new RedeemCouponEventArgs(container, lineItem), this);
+            
             container.Items.Add(lineItem.AsLineItemOf<TLineItem>());
+
+            if (raiseEvents)
+            Redeemed.RaiseEvent(new RedeemCouponEventArgs(container, lineItem), this);
         }
 
         /// <summary>

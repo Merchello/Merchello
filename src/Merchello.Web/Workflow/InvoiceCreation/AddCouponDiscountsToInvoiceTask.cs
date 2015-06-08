@@ -6,6 +6,7 @@
     using Merchello.Core.Chains.InvoiceCreation;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
+    using Merchello.Web.Discounts.Coupons;
 
     using Umbraco.Core;
 
@@ -15,6 +16,16 @@
     internal class AddCouponDiscountsToInvoiceTask : InvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
+        /// The basket sale preparation.
+        /// </summary>
+        private IBasketSalePreparation _basketSalePreparation;
+
+        /// <summary>
+        /// The <see cref="CouponManager"/>.
+        /// </summary>
+        private Lazy<CouponManager> _couponManager = new Lazy<CouponManager>(() => CouponManager.Instance); 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AddCouponDiscountsToInvoiceTask"/> class.
         /// </summary>
         /// <param name="salePreparation">
@@ -23,6 +34,18 @@
         public AddCouponDiscountsToInvoiceTask(SalePreparationBase salePreparation)
             : base(salePreparation)
         {
+        }
+
+
+        /// <summary>
+        /// Gets the <see cref="CouponManager"/>.
+        /// </summary>
+        private CouponManager CouponOfferManager
+        {
+            get
+            {
+                return _couponManager.Value;
+            }
         }
 
         /// <summary>
@@ -41,8 +64,25 @@
 
             if (!(SalePreparation is IBasketSalePreparation)) 
                 return Attempt<IInvoice>.Fail(value, new InvalidCastException("SalePreparation object is not IBasketSalePreparation"));
+            _basketSalePreparation = SalePreparation as IBasketSalePreparation;
 
-            throw new NotImplementedException();
+            foreach (var code in SalePreparation.OfferCodes)
+            {
+                var foundCoupon = CouponOfferManager.GetByOfferCode(code, SalePreparation.Customer);
+                if (!foundCoupon.Success)
+                {
+                    continue;
+                }
+
+                var coupon = foundCoupon.Result;
+                var apply = coupon.TryApply(value, this.SalePreparation.Customer).AsCouponRedemptionResult(coupon);
+                if (apply.Success)
+                {                    
+                    this.CouponOfferManager.SafeAddCouponAttemptContainer<InvoiceLineItem>(value, apply, true);  
+                }
+            }
+
+            return Attempt<IInvoice>.Succeed(value);
         }
     }
 }

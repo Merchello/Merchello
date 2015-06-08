@@ -245,6 +245,7 @@
     <Compile Include="Discounts\Coupons\CouponRedemptionLineItemVisitor.cs" />
     <Compile Include="Discounts\Coupons\CouponRedemptionResultExtensions.cs" />
     <Compile Include="Discounts\Coupons\ICouponRedemptionResult.cs" />
+    <Compile Include="Discounts\Coupons\RedeemCouponEventArgs.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemReward.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemRewardBase.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
@@ -318,6 +319,7 @@
     <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Pluggable\PluggableObjectHelper.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
