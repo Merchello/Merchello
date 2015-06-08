@@ -1,14 +1,11 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Rewards
 {
-    using System;
     using System.Globalization;
     using System.Linq;
-    using System.Web.Mvc;
 
     using Merchello.Core;
     using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Offer;
-    using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -122,15 +119,13 @@
             // Get the item template
             var discountLineItem = CreateTemplateDiscountLineItem();
 
-            var discount = 0M;
-
-            // apply to the entire collection
-            var qualifyingTotal = validate.Items.Sum(x => x.TotalPrice);
+            // apply to the entire collection excluding previously added discounts
+            var qualifyingTotal = validate.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
 
 
-                discount = AdjustmentType == Adjustment.Flat
-                               ? Amount > qualifyingTotal ? qualifyingTotal : Amount
-                               : qualifyingTotal * (Amount / 100);
+            var discount = this.AdjustmentType == Adjustment.Flat
+                                    ? this.Amount > qualifyingTotal ? qualifyingTotal : this.Amount
+                                    : qualifyingTotal * (this.Amount / 100);
           
             discountLineItem.Price = discount;
 

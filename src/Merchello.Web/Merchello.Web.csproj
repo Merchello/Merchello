@@ -239,6 +239,7 @@
     <Compile Include="Discounts\Coupons\Constraints\ProductSelectionConstraintVisitor.cs" />
     <Compile Include="Discounts\Coupons\Constraints\LineItemQuantityFilterRulesConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\ProductSelectionFilterConstraint.cs" />
+    <Compile Include="Discounts\Coupons\CouponExtendedDataExtensions.cs" />
     <Compile Include="Discounts\Coupons\CouponRedemptionEventHandler.cs" />
     <Compile Include="Discounts\Coupons\CouponRedemptionLineItemVisitor.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemReward.cs" />

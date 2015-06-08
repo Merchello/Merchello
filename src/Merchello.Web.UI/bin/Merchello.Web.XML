@@ -596,6 +596,77 @@
             Gets the product constraint data set.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions">
+            <summary>
+            ExtendedDataCollection extensions for coupon discounts.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsAnyCoupons(Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> contains ANY serialized coupons.
+            </summary>
+            <param name="container">
+            The container.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> contains ANY serialized coupons..
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsCoupon(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ILineItem"/> contains a serialized coupon.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ILineItem"/> contains a serialized coupon.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsCoupon(Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/> contains a serialized coupon.
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/> contains a serialized coupon.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplays(Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Gets a collection of <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ILineItemContainer"/>.
+            </summary>
+            <param name="container">
+            The container.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplay(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplay(Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/>.
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionEventHandler">
             <summary>
             The coupon redemption event handler.
