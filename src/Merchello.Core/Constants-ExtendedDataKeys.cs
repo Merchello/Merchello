@@ -20,7 +20,7 @@
                     "merchLineItemCollection",
                     "merchLineItem",
                     "merchCurrencyCode",
-                    "merchOfferReward",
+                    "merchCouponReward",
                     "merchLineItemTaxAmount",
                     "merchName",
                     "merchSku",
@@ -425,11 +425,11 @@
             /// <summary>
             /// Gets the coupon.
             /// </summary>
-            public static string OfferReward
+            public static string CouponReward
             {
                 get
                 {
-                    return "merchOfferReward";
+                    return "merchCouponReward";
                 }
             }
         }

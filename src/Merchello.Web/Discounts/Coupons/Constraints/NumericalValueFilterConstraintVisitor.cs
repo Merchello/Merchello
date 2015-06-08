@@ -12,7 +12,7 @@
     /// <summary>
     /// The numerical value constraint visitor.
     /// </summary>
-    internal class NumericalValueConstraintVisitor : ILineItemVisitor
+    internal class NumericalValueFilterConstraintVisitor : ILineItemVisitor
     {
         /// <summary>
         /// The target value configured in the back office editor.
@@ -34,7 +34,7 @@
         private readonly string _property;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NumericalValueConstraintVisitor"/> class.
+        /// Initializes a new instance of the <see cref="NumericalValueFilterConstraintVisitor"/> class.
         /// </summary>
         /// <param name="target">
         /// The target.
@@ -45,7 +45,7 @@
         /// <param name="property">
         /// The property - either quantity or price
         /// </param>
-        public NumericalValueConstraintVisitor(decimal target, string op, string property)
+        public NumericalValueFilterConstraintVisitor(decimal target, string op, string property)
         {            
             Mandate.ParameterNotNullOrEmpty(property, "property");
             Mandate.ParameterCondition(property.Equals("quantity") || property.Equals("price"), "property must be 'quantity' or 'price'");

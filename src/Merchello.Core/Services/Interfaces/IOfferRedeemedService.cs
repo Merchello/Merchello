@@ -142,5 +142,16 @@
         /// The <see cref="IEnumerable{IOfferRedeemed}"/>.
         /// </returns>
         IEnumerable<IOfferRedeemed> GetByOfferProviderKey(Guid offerProviderKey);
+
+        /// <summary>
+        /// Gets the redemption count for an offer.
+        /// </summary>
+        /// <param name="offerSettingsKey">
+        /// The offer settings key.
+        /// </param>
+        /// <returns>
+        /// The current count of offer redemptions.
+        /// </returns>
+        int GetOfferRedeemedCount(Guid offerSettingsKey);
     }
 }

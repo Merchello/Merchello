@@ -57,9 +57,9 @@
         public void Visit(ILineItem lineItem)
         {
             if (lineItem.LineItemType != LineItemType.Discount) return;
-            if (!lineItem.ExtendedData.ContainsKey(Core.Constants.ExtendedDataKeys.OfferReward)) return;
+            if (!lineItem.ExtendedData.ContainsKey(Core.Constants.ExtendedDataKeys.CouponReward)) return;
 
-            var json = lineItem.ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.OfferReward);
+            var json = lineItem.ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.CouponReward);
             var offerSettings = JsonConvert.DeserializeObject<OfferSettingsDisplay>(json);
 
             var offerRedeemed = new OfferRedeemed(
@@ -70,7 +70,7 @@
 
             offerRedeemed.CustomerKey = _customerKey;
 
-            offerRedeemed.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.OfferReward, json);
+            offerRedeemed.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CouponReward, json);
 
             _redemptions.Add(offerRedeemed);
         }

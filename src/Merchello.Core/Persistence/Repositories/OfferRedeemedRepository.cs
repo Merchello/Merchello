@@ -8,6 +8,7 @@
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Factories;
+    using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 

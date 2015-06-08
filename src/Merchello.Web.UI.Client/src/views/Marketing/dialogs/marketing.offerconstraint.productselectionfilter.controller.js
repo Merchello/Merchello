@@ -267,6 +267,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
                 self.product = {};
                 self.variantSpecific = false;
                 self.selectedVariants = [];
+                self.exclude = false;
                 self.editorOpen = false;
             };
 

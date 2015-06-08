@@ -1,13 +1,13 @@
-<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Marketing.Dialogs.OfferConstraintFilterPriceRulesController" data-ng-show="loaded">
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController" data-ng-show="loaded">
     <div class="umb-modalcolumn-header">
-        <h4>Set line item price filter rules</h4>
+        <h4>Set collection total price rules</h4>
     </div>
     <form name="priceConstraintForm" id="priceConstraintForm">
     <div class="umb-panel-body with-header with-footer">
         <!-- Flyout when Change Prices is clicked -->
 
             <div class="form-group row-fluid input-prepend">
-                <label for="new-price">Price of line items<small>Values should be entered as positive numbers.</small></label>
+                <label for="new-price">Price of matching items<small>Values should be entered as positive numbers.</small></label>
                 <span class="add-on">{{currencySymbol}}</span>
                 <input name="new-price" data-ng-model="price" class=" col-xs-5 span5" type="number" />
             </div>

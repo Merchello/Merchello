@@ -8,7 +8,7 @@
     /// <summary>
     /// The maximum quantity constraint.
     /// </summary>
-    [OfferComponent("AC69429B-3941-4EF1-9B86-90D576848D99", "Set a maximum qualifying quantity", "Limits to discount to a maximum quantity per line. (eg. Customer orders 5 units but this discount only should only be applied to 2)",
+    [OfferComponent("AC69429B-3941-4EF1-9B86-90D576848D99", "Maximum qualifying quantity", "Limits to discount to a maximum quantity per line. (eg. Customer orders 5 units but this discount only should only be applied to 2)",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.maximumquantity.html", typeof(Coupon))]
     public class MaximumQuantityConstraint : CollectionAlterationCouponConstraintBase
     {
@@ -69,7 +69,7 @@
             var visitor = new MaximumQuantityConstraintVisitor(MaximumQuantity);
             value.Items.Accept(visitor);
 
-            return Attempt<ILineItemContainer>.Succeed(this.CreateNewLineContainer(visitor.ModifiedItems));
+            return this.Success(this.CreateNewLineContainer(visitor.ModifiedItems));
         }
     }
 }

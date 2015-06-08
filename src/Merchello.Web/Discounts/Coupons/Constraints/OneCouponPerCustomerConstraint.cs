@@ -16,7 +16,7 @@
     /// A rule to enforce one discount per customer.
     /// </summary>
     [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One coupon per customer", "The customer may only ever use this coupon once.", RestrictToType = typeof(Coupon))]
-    public class OneCouponPerCustomerConstraint : OfferConstraintComponentBase<ILineItemContainer>
+    public class OneCouponPerCustomerConstraint : CouponConstraintBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCouponPerCustomerConstraint"/> class.
@@ -63,9 +63,8 @@
                 var remptions = offerRedeemedService.GetByOfferSettingsKeyAndCustomerKey(offerSettingsKey, customer.Key);
 
                 return remptions.Any()
-                           ? Attempt<ILineItemContainer>.Fail(
-                               new OfferRedemptionException("Customer has already redeemed this offer."))
-                           : Attempt.Succeed(value);
+                           ? this.Fail(value, "Customer has already redeemed this offer.")
+                           : this.Success(value);
 
             }
            

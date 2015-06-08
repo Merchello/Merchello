@@ -13,7 +13,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         $scope.componentsLoaded = false;
         $scope.availableComponents = [];
         $scope.assignedComponents = [];
+        $scope.partition = [];
         $scope.currencySymbol = '';
+        $scope.sortComponent = {};
 
         // exposed components methods
         $scope.assignComponent = assignComponent;
@@ -21,6 +23,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         $scope.configureComponentOpen = configureComponentOpen;
         $scope.isComponentConfigured = isComponentConfigured;
         $scope.applyDisplayConfigurationFormat = applyDisplayConfigurationFormat;
+
 
         var eventName = 'merchello.offercomponentcollection.changed';
 
@@ -35,11 +38,18 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         function init() {
             eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
 
+            // ensure that the parent scope promises have been resolved
             $scope.$watch('preValuesLoaded', function(pvl) {
                 if(pvl === true) {
                    loadSettings();
                 }
             });
+
+            // if these are constraints, enable the sort
+            if ($scope.componentType === 'Constraint') {
+                $scope.sortableOptions.disabled = false;
+                console.info($scope.sortableOptions);
+            }
         }
 
         /**
@@ -72,6 +82,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         function loadComponents() {
             // either assigned constraints or rewards
             $scope.assignedComponents = _.filter($scope.offerSettings.componentDefinitions, function(osc) { return osc.componentType === $scope.componentType; });
+
             var typeGrouping = $scope.offerSettings.getComponentsTypeGrouping();
 
             // there can only be one reward.
@@ -200,6 +211,30 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
                 $scope.saveOfferSettings();
             }, 500);
         }
+
+        // Sortable available offers
+        /// -------------------------------------------------------------------
+
+        $scope.sortableOptions = {
+            start : function(e, ui) {
+               ui.item.data('start', ui.item.index());
+            },
+           stop: function (e, ui) {
+               var component = ui.item.scope().component;
+               var start = ui.item.data('start'),
+                   end =  ui.item.index();
+               // reorder the offerSettings.componentDefinitions
+               if ($scope.offerSettings.hasRewards()) {
+                   // the reward is always in position 0
+                   start++;
+                   end++;
+               }
+               $scope.offerSettings.reorderComponent(start, end);
+            },
+            disabled: true,
+            cursor: "move"
+        }
+
         // Initialize the controller
         init();
     }]);

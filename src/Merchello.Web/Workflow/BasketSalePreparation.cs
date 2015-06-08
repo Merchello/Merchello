@@ -112,7 +112,7 @@
             // this will be used to audit the redeemed offer in the Finalizing handler
             attempt.Result.Award.ExtendedData
                 .SetValue(
-                    Core.Constants.ExtendedDataKeys.OfferReward, 
+                    Core.Constants.ExtendedDataKeys.CouponReward, 
                     JsonConvert.SerializeObject(coupon.Settings.ToOfferSettingsDisplay()));
 
             // save the coupon into the original item cache

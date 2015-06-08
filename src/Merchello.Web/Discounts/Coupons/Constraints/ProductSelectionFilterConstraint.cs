@@ -4,7 +4,6 @@
     using System.Linq;
 
     using Merchello.Core;
-    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
@@ -16,7 +15,7 @@
     /// <summary>
     /// A discount validation constraint to restrict this discount to a selection of products.
     /// </summary>
-    [OfferComponent("15DDF0EA-9C60-489A-96A8-D2AAADBEF328", "Restrict to certain products", "This discount is only offered for certain products.",
+    [OfferComponent("15DDF0EA-9C60-489A-96A8-D2AAADBEF328", "Product rules", "This discount is only offered for certain products.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.productselectionfilter.html")]
     public class ProductSelectionFilterConstraint : CollectionAlterationCouponConstraintBase
     {
@@ -88,9 +87,8 @@
             value.Items.Accept(visitor);
 
             return visitor.FilteredItems.Any()
-                       ? Attempt<ILineItemContainer>.Succeed(this.CreateNewLineContainer(visitor.FilteredItems))
-                       : Attempt<ILineItemContainer>.Fail(
-                           new OfferRedemptionException("Product selection filter did not match any items."));
+                       ? this.Success(this.CreateNewLineContainer(visitor.FilteredItems))
+                       : this.Fail(value, "No products matched the configured filter.");
         }
     }
 }

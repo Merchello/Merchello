@@ -1,30 +1,28 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Constraints
 {
+    using System;
     using System.Linq;
 
     using Merchello.Core.Exceptions;
-    using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
 
-    using umbraco.editorControls.SettingControls;
-
     /// <summary>
-    /// Filters the line item collection for configured price rules."
+    /// Price constraint rules for the entire qualifying collection
     /// </summary>
-    [OfferComponent("66957C56-8A5E-4ECD-BDEB-565F8777A38F", "Filter by product price rules", "Filters the line item collection for individual product line items with prices matching configured rules.",
-        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.filterpricerules.html", typeof(Coupon))]
-    public class PriceFilterRulesConstraint : CollectionAlterationCouponConstraintBase
+    [OfferComponent("01CABB7B-F718-4639-A260-EB22E950DBE6", "Total price of items rules", "Tests the total price all line items against configured rules.",
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.collectionpricerules.html", typeof(Coupon))]
+    public class CollectionPriceRulesConstraint : CouponConstraintBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PriceFilterRulesConstraint"/> class.
+        /// Initializes a new instance of the <see cref="CollectionPriceRulesConstraint"/> class.
         /// </summary>
         /// <param name="definition">
         /// The definition.
         /// </param>
-        public PriceFilterRulesConstraint(OfferComponentDefinition definition)
+        public CollectionPriceRulesConstraint(OfferComponentDefinition definition)
             : base(definition)
         {
         }
@@ -45,10 +43,9 @@
                 // price and operator
                 if (string.IsNullOrEmpty(price) || string.IsNullOrEmpty(operatorText)) return string.Empty;
 
-                return string.Format("'Price is {0} ' +  $filter('currency')({1}, $scope.currencySymbol)", operatorText, price);
+                return string.Format("'Total price is {0} ' +  $filter('currency')({1}, $scope.currencySymbol)", operatorText, price);
             }
         }
-
 
         /// <summary>
         /// Gets the amount.
@@ -88,13 +85,13 @@
         /// </returns>
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
-            var visitor = new NumericalValueConstraintVisitor(this.Price, Operator, "price");
-            value.Items.Accept(visitor);
+            if (Price <= 0) return Attempt<ILineItemContainer>.Succeed(value);
 
-            return visitor.FilteredLineItems.Any()
-                       ? Attempt<ILineItemContainer>.Succeed(CreateNewLineContainer(visitor.FilteredLineItems))
-                       : Attempt<ILineItemContainer>.Fail(
-                           new OfferRedemptionException("Price filter removes all items."));
+            var total = value.Items.Sum(x => x.TotalPrice);
+
+            return StringOperatorHelper.Evaluate(Price, total, Operator) ? 
+                this.Success(value) : 
+                this.Fail(value, "The total price of items failed to pass the configured condition.");
         }
     }
 }

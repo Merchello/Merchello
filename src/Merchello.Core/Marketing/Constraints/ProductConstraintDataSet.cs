@@ -4,17 +4,12 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Text;
-
-    using Merchello.Core.Models;
-
-    using umbraco.cms.businesslogic.packager;
 
     /// <summary>
     /// The product constraint data.
     /// </summary>
     /// <remarks>
-    /// Used when working with data stored in the <see cref="RestrictToProductSelectionConstraint"/>
+    /// Used when working with data stored in the <see cref="ProductSelectionFilterConstraint"/>
     /// </remarks>
     internal class ProductConstraintData
     {
@@ -32,6 +27,11 @@
         /// Gets or sets a value indicating whether specific variants were specified.
         /// </summary>
         public bool SpecifiedVariants { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the product should be excluded.
+        /// </summary>
+        public bool Exclude { get; set; }
     }
 
     /// <summary>

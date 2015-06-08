@@ -12,7 +12,7 @@
     /// <summary>
     /// The exclude shipping cost constraint.
     /// </summary>
-    [OfferComponent("BE93358C-C7BC-489F-9177-DB570F6C7A1F", "Shipping (freight) should not be discounted", "Shipping costs will be removed from qualifying items.", RestrictToType = typeof(Coupon))]
+    [OfferComponent("BE93358C-C7BC-489F-9177-DB570F6C7A1F", "Exclude shipping (freight) charges", "Shipping costs will be removed from the qualifying items.", RestrictToType = typeof(Coupon))]
     public class ExcludeShippingCostConstraint : CollectionAlterationCouponConstraintBase
     {
         /// <summary>
