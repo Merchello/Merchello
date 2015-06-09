@@ -21,20 +21,14 @@
     public class SalePreparationOperationsController : SurfaceControllerBase
     {
 
-        //[ChildActionOnly]
-        //public ActionResult RenderApplyOfferCodeForm(ApplyOfferCodeForm model)
-        //{
-        //    return this.PartialView(PathHelper.GetThemePartialViewPath(model.Theme, "ApplyOfferCodeForm"), model);
-        //}
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ApplyOfferCode(ApplyCouponForm model)
+        public ActionResult RedeemCouponOffer(RedeemCouponOfferForm model)
         {
             if (string.IsNullOrEmpty(model.OfferCode)) return this.CurrentUmbracoPage();
 
-            var attempt = Basket.SalePreparation().TryAwardOffer(model.OfferCode);
-
+            var result = Basket.SalePreparation().RedeemCouponOffer(model.OfferCode);
+            ViewBag.CouponRedemptionResult = result;
             return this.CurrentUmbracoPage();
         }
 

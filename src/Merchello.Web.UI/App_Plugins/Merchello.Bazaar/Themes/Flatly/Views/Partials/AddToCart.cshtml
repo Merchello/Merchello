@@ -14,7 +14,7 @@
     var hasVariants = Model.Product.ProductVariants.Any();
 }
 
-<div class="well span3 add-to-cart@(hasVariants ? " has-variants" : string.Empty)">
+<div class="well add-to-cart @(hasVariants ? " has-variants" : string.Empty)">
     @if (hasVariants)
     {
         <div class="price text-center variant-pricing" id="@Model.Product.Key"></div>
@@ -23,7 +23,7 @@
     {
         <div class="price text-center">@GetSingleProductPrice(Model.Product, Model.Currency)</div>
     }
-    <div class="form-group span3 add-button">
+    <div class="control-group add-button">
         @{
             using (Html.BeginUmbracoForm<BasketOperationsController>("AddToBasket", new { @class = "bs-docs-example", role = "form" }))
             {

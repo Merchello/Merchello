@@ -340,7 +340,9 @@
         {
             if (!IsReadyToInvoice()) return null;
 
-            var attempt = invoiceBuilder.Build();
+            var requestCache = _merchelloContext.Cache.RequestCache;
+            var cacheKey = string.Format("merchello.salespreparationbase.prepareinvoice.{0}", ItemCache.VersionKey);
+            var attempt = (Attempt<IInvoice>)requestCache.GetCacheItem(cacheKey, () => invoiceBuilder.Build());
 
             if (attempt.Success)
             {

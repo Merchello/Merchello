@@ -32,7 +32,7 @@
         /// <summary>
         /// Gets or sets the apply coupon form.
         /// </summary>
-        public ApplyCouponForm ApplyCouponForm { get; set; }
+        public RedeemCouponOfferForm RedeemCouponOfferForm { get; set; }
 
         /// <summary>
         /// Gets the receipt page.

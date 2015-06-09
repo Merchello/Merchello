@@ -1,0 +1,41 @@
+﻿@inherits UmbracoViewPage<RedeemCouponOfferForm>
+@using System.Web.Mvc.Html
+@using Merchello.Bazaar.Controllers.Surface
+@using Merchello.Bazaar.Models
+@using Merchello.Web.Discounts.Coupons
+@using Umbraco.Web
+@using Umbraco.Web.Mvc
+@{
+    var couponRedemptionResult = (ICouponRedemptionResult)ViewBag.CouponRedemptionResult;
+}
+<div class="row-fluid">
+
+    <div class="col-xs-8 span8 offset3">
+        @using (Html.BeginUmbracoForm<SalePreparationOperationsController>("RedeemCouponOffer", new { area = "Bazaar" }, new { @class = "form-inline" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="control-group">
+                @Html.Label("Offer code") @Html.ValidationMessageFor(x => x.OfferCode)
+                @Html.TextBoxFor(x => x.OfferCode, new { placeholder = "Offer code" })
+                <input type="submit" class="btn btn-primary" value="Apply" />                
+            </div>
+        }
+        @if (couponRedemptionResult != null)
+        {
+            if (!couponRedemptionResult.Success )
+            {
+                <strong>Fail</strong>
+                if (couponRedemptionResult.Messages.Any())
+                { 
+                    <ul>
+                        @foreach (var msg in couponRedemptionResult.Messages)
+                        {
+                            <li>@msg</li>
+                        }
+                    </ul>
+                }
+
+            }
+        }
+    </div>
+</div>
