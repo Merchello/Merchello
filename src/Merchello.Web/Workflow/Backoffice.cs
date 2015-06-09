@@ -16,7 +16,7 @@ namespace Merchello.Web.Workflow
     /// <summary>
     /// A Backoffice for the Backoffice
     /// </summary>
-    public class Backoffice : IBackoffice
+    internal class Backoffice : IBackoffice
     {
         /// <summary>
         /// The item cache responsible for persisting the backoffice contents.

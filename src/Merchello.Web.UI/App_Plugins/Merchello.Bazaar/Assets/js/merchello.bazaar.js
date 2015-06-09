@@ -325,7 +325,7 @@
                     }
 
                     // use billing checkbox
-                    if ($('#billing-is-shipping').length) {
+                    if ($('#billing-is-shipping').length > 0) {
                         $('#billing-is-shipping').click(function () {
                             merchello.bazaar.checkout.toggleBillingIsShipping();
                         });
@@ -333,7 +333,7 @@
 
 
                     // bind the customer address drop downs
-                    if ($('#billing-address-select').length) {
+                    if ($('#billing-address-select').length > 0) {
                         // TODO this should not be necessary
                         $('#billing-address-select').removeAttr('data-val').removeAttr('data-val-required');
 
@@ -349,7 +349,7 @@
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
                     }
-                    if ($('shipping-address-select').length) {
+                    if ($('shipping-address-select').length > 0) {
                         $('#shipping-address-select').removeAttr('data-val').removeAttr('data-val-required');
                         $('#shipping-address-select').change(function() {
                             if ($(this).val() !== '00000000-0000-0000-0000-000000000000') {
@@ -369,7 +369,7 @@
                         });
                     }
 
-                    if ($('#save-addresses-check').length) {
+                    if ($('#save-addresses-check').length > 0) {
                         $('#save-addresses-check').click(function() {
                             merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
                         });
@@ -377,15 +377,14 @@
                 }
 
                 // update ship rate quotes
-                if ($('#shipping-quotes-select').length) {
+                if ($('#shipping-quotes-select').length > 0) {
                     $('#shipping-quotes-select').change(function () {
                         merchello.bazaar.checkout.updateShipRateQuote($('#customer-token').val(), $(this).val());
                         merchello.bazaar.checkout.setShipMethod();
                     });
-                    merchello.bazaar.checkout.setShipMethod();
                 }
 
-                if ($('#payment-method-select').length) {
+                if ($('#payment-method-select').length > 0) {
                     $('#payment-method-select').change(function () {
                         merchello.bazaar.checkout.setPaymentMethod();
                     });

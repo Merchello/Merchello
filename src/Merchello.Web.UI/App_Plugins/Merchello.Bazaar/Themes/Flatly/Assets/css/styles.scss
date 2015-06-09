@@ -81,6 +81,20 @@ span.field-validation-error {
         display: none;
     }
 }
+
+// ------------------------------------
+// Receipt
+// ------------------------------------
+#order-info {
+    h2 {
+        margin-bottom: 1em;
+        span.sub-title {
+            font-size: 1em;
+            display: block;
+        }
+    }
+}
+
 // ------------------------------------
 // Account pages 
 // ------------------------------------

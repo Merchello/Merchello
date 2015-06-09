@@ -321,11 +321,23 @@
 
             var salesPreparation = basket.SalePreparation();
 
+            // prepare the invoice
+            var invoice = salesPreparation.PrepareInvoice();
+            
+            // get the existing shipMethodKey if any
+            var shipmentLineItem = invoice.ShippingLineItems().FirstOrDefault();
+            var shipMethodKey = shipmentLineItem != null ? shipmentLineItem.ExtendedData.GetShipMethodKey() : Guid.Empty;
+
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
                 ThemeName = viewModel.Theme,
                 CustomerToken = basket.Customer.Key.ToString().EncryptWithMachineKey(),
-                SaleSummary = _salePreparationSummaryFactory.Value.Build(salesPreparation),                
+                InvoiceSummary = new InvoiceSummary()
+                                     {
+                                         Invoice = invoice,
+                                         Currency = viewModel.Currency
+                                     },             
+                ShipMethodKey   = shipMethodKey,
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
                                                                     {
                                                                         Value = x.ShipMethod.Key.ToString(),
@@ -346,20 +358,10 @@
             };
 
 
-            viewModel.ApplyCouponForm = new ApplyCouponForm()
+            viewModel.RedeemCouponOfferForm = new RedeemCouponOfferForm()
                 {
                     ThemeName = viewModel.Theme,
-                    CurrencySymbol = viewModel.Currency.Symbol,
-                    Messages = new List<string>(),
-                    Items = salesPreparation.ItemCache.Items
-                        .Where(x => x.LineItemType == LineItemType.Discount)
-                        .Select(x => new DiscountLineItem()
-                                         {
-                                            Key = x.Key,
-                                            Name = x.Name,
-                                            OfferCode = x.Sku,
-                                            Price = x.Price
-                                         })
+                    CurrencySymbol = viewModel.Currency.Symbol
                 };
 
             return viewModel;
@@ -408,7 +410,11 @@
         public ReceiptModel CreateReceipt(RenderModel model, IInvoice invoice)
         {
             var viewModel = this.Build<ReceiptModel>(model);
-            viewModel.Invoice = invoice;
+            viewModel.InvoiceSummary = new InvoiceSummary()
+                                           {
+                                               Invoice = invoice,
+                                               Currency = viewModel.Currency
+                                           };
             var shippingLineItem = invoice.ShippingLineItems().FirstOrDefault();
             if (shippingLineItem != null)
             {

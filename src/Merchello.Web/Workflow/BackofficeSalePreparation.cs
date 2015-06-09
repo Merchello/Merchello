@@ -4,13 +4,16 @@
 
     using Merchello.Core;
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// Represents the backoffice sale preparation.
     /// </summary>
-    public class BackofficeSalePreparation : SalePreparationBase, IBackofficeSalePreparation
+    internal class BackofficeSalePreparation : SalePreparationBase, IBackofficeSalePreparation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BackofficeSalePreparation"/> class.
@@ -27,6 +30,12 @@
         internal BackofficeSalePreparation(IMerchelloContext merchelloContext, IItemCache itemCache, ICustomerBase customer)
             : base(merchelloContext, itemCache, customer)
         {
+        }
+
+
+        internal override Attempt<IOfferResult<TConstraint, TAward>> TryApplyOffer<TConstraint, TAward>(TConstraint validateAgainst, string offerCode)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>

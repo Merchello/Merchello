@@ -23,7 +23,7 @@
         /// <summary>
         /// Gets or sets the invoice.
         /// </summary>
-        public IInvoice Invoice { get; set; }
+        public InvoiceSummary InvoiceSummary { get; set; }
 
         /// <summary>
         /// Gets or sets the shipping address.

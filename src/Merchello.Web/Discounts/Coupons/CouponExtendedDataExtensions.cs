@@ -112,7 +112,22 @@
                 LogHelper.Error(typeof(CouponExtendedDataExtensions), "Failed to deserialize coupon from ExtendedDataCollection", ex);
                 throw;
             }
+        }
 
+        /// <summary>
+        /// Serialized and stores the coupon into the <see cref="ExtendedDataCollection"/>
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="coupon">
+        /// The coupon.
+        /// </param>
+        internal static void SetCouponValue(this ExtendedDataCollection extendedData, ICoupon coupon)
+        {
+            extendedData.SetValue(
+                Core.Constants.ExtendedDataKeys.CouponReward,
+                JsonConvert.SerializeObject(((Coupon)coupon).Settings.ToOfferSettingsDisplay()));
         }
     }
 }
