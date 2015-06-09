@@ -1,6 +1,8 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationModel>
+@using System.Web.Mvc
 @using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
+@using Merchello.Web.Discounts.Coupons
 @{
     Layout = "Master.cshtml";
 }
@@ -17,6 +19,6 @@
         TODO add viewbag data here
 
     *@
-    @Html.ThemedPartial(Model, "RedeemCouponOfferForm", Model.RedeemCouponOfferForm)
+    @Html.ThemedPartial(Model, "RedeemCouponOfferForm", Model.RedeemCouponOfferForm, new ViewDataDictionary { { "CouponRedemptionResult", (ICouponRedemptionResult)ViewBag.CouponRedemptionResult } })
 
 </div>
