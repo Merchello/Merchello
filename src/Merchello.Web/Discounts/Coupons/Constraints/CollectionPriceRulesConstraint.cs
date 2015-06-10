@@ -89,7 +89,7 @@
 
             var total = value.Items.Sum(x => x.TotalPrice);
 
-            return StringOperatorHelper.Evaluate(Price, total, Operator) ? 
+            return StringOperatorHelper.Evaluate(total, Price, Operator) ? 
                 this.Success(value) : 
                 this.Fail(value, "The total price of items failed to pass the configured condition.");
         }

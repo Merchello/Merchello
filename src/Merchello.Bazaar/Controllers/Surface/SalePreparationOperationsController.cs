@@ -20,7 +20,15 @@
     [PluginController("Bazaar")]
     public class SalePreparationOperationsController : SurfaceControllerBase
     {
-
+        /// <summary>
+        /// Tries to redeem a coupon offer.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="RedeemCouponOfferForm"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RedeemCouponOffer(RedeemCouponOfferForm model)
@@ -32,6 +40,24 @@
             return this.CurrentUmbracoPage();
         }
 
+        /// <summary>
+        /// Removes the coupon.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <param name="redirectId">
+        /// The content id of the page to redirect to
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public ActionResult RemoveCoupon(string offerCode, int redirectId)
+        {
+            Basket.SalePreparation().RemoveOfferCode(offerCode);
+            return this.RedirectToUmbracoPage(redirectId);
+        }
 
         /// <summary>
         /// Saves addresses during the checkout process.

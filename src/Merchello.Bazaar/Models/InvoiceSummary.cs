@@ -16,5 +16,10 @@
         /// Gets or sets the currency.
         /// </summary>
         public ICurrency Currency { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current page id.
+        /// </summary>
+        public int CurrentPageId { get; set; }
     }
 }

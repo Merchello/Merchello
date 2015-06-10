@@ -8,7 +8,7 @@
 @{
     var couponRedemptionResult = (ICouponRedemptionResult)ViewBag.CouponRedemptionResult;
 }
-<div class="row-fluid">
+<div class="row-fluid" id="redeem-coupon">
 
     <div class="col-xs-8 span8 offset3">
         @using (Html.BeginUmbracoForm<SalePreparationOperationsController>("RedeemCouponOffer", new { area = "Bazaar" }, new { @class = "form-inline" }))
@@ -25,7 +25,7 @@
             if (!couponRedemptionResult.Success)
             {
                 var errorMessage = couponRedemptionResult.Exception.Message;
-                <div class="alert alert-warning alert-dismissible" role="alert">
+                <div class="alert alert-coupon alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <strong>Could not redeem coupon:</strong> @errorMessage.
                     @if (couponRedemptionResult.Messages.Any())

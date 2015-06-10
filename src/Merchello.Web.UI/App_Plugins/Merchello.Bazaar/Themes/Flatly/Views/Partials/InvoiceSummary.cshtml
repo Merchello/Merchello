@@ -1,5 +1,8 @@
 ﻿@inherits UmbracoViewPage<InvoiceSummary>
+@using System.Web.Mvc.Html
+@using System.Web.Routing
 @using Merchello.Core.Models
+@using umbraco.providers.members
 @using Umbraco.Web.Mvc
 @using Merchello.Bazaar
 @using Merchello.Core
@@ -7,12 +10,13 @@
 
 @{
     var discounts = Model.Invoice.DiscountLineItems();
+    var isReceipt = Model.Invoice.HasIdentity;
 }
 
 <h1>
     Order Details
 </h1>
-@if (Model.Invoice.HasIdentity)
+@if (isReceipt)
 {
     <h2 class="sub-title">
         <span>Invoice Number: @Model.Invoice.InvoiceNumber</span>
@@ -56,7 +60,7 @@
             {
                 <tr>
                     <td>@item.Name</td>
-                    <td colspan="2"><b>Offer Code:</b> @item.Sku</td>
+                    <td colspan="2"><b>Offer Code:</b> @item.Sku @RenderRemoveCouponLink(item.Sku, isReceipt)</td>
                     <td class="text-right">(@ModelExtensions.FormatPrice(item.TotalPrice, Model.Currency.Symbol))</td>
                 </tr>
             }
@@ -67,3 +71,12 @@
         </tr>
     </tbody>
 </table>
+
+@helper RenderRemoveCouponLink(string offerCode, bool isReceipt)
+{
+    if (!isReceipt)
+    {
+        @Html.ActionLink("(Remove)", "RemoveCoupon", "SalePreparationOperations", new { area = "Bazaar", offerCode = offerCode, redirectId = Model.CurrentPageId }, null)
+    } 
+    
+}

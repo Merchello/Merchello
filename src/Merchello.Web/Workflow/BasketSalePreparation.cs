@@ -109,25 +109,23 @@
                 // Now we have to revalidate any existing coupon offers to make sure the newly approved ones will still be valid.
                 var clone = this.CloneItemCache();
                 _couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result);
-                var valid = true;
+                ICouponRedemptionResult redemption = new CouponRedemptionResult(result.Award, result.Messages);
 
                 foreach (var oc in OfferCodes)
                 {
-                    var attempt = TryApplyOffer<ILineItemContainer, ILineItem>(clone, oc);
-                    if (!attempt.Success)
+                    redemption = TryApplyOffer<ILineItemContainer, ILineItem>(clone, oc).AsCouponRedemptionResult(coupon);
+                    if (!redemption.Success)
                     {
-                        if (attempt.Result != null) result.AddMessage(attempt.Result.Messages);
+                        if (redemption.Messages.Any()) result.AddMessage(redemption.Messages);
 
-                        result.Exception = attempt.Exception;
+                        result.Exception = redemption.Exception;
                         result.Success = false;
-                        valid = false;
                         break;
                     }
 
-                    _couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, attempt.AsCouponRedemptionResult(coupon));
-                }
+                    _couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result); }
 
-                if (!valid) return new CouponRedemptionResult(new OfferRedemptionException("Invalidates previously added coupon."));
+                if (!redemption.Success) return redemption;
 
             }
 

@@ -335,7 +335,8 @@
                 InvoiceSummary = new InvoiceSummary()
                                      {
                                          Invoice = invoice,
-                                         Currency = viewModel.Currency
+                                         Currency = viewModel.Currency,
+                                         CurrentPageId = viewModel.Id
                                      },             
                 ShipMethodKey   = shipMethodKey,
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()

@@ -1,4 +1,7 @@
-﻿img {
+﻿$yellow :  #f39c12;
+$warn: lighten($yellow, 25%);
+
+img {
 	max-width:100%;
 }
 
@@ -80,6 +83,12 @@ span.field-validation-error {
     .payment-method-form {
         display: none;
     }
+}
+
+.alert-coupon {
+    background-color: $warn;
+    border-color: $yellow;
+    color: black;
 }
 
 // ------------------------------------
