@@ -1,4 +1,7 @@
-﻿img {
+﻿$yellow :  #f39c12;
+$warn: lighten($yellow, 25%);
+
+img {
 	max-width:100%;
 }
 
@@ -81,6 +84,26 @@ span.field-validation-error {
         display: none;
     }
 }
+
+.alert-coupon {
+    background-color: $warn;
+    border-color: $yellow;
+    color: black;
+}
+
+// ------------------------------------
+// Receipt
+// ------------------------------------
+#order-info {
+    h2 {
+        margin-bottom: 1em;
+        span.sub-title {
+            font-size: 1em;
+            display: block;
+        }
+    }
+}
+
 // ------------------------------------
 // Account pages 
 // ------------------------------------

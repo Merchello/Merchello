@@ -21,6 +21,7 @@
                     "merchLineItem",
                     "merchCurrencyCode",
                     "merchCouponReward",
+                    "merchOfferCodeTempeData",
                     "merchLineItemTaxAmount",
                     "merchName",
                     "merchSku",
@@ -430,6 +431,17 @@
                 get
                 {
                     return "merchCouponReward";
+                }
+            }
+
+            /// <summary>
+            /// Gets the offer code queue data.
+            /// </summary>
+            internal static string OfferCodeTempData
+            {
+                get
+                {
+                    return "merchOfferCodeTempData";
                 }
             }
         }

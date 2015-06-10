@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
 
     using Merchello.Core.Builders;
@@ -13,6 +12,8 @@
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
+
+    using Newtonsoft.Json;
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
@@ -46,7 +47,12 @@
         /// <remarks>
         /// Determined by the global back office setting.
         /// </remarks>
-        private Lazy<bool> _shippingTaxable; 
+        private Lazy<bool> _shippingTaxable;
+
+        /// <summary>
+        /// The offer code temp data.
+        /// </summary>
+        private Lazy<List<string>> _offerCodeTempData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SalePreparationBase"/> class.
@@ -71,7 +77,7 @@
             _customer = customer;
             _itemCache = itemCache;
             ApplyTaxesToInvoice = true;
-            RaiseCustomerEvents = true;
+            RaiseCustomerEvents = false;
 
             Initialize();
         }
@@ -114,6 +120,17 @@
         public IItemCache ItemCache
         {
             get { return _itemCache; }
+        }
+
+        /// <summary>
+        /// Gets the offer codes.
+        /// </summary>
+        internal IEnumerable<string> OfferCodes
+        {
+            get
+            {
+                return this._offerCodeTempData.Value;
+            }
         }
 
         /// <summary>
@@ -323,7 +340,9 @@
         {
             if (!IsReadyToInvoice()) return null;
 
-            var attempt = invoiceBuilder.Build();
+            var requestCache = _merchelloContext.Cache.RequestCache;
+            var cacheKey = string.Format("merchello.salespreparationbase.prepareinvoice.{0}", ItemCache.VersionKey);
+            var attempt = (Attempt<IInvoice>)requestCache.GetCacheItem(cacheKey, () => invoiceBuilder.Build());
 
             if (attempt.Success)
             {
@@ -461,6 +480,56 @@
         }
 
         /// <summary>
+        /// Removes an offer code from the OfferCodes collection.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        public void RemoveOfferCode(string offerCode)
+        {
+            if (OfferCodes.Contains(offerCode))
+            {
+                _offerCodeTempData.Value.Remove(offerCode);
+                this.SaveOfferCodes();
+            }
+        }
+
+        /// <summary>
+        /// Clears the offer codes collection.
+        /// </summary>
+        public void ClearOfferCodes()
+        {
+            _offerCodeTempData.Value.Clear();
+            this.SaveOfferCodes();
+        }
+
+        /// <summary>
+        /// Attempts to apply an offer to the the checkout.
+        /// </summary>
+        /// <param name="validateAgainst">
+        /// The object to validate against
+        /// </param>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
+        /// <typeparam name="TAward">
+        /// The type of award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        /// <remarks>
+        /// Custom offer types
+        /// </remarks>
+        internal abstract Attempt<IOfferResult<TConstraint, TAward>> TryApplyOffer<TConstraint, TAward>(TConstraint validateAgainst, string offerCode)
+            where TConstraint : class
+            where TAward : class;
+
+
+        /// <summary>
         /// Purges sales manager information
         /// </summary>
         /// <param name="merchelloContext">
@@ -532,6 +601,44 @@
         }
 
         /// <summary>
+        /// Gets a clone of the ItemCache
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IItemCache"/>.
+        /// </returns>
+        protected IItemCache CloneItemCache()
+        {
+            // The ItemCache needs to be cloned as line items may be altered while applying constraints
+            var clone = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
+            foreach (var item in ItemCache.Items)
+            {
+                clone.Items.Add(item.AsLineItemOf<ItemCacheLineItem>());
+            }
+
+            return clone;
+        }
+
+        /// <summary>
+        /// Saves offer code.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected bool SaveOfferCode(string offerCode)
+        {
+            if (!OfferCodes.Contains(offerCode))
+            {
+                _offerCodeTempData.Value.Add(offerCode);
+                this.SaveOfferCodes();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Saves the current customer
         /// </summary>
         /// <param name="merchelloContext">
@@ -592,6 +699,72 @@
             return Cache.CacheKeys.ItemCacheCacheKey(customer.Key, itemCacheTfKey, versionKey);
         }
 
+        #region Offer codes
+
+        /// <summary>
+        /// Saves the offer codes.
+        /// </summary>
+        private void SaveOfferCodes()
+        {
+            var json =
+                JsonConvert.SerializeObject(
+                    new OfferCodeTempData() { OfferCodes = OfferCodes, VersionKey = ItemCache.VersionKey });
+
+            _customer.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.OfferCodeTempData, json);
+
+            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
+
+        }
+
+        /// <summary>
+        /// Handles the instantiation of offer code queue.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Queue{String}"/> offer codes.
+        /// </returns>
+        private List<string> BuildOfferCodeList()
+        {
+            var codes = new List<string>();
+            var queueDataJson = Customer.ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.OfferCodeTempData);
+            if (string.IsNullOrEmpty(queueDataJson)) return codes;
+
+            try
+            {
+                var savedData = JsonConvert.DeserializeObject<OfferCodeTempData>(queueDataJson);
+
+                // verify that the offer codes are for this version of the checkout
+                if (savedData.VersionKey != ItemCache.VersionKey) return codes;
+
+                codes.AddRange(savedData.OfferCodes);
+            }
+            catch (Exception ex)
+            {
+                // don't throw an exception here as the customer is in the middle of a checkout.
+                LogHelper.Error<SalePreparationBase>("Failed to deserialize OfferCodeTempData.  Returned empty offer code list instead.", ex);
+            }
+
+            return codes;
+        }
+
+        /// <summary>
+        /// Class that gets serialized to customer's ExtendedDataCollection to save offer code queue data.
+        /// </summary>
+        private struct OfferCodeTempData
+        {
+
+            /// <summary>
+            /// Gets or sets the version key to validate offer codes are validate with this preparation
+            /// </summary>
+            public Guid VersionKey { get; set; }
+
+            /// <summary>
+            /// Gets or sets the offer codes.
+            /// </summary>
+            public IEnumerable<string> OfferCodes { get; set; }
+        }
+
+        #endregion
+
         /// <summary>
         /// Maps the <see cref="IShipmentRateQuote"/> to a <see cref="ILineItem"/> 
         /// </summary>
@@ -611,6 +784,8 @@
             var storeSettingsService = _merchelloContext.Services.StoreSettingService;
             var shippingTaxSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.GlobalShippingIsTaxableKey);
             _shippingTaxable = new Lazy<bool>(() => Convert.ToBoolean(shippingTaxSetting.Value));
+            this._offerCodeTempData = new Lazy<List<string>>(this.BuildOfferCodeList);
         }
+
     }
 }

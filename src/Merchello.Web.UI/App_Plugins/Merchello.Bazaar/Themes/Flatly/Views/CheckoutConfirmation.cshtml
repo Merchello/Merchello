@@ -1,20 +1,24 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationModel>
-@using System.Web.Mvc.Html
+@using System.Web.Mvc
 @using Merchello.Bazaar
-@using Merchello.Bazaar.Controllers.Surface
 @using Merchello.Bazaar.Models.ViewModels
-@using Umbraco.Web
+@using Merchello.Web.Discounts.Coupons
 @{
     Layout = "Master.cshtml";
 }
 
+
 <div class="container-fluid">
-    <div class="row-fluid span12">
+    <div class="row-fluid">
         <h1>@Model.Name</h1>
     </div>
 
     @Html.ThemedPartial(Model, "CheckoutConfirmationForm", Model.CheckoutConfirmationForm)
-    
-    @Html.ThemedPartial(Model, "ApplyCouponForm", Model.ApplyCouponForm)
-    
+
+    @*
+        TODO add viewbag data here
+
+    *@
+    @Html.ThemedPartial(Model, "RedeemCouponOfferForm", Model.RedeemCouponOfferForm, new ViewDataDictionary { { "CouponRedemptionResult", (ICouponRedemptionResult)ViewBag.CouponRedemptionResult } })
+
 </div>

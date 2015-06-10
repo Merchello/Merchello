@@ -596,6 +596,130 @@
             Gets the product constraint data set.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions">
+            <summary>
+            ExtendedDataCollection extensions for coupon discounts.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsAnyCoupons(Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> contains ANY serialized coupons.
+            </summary>
+            <param name="container">
+            The container.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> contains ANY serialized coupons..
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsCoupon(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ILineItem"/> contains a serialized coupon.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ILineItem"/> contains a serialized coupon.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsCoupon(Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/> contains a serialized coupon.
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/> contains a serialized coupon.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplays(Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Gets a collection of <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ILineItemContainer"/>.
+            </summary>
+            <param name="container">
+            The container.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplay(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplay(Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/>.
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.SetCouponValue(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Discounts.Coupons.ICoupon)">
+            <summary>
+            Serialized and stores the coupon into the <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/>
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <param name="coupon">
+            The coupon.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionResult">
+            <summary>
+            The result that is in an attempt to apply a coupon to a sale.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult">
+            <summary>
+            Marker interface for the CouponRedemptionResult.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult.Coupon">
+            <summary>
+            Gets the coupon.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionResult.#ctor(Merchello.Core.Models.ILineItem,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponRedemptionResult"/> class for success
+            </summary>
+            <param name="award">
+            The award.
+            </param>
+            <param name="messages">
+            The messages.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionResult.#ctor(System.Exception,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponRedemptionResult"/> class for failure
+            </summary>
+            <param name="exception">
+            The exception.
+            </param>
+            <param name="messages">
+            The messages.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.CouponRedemptionResult.Coupon">
+            <summary>
+            Gets or sets the coupon.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionEventHandler">
             <summary>
             The coupon redemption event handler.
@@ -657,6 +781,51 @@
         <member name="P:Merchello.Web.Discounts.Coupons.CouponRedemptionLineItemVisitor.Redemptions">
             <summary>
             Gets the coupon redemptions.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionResultExtensions">
+            <summary>
+            The coupon redemption result extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionResultExtensions.AsCouponRedemptionResult(Umbraco.Core.Attempt{Merchello.Core.Marketing.Offer.IOfferResult{Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ILineItem}},Merchello.Web.Discounts.Coupons.ICoupon)">
+            <summary>
+            Maps an <see cref="T:Merchello.Core.Marketing.Offer.IOfferResult`2"/> to <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>
+            </summary>
+            <param name="attempt">
+            The attempt.
+            </param>
+            <param name="coupon">
+            The coupon.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs">
+            <summary>
+            The redeem coupon event args.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs.#ctor(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ILineItem)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs"/> class.
+            </summary>
+            <param name="container">
+            The line item container (usually the <see cref="T:Merchello.Core.Models.IInvoice"/>).
+            </param>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs.LineItem">
+            <summary>
+            Gets or sets the line item.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs.Container">
+            <summary>
+            Gets or sets the invoice.
             </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward">
@@ -1551,6 +1720,23 @@
             The <see cref="T:Umbraco.Core.Attempt"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.SafeAddCouponAttemptContainer``1(Merchello.Core.Models.ILineItemContainer,Merchello.Web.Discounts.Coupons.ICouponRedemptionResult,System.Boolean)">
+            <summary>
+            The safe add coupon attempt container.
+            </summary>
+            <typeparam name="TLineItem">
+            The type of line item
+            </typeparam>
+            <param name="container">
+            The container.
+            </param>
+            <param name="result">
+            The result.
+            </param>
+            <param name="raiseEvents">
+            Optional parameter indicating whether or not to raise events.  Defaults to false.
+            </param>
+        </member>
         <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.GetInstance(Merchello.Core.Models.Interfaces.IOfferSettings)">
             <summary>
             Gets an instance of a coupon from the <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>        
@@ -1561,6 +1747,16 @@
             <returns>
             The <see cref="T:Merchello.Web.Discounts.Coupons.Coupon"/>.
             </returns>
+        </member>
+        <member name="E:Merchello.Web.Discounts.Coupons.CouponManager.Redeeming">
+            <summary>
+            Occurs before redeeming the coupon
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Discounts.Coupons.CouponManager.Redeemed">
+            <summary>
+            Occurs after redeeming the coupon.
+            </summary>
         </member>
         <member name="P:Merchello.Web.Discounts.Coupons.CouponManager.Instance">
             <summary>
@@ -3242,6 +3438,366 @@
             <returns>
             The collection of <see cref="T:Merchello.Core.Marketing.Offer.OfferManagerBase`1"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Annotations.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage
+            </summary>
+            <example><code>
+            [CanBeNull] public object Test() { return null; }
+            public void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>
+            </summary>
+            <example><code>
+            [NotNull] public object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            public void ShowError(string message, params object[] args) { /* do something */ }
+            public void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:Merchello.Web.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Annotations.InvokerParameterNameAttribute">
+            <summary>
+            Indicates that the function argument should be string literal and match one
+            of the parameters of the caller function. For example, ReSharper annotates
+            the parameter of <see cref="T:System.ArgumentNullException"/>
+            </summary>
+            <example><code>
+            public void Foo(string param) {
+              if (param == null)
+                throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.NotifyPropertyChangedInvocatorAttribute">
+             <summary>
+             Indicates that the method is contained in a type that implements
+             <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> interface
+             and this method is used to notify that some property value changed
+             </summary>
+             <remarks>
+             The method should be non-static and conform to one of the supported signatures:
+             <list>
+             <item><c>NotifyChanged(string)</c></item>
+             <item><c>NotifyChanged(params string[])</c></item>
+             <item><c>NotifyChanged{T}(Expression{Func{T}})</c></item>
+             <item><c>NotifyChanged{T,U}(Expression{Func{T,U}})</c></item>
+             <item><c>SetProperty{T}(ref T, T, string)</c></item>
+             </list>
+             </remarks>
+             <example><code>
+             public class Foo : INotifyPropertyChanged {
+               public event PropertyChangedEventHandler PropertyChanged;
+               [NotifyPropertyChangedInvocator]
+               protected virtual void NotifyChanged(string propertyName) { ... }
+            
+               private string _name;
+               public string Name {
+                 get { return _name; }
+                 set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+               }
+             }
+             </code>
+             Examples of generated notifications:
+             <list>
+             <item><c>NotifyChanged("Property")</c></item>
+             <item><c>NotifyChanged(() =&gt; Property)</c></item>
+             <item><c>NotifyChanged((VM x) =&gt; x.Property)</c></item>
+             <item><c>SetProperty(ref myField, value, "Property")</c></item>
+             </list>
+             </example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.ContractAnnotationAttribute">
+            <summary>
+            Describes dependency between method input and output
+            </summary>
+            <syntax>
+            <p>Function Definition Table syntax:</p>
+            <list>
+            <item>FDT      ::= FDTRow [;FDTRow]*</item>
+            <item>FDTRow   ::= Input =&gt; Output | Output &lt;= Input</item>
+            <item>Input    ::= ParameterName: Value [, Input]*</item>
+            <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
+            <item>Value    ::= true | false | null | notnull | canbenull</item>
+            </list>
+            If method has single input parameter, it's name could be omitted.<br/>
+            Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same)
+            for method output means that the methos doesn't return normally.<br/>
+            <c>canbenull</c> annotation is only applicable for output parameters.<br/>
+            You can use multiple <c>[ContractAnnotation]</c> for each FDT row,
+            or use single attribute with rows separated by semicolon.<br/>
+            </syntax>
+            <examples><list>
+            <item><code>
+            [ContractAnnotation("=> halt")]
+            public void TerminationMethod()
+            </code></item>
+            <item><code>
+            [ContractAnnotation("halt &lt;= condition: false")]
+            public void Assert(bool condition, string text) // regular assertion method
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null => true")]
+            public bool IsNullOrEmpty(string s) // string.IsNullOrEmpty()
+            </code></item>
+            <item><code>
+            // A method that returns null if the parameter is null, and not null if the parameter is not null
+            [ContractAnnotation("null => null; notnull => notnull")]
+            public object Transform(object data) 
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
+            public bool TryParse(string s, out Person result)
+            </code></item>
+            </list></examples>
+        </member>
+        <member name="T:Merchello.Web.Annotations.LocalizationRequiredAttribute">
+            <summary>
+            Indicates that marked element should be localized or not
+            </summary>
+            <example><code>
+            [LocalizationRequiredAttribute(true)]
+            public class Foo {
+              private string str = "my string"; // Warning: Localizable string
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.CannotApplyEqualityOperatorAttribute">
+            <summary>
+            Indicates that the value of the marked type (or its derivatives)
+            cannot be compared using '==' or '!=' operators and <c>Equals()</c>
+            should be used instead. However, using '==' or '!=' for comparison
+            with <c>null</c> is always permitted.
+            </summary>
+            <example><code>
+            [CannotApplyEqualityOperator]
+            class NoEquality { }
+            class UsesNoEquality {
+              public void Test() {
+                var ca1 = new NoEquality();
+                var ca2 = new NoEquality();
+                if (ca1 != null) { // OK
+                  bool condition = ca1 == ca2; // Warning
+                }
+              }
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.BaseTypeRequiredAttribute">
+            <summary>
+            When applied to a target attribute, specifies a requirement for any type marked
+            with the target attribute to implement or inherit specific type or types.
+            </summary>
+            <example><code>
+            [BaseTypeRequired(typeof(IComponent)] // Specify requirement
+            public class ComponentAttribute : Attribute { }
+            [Component] // ComponentAttribute requires implementing IComponent interface
+            public class MyComponent : IComponent { }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly
+            (e.g. via reflection, in external library), so this symbol
+            will not be marked as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper
+            to not mark symbols marked with such attributes as unused
+            (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used</summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member</summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type</summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly
+            when marked with <see cref="T:Merchello.Web.Annotations.MeansImplicitUseAttribute"/>
+            or <see cref="T:Merchello.Web.Annotations.UsedImplicitlyAttribute"/>
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used</summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used</summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.InstantHandleAttribute">
+            <summary>
+            Tells code analysis engine if the parameter is completely handled
+            when the invoked method is on stack. If the parameter is a delegate,
+            indicates that delegate is executed while the method is executed.
+            If the parameter is an enumerable, indicates that it is enumerated
+            while the method is executed
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>
+            </summary>
+            <example><code>
+            [Pure] private int Multiply(int x, int y) { return x * y; }
+            public void Foo() {
+              const int a = 2, b = 2;
+              Multiply(a, b); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.PathReferenceAttribute">
+            <summary>
+            Indicates that a parameter is a path to a file or a folder
+            within a web project. Path can be relative or absolute,
+            starting from web root (~)
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcActionAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC action. If applied to a method, the MVC action name is calculated
+            implicitly from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcAreaAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC area.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcControllerAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC controller. If applied to a method,
+            the MVC controller name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcMasterAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC Master.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcModelTypeAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC model type.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, Object)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcPartialViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC partial view. If applied to a method,
+            the MVC partial view name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcSupressViewErrorAttribute">
+            <summary>
+            ASP.NET MVC attribute. Allows disabling all inspections
+            for MVC views within a class or a method.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcDisplayTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcEditorTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC template.
+            Use this attribute for custom wrappers similar to
+            <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC view. If applied to a method, the MVC view name is calculated implicitly
+            from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(Object)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcActionSelectorAttribute">
+            <summary>
+            ASP.NET MVC attribute. When applied to a parameter of an attribute,
+            indicates that this parameter is an MVC action name
+            </summary>
+            <example><code>
+            [ActionName("Foo")]
+            public ActionResult Login(string returnUrl) {
+              ViewBag.ReturnUrl = Url.Action("Foo"); // OK
+              return RedirectToAction("Bar"); // Error: Cannot resolve action
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.RazorSectionAttribute">
+            <summary>
+            Razor attribute. Indicates that a parameter or a method is a Razor section.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>
+            </summary>
         </member>
         <member name="T:Merchello.Web.PropertyConverters.ProductDisplayValueConverter">
             <summary>
@@ -8371,6 +8927,45 @@
             The <see cref="T:Umbraco.Core.Attempt"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask">
+            <summary>
+            Adds any coupon discounts to the invoice.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask._basketSalePreparation">
+            <summary>
+            The basket sale preparation.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask._couponManager">
+            <summary>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask.#ctor(Merchello.Core.Sales.SalePreparationBase)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask"/> class.
+            </summary>
+            <param name="salePreparation">
+            The <see cref="T:Merchello.Web.Workflow.IBasketSalePreparation"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask.PerformTask(Merchello.Core.Models.IInvoice)">
+            <summary>
+            Attempts to add the coupons discounts to the invoice
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask.CouponOfferManager">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/>.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Workflow.IWishList">
             <summary>
             Defines a wish list.
@@ -12645,43 +13240,25 @@
             Marker interface for <see cref="T:Merchello.Web.Workflow.IBasket"/> based checkouts
             </summary>
         </member>
-        <member name="M:Merchello.Web.Workflow.IBasketSalePreparation.TryAwardOffer(System.String,System.Boolean)">
+        <member name="M:Merchello.Web.Workflow.IBasketSalePreparation.RedeemCouponOffer(System.String)">
             <summary>
-            Attempts to apply an offer to the the checkout.
+            Attempts to add a coupon offer to the sale.
             </summary>
             <param name="offerCode">
             The offer code.
             </param>
-            <param name="autoAddOnSuccess">
-            A value indicating whether or not the reward should be added to the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> on success
-            </param>
             <returns>
-            The <see cref="T:Umbraco.Core.Attempt"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Workflow.IBasketSalePreparation.TryApplyOffer``2(``0,System.String)">
-            <summary>
-            Attempts to apply an offer to the the checkout.
-            </summary>
-            <param name="validateAgainst">
-            The object to validate against
-            </param>
-            <param name="offerCode">
-            The offer code.
-            </param>
-            <typeparam name="TConstraint">
-            The type of constraint
-            </typeparam>
-            <typeparam name="TAward">
-            The type of award
-            </typeparam>
-            <returns>
-            The <see cref="T:Umbraco.Core.Attempt"/>.
+            The <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>.
             </returns>
         </member>
         <member name="F:Merchello.Web.Workflow.BasketSalePreparation._couponManager">
             <summary>
             The <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Workflow.BasketSalePreparation._requestCache">
+            <summary>
+            The _request cache.
             </summary>
         </member>
         <member name="M:Merchello.Web.Workflow.BasketSalePreparation.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IItemCache,Merchello.Core.Models.ICustomerBase)">
@@ -12714,6 +13291,17 @@
             <param name="args">Additional arguments required by the payment processor</param>
             <returns>A <see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/></returns>
         </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.RedeemCouponOffer(System.String)">
+            <summary>
+            Attempts to add a coupon offer to the sale.
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Workflow.BasketSalePreparation.TryAwardOffer(System.String,System.Boolean)">
             <summary>
             Attempts to apply an offer to the the checkout.
@@ -12727,28 +13315,8 @@
             <returns>
             The <see cref="T:Umbraco.Core.Attempt"/>.
             </returns>
-        </member>
-        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.TryApplyOffer``2(``0,System.String)">
-            <summary>
-            Attempts to apply an offer to the the checkout.
-            </summary>
-            <param name="validateAgainst">
-            The object to validate against
-            </param>
-            <param name="offerCode">
-            The offer code.
-            </param>
-            <typeparam name="TConstraint">
-            The type of constraint
-            </typeparam>
-            <typeparam name="TAward">
-            The type of award
-            </typeparam>
-            <returns>
-            The <see cref="T:Umbraco.Core.Attempt"/>.
-            </returns>
             <remarks>
-            Custom offer types
+            TODO move this to an InvoiceChainTask
             </remarks>
         </member>
         <member name="M:Merchello.Web.Workflow.BasketSalePreparation.GetBasketCheckoutPreparation(Merchello.Web.Workflow.IBasket)">
@@ -12775,6 +13343,43 @@
             <returns>
             The <see cref="T:Merchello.Web.Workflow.BasketSalePreparation"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.TryApplyOffer``2(``0,System.String)">
+            <summary>
+            Attempts to apply an offer to the the checkout.
+            </summary>
+            <param name="validateAgainst">
+            The object to validate against
+            </param>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <typeparam name="TConstraint">
+            The type of constraint
+            </typeparam>
+            <typeparam name="TAward">
+            The type of award
+            </typeparam>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+            <remarks>
+            Custom offer types
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.GetCouponAttempt(System.String)">
+            <summary>
+            Gets the coupon attempt.
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+            <remarks>
+            Caches to the request cache
+            </remarks>
         </member>
         <member name="T:Merchello.Web.Mvc.MerchelloTemplatePage">
             <summary>

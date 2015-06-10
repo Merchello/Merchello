@@ -20,24 +20,44 @@
     [PluginController("Bazaar")]
     public class SalePreparationOperationsController : SurfaceControllerBase
     {
-
-        //[ChildActionOnly]
-        //public ActionResult RenderApplyOfferCodeForm(ApplyOfferCodeForm model)
-        //{
-        //    return this.PartialView(PathHelper.GetThemePartialViewPath(model.Theme, "ApplyOfferCodeForm"), model);
-        //}
-
+        /// <summary>
+        /// Tries to redeem a coupon offer.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="RedeemCouponOfferForm"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ApplyOfferCode(ApplyCouponForm model)
+        public ActionResult RedeemCouponOffer(RedeemCouponOfferForm model)
         {
             if (string.IsNullOrEmpty(model.OfferCode)) return this.CurrentUmbracoPage();
 
-            var attempt = Basket.SalePreparation().TryAwardOffer(model.OfferCode);
-
+            var result = Basket.SalePreparation().RedeemCouponOffer(model.OfferCode);
+            ViewBag.CouponRedemptionResult = result;
             return this.CurrentUmbracoPage();
         }
 
+        /// <summary>
+        /// Removes the coupon.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <param name="redirectId">
+        /// The content id of the page to redirect to
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public ActionResult RemoveCoupon(string offerCode, int redirectId)
+        {
+            Basket.SalePreparation().RemoveOfferCode(offerCode);
+            return this.RedirectToUmbracoPage(redirectId);
+        }
 
         /// <summary>
         /// Saves addresses during the checkout process.

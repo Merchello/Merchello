@@ -8,8 +8,10 @@
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
     using Merchello.Web.Trees;
+    using Merchello.Web.Workflow.InvoiceCreation;
 
     using Umbraco.Core;
+    using Umbraco.Core.Events;
 
     /// <summary>
     /// The provider responsible for managing coupon offers
@@ -40,6 +42,20 @@
             : base(offerSettingsService)
         {
         }
+
+        #region Events
+
+        /// <summary>
+        /// Occurs before redeeming the coupon
+        /// </summary>
+        public static event TypedEventHandler<CouponManager, RedeemCouponEventArgs> Redeeming;
+
+        /// <summary>
+        /// Occurs after redeeming the coupon.
+        /// </summary>
+        public static event TypedEventHandler<CouponManager, RedeemCouponEventArgs> Redeemed;
+
+        #endregion
 
         /// <summary>
         /// Gets the instance.
@@ -81,6 +97,43 @@
         }
 
         /// <summary>
+        /// The safe add coupon attempt container.
+        /// </summary>
+        /// <typeparam name="TLineItem">
+        /// The type of line item
+        /// </typeparam>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional parameter indicating whether or not to raise events.  Defaults to false.
+        /// </param>
+        internal void SafeAddCouponAttemptContainer<TLineItem>(ILineItemContainer container, ICouponRedemptionResult result, bool raiseEvents = false)
+            where TLineItem : class, ILineItem
+        {
+            if (!result.Success) return;
+
+            // the award is the line item
+            var lineItem = result.Award;
+
+            // TODO if there is to be line items of types other than discount line items, this is where they should be added.
+
+            if (container.Items.Contains(lineItem.Sku)) return;
+            lineItem.ExtendedData.SetCouponValue(result.Coupon);
+
+            if (raiseEvents)
+            Redeeming.RaiseEvent(new RedeemCouponEventArgs(container, lineItem), this);
+            
+            container.Items.Add(lineItem.AsLineItemOf<TLineItem>());
+
+            if (raiseEvents)
+            Redeemed.RaiseEvent(new RedeemCouponEventArgs(container, lineItem), this);
+        }
+
+        /// <summary>
         /// Gets an instance of a coupon from the <see cref="IOfferSettings"/>        
         /// /// </summary>
         /// <param name="offerSettings">
@@ -93,5 +146,6 @@
         {
             return new Coupon(offerSettings);
         }
+
     }
 }

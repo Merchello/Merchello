@@ -232,6 +232,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMakers\AddressMock.cs" />
+    <Compile Include="DataMakers\MockCouponDataMaker.cs" />
     <Compile Include="DataMakers\MockInvoiceDataMaker.cs" />
     <Compile Include="DataMakers\MockOrderStatusMaker.cs" />
     <Compile Include="DataMakers\SalePreparationMock.cs" />
@@ -295,6 +296,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Gateway\" />
+    <Folder Include="Mocks\Coupons\Constraints\" />
+    <Folder Include="Mocks\Coupons\Rewards\" />
     <Folder Include="Prototyping\Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -50,7 +50,9 @@
         /// </returns>
         public override Attempt<ILineItemContainer> TryApply(ILineItemContainer value, ICustomerBase customer)
         {
-            throw new NotImplementedException();
+            return !value.ContainsAnyCoupons()
+                       ? this.Success(value)
+                       : this.Fail(value, "One or more coupons have already been added.");
         }
     }
 }

@@ -37,26 +37,26 @@
             // get the basket sale preparation
             var preparation = Basket.SalePreparation();
             preparation.RaiseCustomerEvents = false;
-
-            preparation.ClearShipmentRateQuotes();
-
+            
+            var shipmentRateQuotes = Enumerable.Empty<IShipmentRateQuote>().ToArray();
+            
             // The default basket packaging strategy only creates a single shipment
             var shipment = Basket.PackageBasket(preparation.GetShipToAddress()).FirstOrDefault();
-
-            var shipmentRateQuotes = Enumerable.Empty<IShipmentRateQuote>().ToArray();
             
             if (shipment != null)
             {
+                var invoice = preparation.PrepareInvoice();
+
                 // Quote the shipment
                 shipmentRateQuotes = shipment.ShipmentRateQuotes().ToArray();
-                if (shipmentRateQuotes.Any())
+                if (shipmentRateQuotes.Any() && !invoice.ShippingLineItems().Any())
                 {
                     //// Assume the first selection.  Customer will be able to update this later
                     //// but this allows for a taxation calculation as well in the event shipping charges
                     //// are taxable.
                     preparation.SaveShipmentRateQuote(shipmentRateQuotes.First());
                 }
-            }
+            }            
 
             var paymentMethods = GatewayContext.Payment.GetPaymentGatewayMethods().ToArray();
 

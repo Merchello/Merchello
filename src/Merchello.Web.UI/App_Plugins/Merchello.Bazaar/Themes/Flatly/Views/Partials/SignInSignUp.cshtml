@@ -12,9 +12,9 @@
         @{
             using (Html.BeginUmbracoForm<MembershipOperationsController>("HandleSignIn", new { area = "Bazaar" }, new { @class = "form-horizontal" }))
             {
-                @Html.AntiForgeryToken()
                 <fieldset>
                     <legend>Login</legend>
+                    @Html.AntiForgeryToken()
                     <div class="control-group">
                         @Html.LabelFor(x => x.Login.Username, new { @class = "control-label" })
                         @Html.ValidationMessageFor(x => x.Login.Username)
@@ -50,8 +50,9 @@
         @{
             using (Html.BeginUmbracoForm<MembershipOperationsController>("HandleSignUp", new { area = "Bazaar" }, new { @class = "form-horizontal" }))
             {
-                <fieldset>
+                <fieldset>                    
                     <legend>Register</legend>
+                    @Html.AntiForgeryToken()
                     <div class="control-group">
                         @Html.LabelFor(x => x.Registration.FirstName, new { @class = "control-label" })
                         @Html.ValidationMessageFor(x => x.Registration.FirstName)
