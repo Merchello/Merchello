@@ -15,10 +15,6 @@
 
     @Html.ThemedPartial(Model, "CheckoutConfirmationForm", Model.CheckoutConfirmationForm)
 
-    @*
-        TODO add viewbag data here
-
-    *@
     @Html.ThemedPartial(Model, "RedeemCouponOfferForm", Model.RedeemCouponOfferForm, new ViewDataDictionary { { "CouponRedemptionResult", (ICouponRedemptionResult)ViewBag.CouponRedemptionResult } })
 
 </div>

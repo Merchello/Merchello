@@ -14,6 +14,7 @@
             {
                 <fieldset>
                     <legend>Login</legend>
+                    @Html.AntiForgeryToken()
                     <div class="form-group">
                         @Html.LabelFor(x => x.Login.Username, new { @class = "control-label" })
                         @Html.ValidationMessageFor(x => x.Login.Username)
@@ -51,6 +52,7 @@
             {
                 <fieldset>
                     <legend>Register</legend>
+                    @Html.AntiForgeryToken()
                     <div class="form-group">
                         @Html.LabelFor(x => x.Registration.FirstName, new { @class = "control-label" })
                         @Html.ValidationMessageFor(x => x.Registration.FirstName)
