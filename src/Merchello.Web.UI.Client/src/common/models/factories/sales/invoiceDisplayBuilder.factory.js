@@ -34,7 +34,7 @@
                             invoices.invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult.invoiceStatus);
                             invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
                             invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
-                            invoices.curreny = currencyDisplayBuilder.transform(jsonResult.currency);
+                            invoices.currency = currencyDisplayBuilder.transform(jsonResult.currency);
                         }
                         return invoices;
                     }
