@@ -12,12 +12,14 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.ShippingQuotes)
                 <div class="controls">
-                    <select id="shipping-quotes-select" class="form-control">
-                        @foreach (var quote in Model.ShippingQuotes)
-                        {
-                            <option value="@quote.Value">@quote.Text</option>
-                        }
-                    </select>
+                    @Html.DropDownListFor(x => x.ShipMethodKey, Model.ShippingQuotes, new { id = "shipping-quotes-select", @class = "form-control" })
+                    @*
+            <select id="shipping-quotes-select" class="form-control">
+                @foreach (var quote in Model.ShippingQuotes)
+                {
+                    <option value="@quote.Value">@quote.Text</option>
+                }
+            </select>*@
                 </div>
             </div>
             <div class="form-group">
@@ -32,38 +34,38 @@
                 </div>
             </div>
         </form>
-       @*
+        @*
     Bazaar 1.8.3
     Added payment form resolution to make it easier to integrate forms for various payment provider.
     Controllers must inherit from BazaarPaymentMethodFormControllerBase.
     *@
-    @if (Model.ResolvePaymentForms)
-    {
-        foreach (var frm in Model.PaymentMethodUiInfo)
+        @if (Model.ResolvePaymentForms)
         {
-            var rvd = new RouteValueDictionary { { "model", Model } };
-            if (frm.UrlActionParams.RouteParams.Any())
+            foreach (var frm in Model.PaymentMethodUiInfo)
             {
-                foreach (var val in frm.UrlActionParams.RouteParams)
+                var rvd = new RouteValueDictionary { { "model", Model } };
+                if (frm.UrlActionParams.RouteParams.Any())
                 {
-                    rvd.Add(val.Item1, val.Item2);
+                    foreach (var val in frm.UrlActionParams.RouteParams)
+                    {
+                        rvd.Add(val.Item1, val.Item2);
+                    }
                 }
+                <div id="@frm.Alias" class="payment-method-form">
+                    @Html.Action(frm.UrlActionParams.Method, frm.UrlActionParams.Controller, rvd)
+                </div>
             }
-            <div id="@frm.Alias" class="payment-method-form">
-                @Html.Action(frm.UrlActionParams.Method, frm.UrlActionParams.Controller, rvd)
+        }
+        else
+        {
+            <div id="CashPaymentMethod" class="payment-method-form">
+                @Html.Action("RenderForm", "CashPaymentMethod", new { area = "Bazaar", model = Model })
             </div>
         }
-    }
-    else
-    {
-        <div id="CashPaymentMethod" class="payment-method-form">
-            @Html.Action("RenderForm", "CashPaymentMethod", new { area = "Bazaar", model = Model })
-        </div>
-    }
 
     </div>
-        
-    <div class="col-md-8 offset1">
-        @Html.ThemedPartial(Model.ThemeName, "SaleSummary", Model.SaleSummary)
+
+    <div class="col-md-9">
+        @Html.ThemedPartial(Model.ThemeName, "InvoiceSummary", Model.InvoiceSummary)
     </div>
 </div>

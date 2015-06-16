@@ -3082,7 +3082,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
  * @description
  * The controller for the gateway providers list view controller
  */
-angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListController",
+angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersListController",
     ['$scope', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
         'gatewayProviderResource', 'gatewayProviderDisplayBuilder',
         function($scope, assetsService, notificationsService, dialogService, merchelloTabsFactory, gatewayProviderResource, gatewayProviderDisplayBuilder)
