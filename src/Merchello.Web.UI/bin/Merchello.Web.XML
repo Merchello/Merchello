@@ -13367,6 +13367,26 @@
             Custom offer types
             </remarks>
         </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.DoTryApplyOffer``2(``0,System.String)">
+            <summary>
+            Does the actual work of attempting to apply the offer
+            </summary>
+            <param name="validateAgainst">
+            The validate against.
+            </param>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <typeparam name="TConstraint">
+            The type of constraint
+            </typeparam>
+            <typeparam name="TAward">
+            The type of award
+            </typeparam>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Workflow.BasketSalePreparation.GetCouponAttempt(System.String)">
             <summary>
             Gets the coupon attempt.

@@ -340,9 +340,9 @@
         {
             if (!IsReadyToInvoice()) return null;
 
-            var requestCache = _merchelloContext.Cache.RequestCache;
-            var cacheKey = string.Format("merchello.salespreparationbase.prepareinvoice.{0}", ItemCache.VersionKey);
-            var attempt = (Attempt<IInvoice>)requestCache.GetCacheItem(cacheKey, () => invoiceBuilder.Build());
+            ////var requestCache = _merchelloContext.Cache.RequestCache;
+            ////var cacheKey = string.Format("merchello.salespreparationbase.prepareinvoice.{0}", ItemCache.VersionKey);
+            var attempt = invoiceBuilder.Build();
 
             if (attempt.Success)
             {
@@ -546,7 +546,61 @@
 
             Reset(merchelloContext, customer, RaiseCustomerEvents);
         }
-        
+
+        /// <summary>
+        /// Gets a clone of the ItemCache
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IItemCache"/>.
+        /// </returns>
+        internal IItemCache CloneItemCache()
+        {
+            // The ItemCache needs to be cloned as line items may be altered while applying constraints
+            return this.CloneItemCache(ItemCache);
+        }
+
+        /// <summary>
+        /// Clones a <see cref="ILineItemContainer"/> as <see cref="IItemCache"/>
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IItemCache"/>.
+        /// </returns>
+        internal IItemCache CloneItemCache(ILineItemContainer container)
+        {
+            var clone = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
+            foreach (var item in container.Items)
+            {
+                clone.Items.Add(item.AsLineItemOf<ItemCacheLineItem>());
+            }
+
+            return clone;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="ILineItemContainer"/> with filtered items.
+        /// </summary>
+        /// <param name="filteredItems">
+        /// The line items.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ILineItemContainer"/>.
+        /// </returns>
+        internal ILineItemContainer CreateNewLineContainer(IEnumerable<ILineItem> filteredItems)
+        {
+            var lineItems = filteredItems as ILineItem[] ?? filteredItems.ToArray();
+
+            var result = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
+            if (!lineItems.Any()) return result;
+
+            var itemCacheLineItems = lineItems.Select(x => x.AsLineItemOf<ItemCacheLineItem>());
+
+            result.Items.Add(itemCacheLineItems);
+            return result;
+        }
+
         /// <summary>
         /// Gets the checkout <see cref="IItemCache"/> for the <see cref="ICustomerBase"/>
         /// </summary>
@@ -599,25 +653,7 @@
         {
             return MakeCacheKey(_customer, _itemCache.VersionKey);
         }
-
-        /// <summary>
-        /// Gets a clone of the ItemCache
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IItemCache"/>.
-        /// </returns>
-        protected IItemCache CloneItemCache()
-        {
-            // The ItemCache needs to be cloned as line items may be altered while applying constraints
-            var clone = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
-            foreach (var item in ItemCache.Items)
-            {
-                clone.Items.Add(item.AsLineItemOf<ItemCacheLineItem>());
-            }
-
-            return clone;
-        }
-
+        
         /// <summary>
         /// Saves offer code.
         /// </summary>
@@ -713,7 +749,6 @@
             _customer.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.OfferCodeTempData, json);
 
             SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
-
         }
 
         /// <summary>
@@ -751,7 +786,6 @@
         /// </summary>
         private struct OfferCodeTempData
         {
-
             /// <summary>
             /// Gets or sets the version key to validate offer codes are validate with this preparation
             /// </summary>

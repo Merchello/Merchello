@@ -96,24 +96,5 @@
         Attempt<IOfferResult<TConstraint, TAward>> TryToAward<TConstraint, TAward>(object validatedAgainst, ICustomerBase customer, bool applyConstraints = true)             
             where TConstraint : class
             where TAward : class;
-
-        ///// <summary>
-        ///// The ensure offer is valid.
-        ///// </summary>
-        ///// <param name="customer">
-        ///// The customer.
-        ///// </param>
-        ///// <typeparam name="TConstraint">
-        ///// The type of constraint
-        ///// </typeparam>
-        ///// <typeparam name="TAward">
-        ///// The type of award
-        ///// </typeparam>
-        ///// <returns>
-        ///// The <see cref="Attempt"/>.
-        ///// </returns>
-        //Attempt<IOfferResult<TConstraint, TAward>> EnsureOfferIsValid<TConstraint, TAward>(ICustomerBase customer)
-        //    where TConstraint : class
-        //    where TAward : class;
     }
 }

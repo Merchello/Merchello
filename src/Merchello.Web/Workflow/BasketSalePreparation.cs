@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Web.Workflow
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using Merchello.Core;
     using Merchello.Core.Exceptions;
@@ -95,7 +97,7 @@
 
             var coupon = couponAttempt.Result;
 
-            var validationItems = this.CloneItemCache();
+            var validationItems = this.PrepareInvoice();
             var result = TryApplyOffer<ILineItemContainer, ILineItem>(validationItems, offerCode).AsCouponRedemptionResult(coupon);
 
             if (!result.Success) return result;
@@ -107,13 +109,14 @@
             if (OfferCodes.Any())
             {
                 // Now we have to revalidate any existing coupon offers to make sure the newly approved ones will still be valid.
-                var clone = this.CloneItemCache();
+                var clone = this.CreateNewLineContainer(ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount));
+
                 _couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result);
                 ICouponRedemptionResult redemption = new CouponRedemptionResult(result.Award, result.Messages);
 
                 foreach (var oc in OfferCodes)
                 {
-                    redemption = TryApplyOffer<ILineItemContainer, ILineItem>(clone, oc).AsCouponRedemptionResult(coupon);
+                    redemption = DoTryApplyOffer<ILineItemContainer, ILineItem>(clone, oc).AsCouponRedemptionResult(coupon);
                     if (!redemption.Success)
                     {
                         if (redemption.Messages.Any()) result.AddMessage(redemption.Messages);
@@ -123,10 +126,10 @@
                         break;
                     }
 
-                    _couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result); }
+                    _couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result); 
+                }
 
                 if (!redemption.Success) return redemption;
-
             }
 
             this.SaveOfferCode(offerCode);
@@ -249,9 +252,33 @@
         /// </remarks>
         internal override Attempt<IOfferResult<TConstraint, TAward>> TryApplyOffer<TConstraint, TAward>(TConstraint validateAgainst, string offerCode)
         {
-            if (OfferCodes.Contains(offerCode)) 
-                return Attempt<IOfferResult<TConstraint, TAward>>.Fail(new OfferRedemptionException("This offer has already been added."));
+            return this.OfferCodes.Contains(offerCode) ? 
+                Attempt<IOfferResult<TConstraint, TAward>>.Fail(new OfferRedemptionException("This offer has already been added.")) : 
+                this.DoTryApplyOffer<TConstraint, TAward>(validateAgainst, offerCode);
+        }
 
+        /// <summary>
+        /// Does the actual work of attempting to apply the offer
+        /// </summary>
+        /// <param name="validateAgainst">
+        /// The validate against.
+        /// </param>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <typeparam name="TConstraint">
+        /// The type of constraint
+        /// </typeparam>
+        /// <typeparam name="TAward">
+        /// The type of award
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        private Attempt<IOfferResult<TConstraint, TAward>> DoTryApplyOffer<TConstraint, TAward>(TConstraint validateAgainst, string offerCode)
+            where TConstraint : class
+            where TAward : class
+        {
             var foundOffer = this.GetCouponAttempt(offerCode);
             if (!foundOffer.Success) return Attempt<IOfferResult<TConstraint, TAward>>.Fail(foundOffer.Exception);
 
