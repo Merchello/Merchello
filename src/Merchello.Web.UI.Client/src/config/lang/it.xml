@@ -252,8 +252,6 @@
     <key alias="sendTo"><![CDATA[Manda a <small>(ej. ordini@tuodominio.com)</small>]]></key>
     <key alias="replyTo"><![CDATA[CDATA a <small>(i.e. info@tuodominio.com)</small>]]></key>
     <key alias="emailCustomer">Mandare email al cliente</key>
-    <key alas="resourceType" />
-    <key alas="resourceType" />
   </area>
   <area alias="merchelloNotificationsEditTemplate">
     <key alias="header">Testata</key>
@@ -350,7 +348,7 @@
     <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
     <key alias="orderCreated">Order %0% was created</key>
     <key alias="shipmentCreated">Shipment was created with %0% line items</key>
-    <key alas="shipmentStatusChanged">Shipment status was changed to %0%</key>
+    <key alias="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
   <area alias="merchelloMarketing">
     <key alias="campaigns">Marketing Campaigns</key>
