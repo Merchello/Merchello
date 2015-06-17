@@ -20,7 +20,8 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public void Can_Create_The_Default_Invoice_Builder_With_4_Tasks()
         {
             //// Arrange
-            const int taskCount = 4;
+            //// Confirm Test change OK - this changes to 5 in 1.9.0 with the addition of coupon task
+            const int taskCount = 5;
 
             //// Act
             var invoiceBuild = new InvoiceBuilderChain(SalePreparationMock);
