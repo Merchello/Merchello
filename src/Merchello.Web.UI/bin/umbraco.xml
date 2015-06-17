@@ -53,26 +53,29 @@
             This is here to support compatibility with both MVC4 and MVC5
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Scheduling.ThreadingTaskAwaiter">
+        <member name="T:Umbraco.Web.Scheduling.ThreadingTaskImmutable">
             <summary>
-            This is used to return an awaitable instance from a Task without actually returning the 
-            underlying Task instance since it shouldn't be mutable.
+            Wraps a Task within an object that gives access to its GetAwaiter method and Status
+            property while ensuring that it cannot be modified in any way.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.ThreadingTaskAwaiter.GetAwaiter">
+        <member name="M:Umbraco.Web.Scheduling.ThreadingTaskImmutable.#ctor(System.Threading.Tasks.Task)">
             <summary>
-            With a GetAwaiter declared it means that this instance can be awaited on with the await keyword
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.ThreadingTaskImmutable"/> class with a Task.
             </summary>
-            <returns></returns>
+            <param name="task">The task.</param>
         </member>
-        <member name="P:Umbraco.Web.Scheduling.ThreadingTaskAwaiter.Status">
+        <member name="M:Umbraco.Web.Scheduling.ThreadingTaskImmutable.GetAwaiter">
             <summary>
-            Gets the status of the running task.
+            Gets an awaiter used to await the task.
             </summary>
-            <exception cref="T:System.InvalidOperationException">There is no running task.</exception>
-            <remarks>Unless the AutoStart option is true, there will be no running task until
-            a background task is added to the queue. Unless the KeepAlive option is true, there
-            will be no running task when the queue is empty.</remarks>
+            <returns>An awaiter instance.</returns>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.ThreadingTaskImmutable.Status">
+            <summary>
+            Gets the TaskStatus of the task.
+            </summary>
+            <returns>The current TaskStatus of the task.</returns>
         </member>
         <member name="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1">
             <summary>
@@ -94,26 +97,24 @@
             Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class.
             </summary>
         </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class.
+            </summary>
+            <param name="name">The name of the runner.</param>
+        </member>
         <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class with a set of options.
             </summary>
             <param name="options">The set of options.</param>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.GetAwaiter">
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(System.String,Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions)">
             <summary>
-            Gets an awaiter used to await the BackgroundTaskRunner running operation
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class with a set of options.
             </summary>
-            <returns>An awaiter for the BackgroundTaskRunner running operation</returns>
-            <remarks>
-            <para>This is used to wait until the background task runner is no longer running (IsRunning == false)
-            </para>
-            <para> So long as we have a method called GetAwaiter() that returns an instance of INotifyCompletion 
-            we can await anything. In this case we are awaiting with a custom BackgroundTaskRunnerAwaiter
-            which waits for the Completed event to be raised. 
-            ref:  http://blogs.msdn.com/b/pfxteam/archive/2011/01/13/10115642.aspx
-            </para>
-            </remarks>        
+            <param name="name">The name of the runner.</param>
+            <param name="options">The set of options.</param>
         </member>
         <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.Add(`0)">
             <summary>
@@ -197,7 +198,7 @@
         </member>
         <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.CurrentThreadingTask">
             <summary>
-            Gets an awaiter used to await the running Threading.Task.
+            Gets the running task as an immutable object.
             </summary>
             <exception cref="T:System.InvalidOperationException">There is no running task.</exception>
             <remarks>
@@ -205,6 +206,21 @@
             a background task is added to the queue. Unless the KeepAlive option is true, there
             will be no running task when the queue is empty.
             </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.StoppedAwaitable">
+            <summary>
+            Gets an awaitable used to await the runner running operation.
+            </summary>
+            <returns>An awaitable instance.</returns>
+            <remarks>Used to wait until the runner is no longer running (IsRunning == false),
+            though the runner could be started again afterwards by adding tasks to it.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.TerminatedAwaitable">
+            <summary>
+            Gets an awaitable used to await the runner.
+            </summary>
+            <returns>An awaitable instance.</returns>
+            <remarks>Used to wait until the runner is terminated.</remarks>
         </member>
         <member name="M:Umbraco.Web.BatchedServerMessenger.MessageSeversForIdsOrJson(System.Collections.Generic.IEnumerable{Umbraco.Core.Sync.IServerAddress},umbraco.interfaces.ICacheRefresher,Umbraco.Core.Sync.MessageType,System.Collections.Generic.IEnumerable{System.Object},System.String)">
             <summary>
@@ -3601,11 +3617,6 @@
             ColorListPreValueEditor uses the ValueListPreValueEditor with a custom view and controller.
             </remarks>
         </member>
-        <member name="P:Umbraco.Web.PropertyEditors.DatePropertyEditor.DefaultPreValues">
-            <summary>
-            Overridden because we ONLY support Date (no time) format and we don't have pre-values in the db.
-            </summary>
-        </member>
         <member name="T:Umbraco.Web.PropertyEditors.DatePropertyEditor.DatePropertyValueEditor">
             <summary>
             CUstom value editor so we can serialize with the correct date format (excluding time)
@@ -4133,23 +4144,6 @@
             contain the errors.
             </remarks>
         </member>
-        <member name="T:Umbraco.Web.Scheduling.BackgroundTaskRunnerAwaiter`1">
-            <summary>
-            Custom awaiter used to await when the BackgroundTaskRunner is completed (IsRunning == false)
-            </summary>
-            <typeparam name="T"></typeparam>
-            <remarks>
-            This custom awaiter simply uses a TaskCompletionSource to set the result when the Completed event of the 
-            BackgroundTaskRunner executes.
-            A custom awaiter requires implementing INotifyCompletion as well as IsCompleted, OnCompleted and GetResult
-            see: http://blogs.msdn.com/b/pfxteam/archive/2011/01/13/10115642.aspx
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunnerAwaiter`1.IsCompleted">
-            <summary>
-            This is completed when the runner is finished running
-            </summary>
-        </member>
         <member name="T:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions">
             <summary>
             Provides options to the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class.
@@ -4294,6 +4288,7 @@
             <summary>
             Gets a value indicating whether the task is latched.
             </summary>
+            <remarks>Should return false as soon as the condition is met.</remarks>
         </member>
         <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.RunsOnShutdown">
             <summary>
