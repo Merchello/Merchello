@@ -590,15 +590,7 @@
         /// </returns>
         internal ILineItemContainer CreateNewLineContainer(IEnumerable<ILineItem> filteredItems)
         {
-            var lineItems = filteredItems as ILineItem[] ?? filteredItems.ToArray();
-
-            var result = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
-            if (!lineItems.Any()) return result;
-
-            var itemCacheLineItems = lineItems.Select(x => x.AsLineItemOf<ItemCacheLineItem>());
-
-            result.Items.Add(itemCacheLineItems);
-            return result;
+            return LineItemExtensions.CreateNewBackOfficeLineItemContainer(filteredItems);
         }
 
         /// <summary>

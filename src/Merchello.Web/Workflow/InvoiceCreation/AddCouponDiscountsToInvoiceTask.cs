@@ -73,9 +73,10 @@
                 {
                     continue;
                 }
-
+                
                 var coupon = foundCoupon.Result;
-                var apply = coupon.TryApply(value, this.SalePreparation.Customer).AsCouponRedemptionResult(coupon);
+                var clone = LineItemExtensions.CreateNewBackOfficeLineItemContainer(value.Items);
+                var apply = coupon.TryApply(clone, this.SalePreparation.Customer).AsCouponRedemptionResult(coupon);
                 if (apply.Success)
                 {                    
                     this.CouponOfferManager.SafeAddCouponAttemptContainer<InvoiceLineItem>(value, apply, true);  
