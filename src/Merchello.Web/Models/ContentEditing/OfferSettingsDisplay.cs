@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
 
     using Merchello.Core.Models.Interfaces;
 
@@ -55,6 +56,16 @@
         /// Gets or sets a value indicating whether the offer has expired.
         /// </summary>
         public bool Expired { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the offer has started.
+        /// </summary>
+        public bool HasStarted { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date format (passed back from the back office so that we can correct parsing of the dates).
+        /// </summary>
+        public string DateFormat { get; set; }
 
         /// <summary>
         /// Gets or sets the component definitions.
@@ -125,6 +136,19 @@
             }
             else
             {
+                //// TODO figure out a better way to do this. 
+                //// This is a hack fix for the possible difference between the date format configured in the back office
+                //// and the datetime format configured on the server.
+                //if (!string.IsNullOrEmpty(settings.DateFormat))
+                //{
+                //    var format = settings.DateFormat.Replace("-", "/");
+                //    var startDate = settings.OfferStartsDate.ToShortDateString();
+                //    var expiresDate = settings.OfferEndsDate.ToShortDateString();
+
+                //    settings.OfferStartsDate = DateTime.ParseExact(startDate, format, CultureInfo.InvariantCulture);
+                //    settings.OfferEndsDate = DateTime.ParseExact(expiresDate, format, CultureInfo.InvariantCulture);
+                //}
+
                 // make sure the ends date is after the start date
                 if (settings.OfferEndsDate < settings.OfferStartsDate)
                 {

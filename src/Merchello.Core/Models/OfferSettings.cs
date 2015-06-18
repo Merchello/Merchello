@@ -297,6 +297,18 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether has started.
+        /// </summary>
+        [DataMember]
+        public bool HasStarted
+        {
+            get
+            {
+                return DateTime.Now >= _offerStartsDate;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the <see cref="OfferComponentDefinitionCollection"/>.
         /// </summary>
         [DataMember]

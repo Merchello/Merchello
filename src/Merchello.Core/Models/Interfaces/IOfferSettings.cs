@@ -55,6 +55,11 @@
         bool Expired { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the offer has started.
+        /// </summary>
+        bool HasStarted { get; }
+
+        /// <summary>
         /// Gets or sets the component configurations.
         /// </summary>
         [DataMember]
