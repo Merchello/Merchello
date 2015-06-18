@@ -1365,6 +1365,16 @@
             Gets or sets a value indicating whether the offer has expired.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.HasStarted">
+            <summary>
+            Gets or sets a value indicating whether the offer has started.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.DateFormat">
+            <summary>
+            Gets or sets the date format (passed back from the back office so that we can correct parsing of the dates).
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.ComponentDefinitions">
             <summary>
             Gets or sets the component definitions.

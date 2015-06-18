@@ -500,8 +500,8 @@
             // ensure the offer has not expired
             if (Settings.Expired)
             {
-                seed.Messages.Add("Offer has expired.");
-                return Attempt<IOfferResult<object, object>>.Fail(seed, new OfferRedemptionException("Offer has expired."));
+                seed.Messages.Add("Offer has expired");
+                return Attempt<IOfferResult<object, object>>.Fail(seed, new OfferRedemptionException("Offer has expired"));
             }
 
             // verify an offer processor is available for the offer

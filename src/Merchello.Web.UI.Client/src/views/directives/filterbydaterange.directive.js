@@ -104,7 +104,7 @@
                  *
                  * @param {string} start - String representation of start date.
                  * @param {string} end - String representation of end date.
-                 * @description - Change the date filters, then triggera new API call to load the reports.
+                 * @description - Change the date filters, then trigger new API call to load the reports.
                  */
                 function changeDateFilters(start, end) {
                     $scope.filterStartDate = start;

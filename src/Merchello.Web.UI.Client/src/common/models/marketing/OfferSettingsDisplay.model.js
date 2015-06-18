@@ -16,7 +16,9 @@
         self.offerStartsDate = '';
         self.offerEndsDate = '';
         self.expired = false;
+        self.hasStarted = false;
         self.active = false;
+        self.dateFormat = '';  // used to pass back office format to server for parse exact.
         self.componentDefinitions = [];
     };
 
