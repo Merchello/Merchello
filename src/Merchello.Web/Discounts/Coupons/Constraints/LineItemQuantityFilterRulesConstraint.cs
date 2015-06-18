@@ -2,6 +2,7 @@
 {
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models;
@@ -86,7 +87,7 @@
             var visitor = new NumericalValueFilterConstraintVisitor(Quantity, Operator, "quantity");
             value.Items.Accept(visitor);
 
-            return visitor.FilteredLineItems.Any()
+            return visitor.FilteredLineItems.Any(x => x.LineItemType == LineItemType.Product)
                        ? this.Success(CreateNewLineContainer(visitor.FilteredLineItems))
                        : this.Fail(value, "No items qualify. Resulting collection would be empty.");
         }
