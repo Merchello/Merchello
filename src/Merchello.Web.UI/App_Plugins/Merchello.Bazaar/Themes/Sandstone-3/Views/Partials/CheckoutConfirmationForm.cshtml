@@ -7,6 +7,10 @@
 
 <div class="row-fluid" id="checkout-confirmation">
 
+    <div class="col-md-9">
+        @Html.ThemedPartial(Model.ThemeName, "InvoiceSummary", Model.InvoiceSummary)
+    </div>
+
     <div class="col-md-3">
         <form>
             <div class="form-group">
@@ -65,7 +69,4 @@
 
     </div>
 
-    <div class="col-md-9">
-        @Html.ThemedPartial(Model.ThemeName, "InvoiceSummary", Model.InvoiceSummary)
-    </div>
 </div>
