@@ -40,7 +40,7 @@
             _langSourceDirectory = new DirectoryInfo(path);
         }
 
-        //[Test]
+       [Test]
         public void Can_Verify_That_Language_Files_Do_Not_Contain_Duplicate_Keys()
         {
             var allPassed = true;
