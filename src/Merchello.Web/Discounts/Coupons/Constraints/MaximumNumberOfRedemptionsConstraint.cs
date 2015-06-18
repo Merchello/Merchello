@@ -81,8 +81,8 @@
                 var offerSettingsKey = this.OfferComponentDefinition.OfferSettingsKey;
                 var remptionCount = offerRedeemedService.GetOfferRedeemedCount(offerSettingsKey);
 
-                return remptionCount > MaximumRedemptions
-                           ? this.Fail(value, "Redemption count would exceed the maximum number of allowed.")
+                return remptionCount >= MaximumRedemptions
+                           ? this.Fail(value, "Redemption count would exceed the maximum number of allowed")
                            : this.Success(value);
 
             }
