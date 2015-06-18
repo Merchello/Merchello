@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Core.Chains.InvoiceCreation;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
@@ -75,7 +76,7 @@
                 }
                 
                 var coupon = foundCoupon.Result;
-                var clone = LineItemExtensions.CreateNewBackOfficeLineItemContainer(value.Items);
+                var clone = LineItemExtensions.CreateNewBackOfficeLineItemContainer(value.Items.Where(x => x.LineItemType != LineItemType.Tax));
                 var apply = coupon.TryApply(clone, this.SalePreparation.Customer).AsCouponRedemptionResult(coupon);
                 if (apply.Success)
                 {                    
