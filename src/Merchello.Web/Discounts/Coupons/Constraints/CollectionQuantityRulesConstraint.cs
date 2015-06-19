@@ -12,7 +12,7 @@
     /// <summary>
     /// A discount validation constraint to restrict this offer to line item quantity related rules.
     /// </summary>
-    [OfferComponent("C7F0B590-11E7-4986-A52E-F18D0382E07E", "Total quantity of items rules", "Tests the total price all line items against configured rules.",
+    [OfferComponent("C7F0B590-11E7-4986-A52E-F18D0382E07E", "Total quantity of items rules", "Tests the total quantity all line items against configured rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerconstraint.collectionquantityrules.html", typeof(Coupon))]
     public class CollectionQuantityRulesConstraint : CouponConstraintBase
     {

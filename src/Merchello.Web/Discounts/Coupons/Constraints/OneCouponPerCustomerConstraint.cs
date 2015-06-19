@@ -15,7 +15,7 @@
     /// <summary>
     /// A rule to enforce one discount per customer.
     /// </summary>
-    [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One coupon per customer", "The customer may only ever use this coupon once.", RestrictToType = typeof(Coupon))]
+    [OfferComponent("A035E592-5D09-40BD-BFF6-73C3A4E9DDA2", "One coupon per customer", "The customer may only ever use this coupon once.  Not usable by anonymous customers.", RestrictToType = typeof(Coupon))]
     public class OneCouponPerCustomerConstraint : CouponConstraintBase
     {
         /// <summary>
