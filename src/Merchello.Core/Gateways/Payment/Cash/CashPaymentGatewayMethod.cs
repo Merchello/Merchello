@@ -15,10 +15,12 @@
     /// </summary>    
     [GatewayMethodUi("CashPaymentMethod")]
     [GatewayMethodEditor("Cash Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
-    [PaymentGatewayMethod("Cash Payment Gateway Method Editors", 
+    [PaymentGatewayMethod("Cash Payment Gateway Method Editors",
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizepayment.html", 
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html", 
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.voidpayment.html", 
-        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.refundpayment.html")]
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.refundpayment.html", 
+        "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html")]
     public class CashPaymentGatewayMethod : PaymentGatewayMethodBase, ICashPaymentGatewayMethod
     {
         /// <summary>
@@ -82,7 +84,7 @@
         {
             var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, amount, PaymentMethod.Key);
             payment.CustomerKey = invoice.CustomerKey;
-            payment.PaymentMethodName = PaymentMethod.Name + " " + PaymentMethod.PaymentCode;
+            payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
             payment.Collected = true;
             payment.Authorized = true;
@@ -104,8 +106,12 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
+            // We need to determine if the entire amount authorized has been collected before marking
+            // the payment collected.
+            var appliedPayments = GatewayProviderService.GetAppliedPaymentsByPaymentKey(payment.Key);
+            var applied = appliedPayments.Sum(x => x.Amount);
 
-            payment.Collected = true;
+            payment.Collected = (amount + applied) == payment.Amount;
             payment.Authorized = true;
 
             GatewayProviderService.Save(payment);

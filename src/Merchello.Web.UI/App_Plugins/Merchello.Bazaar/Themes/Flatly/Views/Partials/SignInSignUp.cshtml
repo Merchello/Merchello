@@ -2,6 +2,7 @@
 @using System.Web.Mvc
 @using System.Web.Mvc.Html
 @using Merchello.Bazaar.Controllers
+@using Merchello.Bazaar.Controllers.Surface
 @using Merchello.Bazaar.Models
 @using Umbraco.Web
 
@@ -13,6 +14,7 @@
             {
                 <fieldset>
                     <legend>Login</legend>
+                    @Html.AntiForgeryToken()
                     <div class="control-group">
                         @Html.LabelFor(x => x.Login.Username, new { @class = "control-label" })
                         @Html.ValidationMessageFor(x => x.Login.Username)
@@ -48,8 +50,9 @@
         @{
             using (Html.BeginUmbracoForm<MembershipOperationsController>("HandleSignUp", new { area = "Bazaar" }, new { @class = "form-horizontal" }))
             {
-                <fieldset>
+                <fieldset>                    
                     <legend>Register</legend>
+                    @Html.AntiForgeryToken()
                     <div class="control-group">
                         @Html.LabelFor(x => x.Registration.FirstName, new { @class = "control-label" })
                         @Html.ValidationMessageFor(x => x.Registration.FirstName)

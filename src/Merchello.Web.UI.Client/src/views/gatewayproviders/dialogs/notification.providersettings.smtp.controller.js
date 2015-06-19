@@ -33,6 +33,7 @@
                     }, function (newValue, oldValue) {
                         $scope.dialogData.provider.extendedData.setValue(extendedDataKey, angular.toJson(newValue));
                     }, true);
+                    console.info($scope.dialogData);
                 }
             }
 

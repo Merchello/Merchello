@@ -15,6 +15,7 @@
         Custom
     }
 
+
     /// <summary>
     /// The item cache type.
     /// </summary>
@@ -50,6 +51,7 @@
         Cash,
         CreditCard,
         PurchaseOrder,
+        CustomerCredit,
         Custom
     }
 
@@ -73,6 +75,7 @@
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
     public enum EntityType
     {
+        CampaignOffer,
         Customer,
         GatewayProvider,
         Invoice,

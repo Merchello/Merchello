@@ -23,8 +23,8 @@ namespace Merchello.Tests.UnitTests.Configuration
             //// Arrage
             
             //// Act
-            var configStatus = MerchelloConfiguration.ConfigurationStatus;
-            var currentVersion = MerchelloVersion.Current.ToString();
+            var configStatus = MerchelloConfiguration.ConfigurationStatusVersion;
+            var currentVersion = MerchelloVersion.Current;
             
             Console.Write("Config status {0} - ", configStatus);
             Console.Write("Current Version {0} - ", currentVersion);
@@ -32,5 +32,6 @@ namespace Merchello.Tests.UnitTests.Configuration
             //// Assert
             Assert.AreEqual(configStatus, currentVersion);
         }
+
     }
 }

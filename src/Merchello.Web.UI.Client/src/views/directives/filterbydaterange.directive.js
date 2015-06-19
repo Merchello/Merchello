@@ -11,10 +11,12 @@
             restrict: 'E',
             replace: true,
             scope: {
+                hideDatesLabel: '=',
                 filterStartDate: '=',
                 filterEndDate: '=',
                 filterButtonText: '@filterButtonText',
-                filterWithDates: '&'
+                filterWithDates: '&',
+                hideFilterButton: '='
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterbydaterange.tpl.html',
             controller: function($scope, $element, $q, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
@@ -29,8 +31,8 @@
                     promises.push(loadSettings());
 
                     $q.all(promises).then(function() {
-                        $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth()-1)).format($scope.settings.dateFormat.toUpperCase());
-                        $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
+                       // $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth()-1)).format($scope.settings.dateFormat.toUpperCase());
+                       // $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
                     });
                 }
 
@@ -64,7 +66,6 @@
                 function loadSettings() {
                     var promise = settingsResource.getAllSettings();
                     return promise.then(function(allSettings) {
-                        console.info(allSettings);
                         $scope.settings = settingDisplayBuilder.transform(allSettings);
                     }, function(reason) {
                         notificationsService.error('Failed to load settings', reason.message);
@@ -103,7 +104,7 @@
                  *
                  * @param {string} start - String representation of start date.
                  * @param {string} end - String representation of end date.
-                 * @description - Change the date filters, then triggera new API call to load the reports.
+                 * @description - Change the date filters, then trigger new API call to load the reports.
                  */
                 function changeDateFilters(start, end) {
                     $scope.filterStartDate = start;

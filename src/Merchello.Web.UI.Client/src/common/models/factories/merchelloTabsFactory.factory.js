@@ -91,12 +91,18 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates the tabs for the marketing section
+            function createMarketingTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('offers', 'Offers Listing', '#/merchello/merchello/offerslist/manage');
+                return tabs;
+            }
+
             function createReportsTabs() {
                 var tabs = new Constructor();
                 tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
                 return tabs;
             }
-
 
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,
@@ -109,7 +115,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs,
-                createProductVariantEditorTabs: createProductVariantEditorTabs
+                createProductVariantEditorTabs: createProductVariantEditorTabs,
+                createMarketingTabs: createMarketingTabs
             };
 
 }]);

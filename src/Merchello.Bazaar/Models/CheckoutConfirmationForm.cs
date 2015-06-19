@@ -5,8 +5,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
-    using Merchello.Web.Models.Payments;
-
     /// <summary>
     /// The checkout confirmation form.
     /// </summary>
@@ -25,7 +23,7 @@
         /// <summary>
         /// Gets or sets the sale summary.
         /// </summary>
-        public SalePreparationSummary SaleSummary { get; set; }
+        public InvoiceSummary InvoiceSummary { get; set; }
 
         /// <summary>
         /// Gets or sets the ship method key.

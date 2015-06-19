@@ -137,6 +137,31 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkEditInventoryCountsDialogData();
         }
 
+        // creates a dialog data for voiding payments
+        function createProcessVoidPaymentDialogData() {
+            return new ProcessVoidPaymentDialogData();
+        }
+
+        // creates a dialog data for refunding payments
+        function createProcessRefundPaymentDialogData() {
+            return new ProcessRefundPaymentDialogData();
+        }
+
+        // creates a dialog data for adding new payments
+        function createAddPaymentDialogData() {
+            return new AddPaymentDialogData();
+        }
+
+        // Marketing
+        function createSelectOfferProviderDialogData() {
+            return new SelectOfferProviderDialogData();
+        }
+
+        // offer components
+        function createConfigureOfferComponentDialogData() {
+            return new ConfigureOfferComponentDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -172,6 +197,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteProductDialogData: createDeleteProductDialogData,
             createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
             createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
-            createProductSelectorDialogData: createProductSelectorDialogData
+            createProductSelectorDialogData: createProductSelectorDialogData,
+            createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
+            createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
+            createAddPaymentDialogData: createAddPaymentDialogData,
+            createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
+            createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData
         };
 }]);

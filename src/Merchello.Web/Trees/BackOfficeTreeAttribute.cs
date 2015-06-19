@@ -1,9 +1,6 @@
 ﻿namespace Merchello.Web.Trees
 {
     using System;
-    using System.Security.Permissions;
-
-    using Merchello.Core;
 
     using Umbraco.Core;
 

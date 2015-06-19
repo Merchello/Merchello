@@ -7,17 +7,23 @@
 
 <div class="row-fluid" id="checkout-confirmation">
 
+    <div class="span9">
+        @Html.ThemedPartial(Model.ThemeName, "InvoiceSummary", Model.InvoiceSummary)
+    </div>
+
     <div class="span3">
         <form>
             <div class="control-group">
                 @Html.LabelFor(x => x.ShippingQuotes)
                 <div class="controls">
-                    <select id="shipping-quotes-select">
-                        @foreach (var quote in Model.ShippingQuotes)
-                        {
-                            <option value="@quote.Value">@quote.Text</option>
-                        }
-                    </select>
+
+                    @Html.DropDownListFor(x => x.ShipMethodKey, Model.ShippingQuotes, new { id = "shipping-quotes-select" })
+                    @*<select id="shipping-quotes-select">
+                            @foreach (var quote in Model.ShippingQuotes)
+                            {
+                                <option value="@quote.Value">@quote.Text</option>
+                            }
+                        </select>*@
                 </div>
             </div>
             <div class="control-group">
@@ -60,10 +66,6 @@
                 @Html.Action("RenderForm", "CashPaymentMethod", new { area = "Bazaar", model = Model })
             </div>
         }
-    </div>
-
-    <div class="span8 offset1">
-        @Html.ThemedPartial(Model.ThemeName, "SaleSummary", Model.SaleSummary)
     </div>
 
 </div>

@@ -8,7 +8,6 @@
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
-    using Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneEightTwo;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;

@@ -66,6 +66,11 @@
         public bool Collected { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the payment has been voided.
+        /// </summary>
+        public bool Voided { get; set; }
+        
+        /// <summary>
         /// Gets or sets a value indicating whether exported.
         /// </summary>
         public bool Exported { get; set; }

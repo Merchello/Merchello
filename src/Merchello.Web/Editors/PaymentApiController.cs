@@ -1,7 +1,4 @@
-﻿using Lucene.Net.Index;
-using Merchello.Web.Models.SaleHistory;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
@@ -9,18 +6,17 @@ namespace Merchello.Web.Editors
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
-    using Core;
-    using Core.Gateways.Payment;
-    using Core.Models;
-    using Core.Services;
 
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Payments;
+    using Merchello.Web.Models.SaleHistory;
+    using Merchello.Web.WebApi;
+    using Merchello.Web.Workflow;
     using Merchello.Web.Workflow.Payment;
 
-    using Models;
-    using Models.ContentEditing;
-    using Models.Payments;
-    using WebApi;
-    using Workflow;
     using Umbraco.Web;
 
     /// <summary>
@@ -123,7 +119,7 @@ namespace Merchello.Web.Editors
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return payments.Select(x => x.ToPaymentDisplay());
+            return payments.OrderByDescending(x => x.CreateDate).Select(x => x.ToPaymentDisplay());
         }
 
         /// <summary>
@@ -175,7 +171,7 @@ namespace Merchello.Web.Editors
 		}
 
         /// <summary>
-        /// Returns a payment for an AuthorizePayment PaymentRequest
+        /// Returns a payment for an AuthorizePayment PaymentRequestDisplay
         /// 
         /// GET /umbraco/Merchello/PaymentApi/AuthorizePayment/
         /// </summary>
@@ -186,7 +182,7 @@ namespace Merchello.Web.Editors
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
         [HttpPost]
-        public PaymentResultDisplay AuthorizePayment(PaymentRequest request)
+        public PaymentResultDisplay AuthorizePayment(PaymentRequestDisplay request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
             var authorize = processor.Authorize();
@@ -212,7 +208,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Returns a payment for an CapturePayment PaymentRequest
+        /// Returns a payment for an CapturePayment PaymentRequestDisplay
         /// 
         /// GET /umbraco/Merchello/PaymentApi/CapturePayment/
         /// </summary>
@@ -223,7 +219,7 @@ namespace Merchello.Web.Editors
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
         [HttpPost]
-        public PaymentResultDisplay CapturePayment(PaymentRequest request)
+        public PaymentResultDisplay CapturePayment(PaymentRequestDisplay request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
 
@@ -251,7 +247,7 @@ namespace Merchello.Web.Editors
 
 
         /// <summary>
-        /// Returns a payment for an AuthorizeCapturePayment PaymentRequest
+        /// Returns a payment for an AuthorizeCapturePayment PaymentRequestDisplay
         /// 
         /// GET /umbraco/Merchello/PaymentApi/AuthorizeCapturePayment/
         /// </summary>
@@ -262,7 +258,7 @@ namespace Merchello.Web.Editors
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
         [HttpPost]
-        public PaymentResultDisplay AuthorizeCapturePayment(PaymentRequest request)
+        public PaymentResultDisplay AuthorizeCapturePayment(PaymentRequestDisplay request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
 
@@ -290,7 +286,7 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// Returns a payment for an CapturePayment for a PaymentRequest
+        /// Returns a payment result for an refund operation
         /// 
         /// GET /umbraco/Merchello/PaymentApi/RefundPayment/
         /// </summary>
@@ -300,7 +296,7 @@ namespace Merchello.Web.Editors
         /// <returns>
         /// The <see cref="PaymentDisplay"/>.
         /// </returns>
-        public PaymentResultDisplay RefundPayment(PaymentRequest request)
+        public PaymentResultDisplay RefundPayment(PaymentRequestDisplay request)
         {
             var processor = new PaymentProcessor(MerchelloContext, request);
 
@@ -321,6 +317,38 @@ namespace Merchello.Web.Editors
             
 
             return result;
-        }       
+        }
+
+        /// <summary>
+        /// Returns a payment result for a void operation
+        /// </summary>
+        /// <param name="request">
+        /// The request.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PaymentResultDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public PaymentResultDisplay VoidPayment(PaymentRequestDisplay request)
+        {
+            var processor = new PaymentProcessor(MerchelloContext, request);
+
+            var voided = processor.Void();
+
+            var result = new PaymentResultDisplay()
+            {
+                Success = voided.Payment.Success,
+                Invoice = voided.Invoice.ToInvoiceDisplay(),
+                Payment = voided.Payment.Result.ToPaymentDisplay(),
+                ApproveOrderCreation = voided.ApproveOrderCreation
+            };
+
+            if (voided.Payment.Success)
+            {
+                voided.Payment.Result.AuditPaymentVoided();
+            }
+
+            return result;
+        }
     }
 }

@@ -14,10 +14,10 @@ visual studio extension https://visualstudiogallery.msdn.microsoft.com/8e1b4368-
 Once you have completed these steps, you need to make sure all the node dependencies are installed.
 
 The build command for release:
-npm build
+grunt build
 
 The build command for dev:
-npm build-dev
+grunt build-dev
 
 ###npm install dependencies
 If you run these build commands and you receive an error that a dependency is missing, you need to install it:

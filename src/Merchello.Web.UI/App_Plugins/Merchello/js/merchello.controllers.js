@@ -6,6 +6,1520 @@
 
 (function() { 
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Backoffice.OffersListController
+ * @function
+ *
+ * @description
+ * The controller for offers list view controller
+ */
+angular.module('merchello').controller('Merchello.Backoffice.OfferEditController',
+    ['$scope', '$routeParams', '$location', 'dateHelper', 'assetsService', 'dialogService', 'eventsService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+        'dialogDataFactory', 'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, $routeParams, $location, dateHelper, assetsService, dialogService, eventsService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory,
+             dialogDataFactory, settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, offerComponentDefinitionDisplayBuilder) {
+
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+        $scope.offerSettings = {};
+        $scope.context = 'create';
+        $scope.tabs = {};
+        $scope.settings = {};
+        $scope.offerProvider = {};
+        $scope.allComponents = [];
+        $scope.hasReward = false;
+        $scope.lineItemName = '';
+
+        // exposed methods
+        $scope.saveOffer = saveOffer;
+        $scope.toggleOfferExpires = toggleOfferExpires;
+        $scope.openDeleteOfferDialog = openDeleteOfferDialog;
+        $scope.toggleApplyToEachMatching = toggleApplyToEachMatching;
+        $scope.setLineItemName = setLineItemName;
+        var eventComponentsName = 'merchello.offercomponentcollection.changed';
+        var eventOfferSavingName = 'merchello.offercoupon.saving';
+
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         *
+         * @description
+         * Initializes the controller
+         */
+        function init() {
+            eventsService.on(eventComponentsName, onComponentCollectionChanged);
+            loadSettings();
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         *
+         * @description
+         * Loads in store settings from server into the scope.  Called in init().
+         */
+        function loadSettings() {
+            var promiseSettings = settingsResource.getAllSettings();
+            promiseSettings.then(function(settings) {
+                $scope.settings = settingDisplayBuilder.transform(settings);
+                loadOfferProviders();
+            }, function (reason) {
+                notificationsService.error("Settings Load Failed", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadOfferProviders
+         * @function
+         *
+         * @description
+         * Loads the offer providers and sets the provider for this offer type
+         */
+        function loadOfferProviders() {
+            var providersPromise = marketingResource.getOfferProviders();
+            providersPromise.then(function(providers) {
+                var offerProviders = offerProviderDisplayBuilder.transform(providers);
+                $scope.offerProvider = _.find(offerProviders, function(provider) {
+                    return provider.backOfficeTree.routeId === 'coupons';
+                });
+                var key = $routeParams.id;
+               loadOfferComponents($scope.offerProvider.key, key);
+            }, function(reason) {
+                notificationsService.error("Offer providers load failed", reason.message);
+            });
+        }
+
+        function loadOfferComponents(offerProviderKey, key) {
+
+            var componentPromise = marketingResource.getAvailableOfferComponents(offerProviderKey);
+            componentPromise.then(function(components) {
+                $scope.allComponents = offerComponentDefinitionDisplayBuilder.transform(components);
+                loadOffer(key);
+            }, function(reason) {
+                notificationsService.error("Failted to load offer offer components", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadOffer
+         * @function
+         *
+         * @description
+         * Loads in offer (in this case a coupon)
+         */
+        function loadOffer(key) {
+
+            if (key === 'create' || key === '' || key === undefined) {
+                $scope.context = 'create';
+                $scope.offerSettings = offerSettingsDisplayBuilder.createDefault();
+                setDefaultDates(new Date());
+                $scope.offerSettings.dateFormat = $scope.settings.dateFormat;
+                $scope.offerSettings.offerProviderKey = $scope.offerProvider.key;
+                createTabs(key);
+                $scope.preValuesLoaded = true;
+                $scope.loaded = true;
+
+            } else {
+                $scope.context = 'existing';
+                var offerSettingsPromise = marketingResource.getOfferSettings(key);
+                offerSettingsPromise.then(function(settings) {
+                    $scope.offerSettings = offerSettingsDisplayBuilder.transform(settings);
+                    $scope.lineItemName = $scope.offerSettings.getLineItemName();
+                    $scope.hasReward = $scope.offerSettings.hasRewards();
+                    $scope.offerSettings.dateFormat = $scope.settings.dateFormat;
+                    createTabs(key);
+                    if ($scope.offerSettings.offerStartsDate === '0001-01-01' || !$scope.offerSettings.offerExpires) {
+                        setDefaultDates(new Date());
+                    } else {
+                        $scope.offerSettings.offerStartsDate = $scope.offerSettings.offerStartsDateLocalDateString();
+                        $scope.offerSettings.offerEndsDate = $scope.offerSettings.offerEndsDateLocalDateString();
+                    }
+                    $scope.preValuesLoaded = true;
+                    $scope.loaded = true;
+                }, function(reason) {
+                    notificationsService.error("Failted to load offer settings", reason.message);
+                });
+            }
+        }
+
+
+
+        function createTabs(key) {
+            $scope.tabs = merchelloTabsFactory.createMarketingTabs();
+            $scope.tabs.appendOfferTab(key, $scope.offerProvider.backOfficeTree);
+            $scope.tabs.setActive('offer');
+        }
+
+        function toggleOfferExpires() {
+            $scope.offerSettings.offerExpires = !$scope.offerSettings.offerExpires;
+        }
+
+
+        function toggleApplyToEachMatching() {
+            $scope.applyToEachMatching = !$scope.applyToEachMatching;
+        }
+
+        function setLineItemName(value) {
+            $scope.offerSettings.setLineItemName(value);
+        }
+
+        function saveOffer() {
+
+            eventsService.emit(eventOfferSavingName, $scope.offerForm);
+            if($scope.offerForm.$valid) {
+                var offerPromise;
+                var isNew = false;
+                $scope.preValuesLoaded = false;
+
+                // validate the components
+                $scope.offerSettings.validateComponents();
+
+                // unify the date format before saving
+                $scope.offerSettings.offerStartsDate = dateHelper.convertToIsoDate($scope.offerSettings.offerStartsDate, $scope.settings.dateFormat);
+                $scope.offerSettings.offerEndsDate = dateHelper.convertToIsoDate($scope.offerSettings.offerEndsDate, $scope.settings.dateFormat);
+
+                if ($scope.context === 'create' || $scope.offerSettings.key === '') {
+                    isNew = true;
+                    offerPromise = marketingResource.newOfferSettings($scope.offerSettings);
+                } else {
+                    var os = $scope.offerSettings.clone();
+                    offerPromise = marketingResource.saveOfferSettings(os);
+                }
+                offerPromise.then(function (settings) {
+                    notificationsService.success("Successfully saved the coupon.");
+                    if (isNew) {
+                        $location.url($scope.offerProvider.editorUrl(settings.key), true);
+                    } else {
+                        $scope.offerSettings = undefined;
+                        loadOffer(settings.key);
+                    }
+                }, function (reason) {
+                    notificationsService.error("Failed to save coupon", reason.message);
+                });
+            }
+        }
+
+        function openDeleteOfferDialog() {
+            var dialogData = {};
+            dialogData.name = 'Coupon with offer code: ' + $scope.offerSettings.name;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                show: true,
+                callback: processDeleteOfferConfirm,
+                dialogData: dialogData
+            });
+        }
+
+        function processDeleteOfferConfirm(dialogData) {
+            var promiseDelete = marketingResource.deleteOfferSettings($scope.offerSettings);
+            promiseDelete.then(function() {
+                $location.url('/merchello/merchello/offerslist/manage', true);
+            }, function(reason) {
+                notificationsService.error("Failed to delete coupon", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name setDefaultDates
+         * @function
+         *
+         * @description
+         * Sets the default dates
+         */
+        function setDefaultDates(actual) {
+            var month = actual.getMonth() + 1 == 0 ? 11 : actual.getMonth() + 1;
+            var start = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate());
+            var end = new Date(actual.getFullYear(), month, actual.getDate());
+
+            $scope.offerSettings.offerStartsDate = start.toLocaleDateString();
+            $scope.offerSettings.offerEndsDate = end.toLocaleDateString();
+        }
+
+        function onComponentCollectionChanged() {
+            if(!$scope.offerSettings.hasRewards() || !$scope.offerSettings.componentsConfigured()) {
+                $scope.offerSettings.active = false;
+            }
+        }
+
+        // Initializes the controller
+        init();
+    }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferRewardCouponDiscountPriceController
+ * @function
+ *
+ * @description
+ * The controller to configure the discount for a coupon line item reward
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardCouponDiscountPriceController',
+    ['$scope', 'settingsResource', 'invoiceHelper',
+        function($scope, settingsResource, invoiceHelper) {
+            $scope.loaded = false;
+            $scope.adjustmentType = 'flat';
+            $scope.currencySymbol = '';
+            $scope.amount = 0;
+
+            // exposed methods
+            $scope.save = save;
+
+            function init() {
+                loadSettings();
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                    if ($scope.dialogData.component.isConfigured()) {
+                        loadExistingConfigurations();
+                    } else {
+                        $scope.loaded = true;
+                    }
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            function loadExistingConfigurations() {
+                var amount = $scope.dialogData.getValue('amount');
+                var adjustmentType = $scope.dialogData.getValue('adjustmentType');
+                $scope.adjustmentType = adjustmentType === '' ? 'flat' : adjustmentType;
+                $scope.amount = amount === '' ? 0 : invoiceHelper.round(amount, 2);
+                $scope.loaded = true;
+            }
+
+            function save() {
+                if ($scope.priceAdjustForm.$valid) {
+                    $scope.dialogData.setValue('amount', Math.abs(invoiceHelper.round($scope.amount*1, 2)));
+                    $scope.dialogData.setValue('adjustmentType', $scope.adjustmentType);
+                    $scope.submit($scope.dialogData);
+                }
+            }
+
+            // Initialize
+            init();
+        }]);
+
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController
+ * @function
+ *
+ * @description
+ * The controller to configure the collection price component
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController',
+    ['$scope', 'settingsResource', 'invoiceHelper',
+        function($scope, settingsResource, invoiceHelper) {
+
+            $scope.loaded = false;
+            $scope.operator = 'gt';
+            $scope.price = 0;
+            $scope.currencySymbol = '';
+
+            // exposed methods
+            $scope.save = save;
+
+            function init() {
+                loadSettings();
+                loadExistingConfigurations()
+            }
+
+            function loadExistingConfigurations() {
+                var operator = $scope.dialogData.getValue('operator');
+                var price = $scope.dialogData.getValue('price');
+                $scope.operator = operator === '' ? 'gt' : operator;
+                $scope.price = price === '' ? 0 : invoiceHelper.round(price, 2);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                    $scope.loaded = true;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description
+             * Saves the configuration
+             */
+            function save() {
+                $scope.dialogData.setValue('price', Math.abs(invoiceHelper.round($scope.price*1, 2)));
+                $scope.dialogData.setValue('operator', $scope.operator);
+                $scope.submit($scope.dialogData);
+            }
+
+            // Initialize the controller
+            init();
+        }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintCollectionQuantityRulesController
+ * @function
+ *
+ * @description
+ * The controller to configure the collection quantity constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintCollectionQuantityRulesController',
+    ['$scope',
+    function($scope) {
+        $scope.loaded = false;
+
+        $scope.operator = 'gt';
+        $scope.quantity = 0;
+
+        // exposed methods
+        $scope.save = save;
+
+        function init() {
+            if ($scope.dialogData.component.isConfigured()) {
+                loadExistingConfigurations()
+            } else {
+                $scope.loaded = true;
+            }
+
+        }
+
+        function loadExistingConfigurations() {
+            var operator = $scope.dialogData.getValue('operator');
+            var quantity = $scope.dialogData.getValue('quantity');
+            $scope.operator = operator === '' ? 'gt' : operator;
+            $scope.quantity = quantity === '' ? 0 : quantity * 1;
+            $scope.loaded = true;
+        }
+
+        /**
+         * @ngdoc method
+         * @name save
+         * @function
+         *
+         * @description
+         * Saves the configuration
+         */
+        function save() {
+            $scope.dialogData.setValue('quantity', Math.abs($scope.quantity*1));
+            $scope.dialogData.setValue('operator', $scope.operator);
+            $scope.submit($scope.dialogData);
+        }
+
+        // Initialize the controller
+        init();
+    }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintPriceController
+ * @function
+ *
+ * @description
+ * The controller to configure the price component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintFilterPriceRulesController',
+    ['$scope', 'settingsResource', 'invoiceHelper',
+        function($scope, settingsResource, invoiceHelper) {
+
+            $scope.loaded = false;
+            $scope.operator = 'gt';
+            $scope.price = 0;
+            $scope.currencySymbol = '';
+
+            // exposed methods
+            $scope.save = save;
+
+            function init() {
+                loadSettings();
+                loadExistingConfigurations()
+            }
+
+            function loadExistingConfigurations() {
+                var operator = $scope.dialogData.getValue('operator');
+                var price = $scope.dialogData.getValue('price');
+                $scope.operator = operator === '' ? 'gt' : operator;
+                $scope.price = price === '' ? 0 : invoiceHelper.round(price, 2);
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                    $scope.loaded = true;
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description
+             * Saves the configuration
+             */
+            function save() {
+                $scope.dialogData.setValue('price', Math.abs(invoiceHelper.round($scope.price*1, 2)));
+                $scope.dialogData.setValue('operator', $scope.operator);
+                $scope.submit($scope.dialogData);
+            }
+
+            // Initialize the controller
+            init();
+        }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintFilterQuantityRulesController
+ * @function
+ *
+ * @description
+ * The controller to configure the line item quantity component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintFilterQuantityRulesController',
+    ['$scope',
+    function($scope) {
+        $scope.loaded = false;
+
+        $scope.operator = 'gt';
+        $scope.quantity = 0;
+
+        // exposed methods
+        $scope.save = save;
+
+        function init() {
+            if ($scope.dialogData.component.isConfigured()) {
+                loadExistingConfigurations()
+            } else {
+                $scope.loaded = true;
+            }
+
+        }
+
+        function loadExistingConfigurations() {
+            var operator = $scope.dialogData.getValue('operator');
+            var quantity = $scope.dialogData.getValue('quantity');
+            $scope.operator = operator === '' ? 'gt' : operator;
+            $scope.quantity = quantity === '' ? 0 : quantity * 1;
+            $scope.loaded = true;
+        }
+
+        /**
+         * @ngdoc method
+         * @name save
+         * @function
+         *
+         * @description
+         * Saves the configuration
+         */
+        function save() {
+            $scope.dialogData.setValue('quantity', Math.abs($scope.quantity*1));
+            $scope.dialogData.setValue('operator', $scope.operator);
+            $scope.submit($scope.dialogData);
+        }
+
+        // Initialize the controller
+        init();
+    }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintMaximumQuantityController
+ * @function
+ *
+ * @description
+ * The controller to configure the line item quantity component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintMaximumQuantityController',
+    ['$scope',
+    function($scope) {
+
+    $scope.loaded = false;
+    $scope.maximum = 1;
+
+    // exposed
+    $scope.save = save;
+
+    function init() {
+        console.info($scope.dialogData);
+        if ($scope.dialogData.component.isConfigured()) {
+            loadExistingConfigurations();
+            $scope.loaded = true;
+        } else {
+            $scope.loaded = true;
+        }
+    }
+
+    function loadExistingConfigurations() {
+        var maximum = $scope.dialogData.getValue('maximum')
+        $scope.maximum = maximum === '' ? 1 : maximum * 1;
+    }
+
+    function save() {
+        $scope.dialogData.setValue('maximum', $scope.maximum);
+        $scope.submit($scope.dialogData);
+    }
+
+    // Initialize the controller
+    init();
+}]);
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintPriceController
+ * @function
+ *
+ * @description
+ * The controller to configure the price component constraint
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintProductSelectionFilterController',
+    ['$q', '$scope', 'notificationsService', 'productResource', 'settingsResource', 'productDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+        function($q, $scope, notificationsService, productResource, settingsResource, productDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.context = 'display';
+            $scope.filterText = "";
+            $scope.products = [];
+            $scope.filteredproducts = [];
+            $scope.watchCount = 0;
+            $scope.sortProperty = "name";
+            $scope.sortOrder = "Ascending";
+            $scope.limitAmount = 10;
+            $scope.currentPage = 0;
+            $scope.maxPages = 0;
+
+            // dialog properties
+            $scope.selectedProducts = [];
+
+            // exposed methods
+            $scope.addProduct = addProduct;
+            $scope.removeProduct = removeProduct;
+            $scope.changePage = changePage;
+            $scope.limitChanged = limitChanged;
+            $scope.changeSortOrder = changeSortOrder;
+            $scope.getFilteredProducts = getFilteredProducts;
+            $scope.numberOfPages = numberOfPages;
+            $scope.productIsSelected = productIsSelected;
+            $scope.save = save;
+
+            //--------------------------------------------------------------------------------------
+            // Initialization methods
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description
+             * Method called on intial page load.  Loads in data from server and sets up scope.
+             */
+            function init() {
+                loadSettings();
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProducts
+             * @function
+             *
+             * @description
+             * Load the products from the product service, then wrap the results
+             * in Merchello models and add to the scope via the products collection.
+             */
+            function loadProducts() {
+
+                var page = $scope.currentPage;
+                var perPage = $scope.limitAmount;
+                var sortBy = $scope.sortProperty.replace("-", "");
+                var sortDirection = $scope.sortOrder;
+
+                var query = queryDisplayBuilder.createDefault();
+                query.currentPage = page;
+                query.itemsPerPage = perPage;
+                query.sortBy = sortBy;
+                query.sortDirection = sortDirection;
+                query.addFilterTermParam($scope.filterText);
+
+                var promise = productResource.searchProducts(query);
+                promise.then(function (response) {
+                    var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
+
+                    $scope.products = queryResult.items;
+
+                    $scope.maxPages = queryResult.totalPages;
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
+
+                }, function (reason) {
+                    notificationsService.success("Products Load Failed:", reason.message);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description
+             * Load the settings from the settings service to get the currency symbol
+             */
+            function loadSettings() {
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+
+                    loadExistingConfigurations();
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }
+
+            function loadExistingConfigurations() {
+                var existing = $scope.dialogData.getValue('productConstraints');
+                if (existing !== undefined && existing !== '')
+                {
+                    var parsed = JSON.parse(existing);
+                    var productKeys = _.pluck(parsed, 'productKey');
+
+                    var    productsPromise = productResource.getByKeys(productKeys);
+                    productsPromise.then(function(result) {
+                     var products = productDisplayBuilder.transform(result);
+                        angular.forEach(products, function(p) {
+                            var constrainData = _.find(parsed, function(cd) { return cd.productKey === p.key; });
+                            if(constrainData.specifiedVariants) {
+                                addProduct(p, constrainData.variantKeys);
+                            } else {
+                                addProduct(p);
+                            }
+                        });
+                     loadProducts();
+                    });
+                } else {
+                    loadProducts();
+                }
+
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Events methods
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name limitChanged
+             * @function
+             *
+             * @description
+             * Helper function to set the amount of items to show per page for the paging filters and calculations
+             */
+            function limitChanged(newVal) {
+                $scope.limitAmount = newVal;
+                $scope.currentPage = 0;
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name changePage
+             * @function
+             *
+             * @description
+             * Helper function re-search the products after the page has changed
+             */
+            function changePage (newPage) {
+                $scope.currentPage = newPage;
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name changeSortOrder
+             * @function
+             *
+             * @description
+             * Helper function to set the current sort on the table and switch the
+             * direction if the property is already the current sort column.
+             */
+            function changeSortOrder(propertyToSort) {
+
+                if ($scope.sortProperty == propertyToSort) {
+                    if ($scope.sortOrder == "Ascending") {
+                        $scope.sortProperty = "-" + propertyToSort;
+                        $scope.sortOrder = "Descending";
+                    } else {
+                        $scope.sortProperty = propertyToSort;
+                        $scope.sortOrder = "Ascending";
+                    }
+                } else {
+                    $scope.sortProperty = propertyToSort;
+                    $scope.sortOrder = "Ascending";
+                }
+
+                loadProducts();
+            }
+
+            /**
+             * @ngdoc method
+             * @name getFilteredProducts
+             * @function
+             *
+             * @description
+             * Calls the product service to search for products via a string search
+             * param.  This searches the Examine index in the core.
+             */
+            function getFilteredProducts(filter) {
+                $scope.filterText = filter;
+                $scope.currentPage = 0;
+                loadProducts();
+            }
+
+            function addProduct(product, variantKeys) {
+                var pc = new ProductConstraint();
+                pc.product = product;
+                if (product.hasVariants()) {
+                    angular.forEach(product.productVariants, function(pv) {
+                        var checked = true;
+                        if (variantKeys !== undefined) {
+                            var found = _.find(variantKeys, function(key) { return key === pv.key; });
+                            if (found) {
+                                checked = true;
+                            } else {
+                                checked = false;
+                            }
+                        }
+                      var vc = new VariantConstraint();
+                        vc.key = pv.key;
+                        vc.name = pv.name;
+                        vc.sku = pv.sku;
+                        vc.checked = checked;
+                        pc.selectedVariants.push(vc);
+                    });
+                }
+                $scope.selectedProducts.push(pc);
+                $scope.context = 'display';
+            }
+
+            function removeProduct(constraint) {
+                $scope.selectedProducts = _.reject($scope.selectedProducts, function(sp) { return sp.product.key === constraint.product.key; });
+            }
+
+            function productIsSelected(product) {
+                var pc = _.find($scope.selectedProducts, function(p) { return p.product.key === product.key; });
+                return pc !== undefined;
+            }
+
+            //--------------------------------------------------------------------------------------
+            // Calculations
+            //--------------------------------------------------------------------------------------
+
+            /**
+             * @ngdoc method
+             * @name numberOfPages
+             * @function
+             *
+             * @description
+             * Helper function to get the amount of items to show per page for the paging
+             */
+            function numberOfPages() {
+                return $scope.maxPages;
+            }
+
+            // ---------------------------------------------------------------------------------------
+            // Local scope models
+            // ---------------------------------------------------------------------------------------
+            var ProductConstraint = function() {
+                var self = this;
+                self.product = {};
+                self.variantSpecific = false;
+                self.selectedVariants = [];
+                self.exclude = false;
+                self.editorOpen = false;
+            };
+
+            var VariantConstraint = function() {
+                var self = this;
+                self.name = '';
+                self.key = '';
+                self.sku = '';
+                self.checked = false;
+            };
+
+
+            function save() {
+                if ($scope.selectedProducts.length === 0) {
+                    return;
+                }
+                var saveData = [];
+                angular.forEach($scope.selectedProducts, function(sp) {
+                    var product = {};
+                    product.productKey = sp.product.key;
+                    product.variantKeys = [];
+                    var variants = _.filter(sp.selectedVariants, function(sv) { return sv.checked; });
+                    if (variants.length !== sp.product.productVariants.length) {
+                        product.specifiedVariants = true;
+                        angular.forEach(variants, function(v) {
+                            product.variantKeys.push(v.key);
+                        });
+                    } else {
+                        product.specifiedVariants = false;
+                    }
+
+                    saveData.push(product);
+                });
+                $scope.dialogData.setValue('productConstraints', JSON.stringify(saveData));
+                $scope.submit($scope.dialogData);
+            }
+
+            // Initialize the controller
+            init();
+
+        }]);
+
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferConstraintRedemptionLimitController
+ * @function
+ *
+ * @description
+ * The controller to configure the maximum number of redemptions allowed.
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintRedemptionLimitController',
+    ['$scope',
+        function($scope) {
+
+            $scope.loaded = false;
+            $scope.maximum = 0;
+
+            // exposed
+            $scope.save = save;
+
+            function init() {
+                console.info($scope.dialogData);
+                if ($scope.dialogData.component.isConfigured()) {
+                    loadExistingConfigurations();
+                    $scope.loaded = true;
+                } else {
+                    $scope.loaded = true;
+                }
+            }
+
+            function loadExistingConfigurations() {
+                var maximum = $scope.dialogData.getValue('maximum')
+                $scope.maximum = maximum === '' ? 0 : maximum * 1;
+            }
+
+            function save() {
+                $scope.dialogData.setValue('maximum', $scope.maximum);
+                $scope.submit($scope.dialogData);
+            }
+
+            // Initialize the controller
+            init();
+        }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferProviderSelectionController
+ * @function
+ *
+ * @description
+ * The controller to handle offer provider selection
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferProviderSelectionController',
+    ['$scope', function($scope) {
+        $scope.loaded = true;
+
+        $scope.setSelection = function(provider) {
+            if (provider === undefined) {
+                return;
+            }
+            $scope.dialogData.selectedProvider = provider;
+            $scope.submit($scope.dialogData);
+        };
+
+}]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Directives.OfferComponentsDirectiveController
+ * @function
+ *
+ * @description
+ * The controller to handle offer component association and configuration
+ */
+angular.module('merchello').controller('Merchello.Directives.OfferComponentsDirectiveController',
+    ['$scope', '$timeout', '$filter', 'notificationsService', 'dialogService', 'eventsService', 'dialogDataFactory', 'marketingResource', 'settingsResource', 'offerComponentDefinitionDisplayBuilder',
+    function($scope, $timeout, $filter, notificationsService, dialogService, eventsService, dialogDataFactory, marketingResource, settingsResource, offerComponentDefinitionDisplayBuilder) {
+
+        $scope.componentsLoaded = false;
+        $scope.availableComponents = [];
+        $scope.assignedComponents = [];
+        $scope.partition = [];
+        $scope.currencySymbol = '';
+        $scope.sortComponent = {};
+
+        // exposed components methods
+        $scope.assignComponent = assignComponent;
+        $scope.removeComponentOpen = removeComponentOpen;
+        $scope.configureComponentOpen = configureComponentOpen;
+        $scope.isComponentConfigured = isComponentConfigured;
+        $scope.applyDisplayConfigurationFormat = applyDisplayConfigurationFormat;
+
+
+        var eventName = 'merchello.offercomponentcollection.changed';
+
+        /**
+         * @ngdoc method
+         * @name init
+         * @function
+         *
+         * @description
+         * Initializes the controller
+         */
+        function init() {
+            eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
+
+            // ensure that the parent scope promises have been resolved
+            $scope.$watch('preValuesLoaded', function(pvl) {
+                if(pvl === true) {
+                   loadSettings();
+                }
+            });
+
+            // if these are constraints, enable the sort
+            if ($scope.componentType === 'Constraint') {
+                $scope.sortableOptions.disabled = false;
+                console.info($scope.sortableOptions);
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         *
+         * @description
+         * Load the settings from the settings service to get the currency symbol
+         */
+        function loadSettings() {
+            var currencySymbolPromise = settingsResource.getCurrencySymbol();
+            currencySymbolPromise.then(function (currencySymbol) {
+                $scope.currencySymbol = currencySymbol;
+
+                loadComponents();
+            }, function (reason) {
+                notificationsService.error("Settings Load Failed", reason.message);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadComponents
+         * @function
+         *
+         * @description
+         * Loads the components for this offer
+         */
+        function loadComponents() {
+            // either assigned constraints or rewards
+            $scope.assignedComponents = _.filter($scope.offerSettings.componentDefinitions, function(osc) { return osc.componentType === $scope.componentType; });
+
+            var typeGrouping = $scope.offerSettings.getComponentsTypeGrouping();
+
+            // there can only be one reward.
+            if ($scope.componentType === 'Reward' && $scope.offerSettings.hasRewards()) {
+                $scope.availableComponents = [];
+                $scope.componentsLoaded = true;
+                return;
+            }
+
+            $scope.availableComponents = _.filter($scope.components, function(c) {
+                var ac = _.find($scope.assignedComponents, function(ac) { return ac.componentKey === c.componentKey; });
+                if (ac === undefined && c.componentType === $scope.componentType && (typeGrouping === '' | typeGrouping === c.typeGrouping)) {
+                    return c;
+                }
+            });
+
+            $scope.componentsLoaded = true;
+        }
+
+        function applyDisplayConfigurationFormat(component) {
+            if(component.displayConfigurationFormat !== undefined && component.displayConfigurationFormat !== '') {
+                var value = eval(component.displayConfigurationFormat);
+                if (value === undefined) {
+                    return '';
+                } else {
+                    return value;
+                }
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name assignComponent
+         * @function
+         *
+         * @description
+         * Adds a component from the offer
+         */
+        function assignComponent(component) {
+            if($scope.offerSettings.assignComponent(component))
+            {
+                if ($scope.componentType === 'Reward') {
+                    $scope.$parent.hasReward = true;
+                }
+                eventsService.emit(eventName);
+            }
+        }
+
+        /**
+         * @ngdoc method
+         * @name configureComponentOpen
+         * @function
+         *
+         * @description
+         * Opens the component configuration dialog
+         */
+        function configureComponentOpen(component) {
+            var dialogData = dialogDataFactory.createConfigureOfferComponentDialogData();
+            dialogData.component = component.clone();
+
+            dialogService.open({
+                template: component.dialogEditorView.editorView,
+                show: true,
+                callback: processConfigureComponent,
+                dialogData: dialogData
+            });
+
+        }
+
+        function processConfigureComponent(dialogData) {
+            $scope.offerSettings.updateAssignedComponent(dialogData.component);
+            saveOffer();
+            var component = _.find($scope.offerSettings.componentDefinitions, function(cd) { return cd.key === dialogData.component.key; } );
+            component.updated = false;
+        }
+
+        /**
+         * @ngdoc method
+         * @name removeComponentOpen
+         * @function
+         *
+         * @description
+         * Opens the confirm dialog to a component from the offer
+         */
+        function removeComponentOpen(component) {
+                var dialogData = {};
+                dialogData.name = 'Component: ' + component.name;
+                dialogData.componentKey = component.componentKey;
+                if(!component.extendedData.isEmpty()) {
+                    dialogData.warning = 'This will any delete any configurations for this component if saved.';
+                }
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processRemoveComponent,
+                    dialogData: dialogData
+                });
+        }
+
+        /**
+         * @ngdoc method
+         * @name processRemoveComponent
+         * @function
+         *
+         * @description
+         * Removes a component from the offer
+         */
+        function processRemoveComponent(dialogData) {
+            $scope.offerSettings.componentDefinitions = _.reject($scope.offerSettings.componentDefinitions, function(cd) { return cd.componentKey === dialogData.componentKey; })
+            eventsService.emit(eventName);
+        };
+
+        function isComponentConfigured(component) {
+            if(!component.updated) {
+                return component.isConfigured();
+            }
+        }
+
+        function onComponentCollectionChanged() {
+            loadComponents();
+        }
+
+        function saveOffer() {
+            $timeout(function() {
+                $scope.saveOfferSettings();
+            }, 500);
+        }
+
+        // Sortable available offers
+        /// -------------------------------------------------------------------
+
+        $scope.sortableOptions = {
+            start : function(e, ui) {
+               ui.item.data('start', ui.item.index());
+            },
+           stop: function (e, ui) {
+               var component = ui.item.scope().component;
+               var start = ui.item.data('start'),
+                   end =  ui.item.index();
+               // reorder the offerSettings.componentDefinitions
+               if ($scope.offerSettings.hasRewards()) {
+                   // the reward is always in position 0
+                   start++;
+                   end++;
+               }
+               $scope.offerSettings.reorderComponent(start, end);
+            },
+            disabled: true,
+            cursor: "move"
+        }
+
+        // Initialize the controller
+        init();
+    }]);
+/**
+ * @ngdoc controller
+ * @name Merchello.Backoffice.OffersListController
+ * @function
+ *
+ * @description
+ * The controller for offers list view controller
+ */
+angular.module('merchello').controller('Merchello.Backoffice.OffersListController',
+    ['$scope', '$location', '$filter', 'assetsService', 'dialogService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory', 'dialogDataFactory',
+        'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($scope, $location, $filter, assetsService, dialogService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
+             settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
+
+        $scope.testing = false;
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+        $scope.filterText = '';
+        $scope.tabs = [];
+        $scope.offers = [];
+        $scope.currentFilters = [];
+        $scope.sortProperty = 'name';
+        $scope.sortOrder = 'Ascending';
+        $scope.limitAmount = 25;
+        $scope.currentPage = 0;
+        $scope.maxPages = 0;
+        $scope.settings = {};
+        $scope.offerProviders = [];
+        $scope.includeInactive = false;
+        $scope.currencySymbol = '';
+
+        // exposed methods
+        $scope.getEditUrl = getEditUrl;
+        $scope.limitChanged = limitChanged;
+        $scope.numberOfPages = numberOfPages;
+        $scope.changePage = changePage;
+        $scope.getFilteredOffers = getFilteredOffers;
+        $scope.providerSelectDialogOpen = providerSelectDialogOpen;
+        $scope.getOfferType = getOfferType;
+        $scope.resetFilters = resetFilters;
+        $scope.getOfferReward = getOfferReward;
+
+        function init() {
+            $scope.tabs = merchelloTabsFactory.createMarketingTabs();
+            $scope.tabs.setActive('offers');
+            loadSettings();
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         *
+         * @description
+         * Loads in store settings from server into the scope.  Called in init().
+         */
+        function loadSettings() {
+            var promiseSettings = settingsResource.getAllSettings();
+            promiseSettings.then(function(settings) {
+                $scope.settings = settingDisplayBuilder.transform(settings);
+
+                var promiseCurrency = settingsResource.getCurrencySymbol();
+                promiseCurrency.then(function(symbol) {
+                    $scope.currencySymbol = symbol;
+                    loadOfferProviders();
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+
+            }, function (reason) {
+                notificationsService.error("Settings Load Failed", reason.message);
+            });
+        }
+
+        function loadOfferProviders() {
+            var providersPromise = marketingResource.getOfferProviders();
+            providersPromise.then(function(providers) {
+                $scope.offerProviders = offerProviderDisplayBuilder.transform(providers);
+                resetFilters();
+            }, function(reason) {
+                notificationsService.error("Offer providers load failed", reason.message);
+            });
+        }
+
+        function loadOffers() {
+           var query = buildQuery($scope.filterText);
+            var offersPromise = marketingResource.searchOffers(query);
+            offersPromise.then(function(result) {
+                var queryResult = queryResultDisplayBuilder.transform(result, offerSettingsDisplayBuilder);
+                $scope.offers = queryResult.items;
+                $scope.maxPages = queryResult.totalPages;
+                $scope.itemCount = queryResult.totalItems;
+                $scope.preValuesLoaded = true;
+            });
+        }
+
+        function resetFilters() {
+            $scope.filterText = '';
+            $scope.currentPage = 0;
+            loadOffers();
+        }
+
+        function getOfferReward(offerSettings) {
+            if (offerSettings.hasRewards()) {
+                var reward = offerSettings.getReward();
+                if (reward.isConfigured()) {
+                    return eval(reward.displayConfigurationFormat);
+                } else {
+                    return 'Not configured';
+                }
+            } else {
+                return '-';
+            }
+        }
+
+        function buildQuery(filterText) {
+            var page = $scope.currentPage;
+            var perPage = $scope.limitAmount;
+            var sortBy = sortInfo().sortBy;
+            var sortDirection = sortInfo().sortDirection;
+
+
+            if (filterText === undefined) {
+                filterText = '';
+            }
+            $scope.filterText = filterText;
+            var query = queryDisplayBuilder.createDefault();
+            query.currentPage = page;
+            query.itemsPerPage = perPage;
+            query.sortBy = sortBy;
+            query.sortDirection = sortDirection;
+            query.addFilterTermParam(filterText);
+
+            if (query.parameters.length > 0) {
+                $scope.currentFilters = query.parameters;
+            }
+            return query;
+        }
+
+        /**
+         * @ngdoc method
+         * @name setVariables
+         * @function
+         *
+         * @description
+         * Returns sort information based off the current $scope.sortProperty.
+         */
+        function sortInfo() {
+            var sortDirection, sortBy;
+            // If the sortProperty starts with '-', it's representing a descending value.
+            if ($scope.sortProperty.indexOf('-') > -1) {
+                // Get the text after the '-' for sortBy
+                sortBy = $scope.sortProperty.split('-')[1];
+                sortDirection = 'Descending';
+                // Otherwise it is ascending.
+            } else {
+                sortBy = $scope.sortProperty;
+                sortDirection = 'Ascending';
+            }
+            return {
+                sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
+                sortDirection: sortDirection
+            }
+        };
+
+
+        //--------------------------------------------------------------------------------------
+        // Events methods
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name limitChanged
+         * @function
+         *
+         * @description
+         * Helper function to set the amount of items to show per page for the paging filters and calculations
+         */
+        function limitChanged(newVal) {
+            $scope.limitAmount = newVal;
+            $scope.currentPage = 0;
+            loadOffers();
+        }
+
+        /**
+         * @ngdoc method
+         * @name changePage
+         * @function
+         *
+         * @description
+         * Helper function re-search the products after the page has changed
+         */
+        function changePage(newPage) {
+            $scope.currentPage = newPage;
+            loadOffers();
+        }
+
+        /**
+         * @ngdoc method
+         * @name getFilteredProducts
+         * @function
+         *
+         * @description
+         * Calls the offer settings service to search for offers via a string search
+         * param.
+         */
+        function getFilteredOffers(filter) {
+            $scope.preValuesLoaded = false;
+            $scope.filterText = filter;
+            $scope.currentPage = 0;
+            loadOffers();
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Dialogs
+        //--------------------------------------------------------------------------------------
+        /**
+         * @ngdoc method
+         * @name providerSelectDialogOpen
+         * @function
+         *
+         * @description
+         * Opens the dialog to allow user to select an offer provider to use to create an offer
+         */
+        function providerSelectDialogOpen() {
+            var dialogData = dialogDataFactory.createSelectOfferProviderDialogData();
+            dialogData.offerProviders = $scope.offerProviders;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerproviderselection.html',
+                show: true,
+                callback: providerSelectDialogConfirm,
+                dialogData: dialogData
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name providerSelectDialogConfirm
+         * @param {dialogData} model returned from the dialog view
+         * @function
+         *
+         * @description
+         * Handles the data passed back from the provider editor dialog and redirects to the appropriate editor
+         */
+        function providerSelectDialogConfirm(dialogData) {
+            var view = dialogData.selectedProvider.backOfficeTree.routePath.replace('{0}', 'create');
+            $location.url(view, true);
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Calculations
+        //--------------------------------------------------------------------------------------
+
+        /**
+         * @ngdoc method
+         * @name numberOfPages
+         * @function
+         *
+         * @description
+         * Helper function to get the amount of items to show per page for the paging
+         */
+        function numberOfPages() {
+            return $scope.maxPages;
+            //return Math.ceil($scope.products.length / $scope.limitAmount);
+        }
+
+        /**
+         * @ngdoc method
+         * @name resetFilters
+         * @function
+         *
+         * @description
+         * Fired when the reset filter button is clicked.
+         */
+        function resetFilters() {
+            $scope.preValuesLoaded = false;
+            $scope.currentFilters = [];
+            $scope.filterText = '';
+            loadOffers();
+        }
+
+        function getEditUrl(offer) {
+            var url = '#';
+            var provider = _.find($scope.offerProviders, function(p) { return p.key === offer.offerProviderKey; });
+            if (provider === null || provider === undefined) {
+                return url;
+            }
+            return url + '/' + provider.editorUrl(offer.key);
+        }
+
+        function getOfferType(offer) {
+            var provider = _.find($scope.offerProviders, function(p) { return p.key === offer.offerProviderKey; });
+            if (provider === null || provider === undefined) {
+                return 'could not find';
+            }
+            return provider.backOfficeTree.title;
+        }
+
+        // Initialize the controller
+        init();
+    }]);
     /**
      * @ngdoc controller
      * @name Merchello.Common.Dialogs.DeleteConfirmationController
@@ -731,7 +2245,6 @@
                         $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
                     }
                     $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
-                    $scope.submit($scope.dialogData);
                 }
             }
 
@@ -935,6 +2448,7 @@ angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.Notif
                     }, function (newValue, oldValue) {
                         $scope.dialogData.provider.extendedData.setValue(extendedDataKey, angular.toJson(newValue));
                     }, true);
+                    console.info($scope.dialogData);
                 }
             }
 
@@ -954,13 +2468,76 @@ angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.Notif
  */
 angular.module('merchello')
     .controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodAuthorizeCapturePaymentController',
-    ['$scope', function($scope) {
+    ['$scope', 'invoiceHelper',
+        function($scope, invoiceHelper) {
 
-        function round(num, places) {
-            return +(Math.round(num + "e+" + places) + "e-" + places);
+            function init() {
+                $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.invoiceBalance, 2);
+            }
+
+            init();
+
+    }]);
+
+angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodAuthorizePaymentController',
+    ['$scope', 'invoiceHelper',
+    function($scope, invoiceHelper) {
+        function init() {
+            $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.invoiceBalance, 2);
         }
 
-        $scope.dialogData.amount = round($scope.dialogData.invoiceBalance, 2)
+        init();
+}]);
+
+    'use strict';
+    /**
+     * @ngdoc controller
+     * @name Merchello.GatewayProviders.Dialogs.CashPaymentMethodRefundPaymentController
+     * @function
+     *
+     * @description
+     * The controller for the dialog used in refunding cash payments
+     */
+    angular.module('merchello').controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodRefundPaymentController',
+        ['$scope', 'invoiceHelper',
+        function($scope, invoiceHelper) {
+
+            $scope.wasFormSubmitted = false;
+            $scope.save = save;
+
+            function init() {
+                $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.appliedAmount, 2);
+            }
+
+            function save() {
+                $scope.wasFormSubmitted = true;
+                if(invoiceHelper.valueIsInRage($scope.dialogData.amount, 0, $scope.dialogData.appliedAmount)) {
+                    $scope.submit($scope.dialogData);
+                } else {
+                    $scope.refundForm.amount.$setValidity('amount', false);
+                }
+            }
+
+
+
+            // initializes the controller
+            init();
+    }]);
+
+'use strict';
+/**
+ * @ngdoc controller
+ * @name Merchello.GatewayProviders.Dialogs.CashPaymentMethodVoidPaymentController
+ * @function
+ *
+ * @description
+ * The controller for the dialog used in voiding cash payments
+ */
+angular.module('merchello')
+    .controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodVoidPaymentController',
+    ['$scope', function($scope) {
+
+        console.info($scope.dialogData);
 
     }]);
 
@@ -1511,7 +3088,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
  * @description
  * The controller for the gateway providers list view controller
  */
-angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListController",
+angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersListController",
     ['$scope', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
         'gatewayProviderResource', 'gatewayProviderDisplayBuilder',
         function($scope, assetsService, notificationsService, dialogService, merchelloTabsFactory, gatewayProviderResource, gatewayProviderDisplayBuilder)
@@ -1658,6 +3235,31 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Calls the merchelloGatewayProviderService to deactivate the provider.
              */
             function deactivateProvider(provider) {
+                var dialogData = {};
+                dialogData.name = 'Provider: ' + provider.name;
+                dialogData.provider = provider;
+
+                dialogData.warning = 'This will any delete any configurations, methods and messages you currently have saved.';
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeactivateProvider,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name deactivateProvider
+             * @param {GatewayProvider} provider The GatewayProvider to deactivate
+             * @function
+             *
+             * @description
+             * Calls the merchelloGatewayProviderService to deactivate the provider.
+             */
+            function processDeactivateProvider(dialogData) {
+                var provider = dialogData.provider;
                 var promiseDeactivate = gatewayProviderResource.deactivateGatewayProvider(provider);
                 promiseDeactivate.then(function () {
                     provider.activated = false;
@@ -2204,7 +3806,6 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
                 provider.showSelectResource = false;
                 var promiseAllResources = paymentGatewayProviderResource.getGatewayResources(provider.key);
                 promiseAllResources.then(function (allResources) {
-                    console.info(allResources);
                     provider.gatewayResources = gatewayResourceDisplayBuilder.transform(allResources);
                     if (provider.gatewayResources.length > 0) {
                         provider.selectedGatewayResource = provider.gatewayResources[0];
@@ -3073,23 +4674,6 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
-/**
- * @ngdoc controller
- * @name Merchello.Backoffice.CampaignListController
- * @function
- *
- * @description
- * The controller for the marketing campaign list
- */
-angular.module('merchello').controller('Merchello.Backoffice.CampaignListController',
-    ['$scope', 'assetsService', 'notificationsService', 'dialogService',
-    function($scope, assetsService, notificationsService, dialogService) {
-
-        $scope.loaded = true;
-        $scope.preValuesLoaded = true;
-
-}]);
-
     /**
      * @ngdoc controller
      * @name Merchello.Product.Dialogs.ProductVariantBulkChangePricesController
@@ -3643,6 +5227,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
                         $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+                        console.info($scope.productVariant);
                     } else {
                         // this is a product variant edit
                         // in this case we need the specific variant
@@ -4814,101 +6399,235 @@ angular.module('merchello')
  * The controller for the invoice payments view
  */
 angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsController',
-    ['$scope', '$log', '$routeParams', 'merchelloTabsFactory',
-        'invoiceResource', 'paymentResource', 'settingsResource',
+    ['$scope', '$log', '$routeParams', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'invoiceHelper', 'dialogDataFactory',
+        'invoiceResource', 'paymentResource', 'paymentGatewayProviderResource', 'settingsResource',
         'invoiceDisplayBuilder', 'paymentDisplayBuilder',
-        function($scope, $log, $routeParams, merchelloTabsFactory, invoiceResource, paymentResource, settingsResource,
+        function($scope, $log, $routeParams, dialogService, notificationsService, merchelloTabsFactory, invoiceHelper, dialogDataFactory, invoiceResource, paymentResource, paymentGatewayProviderResource, settingsResource,
         invoiceDisplayBuilder, paymentDisplayBuilder) {
 
             $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             $scope.tabs = [];
             $scope.invoice = {};
             $scope.payments = [];
+            $scope.paymentMethods = [];
+            $scope.remainingBalance = 0;
             $scope.settings = {};
             $scope.currencySymbol = '';
-            $scope.remainingBalance = 0;
+            $scope.showAddPayment = false;
 
-        function init() {
-            var key = $routeParams.id;
-            loadInvoice(key);
-            $scope.tabs = merchelloTabsFactory.createSalesTabs(key);
-            $scope.tabs.setActive('payments');
-        }
+            // exposed methods
+            $scope.openVoidPaymentDialog = openVoidPaymentDialog;
+            $scope.openRefundPaymentDialog = openRefundPaymentDialog;
+            $scope.showVoid = showVoid;
+            $scope.showRefund = showRefund;
 
-        /**
-         * @ngdoc method
-         * @name loadInvoice
-         * @function
-         *
-         * @description - Load an invoice with the associated id.
-         */
-        function loadInvoice(id) {
-            var promise = invoiceResource.getByKey(id);
-            promise.then(function (invoice) {
-                $scope.invoice = invoiceDisplayBuilder.transform(invoice);
-                $scope.billingAddress = $scope.invoice.getBillToAddress();
-                // append the customer tab if needed
-                $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
-                loadPayments(id);
-                loadSettings();
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-                //console.info($scope.invoice);
-            }, function (reason) {
-                notificationsService.error("Invoice Load Failed", reason.message);
-            });
-        };
+            function init() {
+                var key = $routeParams.id;
+                loadInvoice(key);
+                $scope.tabs = merchelloTabsFactory.createSalesTabs(key);
+                $scope.tabs.setActive('payments');
+            }
 
-        /**
-         * @ngdoc method
-         * @name loadSettings
-         * @function
-         *
-         * @description - Load the Merchello settings.
-         */
-        function loadSettings() {
-
-            var settingsPromise = settingsResource.getAllSettings();
-            settingsPromise.then(function(settings) {
-                $scope.settings = settings;
-            }, function(reason) {
-                notificationsService.error('Failed to load global settings', reason.message);
-            })
-
-            var currencySymbolPromise = settingsResource.getAllCurrencies();
-            currencySymbolPromise.then(function (symbols) {
-                var currency = _.find(symbols, function(symbol) {
-                    return symbol.currencyCode === $scope.invoice.getCurrencyCode()
+            /**
+             * @ngdoc method
+             * @name loadInvoice
+             * @function
+             *
+             * @description - Load an invoice with the associated id.
+             */
+            function loadInvoice(id) {
+                var promise = invoiceResource.getByKey(id);
+                promise.then(function (invoice) {
+                    $scope.invoice = invoiceDisplayBuilder.transform(invoice);
+                    $scope.billingAddress = $scope.invoice.getBillToAddress();
+                    // append the customer tab if needed
+                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+                    loadPayments(id);
+                    loadSettings();
+                    $scope.loaded = true;
+                }, function (reason) {
+                    notificationsService.error("Invoice Load Failed", reason.message);
                 });
-                if (currency !== undefined) {
-                    $scope.currencySymbol = currency.symbol;
-                } else {
-                    // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
-                    // default currency
-                    var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
-                    defaultCurrencyPromise.then(function (currencySymbol) {
-                        $scope.currencySymbol = currencySymbol;
-                    }, function (reason) {
-                        notificationService.error('Failed to load the default currency symbol', reason.message);
+            };
+
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description - Load the Merchello settings.
+             */
+            function loadSettings() {
+
+                var settingsPromise = settingsResource.getAllSettings();
+                settingsPromise.then(function(settings) {
+                    $scope.settings = settings;
+                }, function(reason) {
+                    notificationsService.error('Failed to load global settings', reason.message);
+                })
+
+                var currencySymbolPromise = settingsResource.getAllCurrencies();
+                currencySymbolPromise.then(function (symbols) {
+                    var currency = _.find(symbols, function(symbol) {
+                        return symbol.currencyCode === $scope.invoice.getCurrencyCode()
                     });
+                    if (currency !== undefined) {
+                        $scope.currencySymbol = currency.symbol;
+                    } else {
+                        // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
+                        // default currency
+                        var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
+                        defaultCurrencyPromise.then(function (currencySymbol) {
+                            $scope.currencySymbol = currencySymbol;
+                        }, function (reason) {
+                            notificationService.error('Failed to load the default currency symbol', reason.message);
+                        });
+                    }
+                }, function (reason) {
+                    alert('Failed: ' + reason.message);
+                });
+            };
+
+            function showVoid(payment) {
+                if (payment.voided) {
+                    return false;
                 }
-            }, function (reason) {
-                alert('Failed: ' + reason.message);
-            });
-        };
+                var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; })
+                if (exists !== undefined) {
+                    return exists.voidPaymentEditorView.editorView !== '';
+                } else {
+                    return false;
+                }
+            }
 
-        function loadPayments(key)
-        {
-            var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
-            paymentsPromise.then(function(payments) {
-                $scope.payments = paymentDisplayBuilder.transform(payments);
-                $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
-            }, function(reason) {
-                notificationsService.error('Failed to load payments for invoice', reason.message);
-            });
-        }
+            function showRefund(payment) {
+                if (payment.voided || payment.appliedAmount() === 0) {
+                    return false;
+                }
+                var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; })
+                if (exists !== undefined) {
+                    return exists.refundPaymentEditorView.editorView !== '';
+                } else {
+                    return false;
+                }
+            }
+            /**
+             * @ngdoc method
+             * @name loadPayments
+             * @function
+             *
+             * @description - Load the payments applied to an invoice.
+             */
+            function loadPayments(key)
+            {
+                var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
+                paymentsPromise.then(function(payments) {
+                    $scope.payments = paymentDisplayBuilder.transform(payments);
+                    $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.payments), 2);
+                    loadPaymentMethods($scope.payments);
+                }, function(reason) {
+                    notificationsService.error('Failed to load payments for invoice', reason.message);
+                });
+            }
 
-        init();
+            function loadPaymentMethods(payments) {
+                var keys = [];
+                // we need to get unique keys here so we don't have to look up for every payment
+                angular.forEach(payments, function(p) {
+                    if(payments.length > 0) {
+                        var found = false;
+                        var i = 0;
+                        while(i < keys.length && !found) {
+                            if (keys[i] === p.paymentMethodKey) {
+                                found = true;
+                            } else {
+                                i++;
+                            }
+                        }
+                        if (!found) {
+                            keys.push(p.paymentMethodKey);
+                        }
+                    }
+                });
+
+                angular.forEach(keys, function(key) {
+                    // TODO this could be done with a $q defer
+                    var promise = paymentGatewayProviderResource.getPaymentMethodByKey(key);
+                    promise.then(function(method) {
+                        $scope.paymentMethods.push(method);
+                        if ($scope.paymentMethods.length === keys.length) {
+                            $scope.preValuesLoaded = true;
+                        }
+                    });
+                });
+
+                if ($scope.paymentMethods.length === keys.length) {
+                    $scope.preValuesLoaded = true;
+                }
+            }
+
+            // dialog methods
+
+            function openVoidPaymentDialog(payment) {
+
+                var method = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; });
+                if (method === undefined) {
+                    return;
+                }
+
+                var dialogData = dialogDataFactory.createProcessVoidPaymentDialogData();
+                dialogData.paymentMethodKey = payment.paymentMethodKey;
+                dialogData.paymentKey = payment.key;
+                dialogData.invoiceKey = $scope.invoice.key;
+                dialogService.open({
+                    template: method.voidPaymentEditorView.editorView,
+                    show: true,
+                    callback: processVoidPaymentDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            function processVoidPaymentDialog(dialogData) {
+                $scope.loaded = false;
+                var request = dialogData.toPaymentRequestDisplay();
+                var promise = paymentResource.voidPayment(request);
+                promise.then(function(result) {
+                    init();
+                });
+            }
+
+            function openRefundPaymentDialog(payment) {
+                var method = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; });
+                if (method === undefined) {
+                    return;
+                }
+                var dialogData = dialogDataFactory.createProcessRefundPaymentDialogData();
+                dialogData.invoiceKey = $scope.invoice.key;
+                dialogData.paymentKey = payment.key;
+                dialogData.currencySymbol = $scope.currencySymbol;
+                dialogData.paymentMethodKey = payment.paymentMethodKey;
+                dialogData.paymentMethodName = method.name;
+
+                dialogData.appliedAmount = payment.appliedAmount();
+                dialogService.open({
+                    template: method.refundPaymentEditorView.editorView,
+                    show: true,
+                    callback: processRefundPaymentDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            function processRefundPaymentDialog(dialogData) {
+                $scope.loaded = false;
+                var request = dialogData.toPaymentRequestDisplay();
+                var promise = paymentResource.refundPayment(request);
+                promise.then(function(result) {
+                    init();
+                });
+            }
+
+            init();
 }]);
 
 /**
@@ -5202,17 +6921,18 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
      * The controller for the sales overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
-        ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource',
+        ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService', 'invoiceHelper',
+            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
             'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
-        function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, orderResource, dialogDataFactory,
+        function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService, invoiceHelper,
+                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, dialogDataFactory,
                  merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
+            $scope.paymentMethodsLoaded = false;
             $scope.invoice = {};
             $scope.tabs = [];
             $scope.historyLoaded = false;
@@ -5222,7 +6942,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
-            $scope.paymentMethods = {};
+            $scope.paymentMethods = [];
+            $scope.allPayments = [];
             $scope.payments = [];
             $scope.billingAddress = {};
             $scope.hasShippingAddress = false;
@@ -5231,6 +6952,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.customLineItems = [];
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
+            $scope.newPaymentOpen = false;
 
             // exposed methods
             //  dialogs
@@ -5240,7 +6962,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.processDeleteInvoiceDialog = processDeleteInvoiceDialog,
             $scope.openFulfillShipmentDialog = openFulfillShipmentDialog;
             $scope.processFulfillShipmentDialog = processFulfillShipmentDialog;
+
+            $scope.toggleNewPaymentOpen = toggleNewPaymentOpen;
+            $scope.reload = init;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
+            $scope.setNotPreValuesLoaded = setNotPreValuesLoaded;
+
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
@@ -5256,10 +6983,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              * @description - Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init () {
+                $scope.preValuesLoaded = false;
+                $scope.newPaymentOpen = false;
                 loadInvoice($routeParams.id);
                 $scope.tabs = merchelloTabsFactory.createSalesTabs($routeParams.id);
                 $scope.tabs.setActive('overview');
-                $scope.loaded = true;
                 if(Umbraco.Sys.ServerVariables.isDebuggingEnabled) {
                     $scope.debugAllowDelete = true;
                 }
@@ -5287,9 +7015,11 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                             $scope.salesHistory = history.dailyLogs;
                             angular.forEach(history.dailyLogs, function(daily) {
                               angular.forEach(daily.logs, function(log) {
-                                 localizationService.localize(log.message.localizationKey(), log.message.localizationTokens()).then(function(value) {
-                                    log.message.formattedMessage = value;
-                                 });
+                                  if (log.message.formattedMessage ==='') {
+                                     localizationService.localize(log.message.localizationKey(), log.message.localizationTokens()).then(function(value) {
+                                        log.message.formattedMessage = value;
+                                     });
+                                  }
                               });
                             });
                         }
@@ -5324,13 +7054,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     loadPayments(id);
                     loadAuditLog(id);
                     loadShippingAddress(id);
-
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
 
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
+
                     var shipmentLineItem = $scope.invoice.getShippingLineItems();
                     if (shipmentLineItem) {
                         $scope.shipmentLineItems.push(shipmentLineItem);
@@ -5342,7 +7071,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
             }
-
 
            /**
              * @ngdoc method
@@ -5399,16 +7127,48 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              * @description - Load the Merchello payments for the invoice.
              */
             function loadPayments(key) {
-                var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
-                paymentsPromise.then(function(payments) {
-                    $scope.payments = paymentDisplayBuilder.transform(payments);
-                    $scope.remainingBalance = $scope.invoice.remainingBalance($scope.payments);
-                    $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
-                }, function(reason) {
-                    notificationsService.error('Failed to load payments for invoice', reason.message);
-                });
+                if (!$scope.invoice.isPaid()) {
+                    var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
+                    paymentsPromise.then(function(payments) {
+                        $scope.allPayments = paymentDisplayBuilder.transform(payments);
+                        $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
+                        loadPaymentMethods()
+                        $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
+                        $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
+                        $scope.preValuesLoaded = true;
+                    }, function(reason) {
+                        notificationsService.error('Failed to load payments for invoice', reason.message);
+                    });
+                } else {
+                    $scope.preValuesLoaded = true;
+                }
             }
 
+            /**
+             * @ngdoc method
+             * @name loadPaymentMethods
+             * @function
+             *
+             * @description - Load the available Merchello payment methods for the invoice.
+             */
+            function loadPaymentMethods() {
+                if($scope.payments.length === 0) {
+                    var promise = paymentGatewayProviderResource.getAvailablePaymentMethods();
+                    promise.then(function(methods) {
+                        $scope.paymentMethods = paymentMethodDisplayBuilder.transform(methods);
+                        $scope.preValuesLoaded = true;
+                        $scope.paymentMethodsLoaded = true;
+                    });
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadShippingAddress
+             * @function
+             *
+             * @description - Load the shipping address (if any) for an invoice.
+             */
             function loadShippingAddress(key) {
                 var shippingAddressPromise = orderResource.getShippingAddress(key);
                 shippingAddressPromise.then(function(result) {
@@ -5417,6 +7177,28 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }, function(reason) {
                     notificationsService.error('Failed to load shipping address', reason.message);
                 });
+            }
+
+            /**
+             * @ngdoc method
+             * @name toggleNewPaymentOpen
+             * @function
+             *
+             * @description - Toggles the new payment open variable.
+             */
+            function toggleNewPaymentOpen() {
+                $scope.newPaymentOpen = !$scope.newPaymentOpen;
+            }
+
+            /**
+             * @ngdoc method
+             * @name setNotPreValuesLoaded
+             * @function
+             *
+             * @description - Sets preValuesLoaded to false.  For use in directives.
+             */
+            function setNotPreValuesLoaded() {
+                $scope.preValuesLoaded = false;
             }
 
             /**
@@ -5436,13 +7218,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 var promise = paymentResource.getPaymentMethod(dialogData.paymentMethodKey);
                 promise.then(function(paymentMethod) {
                     var pm = paymentMethodDisplayBuilder.transform(paymentMethod);
-                    if (pm.authorizeCapturePaymentEditorView.editorView !== '') {
-                        dialogData.authorizeCapturePaymentEditorView = pm.authorizeCapturePaymentEditorView.editorView;
+                    if (pm.capturePaymentEditorView.editorView !== '') {
+                        dialogData.capturePaymentEditorView = pm.capturePaymentEditorView.editorView;
                     } else {
-                        dialogData.authorizeCapturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
+                        dialogData.capturePaymentEditorView = '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.cashpaymentmethod.authorizecapturepayment.html';
                     }
                     dialogService.open({
-                        template: dialogData.authorizeCapturePaymentEditorView,
+                        template: dialogData.capturePaymentEditorView,
                         show: true,
                         callback: capturePaymentDialogConfirm,
                         dialogData: dialogData
@@ -5459,7 +7241,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              */
             function capturePaymentDialogConfirm(paymentRequest) {
                 $scope.preValuesLoaded = false;
-                console.info(paymentRequest);
                 var promiseSave = paymentResource.capturePayment(paymentRequest);
                 promiseSave.then(function (payment) {
                     // added a timeout here to give the examine index

@@ -369,10 +369,40 @@
             }
 
             /// <summary>
+            /// The campaign offer key.
+            /// </summary>
+            public static class CampaignActivity
+            {
+                ///// <summary>
+                ///// Gets the key representing a sale type.
+                ///// </summary>
+                //public static Guid SaleKey
+                //{
+                //    get { return new Guid("2E8804AF-9852-4216-A3FB-A87D60C2EAF4"); }
+                //}
+
+                /// <summary>
+                /// Gets the key representing a discount type.
+                /// </summary>
+                public static Guid DiscountKey
+                {
+                    get { return new Guid("05F735B6-C01E-4B61-863D-EFE7DF8136BF"); }
+                }
+            }
+
+            /// <summary>
             /// Entity related keys
             /// </summary>
             public static class Entity
             {
+                /// <summary>
+                /// Gets the campaign offer key.
+                /// </summary>
+                public static Guid CampaignOfferKey
+                {
+                    get { return new Guid("0B73E574-4050-47A0-B5A0-7F32B73EF56F"); }
+                }
+
                 /// <summary>
                 /// Gets the customer type field key that represents the entity
                 /// </summary>
@@ -558,6 +588,14 @@
                 public static Guid PurchaseOrderKey
                 {
                     get { return new Guid("2B588AE0-7B76-430F-9341-270A8C943E7E"); }
+                }
+
+                /// <summary>
+                /// Gets the customer credit.
+                /// </summary>
+                public static Guid CustomerCreditKey
+                {
+                    get { return new Guid("CD0FB122-DE4E-4F1A-939F-EC5859777EAE"); }
                 }
             }
 

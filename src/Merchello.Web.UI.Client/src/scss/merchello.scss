@@ -1,12 +1,14 @@
 ﻿// Global Styles
 @import "globals/settings";
 @import "globals/panels";
+@import "globals/well";
 
 // Modules
 @import "modules/orders";
 @import "modules/warehouse";
 @import "modules/product";
 @import "modules/taxation";
+@import "modules/coupon";
 
 // Data Types
 @import "datatypes/productpicker";

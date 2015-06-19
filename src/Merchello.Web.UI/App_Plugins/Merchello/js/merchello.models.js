@@ -57,6 +57,25 @@
 
     angular.module('merchello.models').constant('AddressDisplay', AddressDisplay);
 
+/**
+ * @ngdoc model
+ * @name BackOfficeTreeDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of  BackOfficeTreeDisplay object
+ */
+var BackOfficeTreeDisplay = function() {
+    var self = this;
+    self.routeId = '';
+    self.parentRouteId = '';
+    self.title = '';
+    self.icon = '';
+    self.routePath = '';
+    self.sortOrder = 0;
+};
+
+angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeTreeDisplay);
     /**
      * @ngdoc model
      * @name CountryDisplay
@@ -142,7 +161,7 @@
 
         function getValue(key) {
             if (isEmpty.call(this)) {
-                return;
+                return '';
             }
             var found = false;
             var i = 0;
@@ -277,11 +296,26 @@
             }
         }
 
+        function appendOfferTab(offerKey, backOfficeTree) {
+            var title = '';
+            if(backOfficeTree.title === undefined || backOfficeTree.title === '') {
+                title = 'Offer';
+            } else {
+                title = backOfficeTree.title;
+            }
+            if(offerKey !== '00000000-0000-0000-0000-000000000000' && offerKey !== 'create') {
+                addTab.call(this, 'offer', title, '#' + backOfficeTree.routePath.replace('{0}', offerKey));
+            } else {
+                addTab.call(this, 'offer', 'New ' + title, '#' +backOfficeTree.routePath.replace('{0}', 'create'));
+            }
+        }
+
         return {
             addTab: addTab,
             setActive: setActive,
             insertTab: insertTab,
-            appendCustomerTab: appendCustomerTab
+            appendCustomerTab: appendCustomerTab,
+            appendOfferTab: appendOfferTab
         };
     }());
 
@@ -616,6 +650,45 @@
 
     /**
      * @ngdoc model
+     * @name AddPaymentDialogData
+     * @function
+     *
+     * @description
+     * A back office dialogData model used for adding payments to a sale.
+     */
+    var AddPaymentDialogData = function() {
+        var self = this;
+        self.paymentMethod = {};
+        self.paymentMethodName = '';
+        self.invoice = {};
+        self.authorizePaymentOnly = false;
+        self.invoiceBalance = 0;
+        self.amount = 0;
+        self.currencySymbol = '';
+        self.showSpinner = function() { return true; }
+        self.processorArgs = new ProcessorArgumentCollectionDisplay();
+    };
+
+    AddPaymentDialogData.prototype = (function() {
+
+        function asPaymentRequestDisplay() {
+            var request = new PaymentRequestDisplay();
+            request.invoiceKey = this.invoice.key;
+            request.paymentMethodKey = this.paymentMethod.key;
+            request.amount = this.amount;
+            request.processorArgs = this.processorArgs.toArray();
+            return request;
+        }
+
+        return {
+            asPaymentRequestDisplay: asPaymentRequestDisplay
+        }
+    }());
+
+    angular.module('merchello.models').constant('AddPaymentDialogData', AddPaymentDialogData);
+
+    /**
+     * @ngdoc model
      * @name AddShipCountryDialogData
      * @function
      *
@@ -702,11 +775,12 @@
         self.currencySymbol = '';
         self.invoiceKey = '';
         self.paymentKey = '';
+        self.payment = {};
         self.paymentMethodKey = '';
         self.invoiceBalance = 0.0;
         self.amount = 0.0;
         self.processorArgs = [];
-        self.authorizeCaptureEditorView = '';
+        self.captureEditorView = '';
     };
 
     CapturePaymentDialogData.prototype = (function() {
@@ -716,7 +790,7 @@
             this.paymentKey = payment.key;
             this.paymentMethodKey = payment.paymentMethodKey;
             this.paymentMethodName = payment.paymentMethodName;
-
+            this.payment = payment
         }
 
         //// helper method to set required associated invoice info
@@ -759,6 +833,36 @@
     };
 
     angular.module('merchello.models').constant('ChangeWarehouseCatalogDialogData', ChangeWarehouseCatalogDialogData);
+/**
+ * @ngdoc model
+ * @name ConfigureOfferComponentDialogData
+ * @function
+ *
+ * @description
+ * A back office dialogData model used for configuring offer components.
+ */
+var ConfigureOfferComponentDialogData = function() {
+    var self = this;
+    self.component = {};
+}
+
+ConfigureOfferComponentDialogData.prototype = (function() {
+
+    function setValue(key, value) {
+        this.component.extendedData.setValue(key, value);
+    }
+
+    function getValue(key) {
+        return this.component.extendedData.getValue(key);
+    }
+
+    return {
+        setValue: setValue,
+        getValue: getValue
+    }
+}());
+
+angular.module('merchello.models').constant('ConfigureOfferComponentDialogData');
     /**
      * @ngdoc model
      * @name CreateShipmentDialogData
@@ -997,6 +1101,73 @@
 
     /**
      * @ngdoc model
+     * @name ProcessRefundPaymentDialogData
+     * @function
+     *
+     * @description
+     * Dialog data model for refunding payments
+     */
+    var ProcessRefundPaymentDialogData = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentMethodKey = '';
+        self.paymentKey = '';
+        self.amount = 0;
+        self.currencySymbol = '';
+        self.paymentMethodName = '';
+        self.appliedAmount = 0;
+        self.processorArgumentCollectionDisplay = new ProcessorArgumentCollectionDisplay();
+        self.warning = '';
+    };
+
+    ProcessRefundPaymentDialogData.prototype = (function() {
+        function toPaymentRequestDisplay() {
+            var paymentRequest = angular.extend(this, PaymentRequestDisplay);
+            paymentRequest.processorArgs = this.processorArgumentCollectionDisplay.toArray();
+            return paymentRequest;
+        }
+
+        return {
+            toPaymentRequestDisplay: toPaymentRequestDisplay
+        }
+    }());
+
+    angular.module('merchello.models').constant('ProcessRefundPaymentDialogData', ProcessRefundPaymentDialogData);
+    /**
+     * @ngdoc model
+     * @name ProcessVoidPaymentDialogData
+     * @function
+     *
+     * @description
+     * Dialog data model for voiding payments
+     */
+    var ProcessVoidPaymentDialogData = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentMethodKey = '';
+        self.paymentKey = '';
+        self.processorArgumentCollectionDisplay = new ProcessorArgumentCollectionDisplay();
+        self.warning = '';
+    };
+
+    ProcessVoidPaymentDialogData.prototype = (function() {
+
+        function toPaymentRequestDisplay() {
+            var paymentRequest = angular.extend(this, PaymentRequestDisplay);
+            paymentRequest.processorArgs = this.processorArgumentCollectionDisplay.toArray();
+            return paymentRequest;
+        }
+
+        return {
+            toPaymentRequestDisplay : toPaymentRequestDisplay
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('ProcessVoidPaymentDialogData', ProcessVoidPaymentDialogData);
+
+    /**
+     * @ngdoc model
      * @name ProductSelectorDialogData
      * @function
      *
@@ -1011,6 +1182,23 @@
 
     angular.module('merchello.models').constant('ProductSelectorDialogData', ProductSelectorDialogData);
 
+/**
+ * @ngdoc model
+ * @name SelectOfferProviderDialogData
+ * @function
+ *
+ * @description
+ * A dialogData model for use in the selecting an offer provider
+ *
+ */
+var SelectOfferProviderDialogData = function() {
+    var self = this;
+    self.offerProviders = [];
+    self.selectedProvider = {};
+    self.warning = '';
+};
+
+angular.module('merchello.models').constant('SelectOfferProviderDialogData', SelectOfferProviderDialogData);
     /**
      * @ngdoc model
      * @name GatewayProviderDisplay
@@ -1025,7 +1213,7 @@
         self.providerTfKey = '';
         self.name = '';
         self.description = '';
-        self.extendedData = [];
+        self.extendedData = {};
         self.encryptExtendedData = false;
         self.activated = false;
         self.dialogEditorView = {};
@@ -1127,6 +1315,268 @@
     }());
 
     angular.module('merchello.models').constant('OrderLineItemDisplay', OrderLineItemDisplay);
+/**
+ * @ngdoc model
+ * @name OfferComponentDefinitionDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's OfferComponentDefinitionDisplay object
+ */
+var OfferComponentDefinitionDisplay = function() {
+    var self = this;
+    self.offerSettingsKey = '';
+    self.offerCode = '';
+    self.componentKey = '';
+    self.name = '';
+    self.description = '';
+    self.typeFullName = '';
+    self.typeGrouping = '';
+    self.displayConfigurationFormat = '';
+    self.extendedData = {};
+    self.componentType = '';
+    self.dialogEditorView = {};
+    self.restrictToType = '';
+    self.requiresConfiguration = true;
+    self.updated = false;
+};
+
+OfferComponentDefinitionDisplay.prototype = (function() {
+
+    function clone() {
+        return angular.extend(new OfferComponentDefinitionDisplay(), this);
+    }
+
+    function isConfigured() {
+
+        if(!this.requiresConfiguration) {
+            return true;
+        }
+        // hack catch for save call where there's a context switch on this to window
+        // happens when saving the offer settings
+        if (this.extendedData.items !== undefined) {
+            return !this.extendedData.isEmpty();
+        } else {
+            return true;
+        }
+    }
+
+    return {
+        clone: clone,
+        isConfigured: isConfigured
+    }
+}());
+
+angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', OfferComponentDefinitionDisplay);
+/**
+ * @ngdoc model
+ * @name OfferProviderDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's OfferProviderDisplay object
+ */
+var OfferProviderDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.managesTypeName = '';
+    self.backOfficeTree = {};
+};
+
+OfferProviderDisplay.prototype = (function() {
+
+    function editorUrl(key) {
+        return this.backOfficeTree.routePath.replace('{0}', key);
+    }
+
+    return {
+        editorUrl : editorUrl
+    }
+}());
+
+angular.module('merchello.models').constant('OfferProviderDisplay', OfferProviderDisplay);
+    /**
+     * @ngdoc model
+     * @name OfferSettingsDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's OfferSettingsDisplay object
+     */
+    var OfferSettingsDisplay = function() {
+        var self = this;
+        self.key = '';
+        self.name = '';
+        self.offerCode = '';
+        self.offerProviderKey = '';
+        self.offerExpires = false;
+        self.offerStartsDate = '';
+        self.offerEndsDate = '';
+        self.expired = false;
+        self.hasStarted = false;
+        self.active = false;
+        self.dateFormat = '';  // used to pass back office format to server for parse exact.
+        self.componentDefinitions = [];
+    };
+
+    OfferSettingsDisplay.prototype = (function() {
+
+        function clone() {
+            return angular.extend(new OfferSettingsDisplay(), this);
+        }
+
+        // private methods
+        function getAssignedComponent(componentKey) {
+            return _.find(this.componentDefinitions, function (cd) { return cd.componentKey === componentKey; });
+        }
+
+        // adjusts date with timezone
+        function localDateString(val) {
+            var raw = new Date(val);
+            return new Date(raw.getTime() + raw.getTimezoneOffset()*60000).toLocaleDateString();
+        }
+
+        // gets the local start date string
+        function offerStartsDateLocalDateString() {
+            return localDateString(this.offerStartsDate);
+        }
+
+        // gets the local end date string
+        function offerEndsDateLocalDateString() {
+            return localDateString(this.offerEndsDate);
+        }
+
+        function componentDefinitionExtendedDataToArray() {
+            angular.forEach(this.componentDefinitions, function(cd) {
+                if (!angular.isArray(cd.extendedData)) {
+                    cd.extendedData = cd.extendedData.toArray();
+                }
+            });
+        }
+
+        // returns true if the offer has rewards assigned
+        function hasRewards() {
+            if(!hasComponents.call(this)) {
+                return false;
+            }
+            var reward = _.find(this.componentDefinitions, function(c) { return c.componentType === 'Reward'; } );
+            return reward !== undefined && reward !== null;
+        }
+
+        function getReward() {
+            return _.find(this.componentDefinitions, function(c) { return c.componentType === 'Reward'; } );
+        }
+
+        function componentsConfigured() {
+            if (!hasComponents.call(this)) {
+                return true;
+            }
+            var notConfigured = _.find(this.componentDefinitions, function(c) { return c.isConfigured() === false});
+            return notConfigured === undefined;
+        }
+
+        function hasComponents() {
+            return this.componentDefinitions.length > 0;
+        }
+
+        // gets the current component type grouping
+        function getComponentsTypeGrouping() {
+            return hasComponents.call(this) ? this.componentDefinitions[0].typeGrouping : '';
+        }
+
+        // ensures that all components work with the same type of objects.
+        function ensureTypeGrouping(typeGrouping) {
+            if(!hasComponents.call(this)) {
+                return true;
+            }
+            return this.componentDefinitions[0].typeGrouping === typeGrouping;
+        }
+
+        function assignComponent(component) {
+            var exists =_.find(this.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
+            if (exists === undefined && ensureTypeGrouping.call(this, component.typeGrouping)) {
+                component.offerCode = this.offerCode;
+                component.offerSettingsKey = this.key;
+                if (component.componentType === 'Reward') {
+                    this.componentDefinitions.unshift(component);
+                }
+                else
+                {
+                    this.componentDefinitions.push(component);
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        function updateAssignedComponent(component) {
+            var assigned = getAssignedComponent.call(this, component.componentKey);
+            if (assigned !== undefined && assigned !== null) {
+                assigned.extendedData = component.extendedData;
+                assigned.updated = true;
+            }
+        }
+
+        function setLineItemName(value) {
+            if (hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                reward.extendedData.setValue('lineItemName', value);
+            }
+        }
+
+        function getLineItemName() {
+            if(hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                var name = reward.extendedData.getValue('lineItemName');
+                if (name === '') {
+                    name = reward.name;
+                }
+                return name;
+            } else {
+                return '';
+            }
+        }
+
+        function validateComponents() {
+            var offerCode = this.offerCode;
+            var offerSettingsKey = this.key;
+            var invalid = _.filter(this.componentDefinitions, function (cd) { return cd.offerSettingsKey !== this.key || cd.offerCode !== this.offerCode; });
+            if (invalid !== undefined) {
+                angular.forEach(invalid, function(fix) {
+                    fix.offerSettingsKey = offerSettingsKey;
+                    fix.offerCode = offerCode;
+                });
+            }
+        }
+
+        function reorderComponent(oldIndex, newIndex) {
+            this.componentDefinitions.splice(newIndex, 0, this.componentDefinitions.splice(oldIndex, 1)[0]);
+        }
+
+        return {
+            clone: clone,
+            offerStartsDateLocalDateString: offerStartsDateLocalDateString,
+            offerEndsDateLocalDateString: offerEndsDateLocalDateString,
+            componentDefinitionExtendedDataToArray: componentDefinitionExtendedDataToArray,
+            hasComponents: hasComponents,
+            getComponentsTypeGrouping: getComponentsTypeGrouping,
+            ensureTypeGrouping: ensureTypeGrouping,
+            hasRewards: hasRewards,
+            getReward: getReward,
+            assignComponent: assignComponent,
+            updateAssignedComponent: updateAssignedComponent,
+            getAssignedComponent: getAssignedComponent,
+            componentsConfigured: componentsConfigured,
+            getLineItemName: getLineItemName,
+            setLineItemName: setLineItemName,
+            validateComponents: validateComponents,
+            reorderComponent: reorderComponent
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('OfferSettingsDisplay', OfferSettingsDisplay);
     /**
      * @ngdoc model
      * @name NotificationGatewayProviderDisplay
@@ -1255,6 +1705,7 @@
         self.referenceNumber = '';
         self.amount = 0.0;
         self.authorized = false;
+        self.voided = false;
         self.collected = false;
         self.exported = false;
         self.extendedData = {};
@@ -1264,29 +1715,38 @@
     PaymentDisplay.prototype = (function() {
 
         // private
-        var getStatus = function() {
-                var statusArr = [];
-                if (this.authorized) {
-                    statusArr.push("Authorized");
-                }
-                if (this.collected) {
-                    statusArr.push("Captured");
-                }
-                if (this.exported) {
-                    statusArr.push("Exported");
-                }
+        function getStatus() {
+            var statusArr = [];
+            if (this.authorized) {
+                statusArr.push("Authorized");
+            }
+            if (this.collected) {
+                statusArr.push("Captured");
+            }
+            if (this.exported) {
+                statusArr.push("Exported");
+            }
 
-                return statusArr.join("/");
-            },
+            return statusArr.join("/");
+        }
 
-            hasAmount = function() {
-                return this.amount > 0;
-            };
+        function hasAmount() {
+            return this.amount > 0;
+        }
+
+        function appliedAmount() {
+            var applied = 0;
+            angular.forEach(this.appliedPayments, function(ap) {
+                applied += ap.amount;
+            });
+            return applied;
+        }
 
         // public
         return {
             getStatus: getStatus,
-            hasAmount: hasAmount
+            hasAmount: hasAmount,
+            appliedAmount: appliedAmount
         };
     }());
 
@@ -1332,12 +1792,98 @@
         self.description = '';
         self.paymentCode = '';
         self.dialogEditorView = {};
+        self.authorizePaymentEditorView = {};
         self.authorizeCapturePaymentEditorView = {};
         self.voidPaymentEditorView = {};
         self.refundPaymentEditorView = {};
+        self.capturePaymentEditorView = {};
+        self.includeInPaymentSelection = true;
+        self.requiresCustomer = false;
     };
 
     angular.module('merchello.models').constant('PaymentMethodDisplay', PaymentMethodDisplay);
+    /**
+     * @ngdoc model
+     * @name PaymentRequestDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's PaymentRequestDisplay object
+     */
+    var PaymentRequestDisplay = function() {
+        var self = this;
+        self.invoiceKey = '';
+        self.paymentKey = '';
+        self.paymentMethodKey = '';
+        self.amount = 0.0;
+        self.processorArgs = [];
+    };
+
+    angular.module('merchello.models').constant('PaymentRequestDisplay', PaymentRequestDisplay);
+    /**
+     * @ngdoc model
+     * @name ProcessorArgumentCollectionDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ProcessorArgumentCollectionDisplay object
+     */
+     var ProcessorArgumentCollectionDisplay = function() {
+        var self = this;
+        self.items = [];
+    };
+
+    ProcessorArgumentCollectionDisplay.prototype = (function() {
+
+        function toArray() {
+            return this.items;
+        };
+
+        function isEmpty() {
+            return this.items.length === 0;
+        }
+
+        function getValue(key) {
+            if (isEmpty.call(this)) {
+                return;
+            }
+            var found = false;
+            var i = 0;
+            var value = '';
+            while(i < this.items.length && !found) {
+                if (this.items[ i ].key === key) {
+                    found = true;
+
+                    value = this.items[ i ].value;
+                } else {
+                    i++;
+                }
+            }
+            return value;
+        }
+
+        function setValue(key, value) {
+
+            var existing = _.find(this.items, function(item) {
+                return item.key === key;
+            });
+            if(existing) {
+                existing.value = value;
+                return;
+            }
+
+            this.items.push({ key: key, value: value });
+        }
+
+        return {
+            toArray: toArray,
+            getValue: getValue,
+            setValue: setValue
+        }
+
+    }());
+
+    angular.module('merchello.models').constant('ProcessorArgumentCollectionDisplay', ProcessorArgumentCollectionDisplay);
     /**
      * @ngdoc model
      * @name CatalogInventoryDisplay
@@ -1971,7 +2517,7 @@
 
         // gets the custom line items
         function getCustomLineItems() {
-            var custom =  _.find(this.items, function(item) {
+            var custom =  _.filter(this.items, function(item) {
                 return item.lineItemType === 'Custom';
             });
             if (custom === undefined) {
@@ -1982,7 +2528,7 @@
 
         // gets a collection of discount line items
         function getDiscountLineItems() {
-            var discounts = _.find(this.items, function(item) {
+            var discounts = _.filter(this.items, function(item) {
                 return item.lineItemTypeField.alias === 'Discount';
             });
             if (discounts === undefined) {
@@ -2018,6 +2564,7 @@
             return status === 'paid';
         }
 
+        
         // calculates the unpaid balance of the invoice
         function remainingBalance(payments) {
             var amountPaid = 0;
@@ -2027,6 +2574,10 @@
                 });
             });
             return this.total - amountPaid;
+        }
+
+        function isAnonymous() {
+            return this.customerKey === '00000000-0000-0000-0000-000000000000';
         }
 
         return {
@@ -2044,7 +2595,8 @@
             setBillingAddress: setBillingAddress,
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
-            shippingTotal: shippingTotal
+            shippingTotal: shippingTotal,
+            isAnonymous:  isAnonymous
         };
     }());
 
@@ -2249,6 +2801,7 @@
         var self = this;
         self.area = '';
         self.key = '';
+        self.formattedMessage = '';
     };
 
     SalesHistoryMessageDisplay.prototype = (function() {
@@ -2857,10 +3410,25 @@
                 return transformObject(jsonResult, Constructor);
             }
         }
+        /**
+         * @ngdoc method
+         * @name isStringifyJson
+         * @function
+         *
+         * @description
+         * Checks the value to determine if it is a stringified Json value
+         */
+        function isStringifyJson(value) {
+            return (/^[\],:{}\s]*$/.test(value.replace(/\\["\\\/bfnrtu]/g, '@').
+                replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+                replace(/(?:^|:|,)(?:\s*\[)+/g, '')));
+        }
+
 
         // public
         return {
-            transform : transform
+            transform : transform,
+            isStringifyJson: isStringifyJson
         };
     }]);
     /**
@@ -2886,6 +3454,28 @@
                     }
                 };
         }]);
+
+/**
+ * @ngdoc service
+ * @name backOfficeTreeDisplayBuilder
+ *
+ * @description
+ * A utility service that builds backOfficeTreeDisplay models
+ */
+angular.module('merchello.models').factory('backOfficeTreeDisplayBuilder',
+    ['genericModelBuilder', 'BackOfficeTreeDisplay',
+    function(genericModelBuilder, BackOfficeTreeDisplay) {
+        var Constructor = BackOfficeTreeDisplay;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                return genericModelBuilder.transform(jsonResult, Constructor);
+            }
+        };
+    }]);
 
     /**
      * @ngdoc service
@@ -3142,6 +3732,31 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new BulkEditInventoryCountsDialogData();
         }
 
+        // creates a dialog data for voiding payments
+        function createProcessVoidPaymentDialogData() {
+            return new ProcessVoidPaymentDialogData();
+        }
+
+        // creates a dialog data for refunding payments
+        function createProcessRefundPaymentDialogData() {
+            return new ProcessRefundPaymentDialogData();
+        }
+
+        // creates a dialog data for adding new payments
+        function createAddPaymentDialogData() {
+            return new AddPaymentDialogData();
+        }
+
+        // Marketing
+        function createSelectOfferProviderDialogData() {
+            return new SelectOfferProviderDialogData();
+        }
+
+        // offer components
+        function createConfigureOfferComponentDialogData() {
+            return new ConfigureOfferComponentDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -3177,7 +3792,12 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createDeleteProductDialogData: createDeleteProductDialogData,
             createBulkVariantChangePricesDialogData: createBulkVariantChangePricesDialogData,
             createBulkEditInventoryCountsDialogData: createBulkEditInventoryCountsDialogData,
-            createProductSelectorDialogData: createProductSelectorDialogData
+            createProductSelectorDialogData: createProductSelectorDialogData,
+            createProcessVoidPaymentDialogData: createProcessVoidPaymentDialogData,
+            createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
+            createAddPaymentDialogData: createAddPaymentDialogData,
+            createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
+            createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData
         };
 }]);
 
@@ -3296,6 +3916,117 @@ angular.module('merchello.models').factory('dialogDataFactory',
             }]);
 
 
+    /**
+     * @ngdoc service
+     * @name merchello.models.offerComponentDefinitionDisplayBuilder
+     *
+     * @description
+     * A utility service that builds OfferComponentDefinitionDisplay models
+     */
+    angular.module('merchello.models').factory('offerComponentDefinitionDisplayBuilder',
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'dialogEditorViewDisplayBuilder', 'OfferComponentDefinitionDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, dialogEditorViewDisplayBuilder, OfferComponentDefinitionDisplay) {
+
+            var Constructor = OfferComponentDefinitionDisplay;
+
+            return {
+                createDefault: function() {
+                    var definition = new Constructor();
+                    definition.extendedData = extendedDataDisplayBuilder.createDefault();
+                    return definition;
+                },
+                transform: function(jsonResult) {
+                    var definitions = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var definition = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            definition.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                            definition.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                            definitions.push(definition);
+                        }
+                    } else {
+                        definitions = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        definitions.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                        definitions.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                    }
+                    return definitions;
+                }
+            };
+        }]);
+/**
+ * @ngdoc service
+ * @name offerProviderDisplayBuilder
+ *
+ * @description
+ * A utility service that builds OfferProviderDisplay models
+ */
+angular.module('merchello.models').factory('offerProviderDisplayBuilder', [
+    'genericModelBuilder', 'backOfficeTreeDisplayBuilder', 'OfferProviderDisplay',
+    function(genericModelBuilder, backOfficeTreeDisplayBuilder, OfferProviderDisplay) {
+
+        var Constructor = OfferProviderDisplay;
+
+        return {
+            createDefault: function () {
+                var provider = new Constructor();
+                provider.backOfficeTree = backOfficeTreeDisplayBuilder.createDefault();
+                return provider;
+            },
+            transform: function (jsonResult) {
+                var providers = genericModelBuilder.transform(jsonResult, Constructor);
+                if (angular.isArray(providers)) {
+                    for (var i = 0; i < providers.length; i++) {
+                        providers[i].backOfficeTree = backOfficeTreeDisplayBuilder.transform(jsonResult[i].backOfficeTree);
+                    }
+                } else {
+                    providers.backOfficeTree = backOfficeTreeDisplayBuilder.transform(jsonResult.backOfficeTree);
+                }
+                return providers;
+            }
+        };
+
+    }]);
+/**
+ * @ngdoc service
+ * @name merchello.models.offerSettingsDisplayBuilder
+ *
+ * @description
+ * A utility service that builds OfferSettingsDisplay models
+ */
+angular.module('merchello.models').factory('offerSettingsDisplayBuilder',
+    ['genericModelBuilder', 'offerComponentDefinitionDisplayBuilder', 'OfferSettingsDisplay',
+    function(genericModelBuilder, offerComponentDefinitionDisplayBuilder, OfferSettingsDisplay) {
+        var Constructor = OfferSettingsDisplay;
+
+        function formatDateString(val) {
+            var raw = new Date(val.split('T')[0]);
+            return new Date(raw.getTime() + raw.getTimezoneOffset()*60000);
+        }
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                var settings = [];
+                if(angular.isArray(jsonResult)) {
+                    angular.forEach(jsonResult, function(json) {
+                        var setting = genericModelBuilder.transform(json, Constructor);
+                        setting.offerStartsDate = formatDateString(setting.offerStartsDate);
+                        setting.offerEndsDate = formatDateString(setting.offerEndsDate);
+                        setting.componentDefinitions = offerComponentDefinitionDisplayBuilder.transform(json.componentDefinitions);
+                        settings.push(setting);
+                    });
+                } else {
+                    settings = genericModelBuilder.transform(jsonResult,Constructor);
+                    settings.offerStartsDate = formatDateString(settings.offerStartsDate);
+                    settings.offerEndsDate = formatDateString(settings.offerEndsDate);
+                    settings.componentDefinitions = offerComponentDefinitionDisplayBuilder.transform(jsonResult.componentDefinitions);
+                }
+                return settings;
+            }
+        };
+    }]);
 angular.module('merchello.models').factory('merchelloTabsFactory',
     ['MerchelloTabCollection',
         function(MerchelloTabCollection) {
@@ -3389,12 +4120,18 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // creates the tabs for the marketing section
+            function createMarketingTabs() {
+                var tabs = new Constructor();
+                tabs.addTab('offers', 'Offers Listing', '#/merchello/merchello/offerslist/manage');
+                return tabs;
+            }
+
             function createReportsTabs() {
                 var tabs = new Constructor();
                 tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
                 return tabs;
             }
-
 
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,
@@ -3407,7 +4144,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createCustomerOverviewTabs: createCustomerOverviewTabs,
                 createGatewayProviderTabs: createGatewayProviderTabs,
                 createReportsTabs: createReportsTabs,
-                createProductVariantEditorTabs: createProductVariantEditorTabs
+                createProductVariantEditorTabs: createProductVariantEditorTabs,
+                createMarketingTabs: createMarketingTabs
             };
 
 }]);
@@ -3574,10 +4312,20 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         return payment;
                     },
                     transform: function(jsonResult) {
-                        var payment = genericModelBuilder.transform(jsonResult, Constructor);
-                        payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
-                        payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
-                        return payment;
+                        var payments = [];
+                        if (angular.isArray(jsonResult)) {
+                            for(var i = 0; i < jsonResult.length; i++) {
+                                var payment = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                                payment.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult[ i ].appliedPayments);
+                                payment.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                                payments.push(payment);
+                            }
+                        } else {
+                            payments = genericModelBuilder.transform(jsonResult, Constructor);
+                            payments.appliedPayments = appliedPaymentDisplayBuilder.transform(jsonResult.appliedPayments);
+                            payments.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        }
+                        return payments;
                     }
                 };
             }]);
@@ -3622,9 +4370,11 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                 createDefault: function() {
                     var paymentMethod = new Constructor();
                     paymentMethod.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    paymentMethod.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    paymentMethod.capturePaymentEditorView = dialogEditorViewDisplayBuilder.createDefault();
                     return paymentMethod;
                 },
                 transform: function(jsonResult) {
@@ -3633,17 +4383,21 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         for(var i = 0; i < jsonResult.length; i++) {
                             var paymentMethod = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             paymentMethod.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                            paymentMethod.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[i].authorizePaymentEditorView);
                             paymentMethod.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].authorizeCapturePaymentEditorView);
                             paymentMethod.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].voidPaymentEditorView);
                             paymentMethod.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].refundPaymentEditorView);
+                            paymentMethod.capturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].capturePaymentEditorView);
                             paymentMethods.push(paymentMethod);
                         }
                     } else {
                         paymentMethods = genericModelBuilder.transform(jsonResult, Constructor);
                         paymentMethods.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                        paymentMethods.authorizePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.authorizePaymentEditorView);
                         paymentMethods.authorizeCapturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.authorizeCapturePaymentEditorView);
                         paymentMethods.voidPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.voidPaymentEditorView);
                         paymentMethods.refundPaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.refundPaymentEditorView);
+                        paymentMethods.capturePaymentEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.capturePaymentEditorView);
                     }
                     return paymentMethods;
                 }
@@ -3968,7 +4722,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             invoices.invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult.invoiceStatus);
                             invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
                             invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
-                            invoices.curreny = currencyDisplayBuilder.transform(jsonResult.currency);
+                            invoices.currency = currencyDisplayBuilder.transform(jsonResult.currency);
                         }
                         return invoices;
                     }
@@ -4175,9 +4929,17 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         var auditLogDisplay = genericModelBuilder.transform(jsonResult, Constructor);
                         auditLogDisplay.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
 
-                        // this is a bit brittle - and we should look at the construction of this in the ApiController
-                        var message = JSON.parse(jsonResult.message);
-                        auditLogDisplay.message = salesHistoryMessageDisplayBuilder.transform(message);
+                        // this checks to see if the message in the result is a JSON object
+                        if (genericModelBuilder.isStringifyJson(jsonResult.message)) {
+                            // if so, this is going to be something we can localize later (get from the lang files)
+                            var message = JSON.parse(jsonResult.message);
+                            auditLogDisplay.message = salesHistoryMessageDisplayBuilder.transform(message);
+                        } else {
+                            // otherwise we assume the developer simply put a note into the audit logs and thus
+                            // we can't localize.
+                            auditLogDisplay.message = salesHistoryMessageDisplayBuilder.createDefault();
+                            auditLogDisplay.message.formattedMessage = jsonResult.message;
+                        }
                         return auditLogDisplay;
                     }
                 };

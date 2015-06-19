@@ -47,7 +47,7 @@
         
 
         /// <summary>
-        /// Gets the <see cref="IMerchelloContext"/>.
+        /// Initializes a new instance of the <see cref="RenderControllerBase"/> class.
         /// </summary>
         protected IMerchelloContext MerchelloContext
         {

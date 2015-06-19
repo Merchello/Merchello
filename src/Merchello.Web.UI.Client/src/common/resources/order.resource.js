@@ -10,10 +10,10 @@
             return {
 
                 getOrder: function (orderKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchello']['merchelloOrderApiBaseUrl'] + 'GetOrder';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetOrder'),
+                            url: url,
                             method: "GET",
                             params: { id: orderKey }
                         }),
@@ -21,10 +21,10 @@
                 },
 
                 getOrdersByInvoice: function (invoiceKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetOrdersByInvoiceKey';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetOrdersByInvoiceKey'),
+                            url: url,
                             method: "GET",
                             params: { id: invoiceKey }
                         }),
@@ -32,10 +32,10 @@
                 },
 
                 getUnFulfilledItems: function (invoiceKey) {
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetUnFulfilledItems';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetUnFulfilledItems'),
+                            url: url,
                             method: "GET",
                             params: { id: invoiceKey }
                         }),
@@ -43,9 +43,10 @@
                 },
 
                 getShippingAddress: function (invoiceKey) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetShippingAddress';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingAddress'),
+                            url: url,
                             method: "GET",
                             params: { id: invoiceKey }
                         }),
@@ -58,9 +59,9 @@
                     model.ProductKeys = products;
                     model.ShippingAddress = shippingAddress;
                     model.BillingAddress = billingAddress;
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'ProcessesProductsToBackofficeOrder';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'ProcessesProductsToBackofficeOrder'),
+                        $http.post(url,
                             model
                         ),
                         'Failed to add products to invoice');
@@ -72,18 +73,19 @@
                     model.ProductKeys = products;
                     model.ShippingAddress = shippingAddress;
                     model.BillingAddress = billingAddress;
-
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetShippingMethods';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetShippingMethods'),
+                        $http.post(url,
                             model
                         ),
                         'Failed to get shipping methods');
                 },
 
                 getPaymentMethods: function () {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetPaymentMethods';
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'GetPaymentMethods'),
+                            url: url,
                             method: "GET"
                         }),
                         'Failed to get payment methods');
@@ -98,8 +100,9 @@
                     model.PaymentKey = paymentKey;
                     model.PaymentProviderKey = paymentProviderKey;
                     model.ShipmentKey = shipmentKey;
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'FinalizeBackofficeOrder';
                     return umbRequestHelper.resourcePromise(
-                        $http.post(umbRequestHelper.getApiUrl('merchelloOrderApiBaseUrl', 'FinalizeBackofficeOrder'),
+                        $http.post(url,
                             model
                         ),
                         'Failed to finalize backoffice order');

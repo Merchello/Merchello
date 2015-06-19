@@ -5,6 +5,7 @@
     using Builders;
     using Gateways.Payment;
     using Gateways.Shipping;
+
     using Models;
 
     /// <summary>
@@ -12,6 +13,11 @@
     /// </summary>
     public interface ISalePreparationBase
     {
+        /// <summary>
+        /// Gets the item cache.
+        /// </summary>
+        IItemCache ItemCache { get; }
+
         /// <summary>
         /// Gets or sets a value indicating whether raise customer events when saving customer data.
         /// </summary>
@@ -38,6 +44,8 @@
         /// </summary>
         /// <param name="shipToAddress">The shipping <see cref="IAddress"/></param>
         void SaveShipToAddress(IAddress shipToAddress);
+
+        //void SaveOfferCode(string offerCode);
 
         /// <summary>
         /// Gets the bill to address
@@ -89,7 +97,7 @@
         /// The <see cref="IPaymentMethod"/>.
         /// </returns>
         IPaymentMethod GetPaymentMethod();
-
+            
         /// <summary>
         /// Prepares an <see cref="IInvoice"/> representing the bill for the current "sale"
         /// </summary>
@@ -196,5 +204,18 @@
         /// The line item.
         /// </param>
         void RemoveItem(ILineItem lineItem);
+
+        /// <summary>
+        /// Removes an offer code from the OfferCodes collection.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        void RemoveOfferCode(string offerCode);
+
+        /// <summary>
+        /// Clears the offer codes collection.
+        /// </summary>
+        void ClearOfferCodes();
     }
 }

@@ -5,12 +5,12 @@
     using System.Linq;
     using System.Web.Configuration;
     using System.Web.Mvc;
-    using System.Web.UI.WebControls;
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.Account;
     using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
@@ -26,7 +26,7 @@
     /// <summary>
     /// Represents a view model factory.
     /// </summary>
-    internal class ViewModelFactory : IViewModelFactory
+    public class ViewModelFactory : IViewModelFactory
     {
         /// <summary>
         /// The <see cref="ICustomerBase"/>.
@@ -281,7 +281,7 @@
         /// <returns>
         /// The <see cref="CheckoutModel"/>.
         /// </returns>
-        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentMethod> paymentMethods, IEnumerable<PaymentMethodUiInfo> paymentMethodUiInfos)
+        public CheckoutConfirmationModel CreateCheckoutConfirmation(RenderModel model, IBasket basket, IEnumerable<IShipmentRateQuote> shippingRateQuotes, IEnumerable<IPaymentGatewayMethod> paymentMethods, IEnumerable<PaymentMethodUiInfo> paymentMethodUiInfos)
         {
             var viewModel = this.Build<CheckoutConfirmationModel>(model);
 
@@ -297,34 +297,74 @@
             }
 
             var paymentInfoArray = paymentMethodUiInfos as PaymentMethodUiInfo[] ?? paymentMethodUiInfos.ToArray();
-            var paymentMethodsArray = paymentMethods as IPaymentMethod[] ?? paymentMethods.ToArray();
+            var paymentMethodsArray = paymentMethods as IPaymentGatewayMethod[] ?? paymentMethods.ToArray();
 
+            var isAnonymous = basket.Customer.IsAnonymous;
+            var allowedMethods = new List<IPaymentGatewayMethod>();
+
+            // Payment methods, such as vaulted/stored credit cards may not be available to anonymous customers
+            if (isAnonymous)
+            {
+                foreach (var method in paymentMethodsArray.ToArray())
+                {
+                    var addMethod = true;
+
+                    var att = method.GetType().GetCustomAttribute<PaymentGatewayMethodAttribute>(false);
+                    if (att != null && att.RequiresCustomer) addMethod = false;
+                    if (addMethod) allowedMethods.Add(method);
+                }
+            }
+            else
+            {
+                allowedMethods.AddRange(paymentMethodsArray);
+            }
+
+            var salesPreparation = basket.SalePreparation();
+
+            // prepare the invoice
+            var invoice = salesPreparation.PrepareInvoice();
+            
+            // get the existing shipMethodKey if any
+            var shipmentLineItem = invoice.ShippingLineItems().FirstOrDefault();
+            var shipMethodKey = shipmentLineItem != null ? shipmentLineItem.ExtendedData.GetShipMethodKey() : Guid.Empty;
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
                 ThemeName = viewModel.Theme,
                 CustomerToken = basket.Customer.Key.ToString().EncryptWithMachineKey(),
-                SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation()),
+                InvoiceSummary = new InvoiceSummary()
+                                     {
+                                         Invoice = invoice,
+                                         Currency = viewModel.Currency,
+                                         CurrentPageId = viewModel.Id
+                                     },             
+                ShipMethodKey   = shipMethodKey,
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
-                        {
-                            Value = x.ShipMethod.Key.ToString(),
-                            Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency.Symbol))
-                        }),
-
+                                                                    {
+                                                                        Value = x.ShipMethod.Key.ToString(),
+                                                                        Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency.Symbol))
+                                                                    }),
                 PaymentMethods = (viewModel.ResolvePaymentForms
-                     ? paymentMethodsArray.Where(x => paymentInfoArray.Any(y => y.PaymentMethodKey == x.Key && y.UrlActionParams != null))
+                     ? allowedMethods.Where(x => paymentInfoArray.Any(y => y.PaymentMethodKey == x.PaymentMethod.Key && y.UrlActionParams != null))
                      : paymentMethodsArray)
-                     .Select(x => new SelectListItem() { Value = x.Key.ToString(), Text = x.Name }),
+                     .Select(x => new SelectListItem() { Value = x.PaymentMethod.Key.ToString(), Text = x.PaymentMethod.Name }),
 
                 PaymentMethodUiInfo = viewModel.ResolvePaymentForms ? 
                             paymentInfoArray.Where(x => x.UrlActionParams != null) :
                             paymentInfoArray,
-                    
+
                 ReceiptPageId = viewModel.ReceiptPage.Id,
 
                 ResolvePaymentForms = viewModel.ResolvePaymentForms
             };
-            
+
+
+            viewModel.RedeemCouponOfferForm = new RedeemCouponOfferForm()
+                {
+                    ThemeName = viewModel.Theme,
+                    CurrencySymbol = viewModel.Currency.Symbol
+                };
+
             return viewModel;
         }
 
@@ -371,7 +411,11 @@
         public ReceiptModel CreateReceipt(RenderModel model, IInvoice invoice)
         {
             var viewModel = this.Build<ReceiptModel>(model);
-            viewModel.Invoice = invoice;
+            viewModel.InvoiceSummary = new InvoiceSummary()
+                                           {
+                                               Invoice = invoice,
+                                               Currency = viewModel.Currency
+                                           };
             var shippingLineItem = invoice.ShippingLineItems().FirstOrDefault();
             if (shippingLineItem != null)
             {

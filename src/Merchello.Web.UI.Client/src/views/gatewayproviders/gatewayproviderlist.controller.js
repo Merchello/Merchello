@@ -6,7 +6,7 @@
  * @description
  * The controller for the gateway providers list view controller
  */
-angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListController",
+angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersListController",
     ['$scope', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
         'gatewayProviderResource', 'gatewayProviderDisplayBuilder',
         function($scope, assetsService, notificationsService, dialogService, merchelloTabsFactory, gatewayProviderResource, gatewayProviderDisplayBuilder)
@@ -153,6 +153,31 @@ angular.module("umbraco").controller("Merchello.Backoffice.GatewayProvidersListC
              * Calls the merchelloGatewayProviderService to deactivate the provider.
              */
             function deactivateProvider(provider) {
+                var dialogData = {};
+                dialogData.name = 'Provider: ' + provider.name;
+                dialogData.provider = provider;
+
+                dialogData.warning = 'This will any delete any configurations, methods and messages you currently have saved.';
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeactivateProvider,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name deactivateProvider
+             * @param {GatewayProvider} provider The GatewayProvider to deactivate
+             * @function
+             *
+             * @description
+             * Calls the merchelloGatewayProviderService to deactivate the provider.
+             */
+            function processDeactivateProvider(dialogData) {
+                var provider = dialogData.provider;
                 var promiseDeactivate = gatewayProviderResource.deactivateGatewayProvider(provider);
                 promiseDeactivate.then(function () {
                     provider.activated = false;

@@ -13,7 +13,7 @@
     using Umbraco.Core.Logging;
 
     /// <summary>
-    /// Defines a <see cref="NotificationMonitorBase{TFormatter, TModel}"/> base class
+    /// Defines a <see cref="NotificationMonitorBase{T}"/> base class
     /// </summary>
     /// <typeparam name="T">
     /// The Type of the model passed to the monitor
@@ -52,7 +52,10 @@
             get
             {
                 ////http://issues.merchello.com/youtrack/issue/M-591
-                return _messages.Value.Select(x => x.MemberwiseClone());
+                //return _messages.Value.Select(x => x.MemberwiseClone());
+
+                //// http://issues.merchello.com/youtrack/issue/M-698
+                return this.GetNotificationMessages();
             }
         }
 
@@ -96,7 +99,7 @@
         /// </summary>
         public virtual void RebuildCache()
         {
-            _messages = new Lazy<List<INotificationMessage>>(BuidMessageCache);
+            _messages = new Lazy<List<INotificationMessage>>(this.GetNotificationMessages);
         }
 
         /// <summary>
@@ -118,7 +121,7 @@
         private void Initialize()
         {
             if (_messages == null)
-                _messages = new Lazy<List<INotificationMessage>>(BuidMessageCache);
+                _messages = new Lazy<List<INotificationMessage>>(this.GetNotificationMessages);
         }
 
         /// <summary>
@@ -127,7 +130,7 @@
         /// <returns>
         /// A collection of <see cref="INotificationMessage"/>
         /// </returns>
-        private List<INotificationMessage> BuidMessageCache()
+        private List<INotificationMessage> GetNotificationMessages()
         {
             try
             {

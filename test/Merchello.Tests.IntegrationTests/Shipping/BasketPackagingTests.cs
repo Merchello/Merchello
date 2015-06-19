@@ -29,12 +29,12 @@ namespace Merchello.Tests.IntegrationTests.Shipping
 
 
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
-            _basket = Basket.GetBasket(MerchelloContext, _customer);
+            _basket = Basket.GetBasket(MerchelloContext.Current, _customer);
 
             for(var i = 0; i < ProductCount; i++) _basket.AddItem(PreTestDataWorker.MakeExistingProduct());
             _basket.AddItem(PreTestDataWorker.MakeExistingProduct(false));
 
-            Basket.Save(MerchelloContext, _basket);
+            Basket.Save(MerchelloContext.Current, _basket);
         }
 
 
@@ -82,7 +82,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             _basket.AddItem(notShippable);
             
             //// Act
-            var strategy = new DefaultWarehousePackagingStrategy(MerchelloContext, _basket.Items, destination, Guid.NewGuid());
+            var strategy = new DefaultWarehousePackagingStrategy(MerchelloContext.Current, _basket.Items, destination, Guid.NewGuid());
             var shipments = strategy.PackageShipments();
 
             //// Assert
@@ -113,7 +113,7 @@ namespace Merchello.Tests.IntegrationTests.Shipping
             };
             
             //// Act
-            var shipments = _basket.PackageBasket(MerchelloContext, destination);
+            var shipments = _basket.PackageBasket(MerchelloContext.Current, destination);
 
             //// Assert
             Assert.NotNull(shipments);

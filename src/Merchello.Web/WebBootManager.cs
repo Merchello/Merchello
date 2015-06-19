@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web
 {
+    using Merchello.Core;
+    using Merchello.Core.Marketing.Offer;
     using Merchello.Web.Mvc;
     using Merchello.Web.Reporting;
     using Merchello.Web.Ui;
@@ -66,6 +68,12 @@
 
             if (!ReportApiControllerResolver.HasCurrent)
             ReportApiControllerResolver.Current = new ReportApiControllerResolver(PluginManager.Current.ResolveReportApiControllers());
+
+            if (!OfferProviderResolver.HasCurrent)
+                OfferProviderResolver.Current = new OfferProviderResolver(PluginManager.Current.ResolveOfferProviders(), MerchelloContext.Current.Services.OfferSettingsService);
+
+            if(!OfferComponentResolver.HasCurrent)
+                OfferComponentResolver.Current = new OfferComponentResolver(PluginManager.Current.ResolveOfferComponents(), OfferProviderResolver.Current);
         }
     }
 }

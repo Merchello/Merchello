@@ -891,7 +891,8 @@ textarea::-webkit-input-placeholder {
 .radio input[type="radio"],
 .checkbox input[type="checkbox"] {
   float: left;
-  margin-left: -20px;
+  margin-right: 5px;
+  margin-left: 0;
 }
 
 .controls > .radio:first-child,
@@ -1654,6 +1655,15 @@ legend + .control-group {
 .umb-panel-buttons .umb-btn-toolbar .btn {
   position: relative;
   z-index: 1000;
+}
+
+@media (max-width: 767px) {
+  .form-horizontal .control-label {
+    width: 100%;
+  }
+  .form-horizontal .controls {
+    margin-left: 0;
+  }
 }
 
 body {

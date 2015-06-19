@@ -249,6 +249,7 @@
                 "DELETE FROM merchAppliedPayment WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoiceItem WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoiceIndex WHERE invoiceKey = @Key",
+                "DELETE FROM merchOfferRedeemed WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoice WHERE pk = @Key"
             };
 
@@ -385,7 +386,7 @@
             sql.Select("*").From<InvoiceDto>();
             if (numbers.Any() && terms.Any())
             {
-                sql.Where("billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("%", terms)), @email = string.Format("%{0}%", string.Join("%", terms)), @invNo = numbers.ToArray() });
+                sql.Where("billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @email = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @invNo = numbers.ToArray() });
             }
             else if (numbers.Any())
             {
@@ -393,7 +394,7 @@
             }
             else
             {
-                sql.Where("billToName LIKE @term OR billToEmail LIKE @term", new { @term = string.Format("%{0}%", string.Join("%", terms)), @email = string.Format("%{0}%", string.Join("%", terms)) });
+                sql.Where("billToName LIKE @term OR billToEmail LIKE @term", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @email = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
             }
 
             return sql;

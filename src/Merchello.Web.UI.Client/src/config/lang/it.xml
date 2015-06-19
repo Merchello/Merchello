@@ -4,6 +4,8 @@
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
     <key alias="delete">Delete</key>
+    <key alias="save">Save</key>
+    <key alias="select">Select</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalogo</key>
@@ -85,11 +87,12 @@
     <key alias="createOrder">Create Order</key>
     <key alias="sales">Sales</key>
     <key alias="saleInformation">Sale Information</key>
+    <key alias="addDateFilters">Add date filters</key>
+    <key alias="removeDateFilters">Remove date filters</key>
     <key alias="voidPayment">Void Payment</key>
     <key alias="refundPayment">Refund Payment</key>
     <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
-    <key alias="addDateFilters">Add date filters</key>
-    <key alias="removeDateFilters">Remove date filters</key>
+    <key alias="refundMethod">Refund method</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -148,7 +151,7 @@
   <area alias="merchelloPlaceholders">
     <key alias="enterProduct">Inserisci un nome del prodotto</key>
     <key alias="enterOrder">Scrivi un numero ordine o un nome...</key>to
-		<key alias="addStyle">Aggiungi uno stile...</key></area>
+		<key alias="addStyle">Aggiungi uno stile...</key><key alias="enterOffer">Enter a name for the offer</key></area>
   <area alias="merchelloGeneral">
     <key alias="apply">Applica</key>
     <key alias="price">Prezzo</key>
@@ -175,6 +178,7 @@
     <key alias="select">Seleziona</key>
     <key alias="all">Tutti</key>
     <key alias="none">Nessuno</key>
+    <key alias="expired">Expired</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Impostazioni del negozio</key>
@@ -256,8 +260,7 @@
     <key alias="sendTo"><![CDATA[Manda a <small>(ej. ordini@tuodominio.com)</small>]]></key>
     <key alias="replyTo"><![CDATA[CDATA a <small>(i.e. info@tuodominio.com)</small>]]></key>
     <key alias="emailCustomer">Mandare email al cliente</key>
-    <key alas="resourceType" />
-    <key alas="resourceType" />
+    <key alias="resourceType" />
   </area>
   <area alias="merchelloNotificationsEditTemplate">
     <key alias="header">Testata</key>
@@ -356,10 +359,34 @@
     <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
     <key alias="orderCreated">Order %0% was created</key>
     <key alias="shipmentCreated">Shipment was created with %0% line items</key>
-    <key alas="shipmentStatusChanged">Shipment status was changed to %0%</key>
+    <key alias="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
   <area alias="merchelloMarketing">
     <key alias="campaigns">Marketing Campaigns</key>
+    <key alias="activities">Activities</key>
+    <key alias="btnNewCampaign">New Campaign</key>
+    <key alias="btnDeleteCampaign">Delete</key>
+    <key alias="enterCampaignName">Enter a name for the campaign</key>
+    <key alias="campaignInfo">Campaign Settings</key>
+    <key alias="configCampaign">Configure this marketing campaign</key>
+    <key alias="isActive">Is active</key>
+    <key alias="currentOffers">Current Offers</key>
+    <key alias="offerCode">Offer Code</key>
+    <key alias="newOffer">New Offer</key>
+    <key alias="noOffer">No current offers</key>
+    <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
+    <key alias="offerInfo">Offer Settings</key>
+    <key alias="configOffer">Configure this offer</key>
+    <key alias="offerType">Type of Offer</key>
+    <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
+    <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
+    <key alias="offerNeverExpires">Does not expire.</key>
+    <key alias="offerValidDates">Offer Valid Dates</key>
+    <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
+    <key alias="offerConstraintsInfo">Constraints</key>
+    <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
+    <key alias="offerRewardsInfo">Rewards</key>
+    <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
   </area>
   <area alias="merchelloFulfillShipment">
     <!-- phrases -->
@@ -369,5 +396,12 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Delete Confirmation</key>
     <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+  </area>
+  <area alias="merchelloTableCaptions">
+    <key alias="name">Name</key>
+    <key alias="startDate">Starting</key>
+    <key alias="endDate">Ending</key>
+    <key alias="alias">Alias</key>
+    <key alias="active">Active</key>
   </area>
 </language>

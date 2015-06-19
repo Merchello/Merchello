@@ -104,7 +104,7 @@
 
             if (terms.Any())
             {
-                var preparedTerms = string.Format("%{0}%", string.Join("%", terms));
+                var preparedTerms = string.Format("%{0}%", string.Join("% ", terms)).Trim();
 
                 sql.Where("sku LIKE @sku OR name LIKE @name", new { @sku = preparedTerms, @name = preparedTerms });
             }

@@ -25,7 +25,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             PreTestDataWorker.DeleteAllShipments();
             var invoice = SalePreparationMock.PrepareInvoice();
             PreTestDataWorker.InvoiceService.Save(invoice);
-            _order = invoice.PrepareOrder(MerchelloContext);
+            _order = invoice.PrepareOrder(MerchelloContext.Current);
             PreTestDataWorker.OrderService.Save(_order);
 
             _shipMethodKey =
@@ -43,7 +43,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
             const int taskCount = 3;
 
             //// Act
-            var builder = new ShipmentBuilderChain(MerchelloContext, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking");
+            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking");
 
             //// Assert
             Assert.NotNull(builder);
@@ -57,7 +57,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public void ShipmentBuilder_Creates_And_Saves_A_Shipment_And_OrderLineItems_Are_Updated()
         {
             //// Arrange
-            var builder = new ShipmentBuilderChain(MerchelloContext, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking");
+            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking");
 
             //// Act
             var attempt = builder.Build();
@@ -71,8 +71,8 @@ namespace Merchello.Tests.IntegrationTests.Builders
         public void Can_Save_A_Shipment_After_Its_Built()
         {
             //// Arrange
-            var shipmentService = MerchelloContext.Services.ShipmentService;
-            var builder = new ShipmentBuilderChain(MerchelloContext, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking");
+            var shipmentService = MerchelloContext.Current.Services.ShipmentService;
+            var builder = new ShipmentBuilderChain(MerchelloContext.Current, _order, _order.Items.Select(x => x.Key), _shipMethodKey.GetValueOrDefault(), Constants.DefaultKeys.ShipmentStatus.Quoted, "test-tracking");
             var attempt = builder.Build();
             Assert.IsTrue(attempt.Success, "Failed to build shipment");
 

@@ -29,8 +29,8 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {
             base.FixtureSetup();
 
-            var bootManager = new WebBootManager();
-            bootManager.Initialize();
+            //var bootManager = new WebBootManager();
+            //bootManager.Initialize();
 
             _customerIndexer = (CustomerIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloCustomerIndexer"];
             _searcher = ExamineManager.Instance.SearchProviderCollection["MerchelloCustomerSearcher"];

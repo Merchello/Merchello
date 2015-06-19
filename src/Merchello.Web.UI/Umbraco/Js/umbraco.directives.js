@@ -2268,6 +2268,9 @@ function sectionsDirective($timeout, $window, navigationService, treeService, se
                 if (scope.showTray) {
                     return 'slide';
                 }
+                else if (scope.showTray === false) {
+                    return 'slide';
+                }
                 else {
                     return '';
                 }
@@ -2295,26 +2298,35 @@ function sectionsDirective($timeout, $window, navigationService, treeService, se
 					}
 				});
 			}
-            
-            //Listen for global state changes
-            eventsService.on("appState.globalState.changed", function (e, args) {
-			    if (args.key === "showTray") {
-			        scope.showTray = args.value;
-			    }
-			    if (args.key === "stickyNavigation") {
-			        scope.stickyNavigation = args.value;
-			    }
-			});
 
-			eventsService.on("appState.sectionState.changed", function (e, args) {
-			    if (args.key === "currentSection") {
-			        scope.currentSection = args.value;
-			    }
-			});
-            
-			eventsService.on("app.reInitialize", function (e, args) {
+			var evts = [];
+
+            //Listen for global state changes
+            evts.push(eventsService.on("appState.globalState.changed", function(e, args) {
+                if (args.key === "showTray") {
+                    scope.showTray = args.value;
+                }
+                if (args.key === "stickyNavigation") {
+                    scope.stickyNavigation = args.value;
+                }
+            }));
+
+            evts.push(eventsService.on("appState.sectionState.changed", function(e, args) {
+                if (args.key === "currentSection") {
+                    scope.currentSection = args.value;
+                }
+            }));
+
+            evts.push(eventsService.on("app.reInitialize", function(e, args) {
                 //re-load the sections if we're re-initializing (i.e. package installed)
-			    loadSections();
+                loadSections();
+            }));
+
+            //ensure to unregister from all events!
+			scope.$on('$destroy', function () {
+			    for (var e in evts) {
+			        eventsService.unsubscribe(evts[e]);
+			    }
 			});
 
 			//on page resize
@@ -2329,6 +2341,13 @@ function sectionsDirective($timeout, $window, navigationService, treeService, se
 			};
 
 			scope.sectionClick = function (section) {
+			    if (navigationService.userDialog) {
+			        navigationService.userDialog.close();
+			    }
+			    if (navigationService.helpDialog) {
+			        navigationService.helpDialog.close();
+			    }
+			    
 			    navigationService.hideSearch();
 			    navigationService.showTree(section.alias);
 			    $location.path("/" + section.alias);
@@ -2338,8 +2357,20 @@ function sectionsDirective($timeout, $window, navigationService, treeService, se
 				navigationService.reloadSection(section.alias);
 			};
 
-			scope.trayClick = function(){
-				navigationService.showTray();
+			scope.trayClick = function () {
+                // close dialogs
+			    if (navigationService.userDialog) {
+			        navigationService.userDialog.close();
+			    }
+			    if (navigationService.helpDialog) {
+			        navigationService.helpDialog.close();
+			    }
+
+			    if (appState.getGlobalState("showTray") === true) {
+			        navigationService.hideTray();
+			    } else {
+			        navigationService.showTray();
+			    }
 			};
             
 			loadSections();
@@ -3911,23 +3942,25 @@ function valFormManager(serverValidationManager, $rootScope, $log, $timeout, not
                 element.addClass(className);
             }
 
+            var unsubscribe = [];
+
             //listen for the forms saving event
-            scope.$on(savingEventName, function (ev, args) {
+            unsubscribe.push(scope.$on(savingEventName, function(ev, args) {
                 element.addClass(className);
 
                 //set the flag so we can check to see if we should display the error.
                 isSavingNewItem = $routeParams.create;
-            });
+            }));
 
             //listen for the forms saved event
-            scope.$on(savedEvent, function (ev, args) {
+            unsubscribe.push(scope.$on(savedEvent, function(ev, args) {
                 //remove validation class
                 element.removeClass(className);
 
                 //clear form state as at this point we retrieve new data from the server
                 //and all validation will have cleared at this point    
                 formCtrl.$setPristine();
-            });
+            }));
 
             //This handles the 'unsaved changes' dialog which is triggered when a route is attempting to be changed but
             // the form has pending changes
@@ -3955,10 +3988,12 @@ function valFormManager(serverValidationManager, $rootScope, $log, $timeout, not
                 }
 
             });
+            unsubscribe.push(locationEvent);
+
             //Ensure to remove the event handler when this instance is destroyted
             scope.$on('$destroy', function() {
-                if(locationEvent){
-                    locationEvent();
+                for (var u in unsubscribe) {
+                    unsubscribe[u]();
                 }
             });
 
@@ -4067,8 +4102,10 @@ function valPropertyMsg(serverValidationManager) {
             //create properties on our custom scope so we can use it in our template
             scope.errorMsg = "";
 
+            var unsubscribe = [];
+
             //listen for form error changes
-            scope.$on("valStatusChanged", function (evt, args) {
+            unsubscribe.push(scope.$on("valStatusChanged", function(evt, args) {
                 if (args.form.$invalid) {
 
                     //first we need to check if the valPropertyMsg validity is invalid
@@ -4094,10 +4131,10 @@ function valPropertyMsg(serverValidationManager) {
                     hasError = false;
                     scope.errorMsg = "";
                 }
-            }, true);
+            }, true));
 
             //listen for the forms saving event
-            scope.$on("formSubmitting", function (ev, args) {
+            unsubscribe.push(scope.$on("formSubmitting", function(ev, args) {
                 showValidation = true;
                 if (hasError && scope.errorMsg === "") {
                     scope.errorMsg = getErrorMsg();
@@ -4106,15 +4143,15 @@ function valPropertyMsg(serverValidationManager) {
                     scope.errorMsg = "";
                     stopWatch();
                 }
-            });
+            }));
 
             //listen for the forms saved event
-            scope.$on("formSubmitted", function (ev, args) {
+            unsubscribe.push(scope.$on("formSubmitted", function(ev, args) {
                 showValidation = false;
                 scope.errorMsg = "";
                 formCtrl.$setValidity('valPropertyMsg', true);
                 stopWatch();
-            });
+            }));
 
             //listen for server validation changes
             // NOTE: we pass in "" in order to listen for all validation changes to the content property, not for
@@ -4150,7 +4187,16 @@ function valPropertyMsg(serverValidationManager) {
                     serverValidationManager.unsubscribe(scope.property.alias, "");
                 });
             }
+
+            //when the scope is disposed we need to unsubscribe
+            scope.$on('$destroy', function () {
+                for (var u in unsubscribe) {
+                    unsubscribe[u]();
+                }
+            });
         }
+
+
     };
 }
 angular.module('umbraco.directives.validation').directive("valPropertyMsg", valPropertyMsg);
@@ -4521,8 +4567,10 @@ function valToggleMsg(serverValidationManager) {
                 }
             });
             
+            var unsubscribe = [];
+
             //listen for the saving event (the result is a callback method which is called to unsubscribe)
-            var unsubscribeSaving = scope.$on("formSubmitting", function (ev, args) {
+            unsubscribe.push(scope.$on("formSubmitting", function(ev, args) {
                 showValidation = true;
                 if (formCtrl[attr.valMsgFor].$error[attr.valToggleMsg]) {
                     element.show();
@@ -4534,20 +4582,21 @@ function valToggleMsg(serverValidationManager) {
                 else {
                     element.hide();
                 }
-            });
+            }));
             
             //listen for the saved event (the result is a callback method which is called to unsubscribe)
-            var unsubscribeSaved = scope.$on("formSubmitted", function (ev, args) {
+            unsubscribe.push(scope.$on("formSubmitted", function(ev, args) {
                 showValidation = false;
                 element.hide();
-            });
+            }));
 
             //when the element is disposed we need to unsubscribe!
             // NOTE: this is very important otherwise if this directive is part of a modal, the listener still exists because the dom 
             // element might still be there even after the modal has been hidden.
             element.bind('$destroy', function () {
-                unsubscribeSaving();
-                unsubscribeSaved();
+                for (var u in unsubscribe) {
+                    unsubscribe[u]();
+                }
             });
 
         }

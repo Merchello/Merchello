@@ -1,4 +1,4 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿namespace Merchello.Bazaar.Controllers.Surface
 {
     using System;
     using System.Collections.Generic;

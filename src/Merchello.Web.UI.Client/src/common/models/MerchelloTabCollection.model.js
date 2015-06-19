@@ -74,11 +74,26 @@
             }
         }
 
+        function appendOfferTab(offerKey, backOfficeTree) {
+            var title = '';
+            if(backOfficeTree.title === undefined || backOfficeTree.title === '') {
+                title = 'Offer';
+            } else {
+                title = backOfficeTree.title;
+            }
+            if(offerKey !== '00000000-0000-0000-0000-000000000000' && offerKey !== 'create') {
+                addTab.call(this, 'offer', title, '#' + backOfficeTree.routePath.replace('{0}', offerKey));
+            } else {
+                addTab.call(this, 'offer', 'New ' + title, '#' +backOfficeTree.routePath.replace('{0}', 'create'));
+            }
+        }
+
         return {
             addTab: addTab,
             setActive: setActive,
             insertTab: insertTab,
-            appendCustomerTab: appendCustomerTab
+            appendCustomerTab: appendCustomerTab,
+            appendOfferTab: appendOfferTab
         };
     }());
 

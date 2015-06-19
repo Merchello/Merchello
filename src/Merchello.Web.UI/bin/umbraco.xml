@@ -20,13 +20,14 @@
             <param name="current">The request Uri.</param>
             <returns>The culture that would be selected to render the content.</returns>
         </member>
-        <member name="M:Umbraco.Web.Models.ContentExtensions.GetCulture(Umbraco.Web.UmbracoContext,Umbraco.Core.Services.ILocalizationService,System.Int32,System.String,System.Uri)">
+        <member name="M:Umbraco.Web.Models.ContentExtensions.GetCulture(Umbraco.Web.UmbracoContext,Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Services.IContentService,System.Int32,System.String,System.Uri)">
             <summary>
             Gets the culture that would be selected to render a specified content,
             within the context of a specified current request.
             </summary>
             <param name="umbracoContext">An <see cref="T:Umbraco.Web.UmbracoContext"/> instance.</param>
             <param name="localizationService">An <see cref="T:Umbraco.Core.Services.ILocalizationService"/> implementation.</param>
+            <param name="contentService">An <see cref="T:Umbraco.Core.Services.IContentService"/> implementation.</param>
             <param name="contentId">The content identifier.</param>
             <param name="contentPath">The content path.</param>
             <param name="current">The request Uri.</param>
@@ -52,44 +53,174 @@
             This is here to support compatibility with both MVC4 and MVC5
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Scheduling.ThreadingTaskImmutable">
+            <summary>
+            Wraps a Task within an object that gives access to its GetAwaiter method and Status
+            property while ensuring that it cannot be modified in any way.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.ThreadingTaskImmutable.#ctor(System.Threading.Tasks.Task)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.ThreadingTaskImmutable"/> class with a Task.
+            </summary>
+            <param name="task">The task.</param>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.ThreadingTaskImmutable.GetAwaiter">
+            <summary>
+            Gets an awaiter used to await the task.
+            </summary>
+            <returns>An awaiter instance.</returns>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.ThreadingTaskImmutable.Status">
+            <summary>
+            Gets the TaskStatus of the task.
+            </summary>
+            <returns>The current TaskStatus of the task.</returns>
+        </member>
         <member name="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1">
             <summary>
-            This is used to create a background task runner which will stay alive in the background of and complete
-            any tasks that are queued. It is web aware and will ensure that it is shutdown correctly when the app domain
-            is shutdown.
+            Manages a queue of tasks of type <typeparamref name="T"/> and runs them in the background.
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="T">The type of the managed tasks.</typeparam>
+            <remarks>The task runner is web-aware and will ensure that it shuts down correctly when the AppDomain
+            shuts down (ie is unloaded).</remarks>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.GetAwaiter">
+        <member name="T:Umbraco.Web.Scheduling.IBackgroundTaskRunner`1">
             <summary>
-            Returns the task awaiter so that consumers of the BackgroundTaskManager can await
-            the threading operation.
+            Defines a service managing a queue of tasks of type <typeparamref name="T"/> and running them in the background.
             </summary>
-            <returns></returns>
+            <typeparam name="T">The type of the managed tasks.</typeparam>
+            <remarks>The interface is not complete and exists only to have the contravariance on T.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class.
+            </summary>
+            <param name="name">The name of the runner.</param>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class with a set of options.
+            </summary>
+            <param name="options">The set of options.</param>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(System.String,Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class with a set of options.
+            </summary>
+            <param name="name">The name of the runner.</param>
+            <param name="options">The set of options.</param>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.Add(`0)">
+            <summary>
+            Adds a task to the queue.
+            </summary>
+            <param name="task">The task to add.</param>
+            <exception cref="T:System.InvalidOperationException">The task runner has completed.</exception>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.TryAdd(`0)">
+            <summary>
+            Tries to add a task to the queue.
+            </summary>
+            <param name="task">The task to add.</param>
+            <returns>true if the task could be added to the queue; otherwise false.</returns>
+            <remarks>Returns false if the runner is completed.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.StartUp">
+            <summary>
+            Starts the tasks runner, if not already running.
+            </summary>
+            <remarks>Is invoked each time a task is added, to ensure it is going to be processed.</remarks>
+            <exception cref="T:System.InvalidOperationException">The task runner has completed.</exception>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.StartUpLocked">
+            <summary>
+            Starts the tasks runner, if not already running.
+            </summary>
+            <remarks>Must be invoked within lock(_locker) and with _isCompleted being false.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.Shutdown(System.Boolean,System.Boolean)">
+            <summary>
+            Shuts the taks runner down.
+            </summary>
+            <param name="force">True for force the runner to stop.</param>
+            <param name="wait">True to wait until the runner has stopped.</param>
+            <remarks>If <paramref name="force"/> is false, no more tasks can be queued but all queued tasks
+            will run. If it is true, then only the current one (if any) will end and no other task will run.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.PumpIBackgroundTasks(System.Threading.Tasks.TaskFactory,System.Threading.CancellationToken)">
+            <summary>
+            Runs background tasks for as long as there are background tasks in the queue, with an asynchronous operation.
+            </summary>
+            <param name="factory">The supporting <see cref="T:System.Threading.Tasks.TaskFactory"/>.</param>
+            <param name="token">A cancellation token.</param>
+            <returns>The asynchronous operation.</returns>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.RunIBackgroundTaskAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Runs a background task asynchronously.
+            </summary>
+            <param name="bgTask">The background task.</param>
+            <param name="token">A cancellation token.</param>
+            <returns>The asynchronous operation.</returns>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.Stop(System.Boolean)">
+            <summary>
+            Requests a registered object to unregister.
+            </summary>
+            <param name="immediate">true to indicate the registered object should unregister from the hosting
+            environment before returning; otherwise, false.</param>
             <remarks>
-            This is just the coolest thing ever, check this article out:
-            http://blogs.msdn.com/b/pfxteam/archive/2011/01/13/10115642.aspx
-            
-            So long as we have a method called GetAwaiter() that returns an instance of INotifyCompletion 
-            we can await anything! :)
+            <para>"When the application manager needs to stop a registered object, it will call the Stop method."</para>
+            <para>The application manager will call the Stop method to ask a registered object to unregister. During
+            processing of the Stop method, the registered object must call the HostingEnvironment.UnregisterObject method.</para>
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.StartConsumer">
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.TaskCount">
             <summary>
-            Starts the consumer task
+            Gets the number of tasks in the queue.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.StartThread(System.Threading.CancellationToken)">
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.IsRunning">
             <summary>
-            Invokes a new worker thread to consume tasks
+            Gets a value indicating whether a task is currently running.
             </summary>
-            <param name="token"></param>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.TakeAndConsumeTask(System.Threading.CancellationToken)">
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.IsCompleted">
             <summary>
-            Trys to get a task from the queue, if there isn't one it will wait a second and try again
+            Gets a value indicating whether the runner has completed and cannot accept tasks anymore.
             </summary>
-            <param name="token"></param>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.CurrentThreadingTask">
+            <summary>
+            Gets the running task as an immutable object.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">There is no running task.</exception>
+            <remarks>
+            Unless the AutoStart option is true, there will be no running task until
+            a background task is added to the queue. Unless the KeepAlive option is true, there
+            will be no running task when the queue is empty.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.StoppedAwaitable">
+            <summary>
+            Gets an awaitable used to await the runner running operation.
+            </summary>
+            <returns>An awaitable instance.</returns>
+            <remarks>Used to wait until the runner is no longer running (IsRunning == false),
+            though the runner could be started again afterwards by adding tasks to it.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.TerminatedAwaitable">
+            <summary>
+            Gets an awaitable used to await the runner.
+            </summary>
+            <returns>An awaitable instance.</returns>
+            <remarks>Used to wait until the runner is terminated.</remarks>
         </member>
         <member name="M:Umbraco.Web.BatchedServerMessenger.MessageSeversForIdsOrJson(System.Collections.Generic.IEnumerable{Umbraco.Core.Sync.IServerAddress},umbraco.interfaces.ICacheRefresher,Umbraco.Core.Sync.MessageType,System.Collections.Generic.IEnumerable{System.Object},System.String)">
             <summary>
@@ -650,6 +781,26 @@
             Class which listens to events on business level objects in order to invalidate the cache amongst servers when data changes
             </summary>
         </member>
+        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.UnPublishSingle(Umbraco.Core.Models.IContent)">
+            <summary>
+            Refreshes the xml cache for a single node by removing it
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.UpdateEntireCache">
+            <summary>
+            Refreshes the xml cache for all nodes
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.UpdateMultipleContentCache(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IContent})">
+            <summary>
+            Refreshes the xml cache for nodes in list
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.UpdateSingleContentCache(Umbraco.Core.Models.IContent)">
+            <summary>
+            Refreshes the xml cache for a single node
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.ContentServiceTrashed(Umbraco.Core.Services.IContentService,Umbraco.Core.Events.MoveEventArgs{Umbraco.Core.Models.IContent})">
             <summary>
             Handles cache refreshing for when content is trashed
@@ -1201,6 +1352,22 @@
             <param name="pageId"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToUmbracoPage(System.Int32,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Redirects to the Umbraco page with the given id and passes provided querystring
+            </summary>
+            <param name="pageId"></param>
+            <param name="queryStringValues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToUmbracoPage(System.Int32,System.String)">
+            <summary>
+            Redirects to the Umbraco page with the given id and passes provided querystring
+            </summary>
+            <param name="pageId"></param>
+            <param name="queryString"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToUmbracoPage(Umbraco.Core.Models.IPublishedContent)">
             <summary>
             Redirects to the Umbraco page with the given id
@@ -1208,10 +1375,40 @@
             <param name="publishedContent"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToUmbracoPage(Umbraco.Core.Models.IPublishedContent,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Redirects to the Umbraco page with the given id and passes provided querystring
+            </summary>
+            <param name="publishedContent"></param>
+            <param name="queryStringValues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToUmbracoPage(Umbraco.Core.Models.IPublishedContent,System.String)">
+            <summary>
+            Redirects to the Umbraco page with the given id and passes provided querystring
+            </summary>
+            <param name="publishedContent"></param>
+            <param name="queryString"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToCurrentUmbracoPage">
             <summary>
             Redirects to the currently rendered Umbraco page
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToCurrentUmbracoPage(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Redirects to the currently rendered Umbraco page and passes provided querystring
+            </summary>
+            <param name="queryStringValues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToCurrentUmbracoPage(System.String)">
+            <summary>
+            Redirects to the currently rendered Umbraco page and passes provided querystring
+            </summary>
+            <param name="queryStringValues"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Mvc.SurfaceController.RedirectToCurrentUmbracoUrl">
@@ -3420,11 +3617,6 @@
             ColorListPreValueEditor uses the ValueListPreValueEditor with a custom view and controller.
             </remarks>
         </member>
-        <member name="P:Umbraco.Web.PropertyEditors.DatePropertyEditor.DefaultPreValues">
-            <summary>
-            Overridden because we ONLY support Date (no time) format and we don't have pre-values in the db.
-            </summary>
-        </member>
         <member name="T:Umbraco.Web.PropertyEditors.DatePropertyEditor.DatePropertyValueEditor">
             <summary>
             CUstom value editor so we can serialize with the correct date format (excluding time)
@@ -3513,6 +3705,11 @@
             Overridden to ensure that the value is validated
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.PropertyEditors.IntegerPropertyEditor.IntegerPreValueEditor">
+            <summary>
+            A custom pre-value editor class to deal with the legacy way that the pre-value data is stored.
+            </summary>
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.MultipleTextStringPropertyEditor.MultipleTextStringPreValueEditor">
             <summary>
@@ -3946,6 +4143,157 @@
             Use this when displaying URLs, if there are errors genertaing the urls the urls themselves will
             contain the errors.
             </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions">
+            <summary>
+            Provides options to the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions"/> class.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions.LongRunning">
+            <summary>
+            Gets or sets a value indicating whether the running task should be a long-running,
+            coarse grained operation.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions.KeepAlive">
+            <summary>
+            Gets or sets a value indicating whether the running task should block and wait
+            on the queue, or end, when the queue is empty.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions.AutoStart">
+            <summary>
+            Gets or sets a value indicating whether the running task should start immediately
+            or only once a task has been added to the queue.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions.PreserveRunningTask">
+            <summary>
+            Gets or setes a value indicating whether the running task should be preserved
+            once completed, or reset to null. For unit tests.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Scheduling.DelayedRecurringTaskBase`1">
+            <summary>
+            Provides a base class for recurring background tasks.
+            </summary>
+            <typeparam name="T">The type of the managed tasks.</typeparam>
+        </member>
+        <member name="T:Umbraco.Web.Scheduling.RecurringTaskBase`1">
+            <summary>
+            Provides a base class for recurring background tasks.
+            </summary>
+            <typeparam name="T">The type of the managed tasks.</typeparam>
+        </member>
+        <member name="T:Umbraco.Web.Scheduling.IBackgroundTask">
+            <summary>
+            Represents a background task.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.IBackgroundTask.Run">
+            <summary>
+            Runs the background task.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.IBackgroundTask.RunAsync(System.Threading.CancellationToken)">
+            <summary>
+            Runs the task asynchronously.
+            </summary>
+            <param name="token">A cancellation token.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> instance representing the execution of the background task.</returns>
+            <exception cref="T:System.NotImplementedException">The background task cannot run asynchronously.</exception>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.IBackgroundTask.IsAsync">
+            <summary>
+            Indicates whether the background task can run asynchronously.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.#ctor(Umbraco.Web.Scheduling.IBackgroundTaskRunner{`0},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.RecurringTaskBase`1"/> class with a tasks runner and a period.
+            </summary>
+            <param name="runner">The task runner.</param>
+            <param name="periodMilliseconds">The period.</param>
+            <remarks>The task will repeat itself periodically. Use this constructor to create a new task.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.#ctor(Umbraco.Web.Scheduling.RecurringTaskBase{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.RecurringTaskBase`1"/> class with a source task.
+            </summary>
+            <param name="source">The source task.</param>
+            <remarks>Use this constructor to create a new task from a source task in <c>GetRecurring</c>.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.Run">
+            <summary>
+            Implements IBackgroundTask.Run().
+            </summary>
+            <remarks>Classes inheriting from <c>RecurringTaskBase</c> must implement <c>PerformRun</c>.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.RunAsync(System.Threading.CancellationToken)">
+            <summary>
+            Implements IBackgroundTask.RunAsync().
+            </summary>
+            <remarks>Classes inheriting from <c>RecurringTaskBase</c> must implement <c>PerformRun</c>.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.PerformRun">
+            <summary>
+            Runs the background task.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.PerformRunAsync">
+            <summary>
+            Runs the task asynchronously.
+            </summary>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> instance representing the execution of the background task.</returns>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.GetRecurring">
+            <summary>
+            Gets a new occurence of the recurring task.
+            </summary>
+            <returns>A new task instance to be queued, or <c>null</c> to terminate the recurring task.</returns>
+            <remarks>The new task instance must be created via the <c>RecurringTaskBase(RecurringTaskBase{T} source)</c> constructor,
+            where <c>source</c> is the current task, eg: <c>return new MyTask(this);</c></remarks>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.Dispose">
+            <summary>
+            Dispose the task.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.RecurringTaskBase`1.IsAsync">
+            <summary>
+            Indicates whether the background task can run asynchronously.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Scheduling.ILatchedBackgroundTask">
+            <summary>
+            Represents a latched background task.
+            </summary>
+            <remarks>Latched background tasks can suspend their execution until
+            a condition is met. However if the tasks runner has to terminate,
+            latched background tasks can be executed immediately, depending on
+            the value returned by RunsOnShutdown.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.Latch">
+            <summary>
+            Gets a wait handle on the task condition.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The task is not latched.</exception>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.IsLatched">
+            <summary>
+            Gets a value indicating whether the task is latched.
+            </summary>
+            <remarks>Should return false as soon as the condition is met.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.RunsOnShutdown">
+            <summary>
+             Gets a value indicating whether the task can be executed immediately if the task runner has to terminate.
+            </summary>
         </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.ClearCsrfCookiesAfterUpgrade">
             <summary>
@@ -5733,6 +6081,17 @@
             </summary>
             <value>The app.</value>
         </member>
+        <member name="T:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlCacheFilePersister">
+            <summary>
+            This is the background task runner that persists the xml file to the file system
+            </summary>
+            <remarks>
+            This is used so that all file saving is done on a web aware worker background thread and all logic is performed async so this
+            process will not interfere with any web requests threads. This is also done as to not require any global locks and to ensure that
+            if multiple threads are performing publishing tasks that the file will be persisted in accordance with the final resulting
+            xml structure since the file writes are queued.
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.org.umbraco.our.Repository">
             <remarks/>
         </member>
@@ -6641,21 +7000,6 @@
             Returns the allowed child content type objects for the content item id passed in
             </summary>
             <param name="contentId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.LogScrubber.DisposeResources">
-            <summary>
-            Handles the disposal of resources. Derived from abstract class <see cref="T:Umbraco.Core.DisposableObject"/> which handles common required locking logic.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.ScheduledPublishing.DisposeResources">
-            <summary>
-            Handles the disposal of resources. Derived from abstract class <see cref="T:Umbraco.Core.DisposableObject"/> which handles common required locking logic.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.ScheduledTasks.DisposeResources">
-            <summary>
-            Handles the disposal of resources. Derived from abstract class <see cref="T:Umbraco.Core.DisposableObject"/> which handles common required locking logic.
-            </summary>
         </member>
         <member name="T:Umbraco.Web.Security.MembershipHelper">
             <summary>
@@ -9582,7 +9926,7 @@
         <!-- Badly formed XML comment ignored for member "P:Umbraco.Web.UI.JavaScript.Resources.ServerVariables" -->
         <member name="E:Umbraco.Web.UI.JavaScript.ServerVariablesParser.Parsing">
             <summary>
-            Could allow developers to add custom variables on startup
+            Allows developers to add custom variables on parsing
             </summary>
         </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.RebuildMediaXmlCacheAfterUpgrade">
@@ -13003,16 +13347,6 @@
             the app domain shuts down.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.Scheduler.PerformScheduling(Umbraco.Core.ApplicationContext,Umbraco.Core.Configuration.UmbracoSettings.IUmbracoSettingsSection)">
-            <summary>
-            This performs all of the scheduling on the one timer
-            </summary>
-            <param name="appContext"></param>
-            <param name="settings"></param>
-            <remarks>
-            No processing will be done if this server is a slave
-            </remarks>
-        </member>
         <member name="M:Umbraco.Web.ModelStateExtensions.Merge(System.Web.Mvc.ModelStateDictionary,System.Web.Mvc.ModelStateDictionary,System.String)">
             <summary>
             Merges ModelState that has names matching the prefix
@@ -13104,11 +13438,62 @@
             </summary>
             <param name="pageId"></param>
         </member>
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(System.Int32,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Creates a new RedirectToUmbracoResult
+            </summary>
+            <param name="pageId"></param>
+            <param name="queryStringValues"></param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(System.Int32,System.String)">
+            <summary>
+            Creates a new RedirectToUmbracoResult
+            </summary>
+            <param name="pageId"></param>
+            <param name="queryString"></param>
+        </member>
         <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(Umbraco.Core.Models.IPublishedContent)">
             <summary>
             Creates a new RedirectToUmbracoResult
             </summary>
             <param name="publishedContent"></param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(Umbraco.Core.Models.IPublishedContent,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Creates a new RedirectToUmbracoResult
+            </summary>
+            <param name="publishedContent"></param>
+            <param name="queryStringValues"></param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(Umbraco.Core.Models.IPublishedContent,System.String)">
+            <summary>
+            Creates a new RedirectToUmbracoResult
+            </summary>
+            <param name="queryString"></param>
+            <param name="queryStringValues"></param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(System.Int32,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Creates a new RedirectToUmbracoResult
+            </summary>
+            <param name="pageId"></param>
+            <param name="umbracoContext"></param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(System.Int32,System.Collections.Specialized.NameValueCollection,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Creates a new RedirectToUmbracoResult
+            </summary>
+            <param name="pageId"></param>
+            <param name="queryStringValues"></param>
+            <param name="umbracoContext"></param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(System.Int32,System.String,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Creates a new RedirectToUmbracoResult
+            </summary>
+            <param name="pageId"></param>
+            <param name="queryString"></param>
+            <param name="umbracoContext"></param>
         </member>
         <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(Umbraco.Core.Models.IPublishedContent,Umbraco.Web.UmbracoContext)">
             <summary>
@@ -13117,11 +13502,20 @@
             <param name="publishedContent"></param>
             <param name="umbracoContext"></param>
         </member>
-        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(System.Int32,Umbraco.Web.UmbracoContext)">
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(Umbraco.Core.Models.IPublishedContent,System.Collections.Specialized.NameValueCollection,Umbraco.Web.UmbracoContext)">
             <summary>
             Creates a new RedirectToUmbracoResult
             </summary>
-            <param name="pageId"></param>
+            <param name="publishedContent"></param>
+            <param name="queryStringValues"></param>
+            <param name="umbracoContext"></param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.RedirectToUmbracoPageResult.#ctor(Umbraco.Core.Models.IPublishedContent,System.String,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Creates a new RedirectToUmbracoResult
+            </summary>
+            <param name="publishedContent"></param>
+            <param name="queryString"></param>
             <param name="umbracoContext"></param>
         </member>
         <member name="T:Umbraco.Web.Mvc.Strings">
@@ -13651,6 +14045,27 @@
             Gets the providers.
             </summary>
         </member>
+        <member name="M:Umbraco.Web.Routing.NotFoundHandlerHelper.GetCurrentNotFoundPageId(Umbraco.Core.Configuration.UmbracoSettings.IContentErrorPage[],System.String,Umbraco.Core.Services.IEntityService,Umbraco.Web.PublishedContentQuery)">
+            <summary>
+            Returns the Umbraco page id to use as the Not Found page based on the configured 404 pages and the current request
+            </summary>
+            <param name="error404Collection"></param>
+            <param name="requestServerName">
+            The server name attached to the request, normally would be the source of HttpContext.Current.Request.ServerVariables["SERVER_NAME"]
+            </param>
+            <param name="entityService"></param>
+            <param name="publishedContentQuery"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Routing.NotFoundHandlerHelper.GetContentIdFromErrorPageConfig(Umbraco.Core.Configuration.UmbracoSettings.IContentErrorPage,Umbraco.Core.Services.IEntityService,Umbraco.Web.PublishedContentQuery)">
+            <summary>
+            Returns the content id based on the configured IContentErrorPage section
+            </summary>
+            <param name="errorPage"></param>
+            <param name="entityService"></param>
+            <param name="publishedContentQuery"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.Routing.EnsureRoutableOutcome">
             <summary>
             Reasons a request was not routable on the front-end
@@ -13993,50 +14408,6 @@
             <summary>
             This event ensures that upgrades from (configured) versions lower then 6.0.0
             have their publish state updated after the database schema has been migrated.
-            </summary>
-        </member>
-        <member name="T:Umbraco.Web.Strategies.Publishing.UpdateCacheAfterPublish">
-            <summary>
-            Represents the UpdateCacheAfterPublish class, which subscribes to the Published event
-            of the <see cref="T:Umbraco.Core.Publishing.PublishingStrategy"/> class and is responsible for doing the actual
-            cache refresh after a content item has been published.
-            </summary>
-            <remarks>
-            This implementation is meant as a seperation of the cache refresh from the ContentService
-            and PublishingStrategy.
-            This event subscriber will only be relevant as long as there is an xml cache.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.Strategies.Publishing.UpdateCacheAfterPublish.UpdateEntireCache">
-            <summary>
-            Refreshes the xml cache for all nodes
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Strategies.Publishing.UpdateCacheAfterPublish.UpdateMultipleContentCache(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IContent})">
-            <summary>
-            Refreshes the xml cache for nodes in list
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Strategies.Publishing.UpdateCacheAfterPublish.UpdateSingleContentCache(Umbraco.Core.Models.IContent)">
-            <summary>
-            Refreshes the xml cache for a single node
-            </summary>
-        </member>
-        <member name="T:Umbraco.Web.Strategies.Publishing.UpdateCacheAfterUnPublish">
-            <summary>
-            Represents the UpdateCacheAfterUnPublish class, which subscribes to the UnPublished event
-            of the <see cref="T:Umbraco.Core.Publishing.PublishingStrategy"/> class and is responsible for doing the actual
-            cache refresh after a content item has been unpublished.
-            </summary>
-            <remarks>
-            This implementation is meant as a seperation of the cache refresh from the ContentService
-            and PublishingStrategy.
-            This event subscriber will only be relevant as long as there is an xml cache.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.Strategies.Publishing.UpdateCacheAfterUnPublish.UnPublishSingle(Umbraco.Core.Models.IContent)">
-            <summary>
-            Refreshes the xml cache for a single node by removing it
             </summary>
         </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.EnsureAppsTreesUpdatedOnUpgrade">
@@ -18365,22 +18736,8 @@
         </member>
         <member name="T:umbraco.content">
             <summary>
-            Handles umbraco content
+            Represents the Xml storage for the Xml published cache.
             </summary>
-        </member>
-        <member name="M:umbraco.content.CheckDiskCacheForUpdate">
-            <summary>
-            Checks if the disk cache file has been updated and if so, clears the in-memory cache to force the file to be read.
-            </summary>
-            <remarks>
-            Added to trigger updates of the in-memory cache when the disk cache file is updated.
-            </remarks>
-        </member>
-        <member name="M:umbraco.content.CheckXmlContentPopulation">
-            <summary>
-            Triggers the XML content population if necessary.
-            </summary>
-            <returns>Returns true of the XML was not populated, returns false if it was already populated</returns>
         </member>
         <member name="M:umbraco.content.RefreshContentFromDatabase">
             <summary>
@@ -18431,6 +18788,21 @@
             Unpublishes the  node.
             </summary>
             <param name="documentId">The document id.</param>
+        </member>
+        <member name="M:umbraco.content.ClearContextCache">
+            <summary>
+            Clear HTTPContext cache if any
+            </summary>
+        </member>
+        <member name="M:umbraco.content.LoadContentFromDatabase">
+            <summary>
+            Load content from database
+            </summary>
+        </member>
+        <member name="M:umbraco.content.GetCacheFileUpdateTime">
+            <summary>
+            Adds a task to the xml cache file persister
+            </summary>
         </member>
         <member name="M:umbraco.content.FireBeforeUpdateDocumentCache(umbraco.cms.businesslogic.web.Document,umbraco.cms.businesslogic.DocumentCacheEventArgs)">
             <summary>
@@ -18502,58 +18874,6 @@
             <param name="node">The sender.</param>
             <param name="e">The <see cref="T:umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:umbraco.content.RemoveXmlFilePersistenceQueue">
-            <summary>
-            Removes the flag that queues the file for persistence
-            </summary>
-        </member>
-        <member name="M:umbraco.content.DeleteXmlCache">
-            <summary>
-            Invalidates the disk content cache file. Effectively just deletes it.
-            </summary>
-        </member>
-        <member name="M:umbraco.content.ClearContextCache">
-            <summary>
-            Clear HTTPContext cache if any
-            </summary>
-        </member>
-        <member name="M:umbraco.content.LoadContent">
-            <summary>
-            Load content from either disk or database
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.content.LoadContentFromDiskCache">
-            <summary>
-            Load content from cache file
-            </summary>
-        </member>
-        <member name="M:umbraco.content.LoadContentFromDatabase">
-            <summary>
-            Load content from database
-            </summary>
-        </member>
-        <member name="M:umbraco.content.PersistXmlToFile(System.Xml.XmlDocument)">
-            <summary>
-            Persist a XmlDocument to the Disk Cache
-            </summary>
-            <param name="xmlDoc"></param>
-        </member>
-        <member name="M:umbraco.content.QueueXmlForPersistence">
-            <summary>
-            Marks a flag in the HttpContext so that, upon page execution completion, the Xml cache will
-            get persisted to disk. Ensure this method is only called from a thread executing a page request
-            since UmbracoModule is the only monitor of this flag and is responsible
-            for enacting the persistence at the PostRequestHandlerExecute stage of the page lifecycle.
-            </summary>
-        </member>
-        <member name="M:umbraco.content.CloneXmlDoc(System.Xml.XmlDocument)">
-            <summary>
-            Make a copy of a XmlDocument
-            </summary>
-            <param name="xmlDoc"></param>
-            <returns></returns>
-        </member>
         <member name="P:umbraco.content.UmbracoXmlDiskCacheFileName">
             <summary>
             Gets the path of the umbraco XML disk cache file.
@@ -18564,16 +18884,8 @@
             <remarks>
             Get content. First call to this property will initialize xmldoc
             subsequent calls will be blocked until initialization is done
-            Further we cache(in context) xmlContent for each request to ensure that
+            Further we cache (in context) xmlContent for each request to ensure that
             we always have the same XmlDoc throughout the whole request.
-            </remarks>
-        </member>
-        <member name="P:umbraco.content.XmlContentInternal">
-            <summary>
-            Internal reference to XmlContent
-            </summary>
-            <remarks>
-            Before returning we always check to ensure that the xml is loaded
             </remarks>
         </member>
         <member name="E:umbraco.content.BeforeUpdateDocumentCache">
@@ -28770,16 +29082,6 @@
             </summary>		
             <param name="context"></param>
             <param name="pcr"> </param>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoModule.PersistXmlCache(System.Web.HttpContextBase)">
-            <summary>
-            Checks if the xml cache file needs to be updated/persisted
-            </summary>
-            <param name="httpContext"></param>
-            <remarks>
-            TODO: This needs an overhaul, see the error report created here:
-              https://docs.google.com/document/d/1neGE3q3grB4lVJfgID1keWY2v9JYqf-pw75sxUUJiyo/edit		
-            </remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoModule.DisposeHttpContextItems(System.Web.HttpContext)">
             <summary>

@@ -10,7 +10,8 @@
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <!-- New Order Button -->
                     <div class="btn-group">
-                        <!--<a href="#" class="btn btn-standard">Print</a>-->
+                        <button type="button" class="btn btn-primary pull-right" data-ng-show="remainingBalance > 0">New Payment</button>
+                        {{remainingBalance}}
                     </div>
                 </div>
             </div>
@@ -21,23 +22,25 @@
             <div class="merchello-pane primary">
                 <div class="control-group umb-control-group">
                     <div class="merchello-section-label">
-                        Payment Information
+                        <localize key="merchelloPayment_paymentInfo" />
                         <small>Payment methods &amp; dates</small>
                     </div>
                     <div class="merchello-controls">
 
                         <div class="row-fluid">
 
-                            <div data-ng-repeat="payment in payments">
-                                <div style="padding: 8px"  data-ng-hide="true">
-                                    {{payment.paymentMethodName}}
+                            <div data-ng-repeat="payment in payments" data-ng-show="preValuesLoaded">
+                                <div style="padding: 8px">
+                                    <h4>
+                                        <localize key="merchelloPayment_paymentMethod" />: {{payment.paymentMethodName}}
+                                    </h4>
 
                                     <div class="btn-toolbar pull-right umb-btn-toolbar">
-                                        <button class="btn btn-default text-right"><localize key="merchelloButtons_void" /></button>
-                                        <button class="btn btn-default text-right"><localize key="merchelloButtons_refund" /></button>
+                                        <button class="btn btn-default text-right" data-ng-click="openVoidPaymentDialog(payment)" data-ng-show="showVoid(payment)"><localize key="merchelloButtons_void" /></button>
+                                        <button class="btn btn-default text-right" data-ng-show="showRefund(payment)" data-ng-click="openRefundPaymentDialog(payment)"><localize key="merchelloButtons_refund" /></button>
                                     </div>
 
-                                    <strong>History</strong>
+                                    <h5>History</h5>
                                 </div>
                                 <table class="table">
                                     <tbody>

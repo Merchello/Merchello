@@ -53,11 +53,11 @@
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
-        /// </param>
+        /// </param>e
         /// <param name="request">
         /// The request.
         /// </param>
-        public PaymentProcessor(IMerchelloContext merchelloContext, PaymentRequest request)
+        public PaymentProcessor(IMerchelloContext merchelloContext, PaymentRequestDisplay request)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             
@@ -101,13 +101,29 @@
         /// <summary>
         /// Performs a refund payment
         /// </summary>
-        /// <returns><see cref="IPaymentResult"/></returns>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>
+        /// </returns>
         public IPaymentResult Refund()
         {
-            return !this.IsReady() || this._payment == null 
-                ? this.GetFailedResult() 
-                : this._paymentGatewayMethod.RefundPayment(this._invoice, this._payment, this._amount, this._args);
+            return !IsReady() || _payment == null
+                ? GetFailedResult()
+                : _paymentGatewayMethod.RefundPayment(_invoice, _payment, _amount, _args);
         }
+
+        /// <summary>
+        /// Performs a void payment
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
+        public IPaymentResult Void()
+        {
+            return !this.IsReady() || _payment == null
+                       ? this.GetFailedResult()
+                       : _paymentGatewayMethod.VoidPayment(_invoice, _payment, _args);
+        }
+
 
         /// <summary>
         /// True/false indicating whether or not the processor is ready
@@ -135,9 +151,9 @@
         /// Initializes "this" object
         /// </summary>
         /// <param name="request">
-        /// The incoming <see cref="PaymentRequest"/>
+        /// The incoming <see cref="PaymentRequestDisplay"/>
         /// </param>
-        private void Initialize(PaymentRequest request)
+        private void Initialize(PaymentRequestDisplay request)
         {
             this._invoice = this._merchelloContext.Services.InvoiceService.GetByKey(request.InvoiceKey);
 

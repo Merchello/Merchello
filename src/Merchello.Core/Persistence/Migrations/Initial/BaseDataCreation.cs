@@ -154,7 +154,7 @@
         /// </summary>
         private void CreateWarehouseData()
         {
-            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseKey, Name = "Default Warehouse", CountryCode = "", IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchWarehouse", "Key", new WarehouseDto() { Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseKey, Name = "Default Warehouse", CountryCode = string.Empty, IsDefault = true, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchWarehouseCatalog", "Key", new WarehouseCatalogDto() { Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey, WarehouseKey = Constants.DefaultKeys.Warehouse.DefaultWarehouseKey, Name = "Default Catalog", Description = null, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
@@ -169,7 +169,9 @@
             _database.Insert("merchGatewayProviderSettings", "Key", new GatewayProviderSettingsDto() { Key = Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey, Name = "Fixed Rate Shipping Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Shipping).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
             // add the everywhere else shipcountry
-            _database.Insert("merchShipCountry", "Key",
+            _database.Insert(
+                            "merchShipCountry", 
+                            "Key",
                              new ShipCountryDto()
                                  {
                                      Key = Guid.NewGuid(),
@@ -183,28 +185,13 @@
             // TODO - move this to a package action
             _database.Insert("merchGatewayProviderSettings", "Key", new GatewayProviderSettingsDto() { Key = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey, Name = "Fixed Rate Tax Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Taxation).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
-            /*
-            var taxProvinces = new ProvinceCollection<ITaxProvince>();
-            var provinceData = JsonConvert.SerializeObject(taxProvinces);
-
-            _database.Insert("merchTaxMethod", "Key",
-                             new TaxMethodDto()
-                                 {
-                                     Key = Guid.NewGuid(),
-                                     CountryCode = Constants.CountryCodes.EverywhereElse,
-                                     Name = "Everywhere Else",
-                                     PercentageTaxRate = 0,
-                                     ProviderKey = Constants.ProviderKeys.Taxation.FixedRateTaxationProviderKey,
-                                     ProvinceData = provinceData,
-                                     UpdateDate = DateTime.Now,
-                                     CreateDate = DateTime.Now
-                                 });
-             */
 
             // TODO - move this to a package action
             _database.Insert("merchGatewayProviderSettings", "Key", new GatewayProviderSettingsDto() { Key = Constants.ProviderKeys.Payment.CashPaymentProviderKey, Name = "Cash Payment Provider", ProviderTfKey = EnumTypeFieldConverter.GatewayProvider.GetTypeField(GatewayProviderType.Payment).TypeKey, ExtendedData = new ExtendedDataCollection().SerializeToXml(), EncryptExtendedData = false, CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
 
-            _database.Insert("merchPaymentMethod", "Key",
+            _database.Insert(
+                "merchPaymentMethod", 
+                "Key",
                 new PaymentMethodDto()
                 {
                     Key = Guid.NewGuid(),

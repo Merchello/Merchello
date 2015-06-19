@@ -43,6 +43,7 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.AreSame(expected, resolved.Result.GetType());   
         }
 
+
         /// <summary>
         /// Test to verify <see cref="MerchelloMapper"/> correctly maps ICustomer to CustomerMapper
         /// </summary>

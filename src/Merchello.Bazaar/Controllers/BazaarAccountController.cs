@@ -3,10 +3,6 @@
     using System;
     using System.Web.Mvc;
 
-    using Merchello.Bazaar.Models;
-    using Merchello.Bazaar.Models.ViewModels;
-    using Merchello.Core.Models;
-
     using Umbraco.Core.Logging;
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;

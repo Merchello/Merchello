@@ -113,7 +113,7 @@
 
         // gets the custom line items
         function getCustomLineItems() {
-            var custom =  _.find(this.items, function(item) {
+            var custom =  _.filter(this.items, function(item) {
                 return item.lineItemType === 'Custom';
             });
             if (custom === undefined) {
@@ -124,7 +124,7 @@
 
         // gets a collection of discount line items
         function getDiscountLineItems() {
-            var discounts = _.find(this.items, function(item) {
+            var discounts = _.filter(this.items, function(item) {
                 return item.lineItemTypeField.alias === 'Discount';
             });
             if (discounts === undefined) {
@@ -160,6 +160,7 @@
             return status === 'paid';
         }
 
+        
         // calculates the unpaid balance of the invoice
         function remainingBalance(payments) {
             var amountPaid = 0;
@@ -169,6 +170,10 @@
                 });
             });
             return this.total - amountPaid;
+        }
+
+        function isAnonymous() {
+            return this.customerKey === '00000000-0000-0000-0000-000000000000';
         }
 
         return {
@@ -186,7 +191,8 @@
             setBillingAddress: setBillingAddress,
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
-            shippingTotal: shippingTotal
+            shippingTotal: shippingTotal,
+            isAnonymous:  isAnonymous
         };
     }());
 

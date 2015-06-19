@@ -3,6 +3,9 @@
     using System;
     using System.Collections.Generic;
     using Gateways;
+
+    using Merchello.Core.Chains.OfferConstraints;
+
     using Observation;
     using Umbraco.Core;
 
@@ -12,17 +15,17 @@
     internal static class PluginManagerExtensions
     {
         /// <summary>
-        /// Returns a collection of all <see cref="ITrigger"/> types decorated with the <see cref="TriggerForAttribute"/>
+        /// Returns all available GatewayProvider
         /// </summary>
         /// <param name="pluginManager">
         /// The plugin Manager.
         /// </param>
         /// <returns>
-        /// The collection of trigger types resolved
+        /// The collection of gateway providers resolved
         /// </returns>
-        internal static IEnumerable<Type> ResolveObservableTriggers(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolveGatewayProviders(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<GatewayProviderBase, GatewayProviderActivationAttribute>();
         }
 
         /// <summary>
@@ -40,17 +43,31 @@
         }
 
         /// <summary>
-        /// Returns all available GatewayProvider
+        /// Returns a collection of all <see cref="ITrigger"/> types decorated with the <see cref="TriggerForAttribute"/>
         /// </summary>
         /// <param name="pluginManager">
         /// The plugin Manager.
         /// </param>
         /// <returns>
-        /// The collection of gateway providers resolved
+        /// The collection of trigger types resolved
         /// </returns>
-        internal static IEnumerable<Type> ResolveGatewayProviders(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolveObservableTriggers(this PluginManager pluginManager)
         {
-            return pluginManager.ResolveTypesWithAttribute<GatewayProviderBase, GatewayProviderActivationAttribute>();
+            return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
         }
+
+        /// <summary>
+        /// The resolve offer constraint chains.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IOfferProcessor"/> types
+        /// </returns>
+        internal static IEnumerable<Type> ResolveOfferConstraintChains(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<IOfferProcessor, OfferConstraintChainForAttribute>();
+        } 
     }
 }

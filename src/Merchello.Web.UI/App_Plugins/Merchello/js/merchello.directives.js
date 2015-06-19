@@ -8,6 +8,138 @@
 
 /**
  * @ngdoc directive
+ * @name offerComponents
+ *
+ * @description
+ * Common form elements for Merchello's OfferComponents
+ */
+angular.module('merchello.directives').directive('offerComponents', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offerSettings: '=',
+            components: '=',
+            preValuesLoaded: '=',
+            settings: '=',
+            saveOfferSettings: '&',
+            componentType: '@'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.components.tpl.html',
+        controller:  'Merchello.Directives.OfferComponentsDirectiveController'
+    }
+})
+
+
+/**
+ * @ngdoc directive
+ * @name offerMainProperties
+ *
+ * @description
+ * Common form elements for Merchello's OfferSettings
+ */
+angular.module('merchello.directives').directive('offerMainProperties', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offer: '=',
+            context: '=',
+            settings: '=',
+            toggleOfferExpires: '&'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html'
+    };
+})
+
+angular.module('merchello.directives').directive('uniqueOfferCode', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            offer: '=',
+            offerCode: '=',
+            offerForm: '='
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.uniqueoffercode.tpl.html',
+        controller: function($scope, eventsService, marketingResource) {
+
+            $scope.loaded = false;
+            $scope.checking = false;
+            $scope.isUnique = true;
+
+            var eventOfferSavingName = 'merchello.offercoupon.saving';
+            var input = angular.element( document.querySelector( '#offerCode' ) );
+            var container = angular.element( document.querySelector("#unique-offer-check") );
+
+            var currentCode = '';
+
+            function init() {
+                container.hide();
+                eventsService.on(eventOfferSavingName, onOfferSaving)
+                input.bind("keyup keypress", function (event) {
+                    var code = event.which;
+                    // alpha , numbers, ! and backspace
+
+                    if ((code >47 && code <58) || (code >64 && code <91) || (code >96 && code <123) || code === 33 || code == 8) {
+                        $scope.$apply(function () {
+                            if ($scope.offerCode !== '') {
+                                checkUniqueOfferCode($scope.offerCode);
+                                currentCode = $scope.offerCode;
+                            }
+                        });
+                    } else {
+                        $scope.checking = true;
+                        event.preventDefault();
+                    }
+                });
+                $scope.$watch('offerCode', function(oc) {
+                    if($scope.offerCode !== undefined) {
+                        if (!$scope.loaded) {
+                            $scope.loaded = true;
+                            currentCode = $scope.offer.offerCode;
+                            checkUniqueOfferCode($scope.offer.offerCode);
+                        }
+                    }
+                });
+            }
+            function checkUniqueOfferCode(offerCode) {
+                $scope.checking = true;
+                if (offerCode === '') {
+                    $scope.checking = false;
+                } else {
+                    container.show();
+                    if (offerCode === currentCode) {
+                        $scope.checking = false;
+                        return true;
+                    }
+                    var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
+                    checkPromise.then(function(result) {
+                        $scope.checking = false;
+                        $scope.isUnique = result;
+                    });
+                }
+            }
+
+            function onOfferSaving(e, frm) {
+                var valid = $scope.offer.offerCode !== '';
+                if (valid) {
+                    checkUniqueOfferCode($scope.offer.offerCode);
+                    valid = $scope.isUnique;
+                    $scope.offerCode = $scope.offer.offerCode
+                }
+                frm.offerCode.$setValidity('offerCode', valid);
+            }
+            // Initialize
+            init();
+        }
+    };
+});
+
+/**
+ * @ngdoc directive
  * @name customer-address-table
  * @function
  *
@@ -171,6 +303,27 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
         };
     }]);
 
+angular.module('merchello.directives').directive('comparisonOperatorRadioButtons', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            operator: '='
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/comparisonOperatorRadioButtons.tpl.html',
+        controller: function($scope) {
+
+            function init() {
+                if($scope.operator === undefined) {
+                    $scope.operator = 'gt';
+                }
+            }
+
+            init();
+        }
+    };
+});
+
     /**
      * @ngdoc directive
      * @name filter-by-date-range
@@ -184,10 +337,12 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
             restrict: 'E',
             replace: true,
             scope: {
+                hideDatesLabel: '=',
                 filterStartDate: '=',
                 filterEndDate: '=',
                 filterButtonText: '@filterButtonText',
-                filterWithDates: '&'
+                filterWithDates: '&',
+                hideFilterButton: '='
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/filterbydaterange.tpl.html',
             controller: function($scope, $element, $q, assetsService, angularHelper, notificationsService, settingsResource, settingDisplayBuilder) {
@@ -202,8 +357,8 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                     promises.push(loadSettings());
 
                     $q.all(promises).then(function() {
-                        $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth()-1)).format($scope.settings.dateFormat.toUpperCase());
-                        $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
+                       // $scope.filterStartDate = moment(new Date().setMonth(new Date().getMonth()-1)).format($scope.settings.dateFormat.toUpperCase());
+                       // $scope.filterEndDate = moment(new Date()).format($scope.settings.dateFormat.toUpperCase());
                     });
                 }
 
@@ -237,7 +392,6 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 function loadSettings() {
                     var promise = settingsResource.getAllSettings();
                     return promise.then(function(allSettings) {
-                        console.info(allSettings);
                         $scope.settings = settingDisplayBuilder.transform(allSettings);
                     }, function(reason) {
                         notificationsService.error('Failed to load settings', reason.message);
@@ -276,7 +430,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                  *
                  * @param {string} start - String representation of start date.
                  * @param {string} end - String representation of end date.
-                 * @description - Change the date filters, then triggera new API call to load the reports.
+                 * @description - Change the date filters, then trigger new API call to load the reports.
                  */
                 function changeDateFilters(start, end) {
                     $scope.filterStartDate = start;
@@ -361,6 +515,8 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 if ($scope.classes == undefined) {
                     $scope.classes = 'control-group umb-control-group';
                 }
+
+
             }
         };
     });
@@ -836,6 +992,147 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
         };
 
     });
+
+/**
+ * @ngdoc directive
+ * @name merchello-slide-open-panel
+ * @function
+ *
+ * @description
+ * Directive to allow a section of content to slide open/closed based on a boolean value
+ */
+angular.module('merchello.directives').directive('addPaymentTable', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        transclude: 'true',
+        scope: {
+            isOpen: '=',
+            currencySymbol: '=',
+            reload: '&',
+            toggleOpen: '&',
+            showSpinner: '&',
+            invoice: '=',
+            payments: '=',
+            paymentMethods: '=',
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/addpaymenttable.tpl.html',
+        controller: function($scope, $timeout, notificationsService, dialogService, dialogDataFactory, paymentResource) {
+            $scope.loaded = false;
+            $scope.authorizePaymentOnly = false;
+
+            // exposed methods
+            $scope.openAddPaymentDialog = openAddPaymentDialog;
+            $scope.filterPaymentMethods = filterPaymentMethods;
+
+            /**
+             * @ngdoc method
+             * @name init
+             * @function
+             *
+             * @description - Initializes the controller
+             */
+            function init() {
+                $scope.$watch('paymentMethods', function(methods) {
+                  if (methods.length > 0) {
+                      $scope.$watch('invoice', function(inv) {
+                          if (inv.key !== null && inv.key !== undefined) {
+                              $scope.loaded = true;
+                          }
+                      });
+                  }
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name filterPaymentMethods
+             * @function
+             *
+             * @description - Filters payment methods for methods that offer authorize / authorize capture dialogs
+             */
+            function filterPaymentMethods() {
+                var methods = [];
+                if (!$scope.loaded) {
+                    return methods;
+                }
+                if ($scope.authorizePaymentOnly) {
+                    methods = _.filter($scope.paymentMethods, function(auth) { return auth.authorizePaymentEditorView.editorView !== ''; });
+                } else {
+                    methods = _.filter($scope.paymentMethods, function(capture) { return capture.authorizeCapturePaymentEditorView.editorView !== ''; });
+                }
+                if ($scope.invoice.isAnonymous()) {
+                    methods = _.filter(methods, function(m) { return !m.requiresCustomer; })
+                }
+                return methods;
+            }
+
+            /**
+             * @ngdoc method
+             * @name openAddPaymentDialog
+             * @function
+             *
+             * @description - Opens a dialog to authorize and/or capture a new payment
+             */
+            function openAddPaymentDialog(paymentMethod) {
+
+                var dialogData = dialogDataFactory.createAddPaymentDialogData();
+                dialogData.showSpinner = $scope.showSpinner;
+                dialogData.paymentMethod = paymentMethod;
+                dialogData.paymentMethodName = paymentMethod.name;
+                dialogData.invoiceBalance = $scope.invoice.remainingBalance($scope.payments);
+                dialogData.currencySymbol = $scope.currencySymbol;
+                dialogData.invoice = $scope.invoice;
+                dialogData.authorizePaymentOnly = $scope.authorizePaymentOnly;
+                var dialogView = $scope.authorizePaymentOnly ? paymentMethod.authorizePaymentEditorView.editorView : paymentMethod.authorizeCapturePaymentEditorView.editorView;
+
+                dialogService.open({
+                    template: dialogView,
+                    show: true,
+                    callback: addPaymentDialogConfirm,
+                    dialogData: dialogData
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name addPaymentDialogConfirm
+             * @function
+             *
+             * @description - Authorizes and/or captures a new payment
+             */
+            function addPaymentDialogConfirm(dialogData) {
+                $scope.showSpinner();
+                var paymentRequest = dialogData.asPaymentRequestDisplay();
+                var promise;
+                var note =  ' Authorize/Capture ';
+                if (dialogData.authorizePaymentOnly) {
+                    promise = paymentResource.authorizePayment(paymentRequest);
+                    name = ' Authorize ';
+                } else {
+                    promise = paymentResource.authorizeCapturePayment(paymentRequest);
+                }
+                promise.then(function (payment) {
+                    // added a timeout here to give the examine index
+                    $timeout(function() {
+                        notificationsService.success('Payment ' + note + 'success');
+                        reload()
+                    }, 400);
+                }, function (reason) {
+                    notificationsService.error('Payment ' + note + 'Failed', reason.message);
+                });
+            }
+
+            function reload() {
+                $scope.toggleOpen();
+                $scope.reload();
+            }
+
+            // initialize the controller
+            init();
+        }
+    };
+});
 
     /**
      * @ngdoc directive

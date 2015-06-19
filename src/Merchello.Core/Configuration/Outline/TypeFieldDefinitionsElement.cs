@@ -21,6 +21,18 @@
         }
 
         /// <summary>
+        /// Gets the campaign offers.
+        /// </summary>
+        [ConfigurationProperty("campaignActivities", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]
+        public TypeFieldCollection CampaignActivities
+        {
+            get
+            {
+                return (TypeFieldCollection)this["campaignActivities"];
+            }
+        }
+
+        /// <summary>
         /// Gets the dbTypeFields configuration collection for <see cref="IItemCache"/>
         /// </summary>
         [ConfigurationProperty("itemCache", IsRequired = false), ConfigurationCollection(typeof(TypeFieldCollection), AddItemName = "type")]

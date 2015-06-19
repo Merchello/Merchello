@@ -57,6 +57,9 @@
         /// </summary>
         /// <param name="basket">The basket with items use in the checkout</param>
         /// <returns>A <see cref="IBasketSalePreparation"/></returns>
+        /// <remarks>
+        /// TODO change this to return IBasketSalePreparation
+        /// </remarks>
         public static BasketSalePreparation SalePreparation(this IBasket basket)
         {
             return basket.SalePreparation(MerchelloContext.Current);
@@ -173,7 +176,7 @@
         /// </summary>
         /// <param name="backoffice">The backoffice with items use in the checkout</param>
         /// <returns>A <see cref="IBackofficeSalePreparation"/></returns>
-        public static BackofficeSalePreparation SalePreparation(this IBackoffice backoffice)
+        internal static BackofficeSalePreparation SalePreparation(this IBackoffice backoffice)
         {
             return backoffice.SalePreparation(MerchelloContext.Current);
         }

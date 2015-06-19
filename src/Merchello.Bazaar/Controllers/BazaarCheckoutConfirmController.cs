@@ -2,13 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Configuration;
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Attributes;
     using Merchello.Bazaar.Models;
     using Merchello.Core.Gateways;
-    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Web;
@@ -39,31 +37,30 @@
             // get the basket sale preparation
             var preparation = Basket.SalePreparation();
             preparation.RaiseCustomerEvents = false;
-
-            preparation.ClearShipmentRateQuotes();
-
+            
+            var shipmentRateQuotes = Enumerable.Empty<IShipmentRateQuote>().ToArray();
+            
             // The default basket packaging strategy only creates a single shipment
             var shipment = Basket.PackageBasket(preparation.GetShipToAddress()).FirstOrDefault();
-
-            var shipmentRateQuotes = Enumerable.Empty<IShipmentRateQuote>().ToArray();
             
             if (shipment != null)
             {
+                var invoice = preparation.PrepareInvoice();
+
                 // Quote the shipment
                 shipmentRateQuotes = shipment.ShipmentRateQuotes().ToArray();
-                if (shipmentRateQuotes.Any())
+                if (shipmentRateQuotes.Any() && !invoice.ShippingLineItems().Any())
                 {
                     //// Assume the first selection.  Customer will be able to update this later
                     //// but this allows for a taxation calculation as well in the event shipping charges
                     //// are taxable.
                     preparation.SaveShipmentRateQuote(shipmentRateQuotes.First());
                 }
-            }
-
+            }            
 
             var paymentMethods = GatewayContext.Payment.GetPaymentGatewayMethods().ToArray();
-            var paymentMethodInfos = new List<PaymentMethodUiInfo>();
 
+            var paymentMethodInfos = new List<PaymentMethodUiInfo>();
             foreach (var method in paymentMethods)
             {
                 var att = method.GetType().GetCustomAttribute<GatewayMethodUiAttribute>(false);
@@ -78,7 +75,7 @@
                     });
             }
 
-            var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods.Select(x => x.PaymentMethod), paymentMethodInfos);
+            var viewModel = ViewModelFactory.CreateCheckoutConfirmation(model, Basket, shipmentRateQuotes, paymentMethods, paymentMethodInfos);
 
             return this.View(viewModel.ThemeViewPath("CheckoutConfirmation"), viewModel);
         }

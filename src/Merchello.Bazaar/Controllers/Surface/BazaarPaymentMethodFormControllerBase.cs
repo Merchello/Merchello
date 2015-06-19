@@ -10,6 +10,7 @@
     using Merchello.Core.Sales;
     using Merchello.Web;
     using Merchello.Web.Mvc;
+    using Merchello.Web.Workflow;
 
     using Umbraco.Core;
 
@@ -28,6 +29,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ConfirmSale(CheckoutConfirmationForm model)
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();

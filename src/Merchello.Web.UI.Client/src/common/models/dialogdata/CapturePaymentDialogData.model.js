@@ -14,11 +14,12 @@
         self.currencySymbol = '';
         self.invoiceKey = '';
         self.paymentKey = '';
+        self.payment = {};
         self.paymentMethodKey = '';
         self.invoiceBalance = 0.0;
         self.amount = 0.0;
         self.processorArgs = [];
-        self.authorizeCaptureEditorView = '';
+        self.captureEditorView = '';
     };
 
     CapturePaymentDialogData.prototype = (function() {
@@ -28,7 +29,7 @@
             this.paymentKey = payment.key;
             this.paymentMethodKey = payment.paymentMethodKey;
             this.paymentMethodName = payment.paymentMethodName;
-
+            this.payment = payment
         }
 
         //// helper method to set required associated invoice info

@@ -14,19 +14,21 @@ namespace Merchello.Tests.IntegrationTests.Notifications
     using System.Net;
     using System.Net.Mail;
 
+    using Merchello.Core;
+
     [TestFixture]
     public class SmtpNotificationProviderTests : DatabaseIntegrationTestBase
     {
         private SmtpNotificationGatewayProvider _provider;
 
-        private readonly Guid _key = new Guid("5F2E88D1-6D07-4809-B9AB-D4D6036473E9");
+        private readonly Guid _key = Constants.ProviderKeys.Notification.SmtpNotificationProviderKey;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
         {
             base.FixtureSetup();
 
-            _provider = MerchelloContext.Gateways.Notification.GetProviderByKey(_key, false) as SmtpNotificationGatewayProvider;
+            _provider = MerchelloContext.Current.Gateways.Notification.GetProviderByKey(_key, false) as SmtpNotificationGatewayProvider;
 
             Assert.NotNull(_provider, "Provider was not resolved");
 
@@ -47,7 +49,7 @@ namespace Merchello.Tests.IntegrationTests.Notifications
         {
             if (!_provider.Activated)
             {
-                MerchelloContext.Gateways.Notification.ActivateProvider(_provider);
+                MerchelloContext.Current.Gateways.Notification.ActivateProvider(_provider);
             }
 
             PreTestDataWorker.DeleteAllNotificationMethods();
@@ -70,8 +72,8 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             // handled by setup
 
             //// Act
-            MerchelloContext.Gateways.Notification.DeactivateProvider(_provider);
-            _provider = MerchelloContext.Gateways.Notification.GetProviderByKey(_key, false) as SmtpNotificationGatewayProvider;
+            MerchelloContext.Current.Gateways.Notification.DeactivateProvider(_provider);
+            _provider = MerchelloContext.Current.Gateways.Notification.GetProviderByKey(_key, false) as SmtpNotificationGatewayProvider;
 
             //// Assert
             Assert.NotNull(_provider);
@@ -145,7 +147,7 @@ namespace Merchello.Tests.IntegrationTests.Notifications
         public void Can_Save_SmtpProviderSettings_ToExtendedData()
         {
             //// Arrange
-            var host = "moria";
+            var host = "merchello";
             var key = _provider.Key;
 
             //// Act

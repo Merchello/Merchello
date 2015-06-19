@@ -24,7 +24,7 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             PreTestDataWorker.DeleteAllItemCaches();
 
             _customer = PreTestDataWorker.MakeExistingAnonymousCustomer();
-            _basket = Basket.GetBasket(MerchelloContext, _customer);
+            _basket = Basket.GetBasket(MerchelloContext.Current, _customer);
             
 
         }
@@ -36,10 +36,10 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             //// Arrange
             
             //// Act
-            var basket1 = Basket.GetBasket(MerchelloContext, _customer);
-            var basket2 = Basket.GetBasket(MerchelloContext, _customer);
-            var basket3 = Basket.GetBasket(MerchelloContext, _customer);
-            var basket4 = Basket.GetBasket(MerchelloContext, _customer);
+            var basket1 = Basket.GetBasket(MerchelloContext.Current, _customer);
+            var basket2 = Basket.GetBasket(MerchelloContext.Current, _customer);
+            var basket3 = Basket.GetBasket(MerchelloContext.Current, _customer);
+            var basket4 = Basket.GetBasket(MerchelloContext.Current, _customer);
 
 
         }
@@ -55,7 +55,7 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
 
             //// Act
             _basket.AddItem(product.GetProductVariantForPurchase());
-            Basket.Save(MerchelloContext, _basket);
+            Basket.Save(MerchelloContext.Current, _basket);
 
             //// Assert
             Assert.IsFalse(_basket.Items.IsEmpty);
@@ -75,10 +75,10 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             //// Act
             _basket.AddItem(product1);
             _basket.AddItem(product2);
-            Basket.Save(MerchelloContext, _basket);
+            Basket.Save(MerchelloContext.Current, _basket);
 
             _basket.AddItem(product3);
-            Basket.Save(MerchelloContext, _basket);
+            Basket.Save(MerchelloContext.Current, _basket);
             
             //// Assert
             Assert.IsFalse(_basket.IsEmpty);
@@ -98,13 +98,13 @@ namespace Merchello.Tests.IntegrationTests.ItemCache
             _basket.AddItem(product1);
             _basket.AddItem(product2);
             _basket.AddItem(product3);
-            Basket.Save(MerchelloContext, _basket);
+            Basket.Save(MerchelloContext.Current, _basket);
             Assert.IsTrue(3 == _basket.Items.Count);
 
             //// Act
             _basket.RemoveItem(product2.Sku);
-            Basket.Save(MerchelloContext, _basket);
-            _basket = Basket.GetBasket(MerchelloContext, _customer);
+            Basket.Save(MerchelloContext.Current, _basket);
+            _basket = Basket.GetBasket(MerchelloContext.Current, _customer);
 
             var price = _basket.TotalBasketPrice;
             Console.WriteLine(price);

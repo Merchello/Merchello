@@ -17,6 +17,11 @@
         ICustomerService CustomerService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IDigitalMediaService"/>.
+        /// </summary>
+        IDigitalMediaService DigitalMediaService { get;  }
+
+        /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>
         /// </summary>
         IGatewayProviderService GatewayProviderService { get; }
@@ -35,6 +40,11 @@
         /// Gets the <see cref="IOrderService"/>
         /// </summary>
         IOrderService OrderService { get; }
+
+        /// <summary>
+        /// Gets the offer settings service.
+        /// </summary>
+        IOfferSettingsService OfferSettingsService { get; }
 
         /// <summary>
         /// Gets the <see cref="IPaymentService"/>

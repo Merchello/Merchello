@@ -1,30 +1,18 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿namespace Merchello.Bazaar.Controllers.Surface
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
-    using Merchello.Core;
-    using Merchello.Core.Gateways;
-    using Merchello.Core.Models;
-    using Merchello.Core.Services;
-    using Merchello.Web;
     using Merchello.Web.Mvc;
-    using Merchello.Web.Pluggable;
-    using Merchello.Web.Workflow;
 
-    using Umbraco.Core;
-    using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Web;
-    using Umbraco.Web.Mvc;
 
     /// <summary>
     /// The surface controller base.
     /// </summary>
     public abstract class SurfaceControllerBase : MerchelloSurfaceController
     {
-         /// <summary>
+        /// <summary>
         /// The <see cref="IPublishedContent"/> that represents the store root.
         /// </summary>
         private Lazy<IPublishedContent> _shopPage;
@@ -46,6 +34,7 @@
         }
 
         #endregion
+
 
         /// <summary>
         /// Gets the root shop page.

@@ -1,6 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutAddressForm>
 @using System.Web.Mvc.Html
 @using Merchello.Bazaar.Controllers
+@using Merchello.Bazaar.Controllers.Surface
 @using Merchello.Bazaar.Models
 @using Merchello.Bazaar
 @using Umbraco.Web
@@ -9,9 +10,9 @@
 <div class="row-fluid">
 
     @using (Html.BeginUmbracoForm<SalePreparationOperationsController>("SaveAddresses", null, new { @id = "addresses-form" }))
-    {
+    {        
         <div class="span8">
-
+            @Html.AntiForgeryToken()
             <div class="row-fluid">
                 <div class="span6">
                     <h2>Billing Address</h2>

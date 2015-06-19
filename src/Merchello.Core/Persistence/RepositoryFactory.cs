@@ -138,6 +138,20 @@
         }
 
         /// <summary>
+        /// The create digital media repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The <see cref="IDatabaseUnitOfWork"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDigitalMediaRepository"/>.
+        /// </returns>
+        internal virtual IDigitalMediaRepository CreateDigitalMediaRepository(IDatabaseUnitOfWork uow)
+        {
+            return new DigitalMediaRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="IItemCacheRepository"/>
         /// </summary>
         /// <param name="uow">The <see cref="IDatabaseUnitOfWork"/></param>
@@ -247,6 +261,34 @@
         internal virtual INotificationMethodRepository CreateNotificationMethodRepository(IDatabaseUnitOfWork uow)
         {
             return new NotificationMethodRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
+        /// The create redeemed repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOfferRedeemedRepository"/>.
+        /// </returns>
+        internal virtual IOfferRedeemedRepository CreateOfferRedeemedRepository(IDatabaseUnitOfWork uow)
+        {
+            return new OfferRedeemedRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
+        /// The create offer settings repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOfferSettingsRepository"/>.
+        /// </returns>
+        internal virtual IOfferSettingsRepository CreateOfferSettingsRepository(IDatabaseUnitOfWork uow)
+        {
+            return new OfferSettingsRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>

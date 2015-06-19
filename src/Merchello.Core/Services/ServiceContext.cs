@@ -48,6 +48,11 @@
         private Lazy<ICustomerService> _customerService;
 
         /// <summary>
+        /// The digital media service.
+        /// </summary>
+        private Lazy<IDigitalMediaService> _digitalMediaService; 
+
+        /// <summary>
         /// The invoice service.
         /// </summary>
         private Lazy<IInvoiceService> _invoiceService;
@@ -66,6 +71,16 @@
         /// The order service.
         /// </summary>
         private Lazy<IOrderService> _orderService;
+
+        /// <summary>
+        /// The offer settings service.
+        /// </summary>
+        private Lazy<IOfferSettingsService> _offerSettingsService;
+
+        /// <summary>
+        /// The offer redeemed service.
+        /// </summary>
+        private Lazy<IOfferRedeemedService> _offerRedeemedService; 
 
         /// <summary>
         /// The notification method service.
@@ -142,6 +157,7 @@
         /// </param>
         public ServiceContext(IDatabaseUnitOfWorkProvider dbUnitOfWorkProvider)
         {
+            DatabaseUnitOfWorkProvider = dbUnitOfWorkProvider;
             BuildServiceContext(dbUnitOfWorkProvider, new Lazy<RepositoryFactory>(() => new RepositoryFactory()));
         }
 
@@ -161,6 +177,17 @@
         public ICustomerService CustomerService
         {
             get { return _customerService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IDigitalMediaService"/>.
+        /// </summary>
+        public IDigitalMediaService DigitalMediaService
+        {
+            get
+            {
+                return _digitalMediaService.Value; 
+            }
         }
 
         /// <summary>
@@ -193,6 +220,17 @@
         public IOrderService OrderService
         {
             get { return _orderService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IOfferSettingsService"/>.
+        /// </summary>
+        public IOfferSettingsService OfferSettingsService
+        {
+            get
+            {
+                return _offerSettingsService.Value;
+            }
         }
 
         /// <summary>
@@ -244,6 +282,12 @@
         }
 
         /// <summary>
+        /// Gets the database unit of work provider.
+        /// </summary>
+        /// <remarks>Used for testing</remarks>
+        internal IDatabaseUnitOfWorkProvider DatabaseUnitOfWorkProvider { get; private set; }
+
+        /// <summary>
         /// Gets the <see cref="IAppliedPaymentService"/>.
         /// </summary>
         internal IAppliedPaymentService AppliedPaymentService
@@ -292,6 +336,17 @@
         internal INotificationMethodService NotificationMethodService
         {
             get { return _notificationMethodService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IOfferRedeemedService"/>
+        /// </summary>
+        internal IOfferRedeemedService OfferRedeemedService
+        {
+            get
+            {
+                return _offerRedeemedService.Value;
+            }
         }
 
         /// <summary>
@@ -350,6 +405,9 @@
             if (_customerService == null)
                 _customerService = new Lazy<ICustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _anonymousCustomerService.Value, _customerAddressService.Value, _invoiceService.Value, _paymentService.Value));
 
+            if (_digitalMediaService == null)
+                _digitalMediaService = new Lazy<IDigitalMediaService>(() => new DigitalMediaService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
             if (_itemCacheService == null)
                 _itemCacheService = new Lazy<IItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
@@ -358,6 +416,12 @@
 
             if (_notificationMessageService == null)
                 _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_offerSettingsService == null)
+                _offerSettingsService = new Lazy<IOfferSettingsService>(() => new OfferSettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_offerRedeemedService == null)
+                _offerRedeemedService = new Lazy<IOfferRedeemedService>(() => new OfferRedeemedService(DatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_paymentService == null)
                 _paymentService = new Lazy<IPaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));

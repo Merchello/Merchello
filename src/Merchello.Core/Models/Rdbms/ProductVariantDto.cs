@@ -18,6 +18,7 @@ namespace Merchello.Core.Models.Rdbms
         [ForeignKey(typeof(ProductDto), Name = "FK_merchProductVariant_merchProduct", Column = "pk")]
         public Guid ProductKey { get; set; }
 
+        // TODO add index to SKU http://issues.merchello.com/youtrack/issue/M-646
         [Column("sku")]
         public string Sku { get; set; }
 

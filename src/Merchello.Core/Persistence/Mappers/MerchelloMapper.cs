@@ -58,6 +58,8 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IInvoiceLineItem), typeof(InvoiceLineItemMapper));
             CacheMapper(typeof(IInvoiceStatus), typeof(InvoiceStatusMapper));
             CacheMapper(typeof(IOrder), typeof(OrderMapper));
+            CacheMapper(typeof(IOfferSettings), typeof(OfferSettingsMapper));
+            CacheMapper(typeof(IOfferRedeemed), typeof(OfferRedeemedMapper));
             CacheMapper(typeof(IOrderLineItem), typeof(OrderLineItemMapper));
             CacheMapper(typeof(INotificationMessage), typeof(NotificationMessageMapper));
             CacheMapper(typeof(INotificationMethod), typeof(NotificationMethodMapper));            
@@ -75,6 +77,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IStoreSetting), typeof(StoreSettingMapper));
             CacheMapper(typeof(IWarehouse), typeof(WarehouseMapper));
             CacheMapper(typeof(IWarehouseCatalog), typeof(WarehouseCatalogMapper));
+            CacheMapper(typeof(IDigitalMedia), typeof(DigitalMediaMapper));
         }
 
 

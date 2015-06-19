@@ -2,24 +2,20 @@
 {
     using System;
     using System.Configuration;
-    using System.Net.Mime;
 
     using Cache;
     using Configuration;
     using Gateways;
 
-    using Merchello.Core.Persistence.Migrations;
-    using Merchello.Core.Persistence.Migrations.Initial;
+    using Merchello.Core.Chains.OfferConstraints;
+    using Merchello.Core.Marketing.Offer;
 
     using Observation;
     using Persistence.UnitOfWork;
     using Services;
 
-    using umbraco.cms.businesslogic.packager;
-
     using Umbraco.Core;
     using Umbraco.Core.Logging;
-    using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
     /// A bootstrapper for the Merchello Plugin which initializes all objects to be used in the Merchello Core
@@ -186,7 +182,10 @@
             TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
 
             if (!MonitorResolver.HasCurrent)
-            MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());
+            MonitorResolver.Current = new MonitorResolver(MerchelloContext.Current.Gateways.Notification, PluginManager.Current.ResolveObserverMonitors());            
+
+            if (!OfferProcessorFactory.HasCurrent)
+            OfferProcessorFactory.Current = new OfferProcessorFactory(PluginManager.Current.ResolveOfferConstraintChains());
         }
 
         /// <summary>

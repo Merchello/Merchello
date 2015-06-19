@@ -3083,6 +3083,19 @@
             Any class implementing this interface that is added to the httpcontext.items keys or values will be disposed of at the end of the request.
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Manifest.GridEditorConverter">
+            <summary>
+            Ensures that virtual paths are taken care of
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Serialization.JsonCreationConverter`1.Create(System.Type,Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Create an instance of objectType, based properties in the JSON object
+            </summary>
+            <param name="objectType">type of object expected</param>
+            <param name="jObject">contents of JSON object that will be deserialized</param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Core.Media.Exif.BitConverterEx">
             <summary>
             An endian-aware converter for converting between base data types 
@@ -5847,14 +5860,6 @@
             validators are manifest validators.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Serialization.JsonCreationConverter`1.Create(System.Type,Newtonsoft.Json.Linq.JObject)">
-            <summary>
-            Create an instance of objectType, based properties in the JSON object
-            </summary>
-            <param name="objectType">type of object expected</param>
-            <param name="jObject">contents of JSON object that will be deserialized</param>
-            <returns></returns>
-        </member>
         <member name="T:Umbraco.Core.DisposableObject">
             <summary>
             Abstract implementation of logic commonly required to safely handle disposable unmanaged resources.
@@ -6403,6 +6408,52 @@
             </summary>
             <param name="rememberPreviouslyChangedProperties"></param>
         </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.IsDirty">
+            <summary>
+            Indicates whether the current entity is dirty.
+            </summary>
+            <returns>True if entity is dirty, otherwise False</returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.WasDirty">
+            <summary>
+            Indicates whether the current entity was dirty.
+            </summary>
+            <returns>True if entity was dirty, otherwise False</returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.IsEntityDirty">
+            <summary>
+            Returns true if only the entity properties are dirty
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.WasEntityDirty">
+            <summary>
+            Returns true if only the entity properties were dirty
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.IsPropertyDirty(System.String)">
+            <summary>
+            Indicates whether a specific property on the current <see cref="T:Umbraco.Core.Models.IContent"/> entity is dirty.
+            </summary>
+            <param name="propertyName">Name of the property to check</param>
+            <returns>
+            True if any of the class properties are dirty or 
+            True if any of the user defined PropertyType properties are dirty based on their alias, 
+            otherwise False
+            </returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.WasPropertyDirty(System.String)">
+            <summary>
+            Indicates whether a specific property on the current entity was changed and the changes were committed
+            </summary>
+            <param name="propertyName">Name of the property to check</param>
+            <returns>
+            True if any of the class properties are dirty or 
+            True if any of the user defined PropertyType properties are dirty based on their alias, 
+            otherwise False
+            </returns>
+        </member>
         <member name="P:Umbraco.Core.Models.ContentBase.ParentId">
             <summary>
             Gets or sets the Id of the Parent entity
@@ -6528,6 +6579,12 @@
             * The language is changed
             * The item is already published and is being published again and any property value is changed (to enable a rollback)
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentExtensions.GetDirtyUserProperties(Umbraco.Core.Models.IContentBase)">
+            <summary>
+            Returns a list of all dirty user defined properties
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Models.ContentExtensions.ShouldCreateNewVersion(Umbraco.Core.Models.IContent,Umbraco.Core.Models.PublishedState)">
             <summary>
@@ -15489,46 +15546,6 @@
             <param name="isTrashed">Boolean indicating whether content is trashed (true) or not trashed (false)</param>
             <param name="parentId"> </param>
         </member>
-        <member name="M:Umbraco.Core.Models.Content.IsPropertyDirty(System.String)">
-            <summary>
-            Indicates whether a specific property on the current <see cref="T:Umbraco.Core.Models.IContent"/> entity is dirty.
-            </summary>
-            <param name="propertyName">Name of the property to check</param>
-            <returns>True if Property is dirty, otherwise False</returns>
-        </member>
-        <member name="M:Umbraco.Core.Models.Content.IsDirty">
-            <summary>
-            Indicates whether the current entity is dirty.
-            </summary>
-            <returns>True if entity is dirty, otherwise False</returns>
-        </member>
-        <member name="M:Umbraco.Core.Models.Content.IsEntityDirty">
-            <summary>
-            Returns true if only the entity properties are direty
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Core.Models.Content.IsAnyUserPropertyDirty">
-            <summary>
-            Returns true if any of the properties are dirty
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Core.Models.Content.GetDirtyUserProperties">
-            <summary>
-            Returns a list of all dirty user defined properties
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Core.Models.Content.ResetDirtyProperties">
-            <summary>
-            Resets dirty properties by clearing the dictionary used to track changes.
-            </summary>
-            <remarks>
-            Please note that resetting the dirty properties could potentially
-            obstruct the saving of a new or updated entity.
-            </remarks>
-        </member>
         <member name="M:Umbraco.Core.Models.Content.AddingEntity">
             <summary>
             Method to call when Entity is being saved
@@ -15997,6 +16014,15 @@
             <param name="propertyEditorAlias"></param>
             <param name="dataTypeDatabaseType"></param>
             <param name="isExplicitDbType"></param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PropertyType.#ctor(System.String,Umbraco.Core.Models.DataTypeDatabaseType,System.Boolean,System.String)">
+            <summary>
+            Used internally to assign an explicity database type for this property type regardless of what the underlying data type/property editor is.
+            </summary>
+            <param name="propertyEditorAlias"></param>
+            <param name="dataTypeDatabaseType"></param>
+            <param name="isExplicitDbType"></param>
+            <param name="propertyTypeAlias"></param>
         </member>
         <member name="M:Umbraco.Core.Models.PropertyType.CreatePropertyFromRawValue(System.Object,System.Guid,System.Int32)">
             <summary>
@@ -17860,6 +17886,12 @@
             </summary>
             <param name="encodedPassword">The encoded password.</param>
             <returns>The unencoded password.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Security.MembershipProviderBase.GetCurrentRequestIpAddress">
+            <summary>
+            Returns the current request IP address for logging if there is one
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:Umbraco.Core.Security.MembershipProviderBase.DefaultMinPasswordLength">
             <summary>
@@ -20052,6 +20084,22 @@
             Occurs after Save
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Services.IEntityService.GetIdForKey(System.Guid,Umbraco.Core.Models.UmbracoObjectTypes)">
+            <summary>
+            Returns the integer id for a given GUID
+            </summary>
+            <param name="key"></param>
+            <param name="umbracoObjectType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IEntityService.GetKeyForId(System.Int32,Umbraco.Core.Models.UmbracoObjectTypes)">
+            <summary>
+            Returns the GUID for a given integer id
+            </summary>
+            <param name="id"></param>
+            <param name="umbracoObjectType"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.IEntityService.GetByKey(System.Guid,System.Boolean)">
             <summary>
             Gets an UmbracoEntity by its Id, and optionally loads the complete object graph.
@@ -20232,6 +20280,22 @@
             </summary>
             <param name="umbracoObjectType"><see cref="T:Umbraco.Core.Models.UmbracoObjectTypes"/></param>
             <returns>Type of the entity</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.EntityService.GetIdForKey(System.Guid,Umbraco.Core.Models.UmbracoObjectTypes)">
+            <summary>
+            Returns the integer id for a given GUID
+            </summary>
+            <param name="key"></param>
+            <param name="umbracoObjectType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.EntityService.GetKeyForId(System.Int32,Umbraco.Core.Models.UmbracoObjectTypes)">
+            <summary>
+            Returns the GUID for a given integer id
+            </summary>
+            <param name="id"></param>
+            <param name="umbracoObjectType"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.EntityService.Get(System.Int32,System.Boolean)">
             <summary>
@@ -28168,6 +28232,14 @@
             Extension methods for xml objects
             </summary>
         </member>
+        <member name="M:Umbraco.Core.XmlExtensions.SaveAsync(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Saves the xml document async
+            </summary>
+            <param name="xdoc"></param>
+            <param name="filename"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.XmlExtensions.SelectNodes(System.Xml.XmlNode,System.String,System.Collections.Generic.IEnumerable{Umbraco.Core.Xml.XPathVariable})">
             <summary>
             Selects a list of XmlNode matching an XPath expression.
@@ -28461,6 +28533,25 @@
             Return a dictionary of attributes found for a string based tag
             </summary>
             <param name="tag"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Xml.UmbracoXPathPathSyntaxParser">
+            <summary>
+            This is used to parse our customize Umbraco XPath expressions (i.e. that include special tokens like $site) into 
+            a real XPath statement
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Xml.UmbracoXPathPathSyntaxParser.ParseXPathQuery(System.String,System.Nullable{System.Int32},System.Func{System.Int32,System.Collections.Generic.IEnumerable{System.String}},System.Func{System.Int32,System.Boolean})">
+            <summary>
+            Parses custom umbraco xpath expression
+            </summary>
+            <param name="xpathExpression">The Xpath expression</param>
+            <param name="nodeContextId">
+            The current node id context of executing the query - null if there is no current node, in which case
+            some of the parameters like $current, $parent, $site will be disabled
+            </param>
+            <param name="getPath">The callback to create the nodeId path, given a node Id</param>
+            <param name="publishedContentExists">The callback to return whether a published node exists based on Id</param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Xml.XPath.MacroNavigator">
