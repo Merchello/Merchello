@@ -81,8 +81,8 @@
                                 <div class="btn-group">
                                     <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedSalesCount}} sales selected) <i class="icon-navigation-down"></i></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">Archive Sales</a></li>
-                                        <li><a href="#">Unarchive Sales</a></li>
+                                        <li><a href="#"><localize key="merchelloOrder_archiveSales">Archive Sales</localize></a></li>
+                                        <li><a href="#"><localize key="merchelloOrder_unarchiveSales">Unarchive Sales</localize></a></li>
                                     </ul>
                                 </div>
                             </th>
@@ -107,8 +107,8 @@
 
                 <!-- Prompt to create products if no products in the catalog -->
                 <div class="pager well" data-ng-show="salesLoaded && invoices.length == 0">
-                    <h5>You Have No Sales Yet</h5>
-                    <p>But you will soon!</p>
+                    <h5><localize key="merchelloOrder_noSalesYet" /></h5>
+                    <p><localize key="merchelloOrder_butSoonYouWill" /></p>
                 </div>
 
             </div>
