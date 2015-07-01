@@ -319,13 +319,26 @@
                 allowedMethods.AddRange(paymentMethodsArray);
             }
 
+            var salesPreparation = basket.SalePreparation();
 
+            // prepare the invoice
+            var invoice = salesPreparation.PrepareInvoice();
+            
+            // get the existing shipMethodKey if any
+            var shipmentLineItem = invoice.ShippingLineItems().FirstOrDefault();
+            var shipMethodKey = shipmentLineItem != null ? shipmentLineItem.ExtendedData.GetShipMethodKey() : Guid.Empty;
 
             viewModel.CheckoutConfirmationForm = new CheckoutConfirmationForm()
             {
                 ThemeName = viewModel.Theme,
                 CustomerToken = basket.Customer.Key.ToString().EncryptWithMachineKey(),
-                SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation()),
+                InvoiceSummary = new InvoiceSummary()
+                                     {
+                                         Invoice = invoice,
+                                         Currency = viewModel.Currency,
+                                         CurrentPageId = viewModel.Id
+                                     },             
+                ShipMethodKey   = shipMethodKey,
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
                                                                     {
                                                                         Value = x.ShipMethod.Key.ToString(),
@@ -344,6 +357,13 @@
 
                 ResolvePaymentForms = viewModel.ResolvePaymentForms
             };
+
+
+            viewModel.RedeemCouponOfferForm = new RedeemCouponOfferForm()
+                {
+                    ThemeName = viewModel.Theme,
+                    CurrencySymbol = viewModel.Currency.Symbol
+                };
 
             return viewModel;
         }
@@ -391,7 +411,11 @@
         public ReceiptModel CreateReceipt(RenderModel model, IInvoice invoice)
         {
             var viewModel = this.Build<ReceiptModel>(model);
-            viewModel.Invoice = invoice;
+            viewModel.InvoiceSummary = new InvoiceSummary()
+                                           {
+                                               Invoice = invoice,
+                                               Currency = viewModel.Currency
+                                           };
             var shippingLineItem = invoice.ShippingLineItems().FirstOrDefault();
             if (shippingLineItem != null)
             {

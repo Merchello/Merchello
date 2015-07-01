@@ -60,13 +60,13 @@ namespace Merchello.Web
 
 
         /// <summary>
-        /// Resolves any <see cref="OfferProviderBase{TOffer}"/> types.
+        /// Resolves any <see cref="OfferManagerBase{TOffer}"/> types.
         /// </summary>
         /// <param name="pluginManager">
         /// The <see cref="PluginManager"/>.
         /// </param>
         /// <returns>
-        /// The collection of <see cref="OfferProviderBase{TOffer}"/>.
+        /// The collection of <see cref="OfferManagerBase{TOffer}"/>.
         /// </returns>
         internal static IEnumerable<Type> ResolveOfferProviders(this PluginManager pluginManager)
         {

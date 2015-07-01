@@ -13,6 +13,11 @@
         /// <summary>
         /// Identifies a reward
         /// </summary>
-        Reward
+        Reward,
+
+        /// <summary>
+        /// Identifies a custom component type
+        /// </summary>
+        Custom
     }
 }

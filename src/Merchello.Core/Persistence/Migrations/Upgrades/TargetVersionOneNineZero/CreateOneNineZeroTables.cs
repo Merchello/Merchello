@@ -12,7 +12,7 @@
     /// <summary>
     /// Adds new database tables .
     /// </summary>
-    [Migration("1.7.0", "1.8.3.5", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.8.2", "1.9.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateOneNineZeroTables : MigrationBase
     {
         /// <summary>
@@ -20,7 +20,8 @@
         /// </summary>
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
-            { 0, typeof(OfferSettingsDto) }
+            { 0, typeof(OfferSettingsDto) },
+            { 1, typeof(OfferRedeemedDto) }
             // TODO add the digital media table
             //{ 2, typeof(DigitalMediaDto) }
         };

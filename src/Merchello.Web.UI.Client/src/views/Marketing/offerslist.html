@@ -58,6 +58,9 @@
                             <localize key="merchelloMarketing_offerType" />
                         </th>
                         <th>
+                            <localize key="merchelloMarketing_offerRewardsInfo" />
+                        </th>
+                        <th>
                             <localize key="merchelloTableCaptions_startDate" />
                         </th>
                         <th>
@@ -73,6 +76,7 @@
                         <td><a data-ng-href="{{getEditUrl(offer)}}">{{offer.name}}</a></td>
                         <td>{{ offer.offerCode }}</td>
                         <td>{{ getOfferType(offer) }}</td>
+                        <td>{{ getOfferReward(offer) }}</td>
                         <td data-ng-show="offer.offerExpires">{{ offer.offerStartsDate | date : settings.dateFormat }}</td>
                         <td data-ng-show="offer.offerExpires">{{ offer.offerEndsDate | date : settings.dateFormat }}</td>
                         <td data-ng-hide="offer.offerExpires">-</td>

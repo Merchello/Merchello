@@ -66,6 +66,17 @@ span.field-validation-error {
 #checkout-confirmation .payment-method-form {
   display: none; }
 
+.alert-coupon {
+  background-color: #f9cd8b;
+  border-color: #f39c12;
+  color: black; }
+
+#order-info h2 {
+  margin-bottom: 1em; }
+  #order-info h2 span.sub-title {
+    font-size: 1em;
+    display: block; }
+
 #btn-profile-open {
   margin-top: 1em; }
 

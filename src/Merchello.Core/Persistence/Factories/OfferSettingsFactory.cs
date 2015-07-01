@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -29,7 +30,7 @@
             var configurations = JsonConvert.DeserializeObject<IEnumerable<OfferComponentConfiguration>>(dto.ConfigurationData);
 
             var definitionCollection = new OfferComponentDefinitionCollection();
-            foreach (var config in configurations.ToArray())
+            foreach (var config in configurations)
             {
                 definitionCollection.Add(new OfferComponentDefinition(config));
             }
@@ -60,7 +61,8 @@
         /// </returns>
         public OfferSettingsDto BuildDto(IOfferSettings entity)
         {
-            var configurations = entity.ComponentDefinitions.Select(x => x.AsOfferComponentConfiguration());
+            var configurations = entity.ComponentDefinitions.Select(x => x.AsOfferComponentConfiguration()).ToArray();
+
             return new OfferSettingsDto()
                        {
                            Key = entity.Key,

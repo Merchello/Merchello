@@ -161,7 +161,7 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
 
         function getValue(key) {
             if (isEmpty.call(this)) {
-                return;
+                return '';
             }
             var found = false;
             var i = 0;
@@ -1325,11 +1325,14 @@ angular.module('merchello.models').constant('SelectOfferProviderDialogData', Sel
  */
 var OfferComponentDefinitionDisplay = function() {
     var self = this;
+    self.offerSettingsKey = '';
+    self.offerCode = '';
     self.componentKey = '';
     self.name = '';
     self.description = '';
     self.typeFullName = '';
     self.typeGrouping = '';
+    self.displayConfigurationFormat = '';
     self.extendedData = {};
     self.componentType = '';
     self.dialogEditorView = {};
@@ -1410,7 +1413,9 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.offerStartsDate = '';
         self.offerEndsDate = '';
         self.expired = false;
+        self.hasStarted = false;
         self.active = false;
+        self.dateFormat = '';  // used to pass back office format to server for parse exact.
         self.componentDefinitions = [];
     };
 
@@ -1443,7 +1448,9 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
 
         function componentDefinitionExtendedDataToArray() {
             angular.forEach(this.componentDefinitions, function(cd) {
-                cd.extendedData = cd.extendedData.toArray();
+                if (!angular.isArray(cd.extendedData)) {
+                    cd.extendedData = cd.extendedData.toArray();
+                }
             });
         }
 
@@ -1454,6 +1461,10 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             }
             var reward = _.find(this.componentDefinitions, function(c) { return c.componentType === 'Reward'; } );
             return reward !== undefined && reward !== null;
+        }
+
+        function getReward() {
+            return _.find(this.componentDefinitions, function(c) { return c.componentType === 'Reward'; } );
         }
 
         function componentsConfigured() {
@@ -1481,13 +1492,66 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return this.componentDefinitions[0].typeGrouping === typeGrouping;
         }
 
+        function assignComponent(component) {
+            var exists =_.find(this.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
+            if (exists === undefined && ensureTypeGrouping.call(this, component.typeGrouping)) {
+                component.offerCode = this.offerCode;
+                component.offerSettingsKey = this.key;
+                if (component.componentType === 'Reward') {
+                    this.componentDefinitions.unshift(component);
+                }
+                else
+                {
+                    this.componentDefinitions.push(component);
+                }
+
+                return true;
+            }
+            return false;
+        }
+
         function updateAssignedComponent(component) {
-            console.info(component);
             var assigned = getAssignedComponent.call(this, component.componentKey);
             if (assigned !== undefined && assigned !== null) {
                 assigned.extendedData = component.extendedData;
                 assigned.updated = true;
             }
+        }
+
+        function setLineItemName(value) {
+            if (hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                reward.extendedData.setValue('lineItemName', value);
+            }
+        }
+
+        function getLineItemName() {
+            if(hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                var name = reward.extendedData.getValue('lineItemName');
+                if (name === '') {
+                    name = reward.name;
+                }
+                return name;
+            } else {
+                return '';
+            }
+        }
+
+        function validateComponents() {
+            var offerCode = this.offerCode;
+            var offerSettingsKey = this.key;
+            var invalid = _.filter(this.componentDefinitions, function (cd) { return cd.offerSettingsKey !== this.key || cd.offerCode !== this.offerCode; });
+            if (invalid !== undefined) {
+                angular.forEach(invalid, function(fix) {
+                    fix.offerSettingsKey = offerSettingsKey;
+                    fix.offerCode = offerCode;
+                });
+            }
+        }
+
+        function reorderComponent(oldIndex, newIndex) {
+            this.componentDefinitions.splice(newIndex, 0, this.componentDefinitions.splice(oldIndex, 1)[0]);
         }
 
         return {
@@ -1499,9 +1563,15 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             getComponentsTypeGrouping: getComponentsTypeGrouping,
             ensureTypeGrouping: ensureTypeGrouping,
             hasRewards: hasRewards,
+            getReward: getReward,
+            assignComponent: assignComponent,
             updateAssignedComponent: updateAssignedComponent,
             getAssignedComponent: getAssignedComponent,
-            componentsConfigured: componentsConfigured
+            componentsConfigured: componentsConfigured,
+            getLineItemName: getLineItemName,
+            setLineItemName: setLineItemName,
+            validateComponents: validateComponents,
+            reorderComponent: reorderComponent
         }
 
     }());
@@ -2447,7 +2517,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
 
         // gets the custom line items
         function getCustomLineItems() {
-            var custom =  _.find(this.items, function(item) {
+            var custom =  _.filter(this.items, function(item) {
                 return item.lineItemType === 'Custom';
             });
             if (custom === undefined) {
@@ -2458,7 +2528,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
 
         // gets a collection of discount line items
         function getDiscountLineItems() {
-            var discounts = _.find(this.items, function(item) {
+            var discounts = _.filter(this.items, function(item) {
                 return item.lineItemTypeField.alias === 'Discount';
             });
             if (discounts === undefined) {
@@ -4652,7 +4722,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             invoices.invoiceStatus = invoiceStatusDisplayBuilder.transform(jsonResult.invoiceStatus);
                             invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
                             invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
-                            invoices.curreny = currencyDisplayBuilder.transform(jsonResult.currency);
+                            invoices.currency = currencyDisplayBuilder.transform(jsonResult.currency);
                         }
                         return invoices;
                     }

@@ -113,7 +113,7 @@
 
         // gets the custom line items
         function getCustomLineItems() {
-            var custom =  _.find(this.items, function(item) {
+            var custom =  _.filter(this.items, function(item) {
                 return item.lineItemType === 'Custom';
             });
             if (custom === undefined) {
@@ -124,7 +124,7 @@
 
         // gets a collection of discount line items
         function getDiscountLineItems() {
-            var discounts = _.find(this.items, function(item) {
+            var discounts = _.filter(this.items, function(item) {
                 return item.lineItemTypeField.alias === 'Discount';
             });
             if (discounts === undefined) {

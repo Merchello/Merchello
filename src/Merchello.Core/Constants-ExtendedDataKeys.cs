@@ -20,6 +20,8 @@
                     "merchLineItemCollection",
                     "merchLineItem",
                     "merchCurrencyCode",
+                    "merchCouponReward",
+                    "merchOfferCodeTempeData",
                     "merchLineItemTaxAmount",
                     "merchName",
                     "merchSku",
@@ -417,7 +419,31 @@
             public static string SmtpProviderSettings
             {
                 get { return "merchSmtpProviderSettings"; }
-            }            
+            }   
+         
+            //// Coupons ------------------------------------------------------------------------
+
+            /// <summary>
+            /// Gets the coupon.
+            /// </summary>
+            public static string CouponReward
+            {
+                get
+                {
+                    return "merchCouponReward";
+                }
+            }
+
+            /// <summary>
+            /// Gets the offer code queue data.
+            /// </summary>
+            internal static string OfferCodeTempData
+            {
+                get
+                {
+                    return "merchOfferCodeTempData";
+                }
+            }
         }
     }
 }

@@ -22,6 +22,16 @@ namespace Merchello.Web.Models.ContentEditing
         //public Guid Key { get; set; }
 
         /// <summary>
+        /// Gets or sets the offer settings key.
+        /// </summary>
+        public Guid OfferSettingsKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the offer code.
+        /// </summary>
+        public string OfferCode { get; set; }
+
+        /// <summary>
         /// Gets or sets the component key.
         /// </summary>
         public Guid ComponentKey { get; set; }
@@ -56,6 +66,12 @@ namespace Merchello.Web.Models.ContentEditing
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public OfferComponentType ComponentType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the display configuration format.
+        /// This text is used by the back office UI to display configured values
+        /// </summary>
+        public string DisplayConfigurationFormat { get; set; }
 
         /// <summary>
         /// Gets or sets the extended data.
@@ -108,6 +124,8 @@ namespace Merchello.Web.Models.ContentEditing
                 new OfferComponentDefinition(
                     new OfferComponentConfiguration()
                         {
+                            OfferSettingsKey = definition.OfferSettingsKey,
+                            OfferCode = definition.OfferCode,
                             ComponentKey = definition.ComponentKey,
                             TypeFullName = definition.TypeFullName,
                             Values = definition.ExtendedData.AsEnumerable()

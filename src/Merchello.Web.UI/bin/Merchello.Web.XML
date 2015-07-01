@@ -35,6 +35,293 @@
             
             </summary>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionAlterationCouponConstraintBase">
+            <summary>
+            A base class for coupon constraints that alter the validation collection
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.CouponConstraintBase">
+            <summary>
+            Base class for coupon constraints.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CouponConstraintBase.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.CouponConstraintBase"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CouponConstraintBase.Success(Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Utility method to build a successful <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CouponConstraintBase.Fail(Merchello.Core.Models.ILineItemContainer,System.String)">
+            <summary>
+            Utility method to build a failed <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <param name="message">
+            The message.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionAlterationCouponConstraintBase.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionAlterationCouponConstraintBase"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionAlterationCouponConstraintBase.CreateNewLineContainer(System.Collections.Generic.IEnumerable{Merchello.Core.Models.ILineItem})">
+            <summary>
+            Creates a new <see cref="T:Merchello.Core.Models.ILineItemContainer"/> with filtered items.
+            </summary>
+            <param name="filteredItems">
+            The line items.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.ILineItemContainer"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint">
+            <summary>
+            Price constraint rules for the entire qualifying collection
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint.Price">
+            <summary>
+            Gets the amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.CollectionPriceRulesConstraint.Operator">
+            <summary>
+            Gets the operator.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint">
+            <summary>
+            The exclude shipping cost constraint.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ExcludeShippingCostConstraint.RequiresConfiguration">
+            <summary>
+            Gets a value indicating this reward does not require configuration.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionQuantityRulesConstraint">
+            <summary>
+            A discount validation constraint to restrict this offer to line item quantity related rules.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionQuantityRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.CollectionQuantityRulesConstraint"/> class. 
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.CollectionQuantityRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.CollectionQuantityRulesConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.CollectionQuantityRulesConstraint.Quantity">
+            <summary>
+            Gets the amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.CollectionQuantityRulesConstraint.Operator">
+            <summary>
+            Gets the operator.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumNumberOfRedemptionsConstraint">
+            <summary>
+            Sets and checks the limit number of redemptions for this coupon.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumNumberOfRedemptionsConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumNumberOfRedemptionsConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumNumberOfRedemptionsConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.MaximumNumberOfRedemptionsConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.MaximumNumberOfRedemptionsConstraint.MaximumRedemptions">
+            <summary>
+            Gets the maximum number of redemptions configured.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint">
+            <summary>
+            The maximum quantity constraint.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraint.MaximumQuantity">
+            <summary>
+            Gets the maximum quantity.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor">
+            <summary>
+            The maximum quantity constraint visitor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor._maximum">
+            <summary>
+            The maximum quantity.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor"/> class.
+            </summary>
+            <param name="max">
+            The max.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Visits the line item an asserts the maximum quantity.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.MaximumQuantityConstraintVisitor.ModifiedItems">
+            <summary>
+            Gets or sets the modified items.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint">
             <summary>
             A discount rule to prohibit a discount from being used with other discounts.
@@ -48,10 +335,117 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
         <member name="P:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint.RequiresConfiguration">
             <summary>
             Gets a value indicating that this component does not require configuration.
             </summary>        
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueFilterConstraintVisitor">
+            <summary>
+            The numerical value constraint visitor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueFilterConstraintVisitor._target">
+            <summary>
+            The target value configured in the back office editor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueFilterConstraintVisitor._operator">
+            <summary>
+            The string based operator.
+            </summary>
+            <remarks>
+            eg. eq, lt, lte, gt, gte
+            </remarks>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueFilterConstraintVisitor._property">
+            <summary>
+            The property.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueFilterConstraintVisitor.#ctor(System.Decimal,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueFilterConstraintVisitor"/> class.
+            </summary>
+            <param name="target">
+            The target.
+            </param>
+            <param name="op">
+            The op.
+            </param>
+            <param name="property">
+            The property - either quantity or price
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueFilterConstraintVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Visits the line items to apply expression.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>        
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.NumericalValueFilterConstraintVisitor.FilteredLineItems">
+            <summary>
+            Gets the filtered line items.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint">
+            <summary>
+            Filters the line item collection for configured price rules."
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.Price">
+            <summary>
+            Gets the amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemPriceFilterRulesConstraint.Operator">
+            <summary>
+            Gets the operator.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint">
             <summary>
@@ -66,15 +460,399 @@
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
         </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
         <member name="P:Merchello.Web.Discounts.Coupons.Constraints.OneCouponPerCustomerConstraint.RequiresConfiguration">
             <summary>
             Gets a value indicating that this component does not require configuration.
             </summary>        
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor">
+            <summary>
+            The product selection constraint visitor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor._constraints">
+            <summary>
+            The product constraints.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor._filteredItems">
+            <summary>
+            The filtered items.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor.#ctor(System.Collections.Generic.IEnumerable{Merchello.Core.Marketing.Constraints.ProductConstraintData})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor"/> class.
+            </summary>
+            <param name="productContraints">
+            The product constraints.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Visits the line items to apply expression.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param> 
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionConstraintVisitor.FilteredItems">
+            <summary>
+            Gets the filtered items.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.LineItemQuantityFilterRulesConstraint">
+            <summary>
+            A discount validation constraint to restrict this offer to line item quantity related rules.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.LineItemQuantityFilterRulesConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.LineItemQuantityFilterRulesConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.LineItemQuantityFilterRulesConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemQuantityFilterRulesConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemQuantityFilterRulesConstraint.Quantity">
+            <summary>
+            Gets the amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.LineItemQuantityFilterRulesConstraint.Operator">
+            <summary>
+            Gets the operator.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint">
+            <summary>
+            A discount validation constraint to restrict this discount to a selection of products.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint"/> class.
+            </summary>
+            <param name="settings">
+            The settings.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Validates the constraint against the <see cref="T:Merchello.Core.Models.ILineItemContainer"/>
+            </summary>
+            <param name="value">
+            The value to object to which the constraint is to be applied.
+            </param>
+            <param name="customer">
+            The <see cref="T:Merchello.Core.Models.ICustomerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/> indicating whether or not the constraint can be enforced.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ProductSelectionFilterConstraint.ProductConstraintDataSet">
+            <summary>
+            Gets the product constraint data set.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions">
+            <summary>
+            ExtendedDataCollection extensions for coupon discounts.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsAnyCoupons(Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> contains ANY serialized coupons.
+            </summary>
+            <param name="container">
+            The container.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> contains ANY serialized coupons..
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsCoupon(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ILineItem"/> contains a serialized coupon.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ILineItem"/> contains a serialized coupon.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.ContainsCoupon(Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Determines whether or not the <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/> contains a serialized coupon.
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <returns>
+            A value indicating whether or not the <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/> contains a serialized coupon.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplays(Merchello.Core.Models.ILineItemContainer)">
+            <summary>
+            Gets a collection of <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ILineItemContainer"/>.
+            </summary>
+            <param name="container">
+            The container.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplay(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.GetOfferSettingsDisplay(Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/> from an <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/>.
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponExtendedDataExtensions.SetCouponValue(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Discounts.Coupons.ICoupon)">
+            <summary>
+            Serialized and stores the coupon into the <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/>
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <param name="coupon">
+            The coupon.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionResult">
+            <summary>
+            The result that is in an attempt to apply a coupon to a sale.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult">
+            <summary>
+            Marker interface for the CouponRedemptionResult.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult.Coupon">
+            <summary>
+            Gets the coupon.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionResult.#ctor(Merchello.Core.Models.ILineItem,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponRedemptionResult"/> class for success
+            </summary>
+            <param name="award">
+            The award.
+            </param>
+            <param name="messages">
+            The messages.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionResult.#ctor(System.Exception,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponRedemptionResult"/> class for failure
+            </summary>
+            <param name="exception">
+            The exception.
+            </param>
+            <param name="messages">
+            The messages.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.CouponRedemptionResult.Coupon">
+            <summary>
+            Gets or sets the coupon.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionEventHandler">
+            <summary>
+            The coupon redemption event handler.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionEventHandler.ApplicationStarted(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+            <summary>
+            The Umbraco Application Starting event.
+            </summary>
+            <param name="umbracoApplication">
+            The umbraco application.
+            </param>
+            <param name="applicationContext">
+            The application context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionEventHandler.SalePreparationBaseOnFinalizing(Merchello.Core.Sales.SalePreparationBase,Merchello.Core.Events.SalesPreparationEventArgs{Merchello.Core.Gateways.Payment.IPaymentResult})">
+            <summary>
+            Records the redemption of a coupon offer.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="e">
+            The e.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionLineItemVisitor">
+            <summary>
+            A visitor to assist in recording coupon offer redemptions.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.CouponRedemptionLineItemVisitor._redemptions">
+            <summary>
+            The list of coupons in the invoice
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.CouponRedemptionLineItemVisitor._customerKey">
+            <summary>
+            The _customer key.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionLineItemVisitor.#ctor(System.Nullable{System.Guid})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponRedemptionLineItemVisitor"/> class.
+            </summary>
+            <param name="customerKey">
+            The customer key.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionLineItemVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            The visit.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.CouponRedemptionLineItemVisitor.Redemptions">
+            <summary>
+            Gets the coupon redemptions.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponRedemptionResultExtensions">
+            <summary>
+            The coupon redemption result extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponRedemptionResultExtensions.AsCouponRedemptionResult(Umbraco.Core.Attempt{Merchello.Core.Marketing.Offer.IOfferResult{Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ILineItem}},Merchello.Web.Discounts.Coupons.ICoupon)">
+            <summary>
+            Maps an <see cref="T:Merchello.Core.Marketing.Offer.IOfferResult`2"/> to <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>
+            </summary>
+            <param name="attempt">
+            The attempt.
+            </param>
+            <param name="coupon">
+            The coupon.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs">
+            <summary>
+            The redeem coupon event args.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs.#ctor(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ILineItem)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs"/> class.
+            </summary>
+            <param name="container">
+            The line item container (usually the <see cref="T:Merchello.Core.Models.IInvoice"/>).
+            </param>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs.LineItem">
+            <summary>
+            Gets or sets the line item.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.RedeemCouponEventArgs.Container">
+            <summary>
+            Gets or sets the invoice.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward">
             <summary>
             Represents a discount line item reward.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardBase">
+            <summary>
+            The coupon discount line item reward base.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardBase.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardBase"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardBase.CreateTemplateDiscountLineItem">
+            <summary>
+            Creates a template discount line item.
+            </summary>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
             <summary>
@@ -83,6 +861,46 @@
             <param name="definition">
             The <see cref="T:Merchello.Core.Marketing.Offer.OfferComponentDefinition"/>.
             </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.TryAward(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Tries to apply the discount line item reward
+            </summary>
+            <param name="validate">
+            The <see cref="T:Merchello.Core.Models.ILineItemContainer"/> to validate against
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.IsConfigured">
+            <summary>
+            Gets a value indicating whether is configured.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.Amount">
+            <summary>
+            Gets the configured amount.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.AdjustmentType">
+            <summary>
+            Gets the adjustment type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.Adjustment">
+            <summary>
+            The adjustment.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward">
             <summary>
@@ -96,6 +914,26 @@
             <param name="definition">
             The definition.
             </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.TryAward(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Tries to apply the discount line item reward
+            </summary>
+            <param name="validate">
+            The <see cref="T:Merchello.Core.Models.ILineItemContainer"/> to validate against
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.DisplayConfigurationFormat">
+            <summary>
+            Gets the display configuration format.
+            This text is used by the back office UI to display configured values
+            </summary>
         </member>
         <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward.RequiresConfiguration">
             <summary>
@@ -337,6 +1175,16 @@
             The offer component definition display.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.OfferSettingsKey">
+            <summary>
+            Gets or sets the offer settings key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.OfferCode">
+            <summary>
+            Gets or sets the offer code.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentKey">
             <summary>
             Gets or sets the component key.
@@ -370,6 +1218,12 @@
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ComponentType">
             <summary>
             Gets or sets the component type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.DisplayConfigurationFormat">
+            <summary>
+            Gets or sets the display configuration format.
+            This text is used by the back office UI to display configured values
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay.ExtendedData">
@@ -509,6 +1363,16 @@
         <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.Expired">
             <summary>
             Gets or sets a value indicating whether the offer has expired.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.HasStarted">
+            <summary>
+            Gets or sets a value indicating whether the offer has started.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.DateFormat">
+            <summary>
+            Gets or sets the date format (passed back from the back office so that we can correct parsing of the dates).
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.OfferSettingsDisplay.ComponentDefinitions">
@@ -829,20 +1693,61 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ShippingGatewayMethodDisplay"/>.
             </returns>
         </member>
-        <member name="T:Merchello.Web.Discounts.Coupons.CouponProvider">
+        <member name="T:Merchello.Web.Discounts.Coupons.CouponManager">
             <summary>
             The provider responsible for managing coupon offers
             </summary>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.CouponProvider.#ctor(Merchello.Core.Services.IOfferSettingsService)">
+        <member name="F:Merchello.Web.Discounts.Coupons.CouponManager._instance">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponProvider"/> class.
+            The _instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.#ctor(Merchello.Core.Services.IOfferSettingsService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/> class.
             </summary>
             <param name="offerSettingsService">
             The offer settings service.
             </param>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.CouponProvider.GetInstance(Merchello.Core.Models.Interfaces.IOfferSettings)">
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.GetByOfferCode(System.String,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Gets an offer by it's offer code (with manager defaults).
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.SafeAddCouponAttemptContainer``1(Merchello.Core.Models.ILineItemContainer,Merchello.Web.Discounts.Coupons.ICouponRedemptionResult,System.Boolean)">
+            <summary>
+            The safe add coupon attempt container.
+            </summary>
+            <typeparam name="TLineItem">
+            The type of line item
+            </typeparam>
+            <param name="container">
+            The container.
+            </param>
+            <param name="result">
+            The result.
+            </param>
+            <param name="raiseEvents">
+            Optional parameter indicating whether or not to raise events.  Defaults to false.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.CouponManager.GetInstance(Merchello.Core.Models.Interfaces.IOfferSettings)">
             <summary>
             Gets an instance of a coupon from the <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>        
             /// </summary>
@@ -853,7 +1758,22 @@
             The <see cref="T:Merchello.Web.Discounts.Coupons.Coupon"/>.
             </returns>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.CouponProvider.Key">
+        <member name="E:Merchello.Web.Discounts.Coupons.CouponManager.Redeeming">
+            <summary>
+            Occurs before redeeming the coupon
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Discounts.Coupons.CouponManager.Redeemed">
+            <summary>
+            Occurs after redeeming the coupon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.CouponManager.Instance">
+            <summary>
+            Gets the instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.CouponManager.Key">
             <summary>
             Gets the key.
             </summary>
@@ -1546,6 +2466,9 @@
             </summary>
             <param name="basket">The basket with items use in the checkout</param>
             <returns>A <see cref="T:Merchello.Web.Workflow.IBasketSalePreparation"/></returns>
+            <remarks>
+            TODO change this to return IBasketSalePreparation
+            </remarks>
         </member>
         <member name="M:Merchello.Web.CheckoutExtensions.PackageBasket(Merchello.Web.Workflow.IBasket,Merchello.Core.IMerchelloContext,Merchello.Core.Models.IAddress)">
             <summary>
@@ -2517,14 +3440,374 @@
         </member>
         <member name="M:Merchello.Web.PluginManagerExtensions.ResolveOfferProviders(Umbraco.Core.PluginManager)">
             <summary>
-            Resolves any <see cref="T:Merchello.Core.Marketing.Offer.OfferProviderBase`1"/> types.
+            Resolves any <see cref="T:Merchello.Core.Marketing.Offer.OfferManagerBase`1"/> types.
             </summary>
             <param name="pluginManager">
             The <see cref="T:Umbraco.Core.PluginManager"/>.
             </param>
             <returns>
-            The collection of <see cref="T:Merchello.Core.Marketing.Offer.OfferProviderBase`1"/>.
+            The collection of <see cref="T:Merchello.Core.Marketing.Offer.OfferManagerBase`1"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Annotations.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage
+            </summary>
+            <example><code>
+            [CanBeNull] public object Test() { return null; }
+            public void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>
+            </summary>
+            <example><code>
+            [NotNull] public object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            public void ShowError(string message, params object[] args) { /* do something */ }
+            public void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:Merchello.Web.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Annotations.InvokerParameterNameAttribute">
+            <summary>
+            Indicates that the function argument should be string literal and match one
+            of the parameters of the caller function. For example, ReSharper annotates
+            the parameter of <see cref="T:System.ArgumentNullException"/>
+            </summary>
+            <example><code>
+            public void Foo(string param) {
+              if (param == null)
+                throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.NotifyPropertyChangedInvocatorAttribute">
+             <summary>
+             Indicates that the method is contained in a type that implements
+             <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> interface
+             and this method is used to notify that some property value changed
+             </summary>
+             <remarks>
+             The method should be non-static and conform to one of the supported signatures:
+             <list>
+             <item><c>NotifyChanged(string)</c></item>
+             <item><c>NotifyChanged(params string[])</c></item>
+             <item><c>NotifyChanged{T}(Expression{Func{T}})</c></item>
+             <item><c>NotifyChanged{T,U}(Expression{Func{T,U}})</c></item>
+             <item><c>SetProperty{T}(ref T, T, string)</c></item>
+             </list>
+             </remarks>
+             <example><code>
+             public class Foo : INotifyPropertyChanged {
+               public event PropertyChangedEventHandler PropertyChanged;
+               [NotifyPropertyChangedInvocator]
+               protected virtual void NotifyChanged(string propertyName) { ... }
+            
+               private string _name;
+               public string Name {
+                 get { return _name; }
+                 set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+               }
+             }
+             </code>
+             Examples of generated notifications:
+             <list>
+             <item><c>NotifyChanged("Property")</c></item>
+             <item><c>NotifyChanged(() =&gt; Property)</c></item>
+             <item><c>NotifyChanged((VM x) =&gt; x.Property)</c></item>
+             <item><c>SetProperty(ref myField, value, "Property")</c></item>
+             </list>
+             </example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.ContractAnnotationAttribute">
+            <summary>
+            Describes dependency between method input and output
+            </summary>
+            <syntax>
+            <p>Function Definition Table syntax:</p>
+            <list>
+            <item>FDT      ::= FDTRow [;FDTRow]*</item>
+            <item>FDTRow   ::= Input =&gt; Output | Output &lt;= Input</item>
+            <item>Input    ::= ParameterName: Value [, Input]*</item>
+            <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
+            <item>Value    ::= true | false | null | notnull | canbenull</item>
+            </list>
+            If method has single input parameter, it's name could be omitted.<br/>
+            Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same)
+            for method output means that the methos doesn't return normally.<br/>
+            <c>canbenull</c> annotation is only applicable for output parameters.<br/>
+            You can use multiple <c>[ContractAnnotation]</c> for each FDT row,
+            or use single attribute with rows separated by semicolon.<br/>
+            </syntax>
+            <examples><list>
+            <item><code>
+            [ContractAnnotation("=> halt")]
+            public void TerminationMethod()
+            </code></item>
+            <item><code>
+            [ContractAnnotation("halt &lt;= condition: false")]
+            public void Assert(bool condition, string text) // regular assertion method
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null => true")]
+            public bool IsNullOrEmpty(string s) // string.IsNullOrEmpty()
+            </code></item>
+            <item><code>
+            // A method that returns null if the parameter is null, and not null if the parameter is not null
+            [ContractAnnotation("null => null; notnull => notnull")]
+            public object Transform(object data) 
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
+            public bool TryParse(string s, out Person result)
+            </code></item>
+            </list></examples>
+        </member>
+        <member name="T:Merchello.Web.Annotations.LocalizationRequiredAttribute">
+            <summary>
+            Indicates that marked element should be localized or not
+            </summary>
+            <example><code>
+            [LocalizationRequiredAttribute(true)]
+            public class Foo {
+              private string str = "my string"; // Warning: Localizable string
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.CannotApplyEqualityOperatorAttribute">
+            <summary>
+            Indicates that the value of the marked type (or its derivatives)
+            cannot be compared using '==' or '!=' operators and <c>Equals()</c>
+            should be used instead. However, using '==' or '!=' for comparison
+            with <c>null</c> is always permitted.
+            </summary>
+            <example><code>
+            [CannotApplyEqualityOperator]
+            class NoEquality { }
+            class UsesNoEquality {
+              public void Test() {
+                var ca1 = new NoEquality();
+                var ca2 = new NoEquality();
+                if (ca1 != null) { // OK
+                  bool condition = ca1 == ca2; // Warning
+                }
+              }
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.BaseTypeRequiredAttribute">
+            <summary>
+            When applied to a target attribute, specifies a requirement for any type marked
+            with the target attribute to implement or inherit specific type or types.
+            </summary>
+            <example><code>
+            [BaseTypeRequired(typeof(IComponent)] // Specify requirement
+            public class ComponentAttribute : Attribute { }
+            [Component] // ComponentAttribute requires implementing IComponent interface
+            public class MyComponent : IComponent { }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly
+            (e.g. via reflection, in external library), so this symbol
+            will not be marked as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper
+            to not mark symbols marked with such attributes as unused
+            (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used</summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member</summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type</summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly
+            when marked with <see cref="T:Merchello.Web.Annotations.MeansImplicitUseAttribute"/>
+            or <see cref="T:Merchello.Web.Annotations.UsedImplicitlyAttribute"/>
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used</summary>
+        </member>
+        <member name="F:Merchello.Web.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used</summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.InstantHandleAttribute">
+            <summary>
+            Tells code analysis engine if the parameter is completely handled
+            when the invoked method is on stack. If the parameter is a delegate,
+            indicates that delegate is executed while the method is executed.
+            If the parameter is an enumerable, indicates that it is enumerated
+            while the method is executed
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>
+            </summary>
+            <example><code>
+            [Pure] private int Multiply(int x, int y) { return x * y; }
+            public void Foo() {
+              const int a = 2, b = 2;
+              Multiply(a, b); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.PathReferenceAttribute">
+            <summary>
+            Indicates that a parameter is a path to a file or a folder
+            within a web project. Path can be relative or absolute,
+            starting from web root (~)
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcActionAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC action. If applied to a method, the MVC action name is calculated
+            implicitly from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcAreaAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC area.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcControllerAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC controller. If applied to a method,
+            the MVC controller name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcMasterAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC Master.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcModelTypeAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC model type.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, Object)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcPartialViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC partial view. If applied to a method,
+            the MVC partial view name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcSupressViewErrorAttribute">
+            <summary>
+            ASP.NET MVC attribute. Allows disabling all inspections
+            for MVC views within a class or a method.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcDisplayTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcEditorTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC template.
+            Use this attribute for custom wrappers similar to
+            <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC view. If applied to a method, the MVC view name is calculated implicitly
+            from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(Object)</c>
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Annotations.AspMvcActionSelectorAttribute">
+            <summary>
+            ASP.NET MVC attribute. When applied to a parameter of an attribute,
+            indicates that this parameter is an MVC action name
+            </summary>
+            <example><code>
+            [ActionName("Foo")]
+            public ActionResult Login(string returnUrl) {
+              ViewBag.ReturnUrl = Url.Action("Foo"); // OK
+              return RedirectToAction("Bar"); // Error: Cannot resolve action
+            }
+            </code></example>
+        </member>
+        <member name="T:Merchello.Web.Annotations.RazorSectionAttribute">
+            <summary>
+            Razor attribute. Indicates that a parameter or a method is a Razor section.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>
+            </summary>
         </member>
         <member name="T:Merchello.Web.PropertyConverters.ProductDisplayValueConverter">
             <summary>
@@ -7578,15 +8861,39 @@
             Defines a Coupon.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Constraints">
+        <member name="M:Merchello.Web.Discounts.Coupons.ICoupon.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
             <summary>
-            Gets the constraints.
+            Tries to apply the coupon
             </summary>
+            <param name="container">
+            The container.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.ICoupon.Reward">
+        <member name="M:Merchello.Web.Discounts.Coupons.ICoupon.TryApply``2(``0,Merchello.Core.Models.ICustomerBase)">
             <summary>
-            Gets the rewards.
+            Tries to apply the coupon
             </summary>
+            <param name="validateAgainst">
+            The validate against.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <typeparam name="TConstraint">
+            The type of constraint
+            </typeparam>
+            <typeparam name="TReward">
+            The type of reward
+            </typeparam>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Discounts.Coupons.Coupon.#ctor(Merchello.Core.Models.Interfaces.IOfferSettings)">
             <summary>
@@ -7596,14 +8903,77 @@
             The <see cref="T:Merchello.Core.Models.Interfaces.IOfferSettings"/>.
             </param>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Constraints">
+        <member name="M:Merchello.Web.Discounts.Coupons.Coupon.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
             <summary>
-            Gets the collection discount constraints.
+            Tries to apply the coupon
+            </summary>
+            <param name="container">
+            The container.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Coupon.TryApply``2(``0,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            Tries to apply the coupon
+            </summary>
+            <param name="validateAgainst">
+            The validate against.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <typeparam name="TConstraint">
+            The type of constraint
+            </typeparam>
+            <typeparam name="TReward">
+            The type of reward
+            </typeparam>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask">
+            <summary>
+            Adds any coupon discounts to the invoice.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Coupon.Reward">
+        <member name="F:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask._basketSalePreparation">
             <summary>
-            Gets the coupon reward.
+            The basket sale preparation.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask._couponManager">
+            <summary>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask.#ctor(Merchello.Core.Sales.SalePreparationBase)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask"/> class.
+            </summary>
+            <param name="salePreparation">
+            The <see cref="T:Merchello.Web.Workflow.IBasketSalePreparation"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask.PerformTask(Merchello.Core.Models.IInvoice)">
+            <summary>
+            Attempts to add the coupons discounts to the invoice
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask.CouponOfferManager">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/>.
             </summary>
         </member>
         <member name="T:Merchello.Web.Workflow.IWishList">
@@ -11880,6 +13250,27 @@
             Marker interface for <see cref="T:Merchello.Web.Workflow.IBasket"/> based checkouts
             </summary>
         </member>
+        <member name="M:Merchello.Web.Workflow.IBasketSalePreparation.RedeemCouponOffer(System.String)">
+            <summary>
+            Attempts to add a coupon offer to the sale.
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>.
+            </returns>
+        </member>
+        <member name="F:Merchello.Web.Workflow.BasketSalePreparation._couponManager">
+            <summary>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.CouponManager"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Workflow.BasketSalePreparation._requestCache">
+            <summary>
+            The _request cache.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Workflow.BasketSalePreparation.#ctor(Merchello.Core.IMerchelloContext,Merchello.Core.Models.IItemCache,Merchello.Core.Models.ICustomerBase)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Workflow.BasketSalePreparation"/> class.
@@ -11910,6 +13301,34 @@
             <param name="args">Additional arguments required by the payment processor</param>
             <returns>A <see cref="T:Merchello.Core.Gateways.Payment.IPaymentResult"/></returns>
         </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.RedeemCouponOffer(System.String)">
+            <summary>
+            Attempts to add a coupon offer to the sale.
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.TryAwardOffer(System.String,System.Boolean)">
+            <summary>
+            Attempts to apply an offer to the the checkout.
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <param name="autoAddOnSuccess">
+            A value indicating whether or not the reward should be added to the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> on success
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+            <remarks>
+            TODO move this to an InvoiceChainTask
+            </remarks>
+        </member>
         <member name="M:Merchello.Web.Workflow.BasketSalePreparation.GetBasketCheckoutPreparation(Merchello.Web.Workflow.IBasket)">
             <summary>
             The get basket checkout preparation.
@@ -11934,6 +13353,63 @@
             <returns>
             The <see cref="T:Merchello.Web.Workflow.BasketSalePreparation"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.TryApplyOffer``2(``0,System.String)">
+            <summary>
+            Attempts to apply an offer to the the checkout.
+            </summary>
+            <param name="validateAgainst">
+            The object to validate against
+            </param>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <typeparam name="TConstraint">
+            The type of constraint
+            </typeparam>
+            <typeparam name="TAward">
+            The type of award
+            </typeparam>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+            <remarks>
+            Custom offer types
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.DoTryApplyOffer``2(``0,System.String)">
+            <summary>
+            Does the actual work of attempting to apply the offer
+            </summary>
+            <param name="validateAgainst">
+            The validate against.
+            </param>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <typeparam name="TConstraint">
+            The type of constraint
+            </typeparam>
+            <typeparam name="TAward">
+            The type of award
+            </typeparam>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.GetCouponAttempt(System.String)">
+            <summary>
+            Gets the coupon attempt.
+            </summary>
+            <param name="offerCode">
+            The offer code.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+            <remarks>
+            Caches to the request cache
+            </remarks>
         </member>
         <member name="T:Merchello.Web.Mvc.MerchelloTemplatePage">
             <summary>

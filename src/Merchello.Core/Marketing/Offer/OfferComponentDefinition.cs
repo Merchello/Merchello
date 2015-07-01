@@ -20,6 +20,8 @@
         public OfferComponentDefinition(OfferComponentConfiguration configuration)
         {
             Mandate.ParameterNotNull(configuration, "configuration");
+            this.OfferSettingsKey = configuration.OfferSettingsKey;
+            this.OfferCode = configuration.OfferCode;
             this.ComponentKey = configuration.ComponentKey;
             this.TypeFullName = configuration.TypeFullName;
             this.ExtendedData = configuration.Values.AsExtendedDataCollection();
@@ -32,6 +34,16 @@
         {
             this.ExtendedData = new ExtendedDataCollection();
         }
+
+        /// <summary>
+        /// Gets or sets the offer settings key.
+        /// </summary>
+        public Guid OfferSettingsKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the offer code.
+        /// </summary>
+        public string OfferCode { get; set; }
 
         /// <summary>
         /// Gets or sets the component key.

@@ -51,7 +51,7 @@ angular.module('merchello.directives').directive('offerMainProperties', function
             toggleOfferExpires: '&'
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html'
-    }
+    };
 })
 
 angular.module('merchello.directives').directive('uniqueOfferCode', function() {
@@ -87,6 +87,7 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
                         $scope.$apply(function () {
                             if ($scope.offerCode !== '') {
                                 checkUniqueOfferCode($scope.offerCode);
+                                currentCode = $scope.offerCode;
                             }
                         });
                     } else {
@@ -98,29 +99,38 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
                     if($scope.offerCode !== undefined) {
                         if (!$scope.loaded) {
                             $scope.loaded = true;
-                            currentCode = $scope.offerCode;
-                            checkUniqueOfferCode($scope.offerCode);
+                            currentCode = $scope.offer.offerCode;
+                            checkUniqueOfferCode($scope.offer.offerCode);
                         }
                     }
                 });
             }
             function checkUniqueOfferCode(offerCode) {
                 $scope.checking = true;
-                container.show();
-                if (offerCode === currentCode) {
+                if (offerCode === '') {
                     $scope.checking = false;
-                    return true;
+                } else {
+                    container.show();
+                    if (offerCode === currentCode) {
+                        $scope.checking = false;
+                        return true;
+                    }
+                    var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
+                    checkPromise.then(function(result) {
+                        $scope.checking = false;
+                        $scope.isUnique = result;
+                    });
                 }
-                var checkPromise = marketingResource.checkOfferCodeIsUnique(offerCode);
-                checkPromise.then(function(result) {
-                    $scope.checking = false;
-                    $scope.isUnique = result;
-
-                });
             }
 
             function onOfferSaving(e, frm) {
-                frm.offerCode.$setValidity('offerCode', checkUniqueOfferCode($scope.offerCode));
+                var valid = $scope.offer.offerCode !== '';
+                if (valid) {
+                    checkUniqueOfferCode($scope.offer.offerCode);
+                    valid = $scope.isUnique;
+                    $scope.offerCode = $scope.offer.offerCode
+                }
+                frm.offerCode.$setValidity('offerCode', valid);
             }
             // Initialize
             init();
@@ -420,7 +430,7 @@ angular.module('merchello.directives').directive('comparisonOperatorRadioButtons
                  *
                  * @param {string} start - String representation of start date.
                  * @param {string} end - String representation of end date.
-                 * @description - Change the date filters, then triggera new API call to load the reports.
+                 * @description - Change the date filters, then trigger new API call to load the reports.
                  */
                 function changeDateFilters(start, end) {
                     $scope.filterStartDate = start;

@@ -396,6 +396,11 @@ angular.module('merchello.resources')
 
             var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloMarketingApiBaseUrl'];
 
+            function setUtcDates(offerSettings) {
+                console.info(offerSettings);
+            }
+
+
             return {
                 getOfferProviders: function() {
                     return umbRequestHelper.resourcePromise(
@@ -458,6 +463,7 @@ angular.module('merchello.resources')
                 },
                 saveOfferSettings: function(offerSettings) {
                     offerSettings.componentDefinitionExtendedDataToArray();
+                    setUtcDates(offerSettings);
                     return umbRequestHelper.resourcePromise(
                         $http.post(baseUrl + "PutUpdateOfferSettings",
                             offerSettings
@@ -938,7 +944,6 @@ angular.module('merchello.resources')
 
                 getByKeys: function(keys) {
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetByKeys';
-                    console.info(keys);
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             keys

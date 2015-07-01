@@ -42,6 +42,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult HandleSignUp(CombinedRegisterLoginModel model)
         {
             // Model validation
@@ -105,6 +106,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult HandleSignIn(CombinedRegisterLoginModel model)
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();

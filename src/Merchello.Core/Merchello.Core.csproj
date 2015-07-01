@@ -61,7 +61,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="businesslogic">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\businesslogic.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\businesslogic.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ClientDependency.Core">
@@ -73,11 +73,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="cms">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\cms.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\cms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="controls">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\controls.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\controls.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CookComputing.XmlRpcV2">
@@ -105,11 +105,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="interfaces">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\interfaces.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\log4net.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Lucene.Net">
@@ -117,7 +117,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -141,18 +141,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLCE4Umbraco">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\SQLCE4Umbraco.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\SQLCE4Umbraco.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\System.Data.SqlServerCe.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\System.Data.SqlServerCe.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.SqlServerCe.Entity">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http" />
@@ -198,48 +198,58 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TidyNet">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\TidyNet.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\TidyNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\umbraco.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\umbraco.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Umbraco.Core">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\Umbraco.Core.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\Umbraco.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.DataLayer">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\umbraco.DataLayer.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\umbraco.DataLayer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.editorControls">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\umbraco.editorControls.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\umbraco.editorControls.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.MacroEngines">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\umbraco.MacroEngines.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\umbraco.MacroEngines.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.providers">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\umbraco.providers.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\umbraco.providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Umbraco.Web.UI">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\Umbraco.Web.UI.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\Umbraco.Web.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="UmbracoExamine">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\UmbracoExamine.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\UmbracoExamine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="UrlRewritingNet.UrlRewriter">
-      <HintPath>..\packages\UmbracoCms.Core.7.2.5\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.2.6\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Chains\InvoiceCreation\AddCouponDiscountsToInvoiceTask.cs" />
+    <Compile Include="Chains\OfferConstraints\IOfferProcessor.cs" />
+    <Compile Include="Chains\OfferConstraints\IOfferProcessorFactory.cs" />
+    <Compile Include="Chains\OfferConstraints\IOfferConstraintChainTask.cs" />
+    <Compile Include="Chains\OfferConstraints\LineItemContainerOfferProcessor.cs" />
+    <Compile Include="Chains\OfferConstraints\LineItemContainerOfferConstraintTask.cs" />
+    <Compile Include="Chains\OfferConstraints\OfferProcessorBase.cs" />
+    <Compile Include="Chains\OfferConstraints\OfferConstraintChainForAttribute.cs" />
+    <Compile Include="Chains\OfferConstraints\OfferProcessorFactory.cs" />
+    <Compile Include="Chains\OfferConstraints\OfferConstraintChainTask.cs" />
     <Compile Include="Configuration\Outline\CustomerElement.cs" />
     <Compile Include="Configuration\Outline\PluggableCollection.cs" />
     <Compile Include="Configuration\Outline\PluggableObjectElement.cs" />
@@ -249,11 +259,15 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Exceptions\OfferNotActiveException.cs" />
+    <Compile Include="MandateWrapperExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
-    <Compile Include="Marketing\Constraints\OfferPriceConstraint.cs" />
-    <Compile Include="Marketing\Constraints\ProductLineItemQuantityConstraint.cs" />
+    <Compile Include="Marketing\Constraints\ProductConstraintDataSet.cs" />
+    <Compile Include="Marketing\Offer\IOfferRedemptionResult.cs" />
+    <Compile Include="Marketing\Offer\IOfferResult.cs" />
+    <Compile Include="Marketing\Offer\OfferComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Offer\OfferComponentType.cs" />
-    <Compile Include="Marketing\Offer\IOfferBaseManager.cs" />
+    <Compile Include="Marketing\Offer\IOfferManagerBase.cs" />
     <Compile Include="Marketing\Offer\IOfferProviderResolver.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinitionExtensions.cs" />
@@ -265,14 +279,19 @@
     <Compile Include="Marketing\Offer\OfferComponentAttribute.cs" />
     <Compile Include="Marketing\Constraints\IOfferConstraintComponent.cs" />
     <Compile Include="Marketing\Offer\IOfferComponentResolver.cs" />
-    <Compile Include="Marketing\Constraints\RestrictToProductSelectionConstraint.cs" />
     <Compile Include="Marketing\Offer\OfferBase.cs" />
     <Compile Include="Marketing\Offer\IOffer.cs" />
     <Compile Include="Marketing\Offer\IOfferProvider.cs" />
-    <Compile Include="Marketing\Offer\OfferProviderBase.cs" />
+    <Compile Include="Marketing\Offer\OfferManagerBase.cs" />
     <Compile Include="Marketing\Offer\OfferProviderResolver.cs" />
+    <Compile Include="Marketing\Offer\OfferRedemptionResultBase.cs" />
+    <Compile Include="Marketing\Offer\OfferResult.cs" />
+    <Compile Include="Marketing\Offer\OfferResultExtensions.cs" />
+    <Compile Include="Marketing\Offer\StringOperatorHelper.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
+    <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
+    <Compile Include="Models\Interfaces\IOfferRedeemed.cs" />
     <Compile Include="Models\Interfaces\IOfferSettings.cs" />
     <Compile Include="Marketing\Rewards\IOfferRewardComponent.cs" />
     <Compile Include="Events\FormatterEventArgs.cs" />
@@ -305,8 +324,10 @@
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />
     <Compile Include="Models\OfferComponentDefinitionCollection.cs" />
+    <Compile Include="Models\OfferRedeemed.cs" />
     <Compile Include="Models\OfferSettings.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
+    <Compile Include="Models\Rdbms\OfferRedeemedDto.cs" />
     <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
@@ -387,10 +408,12 @@
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\DigitalMediaFactory.cs" />
+    <Compile Include="Persistence\Factories\OfferRedeemedFactory.cs" />
     <Compile Include="Persistence\Factories\OfferSettingsFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\DigitalMediaMapper.cs" />
+    <Compile Include="Persistence\Mappers\OfferRedeemedMapper.cs" />
     <Compile Include="Persistence\Mappers\OfferSettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
@@ -407,10 +430,12 @@
     <Compile Include="Persistence\Repositories\Interfaces\IAssertsDocumentNumber.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IDigitalMediaRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IOfferRedeemedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IOfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
+    <Compile Include="Persistence\Repositories\OfferRedeemedRepository.cs" />
     <Compile Include="Persistence\Repositories\OfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\PagedRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\ShipmentStatusRepository.cs" />
@@ -964,6 +989,7 @@
     <Compile Include="Services\Interfaces\IDigitalMediaService.cs" />
     <Compile Include="Services\Interfaces\INotificationMessageService.cs" />
     <Compile Include="Services\Interfaces\INotificationMethodService.cs" />
+    <Compile Include="Services\Interfaces\IOfferRedeemedService.cs" />
     <Compile Include="Services\Interfaces\IOfferSettingsService.cs" />
     <Compile Include="Services\Interfaces\IOrderService.cs" />
     <Compile Include="Services\Interfaces\IPageCachedService.cs" />
@@ -972,6 +998,7 @@
     <Compile Include="Services\Interfaces\IWarehouseCatalogService.cs" />
     <Compile Include="Services\NotificationMessageService.cs" />
     <Compile Include="Services\NotificationMethodService.cs" />
+    <Compile Include="Services\OfferRedeemedService.cs" />
     <Compile Include="Services\OfferSettingsService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PageCachedServiceBase.cs" />

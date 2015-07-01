@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
 
+    using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
@@ -216,6 +217,7 @@
         {
             var list = new List<string>
             {
+                "UPDATE merchOfferRedeemed SET offerSettingsKey = NULL WHERE offerSettingsKey = @Key",
                 "DELETE FROM merchOfferSettings WHERE pk = @Key"                        
             };
 
@@ -231,14 +233,12 @@
         protected override void PersistNewItem(IOfferSettings entity)
         {
             ((Entity)entity).AddingEntity();
-
             var factory = new OfferSettingsFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Insert(dto);
 
             entity.Key = dto.Key;
-
             entity.ResetDirtyProperties();
         }
 
@@ -251,7 +251,6 @@
         protected override void PersistUpdatedItem(IOfferSettings entity)
         {
             ((Entity)entity).AddingEntity();
-
             var factory = new OfferSettingsFactory();
             var dto = factory.BuildDto(entity);
 
@@ -259,7 +258,23 @@
 
             entity.ResetDirtyProperties();
         }
-       
+
+        /// <summary>
+        /// The ensure components have the offer settings key set.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        private void EnsureComponentsOfferSettingsKeys(IOfferSettings entity)
+        {
+            var configurations = entity.ComponentDefinitions.Select(x => x.AsOfferComponentConfiguration()).ToArray();
+            foreach (var config in configurations.ToArray())
+            {
+                // TODO fix this hack 
+                config.OfferSettingsKey = entity.Key;
+            }
+        }
+
         /// <summary>
         /// Builds an offer search query.
         /// </summary>
@@ -278,11 +293,11 @@
             sql.Select("*").From<OfferSettingsDto>();
             if (terms.Any())
             {
-                sql.Where("name LIKE @term OR offerCode LIKE @offerCode", new { @term = string.Format("%{0}%", string.Join("%", terms)), offerCode = string.Format("%{0}%", string.Join("%", terms)) });
+                sql.Where("name LIKE @term OR offerCode LIKE @offerCode", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), offerCode = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
             }
             else
             {
-                sql.Where("name LIKE @term OR offerCode LIKE @term", new { @term = string.Format("%{0}%", string.Join("%", terms)) });
+                sql.Where("name LIKE @term OR offerCode LIKE @term", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
             }
 
             return sql;

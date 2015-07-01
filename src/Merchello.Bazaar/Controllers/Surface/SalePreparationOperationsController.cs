@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Bazaar.Controllers.Surface
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -8,6 +9,8 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Web;
+    using Merchello.Web.Discounts.Coupons;
+    using Merchello.Web.Workflow;
 
     using Umbraco.Web.Mvc;
 
@@ -17,6 +20,45 @@
     [PluginController("Bazaar")]
     public class SalePreparationOperationsController : SurfaceControllerBase
     {
+        /// <summary>
+        /// Tries to redeem a coupon offer.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="RedeemCouponOfferForm"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RedeemCouponOffer(RedeemCouponOfferForm model)
+        {
+            if (string.IsNullOrEmpty(model.OfferCode)) return this.CurrentUmbracoPage();
+
+            var result = Basket.SalePreparation().RedeemCouponOffer(model.OfferCode);
+            ViewBag.CouponRedemptionResult = result;
+            return this.CurrentUmbracoPage();
+        }
+
+        /// <summary>
+        /// Removes the coupon.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <param name="redirectId">
+        /// The content id of the page to redirect to
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public ActionResult RemoveCoupon(string offerCode, int redirectId)
+        {
+            Basket.SalePreparation().RemoveOfferCode(offerCode);
+            return this.RedirectToUmbracoPage(redirectId);
+        }
+
         /// <summary>
         /// Saves addresses during the checkout process.
         /// </summary>

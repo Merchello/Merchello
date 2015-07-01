@@ -407,6 +407,23 @@
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="IOfferSettings"/> by their unique keys
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IOfferSettings}"/>.
+        /// </returns>
+        public IEnumerable<IOfferSettings> GetByKeys(IEnumerable<Guid> keys)
+        {
+            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll(keys.ToArray());
+            }
+        }
+
+        /// <summary>
         /// Returns a page of <see cref="IOfferSettings"/>.
         /// </summary>
         /// <param name="page">

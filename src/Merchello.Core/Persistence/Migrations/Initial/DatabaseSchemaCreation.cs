@@ -64,7 +64,8 @@
             { 36, typeof(NotificationMethodDto) },
             { 37, typeof(NotificationMessageDto) },
             { 38, typeof(AuditLogDto) },
-            { 39, typeof(OfferSettingsDto) }
+            { 39, typeof(OfferSettingsDto) },
+            { 40, typeof(OfferRedeemedDto) }
         };
 
         /// <summary>

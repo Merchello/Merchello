@@ -78,7 +78,7 @@
 
 
             //// if the error is for umbracoServer
-            if (this.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchCampaignSettings")))
+            if (this.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchOfferSettings")))
             {
                 return new Version(1, 8, 3);
             }

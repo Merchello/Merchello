@@ -14,7 +14,7 @@
         public void Can_Map_An_OfferProvider_To_OfferProviderDisplay()
         {
             //// Arrange
-            var provider = OfferProviderResolver.Current.GetOfferProvider<CouponProvider>();
+            var provider = OfferProviderResolver.Current.GetOfferProvider<CouponManager>();
 
             //// Act
             var display = provider.ToOfferProviderDisplay();

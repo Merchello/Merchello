@@ -16,7 +16,9 @@
         self.offerStartsDate = '';
         self.offerEndsDate = '';
         self.expired = false;
+        self.hasStarted = false;
         self.active = false;
+        self.dateFormat = '';  // used to pass back office format to server for parse exact.
         self.componentDefinitions = [];
     };
 
@@ -49,7 +51,9 @@
 
         function componentDefinitionExtendedDataToArray() {
             angular.forEach(this.componentDefinitions, function(cd) {
-                cd.extendedData = cd.extendedData.toArray();
+                if (!angular.isArray(cd.extendedData)) {
+                    cd.extendedData = cd.extendedData.toArray();
+                }
             });
         }
 
@@ -60,6 +64,10 @@
             }
             var reward = _.find(this.componentDefinitions, function(c) { return c.componentType === 'Reward'; } );
             return reward !== undefined && reward !== null;
+        }
+
+        function getReward() {
+            return _.find(this.componentDefinitions, function(c) { return c.componentType === 'Reward'; } );
         }
 
         function componentsConfigured() {
@@ -87,13 +95,66 @@
             return this.componentDefinitions[0].typeGrouping === typeGrouping;
         }
 
+        function assignComponent(component) {
+            var exists =_.find(this.componentDefinitions, function(cd) { return cd.componentKey === component.componentKey; });
+            if (exists === undefined && ensureTypeGrouping.call(this, component.typeGrouping)) {
+                component.offerCode = this.offerCode;
+                component.offerSettingsKey = this.key;
+                if (component.componentType === 'Reward') {
+                    this.componentDefinitions.unshift(component);
+                }
+                else
+                {
+                    this.componentDefinitions.push(component);
+                }
+
+                return true;
+            }
+            return false;
+        }
+
         function updateAssignedComponent(component) {
-            console.info(component);
             var assigned = getAssignedComponent.call(this, component.componentKey);
             if (assigned !== undefined && assigned !== null) {
                 assigned.extendedData = component.extendedData;
                 assigned.updated = true;
             }
+        }
+
+        function setLineItemName(value) {
+            if (hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                reward.extendedData.setValue('lineItemName', value);
+            }
+        }
+
+        function getLineItemName() {
+            if(hasRewards.call(this)) {
+                var reward = getReward.call(this);
+                var name = reward.extendedData.getValue('lineItemName');
+                if (name === '') {
+                    name = reward.name;
+                }
+                return name;
+            } else {
+                return '';
+            }
+        }
+
+        function validateComponents() {
+            var offerCode = this.offerCode;
+            var offerSettingsKey = this.key;
+            var invalid = _.filter(this.componentDefinitions, function (cd) { return cd.offerSettingsKey !== this.key || cd.offerCode !== this.offerCode; });
+            if (invalid !== undefined) {
+                angular.forEach(invalid, function(fix) {
+                    fix.offerSettingsKey = offerSettingsKey;
+                    fix.offerCode = offerCode;
+                });
+            }
+        }
+
+        function reorderComponent(oldIndex, newIndex) {
+            this.componentDefinitions.splice(newIndex, 0, this.componentDefinitions.splice(oldIndex, 1)[0]);
         }
 
         return {
@@ -105,9 +166,15 @@
             getComponentsTypeGrouping: getComponentsTypeGrouping,
             ensureTypeGrouping: ensureTypeGrouping,
             hasRewards: hasRewards,
+            getReward: getReward,
+            assignComponent: assignComponent,
             updateAssignedComponent: updateAssignedComponent,
             getAssignedComponent: getAssignedComponent,
-            componentsConfigured: componentsConfigured
+            componentsConfigured: componentsConfigured,
+            getLineItemName: getLineItemName,
+            setLineItemName: setLineItemName,
+            validateComponents: validateComponents,
+            reorderComponent: reorderComponent
         }
 
     }());

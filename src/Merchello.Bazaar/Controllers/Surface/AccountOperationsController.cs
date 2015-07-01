@@ -8,6 +8,7 @@
 
     using Merchello.Bazaar.Models.Account;
     using Merchello.Core.Models;
+    using Merchello.Web;
 
     using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;

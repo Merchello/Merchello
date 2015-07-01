@@ -1,7 +1,11 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Rewards
 {
+    using System.Globalization;
+    using System.Linq;
+
+    using Merchello.Core;
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Marketing.Offer;
-    using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -9,9 +13,9 @@
     /// <summary>
     /// Represents a discount line item reward.
     /// </summary>
-    [OfferComponent("A1CCE36A-C5AA-4C50-B659-CC2FBDEAA7B3", "Discount the price", "Applies a discount according to configured price rules.",
+    [OfferComponent("A1CCE36A-C5AA-4C50-B659-CC2FBDEAA7B3", "Discount the price", "Applies a discount to items that pass constraint filters according to configured price rules.",
         "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.couponreward.discountprice.html", typeof(Coupon))]
-    public class CouponDiscountLineItemReward : OfferRewardComponentBase<ILineItemContainer, ILineItem>
+    public class CouponDiscountLineItemReward : CouponDiscountLineItemRewardBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CouponDiscountLineItemReward"/> class.
@@ -24,9 +28,108 @@
         {
         }
 
-        public override Attempt<ILineItem> Award(ILineItemContainer validate, ICustomerBase customer)
+        /// <summary>
+        /// The adjustment.
+        /// </summary>
+        internal enum Adjustment
         {
-            throw new System.NotImplementedException();
+            Flat,
+            Percent,
+            NotSet
+        }
+
+        #region properties
+
+        /// <summary>
+        /// Gets a value indicating whether is configured.
+        /// </summary>
+        private bool IsConfigured
+        {
+            get
+            {
+                return AdjustmentType != Adjustment.NotSet;
+            }    
+        }
+
+        /// <summary>
+        /// Gets the configured amount.
+        /// </summary>
+        private decimal Amount
+        {
+            get
+            {
+                decimal converted;
+                return decimal.TryParse(this.GetConfigurationValue("amount"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;                                
+            }
+        }
+
+        /// <summary>
+        /// Gets the adjustment type.
+        /// </summary>
+        private Adjustment AdjustmentType
+        {
+            get
+            {
+                var adjustmentType = this.GetConfigurationValue("adjustmentType");   
+                if (string.IsNullOrEmpty(adjustmentType)) return Adjustment.NotSet;
+
+                return Enum<Adjustment>.Parse(adjustmentType, true);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the display configuration format.
+        /// This text is used by the back office UI to display configured values
+        /// </summary>
+        public override string DisplayConfigurationFormat
+        {
+            get
+            {
+
+                if (!IsConfigured) return "''";
+
+                return
+                    string.Format(
+                        AdjustmentType == Adjustment.Percent
+                            ? "'Discount price: {0}%'"
+                            : "'Discount price: ' + $filter('currency')({0}, $scope.currencySymbol)",
+                        Amount);
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Tries to apply the discount line item reward
+        /// </summary>
+        /// <param name="validate">
+        /// The <see cref="ILineItemContainer"/> to validate against
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt{ILinetItem}"/>.
+        /// </returns>
+        public override Attempt<ILineItem> TryAward(ILineItemContainer validate, ICustomerBase customer)
+        {
+            if (!IsConfigured) return Attempt<ILineItem>.Fail(new OfferRedemptionException("The coupon reward is not configured."));
+
+            // Get the item template
+            var discountLineItem = CreateTemplateDiscountLineItem();
+
+            // apply to the entire collection excluding previously added discounts
+            var qualifyingTotal = validate.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
+
+
+            var discount = this.AdjustmentType == Adjustment.Flat
+                                    ? this.Amount > qualifyingTotal ? qualifyingTotal : this.Amount
+                                    : qualifyingTotal * (this.Amount / 100);
+          
+            discountLineItem.Price = discount;
+
+            return Attempt<ILineItem>.Succeed(discountLineItem);
         }
     }
 }

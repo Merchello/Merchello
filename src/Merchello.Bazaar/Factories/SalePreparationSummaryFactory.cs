@@ -48,11 +48,13 @@
         /// <param name="preparation">
         /// The preparation.
         /// </param>
+        /// <param name="theme">The Bazaar them</param>
         /// <returns>
         /// The <see cref="SalePreparationSummary"/>.
         /// </returns>
         public SalePreparationSummary Build(SalePreparationBase preparation)
         {
+
             if (preparation.IsReadyToInvoice())
             {
                 var invoice = preparation.PrepareInvoice();
@@ -65,7 +67,7 @@
                                ShippingTotal = ModelExtensions.FormatPrice(invoice.TotalShipping(), _currency.Symbol),
                                TaxTotal = ModelExtensions.FormatPrice(invoice.TotalTax(), _currency.Symbol),
                                DiscountsTotal = ModelExtensions.FormatPrice(invoice.TotalDiscounts(), _currency.Symbol),
-                               InvoiceTotal = ModelExtensions.FormatPrice(invoice.Total, _currency.Symbol)
+                               InvoiceTotal = ModelExtensions.FormatPrice(invoice.Total, _currency.Symbol),                               
                            };
             }
             
@@ -78,7 +80,7 @@
                     ShippingTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice), _currency.Symbol),
                     TaxTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice), _currency.Symbol),
                     DiscountsTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency.Symbol),
-                    InvoiceTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice) - preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency.Symbol)
+                    InvoiceTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice) - preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency.Symbol),
                 };
         }
     }

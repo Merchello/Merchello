@@ -17,5 +17,5 @@ angular.module('merchello.directives').directive('offerMainProperties', function
             toggleOfferExpires: '&'
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/offer.mainproperties.tpl.html'
-    }
+    };
 })

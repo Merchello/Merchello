@@ -24,6 +24,6 @@
         /// <returns>
         /// The <see cref="Attempt{ILineItemContainer}"/> indicating whether or not the constraint can be enforced.
         /// </returns>
-        Attempt<T> Apply(T value, ICustomerBase customer);
+        Attempt<T> TryApply(T value, ICustomerBase customer);
     }
 }

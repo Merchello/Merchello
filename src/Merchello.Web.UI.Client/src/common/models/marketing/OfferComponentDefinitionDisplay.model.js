@@ -8,11 +8,14 @@
  */
 var OfferComponentDefinitionDisplay = function() {
     var self = this;
+    self.offerSettingsKey = '';
+    self.offerCode = '';
     self.componentKey = '';
     self.name = '';
     self.description = '';
     self.typeFullName = '';
     self.typeGrouping = '';
+    self.displayConfigurationFormat = '';
     self.extendedData = {};
     self.componentType = '';
     self.dialogEditorView = {};

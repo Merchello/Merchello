@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using Gateways;
 
+    using Merchello.Core.Chains.OfferConstraints;
+
     using Observation;
     using Umbraco.Core;
 
@@ -53,5 +55,19 @@
         {
             return pluginManager.ResolveTypesWithAttribute<ITrigger, TriggerForAttribute>();
         }
+
+        /// <summary>
+        /// The resolve offer constraint chains.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IOfferProcessor"/> types
+        /// </returns>
+        internal static IEnumerable<Type> ResolveOfferConstraintChains(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<IOfferProcessor, OfferConstraintChainForAttribute>();
+        } 
     }
 }

@@ -6,7 +6,7 @@
     using Umbraco.Core.Persistence.DatabaseAnnotations;
 
     /// <summary>
-    /// The audit dto.
+    /// The offer settings dto.
     /// </summary>
     [TableName("merchOfferSettings")]
     [PrimaryKey("pk", autoIncrement = false)]

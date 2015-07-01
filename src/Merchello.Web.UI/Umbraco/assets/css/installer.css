@@ -1657,6 +1657,15 @@ legend + .control-group {
   z-index: 1000;
 }
 
+@media (max-width: 767px) {
+  .form-horizontal .control-label {
+    width: 100%;
+  }
+  .form-horizontal .controls {
+    margin-left: 0;
+  }
+}
+
 body {
   margin: 0;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
