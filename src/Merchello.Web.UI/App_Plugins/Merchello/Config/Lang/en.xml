@@ -228,6 +228,7 @@
     <key alias="globalShippable">All items are shippable</key>
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
+    <key alias="globalTaxationApplication">Set how taxes are applied</key>
   </area>
 
   <area alias="merchelloShippingCountry">
