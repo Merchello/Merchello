@@ -26,7 +26,7 @@
                         {{provider.name}}
                         <small data-ng-bind="provider.description"></small>
                         <div data-ng-show="provider.gatewayResources.length > 0">
-                            <a data-ng-click="provider.showSelectResource = !provider.showSelectResource"><i class="icon-bill-dollar"></i><localize key="merchelloPayment_addPaymentMethod" /> </a>
+                            <a data-ng-click="provider.showSelectResource = !provider.showSelectResource"><i class="icon-bill-dollar"></i> <localize key="merchelloPayment_addPaymentMethod" /></a>
                             <div class="well" data-ng-class="{ 'open': provider.showSelectResource, 'closed': (!provider.showSelectResource) }">
                                 <label><localize key="merchelloPayment_resourceType" /> </label>
                                 <select class="form-control col-xs-12 span12" data-ng-model="provider.selectedGatewayResource" data-ng-options="r.name for r in provider.gatewayResources track by r.serviceCode"></select>
