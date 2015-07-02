@@ -13,7 +13,7 @@
     /// <summary>
     /// Insert the new merchello settings GlobalTaxationApplication setting.
     /// </summary>
-    [Migration("1.7.0", "1.9.0.1", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.7.0", "1.9.0.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class InsertNewMerchelloSettingsGlobalTaxationApplicationKey : MigrationBase
     {
         /// <summary>
@@ -49,14 +49,11 @@
         }
 
         /// <summary>
-        /// The down.
+        /// Removes the key
         /// </summary>
-        /// <exception cref="DataLossException">
-        /// Throws an exception if a downgrade is attempted
-        /// </exception>
         public override void Down()
         {
-            throw new DataLossException("Cannot downgrade from a version 1.9.1 database to a prior version, the database schema has already been modified");
+            _database.Delete("merchStoreSetting", "pk", null, Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
         }
     }
 }

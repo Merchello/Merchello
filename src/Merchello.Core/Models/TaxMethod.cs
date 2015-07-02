@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Globalization;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -17,12 +18,66 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     internal class TaxMethod : Entity, ITaxMethod
     {
-        private string _name;
+
+        /// <summary>
+        /// The name selector.
+        /// </summary>
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, string>(x => x.Name);
+
+        /// <summary>
+        /// The percentage tax rate selector.
+        /// </summary>
+        private static readonly PropertyInfo PercentageTaxRateSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, decimal>(x => x.PercentageTaxRate);
+
+        /// <summary>
+        /// The provinces changed selector.
+        /// </summary>
+        private static readonly PropertyInfo ProvincesChangedSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, ProvinceCollection<ITaxProvince>>(x => x.Provinces);
+
+        /// <summary>
+        /// The product tax method selector.
+        /// </summary>
+        private static readonly PropertyInfo ProductTaxMethodSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, bool>(x => x.ProductTaxMethod);
+
+        /// <summary>
+        /// The _provider key.
+        /// </summary>
         private readonly Guid _providerKey;
+
+        /// <summary>
+        /// The _country code.
+        /// </summary>
         private readonly string _countryCode;
+
+        /// <summary>
+        /// The _name.
+        /// </summary>
+        private string _name;
+
+        /// <summary>
+        /// The _percentage tax rate.
+        /// </summary>
         private decimal _percentageTaxRate;
+
+        /// <summary>
+        /// The product tax method.
+        /// </summary>
+        private bool _productTaxMethod;
+
+        /// <summary>
+        /// The _tax provinces.
+        /// </summary>
         private ProvinceCollection<ITaxProvince> _taxProvinces;
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaxMethod"/> class.
+        /// </summary>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
         internal TaxMethod(Guid providerKey, string countryCode)
         {
             Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
@@ -32,10 +87,6 @@ namespace Merchello.Core.Models
             _countryCode = countryCode;
             PercentageTaxRate = 0;
         }
-
-        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, string>(x => x.Name);
-        private static readonly PropertyInfo PercentageTaxRateSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, decimal>(x => x.PercentageTaxRate);
-        private static readonly PropertyInfo ProvincesChangedSelector = ExpressionHelper.GetPropertyInfo<TaxMethod, ProvinceCollection<ITaxProvince>>(x => x.Provinces);
 
         private void TaxProvincesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -106,7 +157,30 @@ namespace Merchello.Core.Models
             }
         }
 
-        
+        /// <summary>
+        /// Gets or sets a value indicating whether product tax method.
+        /// </summary>
+        [DataMember]
+        public bool ProductTaxMethod
+        {
+            get
+            {
+                return _productTaxMethod;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                {
+                    _productTaxMethod = value;
+                    return _productTaxMethod;
+                },
+                _productTaxMethod, 
+                ProductTaxMethodSelector);
+            }
+        }
+
         /// <summary>
         /// True/false indicating whether or not the CountryTaxRate has provinces
         /// </summary>
