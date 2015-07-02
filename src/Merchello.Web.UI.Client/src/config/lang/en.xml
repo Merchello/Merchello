@@ -41,7 +41,7 @@
     <key alias="variant">Variant</key>
     <key alias="sku">SKU</key>
     <key alias="baseSku">Base Sku</key>
-    <key alias="barcode">Barcode</key>sel
+    <key alias="barcode">Barcode</key>
     <key alias="manufacturer">Manufacturer</key>
     <key alias="manufacturerModel">Manufacturer's Model No.</key>
     <key alias="variantInfo">Variant Information</key>
@@ -96,7 +96,7 @@
     <key alias="orderNumber">Order #</key>
     <key alias="paymentStatus">Payment Status</key>
     <key alias="fulfillmentStatus">Fulfillment Status</key>
-    <key alias="lineItems"> Line Items</key>
+    <key alias="lineItems">Line Items</key>
     <key alias="orderName">[Order Name]</key>
     <key alias="createOrder">Create Order</key>
     <key alias="sales">Sales</key>
@@ -118,6 +118,10 @@
     <key alias="processedBy">Processed by</key>
     <key alias="refundMethod">Refund method</key>
     <key alias="resetFilters">Reset Filters</key>
+    <key alias="archiveSales">Archive Sales</key>
+    <key alias="unarchiveSales">Unarchive Sales</key>
+    <key alias="noSalesYet">You have no sales yet</key>
+    <key alias="butSoonYouWill">but soon you will!</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
