@@ -356,6 +356,7 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
         self.globalTaxable = false;
         self.globalTrackInventory = false;
         self.globalShippingIsTaxable = false;
+        self.globalTaxationApplication = 'invoice';
     };
 
     angular.module('merchello.models').constant('SettingDisplay', SettingDisplay);

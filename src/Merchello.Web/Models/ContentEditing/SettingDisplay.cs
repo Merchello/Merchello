@@ -1,5 +1,10 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using Merchello.Core.Gateways.Taxation;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// The setting display.
     /// </summary>
@@ -59,5 +64,11 @@
         /// Gets or sets a value indicating whether global shipping is taxable.
         /// </summary>
         public bool GlobalShippingIsTaxable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the how taxes should be applied globally.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TaxationApplication GlobalTaxationApplication { get; set; }
 	}
 }
