@@ -3234,6 +3234,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.provider = {};
         self.taxMethod = {};
         self.gatewayResource = {};
+        self.addTaxesToProduct = false;
         self.sortOrder = 0;
     };
 

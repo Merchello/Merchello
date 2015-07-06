@@ -4,7 +4,8 @@
   }
   .product-tax-method {
     padding: 1em 0;
-    input[type="radio"] {
+    input[type="checkbox"] {
+      display: inline-block;;
       margin: 0;
       padding: .5em 0;
       line-height: 20px;
