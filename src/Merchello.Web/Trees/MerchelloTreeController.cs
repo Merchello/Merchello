@@ -38,11 +38,8 @@
         protected override TreeNodeCollection GetTreeNodes(string id, FormDataCollection queryStrings)
         {
             var collection = new TreeNodeCollection();
-
             var backoffice = MerchelloConfiguration.Current.BackOffice;
-
             var rootTrees = backoffice.GetTrees().Where(x => x.Visible).ToArray();
-
             var currentTree = rootTrees.FirstOrDefault(x => x.Id == id && x.Visible);
 
             collection.AddRange(
@@ -135,7 +132,6 @@
         {
             var types = ReportApiControllerResolver.Current.ResolvedTypes.ToArray();
             if (!types.Any()) return new TreeNode[] { };
-
 
             var atts = types.Select(x => x.GetCustomAttribute<BackOfficeTreeAttribute>(true)).OrderBy(x => x.SortOrder);
 

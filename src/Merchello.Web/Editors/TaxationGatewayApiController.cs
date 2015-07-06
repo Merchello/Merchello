@@ -75,32 +75,6 @@
             }
         }
 
-        ///// <summary>
-        ///// The get taxation countries.
-        ///// </summary>
-        ///// <returns>
-        ///// The <see cref="IEnumerable{CountryDisplay}"/>.
-        ///// </returns>
-        //public IEnumerable<CountryDisplay> GetDefaultTaxableCountries()
-        //{
-        //    try
-        //    {
-        //        // we only need countries that we are allow to ship to as there is no reason
-        //        var shipCountryService = (ShipCountryService)((ServiceContext)MerchelloContext.Services).ShipCountryService;
-        //        var distinctCodes = shipCountryService.GetAllShipCountries().Select(x => x.CountryCode).Distinct();
-        //        var settingsService = MerchelloContext.Services.StoreSettingService;
-        //        var countries = new List<ICountry>();
-        //        foreach (var countryCode in distinctCodes)
-        //        {
-                    
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.InternalServerError));
-        //    }
-        //} 
-
         /// <summary>
         /// Returns a list of all of GatewayProviders of GatewayProviderType Taxation
         /// 
@@ -109,7 +83,7 @@
         /// <returns>
         /// The collection of <see cref="GatewayProviderDisplay"/>.
         /// </returns>
-        public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
+        public IEnumerable<TaxationGatewayProviderDisplay> GetAllGatewayProviders()
         {
             var providers = _taxationContext.GetAllActivatedProviders();
             if (providers == null)
@@ -117,7 +91,7 @@
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
             
-            return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
+            return providers.Select(provider => provider.ToTaxationGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -136,7 +110,8 @@
             var provider = _taxationContext.GetProviderByKey(id);
             if (provider != null)
             {
-                return provider.GetAllGatewayTaxMethods().Select(x => x.ToTaxMethodDisplay());
+                var methods = provider.GetAllGatewayTaxMethods().Select(x => x.ToTaxMethodDisplay());
+                return methods;
             }
 
             throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));

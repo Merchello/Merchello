@@ -1,10 +1,8 @@
-﻿using System;
-using System.Globalization;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// Defines a Tax Method
     /// </summary>
@@ -39,6 +37,12 @@ namespace Merchello.Core.Models
         /// </summary>
         [DataMember]
         ProvinceCollection<ITaxProvince> Provinces { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether product tax method.
+        /// </summary>
+        [DataMember]
+        bool ProductTaxMethod { get; set; }
 
         /// <summary>
         /// True/false indicating whether or not the CountryTaxRate has provinces
