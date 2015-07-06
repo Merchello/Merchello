@@ -20,6 +20,8 @@
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
+
+    using ServiceContext = Merchello.Core.Services.ServiceContext;
     using Task = System.Threading.Tasks.Task;
 
     /// <summary>
@@ -86,6 +88,9 @@
 
             InvoiceService.Deleted += InvoiceServiceOnDeleted;
             OrderService.Deleted += OrderServiceOnDeleted;
+
+            // Store settings
+            StoreSettingService.Saved += StoreSettingServiceOnSaved;
 
             // Auditing
             PaymentGatewayMethodBase.VoidAttempted += PaymentGatewayMethodBaseOnVoidAttempted;
@@ -206,9 +211,34 @@
             });
         }
 
+        /// <summary>
+        /// The store setting service on saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void StoreSettingServiceOnSaved(IStoreSettingService sender, SaveEventArgs<IStoreSetting> e)
+        {
+            var setting = e.SavedEntities.FirstOrDefault(x => x.Key == Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
+            if (setting == null) return;
+
+            if (setting.Value == "Product") return;
+            
+            var taxMethodService = ((ServiceContext)MerchelloContext.Current.Services).TaxMethodService;
+            var methods = taxMethodService.GetAll().ToArray();
+            foreach (var method in methods)
+            {
+                method.ProductTaxMethod = false;
+            }
+
+            taxMethodService.Save(methods);
+        }
 
         /// <summary>
-        /// Performs audits on SalePrepartionBase.Finalizing
+        /// Performs audits on SalePreparationBase.Finalizing
         /// </summary>
         /// <param name="sender">
         /// The sender.

@@ -338,6 +338,14 @@
                     return new Guid("56044D81-5C1E-4073-A2CB-1BE3412E461B"); 
                 }
             }
+
+            /// <summary>
+            /// Gets the global taxation application key.
+            /// </summary>
+            public static Guid GlobalTaxationApplicationKey
+            {
+                get { return new Guid("B9653D97-A87B-4F78-BE2D-395665FBE361"); }
+            }
         }
 
         /// <summary>

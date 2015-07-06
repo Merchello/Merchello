@@ -69,6 +69,10 @@
                 return new Version(1, 7, 0);
             }
 
+            if (StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.GlobalTaxationApplicationKey))
+            {
+                return new Version(1, 9, 0);
+            }
 
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
@@ -78,10 +82,10 @@
 
 
             //// if the error is for umbracoServer
-            if (this.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchOfferSettings")))
-            {
-                return new Version(1, 8, 3);
-            }
+            //if (this.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchOfferSettings")))
+            //{
+            //    return new Version(1, 8, 3);
+            //}
 
 
             return MerchelloVersion.Current;

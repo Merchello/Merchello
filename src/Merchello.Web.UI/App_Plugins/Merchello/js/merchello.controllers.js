@@ -4427,10 +4427,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
 angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersController',
     ['$scope', '$timeout', 'settingsResource', 'notificationsService', 'dialogService', 'taxationGatewayProviderResource', 'dialogDataFactory', 'merchelloTabsFactory',
         'settingDisplayBuilder', 'countryDisplayBuilder', 'taxCountryDisplayBuilder',
-        'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder', 'taxMethodDisplayBuilder',
+        'gatewayResourceDisplayBuilder', 'taxationGatewayProviderDisplayBuilder', 'taxMethodDisplayBuilder',
     function($scope, $timeout, settingsResource, notificationsService, dialogService, taxationGatewayProviderResource, dialogDataFactory, merchelloTabsFactory,
              settingDisplayBuilder, countryDisplayBuilder, taxCountryDisplayBuilder,
-             gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder, taxMethodDisplayBuilder) {
+             gatewayResourceDisplayBuilder, taxationGatewayProviderDisplayBuilder, taxMethodDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -4438,8 +4438,10 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         $scope.allCountries = [];
         $scope.availableCountries = [];
         $scope.taxationGatewayProviders = [];
+        $scope.settings = {};
 
         // exposed methods
+        $scope.ensureSingleProductTaxMethod = ensureSingleProductTaxMethod;
         $scope.save = save;
         $scope.editTaxMethodProvinces = editTaxMethodProvinces;
 
@@ -4458,12 +4460,28 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         function init() {
             $scope.availableCountries = [];
             $scope.taxationGatewayProviders = [];
-            loadAllAvailableCountries();
-            loadAllTaxationGatewayProviders();
+            loadSettings();
             $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
             $scope.tabs.setActive('taxation');
             _.sortBy($scope.availableCountries, function(country) {
                 return country.name;
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name loadSettings
+         * @function
+         *
+         * @description - Load the Merchello settings.
+         */
+        function loadSettings() {
+            var settingsPromise = settingsResource.getAllSettings();
+            settingsPromise.then(function(settings) {
+                $scope.settings = settings;
+                loadAllAvailableCountries();
+            }, function(reason) {
+                notificationsService.error('Failed to load global settings', reason.message);
             });
         }
 
@@ -4479,6 +4497,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
             var promiseAllCountries = settingsResource.getAllCountries();
             promiseAllCountries.then(function (allCountries) {
                 $scope.allCountries = countryDisplayBuilder.transform(allCountries);
+                loadAllTaxationGatewayProviders();
             }, function (reason) {
                 notificationsService.error("Available Countries Load Failed", reason.message);
             });
@@ -4496,19 +4515,17 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
             var promiseAllProviders = taxationGatewayProviderResource.getAllGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
-                $scope.taxationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
-
-                var noTaxProvider = gatewayProviderDisplayBuilder.createDefault();
+                $scope.taxationGatewayProviders = taxationGatewayProviderDisplayBuilder.transform(allProviders);
+                console.info($scope.taxationGatewayProviders);
+                var noTaxProvider = taxationGatewayProviderDisplayBuilder.createDefault();
                 noTaxProvider.key = -1;
                 noTaxProvider.name = 'Not Taxed';
 
                 if($scope.taxationGatewayProviders.length > 0) {
                     for(var i = 0; i < $scope.taxationGatewayProviders.length; i++) {
                         loadAvailableCountriesWithoutMethod($scope.taxationGatewayProviders[i], noTaxProvider);
-                        loadTaxMethods($scope.taxationGatewayProviders[i]);
                     }
                 }
-
                 $scope.taxationGatewayProviders.unshift(noTaxProvider);
 
             }, function (reason) {
@@ -4517,10 +4534,8 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         }
 
         function loadAvailableCountriesWithoutMethod(taxationGatewayProvider, noTaxProvider) {
-
             var promiseGwResources = taxationGatewayProviderResource.getGatewayResources(taxationGatewayProvider.key);
             promiseGwResources.then(function (resources) {
-
                 var newAvailableCountries = _.map(resources, function (resourceFromServer) {
                     var taxCountry = taxCountryDisplayBuilder.transform(resourceFromServer);
                     taxCountry.country = _.find($scope.allCountries, function (c) { return c.countryCode == taxCountry.gatewayResource.serviceCode; });
@@ -4544,9 +4559,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
                     country.taxMethod.providerKey = '-1';
                     $scope.availableCountries.push(country);
                 });
-
-                console.info($scope.availableCountries);
-
+                loadTaxMethods(taxationGatewayProvider);
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
@@ -4562,8 +4575,8 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
                 var newCountries = _.map(methods, function(methodFromServer) {
                     var taxMethod = taxMethodDisplayBuilder.transform(methodFromServer);
-
                     var taxCountry = taxCountryDisplayBuilder.createDefault();
+                    taxCountry.addTaxesToProduct = taxMethod.productTaxMethod;
                     taxCountry.provider = taxationGatewayProvider;
                     taxCountry.taxMethod = taxMethod;
                     taxCountry.taxMethod.providerKey = taxationGatewayProvider.key;
@@ -4603,6 +4616,14 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         //--------------------------------------------------------------------------------------
         // Events methods
         //--------------------------------------------------------------------------------------
+        function ensureSingleProductTaxMethod(taxCountry) {
+            angular.forEach($scope.availableCountries, function(tc) {
+                if (tc.country.countryCode !== taxCountry.country.countryCode) {
+                    tc.addTaxesToProduct = false;
+                }
+            });
+        }
+
         function save() {
             $scope.preValuesLoaded = false;
             angular.forEach($scope.availableCountries, function(country) {
@@ -4620,6 +4641,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
                     if(country.taxMethod.providerKey !== country.provider.key) {
                             country.taxMethod.providerKey = country.provider.key;
                             country.taxMethod.countryCode = country.country.countryCode;
+                            country.taxMethod.productTaxMethod = country.addTaxesToProduct;
                             var promiseSave = taxationGatewayProviderResource.addTaxMethod(country.taxMethod);
                             promiseSave.then(function() {
                                 notificationsService.success("TaxMethod Saved", "");
@@ -4627,6 +4649,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
                                 notificationsService.error("TaxMethod Save Failed", reason.message);
                         });
                     } else {
+                        country.taxMethod.productTaxMethod = country.addTaxesToProduct;
                         var promiseSave = taxationGatewayProviderResource.saveTaxMethod(country.taxMethod);
                         promiseSave.then(function() {
                             notificationsService.success("TaxMethod Saved", "");

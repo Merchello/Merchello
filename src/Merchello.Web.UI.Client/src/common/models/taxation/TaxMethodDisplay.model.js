@@ -14,6 +14,7 @@
         self.countryCode = '';
         self.percentageTaxRate = 0.0;
         self.provinces = [];
+        self.productTaxMethod = false;
     };
 
     TaxMethodDisplay.prototype = (function() {
