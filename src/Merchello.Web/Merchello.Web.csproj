@@ -252,8 +252,10 @@
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Discounts\Coupons\CouponManager.cs" />
+    <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\GatewayProviders\TaxationByProductValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferComponentExtendedDataResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferComponentTypeGroupingResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferProviderBackOfficeAttributeValueResolver.cs" />

@@ -3234,6 +3234,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.provider = {};
         self.taxMethod = {};
         self.gatewayResource = {};
+        self.addTaxesToProduct = false;
         self.sortOrder = 0;
     };
 
@@ -3298,6 +3299,17 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
     };
 
     angular.module('merchello.models').constant('TaxProvinceDisplay', TaxProvinceDisplay);
+
+var TaxationGatewayProviderDisplay = function () {
+    var self = this;
+    GatewayProviderDisplay.apply(self, arguments);
+    self.taxationByProductProvider = false;
+};
+
+TaxationGatewayProviderDisplay.prototype = GatewayProviderDisplay.prototype;
+TaxationGatewayProviderDisplay.prototype.constructor = TaxationGatewayProviderDisplay;
+
+angular.module('merchello.models').constant('TaxationGatewayProviderDisplay', TaxationGatewayProviderDisplay);
     /**
      * @ngdoc model
      * @name WarehouseCatalogDisplay
@@ -5294,6 +5306,42 @@ angular.module('merchello.models').factory('shippingGatewayProviderDisplayBuilde
                 }
             };
     }]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.gatewayProviderDisplayBuilder
+     *
+     * @description
+     * A utility service that builds GatewayProviderDisplay models
+     */
+angular.module('merchello.models').factory('taxationGatewayProviderDisplayBuilder',
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'dialogEditorViewDisplayBuilder', 'TaxationGatewayProviderDisplay',
+        function (genericModelBuilder, extendedDataDisplayBuilder, dialogEditorViewDisplayBuilder, TaxationGatewayProviderDisplay) {
+
+            var Constructor = TaxationGatewayProviderDisplay;
+
+            return {
+                createDefault: function () {
+                    var gatewayProvider = new Constructor();
+                    gatewayProvider.extendedData = extendedDataDisplayBuilder.createDefault();
+                    gatewayProvider.dialogEditorView = dialogEditorViewDisplayBuilder.createDefault();
+                    return gatewayProvider;
+                },
+                transform: function (jsonResult) {
+                    var gatewayProviders = genericModelBuilder.transform(jsonResult, Constructor);
+                    if (angular.isArray(gatewayProviders)) {
+                        for (var i = 0; i < gatewayProviders.length; i++) {
+                            gatewayProviders[i].extendedData = extendedDataDisplayBuilder.transform(jsonResult[i].extendedData);
+                            gatewayProviders[i].dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[i].dialogEditorView);
+                        }
+                    } else {
+                        gatewayProviders.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        gatewayProviders.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
+                    }
+                    return gatewayProviders;
+                }
+            };
+        }]);
 
     /**
      * @ngdoc service

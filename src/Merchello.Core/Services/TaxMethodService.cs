@@ -1,33 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Threading;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+
+    /// <summary>
+    /// The tax method service.
+    /// </summary>
     internal class TaxMethodService : ITaxMethodService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-        private readonly IStoreSettingService _storeSettingService;
-
+        /// <summary>
+        /// The thread locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         public TaxMethodService()
-            : this(new RepositoryFactory(), new StoreSettingService())
-        { }
+        /// <summary>
+        /// The unit of work provider.
+        /// </summary>
+        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
 
+        /// <summary>
+        /// The repository factory.
+        /// </summary>
+        private readonly RepositoryFactory _repositoryFactory;
+
+        /// <summary>
+        /// The store setting service.
+        /// </summary>
+        private readonly IStoreSettingService _storeSettingService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaxMethodService"/> class.
+        /// </summary>
+        public TaxMethodService()
+            : this(new RepositoryFactory(), new StoreSettingService())
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaxMethodService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
         public TaxMethodService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
             : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
-        { }
+        {            
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaxMethodService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
         public TaxMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
         {
             Mandate.ParameterNotNull(provider, "provider");
@@ -39,68 +84,41 @@ namespace Merchello.Core.Services
             _storeSettingService = storeSettingService;
         }
 
+
+        #region Event Handlers
+
         /// <summary>
-        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
-        /// defines a tax rate for the country, the creation fails.
+        /// Occurs after Create
         /// </summary>
-        /// <param name="providerKey">The unique 'key' (Guid) of the TaxationGatewayProvider</param>
-        /// <param name="countryCode">The two character ISO country code</param>
-        /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ITaxMethod"/> with respective success or fail</returns>
-        internal Attempt<ITaxMethod> CreateTaxMethodWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate, bool raiseEvents = true)
-        {
+        public static event TypedEventHandler<ITaxMethodService, Events.NewEventArgs<ITaxMethod>> Creating;
 
-            var country = _storeSettingService.GetCountryByCode(countryCode);
-            return country == null
-                ? Attempt<ITaxMethod>.Fail(new ArgumentException("Could not create a country for country code '" + countryCode + "'"))
-                : CreateTaxMethodWithKey(providerKey, country, percentageTaxRate, raiseEvents);
-        }
 
-        internal Attempt<ITaxMethod> CreateTaxMethodWithKey(Guid providerKey, ICountry country, decimal percentageTaxRate, bool raiseEvents = true)
-        {
-            if(CountryTaxRateExists(providerKey, country.CountryCode)) return Attempt<ITaxMethod>.Fail(new ConstraintException("A TaxMethod already exists for the provider for the countryCode '" + country.CountryCode + "'"));
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<ITaxMethodService, Events.NewEventArgs<ITaxMethod>> Created;
 
-            var taxMethod = new TaxMethod(providerKey, country.CountryCode)
-                {
-                    Name = country.CountryCode == "ELSE" ? "Everywhere Else" : country.Name,
-                    PercentageTaxRate = percentageTaxRate,
-                    Provinces = country.Provinces.ToTaxProvinceCollection()
-                };
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<ITaxMethodService, SaveEventArgs<ITaxMethod>> Saving;
 
-            if(raiseEvents)
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ITaxMethod>(taxMethod), this))
-            {
-                taxMethod.WasCancelled = false;
-                return Attempt<ITaxMethod>.Fail(taxMethod);
-            }
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<ITaxMethodService, SaveEventArgs<ITaxMethod>> Saved;
 
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
-                {
-                    repository.AddOrUpdate(taxMethod);
-                    uow.Commit();
-                }
-            }
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<ITaxMethodService, DeleteEventArgs<ITaxMethod>> Deleting;
 
-            if(raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<ITaxMethod>(taxMethod), this);
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<ITaxMethodService, DeleteEventArgs<ITaxMethod>> Deleted;
 
-            return Attempt<ITaxMethod>.Succeed(taxMethod);
-        }
-
-        private bool CountryTaxRateExists(Guid providerKey, string countryCode)
-        {
-
-            using(var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
-            {
-                var allTaxMethods = repository.GetAll().ToArray();
-
-                if (!allTaxMethods.Any()) return false;
-                return allTaxMethods.FirstOrDefault(x => x.ProviderKey.Equals(providerKey) && x.CountryCode.Equals(countryCode)) != null;
-            }
-        }
+        #endregion              
 
         /// <summary>
         /// Saves a single <see cref="ITaxMethod"/>
@@ -109,14 +127,13 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(ITaxMethod taxMethod, bool raiseEvents = true)
         {
-            if(raiseEvents)
+            if (raiseEvents)
             if (Saving.IsRaisedEventCancelled(new SaveEventArgs<ITaxMethod>(taxMethod), this))
             {
-                ((TaxMethod) taxMethod).WasCancelled = true;
+                ((TaxMethod)taxMethod).WasCancelled = true;
                 return;
             }
 
-            //TODO refactor this
             taxMethod.Name = string.IsNullOrEmpty(taxMethod.Name)
                                  ? GetTaxMethodName(taxMethod)
                                  : taxMethod.Name;
@@ -131,15 +148,8 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if(raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ITaxMethod>(taxMethod), this);
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<ITaxMethod>(taxMethod), this);
 
-        }
-
-        private string GetTaxMethodName(ITaxMethod taxMethod)
-        {
-            if (taxMethod.CountryCode == "ELSE") return "Everywhere Else";
-            var country = _storeSettingService.GetCountryByCode(taxMethod.CountryCode);
-            return country.Name;
         }
 
         /// <summary>
@@ -150,7 +160,7 @@ namespace Merchello.Core.Services
         public void Save(IEnumerable<ITaxMethod> countryTaxRateList, bool raiseEvents = true)
         {
             var taxMethodsArray = countryTaxRateList as ITaxMethod[] ?? countryTaxRateList.ToArray();
-            if(raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ITaxMethod>(taxMethodsArray), this);
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<ITaxMethod>(taxMethodsArray), this);
 
             using (new WriteLock(Locker))
             {
@@ -175,7 +185,7 @@ namespace Merchello.Core.Services
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(ITaxMethod taxMethod, bool raiseEvents = true)
         {
-            if(raiseEvents)
+            if (raiseEvents)
             if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<ITaxMethod>(taxMethod), this))
             {
                 ((TaxMethod) taxMethod).WasCancelled = true;
@@ -192,7 +202,7 @@ namespace Merchello.Core.Services
                 }
             }
 
-            if(raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ITaxMethod>(taxMethod), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<ITaxMethod>(taxMethod), this);
         }
 
         /// <summary>
@@ -204,7 +214,7 @@ namespace Merchello.Core.Services
         {
             var methods = taxMethods as ITaxMethod[] ?? taxMethods.ToArray();
 
-            if(raiseEvents)
+            if (raiseEvents)
             Deleting.RaiseEvent(new DeleteEventArgs<ITaxMethod>(methods), this);
 
             using (new WriteLock(Locker))
@@ -216,24 +226,39 @@ namespace Merchello.Core.Services
                     {
                         repository.Delete(method);
                     }
+
                     uow.Commit();
                 }
             }
 
-            if(raiseEvents)
+            if (raiseEvents)
             Deleted.RaiseEvent(new DeleteEventArgs<ITaxMethod>(methods), this);
         }
 
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/>
         /// </summary>
-        /// <param name="key">The unique 'key' (Guid) of the <see cref="ITaxMethod"/></param>
+        /// <param name="key">The unique 'key' (GUID) of the <see cref="ITaxMethod"/></param>
         /// <returns><see cref="ITaxMethod"/></returns>
         public ITaxMethod GetByKey(Guid key)
         {
             using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
+            }
+        }
+
+        /// <summary>
+        /// Gets the collection of all tax methods
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{ITaxMethod}"/>.
+        /// </returns>
+        public IEnumerable<ITaxMethod> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
             }
         }
 
@@ -256,7 +281,7 @@ namespace Merchello.Core.Services
                        allTaxMethods.FirstOrDefault(
                            x =>
                            x.ProviderKey.Equals(providerKey) &&
-                           x.CountryCode.Equals(Constants.CountryCodes.EverywhereElse));
+                           x.CountryCode.Equals(Core.Constants.CountryCodes.EverywhereElse));
             }
         }
 
@@ -296,41 +321,111 @@ namespace Merchello.Core.Services
             }
         }
 
-
-        #region Event Handlers
-
         /// <summary>
-        /// Occurs after Create
+        /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
+        /// defines a tax rate for the country, the creation fails.
         /// </summary>
-        public static event TypedEventHandler<ITaxMethodService, Events.NewEventArgs<ITaxMethod>> Creating;
-
+        /// <param name="providerKey">The unique 'key' (GUID) of the TaxationGatewayProvider</param>
+        /// <param name="countryCode">The two character ISO country code</param>
+        /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
+        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ITaxMethod"/> with respective success or fail</returns>
+        internal Attempt<ITaxMethod> CreateTaxMethodWithKey(Guid providerKey, string countryCode, decimal percentageTaxRate, bool raiseEvents = true)
+        {
+            var country = _storeSettingService.GetCountryByCode(countryCode);
+            return country == null
+                ? Attempt<ITaxMethod>.Fail(new ArgumentException("Could not create a country for country code '" + countryCode + "'"))
+                : CreateTaxMethodWithKey(providerKey, country, percentageTaxRate, raiseEvents);
+        }
 
         /// <summary>
-        /// Occurs after Create
+        /// The create tax method with key.
         /// </summary>
-        public static event TypedEventHandler<ITaxMethodService, Events.NewEventArgs<ITaxMethod>> Created;
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <param name="country">
+        /// The country.
+        /// </param>
+        /// <param name="percentageTaxRate">
+        /// The percentage tax rate.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        internal Attempt<ITaxMethod> CreateTaxMethodWithKey(Guid providerKey, ICountry country, decimal percentageTaxRate, bool raiseEvents = true)
+        {
+            if (CountryTaxRateExists(providerKey, country.CountryCode)) return Attempt<ITaxMethod>.Fail(new ConstraintException("A TaxMethod already exists for the provider for the countryCode '" + country.CountryCode + "'"));
+
+            var taxMethod = new TaxMethod(providerKey, country.CountryCode)
+            {
+                Name = country.CountryCode == "ELSE" ? "Everywhere Else" : country.Name,
+                PercentageTaxRate = percentageTaxRate,
+                Provinces = country.Provinces.ToTaxProvinceCollection()
+            };
+
+            if (raiseEvents)
+                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<ITaxMethod>(taxMethod), this))
+                {
+                    taxMethod.WasCancelled = false;
+                    return Attempt<ITaxMethod>.Fail(taxMethod);
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
+                {
+                    repository.AddOrUpdate(taxMethod);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<ITaxMethod>(taxMethod), this);
+
+            return Attempt<ITaxMethod>.Succeed(taxMethod);
+        }
 
         /// <summary>
-        /// Occurs before Save
+        /// The get tax method name.
         /// </summary>
-        public static event TypedEventHandler<ITaxMethodService, SaveEventArgs<ITaxMethod>> Saving;
+        /// <param name="taxMethod">
+        /// The tax method.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private string GetTaxMethodName(ITaxMethod taxMethod)
+        {
+            if (taxMethod.CountryCode == "ELSE") return "Everywhere Else";
+            var country = _storeSettingService.GetCountryByCode(taxMethod.CountryCode);
+            return country.Name;
+        }
 
         /// <summary>
-        /// Occurs after Save
+        /// The country tax rate exists.
         /// </summary>
-        public static event TypedEventHandler<ITaxMethodService, SaveEventArgs<ITaxMethod>> Saved;
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool CountryTaxRateExists(Guid providerKey, string countryCode)
+        {
+            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var allTaxMethods = repository.GetAll().ToArray();
 
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<ITaxMethodService, DeleteEventArgs<ITaxMethod>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<ITaxMethodService, DeleteEventArgs<ITaxMethod>> Deleted;
-
-        #endregion
-
+                if (!allTaxMethods.Any()) return false;
+                return allTaxMethods.FirstOrDefault(x => x.ProviderKey.Equals(providerKey) && x.CountryCode.Equals(countryCode)) != null;
+            }
+        }
     }
 }

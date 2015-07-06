@@ -230,7 +230,7 @@
             }
 
             if (raiseEvents)
-                Saving.IsRaisedEventCancelled(new SaveEventArgs<IStoreSetting>(storeSetting), this);
+                Saved.IsRaisedEventCancelled(new SaveEventArgs<IStoreSetting>(storeSetting), this);
         }
 
         /// <summary>

@@ -16,6 +16,7 @@
         self.provider = {};
         self.taxMethod = {};
         self.gatewayResource = {};
+        self.addTaxesToProduct = false;
         self.sortOrder = 0;
     };
 

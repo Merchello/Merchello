@@ -260,6 +260,7 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
+    <Compile Include="Gateways\Taxation\ITaxationByProductProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationApplication.cs" />
     <Compile Include="MandateWrapperExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />

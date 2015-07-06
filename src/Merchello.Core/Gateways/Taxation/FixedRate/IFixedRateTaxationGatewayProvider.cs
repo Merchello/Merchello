@@ -3,7 +3,7 @@
     /// <summary>
     /// Marker interface the FixedRateTaxationGatewayProvider
     /// </summary>
-    public interface IFixedRateTaxationGatewayProvider
+    public interface IFixedRateTaxationGatewayProvider : ITaxationByProductProvider
     {
     }
 }
