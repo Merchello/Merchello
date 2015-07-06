@@ -16,6 +16,11 @@
         private static void CreateTaxationMappings()
         {
             // taxation
+            AutoMapper.Mapper.CreateMap<IGatewayProviderSettings, TaxationGatewayProviderDisplay>()
+                .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(dest => dest.DialogEditorView, opt => opt.ResolveUsing<GatewayProviderDialogEditorViewResolver>().ConstructedBy(() => new GatewayProviderDialogEditorViewResolver()));
+
+
             AutoMapper.Mapper.CreateMap<ITaxMethod, TaxMethodDisplay>();
 
             AutoMapper.Mapper.CreateMap<ITaxMethod, TaxProvinceDisplay>();
@@ -27,6 +32,7 @@
                 .ForMember(dest => dest.Provinces, opt => opt.MapFrom(src => src.TaxMethod.Provinces))
                 .ForMember(dest => dest.CountryCode, opt => opt.MapFrom(src => src.TaxMethod.CountryCode))
                 .ForMember(dest => dest.PercentageTaxRate, opt => opt.MapFrom(src => src.TaxMethod.PercentageTaxRate))
+                .ForMember(dest => dest.ProductTaxMethod, opt => opt.MapFrom(src => src.TaxMethod.ProductTaxMethod))
                 .ForMember(dest => dest.DialogEditorView, opt => opt.ResolveUsing<GatewayMethodDialogEditorViewResolver>().ConstructedBy(() => new GatewayMethodDialogEditorViewResolver()));
 
             AutoMapper.Mapper.CreateMap<ITaxProvince, TaxProvinceDisplay>();

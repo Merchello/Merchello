@@ -34,10 +34,13 @@
                                 <tbody>
                                 <tr data-ng-repeat="country in availableCountries | orderBy: 'sortOrder'">
                                     <td class="col-xs-4 span4"><h4 data-ng-bind="country.name"></h4></td>
-                                    <td class="col-xs-4 span4">
+                                    <td class="col-xs-6 span6">
                                         <select name="method-type" class="col-xs-12 span12" data-ng-model="country.provider" data-ng-options="p.name for p in taxationGatewayProviders"></select>
+                                        <div data-ng-show="settings.globalTaxationApplication === 'Product' && country.provider.key !== -1" class="product-tax-method">
+                                            <input type="radio" name="productTaxMethod" data-ng-model="p.productTaxMethod" /> <small>Add to Product Price</small>
+                                        </div>
                                     </td>
-                                    <td class="col-xs-3 span3">
+                                    <td class="col-xs-1 span1">
                                         <div data-ng-show="country.taxMethod.hasProvinces()">
                                             <a data-ng-click="editTaxMethodProvinces(country)" class="btn btn-xs btn-mini"><i class="icon-edit"></i></a>
                                         </div>

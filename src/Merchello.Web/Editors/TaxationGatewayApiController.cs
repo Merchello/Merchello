@@ -109,7 +109,7 @@
         /// <returns>
         /// The collection of <see cref="GatewayProviderDisplay"/>.
         /// </returns>
-        public IEnumerable<GatewayProviderDisplay> GetAllGatewayProviders()
+        public IEnumerable<TaxationGatewayProviderDisplay> GetAllGatewayProviders()
         {
             var providers = _taxationContext.GetAllActivatedProviders();
             if (providers == null)
@@ -117,7 +117,7 @@
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
             
-            return providers.Select(provider => provider.GatewayProviderSettings.ToGatewayProviderDisplay());
+            return providers.Select(provider => provider.ToTaxationGatewayProviderDisplay());
         }
 
         /// <summary>
@@ -136,7 +136,8 @@
             var provider = _taxationContext.GetProviderByKey(id);
             if (provider != null)
             {
-                return provider.GetAllGatewayTaxMethods().Select(x => x.ToTaxMethodDisplay());
+                var methods = provider.GetAllGatewayTaxMethods().Select(x => x.ToTaxMethodDisplay());
+                return methods;
             }
 
             throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));

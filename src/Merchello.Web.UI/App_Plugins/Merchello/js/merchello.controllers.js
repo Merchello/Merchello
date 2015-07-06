@@ -4427,10 +4427,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ShippingProvidersCo
 angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersController',
     ['$scope', '$timeout', 'settingsResource', 'notificationsService', 'dialogService', 'taxationGatewayProviderResource', 'dialogDataFactory', 'merchelloTabsFactory',
         'settingDisplayBuilder', 'countryDisplayBuilder', 'taxCountryDisplayBuilder',
-        'gatewayResourceDisplayBuilder', 'gatewayProviderDisplayBuilder', 'taxMethodDisplayBuilder',
+        'gatewayResourceDisplayBuilder', 'taxationGatewayProviderDisplayBuilder', 'taxMethodDisplayBuilder',
     function($scope, $timeout, settingsResource, notificationsService, dialogService, taxationGatewayProviderResource, dialogDataFactory, merchelloTabsFactory,
              settingDisplayBuilder, countryDisplayBuilder, taxCountryDisplayBuilder,
-             gatewayResourceDisplayBuilder, gatewayProviderDisplayBuilder, taxMethodDisplayBuilder) {
+             gatewayResourceDisplayBuilder, taxationGatewayProviderDisplayBuilder, taxMethodDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -4476,13 +4476,12 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
          */
         function loadSettings() {
             var settingsPromise = settingsResource.getAllSettings();
-            settingsPromise.then(function (settings) {
+            settingsPromise.then(function(settings) {
                 $scope.settings = settings;
                 loadAllAvailableCountries();
-                loadAllTaxationGatewayProviders();
-            }, function (reason) {
+            }, function(reason) {
                 notificationsService.error('Failed to load global settings', reason.message);
-            })
+            });
         }
 
         /**
@@ -4497,6 +4496,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
             var promiseAllCountries = settingsResource.getAllCountries();
             promiseAllCountries.then(function (allCountries) {
                 $scope.allCountries = countryDisplayBuilder.transform(allCountries);
+                loadAllTaxationGatewayProviders();
             }, function (reason) {
                 notificationsService.error("Available Countries Load Failed", reason.message);
             });
@@ -4514,9 +4514,9 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
             var promiseAllProviders = taxationGatewayProviderResource.getAllGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
-                $scope.taxationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
-
-                var noTaxProvider = gatewayProviderDisplayBuilder.createDefault();
+                $scope.taxationGatewayProviders = taxationGatewayProviderDisplayBuilder.transform(allProviders);
+                console.info($scope.taxationGatewayProviders);
+                var noTaxProvider = taxationGatewayProviderDisplayBuilder.createDefault();
                 noTaxProvider.key = -1;
                 noTaxProvider.name = 'Not Taxed';
 
@@ -4574,7 +4574,6 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
 
                 var newCountries = _.map(methods, function(methodFromServer) {
                     var taxMethod = taxMethodDisplayBuilder.transform(methodFromServer);
-                    console.info(taxMethod);
                     var taxCountry = taxCountryDisplayBuilder.createDefault();
                     taxCountry.provider = taxationGatewayProvider;
                     taxCountry.taxMethod = taxMethod;

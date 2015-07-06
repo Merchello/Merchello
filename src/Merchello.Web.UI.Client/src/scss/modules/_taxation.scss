@@ -2,4 +2,15 @@
   .tax-rate {
     width: 60px;
   }
+  .product-tax-method {
+    padding: 1em 0;
+    input[type="radio"] {
+      margin: 0;
+      padding: .5em 0;
+      line-height: 20px;
+      vertical-align: middle;
+    }
+    small {
+    }
+  }
 }
