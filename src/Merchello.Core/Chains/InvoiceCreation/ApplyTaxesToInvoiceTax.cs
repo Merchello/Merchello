@@ -34,7 +34,8 @@
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // if taxes are not to be applied, skip this step
-            if (SalePreparation.ApplyTaxesToInvoice)
+            if (SalePreparation.ApplyTaxesToInvoice && 
+                !SalePreparation.MerchelloContext.Gateways.Taxation.ProductPricingEnabled)
             {
                 try
                 {
