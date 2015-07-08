@@ -13,6 +13,8 @@
     using Core.Sales;
     using Core.Services;
 
+    using Merchello.Core.Gateways.Taxation;
+
     using Models.SaleHistory;
 
     using Umbraco.Core;
@@ -91,6 +93,9 @@
 
             // Store settings
             StoreSettingService.Saved += StoreSettingServiceOnSaved;
+
+            // Clear the tax method if set
+
 
             // Auditing
             PaymentGatewayMethodBase.VoidAttempted += PaymentGatewayMethodBaseOnVoidAttempted;
@@ -225,7 +230,20 @@
             var setting = e.SavedEntities.FirstOrDefault(x => x.Key == Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
             if (setting == null) return;
 
-            if (setting.Value == "Product") return;
+            var taxationContext = (TaxationContext)MerchelloContext.Current.Gateways.Taxation;
+            taxationContext.ClearProductPricingMethod();
+            if (setting.Value == "Product")
+            {
+                if (!taxationContext.ProductPricingEnabled)
+                {                    
+                    taxationContext.ProductPricingEnabled = true;
+                    taxationContext.ClearProductPricingMethod();
+                }                    
+
+                return;
+            }
+
+            taxationContext.ProductPricingEnabled = false;
             
             var taxMethodService = ((ServiceContext)MerchelloContext.Current.Services).TaxMethodService;
             var methods = taxMethodService.GetAll().ToArray();

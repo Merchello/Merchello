@@ -281,6 +281,7 @@
     <key alias="taxation" >Taxation</key>
     <key alias="taxMethods" >Tax Methods</key>
     <key alias="taxMethodsHelper" >Set flat tax rates for your shipping regions</key>
+    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
   </area>
   <area alias="merchelloNotifications">
     <key alias="notifications" >Notifications</key>

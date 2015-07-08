@@ -53,7 +53,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {            
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
             var productService = PreTestDataWorker.ProductService;
 
@@ -111,7 +111,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
             var productService = PreTestDataWorker.ProductService;
 
@@ -140,7 +140,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
             var productService = PreTestDataWorker.ProductService;
 

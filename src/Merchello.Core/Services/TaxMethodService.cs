@@ -286,6 +286,24 @@
         }
 
         /// <summary>
+        /// Get tax method for product pricing.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ITaxMethod"/> or null if no tax method is found
+        /// </returns>
+        /// <remarks>
+        /// There can be only one =)
+        /// </remarks>
+        public ITaxMethod GetTaxMethodForProductPricing()
+        {
+            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<ITaxMethod>.Builder.Where(x => x.ProductTaxMethod);
+                return repository.GetByQuery(query).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Gets a collection <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
