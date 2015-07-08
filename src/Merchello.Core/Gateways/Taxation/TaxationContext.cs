@@ -6,11 +6,18 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
 
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Represents the TaxationContext
     /// </summary>
     internal class TaxationContext : GatewayProviderTypedContextBase<TaxationGatewayProviderBase>, ITaxationContext
     {
+        /// <summary>
+        /// The _tax by product method.
+        /// </summary>
+        private ITaxMethod _taxByProductMethod; 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TaxationContext"/> class.
         /// </summary>
@@ -24,6 +31,27 @@
             : base(gatewayProviderService, resolver)
         {
         }
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether product pricing enabled.
+        /// </summary>
+        public bool ProductPricingEnabled { get; internal set; }
+
+        /// <summary>
+        /// Gets the product pricing tax method.
+        /// </summary>
+        internal ITaxMethod ProductPricingTaxMethod
+        {
+            get
+            {
+                if (ProductPricingEnabled)
+                {
+                    return _taxByProductMethod ?? GatewayProviderService.GetTaxMethodForProductPricing();
+                }
+
+                return null;
+            }
+        }
 
         /// <summary>
         /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (GUID) of the GatewayMethod
@@ -34,7 +62,7 @@
         {
             return
                 GetAllActivatedProviders()
-                    .FirstOrDefault(x => ((TaxationGatewayProviderBase) x)
+                    .FirstOrDefault(x => ((TaxationGatewayProviderBase)x)
                         .TaxMethods.Any(y => y.Key == gatewayMethodKey)) as TaxationGatewayProviderBase;
         }
 
@@ -89,6 +117,42 @@
         }
 
         /// <summary>
+        /// Calculates taxes based on a product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxCalculationResult"/>.
+        /// </returns>
+        public ITaxCalculationResult CalculateTaxesForProduct(IModifiableProductVariantData product)
+        {
+            if (!ProductPricingEnabled) return new TaxCalculationResult(0, 0);
+            if (ProductPricingTaxMethod == null) return new TaxCalculationResult(0, 0);
+
+            var provider =
+                GatewayProviderResolver.GetProviderByKey<TaxationGatewayProviderBase>(ProductPricingTaxMethod.ProviderKey);
+
+            if (provider == null)
+            {
+                var error = new NullReferenceException("Could not reTaxationGatewayProvider for CalculateTaxForProduct could not be resolved");
+                LogHelper.Error<TaxationContext>("Resolution failure", error);
+                throw error;
+            }
+
+            var productProvider = provider as ITaxationByProductProvider;
+            if (productProvider != null)
+            {
+                var method = productProvider.GetTaxationByProductMethod(ProductPricingTaxMethod.Key);
+                return method.CalculateTaxForProduct(product);
+            }
+
+            LogHelper.Debug<TaxationContext>("Resolved provider did not Implement ITaxationByProductProvider returning no tax");
+
+            return new TaxCalculationResult(0, 0);
+        }
+
+        /// <summary>
         /// Gets the tax method for a given tax address
         /// </summary>
         /// <param name="taxAddress">
@@ -114,6 +178,15 @@
         public ITaxMethod GetTaxMethodForCountryCode(string countryCode)
         {
             return GatewayProviderService.GetTaxMethodsByCountryCode(countryCode).FirstOrDefault();
+        }
+
+
+        /// <summary>
+        /// Resets the product pricing method to null so that it can be required.
+        /// </summary>
+        internal void ClearProductPricingMethod()
+        {
+            _taxByProductMethod = null;
         }
     }
 }

@@ -7,7 +7,7 @@
     /// <summary>
     /// Represents the abstract GatewayTaxMethod
     /// </summary>
-    public abstract class TaxationGatewayMethodBase : ITaxationGatewayMethod
+    public abstract class TaxationGatewayMethodBase
     {
         /// <summary>
         /// The tax method.

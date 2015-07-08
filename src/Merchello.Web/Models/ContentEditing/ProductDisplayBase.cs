@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
 
+    using Merchello.Core.Models;
+
     /// <summary>
     /// The product display abstract.
     /// </summary>
-    public abstract class ProductDisplayBase
+    public abstract class ProductDisplayBase : IModifiableProductVariantData
     {
         /// <summary>
         /// Gets or sets the name.

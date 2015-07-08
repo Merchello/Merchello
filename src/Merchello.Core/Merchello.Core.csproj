@@ -260,6 +260,7 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
+    <Compile Include="Gateways\Taxation\ITaxationByProductMethod.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductProvider.cs" />
     <Compile Include="Gateways\Taxation\TaxationApplication.cs" />
     <Compile Include="MandateWrapperExtensions.cs" />
@@ -293,6 +294,7 @@
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
+    <Compile Include="Models\Interfaces\IModifiableProductVariantData.cs" />
     <Compile Include="Models\Interfaces\IOfferRedeemed.cs" />
     <Compile Include="Models\Interfaces\IOfferSettings.cs" />
     <Compile Include="Marketing\Rewards\IOfferRewardComponent.cs" />
