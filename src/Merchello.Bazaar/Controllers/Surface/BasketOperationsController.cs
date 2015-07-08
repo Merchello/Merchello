@@ -11,7 +11,6 @@
     using Merchello.Core.Models;
     using Merchello.Web.Workflow;
 
-    using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
 
     /// <summary>
