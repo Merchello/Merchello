@@ -27,13 +27,29 @@
         /// <summary>
         /// The <see cref="IValidationHelper"/>.
         /// </summary>
-        private readonly Lazy<IValidationHelper> _validationHelper; 
+        private readonly Lazy<IValidationHelper> _validationHelper;
+
+        /// <summary>
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </summary>
+        private readonly bool _enableDataModifiers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
         /// </summary>
         public MerchelloHelper()
-            : this(MerchelloContext.Current.Services)
+            : this(true)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not to enable data modifiers
+        /// </param>
+        public MerchelloHelper(bool enableDataModifiers)
+            : this(MerchelloContext.Current.Services, enableDataModifiers)
         {            
         }
 
@@ -43,10 +59,14 @@
         /// <param name="serviceContext">
         /// The service context.
         /// </param>
-        public MerchelloHelper(IServiceContext serviceContext)
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not to enable data modifiers
+        /// </param>
+        public MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers)
         {
             Mandate.ParameterNotNull(serviceContext, "ServiceContext cannot be null");
 
+            _enableDataModifiers = enableDataModifiers;
             _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(serviceContext));
             _validationHelper = new Lazy<IValidationHelper>(() => new ValidationHelper());
         }

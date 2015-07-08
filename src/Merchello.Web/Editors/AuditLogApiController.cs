@@ -49,7 +49,7 @@
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             _auditLogService = merchelloContext.Services.AuditLogService;
-            _merchelloHelper = new MerchelloHelper(merchelloContext.Services);
+            _merchelloHelper = new MerchelloHelper(merchelloContext.Services, false);
         }
 
         /// <summary>
