@@ -61,5 +61,6 @@
         /// </summary>
         [JsonIgnore]
         public IEnumerable<IDataModifierLog> ModifiedDataLogs { get;  set; }
+
     }
 }

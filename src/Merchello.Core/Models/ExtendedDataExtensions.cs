@@ -767,6 +767,31 @@
 
         #endregion
 
+        #region DataModifierLogs
+
+        /// <summary>
+        /// Merges the modifier extend data(s) into the extended data
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="modifier">
+        /// The modifier.
+        /// </param>
+        internal static void MergeDataModifierLogs(this ExtendedDataCollection extendedData, IDataModifierData modifier)
+        {
+            if (modifier.ModifiedDataLogs == null) return;
+            foreach (var log in modifier.ModifiedDataLogs)
+            {
+                foreach (var item in log.ExtendedData)
+                {
+                    extendedData.SetValue(item.Key, item.Value);
+                }
+            }
+        }
+
+        #endregion
+
         #region Utility
 
         /// <summary>

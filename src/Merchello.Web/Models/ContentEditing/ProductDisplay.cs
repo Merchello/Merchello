@@ -89,5 +89,11 @@
                            : 0;
             }
         }
+
+        public ProductDisplay ShallowCopy()
+        {
+            return (ProductDisplay)this.MemberwiseClone();
+
+        }
     }
 }

@@ -103,7 +103,7 @@
         /// </returns>
         public override ProductDisplay GetByKey(Guid key)
         {
-            return this.ModifyData(GetDisplayObject(key));
+            return this.ModifyData(GetDisplayObject(key).ShallowCopy());
         }
 
         /// <summary>
@@ -130,7 +130,7 @@
 
             ReindexEntity(entity);
 
-            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity));
+            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity).ShallowCopy());
         }
 
         /// <summary>
@@ -155,7 +155,7 @@
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay());
+            return this.ModifyData(variant.ToProductVariantDisplay().ShallowCopy());
         }
 
         /// <summary>
@@ -180,7 +180,7 @@
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay());
+            return this.ModifyData(variant.ToProductVariantDisplay().ShallowCopy());
         }
 
         /// <summary>
@@ -248,7 +248,7 @@
 
             var results = SearchProvider.Search(criteria);
 
-            return results.Select(x => this.ModifyData(x.ToProductVariantDisplay()));
+            return results.Select(x => x.ToProductVariantDisplay());
         }
 
         /// <summary>
@@ -273,22 +273,22 @@
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
 
-        /// <summary>
-        /// Modifies Product Data with configured DataModifier Chain.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ProductDisplay"/>.
-        /// </returns>
-        internal ProductDisplay ModifyProductData(ProductDisplay product)
-        {
-            if (!EnableDataModifiers) return product;
-            var modified = this.ModifyData(product);
-            modified.ProductVariants = product.ProductVariants.Select(this.ModifyData);
-            return modified;
-        }
+        ///// <summary>
+        ///// Modifies Product Data with configured DataModifier Chain.
+        ///// </summary>
+        ///// <param name="product">
+        ///// The product.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="ProductDisplay"/>.
+        ///// </returns>
+        //internal ProductDisplay ModifyProductData(ProductDisplay product)
+        //{
+        //    if (!EnableDataModifiers) return product;
+        //    var modified = this.ModifyData(product.ShallowCopy());
+        //    modified.ProductVariants = product.ProductVariants.Select(x => this.ModifyData(x.ShallowCopy()));
+        //    return modified;
+        //}
 
         /// <summary>
         /// The modify data.

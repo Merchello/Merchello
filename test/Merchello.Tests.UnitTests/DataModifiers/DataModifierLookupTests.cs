@@ -44,5 +44,15 @@
             Assert.AreNotEqual(oldPrice, product.Price);
             Assert.AreEqual(20M, product.Price);
         }
+
+        [Test]
+        public void Can_ShallowCopy_A_ProductDisplay()
+        {
+            var product = MockProductDataMaker.MockProductDisplayForInserting();
+
+            var clone = product.ShallowCopy();
+
+            Assert.AreEqual(product.Price, clone.Price);
+        }
     }
 }

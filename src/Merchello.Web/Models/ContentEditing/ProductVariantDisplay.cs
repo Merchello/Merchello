@@ -28,5 +28,12 @@
         /// Gets or sets the attributes.
         /// </summary>
         public IEnumerable<ProductAttributeDisplay> Attributes { get; set; }
+
+
+        public ProductVariantDisplay ShallowCopy()
+        {
+            return (ProductVariantDisplay)this.MemberwiseClone();
+
+        }
     }
 }

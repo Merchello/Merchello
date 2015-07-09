@@ -5223,17 +5223,6 @@
             The entity.
             </param>
         </member>
-        <member name="M:Merchello.Web.Search.CachedProductQuery.ModifyProductData(Merchello.Web.Models.ContentEditing.ProductDisplay)">
-            <summary>
-            Modifies Product Data with configured DataModifier Chain.
-            </summary>
-            <param name="product">
-            The product.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
-            </returns>
-        </member>
         <member name="M:Merchello.Web.Search.CachedProductQuery.ModifyData``1(``0)">
             <summary>
             The modify data.

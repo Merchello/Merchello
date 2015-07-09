@@ -250,6 +250,12 @@
             {
                 var display = productVariant.ToProductVariantDisplay();
                 var attempt = _productDataModifier.Value.Modify(display);
+                if (attempt.Success)
+                {
+                    var modified = attempt.Result;
+                    productVariant.MergeDataModifierData(modified);
+                    extendedData.MergeDataModifierLogs(modified);
+                }
             }
 
             if (!extendedData.DefinesProductVariant()) extendedData.AddProductVariantValues(productVariant);
@@ -447,7 +453,7 @@
         public void Accept(ILineItemVisitor visitor)
         {
             _itemCache.Items.Accept(visitor);
-        }
+        }        
 
         /// <summary>
         /// Initializes the Lazy data modifiers
