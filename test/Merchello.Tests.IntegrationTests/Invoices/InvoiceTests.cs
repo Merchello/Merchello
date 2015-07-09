@@ -78,6 +78,8 @@ namespace Merchello.Tests.IntegrationTests.Invoices
                                          CountryCode = "US"
                                      };
 
+           
+
             // Most of the time this information is brought in from the IProductVariant - but the idea is you can
             // describe things on the fly
             var extendedData = new ExtendedDataCollection();

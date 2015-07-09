@@ -1,12 +1,15 @@
 ﻿namespace Merchello.Tests.IntegrationTests.MerchelloHelperTests
 {
+    using System;
     using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Gateways.Taxation;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Tests.Base.DataMakers;
     using Merchello.Tests.Base.TestHelpers;
+    using Merchello.Web;
     using Merchello.Web.DataModifiers;
 
     using NUnit.Framework;
@@ -18,6 +21,7 @@
     {
         private IStoreSettingService _settingService;
 
+        private Guid _productKey;
 
         [TestFixtureSetUp]
         public override void FixtureSetup()
@@ -45,6 +49,12 @@
             gwTaxMethod.TaxMethod.ProductTaxMethod = true;
             taxProvider.SaveTaxMethod(gwTaxMethod);
             ((TaxationContext)MerchelloContext.Current.Gateways.Taxation).ClearProductPricingMethod();
+
+            DbPreTestDataWorker.DeleteAllProducts();
+            var product = MockProductDataMaker.MockProductForInserting("Product", "PR", 16M);
+            product.SalePrice = 12M;
+            MerchelloContext.Current.Services.ProductService.Save(product);
+            _productKey = product.Key;
         }
 
         [TestFixtureTearDown]
@@ -66,6 +76,22 @@
             Assert.NotNull(chain);
             Assert.AreEqual(TaskCount, chain.TaskCount);
 
+        }
+
+        [Test]
+        public void Can_Get_Product_From_Helper_With_Tax_Included()
+        {
+            //// Arrange
+            var merchello = new MerchelloHelper();
+            
+            //// Act
+            var product = merchello.Query.Product.GetByKey(_productKey);
+
+            //// Assert
+            Assert.NotNull(product);
+            Assert.AreEqual(20, product.Price);
+            Assert.AreEqual(15, product.SalePrice);
+           
         }
     }
 }

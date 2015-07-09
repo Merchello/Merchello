@@ -283,7 +283,7 @@
         /// </returns>
         protected override ProductDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
-            return this.ModifyProductData(result.ToProductDisplay(GetVariantsByProduct));
+            return result.ToProductDisplay(GetVariantsByProduct);
         }
 
         private ProductDisplay ModifyProductData(ProductDisplay product)
