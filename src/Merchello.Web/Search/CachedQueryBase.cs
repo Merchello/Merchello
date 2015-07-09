@@ -49,6 +49,11 @@
         private readonly BaseSearchProvider _searchProvider;
 
         /// <summary>
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </summary>
+        private readonly bool _enableDataModifiers;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryBase{TEntity,TDisplay}"/> class.
         /// </summary>
         /// <param name="service">
@@ -60,10 +65,14 @@
         /// <param name="searchProvider">
         /// The Examine Search provider.
         /// </param>
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </param>
         protected CachedQueryBase(
             IPageCachedService<TEntity> service, 
             BaseIndexProvider indexProvider, 
-            BaseSearchProvider searchProvider)
+            BaseSearchProvider searchProvider, 
+            bool enableDataModifiers)
         {
             Mandate.ParameterNotNull(service, "service");
             Mandate.ParameterNotNull(indexProvider, "indexProvider");
@@ -72,8 +81,23 @@
             _service = service;
             _indexProvider = indexProvider;
             _searchProvider = searchProvider;
+            _enableDataModifiers = enableDataModifiers;
 
             _resultFactory = new Lazy<QueryResultFactory<TDisplay>>(() => new QueryResultFactory<TDisplay>(PerformMapSearchResultToDisplayObject, GetDisplayObject));
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether enable data modifiers.
+        /// </summary>
+        protected bool EnableDataModifiers
+        {
+            get
+            {
+                // TODO this is going to be really difficult to test since we
+                // must have the MerchelloContext singleton setup.  Refactor the MerchelloHelper
+                // in version 2 to take MerchelloContext rather than the ServiceContext
+                return _enableDataModifiers && MerchelloContext.HasCurrent;
+            }
         }
 
         /// <summary>

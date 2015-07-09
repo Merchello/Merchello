@@ -16,6 +16,6 @@
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        ITaxCalculationResult CalculateTaxForProduct(IModifiableProductVariantData product);
+        IProductTaxCalculationResult CalculateTaxForProduct(IModifiableProductVariantData product);
     }
 }

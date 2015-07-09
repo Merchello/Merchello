@@ -4,10 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using global::Examine.SearchCriteria;
     using Core;
     using Core.Services;
-
+    
+    using global::Examine.SearchCriteria;
+    
     using Merchello.Web.Validation;
 
     using Models.ContentEditing;
@@ -17,6 +18,9 @@
     /// <summary>
     /// A helper class that provides many useful methods and functionality for using Merchello in templates
     /// </summary> 
+    /// <remarks>
+    /// TODO Refactor the MerchelloHelper in version 2 to take MerchelloContext rather than the ServiceContext
+    /// </remarks>
     public class MerchelloHelper
     {
         /// <summary>
@@ -59,6 +63,22 @@
         /// <param name="serviceContext">
         /// The service context.
         /// </param>
+        /// <remarks>
+        /// This constructor needs to be removed eventually as it assumes that we want to 
+        /// enable the data modifiers which might be unexpected for some implementations.  It's 
+        /// need here to prevent a breaking change in version 1.9.1
+        /// </remarks>
+        public MerchelloHelper(IServiceContext serviceContext)
+            : this(serviceContext, true)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="serviceContext">
+        /// The service context.
+        /// </param>
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not to enable data modifiers
         /// </param>
@@ -67,7 +87,7 @@
             Mandate.ParameterNotNull(serviceContext, "ServiceContext cannot be null");
 
             _enableDataModifiers = enableDataModifiers;
-            _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(serviceContext));
+            _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(serviceContext, _enableDataModifiers));
             _validationHelper = new Lazy<IValidationHelper>(() => new ValidationHelper());
         }
 
@@ -326,5 +346,4 @@
 
         #endregion
     }
-
 }

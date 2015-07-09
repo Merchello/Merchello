@@ -57,7 +57,7 @@
         [Obsolete("Use MerchelloHelper.Query.Customer.GetByKey")]
         public static CustomerDisplay GetByKey(string key)
         {
-            var query = new CachedCustomerQuery(MerchelloContext.Current.Services.CustomerService);
+            var query = new CachedCustomerQuery(MerchelloContext.Current.Services.CustomerService, false);
 
             return query.GetByKey(new Guid(key));
         }
@@ -71,7 +71,7 @@
         [Obsolete("User MerchelloHelper.Query.Customer.Search")]
         public static IEnumerable<CustomerDisplay> GetAllCustomers()
         {
-            var query = new CachedCustomerQuery(MerchelloContext.Current.Services.CustomerService);
+            var query = new CachedCustomerQuery(MerchelloContext.Current.Services.CustomerService, false);
 
             return query.Search(1, long.MaxValue).Items.Select(x => (CustomerDisplay)x);
         }

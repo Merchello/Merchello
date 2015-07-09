@@ -33,7 +33,7 @@
         /// Initializes a new instance of the <see cref="CachedInvoiceQuery"/> class.
         /// </summary>
         public CachedInvoiceQuery()
-            : this(MerchelloContext.Current.Services.InvoiceService)
+            : this(MerchelloContext.Current.Services.InvoiceService, true)
         {
         }
 
@@ -43,8 +43,11 @@
         /// <param name="invoiceService">
         /// The invoice service.
         /// </param>
-        internal CachedInvoiceQuery(IInvoiceService invoiceService)
-            : this(invoiceService, new CachedOrderQuery(MerchelloContext.Current.Services.OrderService).GetByInvoiceKey)
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </param>
+        internal CachedInvoiceQuery(IInvoiceService invoiceService, bool enableDataModifiers)
+            : this(invoiceService, new CachedOrderQuery(MerchelloContext.Current.Services.OrderService, enableDataModifiers).GetByInvoiceKey, enableDataModifiers)
         {            
         }
 
@@ -57,12 +60,16 @@
         /// <param name="getOrders">
         /// The get Orders.
         /// </param>
-        internal CachedInvoiceQuery(IInvoiceService invoiceService, Func<Guid, IEnumerable<OrderDisplay>> getOrders)
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </param>
+        internal CachedInvoiceQuery(IInvoiceService invoiceService, Func<Guid, IEnumerable<OrderDisplay>> getOrders, bool enableDataModifiers)
             : this(
             invoiceService,
             getOrders,
             ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"],
-            ExamineManager.Instance.SearchProviderCollection["MerchelloInvoiceSearcher"])
+            ExamineManager.Instance.SearchProviderCollection["MerchelloInvoiceSearcher"],
+            enableDataModifiers)
         {            
         }
 
@@ -81,12 +88,16 @@
         /// <param name="searchProvider">
         /// The search provider.
         /// </param>
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </param>
         internal CachedInvoiceQuery(
             IPageCachedService<IInvoice> service, 
             Func<Guid, IEnumerable<OrderDisplay>> getOrders,
             BaseIndexProvider indexProvider, 
-            BaseSearchProvider searchProvider) 
-            : base(service, indexProvider, searchProvider)
+            BaseSearchProvider searchProvider,
+            bool enableDataModifiers) 
+            : base(service, indexProvider, searchProvider, enableDataModifiers)
         {
             _invoiceService = (InvoiceService)service;
             _getOrders = getOrders;

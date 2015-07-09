@@ -160,7 +160,7 @@
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
-        /// <param name="serviceContext">The sevice context</param>
+        /// <param name="serviceContext">The service context</param>
         /// <param name="cache">The cache helper</param>
         /// <remarks>
         /// Since we load fire our boot manager after Umbraco fires its "started" even, Merchello gets the benefit

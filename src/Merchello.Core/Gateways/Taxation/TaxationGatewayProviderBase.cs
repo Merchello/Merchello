@@ -11,6 +11,11 @@
     public abstract class TaxationGatewayProviderBase : GatewayProviderBase, ITaxationGatewayProvider
     {
         /// <summary>
+        /// The _tax methods.
+        /// </summary>
+        private IEnumerable<ITaxMethod> _taxMethods; 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TaxationGatewayProviderBase"/> class.
         /// </summary>
         /// <param name="gatewayProviderService">
@@ -31,11 +36,19 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="ITaxMethod"/> assoicated with this provider
+        /// Gets or sets a collection of <see cref="ITaxMethod"/> assoicated with this provider
         /// </summary>
         public IEnumerable<ITaxMethod> TaxMethods
         {
-            get { return GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProviderSettings.Key); }
+            get
+            {
+                return _taxMethods ?? GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProviderSettings.Key);
+            }
+
+            internal set
+            {
+                _taxMethods = value;
+            }
         }
 
         /// <summary>
@@ -100,6 +113,7 @@
         internal void DeleteAllTaxMethods()
         {
             foreach (var taxMethod in TaxMethods) GatewayProviderService.Delete(taxMethod);
+            TaxMethods = null;
         }        
     }
 }

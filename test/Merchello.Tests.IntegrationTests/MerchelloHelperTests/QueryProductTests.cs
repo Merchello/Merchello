@@ -1,19 +1,20 @@
-﻿using System;
-using System.Linq;
-using Examine;
-using Merchello.Core.Models;
-using Merchello.Examine.Providers;
-using Merchello.Tests.Base.DataMakers;
-using Merchello.Tests.IntegrationTests.TestHelpers;
-using Merchello.Web;
-using NUnit.Framework;
-
-namespace Merchello.Tests.IntegrationTests.Examine
+﻿namespace Merchello.Tests.IntegrationTests.MerchelloHelperTests
 {
+    using System.Linq;
+
+    using global::Examine;
+
     using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Examine.Providers;
+    using Merchello.Tests.Base.DataMakers;
+    using Merchello.Tests.IntegrationTests.TestHelpers;
+    using Merchello.Web;
+
+    using NUnit.Framework;
 
     [TestFixture]
-    public class MerchelloHelperTests : DatabaseIntegrationTestBase
+    public class QueryProductTests : DatabaseIntegrationTestBase
     {
         private ProductIndexer _provider;
         private IWarehouse _warehouse;
@@ -22,11 +23,11 @@ namespace Merchello.Tests.IntegrationTests.Examine
         public override void FixtureSetup()
         {
             base.FixtureSetup();
-            var warehouseService = PreTestDataWorker.WarehouseService;
-            _warehouse = warehouseService.GetDefaultWarehouse();
+            var warehouseService = this.PreTestDataWorker.WarehouseService;
+            this._warehouse = warehouseService.GetDefaultWarehouse();
 
-            _provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
-            _provider.RebuildIndex();
+            this._provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
+            this._provider.RebuildIndex();
         }
 
         
@@ -55,7 +56,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
-            var productService = PreTestDataWorker.ProductService;
+            var productService = this.PreTestDataWorker.ProductService;
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.ProductOptions.Add(new ProductOption("Color"));
@@ -74,7 +75,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             product.OnSale = true;
             product.SalePrice = 18M;
             product.TrackInventory = true;
-            product.AddToCatalogInventory(_warehouse.WarehouseCatalogs.First());
+            product.AddToCatalogInventory(this._warehouse.WarehouseCatalogs.First());
             productService.Save(product);
            
             foreach (var variant in product.ProductVariants)
@@ -88,7 +89,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
                 Assert.AreEqual(1, p.TotalInventoryCount, "Preindexed product variant count");
             }
 
-            _provider.AddProductToIndex(product);
+            this._provider.AddProductToIndex(product);
 
             //// Act
             var productDisplay = merchello.Query.Product.GetByKey(product.Key);
@@ -113,7 +114,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
-            var productService = PreTestDataWorker.ProductService;
+            var productService = this.PreTestDataWorker.ProductService;
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.Height = 11M;
@@ -125,7 +126,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             productService.Save(product);
 
 
-            _provider.AddProductToIndex(product);
+            this._provider.AddProductToIndex(product);
 
             //// Act
             var productDisplay = merchello.Query.Product.GetBySku(product.Sku);
@@ -142,7 +143,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
 
             var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
-            var productService = PreTestDataWorker.ProductService;
+            var productService = this.PreTestDataWorker.ProductService;
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.ProductOptions.Add(new ProductOption("Color"));
@@ -161,7 +162,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             product.OnSale = true;
             product.SalePrice = 18M;
             productService.Save(product);
-            _provider.AddProductToIndex(product);
+            this._provider.AddProductToIndex(product);
 
             Assert.IsTrue(product.ProductVariants.Any());
             var variant = product.ProductVariants.First();

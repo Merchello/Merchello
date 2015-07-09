@@ -63,21 +63,38 @@
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        public virtual ITaxCalculationResult CalculateTaxForProduct(IModifiableProductVariantData product)
+        public virtual IProductTaxCalculationResult CalculateTaxForProduct(IModifiableProductVariantData product)
         {
-            var extendedData = new ExtendedDataCollection();
+            var edprice = new ExtendedDataCollection();
+            var edsaleprice = new ExtendedDataCollection();
 
             var baseTaxRate = TaxMethod.PercentageTaxRate;
 
-            extendedData.SetValue(Core.Constants.ExtendedDataKeys.BaseTaxRate, baseTaxRate.ToString(CultureInfo.InvariantCulture));
+            edprice.SetValue(Core.Constants.ExtendedDataKeys.BaseTaxRate, baseTaxRate.ToString(CultureInfo.InvariantCulture));
+            edsaleprice.SetValue(Core.Constants.ExtendedDataKeys.BaseTaxRate, baseTaxRate.ToString(CultureInfo.InvariantCulture));
 
             var taxRate = baseTaxRate > 1 ? baseTaxRate / 100 : baseTaxRate;
 
-            var adjusted = product.OnSale ? product.SalePrice * taxRate : product.Price * taxRate;
+            var priceCalc = product.Price * taxRate;
+            var salePriceCalc = product.SalePrice * taxRate;
+            edprice.SetValue(Constants.ExtendedDataKeys.ProductPriceTaxAmount, priceCalc.ToString(CultureInfo.InvariantCulture));
+            edsaleprice.SetValue(Constants.ExtendedDataKeys.ProductSalePriceTaxAmount, salePriceCalc.ToString(CultureInfo.InvariantCulture));
 
-            extendedData.SetValue(Constants.ExtendedDataKeys.LineItemTaxAmount, adjusted.ToString(CultureInfo.InvariantCulture));
-
-            return new TaxCalculationResult(TaxMethod.Name, taxRate, adjusted, extendedData);
+            return new ProductTaxCalculationResult()
+                       {
+                           PriceResult =
+                               new TaxCalculationResult(
+                               TaxMethod.Name,
+                               taxRate,
+                               priceCalc,
+                               edprice),
+                           SalePriceResult =
+                               new TaxCalculationResult(
+                               TaxMethod.Name,
+                               taxRate,
+                               salePriceCalc,
+                               edsaleprice)
+                       };
         }
     }
 }

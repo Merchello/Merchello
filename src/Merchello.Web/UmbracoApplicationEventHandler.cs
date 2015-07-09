@@ -232,18 +232,7 @@
 
             var taxationContext = (TaxationContext)MerchelloContext.Current.Gateways.Taxation;
             taxationContext.ClearProductPricingMethod();
-            if (setting.Value == "Product")
-            {
-                if (!taxationContext.ProductPricingEnabled)
-                {                    
-                    taxationContext.ProductPricingEnabled = true;
-                    taxationContext.ClearProductPricingMethod();
-                }                    
-
-                return;
-            }
-
-            taxationContext.ProductPricingEnabled = false;
+            if (setting.Value == "Product") return;
             
             var taxMethodService = ((ServiceContext)MerchelloContext.Current.Services).TaxMethodService;
             var methods = taxMethodService.GetAll().ToArray();

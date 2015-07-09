@@ -19,7 +19,7 @@
             }
 
             /// <summary>
-            /// Gets the configruation key for the default shipment rate quote.
+            /// Gets the configuration key for the default shipment rate quote.
             /// </summary>
             public static string DefaultShipmentRateQuote
             {
@@ -27,7 +27,7 @@
             }
 
             /// <summary>
-            /// Gets the configruation key for the default invoice tax rate quote
+            /// Gets the configuration key for the default invoice tax rate quote
             /// </summary>
             public static string DefaultInvoiceTaxRateQuote
             {
@@ -62,6 +62,14 @@
             public static string OrderPreparationShipmentCreate
             {
                 get { return "OrderPreparationShipmentCreate"; }
+            }
+
+            /// <summary>
+            /// Gets the configuration key for the MerchelloHelper product data modifiers.
+            /// </summary>
+            public static string MerchelloHelperProductDataModifiers
+            {
+                get { return "MerchelloHelperProductDataModifiers"; }
             }
         }
     }
