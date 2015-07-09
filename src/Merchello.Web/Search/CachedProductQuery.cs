@@ -14,6 +14,7 @@
 
     using log4net.Util;
 
+    using Merchello.Core.Chains;
     using Merchello.Examine.Providers;
     using Merchello.Web.DataModifiers;
 
@@ -33,7 +34,7 @@
         /// <summary>
         /// The data modifier.
         /// </summary>
-        private Lazy<IDataModifierChain<IModifiableProductVariantData>> _dataModifier; 
+        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _dataModifier; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
@@ -273,6 +274,47 @@
         }
 
         /// <summary>
+        /// Modifies Product Data with configured DataModifier Chain.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        internal ProductDisplay ModifyProductData(ProductDisplay product)
+        {
+            if (!EnableDataModifiers) return product;
+            var modified = this.ModifyData(product);
+            modified.ProductVariants = product.ProductVariants.Select(this.ModifyData);
+            return modified;
+        }
+
+        /// <summary>
+        /// The modify data.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of data to be modified
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
+        internal T ModifyData<T>(T data)
+            where T : class, IProductVariantDataModifierData
+        {
+            if (!EnableDataModifiers) return data;
+            var attempt = _dataModifier.Value.Modify(data);
+            if (!attempt.Success) return data;
+
+            var modified = attempt.Result as T;
+            return modified ?? data;
+        }
+
+
+        /// <summary>
         /// Maps a <see cref="SearchResult"/> to <see cref="ProductDisplay"/>
         /// </summary>
         /// <param name="result">
@@ -286,24 +328,6 @@
             return result.ToProductDisplay(GetVariantsByProduct);
         }
 
-        private ProductDisplay ModifyProductData(ProductDisplay product)
-        {
-            if (!EnableDataModifiers) return product;
-            var modified = this.ModifyData(product);
-            modified.ProductVariants = product.ProductVariants.Select(this.ModifyData);
-            return modified;
-        }
-
-        private T ModifyData<T>(T data) 
-            where T : class, IModifiableProductVariantData
-        {
-            if (!EnableDataModifiers) return data;
-            var attempt = _dataModifier.Value.Modify(data);
-            if (!attempt.Success) return data;
-
-            var modified = attempt.Result as T;
-            return modified ?? data;
-        }
 
         /// <summary>
         /// Initializes the lazy
@@ -311,7 +335,7 @@
         private void Initialize()
         {
             if (MerchelloContext.HasCurrent)
-            _dataModifier = new Lazy<IDataModifierChain<IModifiableProductVariantData>>(() => new ModifiableProductVariantDataModifierChain(MerchelloContext.Current));    
+            _dataModifier = new Lazy<IDataModifierChain<IProductVariantDataModifierData>>(() => new ProductVariantDataModifierChain(MerchelloContext.Current));    
         }
     }
 }

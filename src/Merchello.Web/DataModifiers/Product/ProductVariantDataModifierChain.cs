@@ -10,9 +10,9 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// Represents a ModifiableProductVariantData data modifier chain
+    /// Represents a ProductVariantDataModifierData data modifier chain
     /// </summary>
-    internal sealed class ModifiableProductVariantDataModifierChain : ConfigurationChainBase<IModifiableProductVariantData>, IDataModifierChain<IModifiableProductVariantData>
+    internal sealed class ProductVariantDataModifierChain : ConfigurationChainBase<IProductVariantDataModifierData>, IDataModifierChain<IProductVariantDataModifierData>
     {
         /// <summary>
         /// The <see cref="IMerchelloContext"/>.
@@ -25,20 +25,20 @@
         private IEnumerable<object> _constructorParameters;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModifiableProductVariantDataModifierChain"/> class.
+        /// Initializes a new instance of the <see cref="ProductVariantDataModifierChain"/> class.
         /// </summary>
-        public ModifiableProductVariantDataModifierChain()
+        public ProductVariantDataModifierChain()
             : this(MerchelloContext.Current)
         {            
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModifiableProductVariantDataModifierChain"/> class.
+        /// Initializes a new instance of the <see cref="ProductVariantDataModifierChain"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The <see cref="MerchelloContext"/>.
         /// </param>
-        public ModifiableProductVariantDataModifierChain(IMerchelloContext merchelloContext)
+        public ProductVariantDataModifierChain(IMerchelloContext merchelloContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             _merchelloContext = merchelloContext;
@@ -74,11 +74,11 @@
         /// <returns>
         /// The <see cref="Attempt"/>.
         /// </returns>
-        public Attempt<IModifiableProductVariantData> Modify(IModifiableProductVariantData value)
+        public Attempt<IProductVariantDataModifierData> Modify(IProductVariantDataModifierData value)
         {
             return TaskHandlers.Any()
                        ? TaskHandlers.First().Execute(value)
-                       : Attempt<IModifiableProductVariantData>.Succeed(value);
+                       : Attempt<IProductVariantDataModifierData>.Succeed(value);
         }
     }
 }

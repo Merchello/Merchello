@@ -170,7 +170,7 @@
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        public IProductTaxCalculationResult CalculateTaxesForProduct(IModifiableProductVariantData product)
+        public IProductTaxCalculationResult CalculateTaxesForProduct(IProductVariantDataModifierData product)
         {
             var empty = new ProductTaxCalculationResult()
                            {

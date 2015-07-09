@@ -71,7 +71,7 @@
         public void Can_Instantiate_The_ModifiableProductVaraintDataModfierChain()
         {
             const int TaskCount = 1;
-            var chain = new ModifiableProductVariantDataModifierChain(MerchelloContext.Current);
+            var chain = new ProductVariantDataModifierChain(MerchelloContext.Current);
 
             Assert.NotNull(chain);
             Assert.AreEqual(TaskCount, chain.TaskCount);

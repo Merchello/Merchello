@@ -4,7 +4,10 @@
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Chains;
     using Merchello.Core.Models;
+    using Merchello.Web.DataModifiers;
+    using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -25,6 +28,11 @@
         private readonly ICustomerBase _customer;
 
         /// <summary>
+        /// The product data modifier.
+        /// </summary>
+        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _productDataModifier; 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CustomerItemCacheBase"/> class.
         /// </summary>
         /// <param name="itemCache">
@@ -39,7 +47,16 @@
             Mandate.ParameterNotNull(customer, "customer");
             _customer = customer;
             _itemCache = itemCache;
+            EnableDataModifiers = true;
+
+            this.Initialize();
         }
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether enable data modifiers.
+        /// </summary>
+        public bool EnableDataModifiers { get; set; }
 
         /// <summary>
         /// Gets the version of the customer item cache
@@ -229,6 +246,12 @@
         /// </param>
         public void AddItem(IProductVariant productVariant, string name, int quantity, ExtendedDataCollection extendedData)
         {
+            if (EnableDataModifiers)
+            {
+                var display = productVariant.ToProductVariantDisplay();
+                var attempt = _productDataModifier.Value.Modify(display);
+            }
+
             if (!extendedData.DefinesProductVariant()) extendedData.AddProductVariantValues(productVariant);
 
             var price = productVariant.OnSale ? extendedData.GetSalePriceValue() : extendedData.GetPriceValue();
@@ -424,6 +447,14 @@
         public void Accept(ILineItemVisitor visitor)
         {
             _itemCache.Items.Accept(visitor);
-        }         
+        }
+
+        /// <summary>
+        /// Initializes the Lazy data modifiers
+        /// </summary>
+        private void Initialize()
+        {
+            _productDataModifier = new Lazy<IDataModifierChain<IProductVariantDataModifierData>>(() => new ProductVariantDataModifierChain(MerchelloContext.Current));
+        }
     }
 }

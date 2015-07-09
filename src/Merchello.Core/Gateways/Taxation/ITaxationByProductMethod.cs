@@ -11,11 +11,11 @@
         /// Calculates taxes for a product.
         /// </summary>
         /// <param name="product">
-        /// The <see cref="IModifiableProductVariantData"/>.
+        /// The <see cref="IProductVariantDataModifierData"/>.
         /// </param>
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        IProductTaxCalculationResult CalculateTaxForProduct(IModifiableProductVariantData product);
+        IProductTaxCalculationResult CalculateTaxForProduct(IProductVariantDataModifierData product);
     }
 }

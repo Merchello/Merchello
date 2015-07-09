@@ -239,6 +239,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\RegionalProvinceConfigurationCollectionTest.cs" />
+    <Compile Include="DataModifiers\DataModifierLookupTests.cs" />
     <Compile Include="ExtendedData\ExtendedDataExtensionTests.cs" />
     <Compile Include="Localization\LocalizationFileTests.cs" />
     <Compile Include="Mappers\AutoMapperTests.cs" />

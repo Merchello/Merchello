@@ -58,12 +58,12 @@
         /// Calculates taxes for a product.
         /// </summary>
         /// <param name="product">
-        /// The <see cref="IModifiableProductVariantData"/>.
+        /// The <see cref="IProductVariantDataModifierData"/>.
         /// </param>
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        public virtual IProductTaxCalculationResult CalculateTaxForProduct(IModifiableProductVariantData product)
+        public virtual IProductTaxCalculationResult CalculateTaxForProduct(IProductVariantDataModifierData product)
         {
             var edprice = new ExtendedDataCollection();
             var edsaleprice = new ExtendedDataCollection();

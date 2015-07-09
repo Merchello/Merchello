@@ -9,7 +9,7 @@
     /// <summary>
     /// The modifiable product variant data modifier task base.
     /// </summary>
-    public abstract class ModifiableProductVariantDataModifierTaskBase : AttemptChainTaskBase<IModifiableProductVariantData>
+    public abstract class ProductVariantDataModifierTaskBase : AttemptChainTaskBase<IProductVariantDataModifierData>
     {
         /// <summary>
         /// The <see cref="IMerchelloContext"/>.
@@ -17,12 +17,12 @@
         private readonly IMerchelloContext _merchelloContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModifiableProductVariantDataModifierTaskBase"/> class.
+        /// Initializes a new instance of the <see cref="ProductVariantDataModifierTaskBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        protected ModifiableProductVariantDataModifierTaskBase(IMerchelloContext merchelloContext)
+        protected ProductVariantDataModifierTaskBase(IMerchelloContext merchelloContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             this._merchelloContext = merchelloContext;

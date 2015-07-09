@@ -10,6 +10,11 @@
     public interface ICustomerItemCacheBase
     {
         /// <summary>
+        /// Gets or sets a value indicating whether enable data modifiers.
+        /// </summary>
+        bool EnableDataModifiers { get; set; }
+
+        /// <summary>
         /// Gets the item caches version key
         /// </summary>
         Guid VersionKey { get; }

@@ -11,7 +11,7 @@
     /// <summary>
     /// The include tax in product price data modifier task.
     /// </summary>
-    public class IncludeTaxInProductPriceDataModifierTask : ModifiableProductVariantDataModifierTaskBase
+    public class IncludeTaxInProductPriceDataModifierTask : ProductVariantDataModifierTaskBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IncludeTaxInProductPriceDataModifierTask"/> class.
@@ -33,16 +33,16 @@
         /// <returns>
         /// The <see cref="Attempt"/>.
         /// </returns>
-        public override Attempt<IModifiableProductVariantData> PerformTask(IModifiableProductVariantData value)
+        public override Attempt<IProductVariantDataModifierData> PerformTask(IProductVariantDataModifierData value)
         {
             var taxationContent = MerchelloContext.Gateways.Taxation;
-            if (!taxationContent.ProductPricingEnabled) return Attempt<IModifiableProductVariantData>.Succeed(value);
+            if (!taxationContent.ProductPricingEnabled) return Attempt<IProductVariantDataModifierData>.Succeed(value);
 
             var result = taxationContent.CalculateTaxesForProduct(value);
-            value.Price += result.PriceResult.TaxAmount;
-            value.SalePrice += result.SalePriceResult.TaxAmount;
+            value.ModifyData("Price", value.Price + result.PriceResult.TaxAmount, result.PriceResult.ExtendedData);
+            value.ModifyData("SalePrice", value.SalePrice + result.SalePriceResult.TaxAmount, result.SalePriceResult.ExtendedData);            
 
-            return Attempt<IModifiableProductVariantData>.Succeed(value);
+            return Attempt<IProductVariantDataModifierData>.Succeed(value);
         }
     }
 }

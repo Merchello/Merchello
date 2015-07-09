@@ -1,7 +1,5 @@
-﻿namespace Merchello.Web.DataModifiers
+﻿namespace Merchello.Core.Chains
 {
-    using Merchello.Core.Models;
-
     using Umbraco.Core;
 
     /// <summary>

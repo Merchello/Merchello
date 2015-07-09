@@ -9,6 +9,9 @@ namespace Merchello.Core
     using System.Linq;
     using System.Xml;
     using System.Xml.Linq;
+
+    using Merchello.Core.Chains;
+
     using Models;
     using Models.Interfaces;
     using Newtonsoft.Json;
@@ -229,8 +232,6 @@ namespace Merchello.Core
 
         #endregion
 
-
-       
 
         #region Examine Serialization
 

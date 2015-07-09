@@ -56,7 +56,7 @@
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        IProductTaxCalculationResult CalculateTaxesForProduct(IModifiableProductVariantData product);
+        IProductTaxCalculationResult CalculateTaxesForProduct(IProductVariantDataModifierData product);
 
         /// <summary>
         /// Gets the tax method for a given tax address
