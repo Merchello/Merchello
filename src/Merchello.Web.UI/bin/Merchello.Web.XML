@@ -13409,6 +13409,17 @@
             The application context.
             </param>
         </member>
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.TaxMethodServiceOnSaved(Merchello.Core.Services.ITaxMethodService,Umbraco.Core.Events.SaveEventArgs{Merchello.Core.Models.ITaxMethod})">
+            <summary>
+            Clears the product pricing tax method so that it can be re-initialized if needed.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="saveEventArgs">
+            The save event args.
+            </param>
+        </member>
         <member name="M:Merchello.Web.UmbracoApplicationEventHandler.BootManagerBaseOnMerchelloStarted(System.Object,System.EventArgs)">
             <summary>
             The boot manager base on merchello started.

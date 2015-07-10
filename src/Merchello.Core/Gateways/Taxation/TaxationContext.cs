@@ -237,6 +237,11 @@
         private ITaxationByProductMethod GetTaxationByProductMethod()
         {
             var taxMethod = GatewayProviderService.GetTaxMethodForProductPricing();
+            if (taxMethod == null)
+            {
+                LogHelper.Debug<TaxationContext>("Product based pricing is set in settings, but a TaxMethod has not been assigned.");
+                return null;
+            }
             var provider = GatewayProviderResolver.GetProviderByKey<TaxationGatewayProviderBase>(taxMethod.ProviderKey);
 
             if (provider == null)

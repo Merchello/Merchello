@@ -5,6 +5,7 @@
 
     using Merchello.Web.Models.ContentEditing;
 
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Models.PublishedContent;
     using Umbraco.Core.PropertyEditors;
 
@@ -64,8 +65,9 @@
                 var key = new Guid(productKey);
                 return merchello.Query.Product.GetByKey(key);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LogHelper.Error<ProductDisplayValueConverter>("Failed to Convert ProductDisplay property", ex);
                 return null;
             }
         }
