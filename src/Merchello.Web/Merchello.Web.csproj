@@ -408,7 +408,7 @@
     <Compile Include="Models\ContentEditing\TaxMethodDisplay.cs" />
     <Compile Include="Models\ContentEditing\WarehouseCatalogDisplay.cs" />
     <Compile Include="Models\ContentEditing\FullfillmentMappingExtensions.cs" />
-    <Compile Include="Models\ContentEditing\ProductMappingExtensions.cs" />
+    <Compile Include="Models\ContentEditing\ProductDisplayExtensions.cs" />
     <Compile Include="Models\ContentEditing\CountryDisplay.cs" />
     <Compile Include="Models\ContentEditing\ProvinceDisplay.cs" />
     <Compile Include="Models\ContentEditing\SettingsMappingExtensions.cs" />

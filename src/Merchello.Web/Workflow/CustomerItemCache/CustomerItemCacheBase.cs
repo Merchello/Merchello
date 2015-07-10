@@ -396,13 +396,14 @@
                     if (modified != null)
                     {
                         extendedData.MergeDataModifierLogs(modified);
-                        if (!extendedData.DefinesProductVariant())  extendedData.AddProductVariantValues(modified);
+                        if (!extendedData.DefinesProductVariant()) extendedData.AddProductVariantValues(modified);
                         productVariant = modified;
                     }
                 }
             }
             else
             {
+                extendedData.MergeDataModifierLogs(productVariant);
                 if (!extendedData.DefinesProductVariant()) extendedData.AddProductVariantValues(productVariant);
             }
             
