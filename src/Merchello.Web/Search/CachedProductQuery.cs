@@ -248,7 +248,7 @@
 
             var results = SearchProvider.Search(criteria);
 
-            return results.Select(x => x.ToProductVariantDisplay());
+            return results.Select(x => this.ModifyData(x.ToProductVariantDisplay()));
         }
 
         /// <summary>

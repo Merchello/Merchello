@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -11,7 +12,8 @@
     /// <summary>
     /// The product mapping extensions.
     /// </summary>
-    internal static class ProductMappingExtensions
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
+    public static class ProductDisplayExtensions
     {
 
         #region IProduct
@@ -152,6 +154,27 @@
         #endregion
 
         #region ProductDisplay
+
+        /// <summary>
+        /// Gets the <see cref="ProductVariantDisplay"/> with matching with attributes from the product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="optionChoices">
+        /// The option choices.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>        
+        public static ProductVariantDisplay GetProductVariantDisplayWithAttributes(this ProductDisplay product, Guid[] optionChoices)
+        {
+            return
+                product.ProductVariants.FirstOrDefault(
+                    x =>
+                    x.Attributes.Count() == optionChoices.Count()
+                    && optionChoices.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
+        }
 
         /// <summary>
         /// Maps a <see cref="IProduct"/> to <see cref="ProductDisplay"/>.

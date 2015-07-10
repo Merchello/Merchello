@@ -95,7 +95,7 @@
             StoreSettingService.Saved += StoreSettingServiceOnSaved;
 
             // Clear the tax method if set
-
+            TaxMethodService.Saved += TaxMethodServiceOnSaved;
 
             // Auditing
             PaymentGatewayMethodBase.VoidAttempted += PaymentGatewayMethodBaseOnVoidAttempted;
@@ -103,6 +103,20 @@
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
             if (_merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        /// <summary>
+        /// Clears the product pricing tax method so that it can be re-initialized if needed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
+        private void TaxMethodServiceOnSaved(ITaxMethodService sender, SaveEventArgs<ITaxMethod> saveEventArgs)
+        {
+            ((TaxationContext)MerchelloContext.Current.Gateways.Taxation).ClearProductPricingMethod();
         }
 
         /// <summary>

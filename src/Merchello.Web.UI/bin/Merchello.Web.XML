@@ -11068,12 +11068,12 @@
             
             </remarks>
         </member>
-        <member name="T:Merchello.Web.Models.ContentEditing.ProductMappingExtensions">
+        <member name="T:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions">
             <summary>
             The product mapping extensions.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.ContentEditing.ProductMappingExtensions.ToProduct(Merchello.Web.Models.ContentEditing.ProductDisplay,Merchello.Core.Models.IProduct)">
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.ToProduct(Merchello.Web.Models.ContentEditing.ProductDisplay,Merchello.Core.Models.IProduct)">
             <summary>
             Maps a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to <see cref="T:Merchello.Core.Models.IProduct"/>
             </summary>
@@ -11087,7 +11087,7 @@
             The <see cref="T:Merchello.Core.Models.IProduct"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Models.ContentEditing.ProductMappingExtensions.ToProduct(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.String,System.Decimal)">
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.ToProduct(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.String,System.Decimal)">
             <summary>
             Maps a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to <see cref="T:Merchello.Core.Models.IProduct"/>
             </summary>
@@ -11107,7 +11107,21 @@
             The <see cref="T:Merchello.Core.Models.IProduct"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Models.ContentEditing.ProductMappingExtensions.ToProductDisplay(Merchello.Core.Models.IProduct)">
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.GetProductVariantDisplayWithAttributes(Merchello.Web.Models.ContentEditing.ProductDisplay,System.Guid[])">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> with matching with attributes from the product.
+            </summary>
+            <param name="product">
+            The product.
+            </param>
+            <param name="optionChoices">
+            The option choices.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
+            </returns>        
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.ToProductDisplay(Merchello.Core.Models.IProduct)">
             <summary>
             Maps a <see cref="T:Merchello.Core.Models.IProduct"/> to <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </summary>
@@ -11118,7 +11132,7 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Models.ContentEditing.ProductMappingExtensions.AsMasterVariantDisplay(Merchello.Web.Models.ContentEditing.ProductDisplay)">
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.AsMasterVariantDisplay(Merchello.Web.Models.ContentEditing.ProductDisplay)">
             <summary>
             Maps a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
             </summary>
@@ -13393,6 +13407,17 @@
             </param>
             <param name="applicationContext">
             The application context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.TaxMethodServiceOnSaved(Merchello.Core.Services.ITaxMethodService,Umbraco.Core.Events.SaveEventArgs{Merchello.Core.Models.ITaxMethod})">
+            <summary>
+            Clears the product pricing tax method so that it can be re-initialized if needed.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="saveEventArgs">
+            The save event args.
             </param>
         </member>
         <member name="M:Merchello.Web.UmbracoApplicationEventHandler.BootManagerBaseOnMerchelloStarted(System.Object,System.EventArgs)">

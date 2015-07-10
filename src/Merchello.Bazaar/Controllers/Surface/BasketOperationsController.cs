@@ -9,6 +9,8 @@
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core.Models;
+    using Merchello.Web;
+    using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Workflow;
 
     using Umbraco.Web.Mvc;
@@ -64,7 +66,24 @@
             var extendedData = new ExtendedDataCollection();
             extendedData.SetValue("umbracoContentId", model.ContentId.ToString(CultureInfo.InvariantCulture));
 
-            var product = this.MerchelloServices.ProductService.GetByKey(model.Product.Key);
+            // NEW IN 1.9.1 
+            // We've added some data modifiers that can handle such things as including taxes in product
+            // pricing.  The data modifiers can either get executed when the item is added to the basket or
+            // as a result from a MerchelloHelper query - you just don't want them to execute twice.
+
+            // Calls directly to the ProductService are not modified
+            // var product = this.MerchelloServices.ProductService.GetByKey(model.Product.Key);
+
+            // Calls to using the MerchelloHelper WILL be modified
+            // var merchello = new MerchelloHelper();
+            //
+            // if you want to do this you should tell the basket not to modify the data again when adding the item
+            // this.Basket.EnableDataModifiers = false;
+
+            // In this case we want to get the product without any data modification
+            var merchello = new MerchelloHelper(false);
+
+            var product = merchello.Query.Product.GetByKey(model.Product.Key);
 
             // In the event the product has options we want to add the "variant" to the basket.
             // -- If a product that has variants is defined, the FIRST variant will be added to the cart. 
@@ -72,7 +91,10 @@
             // -- longer valid for sale.
             if (model.OptionChoices != null && model.OptionChoices.Any())
             {
-                var variant = this.MerchelloServices.ProductVariantService.GetProductVariantWithAttributes(product, model.OptionChoices);
+                // NEW in 1.9.1
+                // ProductDisplay and ProductVariantDisplay classes can be added directly to the Basket
+                // so you don't have to query the service.
+                var variant = product.GetProductVariantDisplayWithAttributes(model.OptionChoices);
                 this.Basket.AddItem(variant, variant.Name, 1, extendedData);
             }
             else
