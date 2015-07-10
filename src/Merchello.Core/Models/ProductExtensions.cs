@@ -209,27 +209,30 @@ namespace Merchello.Core
 
         #region DataModifier
 
-        /// <summary>
-        /// Merges the modified property data.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <param name="modified">
-        /// The modified.
-        /// </param>
-        internal static void MergeDataModifierData(this IProductBase product, IProductVariantDataModifierData modified)
-        {
-            if (modified.ModifiedDataLogs != null)
-            foreach (var log in modified.ModifiedDataLogs)
-            {
-                var propInfo = product.GetType().GetProperty(log.PropertyName, BindingFlags.Public | BindingFlags.Instance);
-                if (propInfo != null && propInfo.CanWrite)
-                {
-                    propInfo.SetValue(product, log.ModifiedValue, null);
-                }
-            }
-        }
+        ///// <summary>
+        ///// Merges the modified property data.
+        ///// </summary>
+        ///// <param name="product">
+        ///// The product.
+        ///// </param>
+        ///// <param name="modified">
+        ///// The modified.
+        ///// </param>
+        ///// <remarks>
+        ///// This has the potential to modify a cached value and create some odd results
+        ///// </remarks>
+        //internal static void MergeDataModifierData(this IProductBase product, IProductVariantDataModifierData modified)
+        //{
+        //    if (modified.ModifiedDataLogs != null)
+        //    foreach (var log in modified.ModifiedDataLogs)
+        //    {
+        //        var propInfo = product.GetType().GetProperty(log.PropertyName, BindingFlags.Public | BindingFlags.Instance);
+        //        if (propInfo != null && propInfo.CanWrite)
+        //        {
+        //            propInfo.SetValue(product, log.ModifiedValue, null);
+        //        }
+        //    }
+        //}
 
         #endregion
 

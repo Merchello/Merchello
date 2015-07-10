@@ -103,7 +103,7 @@
         /// </returns>
         public override ProductDisplay GetByKey(Guid key)
         {
-            return this.ModifyData(GetDisplayObject(key).ShallowCopy());
+            return this.ModifyData(GetDisplayObject(key));
         }
 
         /// <summary>
@@ -130,7 +130,7 @@
 
             ReindexEntity(entity);
 
-            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity).ShallowCopy());
+            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity));
         }
 
         /// <summary>
@@ -155,7 +155,7 @@
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay().ShallowCopy());
+            return this.ModifyData(variant.ToProductVariantDisplay());
         }
 
         /// <summary>
@@ -180,7 +180,7 @@
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay().ShallowCopy());
+            return this.ModifyData(variant.ToProductVariantDisplay());
         }
 
         /// <summary>
@@ -285,8 +285,8 @@
         //internal ProductDisplay ModifyProductData(ProductDisplay product)
         //{
         //    if (!EnableDataModifiers) return product;
-        //    var modified = this.ModifyData(product.ShallowCopy());
-        //    modified.ProductVariants = product.ProductVariants.Select(x => this.ModifyData(x.ShallowCopy()));
+        //    var modified = this.ModifyData(product);
+        //    modified.ProductVariants = product.ProductVariants.Select(x => this.ModifyData(x));
         //    return modified;
         //}
 

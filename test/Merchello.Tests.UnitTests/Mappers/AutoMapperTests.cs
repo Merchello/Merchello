@@ -5,8 +5,11 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Mappers
 {
+    using System;
+
     using Merchello.Core.Gateways.Payment.Cash;
     using Merchello.Core.Services;
+    using Merchello.Tests.Base.DataMakers;
 
     using Moq;
 
@@ -61,5 +64,23 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.IsNotNullOrEmpty(display.RefundPaymentEditorView.EditorView);
         }
 
+        [Test]
+        public void Can_Map_ProductDisplay_To_ProductVariantDisplay()
+        {
+            //// Arrange
+            var product = MockProductDataMaker.MockProductDisplayForInserting();
+            var key = Guid.NewGuid();
+            var variantKey = Guid.NewGuid();
+            product.Key = key;
+            product.ProductVariantKey = variantKey;
+
+            //// Act
+            var variant = AutoMapper.Mapper.Map<ProductVariantDisplay>(product);
+
+            //// Assert
+            Assert.NotNull(variant);
+            Assert.AreEqual(variantKey, variant.Key, "Variant key did not match");
+            Assert.AreEqual(key, variant.ProductKey, "Product key did not match");
+        }
     }
 }

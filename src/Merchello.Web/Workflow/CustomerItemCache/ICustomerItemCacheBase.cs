@@ -3,6 +3,7 @@
     using System;
 
     using Merchello.Core.Models;
+    using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
     /// The CustomerItemCacheBase interface.
@@ -48,6 +49,8 @@
         /// Gets a value indicating whether or not the item cache contains any items
         /// </summary>
         bool IsEmpty { get; }
+
+        #region IProduct
 
         /// <summary>
         /// Adds a <see cref="IProduct"/> to the item cache
@@ -99,6 +102,65 @@
         /// </remarks>
         void AddItem(IProduct product, string name, int quantity, ExtendedDataCollection extendedData);
 
+        #endregion
+
+        #region ProductDisplay
+
+        /// <summary>
+        /// Adds a <see cref="ProductDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="product">The <see cref="ProductDisplay"/> to be added</param>
+        /// <remarks>
+        /// If the product has variants, the "first" variant found will be added.
+        /// </remarks>
+        void AddItem(ProductDisplay product);
+
+        /// <summary>
+        /// Adds a <see cref="ProductDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="product">The <see cref="ProductDisplay"/> to be added</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        /// <remarks>
+        /// If the product has variants, the "first" variant found will be added.
+        /// </remarks>
+        void AddItem(ProductDisplay product, int quantity);
+
+        /// <summary>
+        /// Adds a <see cref="ProductDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="product">The <see cref="ProductDisplay"/> to be added</param>
+        /// <param name="name">Override for the name of the product in the line item</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        /// <remarks>
+        /// If the product has variants, the "first" variant found will be added.
+        /// </remarks>
+        void AddItem(ProductDisplay product, string name, int quantity);
+
+        /// <summary>
+        /// Adds a <see cref="ProductDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="product">
+        /// The <see cref="ProductDisplay"/> to be added
+        /// </param>
+        /// <param name="name">
+        /// Override for the name of the product in the line item
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity to be represented
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended Data.
+        /// </param>
+        /// <remarks>
+        /// If the product has variants, the "first" variant found will be added.
+        /// </remarks>
+        void AddItem(ProductDisplay product, string name, int quantity, ExtendedDataCollection extendedData);
+
+        #endregion
+
+
+        #region IProductVariant
+
         /// <summary>
         /// Adds a <see cref="IProductVariant"/> to the item cache
         /// </summary>
@@ -142,6 +204,57 @@
         /// The extended Data.
         /// </param>
         void AddItem(IProductVariant productVariant, string name, int quantity, ExtendedDataCollection extendedData);
+
+        #endregion
+
+        #region ProductVariantDisplay
+
+        /// <summary>
+        /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
+        void AddItem(ProductVariantDisplay productVariant);
+
+        /// <summary>
+        /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">The product variant to be added</param>
+        /// <param name="quantity">The quantity to be represented</param>
+        void AddItem(ProductVariantDisplay productVariant, int quantity);
+
+        /// <summary>
+        /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant to be added
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity to be represented
+        /// </param>
+        void AddItem(ProductVariantDisplay productVariant, string name, int quantity);
+
+        /// <summary>
+        /// Adds a <see cref="ProductVariantDisplay"/> to the item cache
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant to be added
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity to be represented
+        /// </param>
+        /// <param name="extendedData">
+        /// The extended Data.
+        /// </param>
+        void AddItem(ProductVariantDisplay productVariant, string name, int quantity, ExtendedDataCollection extendedData);
+
+        #endregion
+
 
         /// <summary>
         /// Adds a item to the item cache

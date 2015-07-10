@@ -1299,6 +1299,17 @@
             Gets or sets the sort order.
             </summary>
         </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
+            <summary>
+            The add product variant values.
+            </summary>
+            <param name="extendedData">
+            The extended data.
+            </param>
+            <param name="productVariant">
+            The product variant.
+            </param>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.OfferComponentDefinitionDisplay">
             <summary>
             The offer component definition display.
@@ -8507,6 +8518,56 @@
             If the product has variants, the "first" variant found will be added.
             </remarks>
         </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductDisplay)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to the item cache
+            </summary>
+            <param name="product">The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to be added</param>
+            <remarks>
+            If the product has variants, the "first" variant found will be added.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductDisplay,System.Int32)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to the item cache
+            </summary>
+            <param name="product">The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to be added</param>
+            <param name="quantity">The quantity to be represented</param>
+            <remarks>
+            If the product has variants, the "first" variant found will be added.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.Int32)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to the item cache
+            </summary>
+            <param name="product">The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to be added</param>
+            <param name="name">Override for the name of the product in the line item</param>
+            <param name="quantity">The quantity to be represented</param>
+            <remarks>
+            If the product has variants, the "first" variant found will be added.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.Int32,Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to the item cache
+            </summary>
+            <param name="product">
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to be added
+            </param>
+            <param name="name">
+            Override for the name of the product in the line item
+            </param>
+            <param name="quantity">
+            The quantity to be represented
+            </param>
+            <param name="extendedData">
+            The extended Data.
+            </param>
+            <remarks>
+            If the product has variants, the "first" variant found will be added.
+            </remarks>
+        </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Core.Models.IProductVariant)">
             <summary>
             Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the item cache
@@ -8537,6 +8598,50 @@
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Core.Models.IProductVariant,System.String,System.Int32,Merchello.Core.Models.ExtendedDataCollection)">
             <summary>
             Adds a <see cref="T:Merchello.Core.Models.IProductVariant"/> to the item cache
+            </summary>
+            <param name="productVariant">
+            The product variant to be added
+            </param>
+            <param name="name">
+            The name.
+            </param>
+            <param name="quantity">
+            The quantity to be represented
+            </param>
+            <param name="extendedData">
+            The extended Data.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> to the item cache
+            </summary>
+            <param name="productVariant">The product variant to be added</param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductVariantDisplay,System.Int32)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> to the item cache
+            </summary>
+            <param name="productVariant">The product variant to be added</param>
+            <param name="quantity">The quantity to be represented</param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductVariantDisplay,System.String,System.Int32)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> to the item cache
+            </summary>
+            <param name="productVariant">
+            The product variant to be added
+            </param>
+            <param name="name">
+            The name.
+            </param>
+            <param name="quantity">
+            The quantity to be represented
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductVariantDisplay,System.String,System.Int32,Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> to the item cache
             </summary>
             <param name="productVariant">
             The product variant to be added
@@ -8772,6 +8877,56 @@
             <param name="quantity">The quantity of the line item</param>
             <param name="extendedData">A <see cref="T:Merchello.Core.Models.ExtendedDataCollection"/></param>
         </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductDisplay)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to the item cache
+            </summary>
+            <param name="product">The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to be added</param>
+            <remarks>
+            If the product has variants, the "first" variant found will be added.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductDisplay,System.Int32)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to the item cache
+            </summary>
+            <param name="product">The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to be added</param>
+            <param name="quantity">The quantity to be represented</param>
+            <remarks>
+            If the product has variants, the "first" variant found will be added.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.Int32)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to the item cache
+            </summary>
+            <param name="product">The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to be added</param>
+            <param name="name">Override for the name of the product in the line item</param>
+            <param name="quantity">The quantity to be represented</param>
+            <remarks>
+            If the product has variants, the "first" variant found will be added.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.Int32,Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to the item cache
+            </summary>
+            <param name="product">
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to be added
+            </param>
+            <param name="name">
+            Override for the name of the product in the line item
+            </param>
+            <param name="quantity">
+            The quantity to be represented
+            </param>
+            <param name="extendedData">
+            The extended Data.
+            </param>
+            <remarks>
+            If the product has variants, the "first" variant found will be added.
+            </remarks>
+        </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Core.Models.IProductVariant)">
             <summary>
             Adds a line item to the customer item cache
@@ -8817,6 +8972,50 @@
             </param>
             <param name="quantity">
             The quantity.
+            </param>
+            <param name="extendedData">
+            The extended Data.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> to the item cache
+            </summary>
+            <param name="productVariant">The product variant to be added</param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductVariantDisplay,System.Int32)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> to the item cache
+            </summary>
+            <param name="productVariant">The product variant to be added</param>
+            <param name="quantity">The quantity to be represented</param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductVariantDisplay,System.String,System.Int32)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> to the item cache
+            </summary>
+            <param name="productVariant">
+            The product variant to be added
+            </param>
+            <param name="name">
+            The name.
+            </param>
+            <param name="quantity">
+            The quantity to be represented
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddItem(Merchello.Web.Models.ContentEditing.ProductVariantDisplay,System.String,System.Int32,Merchello.Core.Models.ExtendedDataCollection)">
+            <summary>
+            Adds a <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/> to the item cache
+            </summary>
+            <param name="productVariant">
+            The product variant to be added
+            </param>
+            <param name="name">
+            The name.
+            </param>
+            <param name="quantity">
+            The quantity to be represented
             </param>
             <param name="extendedData">
             The extended Data.
@@ -10867,6 +11066,70 @@
             
             * For testing you will have to use the static .Save(IGatewayProviderService ..., as MerchelloContext.Current will likely be null
             
+            </remarks>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.ProductMappingExtensions">
+            <summary>
+            The product mapping extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductMappingExtensions.ToProduct(Merchello.Web.Models.ContentEditing.ProductDisplay,Merchello.Core.Models.IProduct)">
+            <summary>
+            Maps a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to <see cref="T:Merchello.Core.Models.IProduct"/>
+            </summary>
+            <param name="productDisplay">
+            The product display.
+            </param>
+            <param name="destination">
+            The destination.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProduct"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductMappingExtensions.ToProduct(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.String,System.Decimal)">
+            <summary>
+            Maps a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to <see cref="T:Merchello.Core.Models.IProduct"/>
+            </summary>
+            <param name="productDisplay">
+            The product display.
+            </param>
+            <param name="name">
+            The name.
+            </param>
+            <param name="sku">
+            The SKU.
+            </param>
+            <param name="price">
+            The price.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProduct"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductMappingExtensions.ToProductDisplay(Merchello.Core.Models.IProduct)">
+            <summary>
+            Maps a <see cref="T:Merchello.Core.Models.IProduct"/> to <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </summary>
+            <param name="product">
+            The product.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductMappingExtensions.AsMasterVariantDisplay(Merchello.Web.Models.ContentEditing.ProductDisplay)">
+            <summary>
+            Maps a <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> to <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
+            </summary>
+            <param name="product">
+            The product.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
+            </returns>
+            <remarks>
+            Used for adding items to item caches in <see cref="T:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase"/>
             </remarks>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.CountryDisplay">
