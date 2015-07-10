@@ -33,6 +33,5 @@
         /// package was upgraded
         /// </remarks>
         bool IsConfigured { get; }
-
     }
 }

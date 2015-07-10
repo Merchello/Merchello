@@ -28,7 +28,7 @@
         /// Initializes a new instance of the <see cref="CachedOrderQuery"/> class.
         /// </summary>
         public CachedOrderQuery()
-            : this(MerchelloContext.Current.Services.OrderService)
+            : this(MerchelloContext.Current.Services.OrderService, true)
         {            
         }
 
@@ -38,11 +38,15 @@
         /// <param name="orderService">
         /// The order service.
         /// </param>
-        internal CachedOrderQuery(IOrderService orderService)
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </param>
+        internal CachedOrderQuery(IOrderService orderService, bool enableDataModifiers)
             : this(
             orderService,
             ExamineManager.Instance.IndexProviderCollection["MerchelloOrderIndexer"],
-            ExamineManager.Instance.SearchProviderCollection["MerchelloOrderSearcher"])
+            ExamineManager.Instance.SearchProviderCollection["MerchelloOrderSearcher"],
+            enableDataModifiers)
         {            
         }
 
@@ -58,11 +62,15 @@
         /// <param name="searchProvider">
         /// The search provider.
         /// </param>
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </param>
         internal CachedOrderQuery(
             IPageCachedService<IOrder> service, 
             BaseIndexProvider indexProvider, 
-            BaseSearchProvider searchProvider)
-            : base(service, indexProvider, searchProvider)
+            BaseSearchProvider searchProvider,
+            bool enableDataModifiers)
+            : base(service, indexProvider, searchProvider, enableDataModifiers)
         {
             _orderService = (OrderService)service;
         }

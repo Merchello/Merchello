@@ -174,7 +174,7 @@
                 _shipping = new Lazy<IShippingContext>(() => new ShippingContext(gatewayProviderService, storeSettingService, _resolver));
 
             if (_taxation == null)
-                _taxation = new Lazy<ITaxationContext>(() => new TaxationContext(gatewayProviderService, _resolver));
+                _taxation = new Lazy<ITaxationContext>(() => new TaxationContext(gatewayProviderService, storeSettingService, _resolver));
         }
     }
 }

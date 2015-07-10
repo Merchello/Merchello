@@ -240,6 +240,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Chains\ConfigurationChainBase.cs" />
+    <Compile Include="Chains\IDataModifierChain{T}.cs" />
     <Compile Include="Chains\InvoiceCreation\AddCouponDiscountsToInvoiceTask.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessor.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessorFactory.cs" />
@@ -260,8 +262,10 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
+    <Compile Include="Gateways\Taxation\IProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductMethod.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductProvider.cs" />
+    <Compile Include="Gateways\Taxation\ProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxationApplication.cs" />
     <Compile Include="MandateWrapperExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
@@ -294,7 +298,9 @@
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
+    <Compile Include="Models\Interfaces\IDataModifierData.cs" />
     <Compile Include="Models\Interfaces\IModifiableProductVariantData.cs" />
+    <Compile Include="Models\Interfaces\IDataModifierLog.cs" />
     <Compile Include="Models\Interfaces\IOfferRedeemed.cs" />
     <Compile Include="Models\Interfaces\IOfferSettings.cs" />
     <Compile Include="Marketing\Rewards\IOfferRewardComponent.cs" />
@@ -315,6 +321,9 @@
     <Compile Include="Gateways\Notification\Triggering\ShipmentResultNotifyModelFactory.cs" />
     <Compile Include="Models\DigitalMedia.cs" />
     <Compile Include="Models\Interfaces\IDigitalMedia.cs" />
+    <Compile Include="Models\DataModifierExtensions.cs" />
+    <Compile Include="Models\ModifiableProductVariantData.cs" />
+    <Compile Include="Models\DataModifierLog.cs" />
     <Compile Include="Models\MonitorModels\IShipmentResultNotifyModel.cs" />
     <Compile Include="Gateways\Notification\Triggering\OrderShippedTrigger.cs" />
     <Compile Include="Gateways\Notification\Triggering\PartialOrderShippedTrigger.cs" />

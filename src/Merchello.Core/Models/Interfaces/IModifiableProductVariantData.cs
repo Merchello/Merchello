@@ -1,14 +1,12 @@
 ﻿namespace Merchello.Core.Models
 {
-    using System.Collections;
-
     /// <summary>
     /// Defines modifiable product data.
     /// </summary>
     /// <remarks>
     /// 1.9.1 used in Data Modifier layer in the MerchelloHelper
     /// </remarks>
-    public interface IModifiableProductVariantData
+    public interface IProductVariantDataModifierData : IDataModifierData 
     {
         /// <summary>
         /// Gets or sets the name.

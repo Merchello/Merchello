@@ -23,6 +23,8 @@
                     "merchCouponReward",
                     "merchOfferCodeTempeData",
                     "merchLineItemTaxAmount",
+                    "merchProductPriceTaxAmount",
+                    "merchProductSalePriceTaxAmount",
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -401,6 +403,50 @@
             public static string LineItemTaxAmount
             {
                 get { return "merchLineItemTaxAmount"; }
+            }
+
+            /// <summary>
+            /// Gets the product price no tax.
+            /// </summary>
+            public static string ProductPriceNoTax
+            {
+                get
+                {
+                    return "merchProductPriceNoTax";
+                }
+            }
+
+            /// <summary>
+            /// Gets the product price tax amount.
+            /// </summary>
+            public static string ProductPriceTaxAmount
+            {
+                get
+                {
+                    return "merchProductPriceTaxAmount";
+                }
+            }
+
+            /// <summary>
+            /// Gets the product sale price no tax.
+            /// </summary>
+            public static string ProductSalePriceNoTax
+            {
+                get
+                {
+                    return "merchProductSalePriceNoTax";
+                }
+            }
+
+            /// <summary>
+            /// Gets the product sale price tax amount.
+            /// </summary>
+            public static string ProductSalePriceTaxAmount
+            {
+                get
+                {
+                    return "merchProductSalePriceTaxAmount";
+                }
             }
 
             /// <summary>

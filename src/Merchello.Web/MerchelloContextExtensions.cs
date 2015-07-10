@@ -22,7 +22,7 @@
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        public static ITaxCalculationResult CalculateTaxesForProduct(this ITaxationContext context, IProduct product)
+        public static IProductTaxCalculationResult CalculateTaxesForProduct(this ITaxationContext context, IProduct product)
         {
             return context.CalculateTaxesForProduct(product.ToProductDisplay());
         }
@@ -39,7 +39,7 @@
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        public static ITaxCalculationResult CalculateTaxesForProduct(this ITaxationContext context, IProductVariant productVariant)
+        public static IProductTaxCalculationResult CalculateTaxesForProduct(this ITaxationContext context, IProductVariant productVariant)
         {
             return context.CalculateTaxesForProduct(productVariant.ToProductVariantDisplay());
         }

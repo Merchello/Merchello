@@ -13,6 +13,11 @@
         bool ProductPricingEnabled { get; }
 
         /// <summary>
+        /// Gets the taxation application.
+        /// </summary>
+        TaxationApplication TaxationApplication { get; }
+
+        /// <summary>
         /// Calculates taxes for the <see cref="IInvoice"/>
         /// </summary>
         /// <param name="invoice">The <see cref="IInvoice"/> to tax</param>
@@ -51,7 +56,7 @@
         /// <returns>
         /// The <see cref="ITaxCalculationResult"/>.
         /// </returns>
-        ITaxCalculationResult CalculateTaxesForProduct(IModifiableProductVariantData product);
+        IProductTaxCalculationResult CalculateTaxesForProduct(IProductVariantDataModifierData product);
 
         /// <summary>
         /// Gets the tax method for a given tax address

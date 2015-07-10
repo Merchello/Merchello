@@ -43,10 +43,10 @@
         /// </summary>
         private ICustomerBase _customer;
 
-        /// <summary>
-        /// The backoffice.
-        /// </summary>
-        private IBackoffice _backoffice;
+        ///// <summary>
+        ///// The backoffice.
+        ///// </summary>
+        //private IBackoffice _backoffice;
 
 
         /// <summary>
@@ -185,74 +185,74 @@
         }
 
 
-        /// <summary>
-        /// Adds items to the back office basket to calculate shipping and Sales tax
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [AcceptVerbs("POST")]
-        public BackofficeOrderSummary ProcessesProductsToBackofficeOrder(BackofficeAddItemModel model)
-        {
+        ///// <summary>
+        ///// Adds items to the back office basket to calculate shipping and Sales tax
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //[AcceptVerbs("POST")]
+        //public BackofficeOrderSummary ProcessesProductsToBackofficeOrder(BackofficeAddItemModel model)
+        //{
                                    
-            _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
-            _backoffice = _customer.Backoffice();
+        //    _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
+        //    _backoffice = _customer.Backoffice();
              
-            _backoffice.Empty();
-            _backoffice.Save();
+        //    _backoffice.Empty();
+        //    _backoffice.Save();
 
-            if (model.ProductKeys != null && model.ProductKeys.Any())
-            {
+        //    if (model.ProductKeys != null && model.ProductKeys.Any())
+        //    {
 
-                foreach (var key in model.ProductKeys)
-                {
-                    var extendedData = new ExtendedDataCollection();
-                    //extendedData.SetValue("umbracoContentId", model.ContentId.ToString(CultureInfo.InvariantCulture));
+        //        foreach (var key in model.ProductKeys)
+        //        {
+        //            var extendedData = new ExtendedDataCollection();
+        //            //extendedData.SetValue("umbracoContentId", model.ContentId.ToString(CultureInfo.InvariantCulture));
 
-                    var product = MerchelloContext.Services.ProductService.GetByKey(new Guid(key));
+        //            var product = MerchelloContext.Services.ProductService.GetByKey(new Guid(key));
 
-                    //if (model.OptionChoices != null && model.OptionChoices.Any())
-                    //{
-                    //    var variant = MerchelloContext.Services.ProductVariantService.GetProductVariantWithAttributes(product, model.OptionChoices);
+        //            //if (model.OptionChoices != null && model.OptionChoices.Any())
+        //            //{
+        //            //    var variant = MerchelloContext.Services.ProductVariantService.GetProductVariantWithAttributes(product, model.OptionChoices);
 
-                    //    extendedData.SetValue("isVariant", "true");
+        //            //    extendedData.SetValue("isVariant", "true");
 
-                    //    _backoffice.AddItem(variant, variant.Name, 1, extendedData);
-                    //}
-                    //else
-                    //{
-                    _backoffice.AddItem(product, product.Name, 1, extendedData);
-                    //}
-                }
+        //            //    _backoffice.AddItem(variant, variant.Name, 1, extendedData);
+        //            //}
+        //            //else
+        //            //{
+        //            _backoffice.AddItem(product, product.Name, 1, extendedData);
+        //            //}
+        //        }
                                                                                          
-                var salesPreparation = _customer.Backoffice().SalePreparation();
+        //        var salesPreparation = _customer.Backoffice().SalePreparation();
 
-                salesPreparation.SaveBillToAddress(model.BillingAddress.ToAddress());
-                salesPreparation.SaveShipToAddress(model.ShippingAddress.ToAddress());
+        //        salesPreparation.SaveBillToAddress(model.BillingAddress.ToAddress());
+        //        salesPreparation.SaveShipToAddress(model.ShippingAddress.ToAddress());
                 
-                return GetBackofficeOrderSummary(salesPreparation);
-            }
-            else
-            {
-                return new BackofficeOrderSummary();
-            }
-        }
+        //        return GetBackofficeOrderSummary(salesPreparation);
+        //    }
+        //    else
+        //    {
+        //        return new BackofficeOrderSummary();
+        //    }
+        //}
 
-        /// <summary>
-        /// Adds items to the backoffice basket to calculate shipping and Sales tax
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [AcceptVerbs("POST")]
-        public IEnumerable<IShipmentRateQuote> GetShippingMethods(BackofficeAddItemModel model)
-        {
+        ///// <summary>
+        ///// Adds items to the backoffice basket to calculate shipping and Sales tax
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //[AcceptVerbs("POST")]
+        //public IEnumerable<IShipmentRateQuote> GetShippingMethods(BackofficeAddItemModel model)
+        //{
 
-            _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
-            _backoffice = _customer.Backoffice();
+        //    _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
+        //    _backoffice = _customer.Backoffice();
 
-            var shipment = _backoffice.PackageBackoffice(model.ShippingAddress.ToAddress()).FirstOrDefault();
+        //    var shipment = _backoffice.PackageBackoffice(model.ShippingAddress.ToAddress()).FirstOrDefault();
             
-            return shipment.ShipmentRateQuotes();
-        }
+        //    return shipment.ShipmentRateQuotes();
+        //}
 
         /// <summary>
         /// Adds items to the backoffice basket to calculate shipping and Sales tax
@@ -265,83 +265,83 @@
             return MerchelloContext.Gateways.Payment.GetPaymentGatewayMethods();
         }
 
-        [HttpPost]
-        public bool FinalizeBackofficeOrder(BackofficeAddItemModel model)
-        {
-            _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
-            _backoffice = _customer.Backoffice();
+        //[HttpPost]
+        //public bool FinalizeBackofficeOrder(BackofficeAddItemModel model)
+        //{
+        //    _customer = MerchelloContext.Services.CustomerService.GetAnyByKey(new Guid(model.CustomerKey));
+        //    _backoffice = _customer.Backoffice();
                                                                     
-            // This check asserts that we have enough
-            // this should be handled a bit nicer for the customer.  
-            if (!_backoffice.SalePreparation().IsReadyToInvoice()) return false;
+        //    // This check asserts that we have enough
+        //    // this should be handled a bit nicer for the customer.  
+        //    if (!_backoffice.SalePreparation().IsReadyToInvoice()) return false;
 
-            var preparation = _backoffice.SalePreparation();
+        //    var preparation = _backoffice.SalePreparation();
 
-            // Get the shipment again   
-            var shippingAddress = _backoffice.SalePreparation().GetShipToAddress();
+        //    // Get the shipment again   
+        //    var shippingAddress = _backoffice.SalePreparation().GetShipToAddress();
 
-            var shipment = _backoffice.PackageBackoffice(shippingAddress).FirstOrDefault();
+        //    var shipment = _backoffice.PackageBackoffice(shippingAddress).FirstOrDefault();
 
-            // Clear any previously saved quotes (eg. the user went back to their basket and started the process over again).
-            _backoffice.SalePreparation().ClearShipmentRateQuotes();
+        //    // Clear any previously saved quotes (eg. the user went back to their basket and started the process over again).
+        //    _backoffice.SalePreparation().ClearShipmentRateQuotes();
 
-            // get the quote using the "approved shipping method"
-            var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipmentKey);
+        //    // get the quote using the "approved shipping method"
+        //    var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipmentKey);
 
-            // save the quote                 
-            _backoffice.SalePreparation().SaveShipmentRateQuote(quote);
+        //    // save the quote                 
+        //    _backoffice.SalePreparation().SaveShipmentRateQuote(quote);
 
-            // for cash providers we only want to authorize the payment
-            var paymentMethod = _backoffice.SalePreparation().GetPaymentMethod();
+        //    // for cash providers we only want to authorize the payment
+        //    var paymentMethod = _backoffice.SalePreparation().GetPaymentMethod();
 
-            IPaymentResult attempt;
+        //    IPaymentResult attempt;
 
-            if (Merchello.Core.Constants.ProviderKeys.Payment.CashPaymentProviderKey == new Guid(model.PaymentProviderKey))
-            {
-                // AuthorizePayment will save the invoice with an Invoice Number.
-                //
-                attempt = preparation.AuthorizePayment(new Guid(model.PaymentKey));  
-            }
-            else // we 
-            {
-                // TODO wire in redirect to Credit Card view or PayPal ... etc.
-                throw new NotImplementedException();
-            }
+        //    if (Merchello.Core.Constants.ProviderKeys.Payment.CashPaymentProviderKey == new Guid(model.PaymentProviderKey))
+        //    {
+        //        // AuthorizePayment will save the invoice with an Invoice Number.
+        //        //
+        //        attempt = preparation.AuthorizePayment(new Guid(model.PaymentKey));  
+        //    }
+        //    else // we 
+        //    {
+        //        // TODO wire in redirect to Credit Card view or PayPal ... etc.
+        //        throw new NotImplementedException();
+        //    }
 
-            _backoffice.Empty();
-            _backoffice.Save();
+        //    _backoffice.Empty();
+        //    _backoffice.Save();
 
-            return true;
-        }
+        //    return true;
+        //}
 
            
-        /// <summary>
-        /// Gets the backoffice order summary.
-        /// </summary>
-        /// <param name="salesPreparation">The sales preparation.</param>
-        /// <returns></returns>
-        private static BackofficeOrderSummary GetBackofficeOrderSummary(BackofficeSalePreparation salesPreparation)
-        {
-            var summary = new BackofficeOrderSummary();
+        ///// <summary>
+        ///// Gets the backoffice order summary.
+        ///// </summary>
+        ///// <param name="salesPreparation">The sales preparation.</param>
+        ///// <returns></returns>
+        //private static BackofficeOrderSummary GetBackofficeOrderSummary(BackofficeSalePreparation salesPreparation)
+        //{
+        //    var summary = new BackofficeOrderSummary();
 
-            if (!salesPreparation.IsReadyToInvoice()) return summary;
+        //    if (!salesPreparation.IsReadyToInvoice()) return summary;
 
-            var invoice = salesPreparation.PrepareInvoice();
+        //    var invoice = salesPreparation.PrepareInvoice();
 
-            // item total
-            summary.ItemTotal = invoice.TotalItemPrice();
+        //    // item total
+        //    summary.ItemTotal = invoice.TotalItemPrice();
 
-            // shipping total
-            summary.ShippingTotal = invoice.TotalShipping();
+        //    // shipping total
+        //    summary.ShippingTotal = invoice.TotalShipping();
 
-            // tax total
-            summary.TaxTotal = invoice.TotalTax();
+        //    // tax total
+        //    summary.TaxTotal = invoice.TotalTax();
 
-            // invoice total
-            summary.InvoiceTotal = invoice.Total;
+        //    // invoice total
+        //    summary.InvoiceTotal = invoice.Total;
 
-            return summary;
-        }
+        //    return summary;
+        //}
 
         /// <summary>
         /// The get basket sale preparation.

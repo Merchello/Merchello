@@ -14,7 +14,9 @@
 
     using log4net.Util;
 
+    using Merchello.Core.Chains;
     using Merchello.Examine.Providers;
+    using Merchello.Web.DataModifiers;
 
     using Models.ContentEditing;
     using Models.Querying;
@@ -30,10 +32,15 @@
         private readonly ProductService _productService;
 
         /// <summary>
+        /// The data modifier.
+        /// </summary>
+        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _dataModifier; 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
         /// </summary>
         public CachedProductQuery()
-            : this(MerchelloContext.Current.Services.ProductService)
+            : this(MerchelloContext.Current.Services.ProductService, true)
         {            
         }
 
@@ -43,11 +50,15 @@
         /// <param name="productService">
         /// The product service.
         /// </param>
-        public CachedProductQuery(IProductService productService)
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </param>
+        public CachedProductQuery(IProductService productService, bool enableDataModifiers)
             : this(
             productService,
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"],
-            ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"])
+            ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"],
+            enableDataModifiers)
         {            
         }
 
@@ -63,10 +74,14 @@
         /// <param name="searchProvider">
         /// The search provider.
         /// </param>
-        public CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider) 
-            : base(service, indexProvider, searchProvider)
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not data modifiers are enabled.
+        /// </param>
+        public CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers) 
+            : base(service, indexProvider, searchProvider, enableDataModifiers)
         {
             _productService = (ProductService)service;
+            this.Initialize();
         }
 
         /// <summary>
@@ -88,7 +103,7 @@
         /// </returns>
         public override ProductDisplay GetByKey(Guid key)
         {
-            return GetDisplayObject(key);
+            return this.ModifyData(GetDisplayObject(key));
         }
 
         /// <summary>
@@ -107,7 +122,7 @@
 
             var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
 
-            if (display != null) return display;
+            if (display != null) return this.ModifyData(display);
 
             var entity = _productService.GetBySku(sku);
 
@@ -115,7 +130,7 @@
 
             ReindexEntity(entity);
 
-            return AutoMapper.Mapper.Map<ProductDisplay>(entity);
+            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity));
         }
 
         /// <summary>
@@ -134,13 +149,13 @@
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
 
-            if (result != null) return result;
+            if (result != null) return this.ModifyData(result);
 
             var variant = _productService.GetProductVariantByKey(key);
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return variant.ToProductVariantDisplay();
+            return this.ModifyData(variant.ToProductVariantDisplay());
         }
 
         /// <summary>
@@ -159,13 +174,13 @@
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
 
-            if (result != null) return result;
+            if (result != null) return this.ModifyData(result);
 
             var variant = _productService.GetProductVariantBySku(sku);
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return variant.ToProductVariantDisplay();
+            return this.ModifyData(variant.ToProductVariantDisplay());
         }
 
         /// <summary>
@@ -247,10 +262,57 @@
             ((ProductIndexer)IndexProvider).AddProductToIndex(entity);
         }
 
+        /// <summary>
+        /// Re-indexes entity document via Examine.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         internal void ReindexEntity(IProductVariant entity)
         {
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
+
+        ///// <summary>
+        ///// Modifies Product Data with configured DataModifier Chain.
+        ///// </summary>
+        ///// <param name="product">
+        ///// The product.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="ProductDisplay"/>.
+        ///// </returns>
+        //internal ProductDisplay ModifyProductData(ProductDisplay product)
+        //{
+        //    if (!EnableDataModifiers) return product;
+        //    var modified = this.ModifyData(product);
+        //    modified.ProductVariants = product.ProductVariants.Select(x => this.ModifyData(x));
+        //    return modified;
+        //}
+
+        /// <summary>
+        /// The modify data.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of data to be modified
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
+        internal T ModifyData<T>(T data)
+            where T : class, IProductVariantDataModifierData
+        {
+            if (!EnableDataModifiers) return data;
+            var attempt = _dataModifier.Value.Modify(data);
+            if (!attempt.Success) return data;
+
+            var modified = attempt.Result as T;
+            return modified ?? data;
+        }
+
 
         /// <summary>
         /// Maps a <see cref="SearchResult"/> to <see cref="ProductDisplay"/>
@@ -264,6 +326,16 @@
         protected override ProductDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
             return result.ToProductDisplay(GetVariantsByProduct);
+        }
+
+
+        /// <summary>
+        /// Initializes the lazy
+        /// </summary>
+        private void Initialize()
+        {
+            if (MerchelloContext.HasCurrent)
+            _dataModifier = new Lazy<IDataModifierChain<IProductVariantDataModifierData>>(() => new ProductVariantDataModifierChain(MerchelloContext.Current));    
         }
     }
 }
