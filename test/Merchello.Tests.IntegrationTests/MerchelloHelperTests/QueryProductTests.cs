@@ -140,7 +140,6 @@
         public void Can_Retrieve_A_ProductVariant_From_The_Index()
         {
             //// Arrange
-
             var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
             var productService = this.PreTestDataWorker.ProductService;
@@ -169,6 +168,10 @@
 
             //// Act
             var productVariantDisplay = merchello.Query.Product.GetProductVariantBySku(variant.Sku);
+
+            var products = merchello.Query.Product.GetProductsWithOption("Color", new[] { "Red" }, 1, 10);
+
+            Assert.IsTrue(products.Items.Any());
 
             //// Assert
             Assert.NotNull(productVariantDisplay);

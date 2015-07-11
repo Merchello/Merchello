@@ -232,6 +232,25 @@
             return GetQueryResultDisplay(_productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection));
         }
 
+        public QueryResultDisplay GetProductsWithOption(
+            string optionName,
+            IEnumerable<string> choiceNames,
+            long page,
+            long itemsPerPage,
+            string sortBy = "name",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return
+                this.GetQueryResultDisplay(
+                    _productService.GetProductsKeysWithOption(
+                        optionName,
+                        choiceNames,
+                        page,
+                        itemsPerPage,
+                        sortBy,
+                        sortDirection));
+        }
+
         /// <summary>
         /// Gets the <see cref="ProductVariantDisplay"/> for a product
         /// </summary>

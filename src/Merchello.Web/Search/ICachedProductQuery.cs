@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Web.Search
 {
     using System;
+    using System.Collections.Generic;
+
     using Core.Persistence.Querying;
     using Models.ContentEditing;
     using Models.Querying;
@@ -97,5 +99,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         QueryResultDisplay Search(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending);
+
+        QueryResultDisplay GetProductsWithOption(string optionName, IEnumerable<string> choiceNames, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending);
     }
 }

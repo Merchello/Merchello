@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using Merchello.Core.Models;
@@ -10,6 +11,8 @@
     using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
+
+    using umbraco;
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
@@ -45,7 +48,30 @@
            _productVariantRepository = productVariantRepository;        
         }
 
+        /// <summary>
+        /// The get page.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        /// <remarks>
         //// TODO this is a total hack and needs to be thought through a bit better.  IQuery is a worthless parameter here
+        /// </remarks>
         public override Page<IProduct> GetPage(long page, long itemsPerPage, IQuery<IProduct> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
             var p = SearchKeys(string.Empty, page, itemsPerPage, orderExpression, sortDirection);
@@ -60,6 +86,27 @@
             };
         }
 
+        /// <summary>
+        /// The get paged keys.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
         public override Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<IProduct> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
             return SearchKeys(string.Empty, page, itemsPerPage, orderExpression, sortDirection);
@@ -115,6 +162,211 @@
         }
 
         /// <summary>
+        /// True/false indicating whether or not a SKU is already exists in the database
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU to be tested
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/> indicating whether or not the SKU exists.
+        /// </returns>
+        public bool SkuExists(string sku)
+        {
+            return _productVariantRepository.SkuExists(sku);
+        }
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionName">
+        /// The option name.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetProductsKeysWithOption(
+            string optionName,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionName">
+        /// The option name.
+        /// </param>
+        /// <param name="choiceName">
+        /// The choice name.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetProductsKeysWithOption(
+            string optionName,
+            string choiceName,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetProductsKeysWithOption(
+                new[] { optionName },
+                page,
+                itemsPerPage,
+                orderExpression,
+                sortDirection);
+        }
+
+        public Page<Guid> GetProductsKeysWithOption(
+            IEnumerable<string> optionNames,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ProductVariantDto>()
+                .InnerJoin<ProductVariant2ProductAttributeDto>()
+                .On<ProductVariantDto, ProductVariant2ProductAttributeDto>(
+                    left => left.Key,
+                    right => right.ProductVariantKey)
+                .InnerJoin<ProductOptionDto>()
+                .On<ProductVariant2ProductAttributeDto, ProductOptionDto>(left => left.OptionKey, right => right.Key)
+                .Where(" [merchProductOption].[name] in (@names)", new { names = optionNames });
+            
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        public Page<Guid> GetProductsKeysWithOption(
+            string optionName,
+            IEnumerable<string> choiceNames,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+                .Append("FROM [merchProductVariant]")
+                .Append("WHERE [merchProductVariant].[productKey] IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM (")
+                .Append("SELECT	[merchProductVariant].*")
+                .Append("FROM [merchProductVariant]")
+                .Append("INNER JOIN [merchProductVariant2ProductAttribute]")
+                .Append("ON	[merchProductVariant].[pk] = [merchProductVariant2ProductAttribute].[productVariantKey]")
+                .Append("INNER JOIN [merchProductOption]")
+                .Append("ON [merchProductVariant2ProductAttribute].[optionKey] = [merchProductOption].[pk]")
+                .Append("INNER JOIN [merchProductAttribute]")
+                .Append("ON [merchProductVariant2ProductAttribute].[productAttributeKey] = [merchProductAttribute].[pk]")
+                .Append("WHERE [merchProductOption].[name] = '@name'", new { @name = optionName })
+                .Append("AND")
+                .Append("[merchProductAttribute].[name] IN (@names)", new { @names = choiceNames })
+                .Append(") [merchProductVariant]")
+                .Append(")")
+                .Append("AND [merchProductVariant].[master] = 1");
+                        
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        public Page<Guid> GetProductsKeysInPriceRange(
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetProductsKeysInPriceRange(min, max, 0, page, itemsPerPage, orderExpression, sortDirection);
+        }
+
+        public Page<Guid> GetProductsKeysInPriceRange(
+            decimal min,
+            decimal max,
+            decimal taxModifier,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Page<Guid> GetProductsKeysByManufacturer(
+            string manufacturer,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetProductsKeysByManufacturer(
+                new[] { manufacturer },
+                page,
+                itemsPerPage,
+                orderExpression,
+                sortDirection);
+        }
+
+        public Page<Guid> GetProductsKeysByManufacturer(
+            IEnumerable<string> manufacturer,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Page<Guid> GetProductsKeysInStock(
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeAllowOutOfStockPurchase = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Page<Guid> GetProductsKeysOnSale(
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Get the paged keys.
         /// </summary>
         /// <param name="page">
@@ -149,8 +401,6 @@
             };
         }
 
-        
-
         #region Overrides of RepositoryBase<IProduct>
 
         /// <summary>
@@ -172,8 +422,8 @@
             if (dto == null)
                 return null;
 
-            var inventoryCollection =((ProductVariantRepository) _productVariantRepository).GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
-            var productAttributeCollection = ((ProductVariantRepository) _productVariantRepository).GetProductAttributeCollection(dto.ProductVariantDto.Key);
+            var inventoryCollection = ((ProductVariantRepository)_productVariantRepository).GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
+            var productAttributeCollection = ((ProductVariantRepository)_productVariantRepository).GetProductAttributeCollection(dto.ProductVariantDto.Key);
 
             var factory = new ProductFactory(productAttributeCollection, inventoryCollection, GetProductOptionCollection(dto.Key), GetProductVariantCollection(dto.Key));
             var product = factory.BuildEntity(dto);
@@ -218,7 +468,7 @@
                .InnerJoin<ProductVariantIndexDto>()
                .On<ProductVariantDto, ProductVariantIndexDto>(left => left.Key, right => right.ProductVariantKey)
                .Where<ProductVariantDto>(x => x.Master);
-            
+
             return sql;
         }
 
@@ -276,27 +526,27 @@
 
             // synchronize the inventory
             ((ProductVariantRepository)_productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
-            
+
             entity.ResetDirtyProperties();
         }
 
         protected override void PersistUpdatedItem(IProduct entity)
         {
             ((Product)entity).UpdatingEntity();
-            ((ProductVariant) ((Product) entity).MasterVariant).VersionKey = Guid.NewGuid();
+            ((ProductVariant)((Product)entity).MasterVariant).VersionKey = Guid.NewGuid();
 
             var factory = new ProductFactory();
             var dto = factory.BuildDto(entity);
 
             Database.Update(dto);
             Database.Update(dto.ProductVariantDto);
-            
+
             SaveProductOptions(entity);
 
             // synchronize the inventory
-            ((ProductVariantRepository) _productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
+            ((ProductVariantRepository)_productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
 
-            entity.ResetDirtyProperties();         
+            entity.ResetDirtyProperties();
         }
 
         protected override void PersistDeletedItem(IProduct entity)
@@ -352,11 +602,9 @@
             }
 
             return Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
-        } 
+        }
 
         #endregion
-
-
 
         #region Product Options and Attributes
 
@@ -391,8 +639,8 @@
             var variants = _productVariantRepository.GetByQuery(query);
             foreach (var variant in variants)
             {
-                if(variant != null) // todo why is this need?
-                collection.Add(variant);
+                if (variant != null) // todo why is this need?
+                    collection.Add(variant);
             }
             return collection;
         }
@@ -414,7 +662,7 @@
         }
 
         private void SaveProductOptions(IProduct product)
-        {            
+        {
             var existing = GetProductOptionCollection(product.Key);
             if (!product.DefinesOptions && !existing.Any()) return;
 
@@ -492,7 +740,7 @@
             }
 
             // now save the product attributes
-            SaveProductAttributes(product, productOption);            
+            SaveProductAttributes(product, productOption);
         }
 
         private ProductAttributeCollection GetProductAttributeCollection(Guid optionKey)
@@ -523,10 +771,10 @@
             // EnsureProductVariantsHaveAttributes called in the ProductVariantService cleans up the orphaned variants and fires off
             // the events
 
-            Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE productAttributeKey = @Key)", 
-                new { Key = productAttribute.Key});
+            Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE productAttributeKey = @Key)",
+                new { Key = productAttribute.Key });
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
-            
+
         }
 
         private void SaveProductAttributes(IProduct product, IProductOption productOption)
@@ -589,15 +837,5 @@
         }
 
         #endregion
-
-        /// <summary>
-        /// True/false indicating whether or not a sku is already exists in the database
-        /// </summary>
-        /// <param name="sku">The sku to be tested</param>
-        /// <returns></returns>
-        public bool SkuExists(string sku)
-        {
-            return _productVariantRepository.SkuExists(sku);
-        }
     }
 }

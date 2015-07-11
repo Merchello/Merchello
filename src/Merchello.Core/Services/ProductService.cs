@@ -4,16 +4,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using Models;
 
-    using Persistence.Querying;
-    using Persistence.UnitOfWork;
+    using Merchello.Core.Models;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
-
-    using umbraco.presentation.actions;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -33,7 +32,7 @@
         private static readonly string[] ValidSortFields = { "sku", "name", "price" };
 
         /// <summary>
-        /// The uow provider.
+        /// The unit of work provider.
         /// </summary>
         private readonly IDatabaseUnitOfWorkProvider _uowProvider;
 
@@ -356,9 +355,9 @@
         }
 
         /// <summary>
-        /// Gets a Product by its unique id - pk
+        /// Gets a Product by its unique id - primary key
         /// </summary>
-        /// <param name="key">Guid key for the Product</param>
+        /// <param name="key">GUID key for the Product</param>
         /// <returns><see cref="IProductVariant"/></returns>
         public override IProduct GetByKey(Guid key)
         {
@@ -391,6 +390,130 @@
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetPage(page, itemsPerPage, null, ValidateSortByField(sortBy), sortDirection);
+            }
+        }       
+
+        /// <summary>
+        /// Gets a list of Product give a list of unique keys
+        /// </summary>
+        /// <param name="keys">
+        /// List of unique keys
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IProduct"/>.
+        /// </returns>
+        public IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll(keys.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IProductVariant"/> by it's key.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        public IProductVariant GetProductVariantByKey(Guid productVariantKey)
+        {
+            return _productVariantService.GetByKey(productVariantKey);
+        }
+
+        /// <summary>
+        /// Get's a <see cref="IProductVariant"/> by it's unique SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        public IProductVariant GetProductVariantBySku(string sku)
+        {
+            return _productVariantService.GetBySku(sku);
+        }
+
+        /// <summary>
+        /// The get product variants by product key.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariant}"/>.
+        /// </returns>
+        public IEnumerable<IProductVariant> GetProductVariantsByProductKey(Guid productKey)
+        {
+            return _productVariantService.GetByProductKey(productKey);
+        }
+
+        /// <summary>
+        /// Returns the count of all products
+        /// </summary>
+        /// <returns>
+        /// The total product count.
+        /// </returns>
+        [Obsolete("Only used in ProductQuery")]
+        public int ProductsCount()
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Persistence.Querying.Query<IProduct>.Builder.Where(x => x.Key != Guid.Empty);
+
+                return repository.Count(query);
+            }
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not a SKU is already exists in the database
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU to be tested
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not  a SKU exists
+        /// </returns>
+        public bool SkuExists(string sku)
+        {
+            return _productVariantService.SkuExists(sku);
+        }
+
+        public Page<Guid> GetProductsKeysWithOption(
+            string optionName,
+            IEnumerable<string> choiceNames,
+            long page,
+            long itemsPerPage,
+            string sortBy = "", 
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysWithOption(
+                    optionName,
+                    choiceNames,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);                
+            }
+        }
+
+        /// <summary>
+        /// Gets all the products
+        /// </summary>
+        /// <returns>
+        /// A collection of all <see cref="IProduct"/>.
+        /// </returns>
+        public IEnumerable<IProduct> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
             }
         }
 
@@ -495,110 +618,6 @@
         protected override string ValidateSortByField(string sortBy)
         {
             return ValidSortFields.Contains(sortBy.ToLowerInvariant()) ? sortBy : "name";
-        }
-
-        /// <summary>
-        /// Gets a list of Product give a list of unique keys
-        /// </summary>
-        /// <param name="keys">
-        /// List of unique keys
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="IProduct"/>.
-        /// </returns>
-        public IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys)
-        {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.GetAll(keys.ToArray());
-            }
-        }
-
-        /// <summary>
-        /// Gets a <see cref="IProductVariant"/> by it's key.
-        /// </summary>
-        /// <param name="productVariantKey">
-        /// The product variant key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductVariant"/>.
-        /// </returns>
-        public IProductVariant GetProductVariantByKey(Guid productVariantKey)
-        {
-            return _productVariantService.GetByKey(productVariantKey);
-        }
-
-        /// <summary>
-        /// Get's a <see cref="IProductVariant"/> by it's unique SKU.
-        /// </summary>
-        /// <param name="sku">
-        /// The SKU.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductVariant"/>.
-        /// </returns>
-        public IProductVariant GetProductVariantBySku(string sku)
-        {
-            return _productVariantService.GetBySku(sku);
-        }
-
-        /// <summary>
-        /// The get product variants by product key.
-        /// </summary>
-        /// <param name="productKey">
-        /// The product key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{IProductVariant}"/>.
-        /// </returns>
-        public IEnumerable<IProductVariant> GetProductVariantsByProductKey(Guid productKey)
-        {
-            return _productVariantService.GetByProductKey(productKey);
-        }
-
-        /// <summary>
-        /// Returns the count of all products
-        /// </summary>
-        /// <returns>
-        /// The total product count.
-        /// </returns>
-        [Obsolete("Only used in ProductQuery")]
-        public int ProductsCount()
-        {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
-            {
-                var query = Persistence.Querying.Query<IProduct>.Builder.Where(x => x.Key != Guid.Empty);
-
-                return repository.Count(query);
-            }
-        }
-
-        /// <summary>
-        /// True/false indicating whether or not a SKU is already exists in the database
-        /// </summary>
-        /// <param name="sku">
-        /// The SKU to be tested
-        /// </param>
-        /// <returns>
-        /// A value indicating whether or not  a SKU exists
-        /// </returns>
-        public bool SkuExists(string sku)
-        {
-            return _productVariantService.SkuExists(sku);
-        }
-
-        /// <summary>
-        /// Gets all the products
-        /// </summary>
-        /// <returns>
-        /// A collection of all <see cref="IProduct"/>.
-        /// </returns>
-        public IEnumerable<IProduct> GetAll()
-        {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.GetAll();
-            }
         }
 
         /// <summary>

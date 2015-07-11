@@ -2,7 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+
+    using Merchello.Core.Persistence.Querying;
+
     using Models;
+
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
 
     /// <summary>
@@ -145,5 +150,13 @@
         /// <param name="sku">The sku to be tested</param>
         /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
+
+        Page<Guid> GetProductsKeysWithOption(
+            string optionName,
+            IEnumerable<string> choiceNames,
+            long page,
+            long itemsPerPage,
+            string sortBy = "", 
+            SortDirection sortDirection = SortDirection.Descending);
     }
 }
