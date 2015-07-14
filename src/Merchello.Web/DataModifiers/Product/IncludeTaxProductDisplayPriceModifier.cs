@@ -36,7 +36,7 @@
         public override Attempt<IProductVariantDataModifierData> PerformTask(IProductVariantDataModifierData value)
         {
             var taxationContent = MerchelloContext.Gateways.Taxation;
-            if (!taxationContent.ProductPricingEnabled) return Attempt<IProductVariantDataModifierData>.Succeed(value);
+            if (!taxationContent.ProductPricingEnabled || !value.Taxable) return Attempt<IProductVariantDataModifierData>.Succeed(value);
 
             var result = taxationContent.CalculateTaxesForProduct(value);
             value.ModifyData("Price", value.Price + result.PriceResult.TaxAmount, result.PriceResult.ExtendedData);

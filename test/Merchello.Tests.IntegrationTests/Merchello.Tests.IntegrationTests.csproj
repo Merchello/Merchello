@@ -256,6 +256,7 @@
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
     <Compile Include="Invoices\InvoiceTests.cs" />
+    <Compile Include="MerchelloHelperTests\CachedProductQueryTests.cs" />
     <Compile Include="MerchelloHelperTests\ProductDataModiferTests.cs" />
     <Compile Include="Notifications\NotificationContextTests.cs" />
     <Compile Include="Notifications\NotificationObservationTests.cs" />

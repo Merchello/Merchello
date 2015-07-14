@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using Models;
     using Umbraco.Core.Services;
@@ -25,7 +24,7 @@
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/></param>
         /// <param name="name">The name of the product variant</param>
-        /// <param name="sku">The unique sku of the product variant</param>
+        /// <param name="sku">The unique SKU of the product variant</param>
         /// <param name="price">The price of the product variant</param>
         /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
@@ -49,7 +48,7 @@
         /// <summary>
         /// Ensures that all <see cref="IProductVariant"/> except the "master" variant for the <see cref="IProduct"/> have attributes
         /// </summary>
-        /// <param name="product"><see cref="IProduct"/> to varify</param>
+        /// <param name="product"><see cref="IProduct"/> to verify</param>
         void EnsureProductVariantsHaveAttributes(IProduct product);
 
         /// <summary>
@@ -68,7 +67,7 @@
         /// <summary>
         /// Deletes a collection of <see cref="IProductVariant"/>
         /// </summary>
-        /// <param name="productVariantList">The collction of <see cref="IProductVariant"/> to be deleted</param>
+        /// <param name="productVariantList">The collection of <see cref="IProductVariant"/> to be deleted</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(IEnumerable<IProductVariant> productVariantList, bool raiseEvents = true);
 
@@ -100,7 +99,7 @@
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> objects for a given Product Key
         /// </summary>
-        /// <param name="productKey">Guid product key of the <see cref="IProductVariant"/> collection to retrieve</param>
+        /// <param name="productKey">GUID product key of the <see cref="IProductVariant"/> collection to retrieve</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         IEnumerable<IProductVariant> GetByProductKey(Guid productKey);
 
@@ -117,10 +116,19 @@
         /// <param name="product">The <see cref="IProduct"/></param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         IEnumerable<IProductVariant> GetProductVariantsThatCanBeCreated(IProduct product);
-
+            
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
         /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="attributeKeys">
+        /// The attribute Keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
         IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys);
 
         /// <summary>
@@ -133,11 +141,14 @@
         bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes);
 
         /// <summary>
-        /// True/false indicating whether or not a sku is already exists in the database
+        /// True/false indicating whether or not a SKU is already exists in the database
         /// </summary>
-        /// <param name="sku">The sku to be tested</param>
-        /// <returns></returns>
+        /// <param name="sku">
+        /// The SKU to be tested
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/> indicating whether or not the SKU exists.
+        /// </returns>
         bool SkuExists(string sku);
-
     }
 }

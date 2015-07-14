@@ -140,7 +140,6 @@
         public void Can_Retrieve_A_ProductVariant_From_The_Index()
         {
             //// Arrange
-
             var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
             var productService = this.PreTestDataWorker.ProductService;
@@ -168,39 +167,48 @@
             var variant = product.ProductVariants.First();
 
             //// Act
-            var productVariantDisplay = merchello.Query.Product.GetProductVariantBySku(variant.Sku);
+            var productVariantDisplay = merchello.Query.Product.GetProductVariantBySku(variant.Sku);          
 
             //// Assert
             Assert.NotNull(productVariantDisplay);
             Assert.AreEqual(variant.Key, productVariantDisplay.Key);
         }
+      
 
         //[Test]
-        //public void Can_Get_A_ProductFrom_The_IndexByKey()
-        //{
-        //    var key = new Guid("2f6d404b-fc0d-4305-a97c-9a5e1efe13a8");
-        //    var merchello = new MerchelloHelper(MerchelloContext.Services);
-
-        //    var product = merchello.Query.Product.GetByKey(key);
-
-        //    Assert.NotNull(product);
-        //}
-
-        //[Test]
-        //public void Can_GetGetIguanas_From_Index()
+        //public void Can_Retrieve_A_Product_With_Options()
         //{
         //    //// Arrange
-        //    var merchello = new MerchelloHelper();
+        //    var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
+
+        //    var productService = this.PreTestDataWorker.ProductService;
+
+        //    var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
+        //    product.ProductOptions.Add(new ProductOption("Color"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Purple", "Purple"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Pink", "Pink"));
+        //    product.ProductOptions.Add(new ProductOption("Size"));
+        //    product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Sm"));
+        //    product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "Med"));
+        //    product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Lg"));
+        //    product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("X-Large", "XL"));
+        //    product.Height = 11M;
+        //    product.Width = 11M;
+        //    product.Length = 11M;
+        //    product.CostOfGoods = 15M;
+        //    product.OnSale = true;
+        //    product.SalePrice = 18M;
+        //    productService.Save(product);
+        //    this._provider.AddProductToIndex(product);
+
+        //    Assert.IsTrue(product.ProductVariants.Any());
 
         //    //// Act
-        //    var searched = merchello.SearchProducts("princess");
-        //    var result = searched.FirstOrDefault();
+        //    var products = merchello.Query.Product.GetProductsWithOption("Color", 1, 10);
 
         //    //// Assert
-        //    Assert.IsTrue(searched.Any());
-        //    Console.WriteLine(searched.Count());
-
-
+        //    Assert.IsTrue(products.Items.Any());
         //}
     }
 }
