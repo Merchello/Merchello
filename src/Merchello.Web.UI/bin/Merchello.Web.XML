@@ -5077,6 +5077,248 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsWithOption(System.String,System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products with that have an option with name and a collection of choice names
+            </summary>
+            <param name="optionName">
+            The option name.
+            </param>
+            <param name="choiceNames">
+            The choice names.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsWithOption(System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products with that have an option with name.
+            </summary>
+            <param name="optionName">
+            The option name.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsWithOption(System.String,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products with that have an options with name and choice name
+            </summary>
+            <param name="optionName">
+            The option name.
+            </param>
+            <param name="choiceName">
+            The choice name.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsWithOption(System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products with that have an options with names
+            </summary>
+            <param name="optionNames">
+            The option names.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsInPriceRange(System.Decimal,System.Decimal,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Get products that have prices within a price range
+            </summary>
+            <param name="min">
+            The min.
+            </param>
+            <param name="max">
+            The max.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsInPriceRange(System.Decimal,System.Decimal,System.Decimal,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Get products that have prices within a price range allowing for a tax modifier
+            </summary>
+            <param name="min">
+            The min.
+            </param>
+            <param name="max">
+            The max.
+            </param>
+            <param name="taxModifier">
+            The tax modifier.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsByManufacturer(System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products by manufacturer.
+            </summary>
+            <param name="manufacturer">
+            The manufacturer.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsByManufacturer(System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Get products for a list of manufacturers.
+            </summary>
+            <param name="manufacturer">
+            The manufacturer.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsInStock(System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
+            <summary>
+            Gets products that are in stock or do not track inventory
+            </summary>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <param name="includeAllowOutOfStockPurchase">
+            The include allow out of stock purchase.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsOnSale(System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products that are marked on sale
+            </summary>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
         <member name="F:Merchello.Web.Search.CachedProductQuery._productService">
             <summary>
             The product service.
@@ -5191,6 +5433,248 @@
             <param name="term">
             The term.
             </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsWithOption(System.String,System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products with that have an option with name and a collection of choice names
+            </summary>
+            <param name="optionName">
+            The option name.
+            </param>
+            <param name="choiceNames">
+            The choice names.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsWithOption(System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products with that have an option with name.
+            </summary>
+            <param name="optionName">
+            The option name.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsWithOption(System.String,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products with that have an options with name and choice name
+            </summary>
+            <param name="optionName">
+            The option name.
+            </param>
+            <param name="choiceName">
+            The choice name.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsWithOption(System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products with that have an options with names
+            </summary>
+            <param name="optionNames">
+            The option names.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsInPriceRange(System.Decimal,System.Decimal,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Get products that have prices within a price range
+            </summary>
+            <param name="min">
+            The min.
+            </param>
+            <param name="max">
+            The max.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsInPriceRange(System.Decimal,System.Decimal,System.Decimal,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Get products that have prices within a price range allowing for a tax modifier
+            </summary>
+            <param name="min">
+            The min.
+            </param>
+            <param name="max">
+            The max.
+            </param>
+            <param name="taxModifier">
+            The tax modifier.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsByManufacturer(System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products by manufacturer.
+            </summary>
+            <param name="manufacturer">
+            The manufacturer.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsByManufacturer(System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Get products for a list of manufacturers.
+            </summary>
+            <param name="manufacturer">
+            The manufacturer.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsInStock(System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection,System.Boolean)">
+            <summary>
+            Gets products that are in stock or do not track inventory
+            </summary>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <param name="includeAllowOutOfStockPurchase">
+            The include allow out of stock purchase.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsOnSale(System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products that are marked on sale
+            </summary>
             <param name="page">
             The page.
             </param>

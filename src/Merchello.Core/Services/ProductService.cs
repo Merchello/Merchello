@@ -483,26 +483,6 @@
             return _productVariantService.SkuExists(sku);
         }
 
-        public Page<Guid> GetProductsKeysWithOption(
-            string optionName,
-            IEnumerable<string> choiceNames,
-            long page,
-            long itemsPerPage,
-            string sortBy = "", 
-            SortDirection sortDirection = SortDirection.Descending)
-        {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
-            {
-                return repository.GetProductsKeysWithOption(
-                    optionName,
-                    choiceNames,
-                    page,
-                    itemsPerPage,
-                    this.ValidateSortByField(sortBy),
-                    sortDirection);                
-            }
-        }
-
         /// <summary>
         /// Gets all the products
         /// </summary>
@@ -516,6 +496,415 @@
                 return repository.GetAll();
             }
         }
+
+        #region Filtering
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionName">
+        /// The option name.
+        /// </param>
+        /// <param name="choiceNames">
+        /// The choice names.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysWithOption(
+            string optionName,
+            IEnumerable<string> choiceNames,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysWithOption(
+                    optionName,
+                    choiceNames,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionName">
+        /// The option name.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysWithOption(
+            string optionName,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysWithOption(
+                    optionName,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionName">
+        /// The option name.
+        /// </param>
+        /// <param name="choiceName">
+        /// The choice name.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysWithOption(
+            string optionName,
+            string choiceName,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysWithOption(
+                    optionName,
+                    choiceName,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionNames">
+        /// The option names.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysWithOption(
+            IEnumerable<string> optionNames,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysWithOption(
+                    optionNames,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys in price range.
+        /// </summary>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysInPriceRange(
+            decimal min,
+            decimal max,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysInPriceRange(
+                    min,
+                    max,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys in price range.
+        /// </summary>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="taxModifier">
+        /// The tax modifier.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysInPriceRange(
+            decimal min,
+            decimal max,
+            decimal taxModifier,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysInPriceRange(
+                    min,
+                    max,
+                    taxModifier,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys by manufacturer.
+        /// </summary>
+        /// <param name="manufacturer">
+        /// The manufacturer.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysByManufacturer(
+            string manufacturer,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysByManufacturer(
+                    manufacturer,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys by manufacturer.
+        /// </summary>
+        /// <param name="manufacturer">
+        /// The manufacturer.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysByManufacturer(
+            IEnumerable<string> manufacturer,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysByManufacturer(
+                    manufacturer,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys in stock.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="includeAllowOutOfStockPurchase">
+        /// The include allow out of stock purchase.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysInStock(
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending,
+            bool includeAllowOutOfStockPurchase = false)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysInStock(
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys on sale.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysOnSale(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysOnSale(
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// The count.

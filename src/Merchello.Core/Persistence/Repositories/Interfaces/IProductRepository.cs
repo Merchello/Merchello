@@ -25,14 +25,7 @@
 
         #region Filter Queries
 
-        // get a list of all products with Option "Color"
-        // get a list of all variants with Option "Color" and Choice "Red"       
-        // get a list of all products with price range between min and max (this will have to account for product taxation)
-        // get a list of all variants with a manufacturer
-        // get a list of all variants that are instock (or allow out of stock purchase)
-        // get a list of all variants that are on sale
 
-        #endregion
 
         /// <summary>
         /// The get products keys with option.
@@ -275,5 +268,7 @@
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
         Page<Guid> GetProductsKeysOnSale(long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
+
+        #endregion
     }
 }

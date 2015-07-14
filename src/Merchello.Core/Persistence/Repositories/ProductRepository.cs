@@ -203,7 +203,7 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            throw new NotImplementedException();
+            return GetProductsKeysWithOption(new[] { optionName }, page, itemsPerPage, orderExpression, sortDirection);
         }
 
         /// <summary>
@@ -238,14 +238,51 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            return GetProductsKeysWithOption(
-                new[] { optionName },
-                page,
-                itemsPerPage,
-                orderExpression,
-                sortDirection);
+            var sql = new Sql();
+            sql.Append("SELECT *")
+                .Append("FROM [merchProductVariant]")
+                .Append("WHERE [merchProductVariant].[productKey] IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM (")
+                .Append("SELECT	[merchProductVariant].[productKey]")
+                .Append("FROM [merchProductVariant]")
+                .Append("INNER JOIN [merchProductVariant2ProductAttribute]")
+                .Append("ON	[merchProductVariant].[pk] = [merchProductVariant2ProductAttribute].[productVariantKey]")
+                .Append("INNER JOIN [merchProductOption]")
+                .Append("ON [merchProductVariant2ProductAttribute].[optionKey] = [merchProductOption].[pk]")
+                .Append("INNER JOIN [merchProductAttribute]")
+                .Append("ON [merchProductVariant2ProductAttribute].[productAttributeKey] = [merchProductAttribute].[pk]")
+                .Append("WHERE [merchProductOption].[name] = @name", new { @name = optionName })
+                .Append("AND")
+                .Append("[merchProductAttribute].[name] = @name", new { @name = choiceName })
+                .Append(") [merchProductVariant]")
+                .Append(")")
+                .Append("AND [merchProductVariant].[master] = 1");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionNames">
+        /// The option names.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{GUID}"/>.
+        /// </returns>
         public Page<Guid> GetProductsKeysWithOption(
             IEnumerable<string> optionNames,
             long page,
@@ -254,19 +291,49 @@
             SortDirection sortDirection = SortDirection.Descending)
         {
             var sql = new Sql();
-            sql.Select("*")
-                .From<ProductVariantDto>()
-                .InnerJoin<ProductVariant2ProductAttributeDto>()
-                .On<ProductVariantDto, ProductVariant2ProductAttributeDto>(
-                    left => left.Key,
-                    right => right.ProductVariantKey)
-                .InnerJoin<ProductOptionDto>()
-                .On<ProductVariant2ProductAttributeDto, ProductOptionDto>(left => left.OptionKey, right => right.Key)
-                .Where(" [merchProductOption].[name] in (@names)", new { names = optionNames });
-            
+            sql.Append("SELECT *")
+                .Append("FROM [merchProductVariant]")
+                .Append("WHERE [merchProductVariant].[productKey] IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM (")
+                .Append("SELECT	[merchProductVariant].[productKey]")
+                .Append("FROM [merchProductVariant]")
+                .Append("INNER JOIN [merchProductVariant2ProductAttribute]")
+                .Append("ON	[merchProductVariant].[pk] = [merchProductVariant2ProductAttribute].[productVariantKey]")
+                .Append("INNER JOIN [merchProductOption]")
+                .Append("ON [merchProductVariant2ProductAttribute].[optionKey] = [merchProductOption].[pk]")
+                .Append("WHERE [merchProductOption].[name] IN (@names)", new { @names = optionNames })
+                .Append(") [merchProductVariant]")
+                .Append(")")
+                .Append("AND [merchProductVariant].[master] = 1");
+
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// The get products keys with option an option with specific choices
+        /// </summary>
+        /// <param name="optionName">
+        /// The option name.
+        /// </param>
+        /// <param name="choiceNames">
+        /// The choice names.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{GUID}"/>.
+        /// </returns>
         public Page<Guid> GetProductsKeysWithOption(
             string optionName,
             IEnumerable<string> choiceNames,
@@ -281,7 +348,7 @@
                 .Append("WHERE [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
                 .Append("FROM (")
-                .Append("SELECT	[merchProductVariant].*")
+                .Append("SELECT	[merchProductVariant].[productKey]")
                 .Append("FROM [merchProductVariant]")
                 .Append("INNER JOIN [merchProductVariant2ProductAttribute]")
                 .Append("ON	[merchProductVariant].[pk] = [merchProductVariant2ProductAttribute].[productVariantKey]")
@@ -289,7 +356,7 @@
                 .Append("ON [merchProductVariant2ProductAttribute].[optionKey] = [merchProductOption].[pk]")
                 .Append("INNER JOIN [merchProductAttribute]")
                 .Append("ON [merchProductVariant2ProductAttribute].[productAttributeKey] = [merchProductAttribute].[pk]")
-                .Append("WHERE [merchProductOption].[name] = '@name'", new { @name = optionName })
+                .Append("WHERE [merchProductOption].[name] = @name", new { @name = optionName })
                 .Append("AND")
                 .Append("[merchProductAttribute].[name] IN (@names)", new { @names = choiceNames })
                 .Append(") [merchProductVariant]")
@@ -299,6 +366,30 @@
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// The get products keys in price range.
+        /// </summary>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         public Page<Guid> GetProductsKeysInPriceRange(
             decimal min,
             decimal max,
@@ -310,6 +401,33 @@
             return GetProductsKeysInPriceRange(min, max, 0, page, itemsPerPage, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// The get products keys in price range.
+        /// </summary>
+        /// <param name="min">
+        /// The min.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <param name="taxModifier">
+        /// The tax modifier.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         public Page<Guid> GetProductsKeysInPriceRange(
             decimal min,
             decimal max,
@@ -319,9 +437,46 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            throw new NotImplementedException();
+            var modifier = taxModifier;
+            if (modifier > 0) modifier = taxModifier / 100;
+
+            modifier += 1;
+
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+              .Append("WHERE [merchProductVariant].[productKey] IN (")
+              .Append("SELECT DISTINCT([productKey])")
+              .Append("FROM [merchProductVariant]")
+              .Append("WHERE ([merchProductVariant].[onSale] = 0 AND [merchProductVariant].[price] BETWEEN @low AND @high)", new { @low = min * modifier, @high = max * modifier })
+              .Append("OR")
+              .Append("([merchProductVariant].[onSale] = 1 AND [merchProductVariant].[salePrice] BETWEEN @low AND @high)", new { @low = min * modifier, @high = max * modifier })
+              .Append(")")
+              .Append("AND [merchProductVariant].[master] = 1");
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// The get products keys by manufacturer.
+        /// </summary>
+        /// <param name="manufacturer">
+        /// The manufacturer.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         public Page<Guid> GetProductsKeysByManufacturer(
             string manufacturer,
             long page,
@@ -337,6 +492,27 @@
                 sortDirection);
         }
 
+        /// <summary>
+        /// The get products keys by manufacturer.
+        /// </summary>
+        /// <param name="manufacturer">
+        /// The manufacturer.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
         public Page<Guid> GetProductsKeysByManufacturer(
             IEnumerable<string> manufacturer,
             long page,
@@ -344,9 +520,35 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            throw new NotImplementedException();
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+              .Append("WHERE [merchProductVariant].[manufacturer] IN (@manufacturers)", new { @manufacturers = manufacturer})
+              .Append("AND [merchProductVariant].[master] = 1");
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// The get products keys in stock.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="includeAllowOutOfStockPurchase">
+        /// The include allow out of stock purchase.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         public Page<Guid> GetProductsKeysInStock(
             long page,
             long itemsPerPage,
@@ -354,16 +556,55 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeAllowOutOfStockPurchase = false)
         {
-            throw new NotImplementedException();
+            var sql = new Sql();
+            sql.Append("SELECT *")
+               .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] IN (")
+               .Append("SELECT DISTINCT([productKey])")
+               .Append("FROM (")
+               .Append("SELECT	[merchProductVariant].[productKey]")
+               .Append("FROM [merchProductVariant]")
+               .Append("INNER JOIN [merchCatalogInventory]")
+               .Append("ON	[merchProductVariant].[pk] = [merchCatalogInventory].[productVariantKey]")
+               .Append("WHERE ([merchCatalogInventory].[count] > 0 AND [merchProductVariant].[trackInventory] = 1)")
+               .Append("OR [merchProductVaraint].[trackInventory] = 0")
+               .Append(") [merchProductVariant]")
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        /// <summary>
+        /// The get products keys on sale.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
         public Page<Guid> GetProductsKeysOnSale(
             long page,
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            throw new NotImplementedException();
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+              .Append("WHERE [merchProductVariant].[onSale] = 1")
+              .Append("AND [merchProductVariant].[master] = 1");
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
         /// <summary>
