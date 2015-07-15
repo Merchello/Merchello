@@ -330,6 +330,8 @@ namespace Merchello.Tests.IntegrationTests.Services.Customer
             customer.DeleteCustomerAddress(MerchelloContext.Current, address1);
 
             var assertDefaultBilling = customer.DefaultCustomerAddress(MerchelloContext.Current, AddressType.Billing);
+            var assertCustomer = _customerService.GetByLoginName(FixtureLoginName);
+            Assert.AreEqual(1, assertCustomer.Addresses.Count(), "Customer still has 2 addresses");
             Assert.NotNull(assertDefaultBilling, "Assert Default billing was null");
             Assert.AreEqual(address2.Key, assertDefaultBilling.Key, "Address 2 was not the default address");
         }
