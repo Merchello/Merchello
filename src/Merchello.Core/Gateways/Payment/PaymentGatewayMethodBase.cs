@@ -133,7 +133,7 @@
 
             // collect the payment authorization
             var response = PerformAuthorizePayment(invoice, args);
-
+            //((PaymentResult)response).ApproveOrderCreation = this.EnsureApproveOrderCreation(response, invoice);
             AuthorizeAttempted.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(response), this);
 
             if (!response.Payment.Success) return response;
@@ -174,6 +174,8 @@
 
             // authorize and capture the payment
             var response = PerformAuthorizeCapturePayment(invoice, amount, args);
+
+            //((PaymentResult)response).ApproveOrderCreation = this.EnsureApproveOrderCreation(response, invoice);
 
             AuthorizeCaptureAttempted.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(response), this);
 
@@ -218,6 +220,7 @@
                 GatewayProviderService.Save(invoice);
 
             var response = PerformCapturePayment(invoice, payment, amount, args);
+            //((PaymentResult)response).ApproveOrderCreation = this.EnsureApproveOrderCreation(response, invoice);
 
             // Special case where the order has already been created due to configuration override.
             if (invoice.Orders.Any() && response.ApproveOrderCreation)
@@ -392,6 +395,24 @@
             {
                 GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, PaymentMethod.Name, payment.Amount);
             }
+        }
+
+        /// <summary>
+        /// Ensures ApproveOrderCreation setting.
+        /// </summary>
+        /// <param name="response">
+        /// The response.
+        /// </param>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool EnsureApproveOrderCreation(IPaymentResult response, IInvoice invoice)
+        {
+            if (!response.ApproveOrderCreation) return response.ApproveOrderCreation;
+            return !invoice.ShippableItems().Any() ? response.ApproveOrderCreation : response.ApproveOrderCreation;
         }
 
         /// <summary>
