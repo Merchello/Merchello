@@ -53,6 +53,22 @@
         }
 
         /// <summary>
+        /// Gets the count of addresses by customer key.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int GetCountByCustomerKey(Guid customerKey)
+        {
+            var query = Querying.Query<ICustomerAddress>.Builder.Where(x => x.CustomerKey == customerKey);
+
+            return this.PerformCount(query);
+        }
+
+        /// <summary>
         /// The perform get.
         /// </summary>
         /// <param name="key">

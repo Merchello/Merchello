@@ -313,6 +313,23 @@
         }
 
         /// <summary>
+        /// Gets the count of addresses for a customer.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int Count(Guid customerKey)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetCountByCustomerKey(customerKey);
+            }
+        }
+
+        /// <summary>
         /// Gets the count of all <see cref="CustomerAddress"/> for a given customer
         /// </summary>
         /// <param name="customerKey">
