@@ -232,6 +232,8 @@
                 Height = product.Height,
                 Barcode = product.Barcode,
                 Available = product.Available,
+                Manufacturer = product.Manufacturer,
+                ManufacturerModelNumber = product.ManufacturerModelNumber,
                 TrackInventory = product.TrackInventory,
                 OutOfStockPurchase = product.OutOfStockPurchase,
                 Taxable = product.Taxable,
