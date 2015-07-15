@@ -12,12 +12,15 @@
     using Services;
 
     using Umbraco.Core;
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSixTwoZero;
 
     /// <summary>
     /// The customer extensions.
     /// </summary>
     public static class CustomerExtensions
     {
+
         /// <summary>
         /// Maps a <see cref="ICustomerAddress"/> to a <see cref="IAddress"/>.
         /// </summary>
@@ -250,19 +253,27 @@
         {
             Mandate.ParameterCondition(address.CustomerKey == customer.Key, "The customer address is not associated with this customer.");
 
-            ((ServiceContext)merchelloContext.Services).CustomerAddressService.Save(address);
+            var addressList = new List<ICustomerAddress>();
 
             var addresses = customer.Addresses.ToList();
-
-            if (addresses.Any(x => x.Key == address.Key))
+            var isUpdate = false;
+            foreach (var adr in addresses)
             {
-                addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
+                if (address.IsDefault && adr.Key != address.Key) adr.IsDefault = false;
+
+                if (addresses.Any(x => x.Key == address.Key))
+                {
+                    isUpdate = true;
+                }
+  
+                addressList.Add(adr);
             }
 
-            addresses.Add(address);
-
+            if (!isUpdate) addresses.Add(address);            
 
             ((Customer)customer).Addresses = addresses;
+
+            merchelloContext.Services.CustomerService.Save(customer);
 
             return address;
         }
@@ -290,10 +301,11 @@
                 addresses.RemoveAt(addresses.IndexOf(addresses.FirstOrDefault(x => x.Key == address.Key)));
             }
 
-            ((ServiceContext)merchelloContext.Services).CustomerAddressService.Delete(address);
-
+            if (addresses.Any() && address.IsDefault) addresses.First().IsDefault = true;
 
             ((Customer)customer).Addresses = addresses;
+
+            merchelloContext.Services.CustomerService.Save(customer);
         }
 
         /// <summary>
