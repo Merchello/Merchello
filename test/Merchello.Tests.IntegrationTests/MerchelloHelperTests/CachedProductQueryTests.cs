@@ -2,11 +2,15 @@
 {
     using System.Linq;
 
+    using global::Examine;
+
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Examine.Providers;
     using Merchello.Tests.Base.DataMakers;
     using Merchello.Tests.Base.TestHelpers;
     using Merchello.Web;
+    using Merchello.Web.Models.ContentEditing;
 
     using NUnit.Framework;
 
@@ -20,6 +24,7 @@
         {
             base.FixtureSetup();
             DbPreTestDataWorker.DeleteAllProducts();
+
             var defaultWarehouse = DbPreTestDataWorker.WarehouseService.GetDefaultWarehouse();
 
             _merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
@@ -178,5 +183,40 @@
             Assert.AreEqual(1, results2.Items.Count(), "Count 2 did not return as expected");
         }
 
+
+        [Test]
+        public void Can_Retrieve_A_List_Of_Products_By_Manufacturer()
+        {
+            //// Arrange
+            const string manu1 = "Manufacturer1";
+            const string manu2 = "Manufacturer2";
+            const string manu3 = "Manufacturer3";
+
+            //// Act
+            var results1 = _merchello.Query.Product.GetProductsByManufacturer(manu1, 1, 10);
+            var results2 = _merchello.Query.Product.GetProductsByManufacturer(manu2, 1, 10);
+            var results3 = _merchello.Query.Product.GetProductsByManufacturer(manu3, 1, 10);
+
+            //// Assert
+            Assert.AreEqual(1, results1.Items.Count());
+            Assert.AreEqual(2, results2.Items.Count());
+            Assert.IsTrue(results2.Items.All(x => ((ProductDisplay)x).Manufacturer == manu2));
+            Assert.AreEqual(1, results3.Items.Count());
+        }
+
+        [Test]
+        public void Can_Retrieve_A_List_Of_Products_By_Multiple_Manufactures()
+        {
+            //// Arrange
+            const string manu1 = "Manufacturer1";
+            const string manu2 = "Manufacturer2";
+
+            //// Act
+            var results1 = _merchello.Query.Product.GetProductsByManufacturer(new[] { manu1, manu2 }, 1, 10);
+
+            //// Assert
+            Assert.AreEqual(3, results1.Items.Count());
+            Assert.IsTrue(results1.Items.All(x => ((ProductDisplay)x).Manufacturer == manu2 || ((ProductDisplay)x).Manufacturer == manu1));
+        }
     }
 }
