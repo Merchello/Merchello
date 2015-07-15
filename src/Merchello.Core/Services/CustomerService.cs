@@ -839,7 +839,12 @@
             }
         }
 
-
+        /// <summary>
+        /// Assert the customer address count.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
         private void AssertAddressCount(ICustomer customer)
         {
             var count = _customerAddressService.Count(customer.Key);
