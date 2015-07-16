@@ -1081,6 +1081,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="product">Product</key>
     <key alias="variant">Variant</key>
     <key alias="sku">SKU</key>
+    <key alias="costOfGoods">Cost of Goods</key>
     <key alias="baseSku">Base Sku</key>
     <key alias="barcode">Barcode</key>sel
     <key alias="manufacturer">Manufacturer</key>

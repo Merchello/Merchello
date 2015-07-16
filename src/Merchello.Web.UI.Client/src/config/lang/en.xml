@@ -40,6 +40,7 @@
     <key alias="product">Product</key>
     <key alias="variant">Variant</key>
     <key alias="sku">SKU</key>
+    <key alias="costOfGoods">Cost of Goods</key>
     <key alias="baseSku">Base Sku</key>
     <key alias="barcode">Barcode</key>
     <key alias="manufacturer">Manufacturer</key>

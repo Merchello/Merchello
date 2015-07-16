@@ -333,5 +333,29 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             Assert.IsFalse(product.OnSale, "Product is on sale");
 
         }
+
+        /// <summary>
+        /// Relates to http://issues.merchello.com/youtrack/issue/M-733
+        /// </summary>
+        [Test]
+        public void Can_Update_Product_Options_Without_Breaking_Choices()
+        {
+            //// Arrange
+            var product = MockProductDataMaker.MockProductForInserting(weight: 10M);
+            product.ProductOptions.Add(new ProductOption("Color"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Color1", "Color1"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Color2", "Color2"));
+            product.ProductOptions.Add(new ProductOption("Size"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Size1", "Size1"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Size2", "Size2"));
+
+            //// Act
+            _productService.Save(product);
+            Assert.IsTrue(product.ProductVariants.Any());
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Color3", "Color3"));
+            _productService.Save(product);
+
+            Assert.IsTrue(product.ProductVariants.Any());
+        }
     }
 }
