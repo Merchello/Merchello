@@ -207,19 +207,23 @@
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// without saving it to the database
         /// </summary>
-        /// <param name="product"><see cref="IProduct"/></param>
+        /// <param name="product">The <see cref="IProduct"/></param>
         /// <param name="name">The name of the product variant</param>
-        /// <param name="sku">The unique sku of the product variant</param>
+        /// <param name="sku">The unique SKU of the product variant</param>
         /// <param name="price">The price of the product variant</param>
-        /// <param name="attributes"><see cref="IProductVariant"/></param>        
+        /// <param name="attributes">The <see cref="ProductAttributeCollection"/></param>        
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
         internal IProductVariant CreateProductVariant(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes)
         {
             Mandate.ParameterNotNull(product, "product");
             Mandate.ParameterNotNull(attributes, "attributes");
             Mandate.ParameterCondition(attributes.Count >= product.ProductOptions.Count(x => x.Required), "An attribute must be assigned for every required option");
+
+            //// http://issues.merchello.com/youtrack/issue/M-740
             // verify there is not already a variant with these attributes
-            Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
+            //Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
+            if (this.ProductVariantWithAttributesExists(product, attributes)) return this.GetProductVariantWithAttributes(product, attributes.Select(x => x.Key).ToArray());
+
 
             return new ProductVariant(product.Key, attributes, name, sku, price)
             {
