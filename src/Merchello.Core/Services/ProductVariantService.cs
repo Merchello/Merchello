@@ -13,6 +13,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence.Querying;
     using Umbraco.Web.Models.TemplateQuery;
 
@@ -221,8 +222,12 @@
 
             //// http://issues.merchello.com/youtrack/issue/M-740
             // verify there is not already a variant with these attributes
-            //Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
-            if (this.ProductVariantWithAttributesExists(product, attributes)) return this.GetProductVariantWithAttributes(product, attributes.Select(x => x.Key).ToArray());
+            ////Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
+            if (this.ProductVariantWithAttributesExists(product, attributes))
+            {
+                LogHelper.Debug<ProductVariantService>("Attempt to create a new variant that already exists.  Returning existing variant.");
+                return this.GetProductVariantWithAttributes(product, attributes.Select(x => x.Key).ToArray());
+            }
 
 
             return new ProductVariant(product.Key, attributes, name, sku, price)
