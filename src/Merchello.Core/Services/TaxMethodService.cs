@@ -14,6 +14,8 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
 
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// The tax method service.
     /// </summary>
@@ -318,7 +320,7 @@
             using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
             {
                 var query =
-                    Query<ITaxMethod>.Builder.Where(x => x.CountryCode == countryCode);
+                    Query<ITaxMethod>.Builder.Where(x => x.CountryCode == countryCode || x.CountryCode == Constants.CountryCodes.EverywhereElse);
 
                 return repository.GetByQuery(query);
             }

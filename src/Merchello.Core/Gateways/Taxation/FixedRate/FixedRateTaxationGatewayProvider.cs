@@ -12,6 +12,8 @@
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
 
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// Represents the CountryTaxRateTaxationGatewayProvider.  
     /// </summary>
@@ -73,7 +75,7 @@
         /// <returns><see cref="ITaxMethod"/></returns>
         public override ITaxationGatewayMethod GetGatewayTaxMethodByCountryCode(string countryCode)
         {
-            var taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == countryCode);
+            var taxMethod = this.FindTaxMethodForCountryCode(countryCode);
 
             return taxMethod != null ? new FixRateTaxationGatewayMethod(taxMethod) : null;
         }
