@@ -45,6 +45,7 @@
             product.Price = 30M;
             product.Width = 11M;
             product.Length = 11M;
+            product.Barcode = "barcode1";
             product.Manufacturer = "Manufacturer1";
             product.CostOfGoods = 15M;
             product.OnSale = true;
@@ -61,6 +62,7 @@
             product2.Width = 11M;
             product2.Length = 11M;
             product2.CostOfGoods = 15M;
+            product2.Barcode = "barcode2";
             product2.Manufacturer = "Manufacturer2";
             product2.OnSale = false;
             product2.SalePrice = 35M;
@@ -79,6 +81,7 @@
             product3.Width = 11M;
             product3.Length = 11M;
             product3.CostOfGoods = 15M;
+            product3.Barcode = "barcode3";
             product3.Manufacturer = "Manufacturer2";
             product3.OnSale = false;
             product3.SalePrice = 20M;
@@ -99,6 +102,7 @@
             product4.Width = 11M;
             product4.Length = 11M;
             product4.CostOfGoods = 15M;
+            product4.Barcode = "barcode4";
             product4.Manufacturer = "Manufacturer3";
             product4.OnSale = true;
             product4.SalePrice = 18M;
@@ -217,6 +221,34 @@
             //// Assert
             Assert.AreEqual(3, results1.Items.Count());
             Assert.IsTrue(results1.Items.All(x => ((ProductDisplay)x).Manufacturer == manu2 || ((ProductDisplay)x).Manufacturer == manu1));
+        }
+
+        [Test]
+        public void Can_Retrieve_A_List_Of_Products_By_Barcode()
+        {
+            //// Arrange
+            const string barcode = "barcode1";
+
+            //// Act
+            var results = _merchello.Query.Product.GetProductsByBarcode(barcode, 1, 10);
+
+            //// Assert
+            Assert.AreEqual(1, results.Items.Count());
+            Assert.AreEqual(barcode, ((ProductDisplay)results.Items.First()).Barcode);
+        }
+
+        [Test]
+        public void Can_Retrieve_A_List_Of_Products_By_A_List_Of_Barcodes()
+        {
+            //// Arrange
+            var barcodes = new[] { "barcode1", "barcode3" };
+
+            //// Act
+            var results = _merchello.Query.Product.GetProductsByBarcode(barcodes, 1, 10);
+
+            //// Assert
+            Assert.AreEqual(2, results.Items.Count());
+            Assert.IsTrue(results.Items.All(x => ((ProductDisplay)x).Barcode == "barcode1" || ((ProductDisplay)x).Barcode == "barcode3"));
         }
     }
 }
