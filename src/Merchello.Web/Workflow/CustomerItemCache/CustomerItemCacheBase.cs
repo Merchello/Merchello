@@ -630,7 +630,6 @@
             {
                 item.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
             }
-
         }
 
         /// <summary>

@@ -311,6 +311,51 @@
             Gets the operator.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ExcludeTaxesIncludedInProductPrices">
+            <summary>
+            The exclude shipping cost constraint.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ExcludeTaxesIncludedInProductPrices.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.ExcludeTaxesIncludedInProductPrices"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ExcludeTaxesIncludedInProductPrices.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            The try apply.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.ExcludeTaxesIncludedInProductPrices.RequiresConfiguration">
+            <summary>
+            Gets a value indicating this reward does not require configuration.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.ExcludeTaxesInProductPricesVisitor">
+            <summary>
+            Removes taxes from product line items.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.ExcludeTaxesInProductPricesVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            The visit.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.MaximumNumberOfRedemptionsConstraint">
             <summary>
             Sets and checks the limit number of redemptions for this coupon.
