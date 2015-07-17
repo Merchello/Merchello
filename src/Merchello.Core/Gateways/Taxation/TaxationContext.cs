@@ -172,11 +172,7 @@
         /// </returns>
         public IProductTaxCalculationResult CalculateTaxesForProduct(IProductVariantDataModifierData product)
         {
-            var empty = new ProductTaxCalculationResult()
-                           {
-                               PriceResult = new TaxCalculationResult(0, 0),
-                               SalePriceResult = new TaxCalculationResult(0, 0)
-                           };
+            var empty = ProductTaxCalculationResult.GetEmptyResult();
 
 
             if (!ProductPricingEnabled) return empty;

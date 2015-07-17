@@ -9297,6 +9297,11 @@
             Gets a value indicating whether or not the item cache contains any items
             </summary>
         </member>
+        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.ProductTaxExtendedDataKeys">
+            <summary>
+            The product tax extended data keys.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._itemCache">
             <summary>
             The item cache responsible for persisting the customer item cache contents.
@@ -9641,6 +9646,17 @@
             Accepts visitor class to visit customer item cache items
             </summary>
             <param name="visitor">The <see cref="T:Merchello.Core.Models.ILineItemVisitor"/> to walk the collection</param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.ItemsOnAddingItem(System.Object,Merchello.Core.Events.AddItemEventArgs)">
+            <summary>
+            Handles the adding item event.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="e">
+            The <see cref="T:Merchello.Core.Events.AddItemEventArgs"/>.
+            </param>        
         </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Initialize">
             <summary>

@@ -5,9 +5,12 @@
 
     using Merchello.Core;
     using Merchello.Core.Chains;
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Web.DataModifiers;
     using Merchello.Web.Models.ContentEditing;
+
+    using umbraco.cms.businesslogic.language;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -17,6 +20,17 @@
     /// </summary>
     public abstract class CustomerItemCacheBase : ICustomerItemCacheBase
     {
+        /// <summary>
+        /// The product tax extended data keys.
+        /// </summary>
+        private static readonly string[] ProductTaxExtendedDataKeys = 
+            {
+                    Core.Constants.ExtendedDataKeys.ProductPriceTaxAmount,
+                    Core.Constants.ExtendedDataKeys.ProductPriceNoTax,
+                    Core.Constants.ExtendedDataKeys.ProductSalePriceNoTax,
+                    Core.Constants.ExtendedDataKeys.ProductSalePriceTaxAmount
+            };
+
         /// <summary>
         /// The item cache responsible for persisting the customer item cache contents.
         /// </summary>
@@ -51,7 +65,6 @@
 
             this.Initialize();
         }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether enable data modifiers.
@@ -323,11 +336,6 @@
         public void AddItem(IProductVariant productVariant, string name, int quantity, ExtendedDataCollection extendedData)
         {
             AddItem(productVariant.ToProductVariantDisplay(), name, quantity, extendedData);
-            //if (!extendedData.DefinesProductVariant()) extendedData.AddProductVariantValues(productVariant);
-
-            //var price = productVariant.OnSale ? extendedData.GetSalePriceValue() : extendedData.GetPriceValue();
-
-            //AddItem(string.IsNullOrEmpty(name) ? productVariant.Name : name, productVariant.Sku, quantity, price, extendedData);
         }
 
         #endregion
@@ -409,6 +417,7 @@
             
             var price = productVariant.OnSale ? extendedData.GetSalePriceValue() : extendedData.GetPriceValue();
 
+
             AddItem(string.IsNullOrEmpty(name) ? productVariant.Name : name, productVariant.Sku, quantity, price, extendedData);
         }
 
@@ -473,7 +482,8 @@
         {
             if (quantity <= 0) quantity = 1;
             if (price < 0) price = 0;
-            _itemCache.AddItem(LineItemType.Product, name, sku, quantity, price, extendedData);
+            var lineItem = new ItemCacheLineItem(LineItemType.Product, name, sku, quantity, price, extendedData);                        
+            _itemCache.AddItem(lineItem);
         }
 
         /// <summary>
@@ -485,7 +495,7 @@
         public void AddItem(IItemCacheLineItem lineItem)
         {
             if (lineItem.Quantity <= 0) lineItem.Quantity = 1;
-            if (lineItem.Price < 0) lineItem.Price = 0;
+            if (lineItem.Price < 0) lineItem.Price = 0;            
             _itemCache.AddItem(lineItem);
         }
 
@@ -602,7 +612,26 @@
         public void Accept(ILineItemVisitor visitor)
         {
             _itemCache.Items.Accept(visitor);
-        }        
+        }
+
+        /// <summary>
+        /// Handles the adding item event.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The <see cref="AddItemEventArgs"/>.
+        /// </param>        
+        private static void ItemsOnAddingItem(object sender, AddItemEventArgs e)
+        {
+            var item = e.LineItem;
+            if (item.ExtendedData.ContainsAny(ProductTaxExtendedDataKeys))
+            {
+                item.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.TaxIncludedInProductPrice, true.ToString());
+            }
+
+        }
 
         /// <summary>
         /// Initializes the Lazy data modifiers
@@ -610,6 +639,8 @@
         private void Initialize()
         {
             _productDataModifier = new Lazy<IDataModifierChain<IProductVariantDataModifierData>>(() => new ProductVariantDataModifierChain(MerchelloContext.Current));
+            _itemCache.Items.AddingItem += ItemsOnAddingItem;
         }
+
     }
 }

@@ -6,13 +6,13 @@
     public interface IProductTaxCalculationResult
     {
         /// <summary>
-        /// Gets or sets the price result.
+        /// Gets the price result.
         /// </summary>
-        ITaxCalculationResult PriceResult { get; set; }
+        ITaxCalculationResult PriceResult { get; }
 
         /// <summary>
-        /// Gets or sets the sale price result.
+        /// Gets the sale price result.
         /// </summary>
-        ITaxCalculationResult SalePriceResult { get; set; }
+        ITaxCalculationResult SalePriceResult { get; }
     }
 }
