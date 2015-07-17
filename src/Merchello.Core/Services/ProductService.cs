@@ -759,6 +759,85 @@
         }
 
         /// <summary>
+        /// The get products by barcode.
+        /// </summary>
+        /// <param name="barcode">
+        /// The barcode.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsByBarcode(
+            string barcode,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysByBarcode(
+                    barcode,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products by barcodes.
+        /// </summary>
+        /// <param name="barcodes">
+        /// The barcodes.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsByBarcode(
+            IEnumerable<string> barcodes,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysByBarcode(
+                    barcodes,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        } 
+
+
+        /// <summary>
         /// The get products keys by manufacturer.
         /// </summary>
         /// <param name="manufacturer">
