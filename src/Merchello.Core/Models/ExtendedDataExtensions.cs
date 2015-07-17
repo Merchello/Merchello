@@ -246,28 +246,77 @@
                 extendedData.GetValue(Constants.ExtendedDataKeys.TaxIncludedInProductPrice).AsBool();
         }
 
-        ///// <summary>
-        ///// The product tax amount.
-        ///// </summary>
-        ///// <param name="extendedData">
-        ///// The extended data.
-        ///// </param>
-        ///// <returns>
-        ///// The <see cref="decimal"/>.
-        ///// </returns>
-        //public static decimal ProductTaxAmount(this ExtendedDataCollection extendedData)
-        //{
-        //    return !extendedData.TaxIncludedInProductPrice()
-        //               ? 0M
-        //               : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductPriceTaxAmount)
-        //                     ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductPriceTaxAmount).AsDecimal()
-        //                     : 0M;
-        //}
+        /// <summary>
+        /// The product tax amount.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal ProductPriceTaxAmount(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.TaxIncludedInProductPrice()
+                       ? 0M
+                       : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductPriceTaxAmount)
+                             ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductPriceTaxAmount).AsDecimal()
+                             : 0M;
+        }
 
-        //public static decimal ProductPreTaxPrice(this ExtendedDataCollection extendedData)
-        //{
-            
-        //}
+        /// <summary>
+        /// The product pre tax price.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal ProductPreTaxPrice(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.TaxIncludedInProductPrice()
+                       ? extendedData.GetPriceValue()
+                       : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductPriceNoTax)
+                             ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductPriceNoTax).AsDecimal()
+                             : extendedData.GetPriceValue();
+        }
+
+        /// <summary>
+        /// The product tax amount.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal ProductSalePriceTaxAmount(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.TaxIncludedInProductPrice()
+                       ? 0M
+                       : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductSalePriceTaxAmount)
+                             ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductSalePriceTaxAmount).AsDecimal()
+                             : 0M;
+        }
+
+        /// <summary>
+        /// The product pre tax sale price.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal ProductPreTaxSalePrice(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.TaxIncludedInProductPrice()
+                       ? extendedData.GetPriceValue()
+                       : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductSalePriceNoTax)
+                             ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductSalePriceNoTax).AsDecimal()
+                             : extendedData.GetPriceValue();
+        }
 
         /// <summary>
         /// True/false indicating whether or not this extended data collection contains information 

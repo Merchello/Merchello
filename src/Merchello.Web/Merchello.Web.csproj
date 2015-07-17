@@ -222,6 +222,8 @@
     <Compile Include="Discounts\Coupons\Constraints\CouponConstraintBase.cs" />
     <Compile Include="Discounts\Coupons\Constraints\ExcludeShippingCostConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\CollectionQuantityRulesConstraint.cs" />
+    <Compile Include="Discounts\Coupons\Constraints\ExcludeTaxesIncludedInProductPrices.cs" />
+    <Compile Include="Discounts\Coupons\Constraints\ExcludeTaxesInProductPricesVisitor.cs" />
     <Compile Include="Discounts\Coupons\Constraints\MaximumNumberOfRedemptionsConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\MaximumQuantityConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\MaximumQuantityConstraintVisitor.cs" />

@@ -78,7 +78,7 @@
             // var merchello = new MerchelloHelper();
             //
             // if you want to do this you should tell the basket not to modify the data again when adding the item
-            // this.Basket.EnableDataModifiers = false;
+            //this.Basket.EnableDataModifiers = false;
 
             // In this case we want to get the product without any data modification
             var merchello = new MerchelloHelper(false);
