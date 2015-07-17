@@ -261,6 +261,7 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Events\AddItemEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="Gateways\Taxation\IProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductMethod.cs" />

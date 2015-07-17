@@ -466,6 +466,72 @@
         }
 
         /// <summary>
+        /// The get products by barcode.
+        /// </summary>
+        /// <param name="barcode">
+        /// The barcode.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        public QueryResultDisplay GetProductsByBarcode(
+            string barcode,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return
+                this.GetQueryResultDisplay(
+                    _productService.GetProductsByBarcode(barcode, page, itemsPerPage, sortBy, sortDirection));
+        }
+
+        /// <summary>
+        /// The get products by barcode.
+        /// </summary>
+        /// <param name="barcodes">
+        /// The barcodes.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        public QueryResultDisplay GetProductsByBarcode(
+            IEnumerable<string> barcodes,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return
+                this.GetQueryResultDisplay(
+                    _productService.GetProductsByBarcode(barcodes, page, itemsPerPage, sortBy, sortDirection));
+        }
+
+        /// <summary>
         /// Gets products by manufacturer.
         /// </summary>
         /// <param name="manufacturer">

@@ -200,6 +200,7 @@
         /// </param>
         public static void AddItem(this ILineItemContainer container, ILineItem lineItem)
         {
+            lineItem.ContainerKey = container.Key;
             container.Items.Add(lineItem);
         }
        

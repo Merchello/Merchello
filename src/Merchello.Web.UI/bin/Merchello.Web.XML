@@ -5230,6 +5230,52 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsByBarcode(System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            The get products by barcode.
+            </summary>
+            <param name="barcode">
+            The barcode.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsByBarcode(System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            The get products by barcode.
+            </summary>
+            <param name="barcode">
+            The barcode.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsByManufacturer(System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
             <summary>
             Gets products by manufacturer.
@@ -5585,6 +5631,52 @@
             </param>
             <param name="taxModifier">
             The tax modifier.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsByBarcode(System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            The get products by barcode.
+            </summary>
+            <param name="barcode">
+            The barcode.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsByBarcode(System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            The get products by barcode.
+            </summary>
+            <param name="barcodes">
+            The barcodes.
             </param>
             <param name="page">
             The page.
@@ -9297,6 +9389,11 @@
             Gets a value indicating whether or not the item cache contains any items
             </summary>
         </member>
+        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.ProductTaxExtendedDataKeys">
+            <summary>
+            The product tax extended data keys.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._itemCache">
             <summary>
             The item cache responsible for persisting the customer item cache contents.
@@ -9641,6 +9738,17 @@
             Accepts visitor class to visit customer item cache items
             </summary>
             <param name="visitor">The <see cref="T:Merchello.Core.Models.ILineItemVisitor"/> to walk the collection</param>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.ItemsOnAddingItem(System.Object,Merchello.Core.Events.AddItemEventArgs)">
+            <summary>
+            Handles the adding item event.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="e">
+            The <see cref="T:Merchello.Core.Events.AddItemEventArgs"/>.
+            </param>        
         </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Initialize">
             <summary>

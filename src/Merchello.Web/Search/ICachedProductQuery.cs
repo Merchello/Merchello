@@ -254,6 +254,52 @@
         QueryResultDisplay GetProductsInPriceRange(decimal min, decimal max, decimal taxModifier, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
+        /// The get products by barcode.
+        /// </summary>
+        /// <param name="barcode">
+        /// The barcode.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        QueryResultDisplay GetProductsByBarcode(string barcode, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
+        /// The get products by barcode.
+        /// </summary>
+        /// <param name="barcode">
+        /// The barcode.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        QueryResultDisplay GetProductsByBarcode(IEnumerable<string> barcode, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
         /// Gets products by manufacturer.
         /// </summary>
         /// <param name="manufacturer">

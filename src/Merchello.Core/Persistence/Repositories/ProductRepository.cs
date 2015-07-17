@@ -529,6 +529,73 @@
         }
 
         /// <summary>
+        /// The get products keys by barcode.
+        /// </summary>
+        /// <param name="barcode">
+        /// The barcode.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetProductsKeysByBarcode(
+            string barcode,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetProductsKeysByBarcode(new[] { barcode }, page, itemsPerPage, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get products keys by barcode.
+        /// </summary>
+        /// <param name="barcodes">
+        /// The barcodes.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetProductsKeysByBarcode(
+            IEnumerable<string> barcodes,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+              .Append("WHERE [merchProductVariant].[barcode] IN (@codes)", new { @codes = barcodes })
+              .Append("AND [merchProductVariant].[master] = 1");
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
         /// The get products keys in stock.
         /// </summary>
         /// <param name="page">

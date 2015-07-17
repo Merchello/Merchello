@@ -25,6 +25,7 @@
                     "merchLineItemTaxAmount",
                     "merchProductPriceTaxAmount",
                     "merchProductSalePriceTaxAmount",
+                    "merchTaxIncludedInProductPrice",
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -413,6 +414,17 @@
                 get
                 {
                     return "merchProductPriceNoTax";
+                }
+            }
+
+            /// <summary>
+            /// Gets the tax included in product price.
+            /// </summary>
+            public static string TaxIncludedInProductPrice
+            {
+                get
+                {
+                    return "merchTaxIncludedInProductPrice";
                 }
             }
 
