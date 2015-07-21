@@ -354,6 +354,28 @@
         }
 
 
+        /// <summary>
+        /// Creates a new <see cref="ILineItemContainer"/> with filtered items.
+        /// </summary>
+        /// <param name="filteredItems">
+        /// The line items.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ILineItemContainer"/>.
+        /// </returns>
+        public static ILineItemContainer CreateNewItemCacheLineItemContainer(IEnumerable<ILineItem> filteredItems)
+        {
+            var lineItems = filteredItems as ILineItem[] ?? filteredItems.ToArray();
+
+            var result = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
+            if (!lineItems.Any()) return result;
+
+            var itemCacheLineItems = lineItems.Select(x => x.AsLineItemOf<ItemCacheLineItem>());
+
+            result.Items.Add(itemCacheLineItems);
+            return result;
+        }
+
         #region Formatter
 
         /// <summary>
@@ -428,28 +450,6 @@
         }
 
         #endregion
-
-        /// <summary>
-        /// Creates a new <see cref="ILineItemContainer"/> with filtered items.
-        /// </summary>
-        /// <param name="filteredItems">
-        /// The line items.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ILineItemContainer"/>.
-        /// </returns>
-        internal static ILineItemContainer CreateNewItemCacheLineItemContainer(IEnumerable<ILineItem> filteredItems)
-        {
-            var lineItems = filteredItems as ILineItem[] ?? filteredItems.ToArray();
-
-            var result = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
-            if (!lineItems.Any()) return result;
-
-            var itemCacheLineItems = lineItems.Select(x => x.AsLineItemOf<ItemCacheLineItem>());
-
-            result.Items.Add(itemCacheLineItems);
-            return result;
-        }
     }
 }
 
