@@ -589,7 +589,7 @@
         /// </returns>
         internal ILineItemContainer CreateNewLineContainer(IEnumerable<ILineItem> filteredItems)
         {
-            return LineItemExtensions.CreateNewBackOfficeLineItemContainer(filteredItems);
+            return LineItemExtensions.CreateNewItemCacheLineItemContainer(filteredItems);
         }
 
         /// <summary>
