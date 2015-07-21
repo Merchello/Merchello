@@ -438,7 +438,7 @@
         /// <returns>
         /// The <see cref="ILineItemContainer"/>.
         /// </returns>
-        internal static ILineItemContainer CreateNewBackOfficeLineItemContainer(IEnumerable<ILineItem> filteredItems)
+        internal static ILineItemContainer CreateNewItemCacheLineItemContainer(IEnumerable<ILineItem> filteredItems)
         {
             var lineItems = filteredItems as ILineItem[] ?? filteredItems.ToArray();
 
