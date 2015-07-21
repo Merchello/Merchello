@@ -7,7 +7,7 @@
     /// <summary>
     /// Adds the productTaxMethod field to the merchelloTaxMethod table.
     /// </summary>
-    [Migration("1.7.0", "1.9.0.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.7.0", "1.9.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class AddTaxMethodColumn : MigrationBase 
     {
         /// <summary>

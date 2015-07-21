@@ -155,29 +155,30 @@
                 && _adjustmentType == CouponDiscountLineItemReward.Adjustment.Percent)
             {
                 var product = _merchello.Query.Product.GetByKey(lineItem.ExtendedData.GetProductKey());
-
+                var preTaxPrice = product.Price - (product.Price * DiscountPercent);
+                var preTaxAmount = lineItem.ExtendedData.ProductPriceTaxAmount() - (lineItem.ExtendedData.ProductPriceTaxAmount() * DiscountPercent);
                 //// this is sort of weird here, but the line item price may have been set outside the typical workflow
                 //// and we cannot rely on the OnSale flag being set so we set both prices to the value set in the line item 
                 //// and then apply the taxes to the new price.  Example of this would be using different currencies                                
                 product.Price = lineItem.Price;
-                var preTaxPrice = product.Price;
-
+                
                 // this will be the amount of the discount with the taxation break out from the taxation results
-                product.SalePrice = lineItem.Price - (lineItem.Price * DiscountPercent);
+                product.SalePrice = preTaxPrice;
                 var result = _taxationContext.CalculateTaxesForProduct(product);
                 product.AlterProduct(result);
 
+
+
                 audit.Log = product.Price == lineItem.Price ? 
                     product.ModifiedDataLogs :
-                    product.ModifiedDataLogs.Where(x => x.PropertyName == "SalePrice");
+                    product.ModifiedDataLogs.Where(x => x.PropertyName == "SalePrice").ToArray();
                 _audits.Add(audit);
 
-                var adjustedTax = result.SalePriceResult.TaxAmount;
 
                 // if taxes are to be excluded the constraint ExcludeTaxesIncludedInProductPrices should be added to remove them
                _qualifyingTotal += lineItem.Price * lineItem.Quantity;
-                _adjustedProductPreTaxTotal += preTaxPrice;
-                _adjustedTaxTotal += adjustedTax;
+                _adjustedProductPreTaxTotal += preTaxPrice * lineItem.Quantity;
+                _adjustedTaxTotal += preTaxAmount * lineItem.Quantity;
             }
             else if (_adjustmentType == CouponDiscountLineItemReward.Adjustment.Percent)
             {
