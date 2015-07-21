@@ -69,6 +69,7 @@
     <key alias="toggleAvailable">Tilgængelig</key>
     <key alias="isOnSale">Denne variant er på tilbud</key>
     <key alias="isAvailable">Denne variant er tilgængelig til køb</key>
+    <key alias="costOfGoods">Cost of Goods</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->
@@ -91,11 +92,8 @@
     <key alias="sales">Salg</key>
     <key alias="saleInformation">Salgsinformation</key>
     <!-- actions -->
-    <key alias="filter">Filter Invoices</key>
     <key alias="addDateFilters">Tilføj dato filtrer</key>
     <key alias="removeDateFilters">Fjern dato filtrer</key>
-    <key alias="capturePayment">Capture Payment</key>
-    <key alias="processPayment">Process Payment</key>
     <key alias="voidPayment">Annuller betaling</key>
     <key alias="refundPayment">Refundér betaling</key>
     <key alias="voidPaymentConfirmMessage">Er du sikker du vil refundere denne betaling?</key>
@@ -222,6 +220,7 @@
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Der skal betales moms af forsendelsesomkostningerne</key>
     <key alias="unitSystem">Enhedssystem</key>
+    <key alias="globalTaxationApplication">Set how taxes are applied</key>
   </area>
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Tilføj et land</key>
@@ -270,6 +269,7 @@
     <key alias="taxation">Afgifter</key>
     <key alias="taxMethods">Afgifts metoder</key>
     <key alias="taxMethodsHelper">Opsæt en flad beskatning/afgift til dine forsendelesregioner</key>
+    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
   </area>
   <area alias="merchelloNotifications">
     <key alias="notifications">Notifikationer</key>
