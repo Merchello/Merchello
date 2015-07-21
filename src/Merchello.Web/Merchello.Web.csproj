@@ -227,6 +227,7 @@
     <Compile Include="Discounts\Coupons\Constraints\MaximumNumberOfRedemptionsConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\MaximumQuantityConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\MaximumQuantityConstraintVisitor.cs" />
+    <Compile Include="Discounts\Coupons\Constraints\NotUsableByAnonymousCustomersConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\NotUsableWithOtherCouponsConstraint.cs" />
     <Compile Include="Discounts\Coupons\Constraints\NumericalValueFilterConstraintVisitor.cs" />
     <Compile Include="Discounts\Coupons\Constraints\LineItemPriceFilterRulesConstraint.cs" />
