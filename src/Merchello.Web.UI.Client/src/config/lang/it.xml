@@ -61,6 +61,7 @@
     <key alias="toggleAvailable">Available</key>
     <key alias="isOnSale">This variant is on sale</key>
     <key alias="isAvailable">This variant is available to purchase</key>
+    <key alias="costOfGoods">Cost of Goods</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->
@@ -93,6 +94,10 @@
     <key alias="refundPayment">Refund Payment</key>
     <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
     <key alias="refundMethod">Refund method</key>
+    <key alias="archiveSales">Archive Sales</key>
+    <key alias="unarchiveSales">Unarchive Sales</key>
+    <key alias="noSalesYet">You have no sales yet</key>
+    <key alias="butSoonYouWill">but soon you will!</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -196,6 +201,7 @@
     <key alias="globalTrackInventory">Gestione magazzino per ogni prodotto e sua variante</key>
     <key alias="globalShippingIsTaxable">Le spese di spedizione sono tassabili</key>
     <key alias="unitSystem">Unit System</key>
+    <key alias="globalTaxationApplication">Set how taxes are applied</key>
   </area>
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Aggiungi una nazione</key>
@@ -243,6 +249,7 @@
     <key alias="taxation">Tassazione</key>
     <key alias="taxMethods">Metodo di gestione della tassazione</key>
     <key alias="taxMethodsHelper">Imposta il metodo di tassazione a seconda delle aree a cui spedire</key>
+    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
   </area>
   <area alias="merchelloNotifications">
     <key alias="notifications">Notifiche</key>

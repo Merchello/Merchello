@@ -58,7 +58,7 @@
             Assert.IsTrue(allPassed);
         }
 
-        //[Test]
+        [Test]
         public void Can_Verify_All_Keys_Exist_Matching_In_EnXml_File()
         {
             var en = _langFileDirectory.GetFiles("en.xml").FirstOrDefault();
