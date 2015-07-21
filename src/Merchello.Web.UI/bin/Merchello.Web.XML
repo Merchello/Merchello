@@ -126,6 +126,22 @@
             Gets the constructor argument values.
             </summary>
         </member>
+        <member name="T:Merchello.Web.DataModifiers.Product.ProductVariantDataModifierExtensions">
+            <summary>
+            The product variant data modifier extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.DataModifiers.Product.ProductVariantDataModifierExtensions.AlterProduct(Merchello.Core.Models.IProductVariantDataModifierData,Merchello.Core.Gateways.Taxation.IProductTaxCalculationResult)">
+            <summary>
+            The alters the product with taxation results.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <param name="result">
+            The result.
+            </param>
+        </member>
         <member name="T:Merchello.Web.DigitalDownloadHandler">
             <summary>
             
@@ -987,10 +1003,13 @@
             The definition.
             </param>
         </member>
-        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardBase.CreateTemplateDiscountLineItem">
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardBase.CreateTemplateDiscountLineItem(System.Collections.Generic.IEnumerable{Merchello.Web.Discounts.Coupons.Rewards.CouponRewardAdjustmentAudit})">
             <summary>
             Creates a template discount line item.
             </summary>
+            <param name="audits">
+            Reward audit log
+            </param>
             <returns>
             The <see cref="T:Merchello.Core.Models.ILineItem"/>.
             </returns>
@@ -1017,6 +1036,11 @@
             The <see cref="T:Umbraco.Core.Attempt`1"/>.
             </returns>
         </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.AdjustmentType">
+            <summary>
+            Gets the adjustment type.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.IsConfigured">
             <summary>
             Gets a value indicating whether is configured.
@@ -1025,11 +1049,6 @@
         <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.Amount">
             <summary>
             Gets the configured amount.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.AdjustmentType">
-            <summary>
-            Gets the adjustment type.
             </summary>
         </member>
         <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.DisplayConfigurationFormat">
@@ -1041,6 +1060,105 @@
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.Adjustment">
             <summary>
             The adjustment.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor">
+            <summary>
+            The coupon discount line item reward visitor.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._audits">
+            <summary>
+            The audits.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._amount">
+            <summary>
+            The amount.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._adjustmentType">
+            <summary>
+            The adjustment type.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._productTaxationEnabled">
+            <summary>
+            A value indicating whether or not the taxation context is ready to handle product based taxation.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._taxationContext">
+            <summary>
+            The <see cref="T:Merchello.Core.Gateways.Taxation.ITaxationContext"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._qualifyingTotal">
+            <summary>
+            The qualifying total.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._adjustedProductPreTaxTotal">
+            <summary>
+            The adjusted product total.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor._adjustedTaxTotal">
+            <summary>
+            The adjusted tax total.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.#ctor(System.Decimal,Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemReward.Adjustment)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor"/> class.
+            </summary>
+            <param name="amount">
+            The amount.
+            </param>
+            <param name="adjustmentType">
+            The adjustment type.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Visits each qualifying line item and applies the discount.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.Initialize">
+            <summary>
+            Initializes the visitor.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.Audits">
+            <summary>
+            Gets the audits.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.QualifyingTotal">
+            <summary>
+            Gets the qualifying total.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.AdjustedProductPreTaxTotal">
+            <summary>
+            Gets the adjusted product pre tax total.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.AdjustedTaxTotal">
+            <summary>
+            Gets the adjusted tax total.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponDiscountLineItemRewardVisitor.DiscountPercent">
+            <summary>
+            Gets the percent discount.
             </summary>
         </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponFreeShippingReward">
@@ -1080,6 +1198,21 @@
             <summary>
             Gets a value indicating that this component does not require configuration.
             </summary>      
+        </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Rewards.CouponRewardAdjustmentAudit">
+            <summary>
+            The coupon reward adjustment audit.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponRewardAdjustmentAudit.RelatesToSku">
+            <summary>
+            Gets or sets the SKU for the line item to which this coupon adjustment relates.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Rewards.CouponRewardAdjustmentAudit.Log">
+            <summary>
+            Gets or sets the log of adjustments.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Editors.MarketingApiController">
             <summary>

@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Discounts.Coupons.Rewards
 {
+    using System;
     using System.Globalization;
     using System.Linq;
 
@@ -41,6 +42,21 @@
         #region properties
 
         /// <summary>
+        /// Gets the adjustment type.
+        /// </summary>
+        internal Adjustment AdjustmentType
+        {
+            get
+            {
+                var adjustmentType = this.GetConfigurationValue("adjustmentType");
+                if (string.IsNullOrEmpty(adjustmentType)) return Adjustment.NotSet;
+
+                return Enum<Adjustment>.Parse(adjustmentType, true);
+            }
+        }
+
+
+        /// <summary>
         /// Gets a value indicating whether is configured.
         /// </summary>
         private bool IsConfigured
@@ -60,20 +76,6 @@
             {
                 decimal converted;
                 return decimal.TryParse(this.GetConfigurationValue("amount"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;                                
-            }
-        }
-
-        /// <summary>
-        /// Gets the adjustment type.
-        /// </summary>
-        private Adjustment AdjustmentType
-        {
-            get
-            {
-                var adjustmentType = this.GetConfigurationValue("adjustmentType");   
-                if (string.IsNullOrEmpty(adjustmentType)) return Adjustment.NotSet;
-
-                return Enum<Adjustment>.Parse(adjustmentType, true);
             }
         }
 
@@ -115,18 +117,26 @@
         public override Attempt<ILineItem> TryAward(ILineItemContainer validate, ICustomerBase customer)
         {
             if (!IsConfigured) return Attempt<ILineItem>.Fail(new OfferRedemptionException("The coupon reward is not configured."));
-
-            // Get the item template
-            var discountLineItem = CreateTemplateDiscountLineItem();
+            if (MerchelloContext.Current == null) return Attempt<ILineItem>.Fail(new OfferRedemptionException("The MerchelloContext was null"));
 
             // apply to the entire collection excluding previously added discounts
-            var qualifyingTotal = validate.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
+            var qualifying =
+                LineItemExtensions.CreateNewBackOfficeLineItemContainer(validate.Items.Where(x => x.LineItemType != LineItemType.Discount));
+
+            var visitor = new CouponDiscountLineItemRewardVisitor(Amount, AdjustmentType);
+            qualifying.Items.Accept(visitor);
+
+            var qualifyingTotal = visitor.QualifyingTotal;
 
 
             var discount = this.AdjustmentType == Adjustment.Flat
                                     ? this.Amount > qualifyingTotal ? qualifyingTotal : this.Amount
                                     : qualifyingTotal * (this.Amount / 100);
-          
+
+            // Get the item template
+            var discountLineItem = CreateTemplateDiscountLineItem(visitor.Audits);
+            discountLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CouponAdjustedProductPreTaxTotal, visitor.AdjustedProductPreTaxTotal.ToString(CultureInfo.InvariantCulture));
+            discountLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CouponAdjustedProductTaxTotal, visitor.AdjustedTaxTotal.ToString(CultureInfo.InvariantCulture));
             discountLineItem.Price = discount;
 
             return Attempt<ILineItem>.Succeed(discountLineItem);

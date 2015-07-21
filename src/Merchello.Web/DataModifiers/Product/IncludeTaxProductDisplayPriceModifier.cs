@@ -39,9 +39,7 @@
             if (!taxationContent.ProductPricingEnabled || !value.Taxable) return Attempt<IProductVariantDataModifierData>.Succeed(value);
 
             var result = taxationContent.CalculateTaxesForProduct(value);
-            value.ModifyData("Price", value.Price + result.PriceResult.TaxAmount, result.PriceResult.ExtendedData);
-            value.ModifyData("SalePrice", value.SalePrice + result.SalePriceResult.TaxAmount, result.SalePriceResult.ExtendedData);            
-
+            value.AlterProduct(result);            
             return Attempt<IProductVariantDataModifierData>.Succeed(value);
         }
     }
