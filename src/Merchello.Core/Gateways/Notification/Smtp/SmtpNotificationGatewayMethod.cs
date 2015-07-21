@@ -58,6 +58,8 @@
                 IsBodyHtml = true
             };
 
+            LogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
+
             foreach (var to in message.Recipients)
             {
                 if (!string.IsNullOrEmpty(to))
