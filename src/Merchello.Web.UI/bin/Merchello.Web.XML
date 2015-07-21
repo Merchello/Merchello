@@ -479,6 +479,38 @@
             Gets or sets the modified items.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Discounts.Coupons.Constraints.NotUsableByAnonymousCustomersConstraint">
+            <summary>
+            The not usable by anonymous customers constraint.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NotUsableByAnonymousCustomersConstraint.#ctor(Merchello.Core.Marketing.Offer.OfferComponentDefinition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Discounts.Coupons.Constraints.NotUsableByAnonymousCustomersConstraint"/> class.
+            </summary>
+            <param name="definition">
+            The definition.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Discounts.Coupons.Constraints.NotUsableByAnonymousCustomersConstraint.TryApply(Merchello.Core.Models.ILineItemContainer,Merchello.Core.Models.ICustomerBase)">
+            <summary>
+            The try apply.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <param name="customer">
+            The customer.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Discounts.Coupons.Constraints.NotUsableByAnonymousCustomersConstraint.RequiresConfiguration">
+            <summary>
+            Gets a value indicating whether requires configuration.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Discounts.Coupons.Constraints.NotUsableWithOtherCouponsConstraint">
             <summary>
             A discount rule to prohibit a discount from being used with other discounts.
