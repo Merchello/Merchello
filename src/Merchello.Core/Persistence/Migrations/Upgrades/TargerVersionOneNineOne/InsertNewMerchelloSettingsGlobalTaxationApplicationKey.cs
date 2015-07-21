@@ -13,7 +13,7 @@
     /// <summary>
     /// Insert the new merchello settings GlobalTaxationApplication setting.
     /// </summary>
-    [Migration("1.7.0", "1.9.0.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.7.0", "1.9.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class InsertNewMerchelloSettingsGlobalTaxationApplicationKey : MigrationBase
     {
         /// <summary>
