@@ -20,7 +20,10 @@
                     "merchLineItemCollection",
                     "merchLineItem",
                     "merchCurrencyCode",
-                    "merchCouponReward",
+                    "merchCouponReward",                    
+                    "merchCouponRewardLog",
+                    "merchCouponAdjustedProductPreTaxTotal",
+                    "merchCouponAdjustedProductTaxTotal",
                     "merchOfferCodeTempeData",
                     "merchLineItemTaxAmount",
                     "merchProductPriceTaxAmount",
@@ -489,6 +492,39 @@
                 get
                 {
                     return "merchCouponReward";
+                }
+            }
+
+            /// <summary>
+            /// Gets the coupon reward log.
+            /// </summary>
+            public static string CouponRewardLog
+            {
+                get
+                {
+                    return "merchCouponRewardLog";
+                }
+            }
+
+            /// <summary>
+            /// Gets the coupon adjusted product pre tax total.
+            /// </summary>
+            public static string CouponAdjustedProductPreTaxTotal
+            {
+                get
+                {
+                    return "merchCouponAdjustedProductPreTaxTotal";                    
+                }
+            }
+
+            /// <summary>
+            /// Gets the coupon adjusted product tax total.
+            /// </summary>
+            public static string CouponAdjustedProductTaxTotal
+            {
+                get
+                {
+                    return "merchCouponAdjustedProductTaxTotal";
                 }
             }
 

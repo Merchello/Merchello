@@ -215,6 +215,7 @@
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="DataModifiers\Product\IncludeTaxProductDisplayPriceModifier.cs" />
     <Compile Include="DataModifiers\Product\ProductVariantDataModifierChain.cs" />
+    <Compile Include="DataModifiers\Product\ProductVariantDataModifierExtensions.cs" />
     <Compile Include="DataModifiers\Product\ProductVariantDataModifierTaskBase.cs" />
     <Compile Include="DigitalDownloadHandler.cs" />
     <Compile Include="Discounts\Coupons\Constraints\CollectionAlterationCouponConstraintBase.cs" />
@@ -243,7 +244,9 @@
     <Compile Include="Discounts\Coupons\RedeemCouponEventArgs.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemReward.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemRewardBase.cs" />
+    <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemRewardVisitor.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
+    <Compile Include="Discounts\Coupons\Rewards\CouponRewardAdjustmentAudit.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />

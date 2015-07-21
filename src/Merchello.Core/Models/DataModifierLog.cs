@@ -5,7 +5,7 @@
     /// <summary>
     /// Represents a DataModifierLog.
     /// </summary>
-    internal class DataModifierLog : IDataModifierLog
+    public class DataModifierLog : IDataModifierLog
     {
         /// <summary>
         /// Gets or sets the property name of the property modified.
