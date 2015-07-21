@@ -11,6 +11,70 @@
             <param name="appContext"> </param>
             <param name="http"></param>
         </member>
+        <member name="T:Umbraco.Web.Scheduling.ILatchedBackgroundTask">
+            <summary>
+            Represents a latched background task.
+            </summary>
+            <remarks>Latched background tasks can suspend their execution until
+            a condition is met. However if the tasks runner has to terminate,
+            latched background tasks can be executed immediately, depending on
+            the value returned by RunsOnShutdown.</remarks>
+        </member>
+        <member name="T:Umbraco.Web.Scheduling.IBackgroundTask">
+            <summary>
+            Represents a background task.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.IBackgroundTask.Run">
+            <summary>
+            Runs the background task.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.IBackgroundTask.RunAsync(System.Threading.CancellationToken)">
+            <summary>
+            Runs the task asynchronously.
+            </summary>
+            <param name="token">A cancellation token.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> instance representing the execution of the background task.</returns>
+            <exception cref="T:System.NotImplementedException">The background task cannot run asynchronously.</exception>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.IBackgroundTask.IsAsync">
+            <summary>
+            Indicates whether the background task can run asynchronously.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.Latch">
+            <summary>
+            Gets a wait handle on the task condition.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The task is not latched.</exception>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.IsLatched">
+            <summary>
+            Gets a value indicating whether the task is latched.
+            </summary>
+            <remarks>Should return false as soon as the condition is met.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.RunsOnShutdown">
+            <summary>
+             Gets a value indicating whether the task can be executed immediately if the task runner has to terminate.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.LatchedBackgroundTaskBase.Run">
+            <summary>
+            Implements IBackgroundTask.Run().
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Scheduling.LatchedBackgroundTaskBase.RunAsync(System.Threading.CancellationToken)">
+            <summary>
+            Implements IBackgroundTask.RunAsync().
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Scheduling.LatchedBackgroundTaskBase.IsAsync">
+            <summary>
+            Indicates whether the background task can run asynchronously.
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.Models.ContentExtensions.GetCulture(Umbraco.Core.Models.IContent,System.Uri)">
             <summary>
             Gets the culture that would be selected to render a specified content,
@@ -2344,7 +2408,7 @@
         </member>
         <member name="M:Umbraco.Web.Mvc.AdminTokenAuthorizeAttribute.GetAuthHeaderTokenVal(Umbraco.Core.ApplicationContext)">
             <summary>
-            Used to return the value that needs to go in the Authorization header
+            Used to return the full value that needs to go in the Authorization header
             </summary>
             <param name="appContext"></param>
             <returns></returns>
@@ -4174,126 +4238,56 @@
         </member>
         <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions.PreserveRunningTask">
             <summary>
-            Gets or setes a value indicating whether the running task should be preserved
+            Gets or sets a value indicating whether the running task should be preserved
             once completed, or reset to null. For unit tests.
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Scheduling.DelayedRecurringTaskBase`1">
+        <member name="P:Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions.Hosted">
+            <summary>
+            Gets or sets a value indicating whether the runner should register with (and be
+            stopped by) the hosting. Otherwise, something else should take care of stopping
+            the runner. True by default.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Scheduling.RecurringTaskBase">
             <summary>
             Provides a base class for recurring background tasks.
             </summary>
-            <typeparam name="T">The type of the managed tasks.</typeparam>
         </member>
-        <member name="T:Umbraco.Web.Scheduling.RecurringTaskBase`1">
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase.#ctor(Umbraco.Web.Scheduling.IBackgroundTaskRunner{Umbraco.Web.Scheduling.RecurringTaskBase},System.Int32,System.Int32)">
             <summary>
-            Provides a base class for recurring background tasks.
-            </summary>
-            <typeparam name="T">The type of the managed tasks.</typeparam>
-        </member>
-        <member name="T:Umbraco.Web.Scheduling.IBackgroundTask">
-            <summary>
-            Represents a background task.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.IBackgroundTask.Run">
-            <summary>
-            Runs the background task.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.IBackgroundTask.RunAsync(System.Threading.CancellationToken)">
-            <summary>
-            Runs the task asynchronously.
-            </summary>
-            <param name="token">A cancellation token.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> instance representing the execution of the background task.</returns>
-            <exception cref="T:System.NotImplementedException">The background task cannot run asynchronously.</exception>
-        </member>
-        <member name="P:Umbraco.Web.Scheduling.IBackgroundTask.IsAsync">
-            <summary>
-            Indicates whether the background task can run asynchronously.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.#ctor(Umbraco.Web.Scheduling.IBackgroundTaskRunner{`0},System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.RecurringTaskBase`1"/> class with a tasks runner and a period.
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.RecurringTaskBase"/> class.
             </summary>
             <param name="runner">The task runner.</param>
+            <param name="delayMilliseconds">The delay.</param>
             <param name="periodMilliseconds">The period.</param>
             <remarks>The task will repeat itself periodically. Use this constructor to create a new task.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.#ctor(Umbraco.Web.Scheduling.RecurringTaskBase{`0})">
-            <summary>
-            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.RecurringTaskBase`1"/> class with a source task.
-            </summary>
-            <param name="source">The source task.</param>
-            <remarks>Use this constructor to create a new task from a source task in <c>GetRecurring</c>.</remarks>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.Run">
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase.Run">
             <summary>
             Implements IBackgroundTask.Run().
             </summary>
             <remarks>Classes inheriting from <c>RecurringTaskBase</c> must implement <c>PerformRun</c>.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.RunAsync(System.Threading.CancellationToken)">
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase.RunAsync(System.Threading.CancellationToken)">
             <summary>
             Implements IBackgroundTask.RunAsync().
             </summary>
             <remarks>Classes inheriting from <c>RecurringTaskBase</c> must implement <c>PerformRun</c>.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.PerformRun">
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase.PerformRun">
             <summary>
             Runs the background task.
             </summary>
+            <returns>A value indicating whether to repeat the task.</returns>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.PerformRunAsync">
+        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase.PerformRunAsync(System.Threading.CancellationToken)">
             <summary>
             Runs the task asynchronously.
             </summary>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> instance representing the execution of the background task.</returns>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.GetRecurring">
-            <summary>
-            Gets a new occurence of the recurring task.
-            </summary>
-            <returns>A new task instance to be queued, or <c>null</c> to terminate the recurring task.</returns>
-            <remarks>The new task instance must be created via the <c>RecurringTaskBase(RecurringTaskBase{T} source)</c> constructor,
-            where <c>source</c> is the current task, eg: <c>return new MyTask(this);</c></remarks>
-        </member>
-        <member name="M:Umbraco.Web.Scheduling.RecurringTaskBase`1.Dispose">
-            <summary>
-            Dispose the task.
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Scheduling.RecurringTaskBase`1.IsAsync">
-            <summary>
-            Indicates whether the background task can run asynchronously.
-            </summary>
-        </member>
-        <member name="T:Umbraco.Web.Scheduling.ILatchedBackgroundTask">
-            <summary>
-            Represents a latched background task.
-            </summary>
-            <remarks>Latched background tasks can suspend their execution until
-            a condition is met. However if the tasks runner has to terminate,
-            latched background tasks can be executed immediately, depending on
-            the value returned by RunsOnShutdown.</remarks>
-        </member>
-        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.Latch">
-            <summary>
-            Gets a wait handle on the task condition.
-            </summary>
-            <exception cref="T:System.InvalidOperationException">The task is not latched.</exception>
-        </member>
-        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.IsLatched">
-            <summary>
-            Gets a value indicating whether the task is latched.
-            </summary>
-            <remarks>Should return false as soon as the condition is met.</remarks>
-        </member>
-        <member name="P:Umbraco.Web.Scheduling.ILatchedBackgroundTask.RunsOnShutdown">
-            <summary>
-             Gets a value indicating whether the task can be executed immediately if the task runner has to terminate.
-            </summary>
+            <param name="token">A cancellation token.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> instance representing the execution of the background task,
+            and returning a value indicating whether to repeat the task.</returns>
         </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.ClearCsrfCookiesAfterUpgrade">
             <summary>
@@ -18739,6 +18733,12 @@
             Represents the Xml storage for the Xml published cache.
             </summary>
         </member>
+        <member name="M:umbraco.content.GetUmbracoXmlDiskFileName">
+            <summary>
+            Gets the path of the umbraco XML disk cache file.
+            </summary>
+            <value>The name of the umbraco XML disk cache file.</value>
+        </member>
         <member name="M:umbraco.content.RefreshContentFromDatabase">
             <summary>
             Load content from database and replaces active content when done.
@@ -18873,12 +18873,6 @@
             </summary>
             <param name="node">The sender.</param>
             <param name="e">The <see cref="T:umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="P:umbraco.content.UmbracoXmlDiskCacheFileName">
-            <summary>
-            Gets the path of the umbraco XML disk cache file.
-            </summary>
-            <value>The name of the umbraco XML disk cache file.</value>
         </member>
         <member name="P:umbraco.content.XmlContent">
             <remarks>
