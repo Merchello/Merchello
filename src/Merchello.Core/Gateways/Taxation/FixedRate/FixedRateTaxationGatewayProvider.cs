@@ -12,6 +12,8 @@
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
 
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// Represents the CountryTaxRateTaxationGatewayProvider.  
     /// </summary>
@@ -67,14 +69,29 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="ITaxMethod"/> by it's unique 'key' (Guid)
+        /// Gets a <see cref="ITaxMethod"/> by it's unique 'key' (GUID)
         /// </summary>
         /// <param name="countryCode">The two char ISO country code</param>
         /// <returns><see cref="ITaxMethod"/></returns>
         public override ITaxationGatewayMethod GetGatewayTaxMethodByCountryCode(string countryCode)
         {
-            var taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == countryCode);
+            var taxMethod = this.FindTaxMethodForCountryCode(countryCode);
 
+            return taxMethod != null ? new FixRateTaxationGatewayMethod(taxMethod) : null;
+        }
+
+        /// <summary>
+        /// Gets the FixRateTaxationGatewayMethod.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxationByProductMethod"/>.
+        /// </returns>
+        public ITaxationByProductMethod GetTaxationByProductMethod(Guid key)
+        {
+            var taxMethod = TaxMethods.FirstOrDefault(x => x.Key == key);
             return taxMethod != null ? new FixRateTaxationGatewayMethod(taxMethod) : null;
         }
 
@@ -101,6 +118,5 @@
 
             return resources;
         }
-
     }
 }

@@ -19,6 +19,11 @@
         IItemCache ItemCache { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to apply taxes to invoice.
+        /// </summary>
+        bool ApplyTaxesToInvoice { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether raise customer events when saving customer data.
         /// </summary>
         /// <remarks>

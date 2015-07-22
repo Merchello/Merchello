@@ -825,6 +825,7 @@
         {
             if (!customer.Addresses.Any()) return;
 
+            AssertAddressCount(customer);
             var addresses = customer.Addresses.ToArray();
 
             for (int i = 0; i < addresses.Count(); i++)
@@ -838,6 +839,21 @@
             }
         }
 
+        /// <summary>
+        /// Assert the customer address count.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        private void AssertAddressCount(ICustomer customer)
+        {
+            var count = _customerAddressService.Count(customer.Key);
+            if (count == customer.Addresses.Count()) return;
+            var deletes =
+                _customerAddressService.GetByCustomerKey(customer.Key)
+                    .Where(x => customer.Addresses.All(y => y.Key != x.Key));
+            ((CustomerAddressService)_customerAddressService).Delete(deletes);
+        }
 
         /// <summary>
         /// Deletes invoices and payments associated with a customer

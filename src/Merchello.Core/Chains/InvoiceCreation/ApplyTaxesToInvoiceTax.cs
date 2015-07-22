@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Chains.InvoiceCreation
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Models;
     using Sales;
@@ -55,7 +56,9 @@
 
                     taxAddress = taxAddress ?? value.GetBillingAddress();
 
+                    this.SetTaxableSetting(value);
                     var taxes = value.CalculateTaxes(SalePreparation.MerchelloContext, taxAddress);
+                    this.SetTaxableSetting(value, true);                    
 
                     var taxLineItem = taxes.AsLineItemOf<InvoiceLineItem>();
 
@@ -76,6 +79,30 @@
             }
 
             return Attempt<IInvoice>.Succeed(value);
+        }
+
+        /// <summary>
+        /// Sets or resets the tax setting.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="taxable">
+        /// The taxable.
+        /// </param>
+        /// <remarks>
+        /// In cases where a product already includes the tax and we still need to calculate taxes for shipping
+        /// and custom line items on the invoice we set the taxable setting on the products to false and then set them back
+        /// to true after the tax calculation has been completed.
+        /// </remarks>
+        private void SetTaxableSetting(IInvoice invoice, bool taxable = false)
+        {
+            if (!this.SalePreparation.MerchelloContext.Gateways.Taxation.ProductPricingEnabled) return;
+
+            foreach (var item in invoice.Items.Where(x => x.ExtendedData.TaxIncludedInProductPrice()))
+            {
+                item.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.Taxable, taxable.ToString());  
+            }
         }
     }
 }

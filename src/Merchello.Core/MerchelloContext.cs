@@ -99,6 +99,17 @@
         public static MerchelloContext Current { get; internal set; }
 
         /// <summary>
+        /// Gets a value indicating whether has current.
+        /// </summary>
+        public static bool HasCurrent
+        {
+            get
+            {
+                return Current != null;
+            }
+        }
+
+        /// <summary>
         /// Gets the current ServiceContext
         /// </summary>
         /// <remarks>

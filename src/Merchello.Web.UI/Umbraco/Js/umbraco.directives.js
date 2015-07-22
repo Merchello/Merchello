@@ -1076,6 +1076,8 @@ angular.module("umbraco.directives")
                     }
 
                 });
+
+                $('.nav-pills, .nav-tabs').tabdrop();
             }
 
             scope.showTabs = iAttrs.tabs ? true : false;

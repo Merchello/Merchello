@@ -74,6 +74,7 @@
                 promise.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
                     $scope.products = queryResult.items;
+                    console.info($scope.products);
                     $scope.maxPages = queryResult.totalPages;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;

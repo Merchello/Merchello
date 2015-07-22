@@ -7,6 +7,7 @@
     using System.IO;
     using System.Linq;
     using System.Web.UI;
+    using System.Web.WebPages;
     using System.Xml;
     using System.Xml.Linq;
     using Newtonsoft.Json;
@@ -18,6 +19,23 @@
    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class ExtendedDataCollectionExtensions
     {
+        /// <summary>
+        /// The contains any.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool ContainsAny(this ExtendedDataCollection extendedData, IEnumerable<string> keys)
+        {
+            return extendedData.Keys.ToArray().Any(keys.Contains);
+        }
+
         #region ExtendedDataCollection
 
         /// <summary>
@@ -211,6 +229,93 @@
             extendedData.SetValue(Constants.ExtendedDataKeys.Shippable, productVariant.Shippable.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.Download, productVariant.Download.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.DownloadMediaId, productVariant.DownloadMediaId.ToString());
+        }
+
+        /// <summary>
+        /// The tax included in product price.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not tax is included in the product price.
+        /// </returns>
+        public static bool TaxIncludedInProductPrice(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.TaxIncludedInProductPrice) && 
+                extendedData.GetValue(Constants.ExtendedDataKeys.TaxIncludedInProductPrice).AsBool();
+        }
+
+        /// <summary>
+        /// The product tax amount.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal ProductPriceTaxAmount(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.TaxIncludedInProductPrice()
+                       ? 0M
+                       : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductPriceTaxAmount)
+                             ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductPriceTaxAmount).AsDecimal()
+                             : 0M;
+        }
+
+        /// <summary>
+        /// The product pre tax price.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal ProductPreTaxPrice(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.TaxIncludedInProductPrice()
+                       ? extendedData.GetPriceValue()
+                       : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductPriceNoTax)
+                             ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductPriceNoTax).AsDecimal()
+                             : extendedData.GetPriceValue();
+        }
+
+        /// <summary>
+        /// The product tax amount.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal ProductSalePriceTaxAmount(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.TaxIncludedInProductPrice()
+                       ? 0M
+                       : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductSalePriceTaxAmount)
+                             ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductSalePriceTaxAmount).AsDecimal()
+                             : 0M;
+        }
+
+        /// <summary>
+        /// The product pre tax sale price.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal ProductPreTaxSalePrice(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.TaxIncludedInProductPrice()
+                       ? extendedData.GetPriceValue()
+                       : extendedData.ContainsKey(Constants.ExtendedDataKeys.ProductSalePriceNoTax)
+                             ? extendedData.GetValue(Constants.ExtendedDataKeys.ProductSalePriceNoTax).AsDecimal()
+                             : extendedData.GetPriceValue();
         }
 
         /// <summary>
@@ -763,6 +868,31 @@
         public static string ExtendedDataAsJson(this IHasExtendedData entity)
         {
             return JsonConvert.SerializeObject(entity.ExtendedData.AsEnumerable());
+        }
+
+        #endregion
+
+        #region DataModifierLogs
+
+        /// <summary>
+        /// Merges the modifier extend data(s) into the extended data
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="modifier">
+        /// The modifier.
+        /// </param>
+        internal static void MergeDataModifierLogs(this ExtendedDataCollection extendedData, IDataModifierData modifier)
+        {
+            if (modifier.ModifiedDataLogs == null) return;
+            foreach (var log in modifier.ModifiedDataLogs)
+            {
+                foreach (var item in log.ExtendedData)
+                {
+                    extendedData.SetValue(item.Key, item.Value);
+                }
+            }
         }
 
         #endregion

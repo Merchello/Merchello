@@ -75,7 +75,7 @@ namespace Merchello.Web.Editors
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
-            _merchello = new MerchelloHelper(merchelloContext.Services);
+            _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Merchello.Web.Editors
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
-            _merchello = new MerchelloHelper(merchelloContext.Services);
+            _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
         /// <summary>

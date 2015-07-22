@@ -333,5 +333,105 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             Assert.IsFalse(product.OnSale, "Product is on sale");
 
         }
+
+        /// <summary>
+        /// Relates to http://issues.merchello.com/youtrack/issue/M-733
+        /// </summary>
+        [Test]
+        public void Can_Update_Product_Options_Without_Breaking_Choices()
+        {
+            //// Arrange
+            var product = MockProductDataMaker.MockProductForInserting(weight: 10M);
+            product.ProductOptions.Add(new ProductOption("Color"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Color1", "Color1"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Color2", "Color2"));
+            product.ProductOptions.Add(new ProductOption("Size"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Size1", "Size1"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Size2", "Size2"));
+
+            //// Act
+            _productService.Save(product);
+            Assert.IsTrue(product.ProductVariants.Any());
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Color3", "Color3"));
+            _productService.Save(product);
+
+            Assert.IsTrue(product.ProductVariants.Any());
+        }
+
+        /// <summary>
+        /// Relates to http://issues.merchello.com/youtrack/issue/M-733
+        /// </summary>
+        [Test]
+        public void Simulates_IssueM733()
+        {
+            //// Arrange
+
+            var newProduct = MockProductDataMaker.MockProductForInserting(weight: 10M);
+
+            // add some dimensions
+            newProduct.ProductOptions.Add(new ProductOption("Dimension"));
+            newProduct.ProductOptions.First(x => x.Name == "Dimension").Choices.Add(new ProductAttribute("D1", "D1"));
+            newProduct.ProductOptions.First(x => x.Name == "Dimension").Choices.Add(new ProductAttribute("D2", "D2"));
+            newProduct.ProductOptions.First(x => x.Name == "Dimension").Choices.Add(new ProductAttribute("D3", "D3"));
+            newProduct.ProductOptions.Add(new ProductOption("Fabric"));
+            newProduct.ProductOptions.First(x => x.Name == "Fabric").Choices.Add(new ProductAttribute("F1", "F1"));
+            newProduct.ProductOptions.First(x => x.Name == "Fabric").Choices.Add(new ProductAttribute("F2", "F2"));
+            newProduct.Price = 18M;
+            _productService.Save(newProduct);
+
+            var sku = newProduct.Sku; // this is a partial Guid
+            var variantSkus = newProduct.ProductVariants.Select(x => x.Sku).ToArray();  // An array of variant skus generated from the first save
+            Console.WriteLine(string.Join(", ", variantSkus));
+
+            newProduct.ProductOptions.First(x => x.Name == "Dimension").Choices.Add(new ProductAttribute("D4", "D4"));
+            newProduct.Price = 20M;
+            var removeChoice =
+                newProduct.ProductOptions.First(x => x.Name == "Fabric").Choices.FirstOrDefault(x => x.Sku == "F1");
+            newProduct.ProductOptions.First(x => x.Name == "Fabric").Choices.Remove(removeChoice);
+
+            if (_productService.SkuExists(sku))
+            {
+                // Update product!
+               Console.WriteLine("Update product!");
+               var existingProduct = _productService.GetBySku(sku);
+
+               // Check Dimensions
+               var newDimensions = newProduct.ProductOptions.FirstOrDefault(x => x.Name == "Dimension").Choices;
+               var existingDimensions = existingProduct.ProductOptions.FirstOrDefault(x => x.Name == "Dimension").Choices;
+               foreach (var choice in newDimensions.Where(x => !existingDimensions.Contains(x.Sku)).ToList())
+               {
+                   existingDimensions.Add(choice);
+               }
+               foreach (var choice in existingDimensions.Where(x => !newDimensions.Contains(x.Sku)).ToList())
+               {
+                   existingDimensions.Remove(choice);
+               }
+               existingProduct.ProductOptions.FirstOrDefault(x => x.Name == "Dimension").Choices = existingDimensions;
+
+               // Check Fabrics
+               var newFabrics = newProduct.ProductOptions.FirstOrDefault(x => x.Name == "Fabric").Choices;
+               var existingFabrics = existingProduct.ProductOptions.FirstOrDefault(x => x.Name == "Fabric").Choices;
+               foreach (var choice in newFabrics.Where(x => !existingFabrics.Contains(x.Sku)).ToList())
+               {
+                   existingFabrics.Add(choice);
+               }
+               foreach (var choice in existingFabrics.Where(x => !newFabrics.Contains(x.Sku)).ToList())
+               {
+                   existingFabrics.Remove(choice);
+               }
+
+               existingProduct.Price = newProduct.Price;
+               _productService.Save(existingProduct);
+                Assert.IsTrue(existingProduct.ProductVariants.Any());
+                Assert.AreEqual(20M, existingProduct.Price);
+                var updatedVaraintSkus = existingProduct.ProductVariants.Select(x => x.Sku).ToArray();
+                Console.WriteLine(string.Join(", ", updatedVaraintSkus));
+            }
+            else
+            {
+                Assert.Fail("The sku did not exist");
+            }
+
+        }
     }
 }

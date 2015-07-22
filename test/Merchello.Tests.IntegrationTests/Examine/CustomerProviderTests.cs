@@ -95,7 +95,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             criteria.Field("loginName", "rusty");
             var results = _searcher.Search(criteria);
 
-            var customerDisplay = results.FirstOrDefault().ToCustomerDisplay(new CachedInvoiceQuery(PreTestDataWorker.InvoiceService).GetByCustomerKey);
+            var customerDisplay = results.FirstOrDefault().ToCustomerDisplay(new CachedInvoiceQuery(PreTestDataWorker.InvoiceService, false).GetByCustomerKey);
 
             //// Assert
             Assert.NotNull(customerDisplay);

@@ -1,19 +1,20 @@
-﻿using System;
-using System.Linq;
-using Examine;
-using Merchello.Core.Models;
-using Merchello.Examine.Providers;
-using Merchello.Tests.Base.DataMakers;
-using Merchello.Tests.IntegrationTests.TestHelpers;
-using Merchello.Web;
-using NUnit.Framework;
-
-namespace Merchello.Tests.IntegrationTests.Examine
+﻿namespace Merchello.Tests.IntegrationTests.MerchelloHelperTests
 {
+    using System.Linq;
+
+    using global::Examine;
+
     using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Examine.Providers;
+    using Merchello.Tests.Base.DataMakers;
+    using Merchello.Tests.IntegrationTests.TestHelpers;
+    using Merchello.Web;
+
+    using NUnit.Framework;
 
     [TestFixture]
-    public class MerchelloHelperTests : DatabaseIntegrationTestBase
+    public class QueryProductTests : DatabaseIntegrationTestBase
     {
         private ProductIndexer _provider;
         private IWarehouse _warehouse;
@@ -22,11 +23,11 @@ namespace Merchello.Tests.IntegrationTests.Examine
         public override void FixtureSetup()
         {
             base.FixtureSetup();
-            var warehouseService = PreTestDataWorker.WarehouseService;
-            _warehouse = warehouseService.GetDefaultWarehouse();
+            var warehouseService = this.PreTestDataWorker.WarehouseService;
+            this._warehouse = warehouseService.GetDefaultWarehouse();
 
-            _provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
-            _provider.RebuildIndex();
+            this._provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
+            this._provider.RebuildIndex();
         }
 
         
@@ -53,9 +54,9 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {            
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
-            var productService = PreTestDataWorker.ProductService;
+            var productService = this.PreTestDataWorker.ProductService;
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.ProductOptions.Add(new ProductOption("Color"));
@@ -74,7 +75,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             product.OnSale = true;
             product.SalePrice = 18M;
             product.TrackInventory = true;
-            product.AddToCatalogInventory(_warehouse.WarehouseCatalogs.First());
+            product.AddToCatalogInventory(this._warehouse.WarehouseCatalogs.First());
             productService.Save(product);
            
             foreach (var variant in product.ProductVariants)
@@ -88,7 +89,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
                 Assert.AreEqual(1, p.TotalInventoryCount, "Preindexed product variant count");
             }
 
-            _provider.AddProductToIndex(product);
+            this._provider.AddProductToIndex(product);
 
             //// Act
             var productDisplay = merchello.Query.Product.GetByKey(product.Key);
@@ -111,9 +112,9 @@ namespace Merchello.Tests.IntegrationTests.Examine
         {
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
-            var productService = PreTestDataWorker.ProductService;
+            var productService = this.PreTestDataWorker.ProductService;
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.Height = 11M;
@@ -125,7 +126,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             productService.Save(product);
 
 
-            _provider.AddProductToIndex(product);
+            this._provider.AddProductToIndex(product);
 
             //// Act
             var productDisplay = merchello.Query.Product.GetBySku(product.Sku);
@@ -139,10 +140,9 @@ namespace Merchello.Tests.IntegrationTests.Examine
         public void Can_Retrieve_A_ProductVariant_From_The_Index()
         {
             //// Arrange
+            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services);
-
-            var productService = PreTestDataWorker.ProductService;
+            var productService = this.PreTestDataWorker.ProductService;
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.ProductOptions.Add(new ProductOption("Color"));
@@ -161,45 +161,54 @@ namespace Merchello.Tests.IntegrationTests.Examine
             product.OnSale = true;
             product.SalePrice = 18M;
             productService.Save(product);
-            _provider.AddProductToIndex(product);
+            this._provider.AddProductToIndex(product);
 
             Assert.IsTrue(product.ProductVariants.Any());
             var variant = product.ProductVariants.First();
 
             //// Act
-            var productVariantDisplay = merchello.Query.Product.GetProductVariantBySku(variant.Sku);
+            var productVariantDisplay = merchello.Query.Product.GetProductVariantBySku(variant.Sku);          
 
             //// Assert
             Assert.NotNull(productVariantDisplay);
             Assert.AreEqual(variant.Key, productVariantDisplay.Key);
         }
+      
 
         //[Test]
-        //public void Can_Get_A_ProductFrom_The_IndexByKey()
-        //{
-        //    var key = new Guid("2f6d404b-fc0d-4305-a97c-9a5e1efe13a8");
-        //    var merchello = new MerchelloHelper(MerchelloContext.Services);
-
-        //    var product = merchello.Query.Product.GetByKey(key);
-
-        //    Assert.NotNull(product);
-        //}
-
-        //[Test]
-        //public void Can_GetGetIguanas_From_Index()
+        //public void Can_Retrieve_A_Product_With_Options()
         //{
         //    //// Arrange
-        //    var merchello = new MerchelloHelper();
+        //    var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
+
+        //    var productService = this.PreTestDataWorker.ProductService;
+
+        //    var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
+        //    product.ProductOptions.Add(new ProductOption("Color"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Purple", "Purple"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Pink", "Pink"));
+        //    product.ProductOptions.Add(new ProductOption("Size"));
+        //    product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Sm"));
+        //    product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "Med"));
+        //    product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Lg"));
+        //    product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("X-Large", "XL"));
+        //    product.Height = 11M;
+        //    product.Width = 11M;
+        //    product.Length = 11M;
+        //    product.CostOfGoods = 15M;
+        //    product.OnSale = true;
+        //    product.SalePrice = 18M;
+        //    productService.Save(product);
+        //    this._provider.AddProductToIndex(product);
+
+        //    Assert.IsTrue(product.ProductVariants.Any());
 
         //    //// Act
-        //    var searched = merchello.SearchProducts("princess");
-        //    var result = searched.FirstOrDefault();
+        //    var products = merchello.Query.Product.GetProductsWithOption("Color", 1, 10);
 
         //    //// Assert
-        //    Assert.IsTrue(searched.Any());
-        //    Console.WriteLine(searched.Count());
-
-
+        //    Assert.IsTrue(products.Items.Any());
         //}
     }
 }

@@ -65,7 +65,7 @@
         }
 
         /// <summary>
-        /// Lists all actived <see cref="IGatewayProviderSettings"/>
+        /// Lists all activated <see cref="IGatewayProviderSettings"/>
         /// </summary>
         /// <returns>A collection of all "activated" GatewayProvider of the particular type T</returns>
         public IEnumerable<GatewayProviderBase> GetAllActivatedProviders()
@@ -76,7 +76,7 @@
         /// <summary>
         /// Lists all available providers.  This list includes providers that are just resolved and not configured
         /// </summary>
-        /// <returns>A collection of all Gatewayprovider</returns>
+        /// <returns>A collection of all GatewayProviders</returns>
         public IEnumerable<GatewayProviderBase> GetAllProviders()
         {
             return GatewayProviderResolver.GetAllProviders<T>();
@@ -100,9 +100,9 @@
         }
 
         /// <summary>
-        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (GUID) of the GatewayMethod
         /// </summary>
-        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <param name="gatewayMethodKey">The unique key (GUID) of the <see cref="IGatewayMethod"/></param>
         /// <returns>An instantiated GatewayProvider</returns>
         public abstract T GetProviderByMethodKey(Guid gatewayMethodKey);
 
