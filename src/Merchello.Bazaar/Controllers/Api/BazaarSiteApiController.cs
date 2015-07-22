@@ -6,7 +6,6 @@
     using System.Web.Http;
 
     using Merchello.Bazaar.Models;
-    using Merchello.Bazaar.Models.Account;
     using Merchello.Core;
     using Merchello.Core.Gateways;
     using Merchello.Core.Models;
@@ -90,14 +89,14 @@
         {
             var optionsArray = optionChoiceKeys.Split(',').Where(x => !string.IsNullOrEmpty(x)).Select(x => new Guid(x)).ToArray();
 
-
-            var product = _merchelloContext.Services.ProductService.GetByKey(productKey);
-            var variant = _merchelloContext.Services.ProductVariantService.GetProductVariantWithAttributes(product, optionsArray);
+            // changed in 1.9.1 to use the MerchelloHelper for performance and to include the data modifiers
+            var product = _merchello.Query.Product.GetByKey(productKey);
+            var variant = product.GetProductVariantDisplayWithAttributes(optionsArray);
 
             var data = new
                            {
                                variant.OnSale,
-                               SalePrice = ModelExtensions.FormatPrice(variant.SalePrice.GetValueOrDefault(), _currency.Symbol),
+                               SalePrice = ModelExtensions.FormatPrice(variant.SalePrice, _currency.Symbol),
                                Price = ModelExtensions.FormatPrice(variant.Price, _currency.Symbol),
                                TracksInventory = variant.TrackInventory,
                                variant.TotalInventoryCount

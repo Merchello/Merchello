@@ -61,6 +61,7 @@
     <key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
     <key alias="productOnSale">On sale</key>
+    <key alias="costOfGoods">Cost of Goods</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->
@@ -204,6 +205,7 @@
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
     <key alias="unitSystem">Unit System</key>
+    <key alias="globalTaxationApplication">Set how taxes are applied</key>
   </area>
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Add a Country</key>
@@ -251,6 +253,7 @@
     <key alias="taxation">Taxation</key>
     <key alias="taxMethods">Tax Methods</key>
     <key alias="taxMethodsHelper">Set flat tax rates for your shipping regions</key>
+    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
   </area>
   <area alias="merchelloNotifications">
     <key alias="notifications">Notifications</key>

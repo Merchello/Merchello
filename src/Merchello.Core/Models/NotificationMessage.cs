@@ -160,7 +160,7 @@
 
 
         /// <summary>
-        /// The <see cref="INotificationMethod"/> key
+        /// Gets the <see cref="INotificationMethod"/> key
         /// </summary>
         public Guid MethodKey
         {
@@ -173,184 +173,272 @@
         [DataMember]
         public string Name
         {
-            get { return _name; }
+            get
+            {
+                return _name;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _name = value;
                     return _name;
-                }, _name, NameSelector);
+                }, 
+                _name, 
+                NameSelector);
             }
         }
 
         /// <summary>
-        /// A brief description of the notification
+        /// Gets or sets the brief description of the notification
         /// </summary>
         [DataMember]
         public string Description
         {
-            get { return _description; }
+            get
+            {
+                return _description;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _description = value;
                     return _description;
-                }, _description, DescriptionSelector);
+                }, 
+                _description, 
+                DescriptionSelector);
             }
         }
 
         /// <summary>
-        /// The sender's from address
+        /// Gets the sender's from address
         /// </summary>
         [DataMember]
         public string FromAddress
         {
-            get { return _fromAddress; }
+            get
+            {
+                return _fromAddress;
+            }
+
             internal set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _fromAddress = value;
                     return _fromAddress;
-                }, _fromAddress, FromSelector);
+                }, 
+                _fromAddress, 
+                FromSelector);
             }
         }
 
         /// <summary>
-        /// The reply to 
+        /// Gets or sets the reply to 
         /// </summary>
         [DataMember]
         public string ReplyTo
         {
-            get { return _replyTo; }
+            get
+            {
+                return _replyTo;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _replyTo = value;
                     return _replyTo;
-                }, _replyTo, ReplyToSelector);
+                }, 
+                _replyTo, 
+                ReplyToSelector);
             }
         }
 
         /// <summary>
-        /// The path or text src
+        /// Gets or sets the path or text source
         /// </summary>
         [DataMember]
         public string BodyText
         {
-            get { return _bodyText; }
+            get
+            {
+                return _bodyText;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _bodyText = value;
                     return _bodyText;
-                }, _bodyText, MessageSelector);
+                }, 
+                _bodyText, 
+                MessageSelector);
             }
         }
 
         /// <summary>
-        /// The maximum length of the message
+        /// Gets or sets the maximum length of the message
         /// </summary>
         [DataMember]
         public int MaxLength
         {
-            get { return _maxLength; }
+            get
+            {
+                return _maxLength;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _maxLength = value;
                     return _maxLength;
-                }, _maxLength, MaxLengthSelector);
+                }, 
+                _maxLength, 
+                MaxLengthSelector);
             }
         }
 
         /// <summary>
-        /// True/false indicating whether or not the string value of Message is actually a path to a file to read
+        /// Gets or sets a value indicating whether or not the string value of Message is actually a path to a file to read
         /// </summary>
         public bool BodyTextIsFilePath
         {
-            get { return _bodyTextIsFilePath; }
+            get
+            {
+                return _bodyTextIsFilePath;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _bodyTextIsFilePath = value;
                     return _bodyTextIsFilePath;
-                }, _bodyTextIsFilePath, MessageIsFilePathSelector);
+                }, 
+                _bodyTextIsFilePath, 
+                MessageIsFilePathSelector);
             }
         }
 
         /// <summary>
-        /// Optional key for Notification Monitor
+        /// Gets or sets the optional key for Notification Monitor
         /// </summary>
         [DataMember]
         public Guid? MonitorKey
         {
-            get { return _monitorKey; }
+            get
+            {
+                return _monitorKey;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _monitorKey = value;
                     return _monitorKey;
-                }, _monitorKey, MonitorKeySelector);
+                }, 
+                _monitorKey, 
+                MonitorKeySelector);
             }
         }
 
         /// <summary>
-        /// The recipients of the notification
+        /// Gets or sets the recipients of the notification
         /// </summary>
         [DataMember]
         public string Recipients
         {
-            get { return _recipients; }
+            get
+            {
+                return _recipients;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _recipients = value;
                     return _recipients;
-                }, _recipients, RecipientsSelector);
+                }, 
+                _recipients, 
+                RecipientsSelector);
             }
         }
 
         /// <summary>
-        /// True/false indicating whether or not this notification should be sent to the customer
+        /// Gets or sets a value indicating whether or not this notification should be sent to the customer
         /// </summary>
         [DataMember]
         public bool SendToCustomer
         {
-            get { return _sendToCustomer; }
+            get
+            {
+                return _sendToCustomer;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _sendToCustomer = value;
                     return _sendToCustomer;
-                }, _sendToCustomer, SendToCustomerSelector);
+                }, 
+                _sendToCustomer, 
+                SendToCustomerSelector);
             }
         }
 
         /// <summary>
-        /// True/false indicating whether or not this notification is disabled
+        /// Gets or sets a value indicating whether or not this notification is disabled
         /// </summary>
         [DataMember]
         public bool Disabled
         {
-            get { return _disabled; }
+            get
+            {
+                return _disabled;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                o =>
                 {
                     _disabled = value;
                     return _disabled;
-                }, _disabled, DisabledSelector);
+                }, 
+                _disabled, 
+                DisabledSelector);
             }
+        }
+
+        /// <summary>
+        /// The shallow copy.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="INotificationMessage"/>.
+        /// </returns>
+        public INotificationMessage ShallowCopy()
+        {
+            return (INotificationMessage)this.MemberwiseClone();
         }
     }
 }

@@ -2,7 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+
+    using Merchello.Core.Persistence.Querying;
+
     using Models;
+
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
 
     /// <summary>
@@ -140,10 +145,257 @@
         int ProductsCount();
 
         /// <summary>
-        /// True/false indicating whether or not a sku is already exists in the database
+        /// True/false indicating whether or not a SKU is already exists in the database
         /// </summary>
-        /// <param name="sku">The sku to be tested</param>
+        /// <param name="sku">The SKU to be tested</param>
         /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
+
+        //#region Filter Queries
+
+
+        ///// <summary>
+        ///// The get products keys with option.
+        ///// </summary>
+        ///// <param name="optionName">
+        ///// The option name.
+        ///// </param>
+        ///// <param name="choiceNames">
+        ///// The choice names.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The sort by.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysWithOption(string optionName, IEnumerable<string> choiceNames, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// The get products keys with option.
+        ///// </summary>
+        ///// <param name="optionName">
+        ///// The option name.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysWithOption(string optionName, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// The get products keys with option.
+        ///// </summary>
+        ///// <param name="optionName">
+        ///// The option name.
+        ///// </param>
+        ///// <param name="choiceName">
+        ///// The choice name.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysWithOption(string optionName, string choiceName, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// The get products keys with option.
+        ///// </summary>
+        ///// <param name="optionNames">
+        ///// The option names.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysWithOption(IEnumerable<string> optionNames, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// The get products keys in price range.
+        ///// </summary>
+        ///// <param name="min">
+        ///// The min.
+        ///// </param>
+        ///// <param name="max">
+        ///// The max.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysInPriceRange(decimal min, decimal max, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// The get products keys in price range.
+        ///// </summary>
+        ///// <param name="min">
+        ///// The min.
+        ///// </param>
+        ///// <param name="max">
+        ///// The max.
+        ///// </param>
+        ///// <param name="taxModifier">
+        ///// The tax modifier.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysInPriceRange(decimal min, decimal max, decimal taxModifier, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// The get products keys by manufacturer.
+        ///// </summary>
+        ///// <param name="manufacturer">
+        ///// The manufacturer.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysByManufacturer(string manufacturer, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// The get products keys by manufacturer.
+        ///// </summary>
+        ///// <param name="manufacturer">
+        ///// The manufacturer.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysByManufacturer(IEnumerable<string> manufacturer, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        ///// <summary>
+        ///// The get products keys in stock.
+        ///// </summary>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <param name="includeAllowOutOfStockPurchase">
+        ///// The include allow out of stock purchase.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysInStock(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool includeAllowOutOfStockPurchase = false);
+
+        ///// <summary>
+        ///// The get products keys on sale.
+        ///// </summary>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The order expression.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="Page{Guid}"/>.
+        ///// </returns>
+        //Page<Guid> GetProductsKeysOnSale(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
+        //#endregion
     }
 }

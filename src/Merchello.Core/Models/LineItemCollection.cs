@@ -11,6 +11,9 @@ namespace Merchello.Core.Models
     using System.Runtime.Serialization;
     using System.Threading;
     using System.Xml;
+
+    using Merchello.Core.Events;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -44,12 +47,28 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// Event handler for AddingItem.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="arg">
+        /// The event argument.
+        /// </param>
+        public delegate void AddItemEventHandler(object sender, AddItemEventArgs arg);
+
+        /// <summary>
+        /// The adding tier.
+        /// </summary>
+        public event AddItemEventHandler AddingItem;
+
+        /// <summary>
         /// True/false indicating whether or not the current collection is empty
         /// </summary>
         /// <returns></returns>
         public bool IsEmpty
         {
-            get { return Count == 0; }
+            get { return this.Count == 0; }
         }
 
         /// <summary>
@@ -60,7 +79,7 @@ namespace Merchello.Core.Models
         /// </param>
         public LineItemCollection(Func<ILineItem, bool> validationCallback)
         {
-            ValidateAdd = validationCallback;
+            this.ValidateAdd = validationCallback;
         }
 
 
@@ -81,7 +100,7 @@ namespace Merchello.Core.Models
         /// </returns>
         public override int IndexOfKey(string sku)
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = 0; i < this.Count; i++)
             {
                 if (this[i].Sku == sku)
                 {
@@ -110,7 +129,7 @@ namespace Merchello.Core.Models
         /// </param>
         public void Add(IEnumerable<ILineItem> items)
         {
-            items.ForEach(Add);
+            items.ForEach(this.Add);
         }
 
         /// <summary>
@@ -133,12 +152,12 @@ namespace Merchello.Core.Models
         /// </param>
         internal new void Add(ILineItem item)
         {
-            using (new WriteLock(_addLocker))
+            using (new WriteLock(this._addLocker))
             {
-                var key = GetKeyForItem(item);
+                var key = this.GetKeyForItem(item);
                 if (key != null)
                 {
-                    var exists = Contains(key);
+                    var exists = this.Contains(key);
                     if (exists)
                     {
                         this[key].Quantity += item.Quantity;
@@ -146,13 +165,18 @@ namespace Merchello.Core.Models
                     }
                 }
 
-                if (ValidateAdd != null) if (!ValidateAdd(item)) return;
+                if (this.ValidateAdd != null) if (!this.ValidateAdd(item)) return;
 
+                if (AddingItem != null)
+                {
+                    AddingItem.Invoke(this, new AddItemEventArgs(item));    
+                }
+                
                 base.Add(item);
 
-                OnAdd.IfNotNull(x => x.Invoke());
+                this.OnAdd.IfNotNull(x => x.Invoke());
 
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             }
         }
 

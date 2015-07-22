@@ -28,10 +28,6 @@
         /// </summary>
         private Lazy<IViewModelFactory> _viewModelFactory;
 
-        /// <summary>
-        /// The <see cref="IPublishedContent"/> that represents the store root.
-        /// </summary>
-        private Lazy<IPublishedContent> _shopPage;
 
         #region Constructors
 
@@ -57,16 +53,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets the root shop page.
-        /// </summary>
-        protected IPublishedContent ShopPage
-        {
-            get
-            {
-                return this._shopPage.Value;
-            }
-        }
 
         /// <summary>
         /// Gets the view model factory.
@@ -84,9 +70,7 @@
         /// Initializes the controller.
         /// </summary>
         private void Initialize()
-        {
-            this._shopPage = new Lazy<IPublishedContent>(() => this.UmbracoContext.PublishedContentRequest == null ? null : this.UmbracoContext.PublishedContentRequest.PublishedContent.AncestorOrSelf("MerchStore"));
-
+        {          
             _viewModelFactory = new Lazy<IViewModelFactory>(() => new ViewModelFactory(Umbraco, CurrentCustomer, Currency));
         }
     }

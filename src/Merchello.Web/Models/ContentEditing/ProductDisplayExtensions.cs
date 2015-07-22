@@ -1,17 +1,35 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text.RegularExpressions;
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Workflow.CustomerItemCache;
 
-    internal static class ProductMappingExtensions
+    /// <summary>
+    /// The product mapping extensions.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
+    public static class ProductDisplayExtensions
     {
 
         #region IProduct
 
+        /// <summary>
+        /// Maps a <see cref="ProductDisplay"/> to <see cref="IProduct"/>
+        /// </summary>
+        /// <param name="productDisplay">
+        /// The product display.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         internal static IProduct ToProduct(this ProductDisplay productDisplay, IProduct destination)
         {
             if (productDisplay.Key != Guid.Empty)
@@ -109,6 +127,24 @@
             return destination;
         }
 
+        /// <summary>
+        /// Maps a <see cref="ProductDisplay"/> to <see cref="IProduct"/>
+        /// </summary>
+        /// <param name="productDisplay">
+        /// The product display.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <param name="price">
+        /// The price.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
         internal static IProduct ToProduct(this ProductDisplay productDisplay, string name, string sku, decimal price)
         {
             var destination = MerchelloContext.Current.Services.ProductService.CreateProduct(name, sku, price);
@@ -119,10 +155,57 @@
 
         #region ProductDisplay
 
+        /// <summary>
+        /// Gets the <see cref="ProductVariantDisplay"/> with matching with attributes from the product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="optionChoices">
+        /// The option choices.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>        
+        public static ProductVariantDisplay GetProductVariantDisplayWithAttributes(this ProductDisplay product, Guid[] optionChoices)
+        {
+            return
+                product.ProductVariants.FirstOrDefault(
+                    x =>
+                    x.Attributes.Count() == optionChoices.Count()
+                    && optionChoices.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
+        }
+
+        /// <summary>
+        /// Maps a <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
         internal static ProductDisplay ToProductDisplay(this IProduct product)
         {            
             var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
             return productDisplay;
+        }
+
+        /// <summary>
+        /// Maps a <see cref="ProductDisplay"/> to <see cref="ProductVariantDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        /// <remarks>
+        /// Used for adding items to item caches in <see cref="CustomerItemCacheBase"/>
+        /// </remarks>
+        internal static ProductVariantDisplay AsMasterVariantDisplay(this ProductDisplay product)
+        {
+            return AutoMapper.Mapper.Map<ProductVariantDisplay>(product);
         }
                
         #endregion

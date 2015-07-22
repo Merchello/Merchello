@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Gateways.Taxation
 {
     using System.Collections.Generic;
+    using System.Linq;
+
     using Models;
     using Services;
     using Umbraco.Core.Cache;
@@ -10,6 +12,11 @@
     /// </summary>
     public abstract class TaxationGatewayProviderBase : GatewayProviderBase, ITaxationGatewayProvider
     {
+        /// <summary>
+        /// The _tax methods.
+        /// </summary>
+        private IEnumerable<ITaxMethod> _taxMethods; 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TaxationGatewayProviderBase"/> class.
         /// </summary>
@@ -31,11 +38,19 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="ITaxMethod"/> assoicated with this provider
+        /// Gets a collection of <see cref="ITaxMethod"/> associated with this provider
         /// </summary>
         public IEnumerable<ITaxMethod> TaxMethods
         {
-            get { return GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProviderSettings.Key); }
+            get
+            {
+                return _taxMethods ?? GatewayProviderService.GetTaxMethodsByProviderKey(GatewayProviderSettings.Key);
+            }
+
+            internal set
+            {
+                _taxMethods = value;
+            }
         }
 
         /// <summary>
@@ -95,11 +110,36 @@
         public abstract IEnumerable<ITaxationGatewayMethod> GetAllGatewayTaxMethods();
 
         /// <summary>
+        /// The find tax method for country code.
+        /// </summary>
+        /// <param name="countryCode">
+        /// The country code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxMethod"/>.
+        /// </returns>
+        /// <remarks>
+        /// Accounts for the special case ELSE country
+        /// </remarks>
+        protected ITaxMethod FindTaxMethodForCountryCode(string countryCode)
+        {
+            var taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == countryCode);
+
+            if (taxMethod == null && TaxMethods.Any(x => x.CountryCode == Constants.CountryCodes.EverywhereElse))
+            {
+                taxMethod = TaxMethods.FirstOrDefault(x => x.CountryCode == Constants.CountryCodes.EverywhereElse);
+            }
+
+            return taxMethod;
+        }
+
+        /// <summary>
         /// Deletes all <see cref="ITaxMethod"/>s associated with the provider
         /// </summary>
         internal void DeleteAllTaxMethods()
         {
             foreach (var taxMethod in TaxMethods) GatewayProviderService.Delete(taxMethod);
+            TaxMethods = null;
         }        
     }
 }

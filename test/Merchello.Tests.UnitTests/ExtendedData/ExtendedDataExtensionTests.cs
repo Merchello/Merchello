@@ -77,5 +77,37 @@ namespace Merchello.Tests.UnitTests.ExtendedData
             Assert.NotNull(extendData);
 
         }
+
+        [Test]
+        public void ContainsAny_Returns_True_When_Key_Exists()
+        {
+            //// Arrange
+            var ed = new ExtendedDataCollection();
+            ed.SetValue("one", "value");
+            ed.SetValue("two", "value");
+            ed.SetValue("three", "value");
+
+            //// Act
+            var found = ed.ContainsAny(new[] { "two", "five" });
+
+            //// Assert
+            Assert.IsTrue(found);
+        }
+
+        [Test]
+        public void ContainsAny_Returns_False_When_Keys_DoNot_Exist()
+        {
+            //// Arrange
+            var ed = new ExtendedDataCollection();
+            ed.SetValue("one", "value");
+            ed.SetValue("two", "value");
+            ed.SetValue("three", "value");
+
+            //// Act
+            var found = ed.ContainsAny(new[] { "six", "five" });
+
+            //// Assert
+            Assert.IsFalse(found);
+        }
     }
 }

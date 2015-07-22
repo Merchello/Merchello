@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Gateways.Notification
 {
     using System.Collections.Generic;
+    using System.Linq;
+
     using Formatters;
     using Models;
     using Services;
@@ -13,12 +15,30 @@
     /// </summary>
     public abstract class NotificationGatewayMethodBase : INotificationGatewayMethod
     {
+        /// <summary>
+        /// The _gateway provider service.
+        /// </summary>
         private readonly IGatewayProviderService _gatewayProviderService;
 
+        /// <summary>
+        /// The <see cref="INotificationMethod"/>.
+        /// </summary>
         private readonly INotificationMethod _notificationMethod;
 
+        /// <summary>
+        /// The collection of <see cref="INotificationMessage"/>.
+        /// </summary>
         private IEnumerable<INotificationMessage> _notificationMessages;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationGatewayMethodBase"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="notificationMethod">
+        /// The notification method.
+        /// </param>
         protected NotificationGatewayMethodBase(IGatewayProviderService gatewayProviderService, INotificationMethod notificationMethod)
         {
             Mandate.ParameterNotNull(gatewayProviderService, "gatewayProviderService");
@@ -45,7 +65,8 @@
             {
                 return _notificationMessages ??
                        (_notificationMessages =
-                           GatewayProviderService.GetNotificationMessagesByMethodKey(_notificationMethod.Key));
+                           GatewayProviderService.GetNotificationMessagesByMethodKey(_notificationMethod.Key))
+                           .Select(x => x.ShallowCopy());
             }
         }
 

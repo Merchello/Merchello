@@ -108,10 +108,11 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/></param>
         /// <param name="shipMethodKey">The GUID key as a string of the <see cref="IShipMethod"/></param>
+        /// <param name="tryGetCached">If set true the value is first attempted to be retrieved from cache</param>
         /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
-        public static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, string shipMethodKey)
+        public static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, string shipMethodKey, bool tryGetCached = true)
         {
-            return shipment.ShipmentRateQuoteByShipMethod(new Guid(shipMethodKey));
+            return shipment.ShipmentRateQuoteByShipMethod(new Guid(shipMethodKey), tryGetCached);
         }
 
         /// <summary>
@@ -119,10 +120,11 @@ namespace Merchello.Core.Models
         /// </summary>
         /// <param name="shipment">The <see cref="IShipment"/></param>
         /// <param name="shipMethodKey">The GUID key of the <see cref="IShipMethod"/></param>
+        /// <param name="tryGetCached">If set true the value is first attempted to be retrieved from cache</param>
         /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
-        public static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, Guid shipMethodKey)
+        public static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, Guid shipMethodKey, bool tryGetCached = true)
         {
-            return shipment.ShipmentRateQuoteByShipMethod(MerchelloContext.Current, shipMethodKey);
+            return shipment.ShipmentRateQuoteByShipMethod(MerchelloContext.Current, shipMethodKey, tryGetCached);
         }
 
         /// <summary>
@@ -165,8 +167,9 @@ namespace Merchello.Core.Models
         /// <param name="shipment">The <see cref="IShipment"/></param>
         /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
         /// <param name="shipMethodKey">The GUID key of the <see cref="IShipMethod"/></param>
+        /// <param name="tryGetCached">If set true the value is first attempted to be retrieved from cache</param>
         /// <returns>The <see cref="IShipmentRateQuote"/> for the shipment by the specific <see cref="IShipMethod"/> specified</returns>
-        internal static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, IMerchelloContext merchelloContext, Guid shipMethodKey)
+        internal static IShipmentRateQuote ShipmentRateQuoteByShipMethod(this IShipment shipment, IMerchelloContext merchelloContext, Guid shipMethodKey, bool tryGetCached = true)
         {
             var shipMethod = ((ServiceContext)merchelloContext.Services).ShipMethodService.GetByKey(shipMethodKey);
             if (shipMethod == null) return null;
@@ -177,7 +180,7 @@ namespace Merchello.Core.Models
             // get the GatewayShipMethod from the provider
             var gatewayShipMethod = provider.GetShippingGatewayMethodsForShipment(shipment).FirstOrDefault(x => x.ShipMethod.Key == shipMethodKey);
 
-            return gatewayShipMethod == null ? null : provider.QuoteShipMethodForShipment(shipment, gatewayShipMethod);
+            return gatewayShipMethod == null ? null : provider.QuoteShipMethodForShipment(shipment, gatewayShipMethod, tryGetCached);
         }
 
         /// <summary>

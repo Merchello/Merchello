@@ -28,9 +28,9 @@
         }
 
         /// <summary>
-        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (GUID) of the GatewayMethod
         /// </summary>
-        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <param name="gatewayMethodKey">The unique key (GUID) of the <see cref="IGatewayMethod"/></param>
         /// <returns>An instantiated GatewayProvider</returns>
         public override NotificationGatewayProviderBase GetProviderByMethodKey(Guid gatewayMethodKey)
         {
@@ -40,13 +40,13 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="INotificationMessage"/>s by a Monitor Key (Guid)
+        /// Gets a collection of <see cref="INotificationMessage"/>s by a Monitor Key (GUID)
         /// </summary>
-        /// <param name="monitorKey">The Guid identifier of the the <see cref="IMonitor"/></param>
+        /// <param name="monitorKey">The GUID identifier of the the <see cref="IMonitor"/></param>
         /// <returns>A collection of NotificationMessage</returns>
         public IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey)
         {
-            return GatewayProviderService.GetNotificationMessagesByMonitorKey(monitorKey);
+            return GatewayProviderService.GetNotificationMessagesByMonitorKey(monitorKey).Select(x => x.ShallowCopy());
         }
 
         /// <summary>

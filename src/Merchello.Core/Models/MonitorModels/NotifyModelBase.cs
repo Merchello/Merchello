@@ -6,7 +6,7 @@
     public abstract class NotifyModelBase : INotifyModel
     {
         /// <summary>
-        /// An array of additional recipients (ex. email addresses, phone numbers, twitter handles ...)
+        /// Gets or sets an array of additional recipients (ex. email addresses, phone numbers, twitter handles ...)
         /// </summary>
         public string[] Contacts { get; set; }
     }
