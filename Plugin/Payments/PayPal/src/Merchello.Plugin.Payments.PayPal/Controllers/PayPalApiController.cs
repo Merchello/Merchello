@@ -121,17 +121,12 @@ namespace Merchello.Plugin.Payments.PayPal.Controllers
 	        }
 
             // Capture
-	        decimal captureAmount;
-			Decimal.TryParse(payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureAmount), out captureAmount);
-			if (captureAmount > 0)
-			{
-				var captureResult = paymentGatewayMethod.CapturePayment(invoice, payment, captureAmount, null);
-				if (!captureResult.Payment.Success)
-				{
-					LogHelper.Error<PayPalApiController>("Payment is not captured.", captureResult.Payment.Exception);
-                    return ShowError(captureResult.Payment.Exception.Message);
-				}
-	        }
+            var captureResult = paymentGatewayMethod.CapturePayment(invoice, payment, payment.Amount, null);
+            if (!captureResult.Payment.Success)
+            {
+                LogHelper.Error<PayPalApiController>("Payment is not captured.", captureResult.Payment.Exception);
+                return ShowError(captureResult.Payment.Exception.Message);
+            }
 
             // redirect to Site
 			var returnUrl = payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.ReturnUrl);
