@@ -15,6 +15,8 @@ namespace Merchello.Tests.IntegrationTests.Notifications
     using System.Net.Mail;
 
     using Merchello.Core;
+    using Merchello.Core.Gateways.Notification.Monitors;
+    using Merchello.Core.Observation;
 
     [TestFixture]
     public class SmtpNotificationProviderTests : DatabaseIntegrationTestBase
@@ -217,8 +219,8 @@ namespace Merchello.Tests.IntegrationTests.Notifications
 //            var method = _provider.CreateNotificationMethod(resource, resource.Name, "Test email method");
 //            var message = new NotificationMessage(method.NotificationMethod.Key, "Test email", "Can_Send_A_Test_Email@merchello.com")
 //            {
-//                Recipients = "rusty@mindfly.com",
-//                BodyText =  @"{{BillToName}}
+//                Recipients = "TriggerTest@merchello.com",
+//                BodyText = @"{{BillToName}}
 //Your address
 //{{BillToAddress1}}
 //{{BillToAddress2}}
@@ -244,10 +246,12 @@ namespace Merchello.Tests.IntegrationTests.Notifications
 
 //            var monitor = MonitorResolver.Current.GetMonitorByKey<INotificationMonitorBase>(message.MethodKey);
 
-//            monitor.CacheMessage(message);
+//            //monitor.CacheMessage(message);
 
 //            // Assert
 //            Notification.Trigger("OrderConfirmation");
 //        }
-    }
+
+
+   }
 }
