@@ -18,7 +18,7 @@
     using Umbraco.Core.Logging;
 
     /// <summary>
-    /// A bootstrapper for the Merchello Plugin which initializes all objects to be used in the Merchello Core
+    /// Application boot strap for the Merchello Plugin which initializes all objects to be used in the Merchello Core
     /// </summary>
     /// <remarks>
     /// We needed our own boot strap to setup Merchello specific singletons
@@ -85,6 +85,8 @@
             // create the service context for the MerchelloAppContext   
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;
+
+            AutoMapperMappings.CreateMappings();
 
             _unitOfWorkProvider = new PetaPocoUnitOfWorkProvider(connString, providerName);
 
