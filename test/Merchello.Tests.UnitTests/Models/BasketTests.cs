@@ -20,7 +20,7 @@ namespace Merchello.Tests.UnitTests.Models
         [TestFixtureSetUp]
         public void FixtureInit()
         {
-            AutoMapperMappings.CreateMappings();
+            Web.AutoMapperMappings.CreateMappings();
         }
 
         [SetUp]

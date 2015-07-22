@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargerVersionOneNineOne
+﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneNineOne
 {
     using System;
 
@@ -37,7 +37,7 @@
         /// </param>
         public InsertNewMerchelloSettingsGlobalTaxationApplicationKey(Database database)
         {
-            _database = database;
+            this._database = database;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@
         /// </summary>
         public override void Up()
         {
-            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey, Name = "globalTaxationApplication", Value = TaxationApplication.Invoice.ToString(), TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            this._database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey, Name = "globalTaxationApplication", Value = TaxationApplication.Invoice.ToString(), TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         /// <summary>
@@ -53,7 +53,7 @@
         /// </summary>
         public override void Down()
         {
-            _database.Delete("merchStoreSetting", "pk", null, Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
+            this._database.Delete("merchStoreSetting", "pk", null, Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
         }
     }
 }

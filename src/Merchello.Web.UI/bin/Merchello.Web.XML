@@ -13722,23 +13722,6 @@
             The <see cref="T:Merchello.Web.Discounts.Coupons.ICouponRedemptionResult"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Workflow.BasketSalePreparation.TryAwardOffer(System.String,System.Boolean)">
-            <summary>
-            Attempts to apply an offer to the the checkout.
-            </summary>
-            <param name="offerCode">
-            The offer code.
-            </param>
-            <param name="autoAddOnSuccess">
-            A value indicating whether or not the reward should be added to the <see cref="T:Merchello.Core.Models.ILineItemContainer"/> on success
-            </param>
-            <returns>
-            The <see cref="T:Umbraco.Core.Attempt"/>.
-            </returns>
-            <remarks>
-            TODO move this to an InvoiceChainTask
-            </remarks>
-        </member>
         <member name="M:Merchello.Web.Workflow.BasketSalePreparation.GetBasketCheckoutPreparation(Merchello.Web.Workflow.IBasket)">
             <summary>
             The get basket checkout preparation.

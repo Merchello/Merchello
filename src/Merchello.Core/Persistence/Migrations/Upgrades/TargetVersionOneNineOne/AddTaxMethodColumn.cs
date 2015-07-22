@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargerVersionOneNineOne
+﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneNineOne
 {
     using Merchello.Core.Configuration;
 
@@ -15,7 +15,7 @@
         /// </summary>
         public override void Up()
         {
-            Alter.Table("merchTaxMethod").AddColumn("productTaxMethod").AsBoolean().NotNullable().WithDefaultValue('0');
+            this.Alter.Table("merchTaxMethod").AddColumn("productTaxMethod").AsBoolean().NotNullable().WithDefaultValue('0');
         }
 
         /// <summary>
@@ -23,7 +23,7 @@
         /// </summary>        
         public override void Down()
         {
-            Delete.Column("productTaxMethod").FromTable("merchTaxMethod");
+            this.Delete.Column("productTaxMethod").FromTable("merchTaxMethod");
         }
     }
 }

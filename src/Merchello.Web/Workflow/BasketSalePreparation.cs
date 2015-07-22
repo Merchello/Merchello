@@ -138,54 +138,6 @@
         }
 
         /// <summary>
-        /// Attempts to apply an offer to the the checkout.
-        /// </summary>
-        /// <param name="offerCode">
-        /// The offer code.
-        /// </param>
-        /// <param name="autoAddOnSuccess">
-        /// A value indicating whether or not the reward should be added to the <see cref="ILineItemContainer"/> on success
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attempt"/>.
-        /// </returns>
-        /// <remarks>
-        /// TODO move this to an InvoiceChainTask
-        /// </remarks>
-        public Attempt<IOfferResult<ILineItemContainer, ILineItem>> TryAwardOffer(string offerCode, bool autoAddOnSuccess = true)
-        {
-            // Check to make certain the customer did not already add this coupon before.  The default behavior of the 
-            // line item collections will update the quantity by matching skus.
-            if (ItemCache.Items.Contains(offerCode)) return Attempt<IOfferResult<ILineItemContainer, ILineItem>>.Fail(new OfferRedemptionException("This offer has already been added."));
-
-            var foundOffer = _couponManager.Value.GetByOfferCode(offerCode, Customer);
-            if (!foundOffer.Success) return Attempt<IOfferResult<ILineItemContainer, ILineItem>>.Fail(foundOffer.Exception);
-
-            var coupon = foundOffer.Result;
-
-
-            var attempt = coupon.TryApply(this.CloneItemCache(), Customer);
-
-            if (!attempt.Success) return attempt;
-
-            if (!autoAddOnSuccess) return attempt;
-
-            // stuff the coupon configuration into extended data
-            // this will be used to audit the redeemed offer in the Finalizing handler
-            attempt.Result.Award.ExtendedData
-                .SetValue(
-                    Core.Constants.ExtendedDataKeys.CouponReward, 
-                    JsonConvert.SerializeObject(coupon.Settings.ToOfferSettingsDisplay()));
-
-            // save the coupon into the original item cache
-            ItemCache.AddItem(attempt.Result.Award.AsLineItemOf<ItemCacheLineItem>());
-
-            MerchelloContext.Services.ItemCacheService.Save(ItemCache);               
-            return attempt;
-        }
-
-
-        /// <summary>
         /// The get basket checkout preparation.
         /// </summary>
         /// <param name="basket">
@@ -301,6 +253,7 @@
         /// </remarks>
         private Attempt<Coupon> GetCouponAttempt(string offerCode)
         {
+            //// TODO RSS cache keys should not be hard coded within a class
             var cacheKey = string.Format("merchello.basksalepreparation.offercode.{0}", offerCode);
             return (Attempt<Coupon>)_requestCache.GetCacheItem(cacheKey, () => _couponManager.Value.GetByOfferCode(offerCode, Customer));
         } 
