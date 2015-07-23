@@ -435,8 +435,8 @@
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineOne\AddTaxMethodColumn.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineOne\InsertNewMerchelloSettingsGlobalTaxationApplicationKey.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTenZero\AddTaxMethodColumn.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTenZero\InsertNewMerchelloSettingsGlobalTaxationApplicationKey.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneEightTwo\InsertNewMerchelloSettingsMigrationKey.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\CreateOneNineZeroTables.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\InsertNewTypeFieldData.cs" />
