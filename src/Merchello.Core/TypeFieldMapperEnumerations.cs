@@ -107,7 +107,7 @@
     /// The product type.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
-    internal enum ProductType
+    public enum ProductType
     {
         Custom
     }
