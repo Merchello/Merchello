@@ -6,12 +6,12 @@
     using Umbraco.Core.Persistence.DatabaseAnnotations;
 
     /// <summary>
-    /// The store setting dto.
+    /// The product collection dto.
     /// </summary>
-    [TableName("merchStoreSetting")]
+    [TableName("merchProductCollection")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class StoreSettingDto
+    internal class ProductCollectionDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -28,16 +28,9 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the value.
+        /// Gets or sets the key for the dynamic collection.
         /// </summary>
-        [Column("value")]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type name.
-        /// </summary>
-        [Column("typeName")]
-        public string TypeName { get; set; }
+        public Guid? DynamicCollection { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
@@ -51,6 +44,6 @@
         /// </summary>
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
-        public DateTime CreateDate { get; set; }         
+        public DateTime CreateDate { get; set; }
     }
 }
