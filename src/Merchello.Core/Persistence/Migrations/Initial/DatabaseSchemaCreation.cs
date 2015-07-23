@@ -65,7 +65,10 @@
             { 37, typeof(NotificationMessageDto) },
             { 38, typeof(AuditLogDto) },
             { 39, typeof(OfferSettingsDto) },
-            { 40, typeof(OfferRedeemedDto) }
+            { 40, typeof(OfferRedeemedDto) },
+            { 41, typeof(ProductCollectionDto) },
+            { 42, typeof(Product2ProductCollectionDto) },
+            { 43, typeof(DetachedContentTypeDto) }
         };
 
         /// <summary>

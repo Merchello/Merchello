@@ -6,12 +6,12 @@
     using Umbraco.Core.Persistence.DatabaseAnnotations;
 
     /// <summary>
-    /// The store setting dto.
+    /// The detached content type dto.
     /// </summary>
-    [TableName("merchStoreSetting")]
+    [TableName("merchDetachedContentType")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class StoreSettingDto
+    public class DetachedContentTypeDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -22,22 +22,23 @@
         public Guid Key { get; set; }
 
         /// <summary>
+        /// Gets or sets the entity type field key.
+        /// </summary>
+        [Column("entityTfKey")]
+        public Guid EntityTfKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [Column("name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the value.
+        /// Gets or sets the content type id.
         /// </summary>
-        [Column("value")]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type name.
-        /// </summary>
-        [Column("typeName")]
-        public string TypeName { get; set; }
+        [Column("contentTypeId")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public int? ContentTypeId { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
@@ -51,6 +52,6 @@
         /// </summary>
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
-        public DateTime CreateDate { get; set; }         
+        public DateTime CreateDate { get; set; }
     }
 }

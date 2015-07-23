@@ -74,6 +74,13 @@
                 return new Version(1, 9, 0);
             }
 
+            if (!this.ValidTables.Contains("merchProductCollection")
+                || !this.ValidTables.Contains("merchProduct2ProductCollection")
+                || !this.ValidTables.Contains("merchDetatchedContentType"))
+            {
+                return new Version(1, 10, 0);
+            }
+
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
