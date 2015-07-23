@@ -9,7 +9,7 @@
     /// <summary>
     /// The result that is in an attempt to apply a coupon to a sale.
     /// </summary>
-    internal class CouponRedemptionResult : OfferRedemptionResultBase<ILineItem>, ICouponRedemptionResult
+    public class CouponRedemptionResult : OfferRedemptionResultBase<ILineItem>, ICouponRedemptionResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CouponRedemptionResult"/> class for success
