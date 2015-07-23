@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Umbraco.Core;
-using Umbraco.Core.Services;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the GatewayProviderService
     /// </summary>
@@ -378,7 +379,7 @@ namespace Merchello.Core.Services
         /// Attempts to create a <see cref="ITaxMethod"/> for a given provider and country.  If the provider already 
         /// defines a tax rate for the country, the creation fails.
         /// </summary>
-        /// <param name="providerKey">The unique 'key' (Guid) of the TaxationGatewayProvider</param>
+        /// <param name="providerKey">The unique 'key' (GUID) of the TaxationGatewayProvider</param>
         /// <param name="countryCode">The two character ISO country code</param>
         /// <param name="percentageTaxRate">The tax rate in percentage for the country</param>
         /// <returns><see cref="Attempt"/> indicating whether or not the creation of the <see cref="ITaxMethod"/> with respective success or fail</returns>
@@ -391,6 +392,17 @@ namespace Merchello.Core.Services
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
         /// <returns>A collection <see cref="ITaxMethod"/></returns>
         ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode);
+
+        /// <summary>
+        /// Get tax method for product pricing.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ITaxMethod"/> or null if no tax method is found
+        /// </returns>
+        /// <remarks>
+        /// There can be only one =)
+        /// </remarks>
+        ITaxMethod GetTaxMethodForProductPricing();
 
         /// <summary>
         /// Gets a collection of <see cref="ITaxMethod"/> based on a provider and country code

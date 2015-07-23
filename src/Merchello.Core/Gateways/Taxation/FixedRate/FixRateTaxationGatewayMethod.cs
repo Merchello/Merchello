@@ -1,5 +1,8 @@
 ﻿namespace Merchello.Core.Gateways.Taxation.FixedRate
 {
+    using System.Globalization;
+    using System.Linq;
+
     using Merchello.Core.Configuration;
     using Merchello.Core.Models;
 
@@ -48,6 +51,29 @@
             }
 
             return CalculateTaxForInvoice(attempt.Result);
+        }
+
+
+        /// <summary>
+        /// Calculates taxes for a product.
+        /// </summary>
+        /// <param name="product">
+        /// The <see cref="IProductVariantDataModifierData"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxCalculationResult"/>.
+        /// </returns>
+        public virtual IProductTaxCalculationResult CalculateTaxForProduct(IProductVariantDataModifierData product)
+        {            
+            var baseTaxRate = TaxMethod.PercentageTaxRate;
+
+            var taxRate = baseTaxRate > 1 ? baseTaxRate / 100M : baseTaxRate;
+
+            var priceCalc = product.Price * taxRate;
+
+            var salePriceCalc = product.SalePrice * taxRate;
+
+            return new ProductTaxCalculationResult(TaxMethod.Name, product.Price, priceCalc, product.SalePrice, salePriceCalc, baseTaxRate);
         }
     }
 }

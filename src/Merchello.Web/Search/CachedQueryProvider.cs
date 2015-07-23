@@ -12,6 +12,11 @@
     public class CachedQueryProvider : ICachedQueryProvider
     {
         /// <summary>
+        /// A value indicating whether or not to enable any data modifiers.
+        /// </summary>
+        private readonly bool _enableDataModifiers;
+
+        /// <summary>
         /// The <see cref="ICachedCustomerQuery"/>.
         /// </summary>
         private Lazy<ICachedCustomerQuery> _customerQuery; 
@@ -29,13 +34,13 @@
         /// <summary>
         /// The <see cref="ICachedProductQuery"/>
         /// </summary>
-        private Lazy<ICachedProductQuery> _productQuery; 
+        private Lazy<ICachedProductQuery> _productQuery;        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryProvider"/> class.
         /// </summary>
         public CachedQueryProvider()
-            : this(MerchelloContext.Current.Services)
+            : this(MerchelloContext.Current.Services, true)
         {            
         }
 
@@ -45,9 +50,13 @@
         /// <param name="serviceContext">
         /// The <see cref="IServiceContext"/>
         /// </param>
-        public CachedQueryProvider(IServiceContext serviceContext)
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not to enable any data modifiers.
+        /// </param>
+        public CachedQueryProvider(IServiceContext serviceContext, bool enableDataModifiers)
         {
             Mandate.ParameterNotNull(serviceContext, "ServiceContext is not initialized");
+            _enableDataModifiers = enableDataModifiers;
             InitializeProvider(serviceContext);
         }
 
@@ -95,16 +104,16 @@
         private void InitializeProvider(IServiceContext serviceContext)
         {
             if (_customerQuery == null)
-            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(serviceContext.CustomerService));
+            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(serviceContext.CustomerService, _enableDataModifiers));
 
             if (_invoiceQuery == null)
-            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(serviceContext.InvoiceService));
+            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(serviceContext.InvoiceService, _enableDataModifiers));
 
             if (_orderQuery == null)
-            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(serviceContext.OrderService));
+            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(serviceContext.OrderService, _enableDataModifiers));
 
             if (_productQuery == null)
-            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(serviceContext.ProductService));
+            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(serviceContext.ProductService, _enableDataModifiers));
         }
     }
 }

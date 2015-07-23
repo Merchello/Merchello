@@ -18,15 +18,15 @@
             return Workflow.Basket.GetBasket(customer);
         }
 
-        /// <summary>
-        /// Backoffice's the specified customer.
-        /// </summary>
-        /// <param name="customer">The customer.</param>
-        /// <returns></returns>
-        internal static IBackoffice Backoffice(this ICustomerBase customer)
-        {
-            return Workflow.Backoffice.GetBackoffice(customer);
-        }
+        ///// <summary>
+        ///// Backoffice's the specified customer.
+        ///// </summary>
+        ///// <param name="customer">The customer.</param>
+        ///// <returns></returns>
+        //internal static IBackoffice Backoffice(this ICustomerBase customer)
+        //{
+        //    return Workflow.Backoffice.GetBackoffice(customer);
+        //}
 
         /// <summary>
         /// The wish list.

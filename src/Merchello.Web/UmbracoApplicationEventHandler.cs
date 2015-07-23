@@ -13,6 +13,8 @@
     using Core.Sales;
     using Core.Services;
 
+    using Merchello.Core.Gateways.Taxation;
+
     using Models.SaleHistory;
 
     using Umbraco.Core;
@@ -20,6 +22,8 @@
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
+
+    using ServiceContext = Merchello.Core.Services.ServiceContext;
     using Task = System.Threading.Tasks.Task;
 
     /// <summary>
@@ -87,12 +91,32 @@
             InvoiceService.Deleted += InvoiceServiceOnDeleted;
             OrderService.Deleted += OrderServiceOnDeleted;
 
+            // Store settings
+            StoreSettingService.Saved += StoreSettingServiceOnSaved;
+
+            // Clear the tax method if set
+            TaxMethodService.Saved += TaxMethodServiceOnSaved;
+
             // Auditing
             PaymentGatewayMethodBase.VoidAttempted += PaymentGatewayMethodBaseOnVoidAttempted;
 
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
             if (_merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        /// <summary>
+        /// Clears the product pricing tax method so that it can be re-initialized if needed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
+        private void TaxMethodServiceOnSaved(ITaxMethodService sender, SaveEventArgs<ITaxMethod> saveEventArgs)
+        {
+            ((TaxationContext)MerchelloContext.Current.Gateways.Taxation).ClearProductPricingMethod();
         }
 
         /// <summary>
@@ -206,9 +230,36 @@
             });
         }
 
+        /// <summary>
+        /// The store setting service on saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void StoreSettingServiceOnSaved(IStoreSettingService sender, SaveEventArgs<IStoreSetting> e)
+        {
+            var setting = e.SavedEntities.FirstOrDefault(x => x.Key == Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey);
+            if (setting == null) return;
+
+            var taxationContext = (TaxationContext)MerchelloContext.Current.Gateways.Taxation;
+            taxationContext.ClearProductPricingMethod();
+            if (setting.Value == "Product") return;
+            
+            var taxMethodService = ((ServiceContext)MerchelloContext.Current.Services).TaxMethodService;
+            var methods = taxMethodService.GetAll().ToArray();
+            foreach (var method in methods)
+            {
+                method.ProductTaxMethod = false;
+            }
+
+            taxMethodService.Save(methods);
+        }
 
         /// <summary>
-        /// Performs audits on SalePrepartionBase.Finalizing
+        /// Performs audits on SalePreparationBase.Finalizing
         /// </summary>
         /// <param name="sender">
         /// The sender.

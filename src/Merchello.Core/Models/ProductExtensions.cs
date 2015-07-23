@@ -7,8 +7,12 @@ namespace Merchello.Core
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Xml;
     using System.Xml.Linq;
+
+    using Merchello.Core.Chains;
+
     using Models;
     using Models.Interfaces;
     using Newtonsoft.Json;
@@ -203,7 +207,34 @@ namespace Merchello.Core
             return optionChoices.CartesianProduct();
         }
 
+        #region DataModifier
 
+        ///// <summary>
+        ///// Merges the modified property data.
+        ///// </summary>
+        ///// <param name="product">
+        ///// The product.
+        ///// </param>
+        ///// <param name="modified">
+        ///// The modified.
+        ///// </param>
+        ///// <remarks>
+        ///// This has the potential to modify a cached value and create some odd results
+        ///// </remarks>
+        //internal static void MergeDataModifierData(this IProductBase product, IProductVariantDataModifierData modified)
+        //{
+        //    if (modified.ModifiedDataLogs != null)
+        //    foreach (var log in modified.ModifiedDataLogs)
+        //    {
+        //        var propInfo = product.GetType().GetProperty(log.PropertyName, BindingFlags.Public | BindingFlags.Instance);
+        //        if (propInfo != null && propInfo.CanWrite)
+        //        {
+        //            propInfo.SetValue(product, log.ModifiedValue, null);
+        //        }
+        //    }
+        //}
+
+        #endregion
 
         #region ProductAttributeCollection
 
@@ -229,8 +260,6 @@ namespace Merchello.Core
 
         #endregion
 
-
-       
 
         #region Examine Serialization
 

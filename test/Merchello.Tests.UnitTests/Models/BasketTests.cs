@@ -17,6 +17,12 @@ namespace Merchello.Tests.UnitTests.Models
         private IItemCache _itemCache;
         private IProduct _product;
 
+        [TestFixtureSetUp]
+        public void FixtureInit()
+        {
+            Web.AutoMapperMappings.CreateMappings();
+        }
+
         [SetUp]
         public void Init()
         {
@@ -35,6 +41,7 @@ namespace Merchello.Tests.UnitTests.Models
         {
             //// Arrange                      
             var basket = Basket.GetBasket(_customer, _itemCache);
+            basket.EnableDataModifiers = false;
             var product = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
 
             //// Act
@@ -52,7 +59,8 @@ namespace Merchello.Tests.UnitTests.Models
         public void Can_Add_A_Product_To_The_Basket()
         {
             //// Arrange
-            var basket = Basket.GetBasket(_customer, _itemCache);            
+            var basket = Basket.GetBasket(_customer, _itemCache);
+            basket.EnableDataModifiers = false;
 
             //// Act
             basket.AddItem(_product);
@@ -72,6 +80,8 @@ namespace Merchello.Tests.UnitTests.Models
             var sku = _product.Sku;
             const int count = 10;
             var basket = Basket.GetBasket(_customer, _itemCache);
+            basket.EnableDataModifiers = false;
+
             basket.AddItem(_product);
 
             //// Act
@@ -90,6 +100,7 @@ namespace Merchello.Tests.UnitTests.Models
             //// Arrange
             var sku = _product.Sku;
             var basket = Basket.GetBasket(_customer, _itemCache);
+            basket.EnableDataModifiers = false;
             basket.AddItem(_product);
 
             Assert.IsTrue(!basket.IsEmpty);
@@ -110,6 +121,7 @@ namespace Merchello.Tests.UnitTests.Models
             //// Arrange
             const int expected = 10;
             var basket = Basket.GetBasket(_customer, _itemCache);
+            basket.EnableDataModifiers = false;
             var product1 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
             var product2 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
             var product3 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
@@ -136,6 +148,7 @@ namespace Merchello.Tests.UnitTests.Models
             //// Arrange
             decimal expectedPrice = 0;
             var basket = Basket.GetBasket(_customer, _itemCache);
+            basket.EnableDataModifiers = false;
             var product1 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
             var product2 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());
             var product3 = MockProductDataMaker.MockProductComplete(Guid.NewGuid());

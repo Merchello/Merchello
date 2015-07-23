@@ -16,8 +16,53 @@
     <key alias="variant">Variant</key>
     <key alias="sku">SKU</key>
     <key alias="baseSku">Base Sku</key>
-    <key alias="barcode">Barcode</key>sel
-		<key alias="manufacturer">Manufacturer</key><key alias="manufacturerModel">Manufacturer's Model No.</key><key alias="variantInfo">Variant Information</key><key alias="variantOptions">Variant Options</key><key alias="downloads">Digital Downloads</key><key alias="optionName">Option Name</key><key alias="optionValues">Option Values</key><!-- actions --><key alias="newProduct">New Product</key><key alias="createProduct">Create a Product</key><key alias="createProductSub">The Name field (above), Price, and SKU are required.  Everything else is optional.</key><key alias="newVariant">New Variant</key><key alias="newVariantFor">New Variant for</key><key alias="newVariantOn">This will be a new variant on the</key><key alias="addVariant">Add a Variant</key><key alias="addVariantSub">This will be a new variant on the %0% product.</key><key alias="addOption">Add Another Option</key><key alias="addOptions">Add options to this variant and auto-populate additional variants for each option</key><key alias="deleteProduct">Delete Product</key><key alias="deleteVariant">Delete Variant</key><key alias="toggleOnSale">On Sale</key><key alias="toggleAvailable">Available</key><key alias="configVariant">Configure this variant</key><key alias="selectVariantOptions">Select the variant/options that you would like to create.</key><key alias="addFile">Add a file to your product variant</key><key alias="trackInventory">Track inventory for this variant</key><key alias="setInventoryPreferences">Set preferences for handling out of stock and adjust inventory for this variant</key><!-- phrases --><key alias="barcodeExamples">e.g. UPC, ISBN</key><key alias="optionNameExamples">(e.g. Size, Style, Color)</key><key alias="optionValueExamples">(e.g. red, green, blue)</key><key alias="hasDigitalDownload">This variant has digital goods</key><key alias="hasOptions">This variant has options (like size or color)</key><key alias="isTaxable">This variant is taxable</key><key alias="isShippable">This variant is shippable</key><key alias="isOnSale">This variant is on sale</key><key alias="isAvailable">This variant is available to purchase</key><key alias="noProduct">You have no products.</key><key alias="newProductPrompt">How about creating one now? Simply press the New Product button.</key><key alias="limitSelect">Number of products to display</key><key alias="mustUniqueSku">Must have a unique SKU</key><key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key><key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key><key alias="productOnSale">On sale</key></area>
+    <key alias="barcode">Barcode</key>
+    <key alias="manufacturer">Manufacturer</key>
+    <key alias="manufacturerModel">Manufacturer's Model No.</key>
+    <key alias="variantInfo">Variant Information</key>
+    <key alias="variantOptions">Variant Options</key>
+    <key alias="downloads">Digital Downloads</key>
+    <key alias="optionName">Option Name</key>
+    <key alias="optionValues">Option Values</key>
+    <!-- actions -->
+    <key alias="newProduct">New Product</key>
+    <key alias="createProduct">Create a Product</key>
+    <key alias="createProductSub">The Name field (above), Price, and SKU are required.  Everything else is optional.</key>
+    <key alias="newVariant">New Variant</key>
+    <key alias="newVariantFor">New Variant for</key>
+    <key alias="newVariantOn">This will be a new variant on the</key>
+    <key alias="addVariant">Add a Variant</key>
+    <key alias="addVariantSub">This will be a new variant on the %0% product.</key>
+    <key alias="addOption">Add Another Option</key>
+    <key alias="addOptions">Add options to this variant and auto-populate additional variants for each option</key>
+    <key alias="deleteProduct">Delete Product</key>
+    <key alias="deleteVariant">Delete Variant</key>
+    <key alias="toggleOnSale">On Sale</key>
+    <key alias="toggleAvailable">Available</key>
+    <key alias="configVariant">Configure this variant</key>
+    <key alias="selectVariantOptions">Select the variant/options that you would like to create.</key>
+    <key alias="addFile">Add a file to your product variant</key>
+    <key alias="trackInventory">Track inventory for this variant</key>
+    <key alias="setInventoryPreferences">Set preferences for handling out of stock and adjust inventory for this variant</key>
+    <!-- phrases -->
+    <key alias="barcodeExamples">e.g. UPC, ISBN</key>
+    <key alias="optionNameExamples">(e.g. Size, Style, Color)</key>
+    <key alias="optionValueExamples">(e.g. red, green, blue)</key>
+    <key alias="hasDigitalDownload">This variant has digital goods</key>
+    <key alias="hasOptions">This variant has options (like size or color)</key>
+    <key alias="isTaxable">This variant is taxable</key>
+    <key alias="isShippable">This variant is shippable</key>
+    <key alias="isOnSale">This variant is on sale</key>
+    <key alias="isAvailable">This variant is available to purchase</key>
+    <key alias="noProduct">You have no products.</key>
+    <key alias="newProductPrompt">How about creating one now? Simply press the New Product button.</key>
+    <key alias="limitSelect">Number of products to display</key>
+    <key alias="mustUniqueSku">Must have a unique SKU</key>
+    <key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
+    <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
+    <key alias="productOnSale">On sale</key>
+    <key alias="costOfGoods">Cost of Goods</key>
+  </area>
   <area alias="merchelloOrder">
     <!-- things -->
     <key alias="invoice">Invoice</key>
@@ -27,7 +72,7 @@
     <key alias="orderNumber">Order #</key>
     <key alias="paymentStatus">Payment Status</key>
     <key alias="fulfillmentStatus">Fulfillment Status</key>
-    <key alias="lineItems"> Line Items</key>
+    <key alias="lineItems">Line Items</key>
     <key alias="orderName">[Order Name]</key>
     <key alias="sales">Sales</key>
     <key alias="saleInformation">Sale Information</key>
@@ -49,6 +94,10 @@
     <key alias="refundPayment">Refund Payment</key>
     <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
     <key alias="refundMethod">Refund method</key>
+    <key alias="archiveSales">Archive Sales</key>
+    <key alias="unarchiveSales">Unarchive Sales</key>
+    <key alias="noSalesYet">You have no sales yet</key>
+    <key alias="butSoonYouWill">but soon you will!</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -156,6 +205,7 @@
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
     <key alias="unitSystem">Unit System</key>
+    <key alias="globalTaxationApplication">Set how taxes are applied</key>
   </area>
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Add a Country</key>
@@ -203,6 +253,7 @@
     <key alias="taxation">Taxation</key>
     <key alias="taxMethods">Tax Methods</key>
     <key alias="taxMethodsHelper">Set flat tax rates for your shipping regions</key>
+    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
   </area>
   <area alias="merchelloNotifications">
     <key alias="notifications">Notifications</key>

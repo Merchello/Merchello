@@ -2,40 +2,25 @@
 {
     using System.Collections.Generic;
 
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The product display abstract.
     /// </summary>
-    public abstract class ProductDisplayBase
+    public abstract class ProductDisplayBase : ProductVariantDataModifierData
     {
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        public string Name { get; set; }
-
         /// <summary>
         /// Gets or sets the SKU.
         /// </summary>
         public string Sku { get; set; }
 
         /// <summary>
-        /// Gets or sets the price.
-        /// </summary>
-        public decimal Price { get; set; }
-
-        /// <summary>
         /// Gets or sets the cost of goods.
         /// </summary>
         public decimal CostOfGoods { get; set; }
-
-        /// <summary>
-        /// Gets or sets the sale price.
-        /// </summary>
-        public decimal SalePrice { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether on sale.
-        /// </summary>
-        public bool OnSale { get; set; }
 
         /// <summary>
         /// Gets or sets the manufacturer.
@@ -73,29 +58,9 @@
         public string Barcode { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the product is available.
-        /// </summary>
-        public bool Available { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether track inventory.
-        /// </summary>
-        public bool TrackInventory { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether out of stock purchase.
         /// </summary>
         public bool OutOfStockPurchase { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether taxable.
-        /// </summary>
-        public bool Taxable { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether shippable.
-        /// </summary>
-        public bool Shippable { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the product is a downloadable product.

@@ -59,6 +59,11 @@
 
                     <div class="form-group col-xs-6 span6">
                         <!-- open -->
+                        <label for="taxationApplication"><localize key="merchelloSettings_globalTaxationApplication" /></label>
+                        <select class="form-control col-xs-8 span8" name="taxationApplication" data-ng-model="settingsDisplay.globalTaxationApplication" no-dirty-check>
+                            <option value="Invoice">Invoice</option>
+                            <option value="Product">Product</option>
+                        </select>
                     </div>
                 </div>
             </div>

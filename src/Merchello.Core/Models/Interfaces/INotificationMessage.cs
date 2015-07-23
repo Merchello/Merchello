@@ -78,5 +78,12 @@ namespace Merchello.Core.Models
         /// </summary>
         bool Disabled { get; set; }
 
+        /// <summary>
+        /// Clones the message.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="INotificationMessage"/>.
+        /// </returns>
+        INotificationMessage ShallowCopy();
     }
 }

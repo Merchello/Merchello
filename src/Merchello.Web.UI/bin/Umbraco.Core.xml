@@ -89,22 +89,29 @@
             Any caching that is done in the application (app wide) should be done through this property
             </remarks>
         </member>
-        <member name="P:Umbraco.Core.ApplicationContext.OriginalRequestUrl">
+        <member name="P:Umbraco.Core.ApplicationContext.UmbracoApplicationUrl">
             <summary>
-            The original/first url that the web application executes
+            The application url.
             </summary>
             <remarks>
-            we need to set the initial url in our ApplicationContext, this is so our keep alive service works and this must
-            exist on a global context because the keep alive service doesn't run in a web context.
-            we are NOT going to put a lock on this because locking will slow down the application and we don't really care
-            if two threads write to this at the exact same time during first page hit.
-            see: http://issues.umbraco.org/issue/U4-2059
+            The application url is the url that should be used by services to talk to the application,
+            eg keep alive or scheduled publishing services. It must exist on a global context because
+            some of these services may not run within a web context.
+            The format of the application url is:
+            - has a scheme (http or https)
+            - has the SystemDirectories.Umbraco path
+            - does not end with a slash
+            It is initialized on the first request made to the server, by UmbracoModule.EnsureApplicationUrl:
+            - if umbracoSettings:settings/web.routing/@umbracoApplicationUrl is set, use the value (new setting)
+            - if umbracoSettings:settings/scheduledTasks/@baseUrl is set, use the value (backward compatibility)
+            - otherwise, use the url of the (first) request.
+            Not locking, does not matter if several threads write to this.
+            See also issues:
+            - http://issues.umbraco.org/issue/U4-2059
+            - http://issues.umbraco.org/issue/U4-6788
+            - http://issues.umbraco.org/issue/U4-5728
+            - http://issues.umbraco.org/issue/U4-5391
             </remarks>
-        </member>
-        <member name="P:Umbraco.Core.ApplicationContext.Configured">
-            <summary>
-            Checks if the version configured matches the assembly version
-            </summary>
         </member>
         <member name="P:Umbraco.Core.ApplicationContext.DatabaseContext">
             <summary>
@@ -701,6 +708,48 @@
             An abstract class for implementing a basic cache provider
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Cache.ICacheProvider.ClearAllCache">
+            <summary>
+            Removes all items from the cache.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Cache.ICacheProvider.ClearCacheItem(System.String)">
+            <summary>
+            Removes an item from the cache, identified by its key.
+            </summary>
+            <param name="key">The key of the item.</param>
+        </member>
+        <member name="M:Umbraco.Core.Cache.ICacheProvider.ClearCacheObjectTypes(System.String)">
+            <summary>
+            Removes items from the cache, of a specified type.
+            </summary>
+            <param name="typeName">The name of the type to remove.</param>
+            <remarks>
+            <para>If the type is an interface, then all items of a type implementing that interface are
+            removed. Otherwise, only items of that exact type are removed (items of type inheriting from
+            the specified type are not removed).</para>
+            <para>Performs a case-sensitive search.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Cache.ICacheProvider.ClearCacheObjectTypes``1">
+            <summary>
+            Removes items from the cache, of a specified type.
+            </summary>
+            <typeparam name="T">The type of the items to remove.</typeparam>
+            <remarks>If the type is an interface, then all items of a type implementing that interface are
+            removed. Otherwise, only items of that exact type are removed (items of type inheriting from
+            the specified type are not removed).</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Cache.ICacheProvider.ClearCacheObjectTypes``1(System.Func{System.String,``0,System.Boolean})">
+            <summary>
+            Removes items from the cache, of a specified type, satisfying a predicate.
+            </summary>
+            <typeparam name="T">The type of the items to remove.</typeparam>
+            <param name="predicate">The predicate to satisfy.</param>
+            <remarks>If the type is an interface, then all items of a type implementing that interface are
+            removed. Otherwise, only items of that exact type are removed (items of type inheriting from
+            the specified type are not removed).</remarks>
+        </member>
         <member name="M:Umbraco.Core.Cache.ICacheProvider.GetCacheItem(System.String)">
             <summary>
             Returns an item with a given key
@@ -758,6 +807,11 @@
             <remarks>
             </remarks>
         </member>
+        <member name="P:Umbraco.Core.Cache.ObjectCacheRuntimeCacheProvider.InstanceId">
+            <summary>
+            Used for debugging
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Cache.HttpRuntimeCacheProvider">
             <summary>
             A CacheProvider that wraps the logic of the HttpRuntime.Cache
@@ -795,6 +849,11 @@
             <param name="priority"></param>
             <param name="removedCallback"></param>
             <param name="dependency"></param>
+        </member>
+        <member name="P:Umbraco.Core.Cache.HttpRuntimeCacheProvider.InstanceId">
+            <summary>
+            Used for debugging
+            </summary>
         </member>
         <member name="T:Umbraco.Core.Cache.IJsonCacheRefresher">
             <summary>
@@ -2160,6 +2219,11 @@
             <param name="afterComplete"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.CoreBootManager.EnsureDatabaseConnection">
+            <summary>
+            We cannot continue if the db cannot be connected to
+            </summary>
+        </member>
         <member name="M:Umbraco.Core.CoreBootManager.FreezeResolution">
             <summary>
             Freeze resolution to not allow Resolvers to be modified
@@ -3072,6 +3136,17 @@
             <summary>
             The entity being sent to publish
             </summary>
+        </member>
+        <member name="T:Umbraco.Core.Exceptions.UmbracoStartupFailedException">
+            <summary>
+            An exception that is thrown if the umbraco application cannnot boot
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Exceptions.UmbracoStartupFailedException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Exception"/> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error. </param>
         </member>
         <member name="T:Umbraco.Core.HideFromTypeFinderAttribute">
             <summary>
@@ -5862,27 +5937,17 @@
         </member>
         <member name="T:Umbraco.Core.DisposableObject">
             <summary>
-            Abstract implementation of logic commonly required to safely handle disposable unmanaged resources.
+            Abstract implementation of IDisposable.
             </summary>
-        </member>
-        <member name="M:Umbraco.Core.DisposableObject.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-            <filterpriority>2</filterpriority>
-        </member>
-        <member name="M:Umbraco.Core.DisposableObject.DisposeResources">
-            <summary>
-            Handles the disposal of resources. Derived from abstract class <see cref="T:Umbraco.Core.DisposableObject"/> which handles common required locking logic.
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.DisposableObject.IsDisposed">
-            <summary>
-            Gets a value indicating whether this instance is disposed.
-            </summary>
-            <value>
-            	<c>true</c> if this instance is disposed; otherwise, <c>false</c>.
-            </value>
+            <remarks>
+            Can also be used as a pattern for when inheriting is not possible.
+            
+            See also: https://msdn.microsoft.com/en-us/library/b1yfkh5e%28v=vs.110%29.aspx
+            See also: https://lostechies.com/chrispatterson/2012/11/29/idisposable-done-right/
+            
+            Note: if an object's ctor throws, it will never be disposed, and so if that ctor
+            has allocated disposable objects, it should take care of disposing them.
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.Manifest.PackageManifest">
             <summary>
@@ -25430,15 +25495,6 @@
             A helper used to determine the current server environment status
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Sync.ServerEnvironmentHelper.GetCurrentServerUmbracoBaseUrl(Umbraco.Core.ApplicationContext,Umbraco.Core.Configuration.UmbracoSettings.IUmbracoSettingsSection)">
-            <summary>
-            Returns the current umbraco base url for the current server depending on it's environment 
-            status. This will attempt to determine the internal umbraco base url that can be used by the current
-            server to send a request to itself if it is in a load balanced environment.
-            </summary>
-            <returns>The full base url including schema (i.e. http://myserver:80/umbraco ) - or <c>null</c> if the url
-            cannot be determined at the moment (usually because the first request has not properly completed yet).</returns>
-        </member>
         <member name="M:Umbraco.Core.Sync.ServerEnvironmentHelper.GetStatus(Umbraco.Core.Configuration.UmbracoSettings.IUmbracoSettingsSection)">
             <summary>
             Returns the current environment status for the current server
@@ -27566,6 +27622,18 @@
             <summary>
              String extension methods
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.StringExtensions.DetectIsJavaScriptPath(System.String)">
+            <summary>
+            Based on the input string, this will detect if the strnig is a JS path or a JS snippet.
+            If a path cannot be determined, then it is assumed to be a snippet the original text is returned
+            with an invalid attempt, otherwise a valid attempt is returned with the resolved path
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+            <remarks>
+            This is only used for legacy purposes for the Action.JsSource stuff and shouldn't be needed in v8
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.StringExtensions.DetectIsJson(System.String)">
             <summary>

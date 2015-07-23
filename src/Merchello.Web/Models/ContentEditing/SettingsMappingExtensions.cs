@@ -3,6 +3,10 @@ using Merchello.Core.Models;
 
 namespace Merchello.Web.Models.ContentEditing
 {
+    using System;
+
+    using Merchello.Core.Gateways.Taxation;
+
     internal static class SettingsMappingExtensions
     {
 
@@ -93,6 +97,9 @@ namespace Merchello.Web.Models.ContentEditing
                         }
                         settingDisplay.GlobalShippingIsTaxable = boolValue;
                         break;
+                    case "globalTaxationApplication":
+                        settingDisplay.GlobalTaxationApplication = (TaxationApplication)Enum.Parse(typeof(TaxationApplication), setting.Value);
+				        break;
 					default:
 						setting.Value = string.Empty;
 						break;
@@ -140,6 +147,9 @@ namespace Merchello.Web.Models.ContentEditing
                     case "globalShippingIsTaxable":
 						setting.Value = settingDisplay.GlobalShippingIsTaxable.ToString();	
 						break;
+                    case "globalTaxationApplication":
+				        setting.Value = settingDisplay.GlobalTaxationApplication.ToString();
+				        break;
 					default:
 						setting.Value = string.Empty;		 
 						break;

@@ -499,45 +499,6 @@ namespace Merchello.Web.Models.ContentEditing
 
 		#endregion
 
-		#region TaxMethodDisplay
-
-		internal static ITaxMethod ToTaxMethod(this TaxMethodDisplay taxMethodDisplay, ITaxMethod destination)
-		{
-			if (taxMethodDisplay.Key != Guid.Empty) destination.Key = taxMethodDisplay.Key;
-
-		   
-			destination.Name = taxMethodDisplay.Name;
-			destination.PercentageTaxRate = taxMethodDisplay.PercentageTaxRate;
-
-			// this may occur when creating a new tax method since the UI does not 
-			// query for provinces 
-			// TODO fix
-			if (destination.HasProvinces && !taxMethodDisplay.Provinces.Any())
-			{
-				taxMethodDisplay.Provinces = destination.Provinces.Select(x => x.ToTaxProvinceDisplay()).ToArray();
-			}
-
-			foreach (var province in taxMethodDisplay.Provinces)
-			{
-				var p = destination.Provinces.FirstOrDefault(x => x.Code == province.Code);
-				if (p != null) p.PercentAdjustment = province.PercentAdjustment;
-			}
-		
-			return destination;
-		}
-
-		internal static TaxMethodDisplay ToTaxMethodDisplay(this ITaxMethod taxMethod)
-		{
-		   return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxMethod);     
-		}
-
-		internal static TaxMethodDisplay ToTaxMethodDisplay(this ITaxationGatewayMethod taxGatewayMethod)
-		{
-			return AutoMapper.Mapper.Map<TaxMethodDisplay>(taxGatewayMethod);
-		}
-
-		#endregion
-
 		#region TaxProvinceDisplay
 
 		internal static TaxProvinceDisplay ToTaxProvinceDisplay(this ITaxProvince taxProvince)

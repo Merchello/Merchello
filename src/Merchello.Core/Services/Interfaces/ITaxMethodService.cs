@@ -47,12 +47,31 @@ namespace Merchello.Core.Services
         ITaxMethod GetByKey(Guid key);
 
         /// <summary>
+        /// The get all.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{ITaxMethod}"/>.
+        /// </returns>
+        IEnumerable<ITaxMethod> GetAll(); 
+        
+        /// <summary>
         /// Gets a <see cref="ITaxMethod"/> based on a provider and country code
         /// </summary>
         /// <param name="providerKey">The unique 'key' of the <see cref="IGatewayProviderSettings"/></param>
         /// <param name="countryCode">The country code of the <see cref="ITaxMethod"/></param>
         /// <returns><see cref="ITaxMethod"/></returns>
         ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode);
+
+        /// <summary>
+        /// Get tax method for product pricing.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ITaxMethod"/> or null if no tax method is found
+        /// </returns>
+        /// <remarks>
+        /// There can be only one =)
+        /// </remarks>
+        ITaxMethod GetTaxMethodForProductPricing();
 
         /// <summary>
         /// Gets a <see cref="ITaxMethod"/> based on a provider and country code

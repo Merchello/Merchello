@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-using Newtonsoft.Json;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
+    using Newtonsoft.Json;
+
     internal class TaxMethodFactory : IEntityFactory<ITaxMethod, TaxMethodDto>
     {
         public ITaxMethod BuildEntity(TaxMethodDto dto)
@@ -22,6 +22,7 @@ namespace Merchello.Core.Persistence.Factories
                 Name = dto.Name,
                 PercentageTaxRate = dto.PercentageTaxRate,
                 Provinces = provinces,
+                ProductTaxMethod = dto.ProductTaxMethod,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };
@@ -42,6 +43,7 @@ namespace Merchello.Core.Persistence.Factories
                     ProviderKey = entity.ProviderKey,
                     PercentageTaxRate = entity.PercentageTaxRate,
                     ProvinceData = provinceData,
+                    ProductTaxMethod = entity.ProductTaxMethod,
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

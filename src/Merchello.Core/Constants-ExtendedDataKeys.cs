@@ -20,9 +20,15 @@
                     "merchLineItemCollection",
                     "merchLineItem",
                     "merchCurrencyCode",
-                    "merchCouponReward",
+                    "merchCouponReward",                    
+                    "merchCouponRewardLog",
+                    "merchCouponAdjustedProductPreTaxTotal",
+                    "merchCouponAdjustedProductTaxTotal",
                     "merchOfferCodeTempeData",
                     "merchLineItemTaxAmount",
+                    "merchProductPriceTaxAmount",
+                    "merchProductSalePriceTaxAmount",
+                    "merchTaxIncludedInProductPrice",
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -404,6 +410,61 @@
             }
 
             /// <summary>
+            /// Gets the product price no tax.
+            /// </summary>
+            public static string ProductPriceNoTax
+            {
+                get
+                {
+                    return "merchProductPriceNoTax";
+                }
+            }
+
+            /// <summary>
+            /// Gets the tax included in product price.
+            /// </summary>
+            public static string TaxIncludedInProductPrice
+            {
+                get
+                {
+                    return "merchTaxIncludedInProductPrice";
+                }
+            }
+
+            /// <summary>
+            /// Gets the product price tax amount.
+            /// </summary>
+            public static string ProductPriceTaxAmount
+            {
+                get
+                {
+                    return "merchProductPriceTaxAmount";
+                }
+            }
+
+            /// <summary>
+            /// Gets the product sale price no tax.
+            /// </summary>
+            public static string ProductSalePriceNoTax
+            {
+                get
+                {
+                    return "merchProductSalePriceNoTax";
+                }
+            }
+
+            /// <summary>
+            /// Gets the product sale price tax amount.
+            /// </summary>
+            public static string ProductSalePriceTaxAmount
+            {
+                get
+                {
+                    return "merchProductSalePriceTaxAmount";
+                }
+            }
+
+            /// <summary>
             /// Gets the tax transaction results.
             /// </summary>
             public static string TaxTransactionResults
@@ -431,6 +492,39 @@
                 get
                 {
                     return "merchCouponReward";
+                }
+            }
+
+            /// <summary>
+            /// Gets the coupon reward log.
+            /// </summary>
+            public static string CouponRewardLog
+            {
+                get
+                {
+                    return "merchCouponRewardLog";
+                }
+            }
+
+            /// <summary>
+            /// Gets the coupon adjusted product pre tax total.
+            /// </summary>
+            public static string CouponAdjustedProductPreTaxTotal
+            {
+                get
+                {
+                    return "merchCouponAdjustedProductPreTaxTotal";                    
+                }
+            }
+
+            /// <summary>
+            /// Gets the coupon adjusted product tax total.
+            /// </summary>
+            public static string CouponAdjustedProductTaxTotal
+            {
+                get
+                {
+                    return "merchCouponAdjustedProductTaxTotal";
                 }
             }
 

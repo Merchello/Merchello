@@ -28,6 +28,10 @@
             AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
 
             AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
+
+            AutoMapper.Mapper.CreateMap<ProductDisplay, ProductVariantDisplay>()
+                .ForMember(dest => dest.Key, opt => opt.MapFrom(x => x.ProductVariantKey))
+                .ForMember(dest => dest.ProductKey, opt => opt.MapFrom(x => x.Key));
         }
     }
 }

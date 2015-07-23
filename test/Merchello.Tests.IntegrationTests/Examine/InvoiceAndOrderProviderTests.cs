@@ -205,7 +205,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             PreTestDataWorker.InvoiceService.Save(invoice3);
 
             //// Act
-            var merchello = new MerchelloHelper();
+            var merchello = new Merchello.Web.MerchelloHelper();
 
             var invoices = merchello.InvoicesByCustomer(customer.Key);
 

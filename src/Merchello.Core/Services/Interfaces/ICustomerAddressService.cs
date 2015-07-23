@@ -37,14 +37,14 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Delete(ICustomerAddress address, bool raiseEvents = true);
 
-        /////// <summary>
-        /////// The delete.
-        /////// </summary>
-        /////// <param name="addresses">
-        /////// The addresses.
-        /////// </param>
-        /////// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        ////void Delete(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true);
+        ///// <summary>
+        ///// The delete.
+        ///// </summary>
+        ///// <param name="addresses">
+        ///// The addresses.
+        ///// </param>
+        ///// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
+        //void Delete(IEnumerable<ICustomerAddress> addresses, bool raiseEvents = true);
 
         /// <summary>
         /// The get by key.
@@ -97,11 +97,22 @@
         IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType);
 
         /// <summary>
-        /// Gets a colleciton of all customer addresses
+        /// Gets a collection of all customer addresses
         /// </summary>
         /// <returns>
-        /// The colleciton of all customer addresses.
+        /// The collection of all customer addresses.
         /// </returns>
         IEnumerable<ICustomerAddress> GetAll();
+
+        /// <summary>
+        /// Gets the count of addresses for a customer.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        int Count(Guid customerKey);
     }
 }

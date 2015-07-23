@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Trigger call to notifify the monitor of a change
+        /// Trigger call to notify the monitor of a change
         /// </summary>
         /// <param name="value">
         /// The model to be used by the monitor

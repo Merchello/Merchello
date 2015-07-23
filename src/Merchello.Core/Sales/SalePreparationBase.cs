@@ -123,6 +123,11 @@
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to apply taxes to invoice.
+        /// </summary>
+        public bool ApplyTaxesToInvoice { get; set; }
+
+        /// <summary>
         /// Gets the offer codes.
         /// </summary>
         internal IEnumerable<string> OfferCodes
@@ -132,12 +137,6 @@
                 return this._offerCodeTempData.Value;
             }
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to apply taxes to invoice.
-        /// </summary>
-        internal bool ApplyTaxesToInvoice { get; set; }
-
 
         /// <summary>
         /// Gets the <see cref="IRuntimeCacheProvider"/>
@@ -590,7 +589,7 @@
         /// </returns>
         internal ILineItemContainer CreateNewLineContainer(IEnumerable<ILineItem> filteredItems)
         {
-            return LineItemExtensions.CreateNewBackOfficeLineItemContainer(filteredItems);
+            return LineItemExtensions.CreateNewItemCacheLineItemContainer(filteredItems);
         }
 
         /// <summary>

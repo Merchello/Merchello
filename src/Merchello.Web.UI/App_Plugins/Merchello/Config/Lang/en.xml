@@ -40,8 +40,9 @@
     <key alias="product">Product</key>
     <key alias="variant">Variant</key>
     <key alias="sku">SKU</key>
+    <key alias="costOfGoods">Cost of Goods</key>
     <key alias="baseSku">Base Sku</key>
-    <key alias="barcode">Barcode</key>sel
+    <key alias="barcode">Barcode</key>
     <key alias="manufacturer">Manufacturer</key>
     <key alias="manufacturerModel">Manufacturer's Model No.</key>
     <key alias="variantInfo">Variant Information</key>
@@ -96,7 +97,7 @@
     <key alias="orderNumber">Order #</key>
     <key alias="paymentStatus">Payment Status</key>
     <key alias="fulfillmentStatus">Fulfillment Status</key>
-    <key alias="lineItems"> Line Items</key>
+    <key alias="lineItems">Line Items</key>
     <key alias="orderName">[Order Name]</key>
     <key alias="createOrder">Create Order</key>
     <key alias="sales">Sales</key>
@@ -118,6 +119,10 @@
     <key alias="processedBy">Processed by</key>
     <key alias="refundMethod">Refund method</key>
     <key alias="resetFilters">Reset Filters</key>
+    <key alias="archiveSales">Archive Sales</key>
+    <key alias="unarchiveSales">Unarchive Sales</key>
+    <key alias="noSalesYet">You have no sales yet</key>
+    <key alias="butSoonYouWill">but soon you will!</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -228,6 +233,7 @@
     <key alias="globalShippable">All items are shippable</key>
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
+    <key alias="globalTaxationApplication">Set how taxes are applied</key>
   </area>
 
   <area alias="merchelloShippingCountry">
@@ -276,6 +282,7 @@
     <key alias="taxation" >Taxation</key>
     <key alias="taxMethods" >Tax Methods</key>
     <key alias="taxMethodsHelper" >Set flat tax rates for your shipping regions</key>
+    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
   </area>
   <area alias="merchelloNotifications">
     <key alias="notifications" >Notifications</key>
