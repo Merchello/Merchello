@@ -182,7 +182,7 @@
             }
             else if (_adjustmentType == CouponDiscountLineItemReward.Adjustment.Percent)
             {
-                var modifiedPrice = lineItem.Price * DiscountPercent;
+                var modifiedPrice = lineItem.Price - (lineItem.Price * DiscountPercent);
                 audit.Log = new[]
                 {
                     new DataModifierLog()
@@ -193,11 +193,11 @@
                         }
                 };
                 _audits.Add(audit);
-                _qualifyingTotal += lineItem.Price;
+                _qualifyingTotal += lineItem.Price * lineItem.Quantity;
             }
             else
             {
-                _qualifyingTotal += lineItem.Price;
+                _qualifyingTotal += lineItem.Price * lineItem.Quantity;
             }
         }
 
