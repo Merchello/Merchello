@@ -88,7 +88,8 @@
                         <div class="row-fluid col-xs-8 span8">
                             <label for="template"><localize key="merchelloNotificationsEdit_emailTemplateEditBody" /></label>
                             <ng-form>
-                                <umb-editor model="rteProperties"></umb-editor>
+                                <textarea data-ng-model="notificationMessage.bodyText" class="col-xs-12 span12" rows="10"></textarea>
+                                <!--umb-editor model="rteProperties"></umb-editor-->
                             </ng-form>
                         </div>
                     </div>

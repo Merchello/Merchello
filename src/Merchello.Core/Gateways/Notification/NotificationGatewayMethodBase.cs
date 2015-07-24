@@ -65,8 +65,8 @@
             {
                 return _notificationMessages ??
                        (_notificationMessages =
-                           GatewayProviderService.GetNotificationMessagesByMethodKey(_notificationMethod.Key))
-                           .Select(x => x.ShallowCopy());
+                           GatewayProviderService.GetNotificationMessagesByMethodKey(_notificationMethod.Key));
+                           //.Select(x => x.ShallowCopy());
             }
         }
 
