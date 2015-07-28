@@ -172,24 +172,6 @@
         [Constraint(Default = "0")]
         public bool Master { get; set; }
 
-        /// <summary>
-        /// Gets or sets the detached published content type key.
-        /// </summary>
-        [Column("detachedPublishedContentTypeKey")]
-        [ForeignKey(typeof(DetachedContentTypeDto), Name = "FK_merchProductVariant_merchDetachedPublishedContent", Column = "pk")]
-        public Guid DetachedPublishedContentTypeKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the detached content values.
-        /// </summary>
-        /// <remarks>
-        /// Introduced in version 1.11.0
-        /// Used to store property value JSON similar to the Nested Content package
-        /// </remarks>
-        [Column("detachedContentValues")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        [SpecialDbType(SpecialDbTypes.NTEXT)]
-        public string DetachedContentValues { get; set; }
 
         /// <summary>
         /// Gets or sets the version key.
@@ -218,10 +200,5 @@
         [ResultColumn]
         public ProductVariantIndexDto ProductVariantIndexDto { get; set; }
 
-        /// <summary>
-        /// Gets or sets the detached published content type.
-        /// </summary>
-        [ResultColumn]
-        public DetachedContentTypeDto DetachedContentType { get; set; }
     }
 }

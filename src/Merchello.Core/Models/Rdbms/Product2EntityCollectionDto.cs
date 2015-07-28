@@ -8,25 +8,25 @@
     /// <summary>
     /// The product 2 product collection dto.
     /// </summary>
-    [TableName("merchProduct2ProductCollection")]
+    [TableName("merchProduct2EntityCollection")]
     [PrimaryKey("productKey", autoIncrement = false)]
     [ExplicitColumns]
-    internal class Product2ProductCollectionDto
+    internal class Product2EntityCollectionDto
     {
         /// <summary>
         /// Gets or sets the product key.
         /// </summary>
         [Column("productKey")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProduct2ProductCollection", OnColumns = "productKey, productCollectionKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProduct2EntityCollection", OnColumns = "productKey, entityCollectionKey")]
         [ForeignKey(typeof(ProductDto), Name = "FK_merchProduct2ProductCollection_merchProduct", Column = "pk")]
         public Guid ProductKey { get; set; }
 
         /// <summary>
         /// Gets or sets the product collection key.
         /// </summary>
-        [Column("productCollectionKey")]
-        [ForeignKey(typeof(ProductCollectionDto), Name = "FK_merchProduct2ProductCollection_merchProductCollection", Column = "pk")]
-        public Guid ProductCollectionKey { get; set; }
+        [Column("entityCollectionKey")]
+        [ForeignKey(typeof(EntityCollectionDto), Name = "FK_merchProduct2EntityCollection_merchEntityCollection", Column = "pk")]
+        public Guid EntityCollectionKey { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
@@ -46,6 +46,6 @@
         /// Gets or sets the product collection.
         /// </summary>
         [ResultColumn]
-        public ProductCollectionDto ProductCollection { get; set; }
+        public EntityCollectionDto EntityCollection { get; set; }
     }
 }
