@@ -1,0 +1,60 @@
+﻿namespace Merchello.Core.Persistence.Factories
+{
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The entity collection factory.
+    /// </summary>
+    internal class EntityCollectionFactory : IEntityFactory<IEntityCollection, EntityCollectionDto>
+    {
+        /// <summary>
+        /// The build entity.
+        /// </summary>
+        /// <param name="dto">
+        /// The dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityCollection"/>.
+        /// </returns>
+        public IEntityCollection BuildEntity(EntityCollectionDto dto)
+        {
+            var collection = new EntityCollection(dto.EntityTfKey, dto.ProviderKey)
+                {
+                    Key = dto.Key,
+                    Name = dto.Name,
+                    CreateDate = dto.CreateDate,
+                    UpdateDate = dto.UpdateDate
+                };
+
+            collection.ResetDirtyProperties();
+
+            return collection;
+        }
+
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionDto"/>.
+        /// </returns>
+        public EntityCollectionDto BuildDto(IEntityCollection entity)
+        {
+            var dto = new EntityCollectionDto()
+                {
+                    Key = entity.Key,
+                    EntityTfKey = entity.EntityTfKey,
+                    Name = entity.Name,
+                    ProviderKey = entity.ProviderKey,
+                    CreateDate = entity.CreateDate,
+                    UpdateDate = entity.UpdateDate
+                };
+
+            return dto;
+        }
+    }
+}

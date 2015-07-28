@@ -11,26 +11,26 @@
     using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
-    /// The create product 2 product collection table.
+    /// The create product collection table.
     /// </summary>
-    [Migration("1.10.0", "1.10.0.1", 1, MerchelloConfiguration.MerchelloMigrationName)]
-    public class CreateProduct2ProductCollectionTable : MigrationBase 
+    [Migration("1.10.0", "1.10.0.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    public class CreateEntityCollectionTable : MigrationBase 
     {
-        /// <summary>
+         /// <summary>
         /// Tables in the order of creation or reverse deletion.
         /// </summary>
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
-            { 0, typeof(Product2ProductCollectionDto) }
+            { 0, typeof(EntityCollectionDto) }
         };
 
         /// <summary>
-        /// Creates the merchProduct2ProductCollection table in the database
+        /// Adds the merchProductCollection table to the database.
         /// </summary>
         public override void Up()
         {
             var database = ApplicationContext.Current.DatabaseContext.Database;
-            if (!database.TableExist("merchProduct2ProductCollection"))
+            if (!database.TableExist("merchEntityCollection"))
             {
                 DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.11.0 upgrade");
             }
@@ -40,7 +40,7 @@
         /// The down.
         /// </summary>
         /// <exception cref="DataLossException">
-        /// Throws a data loss exception on a downgrade attempt
+        /// Throws a data loss exception if a downgrade is attempted
         /// </exception>
         public override void Down()
         {

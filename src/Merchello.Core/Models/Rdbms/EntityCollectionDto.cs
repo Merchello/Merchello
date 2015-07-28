@@ -8,10 +8,10 @@
     /// <summary>
     /// The product collection dto.
     /// </summary>
-    [TableName("merchProductCollection")]
+    [TableName("merchEntityCollection")]
     [PrimaryKey("pk", autoIncrement = false)]
     [ExplicitColumns]
-    internal class ProductCollectionDto
+    internal class EntityCollectionDto
     {
         /// <summary>
         /// Gets or sets the key.
@@ -22,15 +22,22 @@
         public Guid Key { get; set; }
 
         /// <summary>
+        /// Gets or sets the entity type field key.
+        /// </summary>
+        [Column("entityTfKey")]
+        public Guid EntityTfKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [Column("name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the key for the dynamic collection.
+        /// Gets or sets the key for the collection provider.
         /// </summary>
-        public Guid? DynamicCollection { get; set; }
+        [Column("providerKey")]
+        public Guid ProviderKey { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
