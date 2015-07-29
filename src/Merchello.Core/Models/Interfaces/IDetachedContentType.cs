@@ -8,7 +8,7 @@
     /// Defines detached content.
     /// </summary>
     public interface IDetachedContentType : IEntity
-    {
+    {        
         /// <summary>
         /// Gets or sets the entity type field key.
         /// </summary>

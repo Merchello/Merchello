@@ -24,22 +24,22 @@
         /// Gets or sets the product variant key.
         /// </summary>
         [Column("productVariantKey")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProductVariant2DetachedContent", OnColumns = "productVariantKey, detachedContentTypeKey,cultureName")]
-        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchProductVariant2DetachedContent_merchProductVariant", Column = "pk")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProductVariantDetachedContent", OnColumns = "productVariantKey, detachedContentTypeKey,cultureName")]
+        [ForeignKey(typeof(ProductVariantDto), Name = "FK_merchProductVariantDetachedContent_merchProductVariant", Column = "pk")]
         public Guid ProductVariantKey { get; set; }
 
         /// <summary>
         /// Gets or sets the detached content type key.
         /// </summary>
         [Column("detachedContentTypeKey")]
-        [ForeignKey(typeof(DetachedContentTypeDto), Name = "FK_merchProductVariant2DetachedContent_merchDetachedContentTypeKey", Column = "pk")]
+        [ForeignKey(typeof(DetachedContentTypeDto), Name = "FK_merchProductVariantDetachedContent_merchDetachedContentTypeKey", Column = "pk")]
         public Guid DetachedContentTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the culture name.
         /// </summary>
         [Column("cultureName")]
-        [Index(IndexTypes.NonClustered, Name = "IX_merchProductVariant2DetachedContentCultureName")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchProductVariantDetachedContentCultureName")]
         public string CultureName { get; set; }
 
         /// <summary>
@@ -60,6 +60,13 @@
         [Column("templateId")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public int? TemplateId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the slug.
+        /// </summary>
+        [Column("slug")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Slug { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.

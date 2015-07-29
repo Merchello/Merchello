@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models.EntityBase
+﻿namespace Merchello.Core.Models.EntityBase
 {
+    using System;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// Defines an Entity.
     /// Entities should always have an Id, Created and Modified date
@@ -10,7 +10,7 @@ namespace Merchello.Core.Models.EntityBase
     public interface IEntity : ITracksDirty
     {
         /// <summary>
-        /// Guid based Id
+        /// Gets or sets the GUID based Id
         /// </summary>
         [DataMember]
         Guid Key { get; set; }
@@ -28,10 +28,9 @@ namespace Merchello.Core.Models.EntityBase
         DateTime UpdateDate { get; set; }
 
         /// <summary>
-        /// Indicates whether the current entity has an identity, eg. Id.
+        /// Gets a value indicating whether the current entity has an identity, e.g. Id.
         /// </summary>
         [IgnoreDataMember]
-        bool HasIdentity { get; } 
-           
+        bool HasIdentity { get; }            
     }
 }
