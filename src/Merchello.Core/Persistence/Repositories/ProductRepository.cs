@@ -675,6 +675,126 @@
         }
 
         /// <summary>
+        /// Adds a product to a static product collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddProductToCollection(Guid productKey, Guid collectionKey)
+        {
+            var dto = new Product2EntityCollectionDto()
+                          {
+                              ProductKey = productKey,
+                              EntityCollectionKey = collectionKey,
+                              CreateDate = DateTime.Now,
+                              UpdateDate = DateTime.Now
+                          };
+
+            Database.Insert(dto);
+        }
+
+        /// <summary>
+        /// The remove product from collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveProductFromCollection(Guid productKey, Guid collectionKey)
+        {
+            Database.Execute(
+                "DELETE merchProduct2EntityCollection WHERE merchProduct2EntityCollection.productKey = @pkey AND merchProduct2EntityCollection.entityCollectionKey = @eckey",
+                new { @pkey = productKey, @eckey = collectionKey });
+        }
+
+        /// <summary>
+        /// The get product keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetProductKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT productKey")
+                .Append("FROM [merchProduct]")
+                .Append("INNER JOIN [merchProduct2EntityCollection]")
+                .Append("ON	[merchProduct].[pk] = [merchProduct2EntityCollection].[productKey]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @eckey = collectionKey });
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get products from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetProductsFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+             var sql = new Sql();
+            sql.Append("SELECT productKey")
+                .Append("FROM [merchProduct]")
+                .Append("INNER JOIN [merchProduct2EntityCollection]")
+                .Append("ON	[merchProduct].[pk] = [merchProduct2EntityCollection].[productKey]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @eckey = collectionKey });
+
+            var p = base.GetDtoPage(page, itemsPerPage, sql, orderExpression, sortDirection);
+
+            return this.MapPageDtoToPageEntity(p);
+        }
+
+        /// <summary>
         /// Get the paged keys.
         /// </summary>
         /// <param name="page">

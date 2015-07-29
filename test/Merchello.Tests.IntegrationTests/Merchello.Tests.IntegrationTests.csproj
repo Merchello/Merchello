@@ -279,6 +279,7 @@
     <Compile Include="Reports\ReportResolutionTests.cs" />
     <Compile Include="Scratch.cs" />
     <Compile Include="Services\Product\ProductAllinTests.cs" />
+    <Compile Include="Services\Product\ProductCollectionTests.cs" />
     <Compile Include="Services\Shipping\ShippingServiceTests.cs" />
     <Compile Include="Services\Warehouse\WarehhouseServiceTests.cs" />
     <Compile Include="Shipping\ShippingLineItemTests.cs" />

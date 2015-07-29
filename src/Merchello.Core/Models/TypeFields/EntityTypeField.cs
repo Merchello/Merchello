@@ -8,7 +8,7 @@ namespace Merchello.Core.Models.TypeFields
     /// <summary>
     /// Type fields for Merchello entities
     /// </summary>
-    internal sealed class EntityTypeField : TypeFieldMapper<EntityType>, IEntityTypeField
+    public sealed class EntityTypeField : TypeFieldMapper<EntityType>, IEntityTypeField
     {
 
         internal EntityTypeField()

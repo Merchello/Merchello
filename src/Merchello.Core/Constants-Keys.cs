@@ -195,6 +195,20 @@
         public static class ProviderKeys
         {
             /// <summary>
+            /// The entity collection.
+            /// </summary>
+            public static class EntityCollection
+            {
+                /// <summary>
+                /// Gets the static product collection provider key.
+                /// </summary>
+                public static Guid StaticProductCollectionProviderKey
+                {
+                    get { return new Guid("4700456D-A872-4721-8455-1DDAC19F8C16"); }
+                }
+            }
+
+            /// <summary>
             /// The shipping gateway providers keys.
             /// </summary>
             public static class Shipping

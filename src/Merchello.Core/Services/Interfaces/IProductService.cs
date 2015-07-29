@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
 
     using Models;
@@ -150,6 +151,100 @@
         /// <param name="sku">The SKU to be tested</param>
         /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
+
+        /// <summary>
+        /// The add product to collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        void AddProductToCollection(IProduct product, IEntityCollection collection);
+
+        /// <summary>
+        /// The add product to collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        void AddProductToCollection(IProduct product, Guid collectionKey);
+
+        /// <summary>
+        /// The add product to collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        void AddProductToCollection(Guid productKey, Guid collectionKey);
+
+        /// <summary>
+        /// The remove product from collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        void RemoveProductFromCollection(IProduct product, IEntityCollection collection);
+
+        /// <summary>
+        /// The remove product from collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        void RemoveProductFromCollection(IProduct product, Guid collectionKey);
+
+        /// <summary>
+        /// The remove product from collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        void RemoveProductFromCollection(Guid productKey, Guid collectionKey);
+
+        /// <summary>
+        /// The get products from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        Page<IProduct> GetProductsFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending);
 
         //#region Filter Queries
 
