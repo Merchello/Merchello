@@ -320,6 +320,20 @@
         #endregion
 
         /// <summary>
+        /// Returns a value indicating whether or not the product exists in a collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool ExistsInCollection(Guid productKey, Guid collectionKey);
+
+        /// <summary>
         /// Adds a product to a static product collection.
         /// </summary>
         /// <param name="productKey">

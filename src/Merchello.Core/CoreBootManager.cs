@@ -8,6 +8,7 @@
     using Gateways;
 
     using Merchello.Core.Chains.OfferConstraints;
+    using Merchello.Core.EntityCollections;
     using Merchello.Core.Marketing.Offer;
 
     using Observation;
@@ -107,6 +108,8 @@
             InitializeResolvers();
 
             InitializeObserverSubscriptions();
+
+            this.InitializeEntityCollectionProviderResolver(MerchelloContext.Current);
 
             IsInitialized = true;   
 
@@ -229,6 +232,24 @@
                 PluginManager.Current.ResolveGatewayProviders(),
                 serviceContext.GatewayProviderService,
                 cache.RuntimeCache);
+        }
+
+        /// <summary>
+        /// The initialize entity collection provider resolver.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
+        private void InitializeEntityCollectionProviderResolver(IMerchelloContext merchelloContext)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent)
+            {
+                LogHelper.Info<CoreBootManager>("Initializing EntityCollectionProviders");
+
+                EntityCollectionProviderResolver.Current = new EntityCollectionProviderResolver(
+                   PluginManager.Current.ResolveEnityCollectionProviders(),
+                   merchelloContext);                 
+            }
         }
     }
 }

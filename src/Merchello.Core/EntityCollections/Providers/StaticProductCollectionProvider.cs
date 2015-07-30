@@ -1,22 +1,18 @@
-﻿namespace Merchello.Core.EntityCollections
+﻿namespace Merchello.Core.EntityCollections.Providers
 {
     using System;
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Models.Interfaces;
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Services;
-
-    using umbraco.cms.presentation;
 
     using Umbraco.Core.Persistence;
 
     /// <summary>
     /// The static product collection provider.
     /// </summary>
-    [EntityCollectionProvider("Static Product Collection", "A static product collection")]
+    [EntityCollectionProvider("4700456D-A872-4721-8455-1DDAC19F8C16", "9F923716-A022-4089-A110-1E9B4E1F2AD1", "Static Product Collection", "A static product collection that could be used for product categories and product groupings", false)]
     public class StaticProductCollectionProvider : EntityCollectionProviderBase<IProduct>
     {
         /// <summary>
@@ -33,41 +29,6 @@
         {
         }
 
-        /// <summary>
-        /// Gets the provider key.
-        /// </summary>
-        public override Guid ProviderKey
-        {
-            get
-            {
-                return Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey;
-            }
-        }
-
-        /// <summary>
-        /// Gets the entity type.
-        /// </summary>
-        public override ITypeField EntityType
-        {
-            get
-            {
-                return EnumTypeFieldConverter.EntityType.Product;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this provider manages a single (unique) <see cref="IEntityCollection"/>.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="StaticProductCollectionProvider"/> manages multiple product collections
-        /// </remarks>
-        public override bool ManagesUniqueCollection
-        {
-            get
-            {
-                return false;
-            }
-        }
 
         /// <summary>
         /// The get entities.
@@ -75,9 +36,9 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProduct}"/>.
         /// </returns>
-        public override IEnumerable<IProduct> GetEntities()
+        protected override IEnumerable<IProduct> PerformGetEntities()
         {
-            return this.GetPagedEntities(1, long.MaxValue).Items;
+            return this.PerformGetPagedEntities(1, long.MaxValue).Items;
         }
 
         /// <summary>
@@ -98,10 +59,10 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public override Page<IProduct> GetPagedEntities(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
+        protected override Page<IProduct> PerformGetPagedEntities(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return MerchelloContext.Services.ProductService.GetProductsFromStaticCollection(
-                CollectionKey,
+            return this.MerchelloContext.Services.ProductService.GetProductsFromStaticCollection(
+                this.CollectionKey,
                 page,
                 itemsPerPage,
                 sortBy,
@@ -126,10 +87,10 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public override Page<Guid> GetPagedEntityKeys(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
+        protected override Page<Guid> PerformGetPagedEntityKeys(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return ((ProductService)MerchelloContext.Services.ProductService).GetProductKeysFromStaticCollection(
-                CollectionKey,
+            return ((ProductService)this.MerchelloContext.Services.ProductService).GetProductKeysFromStaticCollection(
+                this.CollectionKey,
                 page,
                 itemsPerPage,
                 sortBy,

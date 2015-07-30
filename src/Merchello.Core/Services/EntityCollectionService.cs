@@ -7,6 +7,7 @@
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
@@ -113,8 +114,8 @@
         /// <summary>
         /// The create entity collection.
         /// </summary>
-        /// <param name="entityTfKey">
-        /// The entity type field key.
+        /// <param name="entityType">
+        /// The entity type.
         /// </param>
         /// <param name="providerKey">
         /// The provider key.
@@ -128,26 +129,18 @@
         /// <returns>
         /// The <see cref="IEntityCollection"/>.
         /// </returns>
-        public IEntityCollection CreateEntityCollection(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true)
+        public IEntityCollection CreateEntityCollection(EntityType entityType, Guid providerKey, string name, bool raiseEvents = true)
         {
-            Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
-            var collection = new EntityCollection(entityTfKey, providerKey) { Name = name };
+            var entityTfKey = EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey;
 
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IEntityCollection>(collection), this))
-            {
-                collection.WasCancelled = true;
-                return collection;
-            }
-
-            return collection;
+            return CreateEntityCollection(entityTfKey, providerKey, name, raiseEvents);
         }
 
         /// <summary>
         /// The create entity collection with key.
         /// </summary>
-        /// <param name="entityTfKey">
-        /// The entity type field key.
+        /// <param name="entityType">
+        /// The entity type.
         /// </param>
         /// <param name="providerKey">
         /// The provider key.
@@ -161,26 +154,15 @@
         /// <returns>
         /// The <see cref="IEntityCollection"/>.
         /// </returns>
-        public IEntityCollection CreateEntityCollectionWithKey(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true)
+        public IEntityCollection CreateEntityCollectionWithKey(
+            EntityType entityType,
+            Guid providerKey,
+            string name,
+            bool raiseEvents = true)
         {
-            var collection = this.CreateEntityCollection(entityTfKey, providerKey, name, raiseEvents);
+            var entityTfKey = EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey;
 
-            if (((EntityCollection)collection).WasCancelled) return collection;
-
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
-                {
-                    repository.AddOrUpdate(collection);
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents) 
-            Created.RaiseEvent(new Events.NewEventArgs<IEntityCollection>(collection), this);
-
-            return collection;
+            return CreateEntityCollectionWithKey(entityTfKey, providerKey, name, raiseEvents);
         }
 
         /// <summary>
@@ -369,11 +351,102 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        internal IEnumerable<IEntityCollection> GetAll()
+        public IEnumerable<IEntityCollection> GetAll()
         {
             using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
+            }
+        }
+
+
+        /// <summary>
+        /// The create entity collection.
+        /// </summary>
+        /// <param name="entityTfKey">
+        /// The entity type field key.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityCollection"/>.
+        /// </returns>
+        internal IEntityCollection CreateEntityCollection(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true)
+        {
+            Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
+            Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
+            var collection = new EntityCollection(entityTfKey, providerKey) { Name = name };
+
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IEntityCollection>(collection), this))
+            {
+                collection.WasCancelled = true;
+                return collection;
+            }
+
+            return collection;
+        }
+
+        /// <summary>
+        /// The create entity collection with key.
+        /// </summary>
+        /// <param name="entityTfKey">
+        /// The entity type field key.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityCollection"/>.
+        /// </returns>
+        internal IEntityCollection CreateEntityCollectionWithKey(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true)
+        {
+            var collection = this.CreateEntityCollection(entityTfKey, providerKey, name, raiseEvents);
+
+            if (((EntityCollection)collection).WasCancelled) return collection;
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
+                {
+                    repository.AddOrUpdate(collection);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents)
+                Created.RaiseEvent(new Events.NewEventArgs<IEntityCollection>(collection), this);
+
+            return collection;
+        }
+
+        /// <summary>
+        /// The get entity collections by product key.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        internal IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey)
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntityCollectionsByProductKey(productKey);                
             }
         } 
     }

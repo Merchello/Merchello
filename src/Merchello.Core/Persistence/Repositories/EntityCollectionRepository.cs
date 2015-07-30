@@ -36,6 +36,30 @@
         }
 
         /// <summary>
+        /// The get entity collections by product key.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey)
+        {
+            var sql =
+                this.GetBaseQuery(false)
+                    .Append("WHERE [merchEntityCollection].[pk] IN (")
+                    .Append("SELECT DISTINCT([entityCollectionKey])")
+                    .Append("FROM [merchProduct2EntityCollection]")
+                    .Append("WHERE [merchProduct2EntityCollection].[productKey] = @pkey", new { @pkey = productKey })
+                    .Append(")");
+            var dtos = Database.Fetch<EntityCollectionDto>(sql);
+            var factory = new EntityCollectionFactory();
+
+            return dtos.Select(factory.BuildEntity);
+        }
+
+        /// <summary>
         /// The perform get.
         /// </summary>
         /// <param name="key">
@@ -190,6 +214,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-        }
+        }        
     }
 }

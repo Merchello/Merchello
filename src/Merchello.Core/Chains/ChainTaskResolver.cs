@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Configuration;
-using System.Linq;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Core.Chains
+﻿namespace Merchello.Core.Chains
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Configuration;
+
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Utility class to resolve chain tasks
     /// </summary>
@@ -33,7 +35,7 @@ namespace Merchello.Core.Chains
         /// </summary>
         /// <typeparam name="T">The type of the task</typeparam>
         /// <param name="chainAlias">The 'configuration' alias of the chain.  This is the merchello.config value</param>
-        /// <param name="ctrValues"></param>
+        /// <param name="ctrValues">Constructor values</param>
         /// <returns>A collection of instantiated of AttemptChainTask</returns>
         internal static IEnumerable<T> ResolveAttemptChainByAlias<T>(string chainAlias, object[] ctrValues) where T : class, IAttemptChainTask<T>, new()
         {
@@ -59,7 +61,7 @@ namespace Merchello.Core.Chains
         /// Gets a list of types from the merchello.config file
         /// </summary>
         /// <param name="chainAlias">The 'configuration' alias of the chain.  This is the merchello.config value</param>
-        /// <returns></returns>
+        /// <returns>The collection of types to instantiate</returns>
         internal static IEnumerable<string> GetTypesForChain(string chainAlias)
         {
             var config = MerchelloConfiguration.Current.GetTaskChainElement(chainAlias);

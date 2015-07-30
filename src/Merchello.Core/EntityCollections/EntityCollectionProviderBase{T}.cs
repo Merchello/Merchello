@@ -4,8 +4,6 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Models.Interfaces;
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence.Querying;
 
     using Umbraco.Core.Persistence;
@@ -34,28 +32,37 @@
         }
 
         /// <summary>
-        /// Gets the provider key.
+        /// The get entities.
         /// </summary>
-        public abstract Guid ProviderKey { get; }
-
-        /// <summary>
-        /// Gets the entity type.
-        /// </summary>
-        public abstract ITypeField EntityType { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this provider manages a single (unique) <see cref="IEntityCollection"/>.
-        /// </summary>
-        /// <remarks>
-        /// If true, the boot manager will automatically add the collection to the merchEntityCollection table if it does not exist.
-        /// Likewise, if the provider is removed, it will remove itself from the merchEntityCollection table
-        /// </remarks>
-        public virtual bool ManagesUniqueCollection
+        /// <returns>
+        /// The <see cref="IEnumerable{T}"/>.
+        /// </returns>
+        public IEnumerable<T> GetEntities()
         {
-            get
-            {
-                return true;
-            }
+            return this.PerformGetEntities();
+        }
+
+        /// <summary>
+        /// The get paged entities.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<T> GetPagedEntities(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
+        {
+            return this.PerformGetPagedEntities(page, itemsPerPage, sortBy, sortDirection);
         }
 
         /// <summary>
@@ -64,7 +71,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{T}"/>.
         /// </returns>
-        public abstract IEnumerable<T> GetEntities();
+        protected abstract IEnumerable<T> PerformGetEntities();
 
         /// <summary>
         /// The get entities.
@@ -84,35 +91,10 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        public abstract Page<T> GetPagedEntities(
+        protected abstract Page<T> PerformGetPagedEntities(
             long page,
             long itemsPerPage,
             string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Ascending);
-
-        /// <summary>
-        /// The get paged entity keys.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{Guid}"/>.
-        /// </returns>
-        public abstract Page<Guid> GetPagedEntityKeys(
-            long page,
-            long itemsPerPage,
-            string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Ascending);
-
+            SortDirection sortDirection = SortDirection.Ascending);        
     }
 }

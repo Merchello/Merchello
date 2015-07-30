@@ -38,7 +38,7 @@
         /// </summary>
         [Column("providerKey")]
         public Guid ProviderKey { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the update date.
         /// </summary>

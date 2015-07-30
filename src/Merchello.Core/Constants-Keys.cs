@@ -450,6 +450,17 @@
                 }
 
                 /// <summary>
+                /// Gets the entity collection key.
+                /// </summary>
+                public static Guid EntityCollectionKey
+                {
+                    get
+                    {
+                        return new Guid("A3C60219-2687-4044-A85C-CC7D6FFCA298");
+                    }
+                }
+
+                /// <summary>
                 /// Gets the gateway provider type field key that represents the entity
                 /// </summary>
                 public static Guid GatewayProviderKey

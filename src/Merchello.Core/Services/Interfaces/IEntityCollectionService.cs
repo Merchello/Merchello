@@ -15,8 +15,8 @@
         /// <summary>
         /// The create entity collection.
         /// </summary>
-        /// <param name="entityTfKey">
-        /// The entity type field key.
+        /// <param name="entityType">
+        /// The entity type.
         /// </param>
         /// <param name="providerKey">
         /// The provider key.
@@ -30,13 +30,13 @@
         /// <returns>
         /// The <see cref="IEntityCollection"/>.
         /// </returns>
-        IEntityCollection CreateEntityCollection(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true);
+        IEntityCollection CreateEntityCollection(EntityType entityType, Guid providerKey, string name, bool raiseEvents = true);
 
         /// <summary>
         /// The create entity collection with key.
         /// </summary>
-        /// <param name="entityTfKey">
-        /// The entity type field key.
+        /// <param name="entityType">
+        /// The entity type.
         /// </param>
         /// <param name="providerKey">
         /// The provider key.
@@ -50,7 +50,48 @@
         /// <returns>
         /// The <see cref="IEntityCollection"/>.
         /// </returns>
-        IEntityCollection CreateEntityCollectionWithKey(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true);
+        IEntityCollection CreateEntityCollectionWithKey(EntityType entityType, Guid providerKey, string name, bool raiseEvents = true);
+
+
+        ///// <summary>
+        ///// The create entity collection.
+        ///// </summary>
+        ///// <param name="entityTfKey">
+        ///// The entity type field key.
+        ///// </param>
+        ///// <param name="providerKey">
+        ///// The provider key.
+        ///// </param>
+        ///// <param name="name">
+        ///// The name.
+        ///// </param>
+        ///// <param name="raiseEvents">
+        ///// Optional boolean indicating whether or not to raise events
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="IEntityCollection"/>.
+        ///// </returns>
+        //IEntityCollection CreateEntityCollection(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true);
+
+        ///// <summary>
+        ///// The create entity collection with key.
+        ///// </summary>
+        ///// <param name="entityTfKey">
+        ///// The entity type field key.
+        ///// </param>
+        ///// <param name="providerKey">
+        ///// The provider key.
+        ///// </param>
+        ///// <param name="name">
+        ///// The name.
+        ///// </param>
+        ///// <param name="raiseEvents">
+        ///// Optional boolean indicating whether or not to raise events
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="IEntityCollection"/>.
+        ///// </returns>
+        //IEntityCollection CreateEntityCollectionWithKey(Guid entityTfKey, Guid providerKey, string name, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single entity collection.
@@ -128,5 +169,13 @@
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
         IEnumerable<IEntityCollection> GetByProviderKey(Guid providerKey);
+
+        /// <summary>
+        /// The get all.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetAll();
     }
 }
