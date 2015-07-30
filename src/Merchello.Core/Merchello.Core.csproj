@@ -266,6 +266,7 @@
     <Compile Include="EntityCollections\EntityCollectionProviderBase.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderBase{T}.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider.cs" />
+    <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
     <Compile Include="EntityCollections\StaticProductCollectionProvider.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />

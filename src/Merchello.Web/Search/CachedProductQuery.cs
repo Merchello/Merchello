@@ -12,17 +12,12 @@
     using global::Examine;
     using global::Examine.Providers;
 
-    using log4net.Util;
-
     using Merchello.Core.Chains;
     using Merchello.Examine.Providers;
     using Merchello.Web.DataModifiers;
 
     using Models.ContentEditing;
     using Models.Querying;
-
-    using umbraco;
-    using umbraco.cms.presentation;
 
     /// <summary>
     /// Represents a CachedProductQuery
@@ -256,7 +251,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetProductsFromCollection(
+        public QueryResultDisplay GetProductsFromStaticCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -265,7 +260,7 @@
         {
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductKeysFromCollection(
+                    _productService.GetProductKeysFromStaticCollection(
                         collectionKey,
                         page,
                         itemsPerPage,

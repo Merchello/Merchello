@@ -919,6 +919,7 @@
                     "DELETE FROM merchCatalogInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariant WHERE productKey = @Key",
+                    "DELETE FROM merchProduct2EntityCollection WHERE productKey = @Key",
                     "DELETE FROM merchProduct WHERE pk = @Key",
                     "DELETE FROM merchProductOption WHERE pk NOT IN (SELECT optionKey FROM merchProduct2ProductOption)"
                 };

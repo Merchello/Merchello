@@ -362,5 +362,19 @@
                 return repository.GetByQuery(query);
             }
         }
+
+        /// <summary>
+        /// The get all.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        internal IEnumerable<IEntityCollection> GetAll()
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        } 
     }
 }

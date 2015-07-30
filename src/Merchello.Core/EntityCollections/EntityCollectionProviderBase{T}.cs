@@ -84,7 +84,31 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        public abstract Page<T> GetEntities(
+        public abstract Page<T> GetPagedEntities(
+            long page,
+            long itemsPerPage,
+            string sortBy = "name",
+            SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// The get paged entity keys.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public abstract Page<Guid> GetPagedEntityKeys(
             long page,
             long itemsPerPage,
             string sortBy = "name",

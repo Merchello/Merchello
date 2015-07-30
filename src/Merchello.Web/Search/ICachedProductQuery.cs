@@ -121,7 +121,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        QueryResultDisplay GetProductsFromCollection(
+        QueryResultDisplay GetProductsFromStaticCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,

@@ -14,6 +14,8 @@
     {
         private IProductService _productService;
 
+        private IEntityCollectionService _entityCollectionService;
+
         private IProduct _product;
 
         [TestFixtureSetUp]
@@ -22,8 +24,10 @@
             base.FixtureSetup();
 
             DbPreTestDataWorker.DeleteAllProducts();
-            _productService = DbPreTestDataWorker.ProductService;
+            DbPreTestDataWorker.DeleteAllEntityCollections();
 
+            _productService = DbPreTestDataWorker.ProductService;
+            _entityCollectionService = DbPreTestDataWorker.EntityCollectionService;
 
             _product = DbPreTestDataWorker.MakeExistingProduct();
             _product.ProductOptions.Add(new ProductOption("Color"));
@@ -44,9 +48,5 @@
             _productService.Save(_product);
         }
 
-        public void Can_Add_Product_To_A_Collection()
-        {
-            
-        }
     }
 }
