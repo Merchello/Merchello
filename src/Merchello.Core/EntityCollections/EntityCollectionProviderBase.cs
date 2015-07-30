@@ -31,6 +31,7 @@
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             MerchelloContext = merchelloContext;
             this.CollectionKey = collectionKey;
+            this.Initialize();
         }
 
         /// <summary>

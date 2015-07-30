@@ -237,9 +237,9 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        Page<IProduct> GetProductsFromCollection(
+        Page<IProduct> GetProductsFromStaticCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,

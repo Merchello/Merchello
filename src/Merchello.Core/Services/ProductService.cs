@@ -595,7 +595,7 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public Page<IProduct> GetProductsFromCollection(
+        public Page<IProduct> GetProductsFromStaticCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -643,7 +643,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetProductKeysFromCollection(
+        internal Page<Guid> GetProductKeysFromStaticCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,

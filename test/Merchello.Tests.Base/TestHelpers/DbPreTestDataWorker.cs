@@ -129,6 +129,24 @@ namespace Merchello.Tests.Base.TestHelpers
 
         #endregion
 
+        #region IEntityCollection
+
+        public void DeleteAllEntityCollections()
+        {
+            var collections = ((EntityCollectionService)_serviceContext.EntityCollectionService).GetAll();
+            EntityCollectionService.Delete(collections);
+        }
+
+        public IEntityCollectionService EntityCollectionService
+        {
+            get
+            {
+                return _serviceContext.EntityCollectionService;
+            }
+        }
+
+        #endregion
+
         #region IItemCache
 
         /// <summary>

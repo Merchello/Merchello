@@ -7,6 +7,9 @@
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Services;
+
+    using umbraco.cms.presentation;
 
     using Umbraco.Core.Persistence;
 
@@ -74,7 +77,7 @@
         /// </returns>
         public override IEnumerable<IProduct> GetEntities()
         {
-            return this.GetEntities(1, long.MaxValue).Items;
+            return this.GetPagedEntities(1, long.MaxValue).Items;
         }
 
         /// <summary>
@@ -95,9 +98,37 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public override Page<IProduct> GetEntities(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
+        public override Page<IProduct> GetPagedEntities(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return MerchelloContext.Services.ProductService.GetProductsFromCollection(
+            return MerchelloContext.Services.ProductService.GetProductsFromStaticCollection(
+                CollectionKey,
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection);
+        }
+
+        /// <summary>
+        /// The get paged entity keys.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public override Page<Guid> GetPagedEntityKeys(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
+        {
+            return ((ProductService)MerchelloContext.Services.ProductService).GetProductKeysFromStaticCollection(
                 CollectionKey,
                 page,
                 itemsPerPage,
