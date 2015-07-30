@@ -1,54 +1,62 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
+    /// <summary>
+    /// Defines the EntityTypeField.
+    /// </summary>
     public interface IEntityTypeField : ITypeFieldMapper<EntityType>
     {
         /// <summary>
-        /// The customer entity type
+        /// Gets the customer entity type
         /// </summary>
         ITypeField Customer { get; }
 
         /// <summary>
-        /// The GatewayProvider entity type
+        /// Gets the entity collection entity type.
+        /// </summary>
+        ITypeField EntityCollection { get; }
+
+        /// <summary>
+        /// Gets the GatewayProvider entity type
         /// </summary>
         ITypeField GatewayProvider { get; }
 
         /// <summary>
-        /// The Invoice entity type
+        /// Gets the Invoice entity type
         /// </summary>
         ITypeField Invoice { get; }
 
         /// <summary>
-        /// The ItemCache entity type
+        /// Gets the ItemCache entity type
         /// </summary>
         ITypeField ItemCache { get; }
 
         /// <summary>
-        /// The Order entity type
+        /// Gets the Order entity type
         /// </summary>
         ITypeField Order { get; }
 
         /// <summary>
-        /// The Payemnt entity type
+        /// Gets the Payment entity type
         /// </summary>
         ITypeField Payment { get; }
 
         /// <summary>
-        /// The Product entity type
+        /// Gets the Product entity type
         /// </summary>
         ITypeField Product { get;  }
 
         /// <summary>
-        /// The Shipment Entity type
+        /// Gets the Shipment Entity type
         /// </summary>
         ITypeField Shipment { get; }
 
         /// <summary>
-        /// The Warehouse Entity type
+        /// Gets the Warehouse Entity type
         /// </summary>
         ITypeField Warehouse { get; }
 
         /// <summary>
-        /// The WarehouseCatalog entity tyep
+        /// Gets the WarehouseCatalog entity type
         /// </summary>
         ITypeField WarehouseCatalog { get; }
     }

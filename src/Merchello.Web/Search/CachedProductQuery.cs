@@ -13,11 +13,14 @@
     using global::Examine.Providers;
 
     using Merchello.Core.Chains;
+    using Merchello.Core.EntityCollections;
     using Merchello.Examine.Providers;
     using Merchello.Web.DataModifiers;
 
     using Models.ContentEditing;
     using Models.Querying;
+
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents a CachedProductQuery
@@ -251,21 +254,32 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetProductsFromStaticCollection(
+        public QueryResultDisplay GetProductsFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
             string sortBy = "name",
             SortDirection sortDirection = SortDirection.Ascending)
         {
+            var provider = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
+
+            if (provider == null)
+            {
+                LogHelper.Debug<CachedProductQuery>("EntityCollectionProvider was not resolved");
+                return new QueryResultDisplay();
+            }
+
+            if (!provider.EnsureEntityType(EntityType.Product))
+            {
+                var invalid =
+                    new InvalidCastException(
+                        "Attempted to query a product collection with a provider that does not handle the product entity type");
+                LogHelper.Error<CachedProductQuery>("Invalid query operation", invalid);
+                throw invalid;
+            }
+
             return
-                this.GetQueryResultDisplay(
-                    _productService.GetProductKeysFromStaticCollection(
-                        collectionKey,
-                        page,
-                        itemsPerPage,
-                        sortBy,
-                        sortDirection));
+                this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>

@@ -4,23 +4,29 @@ namespace Merchello.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Xml;
     using System.Xml.Linq;
 
-    using Merchello.Core.Chains;
+    using Merchello.Core.EntityCollections;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Services;
 
     using Models;
-    using Models.Interfaces;
+
     using Newtonsoft.Json;
+
+    using Umbraco.Core.Logging;
+
     using Formatting = Newtonsoft.Json.Formatting;
 
     /// <summary>
     /// The product extensions.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class ProductExtensions
     {
         /// <summary>
@@ -159,7 +165,7 @@ namespace Merchello.Core
         }
 
         /// <summary>
-        /// Removes a product varaint from a catalog inventory.
+        /// Removes a product variant from a catalog inventory.
         /// </summary>
         /// <param name="productVariant">
         /// The product variant.
@@ -175,7 +181,7 @@ namespace Merchello.Core
         }
 
         /// <summary>
-        /// Removes a product varaint from a catalog inventory.
+        /// Removes a product variant from a catalog inventory.
         /// </summary>
         /// <param name="productVariant">
         /// The product variant.
@@ -206,6 +212,71 @@ namespace Merchello.Core
 
             return optionChoices.CartesianProduct();
         }
+
+        #region Static Product Collections
+
+        /// <summary>
+        /// Adds a product to a static product collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public static void AddToCollection(this IProduct product, Guid collectionKey)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent || !MerchelloContext.HasCurrent) return;
+            var provider = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
+            if (provider == null) return;
+            if (!provider.EnsureEntityType(EntityType.Product))
+            {
+                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a product to a non product collection");
+                return;
+            }
+
+            MerchelloContext.Current.Services.ProductService.AddProductToCollection(product.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The remove from collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>        
+        public static void RemoveFromCollection(this IProduct product, Guid collectionKey)
+        {
+            if (!MerchelloContext.HasCurrent) return;
+            MerchelloContext.Current.Services.ProductService.RemoveProductFromCollection(product.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The get entity collections.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        /// <remarks>
+        /// This is internal so that people do not query for these entries in a big product list 
+        /// which would be really excessive database calls.
+        /// TODO need to decide how to cache these to provide that functionality
+        /// </remarks>
+        internal static IEnumerable<IEntityCollection> GetEntityCollections(this IProduct product)
+        {
+            if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
+            return
+                ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
+                    .GetEntityCollectionsByProductKey(product.Key);
+        } 
+
+        #endregion
+
 
         #region DataModifier
 

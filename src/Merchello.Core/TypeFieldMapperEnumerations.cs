@@ -77,6 +77,7 @@
     {
         CampaignOffer,
         Customer,
+        EntityCollection,
         GatewayProvider,
         Invoice,
         ItemCache,

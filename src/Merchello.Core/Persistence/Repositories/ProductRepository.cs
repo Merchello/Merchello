@@ -29,6 +29,8 @@
         /// </summary>
         private readonly IProductVariantRepository _productVariantRepository;
 
+        private readonly IEntityCollectionRepository _entityCollectionRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductRepository"/> class.
         /// </summary>
@@ -675,6 +677,30 @@
         }
 
         /// <summary>
+        /// Returns a value indicating whether or not the product exists in a collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid productKey, Guid collectionKey)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT COUNT(*)")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @pkey = productKey, @eckey = collectionKey });
+
+            return Database.ExecuteScalar<int>(sql) > 0;
+        }
+
+        /// <summary>
         /// Adds a product to a static product collection.
         /// </summary>
         /// <param name="productKey">
@@ -685,6 +711,8 @@
         /// </param>
         public void AddProductToCollection(Guid productKey, Guid collectionKey)
         {
+            if (this.ExistsInCollection(productKey, collectionKey)) return;
+            
             var dto = new Product2EntityCollectionDto()
                           {
                               ProductKey = productKey,
@@ -708,7 +736,7 @@
         public void RemoveProductFromCollection(Guid productKey, Guid collectionKey)
         {
             Database.Execute(
-                "DELETE merchProduct2EntityCollection WHERE merchProduct2EntityCollection.productKey = @pkey AND merchProduct2EntityCollection.entityCollectionKey = @eckey",
+                "DELETE [merchProduct2EntityCollection] WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
                 new { @pkey = productKey, @eckey = collectionKey });
         }
 
@@ -741,13 +769,14 @@
             SortDirection sortDirection = SortDirection.Descending)
         {
             var sql = new Sql();
-            sql.Append("SELECT productKey")
-                .Append("FROM [merchProduct]")
-                .Append("INNER JOIN [merchProduct2EntityCollection]")
-                .Append("ON	[merchProduct].[pk] = [merchProduct2EntityCollection].[productKey]")
-                .Append(
-                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
-                    new { @eckey = collectionKey });
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] IN (")
+               .Append("SELECT DISTINCT([productKey])")
+               .Append("FROM [merchProduct2EntityCollection]")
+               .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -780,18 +809,16 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-             var sql = new Sql();
-            sql.Append("SELECT productKey")
-                .Append("FROM [merchProduct]")
-                .Append("INNER JOIN [merchProduct2EntityCollection]")
-                .Append("ON	[merchProduct].[pk] = [merchProduct2EntityCollection].[productKey]")
-                .Append(
-                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
-                    new { @eckey = collectionKey });
+            var p = this.GetProductKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
 
-            var p = base.GetDtoPage(page, itemsPerPage, sql, orderExpression, sortDirection);
-
-            return this.MapPageDtoToPageEntity(p);
+            return new Page<IProduct>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
         }
 
         /// <summary>

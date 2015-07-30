@@ -262,12 +262,16 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="EntityCollections\EntityCollectionBaseExtensions.cs" />
+    <Compile Include="EntityCollections\EntityCollectionEvents.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderAttribute.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderBase.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderBase{T}.cs" />
+    <Compile Include="EntityCollections\EntityCollectionProviderResolver.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider.cs" />
+    <Compile Include="EntityCollections\IEntityCollectionProvider{T}.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
-    <Compile Include="EntityCollections\StaticProductCollectionProvider.cs" />
+    <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="Gateways\Taxation\IProductTaxCalculationResult.cs" />
@@ -308,6 +312,7 @@
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
     <Compile Include="Models\DetachedContentType.cs" />
     <Compile Include="Models\EntityCollection.cs" />
+    <Compile Include="Models\EntityCollectionExtensions.cs" />
     <Compile Include="Models\Interfaces\IDataModifierData.cs" />
     <Compile Include="Models\Interfaces\IDetachedContentType.cs" />
     <Compile Include="Models\Interfaces\IEntityCollection.cs" />
@@ -445,6 +450,7 @@
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\DigitalMediaMapper.cs" />
+    <Compile Include="Persistence\Mappers\EntityCollectionMapper.cs" />
     <Compile Include="Persistence\Mappers\OfferRedeemedMapper.cs" />
     <Compile Include="Persistence\Mappers\OfferSettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
@@ -452,6 +458,7 @@
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateProduct2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateEntityCollectionTable.cs" />
