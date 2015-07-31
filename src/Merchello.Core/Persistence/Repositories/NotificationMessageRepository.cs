@@ -105,7 +105,7 @@ namespace Merchello.Core.Persistence.Repositories
 
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
+            //RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
         }
 
         protected override void PersistUpdatedItem(INotificationMessage entity)
@@ -118,13 +118,13 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
+           // RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
         }
 
         protected override void PersistDeletedItem(INotificationMessage entity)
         {
             base.PersistDeletedItem(entity);
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
+            //RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
         }
     }
 }
