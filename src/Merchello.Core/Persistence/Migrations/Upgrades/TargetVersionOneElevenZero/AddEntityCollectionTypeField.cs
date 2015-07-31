@@ -9,12 +9,11 @@
     using Umbraco.Core;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
-    using Umbraco.Web.Cache;
 
     /// <summary>
     /// The add entity collection type field.
     /// </summary>
-    [Migration("1.10.0", "1.10.0.1", 4, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.10.0", "1.10.0.1", 5, MerchelloConfiguration.MerchelloMigrationName)]
     public class AddEntityCollectionTypeField : MigrationBase
     {
         /// <summary>

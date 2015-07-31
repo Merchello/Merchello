@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.EntityCollections
 {
     using System;
-    using System.Collections.Generic;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Persistence.Querying;
@@ -9,16 +8,16 @@
     using Umbraco.Core.Persistence;
 
     /// <summary>
-    /// The entity collection provider base.
+    /// The cached entity collection provider base.
     /// </summary>
     /// <typeparam name="T">
     /// The type of entity
     /// </typeparam>
-    public abstract class EntityCollectionProviderBase<T> : EntityCollectionProviderBase, IEntityCollectionProvider<T>
+    public abstract class CachedEntityCollectionProviderBase<T> : EntityCollectionProviderBase<T>, ICachedEntityCollectionProvider
         where T : IEntity
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityCollectionProviderBase{T}"/> class.
+        /// Initializes a new instance of the <see cref="CachedEntityCollectionProviderBase{T}"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -26,24 +25,13 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        protected EntityCollectionProviderBase(IMerchelloContext merchelloContext, Guid collectionKey)
+        protected CachedEntityCollectionProviderBase(IMerchelloContext merchelloContext, Guid collectionKey)
             : base(merchelloContext, collectionKey)
         {
         }
 
         /// <summary>
-        /// The get entities.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{T}"/>.
-        /// </returns>
-        public IEnumerable<T> GetEntities()
-        {
-            return this.PerformGetEntities();
-        }
-
-        /// <summary>
-        /// The get paged entities.
+        /// The get paged entity keys.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -58,23 +46,19 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page{T}"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public Page<T> GetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        /// <remarks>
+        /// All we're doing here is keeping a bit of control in case we need to do some processing before or after
+        /// later on.
+        /// </remarks>
+        public Page<Guid> GetPagedEntityKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return this.PerformGetPagedEntities(page, itemsPerPage, sortBy, sortDirection);
+            return this.PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
         }
 
         /// <summary>
-        /// The get entities.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{T}"/>.
-        /// </returns>
-        protected abstract IEnumerable<T> PerformGetEntities();
-
-        /// <summary>
-        /// The get entities.
+        /// The get paged entity keys.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -89,12 +73,12 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page{T}"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        protected abstract Page<T> PerformGetPagedEntities(
+        protected abstract Page<Guid> PerformGetPagedEntityKeys(
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending);        
+            SortDirection sortDirection = SortDirection.Ascending);
     }
 }

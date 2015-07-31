@@ -174,6 +174,7 @@
             var list = new List<string>
                 {
                     "DELETE FROM merchProduct2EntityCollection WHERE merchProduct2EntityCollection.entityCollectionKey = @Key",
+                    "DELETE FROM merchInvoice2EntityCollection WHERE merchInvoice2EntityCollection.entityCollectionKey = @Key",
                     "DELETE FROM merchEntityCollection WHERE merchEntityCollection.pk = @Key"
                 };
 

@@ -660,7 +660,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         public Page<Guid> GetProductsKeysOnSale(
             long page,

@@ -262,15 +262,18 @@
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="EntityCollections\CachedEntityCollectionProviderBase{T}.cs" />
     <Compile Include="EntityCollections\EntityCollectionBaseExtensions.cs" />
     <Compile Include="EntityCollections\EntityCollectionEvents.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderAttribute.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderBase.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderBase{T}.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderResolver.cs" />
+    <Compile Include="EntityCollections\ICachedEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider{T}.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
+    <Compile Include="EntityCollections\Providers\StaticInvoiceCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
@@ -359,6 +362,7 @@
     <Compile Include="Models\OfferSettings.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
+    <Compile Include="Models\Rdbms\Invoice2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\OfferRedeemedDto.cs" />
     <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />
     <Compile Include="Models\Rdbms\Product2EntityCollectionDto.cs" />
@@ -460,6 +464,7 @@
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateDetachedPublishedContentTypeTable.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateInvoice2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateProduct2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateEntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateProductVariantDetachedContentTable.cs" />

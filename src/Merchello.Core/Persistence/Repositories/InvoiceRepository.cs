@@ -130,6 +130,156 @@
             return value == null ? 0 : int.Parse(value.ToString());
         }
 
+        #region Static Collections
+
+        /// <summary>
+        /// Returns a value indicating whether or not the invoice exists in a collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid invoiceKey, Guid collectionKey)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT COUNT(*)")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append(
+                    "WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @ikey = invoiceKey, @eckey = collectionKey });
+
+            return Database.ExecuteScalar<int>(sql) > 0;
+        }
+
+        /// <summary>
+        /// Adds a invoice to a static invoice collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddInvoiceToCollection(Guid invoiceKey, Guid collectionKey)
+        {
+            if (this.ExistsInCollection(invoiceKey, collectionKey)) return;
+
+            var dto = new Invoice2EntityCollectionDto()
+            {
+                InvoiceKey = invoiceKey,
+                EntityCollectionKey = collectionKey,
+                CreateDate = DateTime.Now,
+                UpdateDate = DateTime.Now
+            };
+
+            Database.Insert(dto);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveProductFromCollection(Guid invoiceKey, Guid collectionKey)
+        {
+            Database.Execute(
+                "DELETE [merchInvoice2EntityCollection] WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey AND [merchInvoice2EntityCollection].[entityCollectionKey] = @eckey",
+                new { @pkey = invoiceKey, @eckey = collectionKey });
+        }
+
+
+        /// <summary>
+        /// The get invoice keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchInvoice]")
+               .Append("WHERE [merchInvoice].[pk] IN (")
+               .Append("SELECT DISTINCT([invoiceKey])")
+               .Append("FROM [merchInvoice2EntityCollection]")
+               .Append("WHERE [merchInvoice2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets invoices from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<IInvoice> GetInvoicesFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetInvoiceKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IInvoice>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        #endregion
+
+
         /// <summary>
         /// Gets an <see cref="IInvoice"/>.
         /// </summary>
@@ -250,6 +400,7 @@
                 "DELETE FROM merchInvoiceItem WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoiceIndex WHERE invoiceKey = @Key",
                 "DELETE FROM merchOfferRedeemed WHERE invoiceKey = @Key",
+                "DELETE FROM merchInvoice2EntityCollection WHERE invoiceKye = @Key",
                 "DELETE FROM merchInvoice WHERE pk = @Key"
             };
 
@@ -399,6 +550,5 @@
 
             return sql;
         }
-
     }
 }

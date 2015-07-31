@@ -4,6 +4,8 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
 
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// The entity collection extensions.
     /// </summary>
@@ -20,8 +22,14 @@
         /// </returns>
         public static EntityCollectionProviderBase ResolveProvider(this IEntityCollection collection)
         {
-            return !EntityCollectionProviderResolver.HasCurrent ? null : 
-                EntityCollectionProviderResolver.Current.GetProviderForCollection(collection.Key);
+            if (!EntityCollectionProviderResolver.HasCurrent) return null;
+ 
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collection.Key);
+
+            if (attempt.Success) return attempt.Result;
+            
+            LogHelper.Error(typeof(EntityCollectionExtensions), "Resolver failed to resolve collection provider", attempt.Exception);
+            return null;
         }
 
         /// <summary>
@@ -31,16 +39,23 @@
         /// The collection.
         /// </param>
         /// <typeparam name="T">
-        /// The type of entity
+        /// The type of provider
         /// </typeparam>
         /// <returns>
         /// The <see cref="EntityCollectionProviderBase"/>.
         /// </returns>
-        public static EntityCollectionProviderBase<T> ResolveProvider<T>(this IEntityCollection collection)
-            where T : IEntity
+        public static T ResolveProvider<T>(this IEntityCollection collection)
+            where T : class
         {
             var provider = collection.ResolveProvider();
-            return provider != null ? provider as EntityCollectionProviderBase<T> : null;
+            
+            if (provider == null) return null;
+            
+            if (provider is T) return provider as T;
+            
+            LogHelper.Debug(typeof(EntityCollectionExtensions), "Provider was resolved but was not of expected type.");
+
+            return null;
         }
 
         #region Examine

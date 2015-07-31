@@ -113,7 +113,7 @@
         /// <returns>
         /// The <see cref="EntityCollectionProviderBase"/>.
         /// </returns>
-        public EntityCollectionProviderBase GetProviderForCollection(Guid collectionKey)
+        public Attempt<EntityCollectionProviderBase> GetProviderForCollection(Guid collectionKey)
         {
             this.EnsureInitialized();
 
@@ -121,10 +121,11 @@
             if (_entityCollectionProviderCache.ContainsKey(collectionKey))
             {
                 var attempt = this.CreateInstance(_entityCollectionProviderCache[collectionKey], collectionKey);
-                return attempt.Success ? attempt.Result : null;
+                return attempt;
             }
 
-            return null;
+            var nullReference = new NullReferenceException("EntityCollectionProvider could not be resolved for the collection.");
+            return Attempt<EntityCollectionProviderBase>.Fail(nullReference);
         }
 
         /// <summary>
@@ -139,10 +140,14 @@
         /// <returns>
         /// The <see cref="T"/>.
         /// </returns>
-        public T GetProviderForCollection<T>(Guid collectionKey) where T : EntityCollectionProviderBase
+        public Attempt<T> GetProviderForCollection<T>(Guid collectionKey) where T : EntityCollectionProviderBase
         {
-            var provider = GetProviderForCollection(collectionKey); 
-            return provider != null ? provider as T : null;
+            var attempt = GetProviderForCollection(collectionKey);
+            return attempt.Success ? 
+               attempt.Result is T ? 
+               Attempt<T>.Succeed(attempt.Result as T) :
+               Attempt<T>.Fail(new InvalidCastException("Provider was resolved but was not of expected type."))
+               : Attempt<T>.Fail(attempt.Exception);
         }
 
         /// <summary>
