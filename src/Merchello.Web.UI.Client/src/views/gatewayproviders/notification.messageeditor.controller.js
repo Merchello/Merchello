@@ -45,7 +45,7 @@
             var promise = notificationGatewayProviderResource.getNotificationMessagesByKey(key);
             promise.then(function (notification) {
                 $scope.notificationMessage = notificationMessageDisplayBuilder.transform(notification);
-                $scope.rteProperties.value = notification.bodyText;
+                //$scope.rteProperties.value = notification.bodyText;
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             });
@@ -77,7 +77,8 @@
          */
         function save() {
             $scope.preValuesLoaded = false;
-            $scope.notificationMessage.bodyText = $scope.rteProperties.value;
+            //$scope.notificationMessage.bodyText = $scope.rteProperties.value;
+            console.info($scope.notificationMessage);
             var promiseSave = notificationGatewayProviderResource.updateNotificationMessage($scope.notificationMessage);
             promiseSave.then(function () {
                 notificationsService.success("Notification Message Saved");

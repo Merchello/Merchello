@@ -48,6 +48,15 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="IAppliedPaymentTypeField"/>
+        /// </summary>
+        /// <returns></returns>
+        public static IProductTypeField Product
+        {
+            get { return new ProductTypeField(); }
+        }
+
+        /// <summary>
         /// Gets the <see cref="IEntityTypeField"/>
         /// </summary>
         internal static IEntityTypeField EntityType

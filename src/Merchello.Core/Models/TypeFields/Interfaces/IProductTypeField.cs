@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the ProductTypeField
     /// </summary>
-    internal interface IProductTypeField : ITypeFieldMapper<ProductType>
+    public interface IProductTypeField : ITypeFieldMapper<ProductType>
     {
          
     }
