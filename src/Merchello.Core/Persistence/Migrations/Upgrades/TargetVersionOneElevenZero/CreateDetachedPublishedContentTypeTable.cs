@@ -16,7 +16,7 @@
     /// <summary>
     /// The create detached published content type table.
     /// </summary>
-    [Migration("1.10.0", "1.10.0.1", 3, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.10.0", "1.10.1.1", 3, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateDetachedPublishedContentTypeTable : MigrationBase 
     {
         /// <summary>

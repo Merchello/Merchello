@@ -150,7 +150,7 @@
             sql.Append("SELECT COUNT(*)")
                 .Append("FROM [merchInvoice2EntityCollection]")
                 .Append(
-                    "WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    "WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey AND [merchInvoice2EntityCollection].[entityCollectionKey] = @eckey",
                     new { @ikey = invoiceKey, @eckey = collectionKey });
 
             return Database.ExecuteScalar<int>(sql) > 0;

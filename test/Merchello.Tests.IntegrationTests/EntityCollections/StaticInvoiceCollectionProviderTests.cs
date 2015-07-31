@@ -75,14 +75,18 @@
             var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
             invoice.SetBillingAddress(billTo);
             _invoiceService.Save(invoice);
+
             var invoice2 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
             invoice2.SetBillingAddress(billTo);
             _invoiceService.Save(invoice2);
+            
             var invoice3 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            _invoiceService.Save(invoice3);
             invoice3.SetBillingAddress(billTo);
+            
             var invoice4 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
             invoice4.SetBillingAddress(billTo);
-
+            _invoiceService.Save(invoice4);
           
             
 
@@ -104,26 +108,24 @@
             Assert.NotNull(provider2);
             Assert.AreEqual(typeof(StaticInvoiceCollectionProvider), provider2.GetType());
 
+            invoice.AddToCollection(collection1);
+            invoice2.AddToCollection(collection1);
+            invoice3.AddToCollection(collection1);
+            invoice4.AddToCollection(collection1);
 
-            //// Act
-            //var odd = false;
-            //foreach (var p in products)
-            //{
-            //    odd = !odd;
-            //    p.AddToCollection(collection1.Key);
-            //    if (odd) p.AddToCollection(collection2.Key);
-            //}
+            invoice3.AddToCollection(collection2);
+            invoice4.AddToCollection(collection2);
 
-            ////// Assert
-            //var c1Products = provider1.GetEntities().ToArray();
-            //var c2Products = provider2.GetEntities().ToArray();
-            //Assert.IsTrue(c1Products.Any());
-            //Assert.IsTrue(c2Products.Any());
+            //// Assert
+            var c1Invoices = provider1.GetEntities().ToArray();
+            var c2Invoices = provider2.GetEntities().ToArray();
+            Assert.IsTrue(c1Invoices.Any());
+            Assert.IsTrue(c2Invoices.Any());
 
-            //Assert.Greater(c1Products.Count(), c2Products.Count());
+            Assert.Greater(c1Invoices.Count(), c2Invoices.Count());
 
-            //var p1 = c1Products.First();
-            //Assert.IsTrue(p1.GetEntityCollections().Any());
+            var i1 = c1Invoices.First();
+            Assert.IsTrue(i1.GetEntityCollections().Any());
 
         }
     }

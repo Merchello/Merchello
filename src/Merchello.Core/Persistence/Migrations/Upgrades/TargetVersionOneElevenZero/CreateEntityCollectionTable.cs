@@ -13,7 +13,7 @@
     /// <summary>
     /// The create product collection table.
     /// </summary>
-    [Migration("1.10.0", "1.10.0.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.10.0", "1.10.1.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateEntityCollectionTable : MigrationBase 
     {
          /// <summary>

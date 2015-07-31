@@ -13,7 +13,7 @@
     /// <summary>
     /// The create product variant 2 detached content type table.
     /// </summary>
-    [Migration("1.10.0", "1.10.0.1", 4, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.10.0", "1.10.1.1", 4, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateProductVariantDetachedContentTable : MigrationBase
     {
         /// <summary>

@@ -448,6 +448,23 @@
             {
                 return repository.GetEntityCollectionsByProductKey(productKey);                
             }
+        }
+
+        /// <summary>
+        /// The get entity collections by invoice key.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        internal IEnumerable<IEntityCollection> GetEntityCollectionsByInvoiceKey(Guid invoiceKey)
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntityCollectionsByInvoiceKey(invoiceKey);
+            }
         } 
     }
 }
