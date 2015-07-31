@@ -33,6 +33,6 @@ Merchello's forum is an extension of it's project package on [our.umbraco.org](h
 
 We would love and need your help. If you want to contribute to Merchello's core, the easiest way to get started is to fork the project on [GitHub](https://github.com/merchello/Merchello) and open <code>src/Merchello.sln</code> in Visual Studio. We're excited to see what you do!
 
-## Please report your bugs!
+## Please report bugs you find!
 
 If you don't want to dip your fingers into the core, one of the best ways you can contribute to Merchello is by letting us know if something is going wrong. This feedback is very useful to us - we can't catch them all! To view existing issues or submit one of your own, visit [issues.merchello.com](http://issues.merchello.com).
