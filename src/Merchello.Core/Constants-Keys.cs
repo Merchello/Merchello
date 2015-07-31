@@ -206,6 +206,17 @@
                 {
                     get { return new Guid("4700456D-A872-4721-8455-1DDAC19F8C16"); }
                 }
+
+                /// <summary>
+                /// Gets the static invoice collection provider key.
+                /// </summary>
+                public static Guid StaticInvoiceCollectionProviderKey
+                {
+                    get
+                    {
+                        return new Guid("1AEF5650-242D-4566-ADCA-AC0C90538B47");
+                    }
+                }
             }
 
             /// <summary>

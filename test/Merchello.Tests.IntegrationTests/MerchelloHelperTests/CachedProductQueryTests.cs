@@ -6,6 +6,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Examine.Providers;
     using Merchello.Tests.Base.DataMakers;
     using Merchello.Tests.Base.TestHelpers;
@@ -19,6 +20,8 @@
     {
         private MerchelloHelper _merchello;
 
+        private IEntityCollection _collection;
+
         [TestFixtureSetUp]
         public override void FixtureSetup()
         {
@@ -30,6 +33,12 @@
             _merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
 
             var productService = MerchelloContext.Current.Services.ProductService;
+            var entityCollectionService = MerchelloContext.Current.Services.EntityCollectionService;
+
+            _collection = entityCollectionService.CreateEntityCollectionWithKey(
+                EntityType.Product,
+                Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
+                "Test Merchello Helper Collection");
 
             var product = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product.ProductOptions.Add(new ProductOption("Color"));
@@ -52,6 +61,8 @@
             product.SalePrice = 25M;
             productService.Save(product);
 
+            product.AddToCollection(_collection);
+
             var product2 = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product2.ProductOptions.Add(new ProductOption("Color"));
             product2.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Purple", "purple"));
@@ -70,6 +81,8 @@
             productService.Save(product2);
             product2.CatalogInventories.First().Count = 10;
             productService.Save(product2);
+            
+            product2.AddToCollection(_collection);
 
             var product3 = MockProductDataMaker.MockProductCollectionForInserting(1).First();
             product3.ProductOptions.Add(new ProductOption("Color"));
@@ -110,6 +123,8 @@
             productService.Save(product4);
             product4.CatalogInventories.First().Count = 10;
             productService.Save(product4);
+
+            product4.AddToCollection(_collection);
         }
 
         [Test]
@@ -249,6 +264,18 @@
             //// Assert
             Assert.AreEqual(2, results.Items.Count());
             Assert.IsTrue(results.Items.All(x => ((ProductDisplay)x).Barcode == "barcode1" || ((ProductDisplay)x).Barcode == "barcode3"));
+        }
+
+        [Test]
+        public void Can_Retrieve_A_List_Of_Products_From_A_StaticCollection()
+        {
+            //// Arrange
+            
+            //// Act
+            var result = _merchello.Query.Product.GetProductsFromCollection(_collection.Key, 1, 100);
+
+            //// Assert
+            Assert.AreEqual(3, result.Items.Count());
         }
     }
 }

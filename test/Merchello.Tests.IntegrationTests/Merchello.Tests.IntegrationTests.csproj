@@ -251,12 +251,14 @@
     <Compile Include="DisplayClasses\GatewayProviderDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferComponentDefinitionDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferProviderTests.cs" />
+    <Compile Include="EntityCollections\StaticInvoiceCollectionProviderTests.cs" />
     <Compile Include="EntityCollections\StaticProductEntityCollectionProviderTests.cs" />
     <Compile Include="Examine\CachedQueryTests.cs" />
     <Compile Include="Examine\CustomerProviderTests.cs" />
     <Compile Include="Examine\InvoiceAndOrderProviderTests.cs" />
     <Compile Include="Gateways\ShippingContextTests.cs" />
     <Compile Include="Invoices\InvoiceTests.cs" />
+    <Compile Include="MerchelloHelperTests\CachedInvoiceQueryTests.cs" />
     <Compile Include="MerchelloHelperTests\CachedProductQueryTests.cs" />
     <Compile Include="MerchelloHelperTests\ProductDataModiferTests.cs" />
     <Compile Include="Notifications\NotificationContextTests.cs" />
