@@ -25,5 +25,16 @@
         /// Used by the StaticProductCollectionProvider
         /// </remarks>
         IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey);
+
+        /// <summary>
+        /// The get entity collections by invoice key.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetEntityCollectionsByInvoiceKey(Guid invoiceKey);
     }
 }

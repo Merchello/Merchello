@@ -13,7 +13,7 @@
     /// <summary>
     /// Create merchInvoice2EntityCollection table in the database.
     /// </summary>
-    [Migration("1.10.0", "1.10.0.1", 2, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.10.0", "1.10.1.1", 2, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateInvoice2EntityCollectionTable : MigrationBase
     {
         /// <summary>

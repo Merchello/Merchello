@@ -14,6 +14,8 @@
     using Gateways.Taxation;
 
     using Merchello.Core.Cache;
+    using Merchello.Core.EntityCollections;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
 
     using Newtonsoft.Json;
@@ -181,6 +183,69 @@
             return patterns.Where(x => x != null);
         }
        
+        #endregion
+
+        #region Static Collections
+
+        /// <summary>
+        /// The add to collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public static void AddToCollection(this IInvoice invoice, IEntityCollection collection)
+        {
+            invoice.AddToCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// The add to collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public static void AddToCollection(this IInvoice invoice, Guid collectionKey)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent || !MerchelloContext.HasCurrent) return;
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
+            if (!attempt.Success) return;
+
+            var provider = attempt.Result;
+
+            if (!provider.EnsureEntityType(EntityType.Invoice))
+            {
+                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a product to a non product collection");
+                return;
+            }
+
+            MerchelloContext.Current.Services.InvoiceService.AddInvoiceToCollection(invoice.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The get entity collections.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        internal static IEnumerable<IEntityCollection> GetEntityCollections(this IInvoice invoice)
+        {
+            if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
+
+
+            return
+                ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
+                    .GetEntityCollectionsByInvoiceKey(invoice.Key);
+        } 
+
         #endregion
 
         #region Customer

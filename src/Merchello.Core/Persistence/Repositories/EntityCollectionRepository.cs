@@ -60,6 +60,30 @@
         }
 
         /// <summary>
+        /// The get entity collections by invoice key.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetEntityCollectionsByInvoiceKey(Guid invoiceKey)
+        {
+            var sql =
+            this.GetBaseQuery(false)
+                .Append("WHERE [merchEntityCollection].[pk] IN (")
+                .Append("SELECT DISTINCT([entityCollectionKey])")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append("WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey", new { @ikey = invoiceKey })
+                .Append(")");
+                    var dtos = Database.Fetch<EntityCollectionDto>(sql);
+                    var factory = new EntityCollectionFactory();
+
+            return dtos.Select(factory.BuildEntity);
+        }
+
+        /// <summary>
         /// The perform get.
         /// </summary>
         /// <param name="key">
