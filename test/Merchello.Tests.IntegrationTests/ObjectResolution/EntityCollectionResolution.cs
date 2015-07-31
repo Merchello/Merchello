@@ -26,5 +26,19 @@
             //// Assert
             Assert.AreEqual(expected, key);
         }
+
+        [Test]
+        public void Can_Resolve_StaticInvoiceCollectionProvider_Key()
+        {
+            //// Arrange
+            var expected = Core.Constants.ProviderKeys.EntityCollection.StaticInvoiceCollectionProviderKey;
+            var resolver = EntityCollectionProviderResolver.Current;
+
+            //// Act
+            var key = resolver.GetProviderKey<StaticInvoiceCollectionProvider>();
+
+            //// Assert
+            Assert.AreEqual(expected, key);
+        }
     }
 }

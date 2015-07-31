@@ -216,6 +216,20 @@ namespace Merchello.Core
         #region Static Product Collections
 
         /// <summary>
+        /// The add to collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public static void AddToCollection(this IProduct product, IEntityCollection collection)
+        {
+            product.AddToCollection(collection.Key);
+        }
+
+        /// <summary>
         /// Adds a product to a static product collection.
         /// </summary>
         /// <param name="product">

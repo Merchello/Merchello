@@ -68,8 +68,9 @@
             { 40, typeof(OfferRedeemedDto) },
             { 41, typeof(EntityCollectionDto) },
             { 42, typeof(Product2EntityCollectionDto) },
-            { 43, typeof(DetachedContentTypeDto) },
-            { 44, typeof(ProductVariantDetachedContentDto) }
+            { 43, typeof(Invoice2EntityCollectionDto) },
+            { 44, typeof(DetachedContentTypeDto) },
+            { 45, typeof(ProductVariantDetachedContentDto) }
         };
 
         /// <summary>
