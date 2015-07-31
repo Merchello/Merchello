@@ -10,39 +10,38 @@
     using Umbraco.Core.Persistence;
 
     /// <summary>
-    /// The static product collection provider.
+    /// The static invoice collection provider.
     /// </summary>
-    [EntityCollectionProvider("4700456D-A872-4721-8455-1DDAC19F8C16", "9F923716-A022-4089-A110-1E9B4E1F2AD1", "Static Product Collection", "A static product collection that could be used for product categories and product groupings", false)]
-    public class StaticProductCollectionProvider : CachedEntityCollectionProviderBase<IProduct>
+    [EntityCollectionProvider("1AEF5650-242D-4566-ADCA-AC0C90538B47", "454539B9-D753-4C16-8ED5-5EB659E56665", "Static Invoice Collection", "A static invoice collection that could be used for categorizing or grouping sales", false)]
+    public class StaticInvoiceCollectionProvider : CachedEntityCollectionProviderBase<IInvoice>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StaticProductCollectionProvider"/> class.
+        /// Initializes a new instance of the <see cref="StaticInvoiceCollectionProvider"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
         /// <param name="collectionKey">
         /// The collection key.
-        /// </param>
-        public StaticProductCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
+        /// </param>        
+        public StaticInvoiceCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
             : base(merchelloContext, collectionKey)
         {
         }
 
-
         /// <summary>
-        /// The get entities.
+        /// The perform get entities.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable{IProduct}"/>.
+        /// The <see cref="IEnumerable{IInvoice}"/>.
         /// </returns>
-        protected override IEnumerable<IProduct> PerformGetEntities()
+        protected override IEnumerable<IInvoice> PerformGetEntities()
         {
             return this.PerformGetPagedEntities(1, long.MaxValue).Items;
         }
 
         /// <summary>
-        /// The get entities.
+        /// The perform get paged entities.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -57,12 +56,16 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page{IProduct}"/>.
+        /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        protected override Page<IProduct> PerformGetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        protected override Page<IInvoice> PerformGetPagedEntities(
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
         {
-            return this.MerchelloContext.Services.ProductService.GetProductsFromStaticCollection(
-                this.CollectionKey,
+            return MerchelloContext.Services.InvoiceService.GetInvoicesFromStaticCollection(
+                CollectionKey,
                 page,
                 itemsPerPage,
                 sortBy,
@@ -70,7 +73,7 @@
         }
 
         /// <summary>
-        /// The get paged entity keys.
+        /// The perform get paged entity keys.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -87,14 +90,19 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        protected override Page<Guid> PerformGetPagedEntityKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        protected override Page<Guid> PerformGetPagedEntityKeys(
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
         {
-            return ((ProductService)this.MerchelloContext.Services.ProductService).GetProductKeysFromStaticCollection(
-                this.CollectionKey,
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
+            return
+                ((InvoiceService)MerchelloContext.Services.InvoiceService).GetInvoiceKeysFromStaticCollection(
+                    CollectionKey,
+                    page,
+                    itemsPerPage,
+                    sortBy,
+                    sortDirection);
         }
     }
 }

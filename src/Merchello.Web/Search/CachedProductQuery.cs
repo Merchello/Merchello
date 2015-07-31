@@ -261,13 +261,15 @@
             string sortBy = "name",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            var provider = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection<CachedEntityCollectionProviderBase<IProduct>>(collectionKey);
 
-            if (provider == null)
+            if (!attempt.Success)
             {
-                LogHelper.Debug<CachedProductQuery>("EntityCollectionProvider was not resolved");
+                LogHelper.Error<CachedProductQuery>("EntityCollectionProvider was not resolved", attempt.Exception);
                 return new QueryResultDisplay();
             }
+
+            var provider = attempt.Result;
 
             if (!provider.EnsureEntityType(EntityType.Product))
             {

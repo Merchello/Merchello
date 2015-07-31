@@ -77,7 +77,7 @@
                 _providerKey,
                 "Product Collection1");
 
-            var provider1 = collection1.ResolveProvider<IProduct>();
+            var provider1 = collection1.ResolveProvider<StaticProductCollectionProvider>();
             Assert.NotNull(provider1);
             Assert.AreEqual(typeof(StaticProductCollectionProvider), provider1.GetType());
 
@@ -86,7 +86,7 @@
                 _providerKey,
                 "Product Collection2");
 
-            var provider2 = collection2.ResolveProvider<IProduct>();
+            var provider2 = collection2.ResolveProvider<StaticProductCollectionProvider>();
             Assert.NotNull(provider2);
             Assert.AreEqual(typeof(StaticProductCollectionProvider), provider2.GetType());
 

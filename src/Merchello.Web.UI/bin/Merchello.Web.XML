@@ -6423,6 +6423,29 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.GetInvoicesFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets products from a collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.GetByCustomerKey(System.Guid)">
             <summary>
             Gets the collection of all customer invoices
@@ -6789,6 +6812,29 @@
             </param>
             <param name="invoiceStatusKey">
             The invoice status key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.GetInvoicesFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            The get invoices from collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
             </param>
             <param name="page">
             The page.

@@ -227,8 +227,11 @@ namespace Merchello.Core
         public static void AddToCollection(this IProduct product, Guid collectionKey)
         {
             if (!EntityCollectionProviderResolver.HasCurrent || !MerchelloContext.HasCurrent) return;
-            var provider = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
-            if (provider == null) return;
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
+            if (!attempt.Success) return;
+
+            var provider = attempt.Result;
+
             if (!provider.EnsureEntityType(EntityType.Product))
             {
                 LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a product to a non product collection");

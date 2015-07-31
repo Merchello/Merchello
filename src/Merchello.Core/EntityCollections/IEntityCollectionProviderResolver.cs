@@ -4,6 +4,8 @@
     using System.Collections;
     using System.Collections.Generic;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines an EntityCollectionProviderResolver.
     /// </summary>
@@ -51,7 +53,7 @@
         /// <returns>
         /// The <see cref="EntityCollectionProviderBase"/>.
         /// </returns>
-        EntityCollectionProviderBase GetProviderForCollection(Guid collectionKey);
+        Attempt<EntityCollectionProviderBase> GetProviderForCollection(Guid collectionKey);
 
         /// <summary>
         /// The get provider for collection.
@@ -65,6 +67,6 @@
         /// <returns>
         /// The <see cref="T"/>.
         /// </returns>
-        T GetProviderForCollection<T>(Guid collectionKey) where T : EntityCollectionProviderBase;
+        Attempt<T> GetProviderForCollection<T>(Guid collectionKey) where T : EntityCollectionProviderBase;
     }
 }

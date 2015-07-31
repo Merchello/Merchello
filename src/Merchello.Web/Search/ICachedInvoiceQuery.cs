@@ -326,6 +326,34 @@
 
 
         /// <summary>
+        /// Gets products from a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        QueryResultDisplay GetInvoicesFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "invoiceNumber",
+            SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
         /// Gets the collection of all customer invoices
         /// </summary>
         /// <param name="customerKey">

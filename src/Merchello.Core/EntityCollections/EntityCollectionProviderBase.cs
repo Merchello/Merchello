@@ -64,33 +64,6 @@
         protected Guid CollectionKey { get; private set; }
 
         /// <summary>
-        /// The get paged entity keys.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{Guid}"/>.
-        /// </returns>
-        /// <remarks>
-        /// All we're doing here is keeping a bit of control in case we need to do some processing before or after
-        /// later on.
-        /// </remarks>
-        public Page<Guid> GetPagedEntityKeys(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
-        {
-            return this.PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
-        }
-
-        /// <summary>
         /// The ensure entity type.
         /// </summary>
         /// <param name="entityType">
@@ -119,31 +92,7 @@
             }
 
             return att.EntityTfKey.Equals(EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey);
-        }
-
-        /// <summary>
-        /// The get paged entity keys.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{Guid}"/>.
-        /// </returns>
-        protected abstract Page<Guid> PerformGetPagedEntityKeys(
-            long page,
-            long itemsPerPage,
-            string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Ascending);
+        }        
 
         /// <summary>
         /// Initializes the provider.

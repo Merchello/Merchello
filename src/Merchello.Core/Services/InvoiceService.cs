@@ -8,6 +8,7 @@
 
     using Merchello.Core.Events;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.Repositories;
     using Merchello.Core.Persistence.UnitOfWork;
@@ -16,6 +17,7 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Web.org.umbraco.our;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -552,6 +554,179 @@
                 return repository.GetAll();
             }
         }
+
+        #region Static Collections
+
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public void AddInvoiceToCollection(IInvoice invoice, IEntityCollection collection)
+        {
+            AddInvoiceToCollection(invoice, collection.Key);
+        }
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddInvoiceToCollection(IInvoice invoice, Guid collectionKey)
+        {
+            AddInvoiceToCollection(invoice.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddInvoiceToCollection(Guid invoiceKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                repository.AddInvoiceToCollection(invoiceKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public void RemoveInvoiceFromCollection(IInvoice invoice, IEntityCollection collection)
+        {
+            RemoveInvoiceFromCollection(invoice, collection.Key);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveInvoiceFromCollection(IInvoice invoice, Guid collectionKey)
+        {
+            RemoveInvoiceFromCollection(invoice.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveInvoiceFromCollection(Guid invoiceKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                repository.RemoveProductFromCollection(invoiceKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The get invoices from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<IInvoice> GetInvoicesFromStaticCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoicesFromCollection(
+                    collectionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get invoice keys from static collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetInvoiceKeysFromStaticCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoiceKeysFromCollection(
+                    collectionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        } 
+
+        #endregion
 
         /// <summary>
         /// Gets list of all <see cref="IInvoice"/>

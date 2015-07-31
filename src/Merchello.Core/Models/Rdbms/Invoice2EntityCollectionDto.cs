@@ -6,26 +6,26 @@
     using Umbraco.Core.Persistence.DatabaseAnnotations;
 
     /// <summary>
-    /// The product 2 product collection dto.
+    /// The invoice 2 entity collection dto.
     /// </summary>
-    [TableName("merchProduct2EntityCollection")]
-    [PrimaryKey("productKey", autoIncrement = false)]
+    [TableName("merchInvoice2EntityCollection")]
+    [PrimaryKey("invoiceKey", autoIncrement = false)]
     [ExplicitColumns]
-    internal class Product2EntityCollectionDto
+    internal class Invoice2EntityCollectionDto
     {
         /// <summary>
-        /// Gets or sets the product key.
+        /// Gets or sets the invoice key.
         /// </summary>
-        [Column("productKey")]
-        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchProduct2EntityCollection", OnColumns = "productKey, entityCollectionKey")]
-        [ForeignKey(typeof(ProductDto), Name = "FK_merchProduct2EnityCollection_merchProduct", Column = "pk")]
-        public Guid ProductKey { get; set; }
+        [Column("invoiceKey")]
+        [PrimaryKeyColumn(AutoIncrement = false, Name = "PK_merchInvoice2EntityCollection", OnColumns = "invoiceKey, entityCollectionKey")]
+        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchInvoice2EntityCollection_merchInvoice", Column = "pk")]
+        public Guid InvoiceKey { get; set; }
 
         /// <summary>
         /// Gets or sets the product collection key.
         /// </summary>
         [Column("entityCollectionKey")]
-        [ForeignKey(typeof(EntityCollectionDto), Name = "FK_merchProduct2EntityCollection_merchEntityCollection", Column = "pk")]
+        [ForeignKey(typeof(EntityCollectionDto), Name = "FK_merchInvoice2EntityCollection_merchEntityCollection", Column = "pk")]
         public Guid EntityCollectionKey { get; set; }
 
         /// <summary>
@@ -41,5 +41,5 @@
         [Column("createDate")]
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
-    }
+    }     
 }
