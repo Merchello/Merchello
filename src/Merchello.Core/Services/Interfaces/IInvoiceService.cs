@@ -182,7 +182,7 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        void AddInvoiceToCollection(IInvoice invoice, IEntityCollection collection);
+        void AddToCollection(IInvoice invoice, IEntityCollection collection);
 
         /// <summary>
         /// The add invoice to collection.
@@ -193,7 +193,7 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        void AddInvoiceToCollection(IInvoice invoice, Guid collectionKey);
+        void AddToCollection(IInvoice invoice, Guid collectionKey);
 
         /// <summary>
         /// The add invoice to collection.
@@ -204,7 +204,7 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        void AddInvoiceToCollection(Guid invoiceKey, Guid collectionKey);
+        void AddToCollection(Guid invoiceKey, Guid collectionKey);
 
         /// <summary>
         /// The remove invoice from collection.
@@ -215,7 +215,7 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        void RemoveInvoiceFromCollection(IInvoice invoice, IEntityCollection collection);
+        void RemoveFromCollection(IInvoice invoice, IEntityCollection collection);
 
         /// <summary>
         /// The remove invoice from collection.
@@ -226,7 +226,7 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        void RemoveInvoiceFromCollection(IInvoice invoice, Guid collectionKey);
+        void RemoveFromCollection(IInvoice invoice, Guid collectionKey);
 
         /// <summary>
         /// The remove invoice from collection.
@@ -237,7 +237,21 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        void RemoveInvoiceFromCollection(Guid invoiceKey, Guid collectionKey);
+        void RemoveFromCollection(Guid invoiceKey, Guid collectionKey);
+
+        /// <summary>
+        /// Returns true if the invoice exists in the static collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool ExistsInCollection(Guid invoiceKey, Guid collectionKey);
 
         /// <summary>
         /// The get invoices from collection.
@@ -260,7 +274,7 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        Page<IInvoice> GetInvoicesFromStaticCollection(
+        Page<IInvoice> GetFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,

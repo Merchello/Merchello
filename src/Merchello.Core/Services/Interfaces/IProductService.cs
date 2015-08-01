@@ -161,7 +161,7 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        void AddProductToCollection(IProduct product, IEntityCollection collection);
+        void AddToCollection(IProduct product, IEntityCollection collection);
 
         /// <summary>
         /// The add product to collection.
@@ -172,7 +172,7 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        void AddProductToCollection(IProduct product, Guid collectionKey);
+        void AddToCollection(IProduct product, Guid collectionKey);
 
         /// <summary>
         /// The add product to collection.
@@ -183,7 +183,21 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        void AddProductToCollection(Guid productKey, Guid collectionKey);
+        void AddToCollection(Guid productKey, Guid collectionKey);
+
+        /// <summary>
+        /// Returns true if the product exists in the static collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool ExistsInCollection(Guid productKey, Guid collectionKey);
 
         /// <summary>
         /// The remove product from collection.
@@ -194,7 +208,7 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        void RemoveProductFromCollection(IProduct product, IEntityCollection collection);
+        void RemoveFromCollection(IProduct product, IEntityCollection collection);
 
         /// <summary>
         /// The remove product from collection.
@@ -205,7 +219,7 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        void RemoveProductFromCollection(IProduct product, Guid collectionKey);
+        void RemoveFromCollection(IProduct product, Guid collectionKey);
 
         /// <summary>
         /// The remove product from collection.
@@ -216,7 +230,7 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        void RemoveProductFromCollection(Guid productKey, Guid collectionKey);
+        void RemoveFromCollection(Guid productKey, Guid collectionKey);
 
         /// <summary>
         /// The get products from collection.
@@ -239,7 +253,7 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        Page<IProduct> GetProductsFromStaticCollection(
+        Page<IProduct> GetFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,

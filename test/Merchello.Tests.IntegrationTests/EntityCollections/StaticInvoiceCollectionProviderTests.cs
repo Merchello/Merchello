@@ -125,7 +125,7 @@
             Assert.Greater(c1Invoices.Count(), c2Invoices.Count());
 
             var i1 = c1Invoices.First();
-            Assert.IsTrue(i1.GetEntityCollections().Any());
+            Assert.IsTrue(i1.GetCollectionsContaining().Any());
 
         }
     }

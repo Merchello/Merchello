@@ -41,6 +41,20 @@
         }
 
         /// <summary>
+        /// The perform exists.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected override bool PerformExists(IInvoice entity)
+        {
+            return MerchelloContext.Services.InvoiceService.ExistsInCollection(entity.Key, CollectionKey);
+        }
+
+        /// <summary>
         /// The perform get paged entities.
         /// </summary>
         /// <param name="page">
@@ -64,7 +78,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            return MerchelloContext.Services.InvoiceService.GetInvoicesFromStaticCollection(
+            return MerchelloContext.Services.InvoiceService.GetFromCollection(
                 CollectionKey,
                 page,
                 itemsPerPage,

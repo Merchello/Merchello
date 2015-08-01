@@ -42,6 +42,20 @@
         }
 
         /// <summary>
+        /// The perform exists.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected override bool PerformExists(IProduct entity)
+        {
+            return MerchelloContext.Services.ProductService.ExistsInCollection(entity.Key, CollectionKey);
+        }
+
+        /// <summary>
         /// The get entities.
         /// </summary>
         /// <param name="page">
@@ -61,7 +75,7 @@
         /// </returns>
         protected override Page<IProduct> PerformGetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return this.MerchelloContext.Services.ProductService.GetProductsFromStaticCollection(
+            return this.MerchelloContext.Services.ProductService.GetFromCollection(
                 this.CollectionKey,
                 page,
                 itemsPerPage,

@@ -43,6 +43,20 @@
         }
 
         /// <summary>
+        /// Returns true if the entity exists in the collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Exists(T entity)
+        {
+            return this.PerformExists(entity);
+        }
+
+        /// <summary>
         /// The get paged entities.
         /// </summary>
         /// <param name="page">
@@ -72,6 +86,17 @@
         /// The <see cref="IEnumerable{T}"/>.
         /// </returns>
         protected abstract IEnumerable<T> PerformGetEntities();
+
+        /// <summary>
+        /// Returns true if the entity exists in the collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected abstract bool PerformExists(T entity);
 
         /// <summary>
         /// The get entities.

@@ -109,7 +109,7 @@
             Assert.Greater(c1Products.Count(), c2Products.Count());
 
             var p1 = c1Products.First();
-            Assert.IsTrue(p1.GetEntityCollections().Any());
+            Assert.IsTrue(p1.GetCollectionsContaining().Any());
 
         }
     }

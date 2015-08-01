@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence.Querying;
@@ -64,7 +65,21 @@
         protected Guid CollectionKey { get; private set; }
 
         /// <summary>
-        /// The ensure entity type.
+        /// Ensures this is the provider by <see cref="System.Type"/>.
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        internal bool EnsureType(Type type)
+        {
+            return EntityCollection.TypeOfEntities() == type;
+        }
+
+        /// <summary>
+        /// Ensures this is the provider for the <see cref="EntityType"/>.
         /// </summary>
         /// <param name="entityType">
         /// The entity Type.

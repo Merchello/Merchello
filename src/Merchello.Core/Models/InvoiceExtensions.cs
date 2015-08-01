@@ -224,11 +224,11 @@
                 return;
             }
 
-            MerchelloContext.Current.Services.InvoiceService.AddInvoiceToCollection(invoice.Key, collectionKey);
+            MerchelloContext.Current.Services.InvoiceService.AddToCollection(invoice.Key, collectionKey);
         }
 
         /// <summary>
-        /// The get entity collections.
+        /// Returns static collections containing the invoice.
         /// </summary>
         /// <param name="invoice">
         /// The invoice.
@@ -236,7 +236,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        internal static IEnumerable<IEntityCollection> GetEntityCollections(this IInvoice invoice)
+        internal static IEnumerable<IEntityCollection> GetCollectionsContaining(this IInvoice invoice)
         {
             if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
 
