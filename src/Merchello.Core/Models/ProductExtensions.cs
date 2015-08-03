@@ -252,11 +252,25 @@ namespace Merchello.Core
                 return;
             }
 
-            MerchelloContext.Current.Services.ProductService.AddProductToCollection(product.Key, collectionKey);
+            MerchelloContext.Current.Services.ProductService.AddToCollection(product.Key, collectionKey);
         }
 
         /// <summary>
-        /// The remove from collection.
+        /// Removes a product from a collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public static void RemoveFromCollection(this IProduct product, IEntityCollection collection)
+        {
+            product.RemoveFromCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// Removes a product from a collection.
         /// </summary>
         /// <param name="product">
         /// The product.
@@ -267,11 +281,11 @@ namespace Merchello.Core
         public static void RemoveFromCollection(this IProduct product, Guid collectionKey)
         {
             if (!MerchelloContext.HasCurrent) return;
-            MerchelloContext.Current.Services.ProductService.RemoveProductFromCollection(product.Key, collectionKey);
+            MerchelloContext.Current.Services.ProductService.RemoveFromCollection(product.Key, collectionKey);
         }
 
         /// <summary>
-        /// The get entity collections.
+        /// Returns static collections containing the product.
         /// </summary>
         /// <param name="product">
         /// The product.
@@ -284,13 +298,18 @@ namespace Merchello.Core
         /// which would be really excessive database calls.
         /// TODO need to decide how to cache these to provide that functionality
         /// </remarks>
-        internal static IEnumerable<IEntityCollection> GetEntityCollections(this IProduct product)
+        internal static IEnumerable<IEntityCollection> GetCollectionsContaining(this IProduct product)
         {
             if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
             return
                 ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
                     .GetEntityCollectionsByProductKey(product.Key);
-        } 
+        }
+
+        //internal static bool ExistsInCollection(this IProduct product, IEntityCollection collection)
+        //{
+
+        //}
 
         #endregion
 

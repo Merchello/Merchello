@@ -23,6 +23,7 @@
             var collection = new EntityCollection(dto.EntityTfKey, dto.ProviderKey)
                 {
                     Key = dto.Key,
+                    ParentKey = dto.ParentKey,
                     Name = dto.Name,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
@@ -47,6 +48,7 @@
             var dto = new EntityCollectionDto()
                 {
                     Key = entity.Key,
+                    ParentKey = entity.ParentKey,
                     EntityTfKey = entity.EntityTfKey,
                     Name = entity.Name,
                     ProviderKey = entity.ProviderKey,

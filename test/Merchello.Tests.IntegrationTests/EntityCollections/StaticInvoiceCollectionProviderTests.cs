@@ -67,7 +67,7 @@
         }
 
         [Test]
-        public void Can_Add_Products_To_Collections()
+        public void Can_Add_Invoices_To_Collections()
         {
             //// Arrange
             var billTo = new Address() { Address1 = "test", CountryCode = "US", PostalCode = "11111" };
@@ -125,8 +125,62 @@
             Assert.Greater(c1Invoices.Count(), c2Invoices.Count());
 
             var i1 = c1Invoices.First();
-            Assert.IsTrue(i1.GetEntityCollections().Any());
+            Assert.IsTrue(i1.GetCollectionsContaining().Any());
 
+        }
+
+        [Test]
+        public void Can_Remove_Invoices_From_A_Collection()
+        {
+            //// Arrange
+            //// Arrange
+            var billTo = new Address() { Address1 = "test", CountryCode = "US", PostalCode = "11111" };
+
+            var invoice = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            invoice.SetBillingAddress(billTo);
+            _invoiceService.Save(invoice);
+
+            var invoice2 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            invoice2.SetBillingAddress(billTo);
+            _invoiceService.Save(invoice2);
+
+            var invoice3 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            _invoiceService.Save(invoice3);
+            invoice3.SetBillingAddress(billTo);
+
+            var invoice4 = _invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            invoice4.SetBillingAddress(billTo);
+            _invoiceService.Save(invoice4);
+
+            var collection1 = _entityCollectionService.CreateEntityCollectionWithKey(
+              EntityType.Invoice,
+              _providerKey,
+              "Invoice Collection1");
+
+            
+            invoice.AddToCollection(collection1);
+            invoice2.AddToCollection(collection1);
+            invoice3.AddToCollection(collection1);
+            invoice4.AddToCollection(collection1);
+            var provider = collection1.ResolveProvider<StaticInvoiceCollectionProvider>();
+            Assert.NotNull(provider);
+
+            //// Act
+            
+            var cinvoices = provider.GetEntities().ToArray();
+            Assert.AreEqual(4, cinvoices.Count());
+
+            var remove = cinvoices.First();
+            var key = remove.Key;
+
+            remove.RemoveFromCollection(collection1);
+
+            //// Assert
+            var afterRemove = provider.GetEntities().ToArray();
+            Assert.AreEqual(3, afterRemove.Count());
+            Assert.False(afterRemove.Any(x => x.Key == key));
+            Assert.IsFalse(collection1.Exists(remove));
+            Assert.IsFalse(remove.GetCollectionsContaining().Any());
         }
     }
 }

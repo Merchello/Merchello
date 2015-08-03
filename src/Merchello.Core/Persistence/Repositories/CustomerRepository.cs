@@ -92,6 +92,150 @@
         }
 
         /// <summary>
+        /// Returns a value indicating whether or not the entity exists in a collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, Guid collectionKey)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT COUNT(*)")
+                .Append("FROM [merchCustomer2EntityCollection]")
+                .Append(
+                    "WHERE [merchCustomer2EntityCollection].[customerKey] = @ekey AND [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @ekey = entityKey, @eckey = collectionKey });
+
+            return Database.ExecuteScalar<int>(sql) > 0;
+        }
+
+        /// <summary>
+        /// Adds a entity to a static invoice collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(Guid entityKey, Guid collectionKey)
+        {
+            if (this.ExistsInCollection(entityKey, collectionKey)) return;
+
+            var dto = new Customer2EntityCollectionDto()
+            {
+                CustomerKey = entityKey,
+                EntityCollectionKey = collectionKey,
+                CreateDate = DateTime.Now,
+                UpdateDate = DateTime.Now
+            };
+
+            Database.Insert(dto);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(Guid entityKey, Guid collectionKey)
+        {
+            Database.Execute(
+            "DELETE [merchCustomer2EntityCollection] WHERE [merchCustomer2EntityCollection].[customerKey] = @ekey AND [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey",
+            new { @ekey = entityKey, @eckey = collectionKey });
+        }
+
+        /// <summary>
+        /// The get entity keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchCustomer]")
+               .Append("WHERE [merchCustomer].[pk] IN (")
+               .Append("SELECT DISTINCT([customerKey])")
+               .Append("FROM [merchCustomer2EntityCollection]")
+               .Append("WHERE [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets entity from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<ICustomer> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<ICustomer>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
         /// Performs the Get by key operation.
         /// </summary>
         /// <param name="key">
@@ -191,6 +335,7 @@
                     "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = @Key)",
                     "DELETE FROM merchItemCache WHERE entityKey = @Key",
                     "DELETE FROM merchCustomerAddress WHERE customerKey = @Key",
+                    "DELETE FROM merchCustomer2EntityCollection WHERE customerKey = @Key",
                     "DELETE FROM merchCustomerIndex WHERE customerKey = @Key",
                     "DELETE FROM merchCustomer WHERE pk = @Key"
                 };

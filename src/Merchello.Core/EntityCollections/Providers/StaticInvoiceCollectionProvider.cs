@@ -29,15 +29,19 @@
         {
         }
 
+
         /// <summary>
-        /// The perform get entities.
+        /// The perform exists.
         /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IInvoice}"/>.
+        /// The <see cref="bool"/>.
         /// </returns>
-        protected override IEnumerable<IInvoice> PerformGetEntities()
+        protected override bool PerformExists(IInvoice entity)
         {
-            return this.PerformGetPagedEntities(1, long.MaxValue).Items;
+            return MerchelloContext.Services.InvoiceService.ExistsInCollection(entity.Key, CollectionKey);
         }
 
         /// <summary>
@@ -64,7 +68,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            return MerchelloContext.Services.InvoiceService.GetInvoicesFromStaticCollection(
+            return MerchelloContext.Services.InvoiceService.GetFromCollection(
                 CollectionKey,
                 page,
                 itemsPerPage,
@@ -97,7 +101,7 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             return
-                ((InvoiceService)MerchelloContext.Services.InvoiceService).GetInvoiceKeysFromStaticCollection(
+                ((InvoiceService)MerchelloContext.Services.InvoiceService).GetKeysFromCollection(
                     CollectionKey,
                     page,
                     itemsPerPage,

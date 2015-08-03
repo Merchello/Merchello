@@ -251,6 +251,8 @@
     <Compile Include="DisplayClasses\GatewayProviderDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferComponentDefinitionDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferProviderTests.cs" />
+    <Compile Include="EntityCollections\StaticCustomerCollectionProviderTests.cs" />
+    <Compile Include="EntityCollections\StaticEntityCollectionCollectionProviderTests.cs" />
     <Compile Include="EntityCollections\StaticInvoiceCollectionProviderTests.cs" />
     <Compile Include="EntityCollections\StaticProductEntityCollectionProviderTests.cs" />
     <Compile Include="Examine\CachedQueryTests.cs" />

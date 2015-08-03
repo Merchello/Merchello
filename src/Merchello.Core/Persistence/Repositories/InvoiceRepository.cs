@@ -135,7 +135,7 @@
         /// <summary>
         /// Returns a value indicating whether or not the invoice exists in a collection.
         /// </summary>
-        /// <param name="invoiceKey">
+        /// <param name="entityKey">
         /// The invoice key.
         /// </param>
         /// <param name="collectionKey">
@@ -144,14 +144,14 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool ExistsInCollection(Guid invoiceKey, Guid collectionKey)
+        public bool ExistsInCollection(Guid entityKey, Guid collectionKey)
         {
             var sql = new Sql();
             sql.Append("SELECT COUNT(*)")
                 .Append("FROM [merchInvoice2EntityCollection]")
                 .Append(
                     "WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey AND [merchInvoice2EntityCollection].[entityCollectionKey] = @eckey",
-                    new { @ikey = invoiceKey, @eckey = collectionKey });
+                    new { @ikey = entityKey, @eckey = collectionKey });
 
             return Database.ExecuteScalar<int>(sql) > 0;
         }
@@ -159,19 +159,19 @@
         /// <summary>
         /// Adds a invoice to a static invoice collection.
         /// </summary>
-        /// <param name="invoiceKey">
+        /// <param name="entityKey">
         /// The invoice key.
         /// </param>
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void AddInvoiceToCollection(Guid invoiceKey, Guid collectionKey)
+        public void AddToCollection(Guid entityKey, Guid collectionKey)
         {
-            if (this.ExistsInCollection(invoiceKey, collectionKey)) return;
+            if (this.ExistsInCollection(entityKey, collectionKey)) return;
 
             var dto = new Invoice2EntityCollectionDto()
             {
-                InvoiceKey = invoiceKey,
+                InvoiceKey = entityKey,
                 EntityCollectionKey = collectionKey,
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now
@@ -183,17 +183,17 @@
         /// <summary>
         /// The remove invoice from collection.
         /// </summary>
-        /// <param name="invoiceKey">
+        /// <param name="entityKey">
         /// The invoice key.
         /// </param>
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void RemoveProductFromCollection(Guid invoiceKey, Guid collectionKey)
+        public void RemoveFromCollection(Guid entityKey, Guid collectionKey)
         {
             Database.Execute(
                 "DELETE [merchInvoice2EntityCollection] WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey AND [merchInvoice2EntityCollection].[entityCollectionKey] = @eckey",
-                new { @pkey = invoiceKey, @eckey = collectionKey });
+                new { @ikey = entityKey, @eckey = collectionKey });
         }
 
 
@@ -218,7 +218,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        public Page<Guid> GetInvoiceKeysFromCollection(
+        public Page<Guid> GetKeysFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -258,14 +258,14 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        public Page<IInvoice> GetInvoicesFromCollection(
+        public Page<IInvoice> GetFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetInvoiceKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+            var p = this.GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
 
             return new Page<IInvoice>()
             {
@@ -400,7 +400,7 @@
                 "DELETE FROM merchInvoiceItem WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoiceIndex WHERE invoiceKey = @Key",
                 "DELETE FROM merchOfferRedeemed WHERE invoiceKey = @Key",
-                "DELETE FROM merchInvoice2EntityCollection WHERE invoiceKye = @Key",
+                "DELETE FROM merchInvoice2EntityCollection WHERE invoiceKey = @Key",
                 "DELETE FROM merchInvoice WHERE pk = @Key"
             };
 

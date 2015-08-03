@@ -493,9 +493,9 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        public void AddProductToCollection(IProduct product, IEntityCollection collection)
+        public void AddToCollection(IProduct product, IEntityCollection collection)
         {
-            AddProductToCollection(product, collection.Key);
+            this.AddToCollection(product, collection.Key);
         }
 
         /// <summary>
@@ -507,9 +507,9 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void AddProductToCollection(IProduct product, Guid collectionKey)
+        public void AddToCollection(IProduct product, Guid collectionKey)
         {
-            AddProductToCollection(product.Key, collectionKey);
+            this.AddToCollection(product.Key, collectionKey);
         }
 
         /// <summary>
@@ -521,11 +521,31 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void AddProductToCollection(Guid productKey, Guid collectionKey)
+        public void AddToCollection(Guid productKey, Guid collectionKey)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                repository.AddProductToCollection(productKey, collectionKey);
+                repository.AddToCollection(productKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The exists in collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid productKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.ExistsInCollection(productKey, collectionKey);
             }
         }
 
@@ -538,9 +558,9 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        public void RemoveProductFromCollection(IProduct product, IEntityCollection collection)
+        public void RemoveFromCollection(IProduct product, IEntityCollection collection)
         {
-            RemoveProductFromCollection(product, collection.Key);
+            this.RemoveFromCollection(product, collection.Key);
         }
 
         /// <summary>
@@ -552,9 +572,9 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void RemoveProductFromCollection(IProduct product, Guid collectionKey)
+        public void RemoveFromCollection(IProduct product, Guid collectionKey)
         {
-            RemoveProductFromCollection(product.Key, collectionKey);
+            this.RemoveFromCollection(product.Key, collectionKey);
         }
 
         /// <summary>
@@ -566,11 +586,11 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void RemoveProductFromCollection(Guid productKey, Guid collectionKey)
+        public void RemoveFromCollection(Guid productKey, Guid collectionKey)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                repository.RemoveProductFromCollection(productKey, collectionKey);
+                repository.RemoveFromCollection(productKey, collectionKey);
             }
         }
 
@@ -595,7 +615,7 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public Page<IProduct> GetProductsFromStaticCollection(
+        public Page<IProduct> GetFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -604,7 +624,7 @@
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductsFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 
@@ -643,7 +663,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetProductKeysFromStaticCollection(
+        internal Page<Guid> GetKeysFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -652,7 +672,7 @@
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 

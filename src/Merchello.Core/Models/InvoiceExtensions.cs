@@ -220,15 +220,45 @@
 
             if (!provider.EnsureEntityType(EntityType.Invoice))
             {
-                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a product to a non product collection");
+                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a invoice to a non invoice collection");
                 return;
             }
 
-            MerchelloContext.Current.Services.InvoiceService.AddInvoiceToCollection(invoice.Key, collectionKey);
+            MerchelloContext.Current.Services.InvoiceService.AddToCollection(invoice.Key, collectionKey);
         }
 
         /// <summary>
-        /// The get entity collections.
+        /// The remove from collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>        
+        public static void RemoveFromCollection(this IInvoice invoice, IEntityCollection collection)
+        {
+            invoice.RemoveFromCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// The remove from collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>        
+        public static void RemoveFromCollection(this IInvoice invoice, Guid collectionKey)
+        {
+            if (!MerchelloContext.HasCurrent) return;
+            MerchelloContext.Current.Services.InvoiceService.RemoveFromCollection(invoice.Key, collectionKey);
+        }
+
+
+        /// <summary>
+        /// Returns static collections containing the invoice.
         /// </summary>
         /// <param name="invoice">
         /// The invoice.
@@ -236,7 +266,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        internal static IEnumerable<IEntityCollection> GetEntityCollections(this IInvoice invoice)
+        internal static IEnumerable<IEntityCollection> GetCollectionsContaining(this IInvoice invoice)
         {
             if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
 

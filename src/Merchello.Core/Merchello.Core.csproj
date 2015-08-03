@@ -273,6 +273,8 @@
     <Compile Include="EntityCollections\IEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider{T}.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
+    <Compile Include="EntityCollections\Providers\StaticCustomerCollectionProvider.cs" />
+    <Compile Include="EntityCollections\Providers\StaticEntityCollectionCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticInvoiceCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
@@ -360,6 +362,7 @@
     <Compile Include="Models\OfferComponentDefinitionCollection.cs" />
     <Compile Include="Models\OfferRedeemed.cs" />
     <Compile Include="Models\OfferSettings.cs" />
+    <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\Rdbms\Invoice2EntityCollectionDto.cs" />
@@ -463,6 +466,7 @@
     <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateCustomer2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateInvoice2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateProduct2EntityCollectionTable.cs" />
@@ -486,6 +490,7 @@
     <Compile Include="Persistence\Repositories\Interfaces\IOfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IPagedRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IShipmentStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IStaticEntityCollectionRepository{T}.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IWarehouseCatalogRepository.cs" />
     <Compile Include="Persistence\Repositories\OfferRedeemedRepository.cs" />
     <Compile Include="Persistence\Repositories\OfferSettingsRepository.cs" />
@@ -1049,6 +1054,7 @@
     <Compile Include="Services\Interfaces\IPageCachedService.cs" />
     <Compile Include="Services\Interfaces\IPaymentMethodService.cs" />
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IStaticCollectionService{T}.cs" />
     <Compile Include="Services\Interfaces\IWarehouseCatalogService.cs" />
     <Compile Include="Services\NotificationMessageService.cs" />
     <Compile Include="Services\NotificationMethodService.cs" />

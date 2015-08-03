@@ -7,6 +7,7 @@
     using System.Web.UI;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
@@ -650,6 +651,195 @@
                 return repository.GetAll(keys.ToArray());
             }
         }
+
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The customer.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public void AddToCollection(ICustomer entity, IEntityCollection collection)
+        {
+            AddToCollection(entity, collection.Key);
+        }
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The customer.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(ICustomer entity, Guid collectionKey)
+        {
+            AddToCollection(entity.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(Guid entityKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                repository.AddToCollection(entityKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The customer.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public void RemoveFromCollection(ICustomer entity, IEntityCollection collection)
+        {
+            RemoveFromCollection(entity, collection.Key);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The customer.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(ICustomer entity, Guid collectionKey)
+        {
+            RemoveFromCollection(entity.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(Guid entityKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                repository.RemoveFromCollection(entityKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// Determines if an customer exists in a collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.ExistsInCollection(entityKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The get invoices from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<ICustomer> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetFromCollection(
+                    collectionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get customer keys from static collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysFromCollection(
+                    collectionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        } 
         
         #endregion
 

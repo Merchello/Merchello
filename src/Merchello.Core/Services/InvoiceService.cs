@@ -17,7 +17,6 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
-    using Umbraco.Web.org.umbraco.our;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -567,9 +566,9 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        public void AddInvoiceToCollection(IInvoice invoice, IEntityCollection collection)
+        public void AddToCollection(IInvoice invoice, IEntityCollection collection)
         {
-            AddInvoiceToCollection(invoice, collection.Key);
+            this.AddToCollection(invoice, collection.Key);
         }
 
         /// <summary>
@@ -581,9 +580,9 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void AddInvoiceToCollection(IInvoice invoice, Guid collectionKey)
+        public void AddToCollection(IInvoice invoice, Guid collectionKey)
         {
-            AddInvoiceToCollection(invoice.Key, collectionKey);
+            this.AddToCollection(invoice.Key, collectionKey);
         }
 
         /// <summary>
@@ -595,11 +594,11 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void AddInvoiceToCollection(Guid invoiceKey, Guid collectionKey)
+        public void AddToCollection(Guid invoiceKey, Guid collectionKey)
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                repository.AddInvoiceToCollection(invoiceKey, collectionKey);
+                repository.AddToCollection(invoiceKey, collectionKey);
             }
         }
 
@@ -612,9 +611,9 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        public void RemoveInvoiceFromCollection(IInvoice invoice, IEntityCollection collection)
+        public void RemoveFromCollection(IInvoice invoice, IEntityCollection collection)
         {
-            RemoveInvoiceFromCollection(invoice, collection.Key);
+            this.RemoveFromCollection(invoice, collection.Key);
         }
 
         /// <summary>
@@ -626,9 +625,9 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void RemoveInvoiceFromCollection(IInvoice invoice, Guid collectionKey)
+        public void RemoveFromCollection(IInvoice invoice, Guid collectionKey)
         {
-            RemoveInvoiceFromCollection(invoice.Key, collectionKey);
+            this.RemoveFromCollection(invoice.Key, collectionKey);
         }
 
         /// <summary>
@@ -640,11 +639,31 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void RemoveInvoiceFromCollection(Guid invoiceKey, Guid collectionKey)
+        public void RemoveFromCollection(Guid invoiceKey, Guid collectionKey)
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                repository.RemoveProductFromCollection(invoiceKey, collectionKey);
+                repository.RemoveFromCollection(invoiceKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// Determines if an invoice exists in a collection.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid invoiceKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.ExistsInCollection(invoiceKey, collectionKey);
             }
         }
 
@@ -669,7 +688,7 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        public Page<IInvoice> GetInvoicesFromStaticCollection(
+        public Page<IInvoice> GetFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -678,7 +697,7 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetInvoicesFromCollection(
+                return repository.GetFromCollection(
                     collectionKey,
                     page,
                     itemsPerPage,
@@ -708,7 +727,7 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<Guid> GetInvoiceKeysFromStaticCollection(
+        internal Page<Guid> GetKeysFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -717,7 +736,7 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetInvoiceKeysFromCollection(
+                return repository.GetKeysFromCollection(
                     collectionKey,
                     page,
                     itemsPerPage,

@@ -26,6 +26,17 @@
         IEnumerable<T> GetEntities();
 
         /// <summary>
+        /// Returns true if the entity exists in the collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool Exists(T entity);
+
+        /// <summary>
         /// The get entities.
         /// </summary>
         /// <param name="page">

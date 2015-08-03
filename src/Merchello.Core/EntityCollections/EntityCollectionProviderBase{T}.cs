@@ -37,9 +37,23 @@
         /// <returns>
         /// The <see cref="IEnumerable{T}"/>.
         /// </returns>
-        public IEnumerable<T> GetEntities()
+        public virtual IEnumerable<T> GetEntities()
         {
-            return this.PerformGetEntities();
+            return this.GetPagedEntities(1, long.MaxValue).Items;
+        }
+
+        /// <summary>
+        /// Returns true if the entity exists in the collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Exists(T entity)
+        {
+            return this.PerformExists(entity);
         }
 
         /// <summary>
@@ -65,13 +79,17 @@
             return this.PerformGetPagedEntities(page, itemsPerPage, sortBy, sortDirection);
         }
 
+
         /// <summary>
-        /// The get entities.
+        /// Returns true if the entity exists in the collection.
         /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{T}"/>.
+        /// The <see cref="bool"/>.
         /// </returns>
-        protected abstract IEnumerable<T> PerformGetEntities();
+        protected abstract bool PerformExists(T entity);
 
         /// <summary>
         /// The get entities.

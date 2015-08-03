@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using Merchello.Core.Models;
@@ -11,8 +10,6 @@
     using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
-
-    using umbraco;
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
@@ -28,8 +25,6 @@
         /// The product variant repository.
         /// </summary>
         private readonly IProductVariantRepository _productVariantRepository;
-
-        private readonly IEntityCollectionRepository _entityCollectionRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductRepository"/> class.
@@ -679,8 +674,8 @@
         /// <summary>
         /// Returns a value indicating whether or not the product exists in a collection.
         /// </summary>
-        /// <param name="productKey">
-        /// The product key.
+        /// <param name="entityKey">
+        /// The entity key.
         /// </param>
         /// <param name="collectionKey">
         /// The collection key.
@@ -688,14 +683,14 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool ExistsInCollection(Guid productKey, Guid collectionKey)
+        public bool ExistsInCollection(Guid entityKey, Guid collectionKey)
         {
             var sql = new Sql();
             sql.Append("SELECT COUNT(*)")
                 .Append("FROM [merchProduct2EntityCollection]")
                 .Append(
                     "WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
-                    new { @pkey = productKey, @eckey = collectionKey });
+                    new { @pkey = entityKey, @eckey = collectionKey });
 
             return Database.ExecuteScalar<int>(sql) > 0;
         }
@@ -703,19 +698,19 @@
         /// <summary>
         /// Adds a product to a static product collection.
         /// </summary>
-        /// <param name="productKey">
-        /// The product key.
+        /// <param name="entityKey">
+        /// The entity key.
         /// </param>
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void AddProductToCollection(Guid productKey, Guid collectionKey)
+        public void AddToCollection(Guid entityKey, Guid collectionKey)
         {
-            if (this.ExistsInCollection(productKey, collectionKey)) return;
+            if (this.ExistsInCollection(entityKey, collectionKey)) return;
             
             var dto = new Product2EntityCollectionDto()
                           {
-                              ProductKey = productKey,
+                              ProductKey = entityKey,
                               EntityCollectionKey = collectionKey,
                               CreateDate = DateTime.Now,
                               UpdateDate = DateTime.Now
@@ -727,17 +722,17 @@
         /// <summary>
         /// The remove product from collection.
         /// </summary>
-        /// <param name="productKey">
-        /// The product key.
+        /// <param name="entityKey">
+        /// The entity key.
         /// </param>
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public void RemoveProductFromCollection(Guid productKey, Guid collectionKey)
+        public void RemoveFromCollection(Guid entityKey, Guid collectionKey)
         {
             Database.Execute(
                 "DELETE [merchProduct2EntityCollection] WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
-                new { @pkey = productKey, @eckey = collectionKey });
+                new { @pkey = entityKey, @eckey = collectionKey });
         }
 
         /// <summary>
@@ -761,7 +756,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public Page<Guid> GetProductKeysFromCollection(
+        public Page<Guid> GetKeysFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -802,14 +797,14 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public Page<IProduct> GetProductsFromCollection(
+        public Page<IProduct> GetFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetProductKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+            var p = this.GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
 
             return new Page<IProduct>()
             {

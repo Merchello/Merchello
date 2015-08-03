@@ -22,6 +22,14 @@
         public Guid Key { get; set; }
 
         /// <summary>
+        /// Gets or sets the parent key.
+        /// </summary>
+        [Column("parentKey")]
+        [ForeignKey(typeof(EntityCollectionDto), Name = "FK_merchEntityCollection_merchEntityCollection", Column = "pk")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public Guid? ParentKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the entity type field key.
         /// </summary>
         [Column("entityTfKey")]

@@ -32,6 +32,11 @@
         private static readonly PropertyInfo ProviderKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid>(x => x.ProviderKey);
 
         /// <summary>
+        /// The parent key selector.
+        /// </summary>
+        private static readonly PropertyInfo ParentKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid?>(x => x.ParentKey);
+
+        /// <summary>
         /// The entity type field key.
         /// </summary>
         private Guid _entityTfKey;
@@ -45,6 +50,11 @@
         /// The dynamic collection.
         /// </summary>
         private Guid _prodiverKey;
+
+        /// <summary>
+        /// The _parent key.
+        /// </summary>
+        private Guid? _parentKey;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollection"/> class.
@@ -61,6 +71,30 @@
             Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
             _entityTfKey = entityTfKey;
             _prodiverKey = providerKey;
+        }
+
+        /// <summary>
+        /// Gets or sets the parent key.
+        /// </summary>
+        [DataMember]
+        public Guid? ParentKey
+        {
+            get
+            {
+                return _parentKey;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                   o =>
+                   {
+                       _parentKey = value;
+                       return _parentKey;
+                   },
+                   _parentKey,
+                   ParentKeySelector);
+            }
         }
 
         /// <summary>
