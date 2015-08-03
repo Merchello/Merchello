@@ -4537,6 +4537,29 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Search.ICachedCustomerQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets customers from a collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
         <member name="F:Merchello.Web.Search.CachedCustomerQuery._customerService">
             <summary>
             The customer service.
@@ -4663,6 +4686,29 @@
             </param>
             <param name="lastActivityDateEnd">
             The customer date end.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedCustomerQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets customers from a collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
             </param>
             <param name="page">
             The page.
@@ -5287,7 +5333,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
             <summary>
             Gets products from a collection.
             </summary>
@@ -5728,7 +5774,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedProductQuery.GetProductsFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
             <summary>
             The get products from collection.
             </summary>
@@ -6423,7 +6469,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.GetInvoicesFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
             <summary>
             Gets products from a collection.
             </summary>
@@ -6829,7 +6875,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.GetInvoicesFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
             <summary>
             The get invoices from collection.
             </summary>

@@ -5,7 +5,6 @@
     using System.Linq;
 
     using Merchello.Core.EntityCollections;
-    using Merchello.Core.EntityCollections.Providers;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
@@ -109,7 +108,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEnityCollection}"/>.
         /// </returns>
-        public static IEnumerable<IEntityCollection> ChildCollections(this IEntityCollection collection)
+        internal static IEnumerable<IEntityCollection> ChildCollections(this IEntityCollection collection)
         {
             return !MerchelloContext.HasCurrent ? 
                 Enumerable.Empty<IEntityCollection>() : 

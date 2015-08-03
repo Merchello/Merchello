@@ -272,7 +272,7 @@
             //// Arrange
             
             //// Act
-            var result = _merchello.Query.Product.GetProductsFromCollection(_collection.Key, 1, 100);
+            var result = _merchello.Query.Product.GetFromCollection(_collection.Key, 1, 100);
 
             //// Assert
             Assert.AreEqual(3, result.Items.Count());

@@ -511,7 +511,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetInvoicesFromCollection(
+        public QueryResultDisplay GetFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,

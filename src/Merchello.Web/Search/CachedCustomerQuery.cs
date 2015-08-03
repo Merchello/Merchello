@@ -10,8 +10,13 @@
     using Examine;
     using global::Examine;
     using global::Examine.Providers;
+
+    using Merchello.Core.EntityCollections;
+
     using Models.ContentEditing;
     using Models.Querying;
+
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents a CachedCustomerQuery.
@@ -200,6 +205,58 @@
             var query = Query<ICustomer>.Builder.Where(x => x.LastActivityDate >= lastActivityDateStart && x.LastActivityDate <= lastActivityDateEnd);
 
             return GetQueryResultDisplay(_customerService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
+        }
+
+        /// <summary>
+        /// Gets customers from a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        public QueryResultDisplay GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "loginName",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection<CachedEntityCollectionProviderBase<ICustomer>>(collectionKey);
+
+
+            if (!attempt.Success)
+            {
+                LogHelper.Error<CachedInvoiceQuery>("EntityCollectionProvider was not resolved", attempt.Exception);
+                return new QueryResultDisplay();
+            }
+
+            var provider = attempt.Result;
+
+            if (!provider.EnsureEntityType(EntityType.Customer))
+            {
+                var invalid =
+                    new InvalidCastException(
+                        "Attempted to query a product collection with a provider that does not handle the invoice entity type");
+                LogHelper.Error<CachedInvoiceQuery>("Invalid query operation", invalid);
+                throw invalid;
+            }
+
+            return
+                this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
