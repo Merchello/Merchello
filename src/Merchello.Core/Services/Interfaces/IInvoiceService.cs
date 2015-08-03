@@ -4,15 +4,11 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Models.Interfaces;
-    using Merchello.Core.Persistence.Querying;
-
-    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// Defines the InvoiceService
     /// </summary>
-    public interface IInvoiceService : IPageCachedService<IInvoice>
+    public interface IInvoiceService : IStaticCollectionService<IInvoice>, IPageCachedService<IInvoice>
     {
         /// <summary>
         /// Creates a <see cref="IInvoice"/> without saving it to the database
@@ -167,119 +163,6 @@
         /// The collection of <see cref="IInvoiceStatus"/>.
         /// </returns>
         IEnumerable<IInvoiceStatus> GetAllInvoiceStatuses();
-
-
-        #endregion
-
-        #region Static Collections
-
-        /// <summary>
-        /// The add invoice to collection.
-        /// </summary>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
-        void AddToCollection(IInvoice invoice, IEntityCollection collection);
-
-        /// <summary>
-        /// The add invoice to collection.
-        /// </summary>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        void AddToCollection(IInvoice invoice, Guid collectionKey);
-
-        /// <summary>
-        /// The add invoice to collection.
-        /// </summary>
-        /// <param name="invoiceKey">
-        /// The invoice key.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        void AddToCollection(Guid invoiceKey, Guid collectionKey);
-
-        /// <summary>
-        /// The remove invoice from collection.
-        /// </summary>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
-        void RemoveFromCollection(IInvoice invoice, IEntityCollection collection);
-
-        /// <summary>
-        /// The remove invoice from collection.
-        /// </summary>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        void RemoveFromCollection(IInvoice invoice, Guid collectionKey);
-
-        /// <summary>
-        /// The remove invoice from collection.
-        /// </summary>
-        /// <param name="invoiceKey">
-        /// The invoice key.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        void RemoveFromCollection(Guid invoiceKey, Guid collectionKey);
-
-        /// <summary>
-        /// Returns true if the invoice exists in the static collection.
-        /// </summary>
-        /// <param name="invoiceKey">
-        /// The invoice key.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        bool ExistsInCollection(Guid invoiceKey, Guid collectionKey);
-
-        /// <summary>
-        /// The get invoices from collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{IInvoice}"/>.
-        /// </returns>
-        Page<IInvoice> GetFromCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending);
 
 
         #endregion

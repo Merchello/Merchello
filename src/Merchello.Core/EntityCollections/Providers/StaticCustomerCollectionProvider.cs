@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.EntityCollections.Providers
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Models;
     using Merchello.Core.Persistence.Querying;
@@ -9,13 +10,13 @@
     using Umbraco.Core.Persistence;
 
     /// <summary>
-    /// The static product collection provider.
+    /// The static customer collection provider.
     /// </summary>
-    [EntityCollectionProvider("4700456D-A872-4721-8455-1DDAC19F8C16", "9F923716-A022-4089-A110-1E9B4E1F2AD1", "Static Product Collection", "A static product collection that could be used for product categories and product groupings", false)]
-    public class StaticProductCollectionProvider : CachedEntityCollectionProviderBase<IProduct>
+    [EntityCollectionProvider("A389D41B-C8F1-4289-BD2E-5FFF01DBBDB1", "1607D643-E5E8-4A93-9393-651F83B5F1A9", "Static Customer Collection", "A static customer collection that could be used for categorizing or grouping sales", false)]
+    public class StaticCustomerCollectionProvider : CachedEntityCollectionProviderBase<ICustomer>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StaticProductCollectionProvider"/> class.
+        /// Initializes a new instance of the <see cref="StaticCustomerCollectionProvider"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -23,7 +24,7 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public StaticProductCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
+        public StaticCustomerCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
             : base(merchelloContext, collectionKey)
         {
         }
@@ -38,13 +39,13 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        protected override bool PerformExists(IProduct entity)
+        protected override bool PerformExists(ICustomer entity)
         {
-            return MerchelloContext.Services.ProductService.ExistsInCollection(entity.Key, CollectionKey);
+            return MerchelloContext.Services.CustomerService.ExistsInCollection(entity.Key, CollectionKey);
         }
 
         /// <summary>
-        /// The get entities.
+        /// Gets a page of <see cref="ICustomer"/>s from the collection.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -59,11 +60,11 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page{IProduct}"/>.
+        /// The <see cref="Page{ICustomer}"/>.
         /// </returns>
-        protected override Page<IProduct> PerformGetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        protected override Page<ICustomer> PerformGetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return this.MerchelloContext.Services.ProductService.GetFromCollection(
+            return this.MerchelloContext.Services.CustomerService.GetFromCollection(
                 this.CollectionKey,
                 page,
                 itemsPerPage,
@@ -72,7 +73,7 @@
         }
 
         /// <summary>
-        /// The get paged entity keys.
+        /// Gets a <see cref="Page{Guid}"/> of customer keys.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -89,14 +90,18 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        protected override Page<Guid> PerformGetPagedEntityKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        protected override Page<Guid> PerformGetPagedEntityKeys(
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
         {
-            return ((ProductService)this.MerchelloContext.Services.ProductService).GetKeysFromCollection(
-                this.CollectionKey,
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
+            return ((CustomerService)this.MerchelloContext.Services.CustomerService).GetKeysFromCollection(
+                    this.CollectionKey,
+                    page,
+                    itemsPerPage,
+                    sortBy,
+                    sortDirection);
         }
     }
 }

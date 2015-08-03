@@ -84,6 +84,59 @@
         }
 
         /// <summary>
+        /// The get page.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IEntityCollection}"/>.
+        /// </returns>
+        public Page<IEntityCollection> GetPage(
+            long page,
+            long itemsPerPage,
+            IQuery<IEntityCollection> query,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sqlClause = new Sql();
+            sqlClause.Select("*").From<EntityCollectionDto>();
+
+            var translator = new SqlTranslator<IEntityCollection>(sqlClause, query);
+            var sql = translator.Translate();
+
+            if (!string.IsNullOrEmpty(orderExpression))
+            {
+                sql.Append(sortDirection == SortDirection.Ascending
+                    ? string.Format("ORDER BY {0} ASC", orderExpression)
+                    : string.Format("ORDER BY {0} DESC", orderExpression));
+            }
+
+            var dtoPage = Database.Page<EntityCollectionDto>(page, itemsPerPage, sql);
+
+            return new Page<IEntityCollection>()
+            {
+                CurrentPage = dtoPage.CurrentPage,
+                ItemsPerPage = dtoPage.ItemsPerPage,
+                TotalItems = dtoPage.TotalItems,
+                TotalPages = dtoPage.TotalPages,
+                Items = dtoPage.Items.Select(x => Get(x.Key)).ToList()
+            };
+        }
+
+        /// <summary>
         /// The perform get.
         /// </summary>
         /// <param name="key">
@@ -239,6 +292,6 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
-        }        
+        }
     }
 }

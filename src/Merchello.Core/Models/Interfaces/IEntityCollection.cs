@@ -11,6 +11,12 @@
     public interface IEntityCollection : IEntity
     {
         /// <summary>
+        /// Gets or sets the parent key.
+        /// </summary>
+        [DataMember]
+        Guid? ParentKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the entity type field key.
         /// </summary>
         [DataMember]

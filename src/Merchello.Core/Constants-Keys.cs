@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Core.Cache;
     using Merchello.Core.Models.Rdbms;
 
     /// <summary>
@@ -215,6 +216,28 @@
                     get
                     {
                         return new Guid("1AEF5650-242D-4566-ADCA-AC0C90538B47");
+                    }
+                }
+
+                /// <summary>
+                /// Gets the static customer collection provider key.
+                /// </summary>
+                public static Guid StaticCustomerCollectionProviderKey
+                {
+                    get
+                    {
+                        return new Guid("A389D41B-C8F1-4289-BD2E-5FFF01DBBDB1");
+                    }
+                }
+
+                /// <summary>
+                /// Gets the static entity collection collection provider.
+                /// </summary>
+                public static Guid StaticEntityCollectionCollectionProvider
+                {
+                    get
+                    {
+                        return new Guid("A8120A01-E9BF-4204-ADDD-D9553F6F24FE");
                     }
                 }
             }

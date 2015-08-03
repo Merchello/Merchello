@@ -4,7 +4,9 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Persistence.Querying;
 
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
 
     /// <summary>
@@ -30,7 +32,11 @@
         /// <returns>
         /// The <see cref="IEntityCollection"/>.
         /// </returns>
-        IEntityCollection CreateEntityCollection(EntityType entityType, Guid providerKey, string name, bool raiseEvents = true);
+        IEntityCollection CreateEntityCollection(
+            EntityType entityType,
+            Guid providerKey,
+            string name,
+            bool raiseEvents = true);
 
         /// <summary>
         /// The create entity collection with key.
@@ -50,7 +56,11 @@
         /// <returns>
         /// The <see cref="IEntityCollection"/>.
         /// </returns>
-        IEntityCollection CreateEntityCollectionWithKey(EntityType entityType, Guid providerKey, string name, bool raiseEvents = true);
+        IEntityCollection CreateEntityCollectionWithKey(
+            EntityType entityType,
+            Guid providerKey,
+            string name,
+            bool raiseEvents = true);
 
 
         ///// <summary>
@@ -177,5 +187,89 @@
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
         IEnumerable<IEntityCollection> GetAll();
+
+        /// <summary>
+        /// The get children.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetChildren(Guid collectionKey);
+
+        /// <summary>
+        /// The exists in collection.
+        /// </summary>
+        /// <param name="parentKey">
+        /// The parent key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool ExistsInCollection(Guid? parentKey, Guid collectionKey);
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetRootLevelEntityCollections();
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetRootLevelEntityCollections(EntityType entityType);
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <param name="entityTfKey">
+        /// The entity tf key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey);
+
+
+        /// <summary>
+        /// Gets a Page of collections from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<IEntityCollection> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending);
     }
 }

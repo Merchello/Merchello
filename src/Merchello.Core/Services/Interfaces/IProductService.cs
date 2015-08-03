@@ -3,18 +3,12 @@
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Core.Models.Interfaces;
-    using Merchello.Core.Persistence.Querying;
-
     using Models;
-
-    using Umbraco.Core.Persistence;
-    using Umbraco.Core.Services;
 
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
     /// </summary>
-    public interface IProductService : IPageCachedService<IProduct>
+    public interface IProductService : IStaticCollectionService<IProduct>, IPageCachedService<IProduct>
     {
         /// <summary>
         /// Creates a Product without saving it to the database
@@ -152,113 +146,6 @@
         /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
 
-        /// <summary>
-        /// The add product to collection.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
-        void AddToCollection(IProduct product, IEntityCollection collection);
-
-        /// <summary>
-        /// The add product to collection.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        void AddToCollection(IProduct product, Guid collectionKey);
-
-        /// <summary>
-        /// The add product to collection.
-        /// </summary>
-        /// <param name="productKey">
-        /// The product key.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        void AddToCollection(Guid productKey, Guid collectionKey);
-
-        /// <summary>
-        /// Returns true if the product exists in the static collection.
-        /// </summary>
-        /// <param name="productKey">
-        /// The product key.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        bool ExistsInCollection(Guid productKey, Guid collectionKey);
-
-        /// <summary>
-        /// The remove product from collection.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <param name="collection">
-        /// The collection.
-        /// </param>
-        void RemoveFromCollection(IProduct product, IEntityCollection collection);
-
-        /// <summary>
-        /// The remove product from collection.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        void RemoveFromCollection(IProduct product, Guid collectionKey);
-
-        /// <summary>
-        /// The remove product from collection.
-        /// </summary>
-        /// <param name="productKey">
-        /// The product key.
-        /// </param>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        void RemoveFromCollection(Guid productKey, Guid collectionKey);
-
-        /// <summary>
-        /// The get products from collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{IProduct}"/>.
-        /// </returns>
-        Page<IProduct> GetFromCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending);
 
         //#region Filter Queries
 

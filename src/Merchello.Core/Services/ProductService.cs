@@ -525,10 +525,22 @@
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                repository.AddProductToCollection(productKey, collectionKey);
+                repository.AddToCollection(productKey, collectionKey);
             }
         }
 
+        /// <summary>
+        /// The exists in collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public bool ExistsInCollection(Guid productKey, Guid collectionKey)
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
@@ -578,7 +590,7 @@
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                repository.RemoveProductFromCollection(productKey, collectionKey);
+                repository.RemoveFromCollection(productKey, collectionKey);
             }
         }
 
@@ -612,7 +624,7 @@
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductsFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 
@@ -651,7 +663,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        internal Page<Guid> GetProductKeysFromStaticCollection(
+        internal Page<Guid> GetKeysFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -660,7 +672,7 @@
         {
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 

@@ -37,9 +37,9 @@
         /// <returns>
         /// The <see cref="IEnumerable{T}"/>.
         /// </returns>
-        public IEnumerable<T> GetEntities()
+        public virtual IEnumerable<T> GetEntities()
         {
-            return this.PerformGetEntities();
+            return this.GetPagedEntities(1, long.MaxValue).Items;
         }
 
         /// <summary>
@@ -79,13 +79,6 @@
             return this.PerformGetPagedEntities(page, itemsPerPage, sortBy, sortDirection);
         }
 
-        /// <summary>
-        /// The get entities.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{T}"/>.
-        /// </returns>
-        protected abstract IEnumerable<T> PerformGetEntities();
 
         /// <summary>
         /// Returns true if the entity exists in the collection.

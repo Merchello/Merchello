@@ -29,16 +29,6 @@
         {
         }
 
-        /// <summary>
-        /// The perform get entities.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{IInvoice}"/>.
-        /// </returns>
-        protected override IEnumerable<IInvoice> PerformGetEntities()
-        {
-            return this.PerformGetPagedEntities(1, long.MaxValue).Items;
-        }
 
         /// <summary>
         /// The perform exists.
@@ -111,7 +101,7 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             return
-                ((InvoiceService)MerchelloContext.Services.InvoiceService).GetInvoiceKeysFromStaticCollection(
+                ((InvoiceService)MerchelloContext.Services.InvoiceService).GetKeysFromCollection(
                     CollectionKey,
                     page,
                     itemsPerPage,

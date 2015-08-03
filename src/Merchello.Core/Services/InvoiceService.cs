@@ -17,7 +17,6 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
-    using Umbraco.Web.org.umbraco.our;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -599,7 +598,7 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                repository.AddInvoiceToCollection(invoiceKey, collectionKey);
+                repository.AddToCollection(invoiceKey, collectionKey);
             }
         }
 
@@ -644,7 +643,7 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                repository.RemoveProductFromCollection(invoiceKey, collectionKey);
+                repository.RemoveFromCollection(invoiceKey, collectionKey);
             }
         }
 
@@ -698,7 +697,7 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetInvoicesFromCollection(
+                return repository.GetFromCollection(
                     collectionKey,
                     page,
                     itemsPerPage,
@@ -728,7 +727,7 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        internal Page<Guid> GetInvoiceKeysFromStaticCollection(
+        internal Page<Guid> GetKeysFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -737,7 +736,7 @@
         {
             using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
             {
-                return repository.GetInvoiceKeysFromCollection(
+                return repository.GetKeysFromCollection(
                     collectionKey,
                     page,
                     itemsPerPage,

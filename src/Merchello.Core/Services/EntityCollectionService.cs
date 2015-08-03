@@ -8,12 +8,14 @@
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
-    using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Persistence;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents an entity collection service.
@@ -36,6 +38,12 @@
         /// The repository factory.
         /// </summary>
         private readonly RepositoryFactory _repositoryFactory;
+
+
+        /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "name" };
 
 
         #endregion
@@ -359,6 +367,127 @@
             }
         }
 
+        /// <summary>
+        /// The get children.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetChildren(Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == collectionKey);
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// The exists in collection.
+        /// </summary>
+        /// <param name="parentKey">
+        /// The parent key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid? parentKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == parentKey && x.Key == collectionKey);
+                return repository.Count(query) > 0;
+            }
+        }
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetRootLevelEntityCollections()
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == null);
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetRootLevelEntityCollections(EntityType entityType)
+        {
+            return this.GetRootLevelEntityCollections(
+                EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey);
+        }
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <param name="entityTfKey">
+        /// The entity type field key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey)
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == null && x.EntityTfKey == entityTfKey);
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// The get from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        public Page<IEntityCollection> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == collectionKey);
+                return repository.GetPage(page, itemsPerPage, query, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
 
         /// <summary>
         /// The create entity collection.
@@ -465,6 +594,23 @@
             {
                 return repository.GetEntityCollectionsByInvoiceKey(invoiceKey);
             }
-        } 
+        }
+
+
+
+        /// <summary>
+        /// The validate sort by field.
+        /// </summary>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private string ValidateSortByField(string sortBy)
+        {
+            return ValidSortFields.Contains(sortBy.ToLowerInvariant()) ? sortBy : "name";
+        }
+
     }
 }
