@@ -181,9 +181,9 @@ namespace Merchello.Tests.Base.TestHelpers
         /// Inserts a customer record in the merchCustomer table and returns an <see cref="ICustomer"/> object representation
         /// </summary>
         /// <returns></returns>
-        public ICustomer MakeExistingCustomer()
+        public ICustomer MakeExistingCustomer(string loginName = "")
         {
-            var customer = MockCustomerDataMaker.CustomerForInserting();
+            var customer = MockCustomerDataMaker.CustomerForInserting(loginName);
             ((CustomerService)CustomerService).Save(customer);
             return customer;
         }

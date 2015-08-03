@@ -256,7 +256,21 @@ namespace Merchello.Core
         }
 
         /// <summary>
-        /// The remove from collection.
+        /// Removes a product from a collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public static void RemoveFromCollection(this IProduct product, IEntityCollection collection)
+        {
+            product.RemoveFromCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// Removes a product from a collection.
         /// </summary>
         /// <param name="product">
         /// The product.

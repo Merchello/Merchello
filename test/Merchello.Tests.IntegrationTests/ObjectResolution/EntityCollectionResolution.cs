@@ -40,5 +40,33 @@
             //// Assert
             Assert.AreEqual(expected, key);
         }
+
+        [Test]
+        public void Can_Resolve_StaticCustomerCollectionProvider_Key()
+        {
+            //// Arrange
+            var expected = Core.Constants.ProviderKeys.EntityCollection.StaticCustomerCollectionProviderKey;
+            var resolver = EntityCollectionProviderResolver.Current;
+
+            //// Act
+            var key = resolver.GetProviderKey<StaticCustomerCollectionProvider>();
+
+            //// Assert
+            Assert.AreEqual(expected, key);
+        }
+
+        [Test]
+        public void Can_Resolve_StaticEntityCollectionCollectionProvider_Key()
+        {
+            //// Arrange
+            var expected = Core.Constants.ProviderKeys.EntityCollection.StaticEntityCollectionCollectionProvider;
+            var resolver = EntityCollectionProviderResolver.Current;
+
+            //// Act
+            var key = resolver.GetProviderKey<StaticEntityCollectionCollectionProvider>();
+
+            //// Assert
+            Assert.AreEqual(expected, key);
+        }
     }
 }

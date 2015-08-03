@@ -25,6 +25,7 @@
 
             CacheMap<EntityCollection, EntityCollectionDto>(src => src.Key, dto => dto.Key);
             CacheMap<EntityCollection, EntityCollectionDto>(src => src.EntityTfKey, dto => dto.EntityTfKey);
+            CacheMap<EntityCollection, EntityCollectionDto>(src => src.ParentKey, dto => dto.ParentKey);
             CacheMap<EntityCollection, EntityCollectionDto>(src => src.ProviderKey, dto => dto.ProviderKey);
             CacheMap<EntityCollection, EntityCollectionDto>(src => src.Name, dto => dto.Name);
             CacheMap<EntityCollection, EntityCollectionDto>(src => src.UpdateDate, dto => dto.UpdateDate);

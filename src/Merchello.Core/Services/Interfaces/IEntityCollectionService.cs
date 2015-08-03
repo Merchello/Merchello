@@ -271,5 +271,27 @@
             long itemsPerPage,
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
+        /// The child entity collection count.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        int ChildEntityCollectionCount(Guid collectionKey);
+
+        /// <summary>
+        /// The has child entity collections.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool HasChildEntityCollections(Guid collectionKey);
     }
 }

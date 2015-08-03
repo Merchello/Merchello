@@ -112,5 +112,44 @@
             Assert.IsTrue(p1.GetCollectionsContaining().Any());
 
         }
+
+        [Test]
+        public void Can_Remove_Products_From_A_Collection()
+        {
+            //// Arrange
+            var products = MockProductDataMaker.MockProductCollectionForInserting(4).ToArray();
+            _productService.Save(products);
+
+            var collection1 = _entityCollectionService.CreateEntityCollectionWithKey(
+               EntityType.Product,
+               _providerKey,
+               "Product Collection1");
+
+            //// Act
+            foreach (var p in products)
+            {
+                p.AddToCollection(collection1.Key);
+            }
+
+            var provider = collection1.ResolveProvider<StaticProductCollectionProvider>();
+            Assert.NotNull(provider);
+
+            var cproducts = provider.GetEntities().ToArray();
+            Assert.AreEqual(4, cproducts.Count());
+
+            var remove = cproducts.First();
+            var key = remove.Key;
+
+            remove.RemoveFromCollection(collection1);
+
+            //// Assert
+            var afterRemove = provider.GetEntities().ToArray();
+            Assert.AreEqual(3, afterRemove.Count());
+            Assert.False(afterRemove.Any(x => x.Key == key));
+            Assert.IsFalse(collection1.Exists(remove));
+            Assert.IsFalse(remove.GetCollectionsContaining().Any());
+
+            Assert.IsFalse(collection1.ChildCollections().Any());
+        }
     }
 }

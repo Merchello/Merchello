@@ -1,8 +1,11 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.EntityCollections.Providers;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
@@ -96,6 +99,54 @@
 
             return resolved != null && resolved.Exists(entity);
         }
+
+        /// <summary>
+        /// The child collections.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEnityCollection}"/>.
+        /// </returns>
+        public static IEnumerable<IEntityCollection> ChildCollections(this IEntityCollection collection)
+        {
+            return !MerchelloContext.HasCurrent ? 
+                Enumerable.Empty<IEntityCollection>() : 
+                MerchelloContext.Current.Services.EntityCollectionService.GetChildren(collection.Key);
+        }
+
+        ///// <summary>
+        ///// The save as child of.
+        ///// </summary>
+        ///// <param name="collection">
+        ///// The collection.
+        ///// </param>
+        ///// <param name="parent">
+        ///// The parent.
+        ///// </param>
+        //internal static void SetParent(this IEntityCollection collection, IEntityCollection parent)
+        //{
+        //    if (!MerchelloContext.HasCurrent) return;
+
+        //    collection.ParentKey = parent.Key;
+
+        //    MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
+        //}
+
+        ///// <summary>
+        ///// Sets the parent to root
+        ///// </summary>
+        ///// <param name="collection">
+        ///// The collection.
+        ///// </param>
+        //internal static void SetParent(this IEntityCollection collection)
+        //{
+        //    if (collection.ParentKey == null) return;
+        //    if (!MerchelloContext.HasCurrent) return;
+        //    collection.ParentKey = null;
+        //    MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
+        //}
 
         /// <summary>
         /// The resolve validated provider.

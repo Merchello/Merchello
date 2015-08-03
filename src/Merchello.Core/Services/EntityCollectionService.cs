@@ -254,6 +254,8 @@
                 return;
             }
 
+            Delete(entityCollection.ChildCollections());
+
             using (new WriteLock(Locker))
             {
                 var uow = _uowProvider.GetUnitOfWork();
@@ -279,8 +281,14 @@
         public void Delete(IEnumerable<IEntityCollection> entityCollections, bool raiseEvents = true)
         {
             var collectionsArray = entityCollections as IEntityCollection[] ?? entityCollections.ToArray();
+            if (!collectionsArray.Any()) return;
             if (raiseEvents)
             Deleting.RaiseEvent(new DeleteEventArgs<IEntityCollection>(collectionsArray), this);
+
+            foreach (var collection in collectionsArray)
+            {
+                this.DeleteAllChildCollections(collection);
+            }
 
             using (new WriteLock(Locker))
             {
@@ -490,6 +498,38 @@
         }
 
         /// <summary>
+        /// The child entity collection count.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int ChildEntityCollectionCount(Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == collectionKey);
+                return repository.Count(query);
+            }
+        }
+
+        /// <summary>
+        /// The has child entity collections.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool HasChildEntityCollections(Guid collectionKey)
+        {
+            return this.ChildEntityCollectionCount(collectionKey) > 0;
+        }
+
+        /// <summary>
         /// The create entity collection.
         /// </summary>
         /// <param name="entityTfKey">
@@ -596,7 +636,22 @@
             }
         }
 
-
+        /// <summary>
+        /// The get entity collections by customer key.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        internal IEnumerable<IEntityCollection> GetEntityCollectionsByCustomerKey(Guid customerKey)
+        {
+            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntityCollectionsByCustomerKey(customerKey);
+            }
+        }
 
         /// <summary>
         /// The validate sort by field.
@@ -612,5 +667,17 @@
             return ValidSortFields.Contains(sortBy.ToLowerInvariant()) ? sortBy : "name";
         }
 
+        /// <summary>
+        /// The delete all child collections.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        private void DeleteAllChildCollections(IEntityCollection collection)
+        {
+            if (!this.HasChildEntityCollections(collection.Key)) return;
+
+            Delete(collection.ChildCollections());
+        }
     }
 }

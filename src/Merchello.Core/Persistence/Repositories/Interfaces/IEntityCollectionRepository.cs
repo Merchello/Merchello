@@ -42,6 +42,17 @@
         IEnumerable<IEntityCollection> GetEntityCollectionsByInvoiceKey(Guid invoiceKey);
 
         /// <summary>
+        /// The get entity collections by customer key.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetEntityCollectionsByCustomerKey(Guid customerKey);
+            
+        /// <summary>
         /// Gets a page of <see cref="IEntityCollection"/>
         /// </summary>
         /// <param name="page">

@@ -193,7 +193,7 @@
         {
             Database.Execute(
                 "DELETE [merchInvoice2EntityCollection] WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey AND [merchInvoice2EntityCollection].[entityCollectionKey] = @eckey",
-                new { @pkey = entityKey, @eckey = collectionKey });
+                new { @ikey = entityKey, @eckey = collectionKey });
         }
 
 

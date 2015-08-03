@@ -335,6 +335,7 @@
                     "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = @Key)",
                     "DELETE FROM merchItemCache WHERE entityKey = @Key",
                     "DELETE FROM merchCustomerAddress WHERE customerKey = @Key",
+                    "DELETE FROM merchCustomer2EntityCollection WHERE customerKey = @Key",
                     "DELETE FROM merchCustomerIndex WHERE customerKey = @Key",
                     "DELETE FROM merchCustomer WHERE pk = @Key"
                 };
