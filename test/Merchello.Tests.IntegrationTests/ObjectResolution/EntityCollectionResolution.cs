@@ -3,6 +3,7 @@
     using Merchello.Core.EntityCollections;
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Tests.Base.TestHelpers;
+    using Merchello.Web.Models.ContentEditing.Collections;
 
     using NUnit.Framework;
 
@@ -67,6 +68,19 @@
 
             //// Assert
             Assert.AreEqual(expected, key);
+        }
+
+        [Test]
+        public void Can_Map_EntityCollectionProviderAttribute_To_EntityCollectionProviderDisplay()
+        {
+            //// Arrange
+            var att = EntityCollectionProviderResolver.Current.GetProviderAttribute<StaticProductCollectionProvider>();
+
+            //// Act
+            var display = att.ToEntityCollectionProviderDisplay();
+
+            //// Assert
+            Assert.NotNull(display);
         }
     }
 }

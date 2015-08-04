@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Core.EntityCollections
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Merchello.Core.Models.TypeFields;
 
     using Umbraco.Core;
 
@@ -109,5 +112,16 @@
         /// Gets a value indicating whether manages unique collection.
         /// </summary>
         public bool ManagesUniqueCollection { get; private set; }
+
+        /// <summary>
+        /// Gets the entity type.
+        /// </summary>
+        public EntityType EntityType
+        {
+            get
+            {
+                return EnumTypeFieldConverter.EntityType.GetTypeField(EntityTfKey);
+            }
+        }
     }
 }

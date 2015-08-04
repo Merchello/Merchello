@@ -1298,6 +1298,16 @@
             The <see cref="T:Merchello.Core.Services.IEntityCollectionService"/>.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Editors.EntityCollectionApiController._staticProviderAtts">
+            <summary>
+            The static collection providers.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Editors.EntityCollectionApiController._resolver">
+            <summary>
+            The <see cref="T:Merchello.Core.EntityCollections.EntityCollectionProviderResolver"/>.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Editors.EntityCollectionApiController"/> class.
@@ -1321,6 +1331,27 @@
             <param name="umbracoContext">
             The umbraco context.
             </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetDefaultEntityCollectionProviders">
+            <summary>
+            The get entity collection providers.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.IEnumerable"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetEntityCollectionProviders">
+            <summary>
+            The get entity collection providers.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.IEnumerable"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.Initialize">
+            <summary>
+            Initializes the controller.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Editors.MarketingApiController">
             <summary>
@@ -1626,6 +1657,22 @@
             Gets or sets the sort order.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplayExtensions">
+            <summary>
+            Extension methods for <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplayExtensions.ToEntityCollectionDisplay(Merchello.Core.Models.Interfaces.IEntityCollection)">
+            <summary>
+            Maps <see cref="T:Merchello.Core.Models.Interfaces.IEntityCollection"/> to <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </summary>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay">
             <summary>
             Represents an entity collection provider.
@@ -1660,6 +1707,22 @@
             <summary>
             Gets or sets the managed collections.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplayExtensions">
+            <summary>
+            The entity collection provider display extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplayExtensions.ToEntityCollectionProviderDisplay(Merchello.Core.EntityCollections.EntityCollectionProviderAttribute)">
+            <summary>
+            The to entity collection provider display.
+            </summary>
+            <param name="att">
+            The provider attribute.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
             <summary>
@@ -2407,6 +2470,32 @@
             </summary>
         </member>
         <member name="M:Merchello.Web.Models.MapperResolvers.AvailableGatewayResourcesResolver.ResolveCore(Merchello.Core.Gateways.GatewayProviderBase)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver">
+            <summary>
+            The managed collections resolver.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver._entityCollectionService">
+            <summary>
+            The entity collection service.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver.ResolveCore(Merchello.Core.EntityCollections.EntityCollectionProviderAttribute)">
             <summary>
             The resolve core.
             </summary>

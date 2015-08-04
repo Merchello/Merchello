@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core;
+    using Merchello.Core.EntityCollections;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -43,5 +45,26 @@
         /// Gets or sets the managed collections.
         /// </summary>
         public IEnumerable<EntityCollectionDisplay> ManagedCollections { get; set;   }
+    }
+
+    /// <summary>
+    /// The entity collection provider display extensions.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    internal static class EntityCollectionProviderDisplayExtensions
+    {
+        /// <summary>
+        /// The to entity collection provider display.
+        /// </summary>
+        /// <param name="att">
+        /// The provider attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderDisplay"/>.
+        /// </returns>
+        public static EntityCollectionProviderDisplay ToEntityCollectionProviderDisplay(this EntityCollectionProviderAttribute att)
+        {
+            return AutoMapper.Mapper.Map<EntityCollectionProviderDisplay>(att);
+        }
     }
 }

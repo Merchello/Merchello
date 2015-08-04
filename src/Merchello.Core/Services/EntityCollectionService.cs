@@ -43,7 +43,7 @@
         /// <summary>
         /// The valid sort fields.
         /// </summary>
-        private static readonly string[] ValidSortFields = { "name" };
+        private static readonly string[] ValidSortFields = { "name", "sortOrder" };
 
 
         #endregion
