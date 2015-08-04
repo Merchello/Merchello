@@ -111,13 +111,6 @@ namespace Merchello.Tests.UnitTests.Mappers
             Assert.AreEqual("AutoMapper Test", ecd.Name);
             Assert.AreEqual(providerKey, ecd.ProviderKey);
             Assert.AreEqual(EntityType, ecd.EntityType);
-        }
-
-        //[Test]
-        //public void Can_Map_EntityCollectionProvider_To_EntityCollectionProviderDisplay()
-        //{
-        //    //// Arrange
-        //    var provider = 
-        //}
+        }        
     }
 }

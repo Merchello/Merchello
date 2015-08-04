@@ -85,6 +85,31 @@
                 Guid.Empty;
         }
 
+        /// <summary>
+        /// Gets the <see cref="EntityCollectionProviderAttribute"/> from the provider of type T.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderAttribute"/>.
+        /// </returns>
+        public EntityCollectionProviderAttribute GetProviderAttribute<T>()
+        {
+            var foundType = _instanceTypes.FirstOrDefault(typeof(T).IsAssignableFrom);
+            return foundType != null ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false) : null;
+        }
+
+        /// <summary>
+        /// Gets the provider attributes for all resolved types.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionProviderAttribute}"/>.
+        /// </returns>
+        public IEnumerable<EntityCollectionProviderAttribute> GetProviderAttributes()
+        {
+            return _instanceTypes.Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false));
+        }
 
         /// <summary>
         /// Gets a collection of resolved entity collection provider types for a specific entity type.

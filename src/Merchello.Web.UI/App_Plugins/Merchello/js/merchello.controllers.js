@@ -1520,6 +1520,15 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         // Initialize the controller
         init();
     }]);
+angular.module('merchello').controller('Merchello.Backoffice.CollectionProviderListController',
+    ['$scope', 'assetsService',
+        function($scope, assetsService) {
+
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+
+        }]);
+
     /**
      * @ngdoc controller
      * @name Merchello.Common.Dialogs.DeleteConfirmationController
