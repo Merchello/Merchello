@@ -13,7 +13,7 @@
     /// The static invoice collection provider.
     /// </summary>
     [EntityCollectionProvider("1AEF5650-242D-4566-ADCA-AC0C90538B47", "454539B9-D753-4C16-8ED5-5EB659E56665", "Static Invoice Collection", "A static invoice collection that could be used for categorizing or grouping sales", false)]
-    public class StaticInvoiceCollectionProvider : CachedEntityCollectionProviderBase<IInvoice>
+    internal class StaticInvoiceCollectionProvider : CachedEntityCollectionProviderBase<IInvoice>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StaticInvoiceCollectionProvider"/> class.

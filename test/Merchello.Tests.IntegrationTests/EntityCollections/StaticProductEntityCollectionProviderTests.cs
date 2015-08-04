@@ -101,8 +101,8 @@
             }
 
             //// Assert
-            var c1Products = provider1.GetEntities().ToArray();
-            var c2Products = provider2.GetEntities().ToArray();
+            var c1Products = collection1.GetEntities<IProduct>().ToArray();
+            var c2Products = collection2.GetEntities<IProduct>().ToArray();
             Assert.IsTrue(c1Products.Any());
             Assert.IsTrue(c2Products.Any());
 
@@ -134,7 +134,7 @@
             var provider = collection1.ResolveProvider<StaticProductCollectionProvider>();
             Assert.NotNull(provider);
 
-            var cproducts = provider.GetEntities().ToArray();
+            var cproducts = collection1.GetEntities<IProduct>().ToArray();
             Assert.AreEqual(4, cproducts.Count());
 
             var remove = cproducts.First();
@@ -143,7 +143,7 @@
             remove.RemoveFromCollection(collection1);
 
             //// Assert
-            var afterRemove = provider.GetEntities().ToArray();
+            var afterRemove = collection1.GetEntities<IProduct>().ToArray();
             Assert.AreEqual(3, afterRemove.Count());
             Assert.False(afterRemove.Any(x => x.Key == key));
             Assert.IsFalse(collection1.Exists(remove));

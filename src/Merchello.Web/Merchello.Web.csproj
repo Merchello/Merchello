@@ -250,6 +250,8 @@
     <Compile Include="Editors\MarketingApiController.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Collections\EntityCollectionDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Collections\EntityCollectionProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\ExtendedDataExtensions.cs" />
     <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferProviderDisplay.cs" />

@@ -1,13 +1,14 @@
 ﻿namespace Merchello.Core.EntityCollections
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence.Querying;
-
-    using umbraco;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -41,7 +42,6 @@
             this.Initialize();
         }
 
-
         /// <summary>
         /// Gets the entity collection.
         /// </summary>
@@ -63,6 +63,89 @@
         /// Gets the collection key.
         /// </summary>
         protected Guid CollectionKey { get; private set; }
+
+        /// <summary>
+        /// The get entities.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{Object}"/>.
+        /// </returns>
+        public abstract IEnumerable<object> GetEntities();        
+
+        /// <summary>
+        /// The get entities.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of <see cref="IEntity"/>
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{T}"/>.
+        /// </returns>
+        public IEnumerable<T> GetEntities<T>() where T : class, IEntity
+        {
+            this.ValidateType(typeof(T)); 
+            
+            return this.GetEntities().Select(x => x as T);
+        }
+
+        /// <summary>
+        /// Gets a generic page of entities.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Object"/>.
+        /// </returns>
+        public abstract Page<object> GetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// Gets a page of typed entities
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of <see cref="IEntity"/>
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<T> GetPagedEntities<T>(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+            where T : class, IEntity
+        {
+            this.ValidateType(typeof(T));
+
+            var p = GetPagedEntities(page, itemsPerPage, sortBy, sortDirection);
+
+            return new Page<T>()
+                {
+                    Context = p.Context,
+                    CurrentPage = p.CurrentPage,
+                    ItemsPerPage = p.ItemsPerPage,
+                    TotalItems = p.TotalItems,
+                    TotalPages = p.TotalPages,
+                    Items = p.Items.Select(x => x as T).ToList()
+                };
+        }
 
         /// <summary>
         /// Ensures this is the provider by <see cref="System.Type"/>.
@@ -107,7 +190,25 @@
             }
 
             return att.EntityTfKey.Equals(EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey);
-        }        
+        }
+
+        /// <summary>
+        /// Validates the type.
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <exception cref="InvalidCastException">
+        /// Throws an exception if the type does not match the collection
+        /// </exception>
+        private void ValidateType(Type type)
+        {
+            if (this.EnsureType(type)) return;
+
+            var invalidType = new InvalidCastException("Cannot cast " + type.FullName + " to " + EntityCollection.TypeOfEntities().FullName);
+            LogHelper.Error<EntityCollectionProviderBase>("Invalid type", invalidType);
+            throw invalidType;
+        }
 
         /// <summary>
         /// Initializes the provider.
