@@ -8,7 +8,6 @@
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Tests.Base.DataMakers;
     using Merchello.Tests.Base.TestHelpers;
 
     using NUnit.Framework;

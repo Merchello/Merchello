@@ -180,37 +180,37 @@
                 MerchelloContext.Current.Services.EntityCollectionService.GetChildren(collection.Key);
         }
 
-        ///// <summary>
-        ///// The save as child of.
-        ///// </summary>
-        ///// <param name="collection">
-        ///// The collection.
-        ///// </param>
-        ///// <param name="parent">
-        ///// The parent.
-        ///// </param>
-        //internal static void SetParent(this IEntityCollection collection, IEntityCollection parent)
-        //{
-        //    if (!MerchelloContext.HasCurrent) return;
+        /// <summary>
+        /// The save as child of.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        internal static void SetParent(this IEntityCollection collection, IEntityCollection parent)
+        {
+            if (!MerchelloContext.HasCurrent || collection.EntityTfKey != parent.EntityTfKey) return;
 
-        //    collection.ParentKey = parent.Key;
+            collection.ParentKey = parent.Key;
 
-        //    MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
-        //}
+            MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
+        }
 
-        ///// <summary>
-        ///// Sets the parent to root
-        ///// </summary>
-        ///// <param name="collection">
-        ///// The collection.
-        ///// </param>
-        //internal static void SetParent(this IEntityCollection collection)
-        //{
-        //    if (collection.ParentKey == null) return;
-        //    if (!MerchelloContext.HasCurrent) return;
-        //    collection.ParentKey = null;
-        //    MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
-        //}
+        /// <summary>
+        /// Sets the parent to root
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        internal static void SetParent(this IEntityCollection collection)
+        {
+            if (collection.ParentKey == null) return;
+            if (!MerchelloContext.HasCurrent) return;
+            collection.ParentKey = null;
+            MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
+        }
 
 
         /// <summary>

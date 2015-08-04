@@ -25,6 +25,7 @@
                     Key = dto.Key,
                     ParentKey = dto.ParentKey,
                     Name = dto.Name,
+                    SortOrder = dto.SortOrder,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -51,6 +52,7 @@
                     ParentKey = entity.ParentKey,
                     EntityTfKey = entity.EntityTfKey,
                     Name = entity.Name,
+                    SortOrder = entity.SortOrder,
                     ProviderKey = entity.ProviderKey,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate

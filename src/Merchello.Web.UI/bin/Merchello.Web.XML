@@ -1246,9 +1246,9 @@
             Gets or sets the log of adjustments.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Editors.MarketingApiController">
+        <member name="T:Merchello.Web.Editors.EntityCollectionApiController">
             <summary>
-            An API controller for the Merchello marketing section.
+            The entity collection api controller.
             </summary>
         </member>
         <member name="T:Merchello.Web.WebApi.MerchelloApiController">
@@ -1292,6 +1292,40 @@
             <remarks>
             Useful for debugging
             </remarks>
+        </member>
+        <member name="F:Merchello.Web.Editors.EntityCollectionApiController._entityCollectionService">
+            <summary>
+            The <see cref="T:Merchello.Core.Services.IEntityCollectionService"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.EntityCollectionApiController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.EntityCollectionApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.EntityCollectionApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="umbracoContext">
+            The umbraco context.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Editors.MarketingApiController">
+            <summary>
+            An API controller for the Merchello marketing section.
+            </summary>
         </member>
         <member name="F:Merchello.Web.Editors.MarketingApiController._offerSettingsService">
             <summary>
@@ -1441,6 +1475,49 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.LocalizationHelper">
+            <summary>
+            The localization helper.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.LocalizationHelper.UmbracoDefaultUiLanguage">
+            <summary>
+            The umbraco default UI language.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.LocalizationHelper.GetCultureFromUser(Umbraco.Core.Models.Membership.IUser)">
+            <summary>
+            Gets the culture from user language.
+            </summary>
+            <param name="user">
+            The user.
+            </param>
+            <returns>
+            The <see cref="T:System.Globalization.CultureInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.LocalizationHelper.GetLanguage(Umbraco.Core.Models.Membership.IUser)">
+            <summary>
+            The get language.
+            </summary>
+            <param name="u">
+            The <see cref="T:Umbraco.Core.Models.Membership.IUser"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.LocalizationHelper.GetLanguage(System.String)">
+            <summary>
+            The get language.
+            </summary>
+            <param name="userLanguage">
+            The user language.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.MerchelloContextExtensions">
             <summary>
             Extension methods for the <see cref="T:Merchello.Core.IMerchelloContext"/>.
@@ -1507,6 +1584,81 @@
         <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.SortOrder">
             <summary>
             Gets or sets the sort order.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay">
+            <summary>
+            Represents and entity collection.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.ParentKey">
+            <summary>
+            Gets or sets the parent key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.EntityTfKey">
+            <summary>
+            Gets or sets the entity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.EntityType">
+            <summary>
+            Gets or sets the entity type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.ProviderKey">
+            <summary>
+            Gets or sets the provider key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.SortOrder">
+            <summary>
+            Gets or sets the sort order.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay">
+            <summary>
+            Represents an entity collection provider.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.ManagesUniqueCollection">
+            <summary>
+            Gets or sets a value indicating whether manages unique collection.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.EntityType">
+            <summary>
+            Gets or sets the entity type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.ManagedCollections">
+            <summary>
+            Gets or sets the managed collections.
             </summary>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
@@ -14212,6 +14364,37 @@
             The merchello tree controller.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._textService">
+            <summary>
+            The text service.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._user">
+            <summary>
+            The <see cref="T:Umbraco.Core.Models.Membership.IUser"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._culture">
+            <summary>
+            The <see cref="T:System.Globalization.CultureInfo"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Trees.MerchelloTreeController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Trees.MerchelloTreeController"/> class.
+            </summary>
+            <param name="context">
+            The context.
+            </param>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the Umbraco ApplicationContent is null
+            </exception>
+        </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The get tree nodes.
@@ -14257,6 +14440,17 @@
             The <see cref="T:Umbraco.Web.Models.Trees.TreeNode"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.LocalizeTitle(Merchello.Core.Configuration.Outline.TreeElement)">
+            <summary>
+            The localize title.
+            </summary>
+            <param name="tree">
+            The tree.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetAttributeDefinedTrees(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Adds attribute defined trees.
@@ -14264,6 +14458,9 @@
             <param name="queryStrings">
             The query Strings.
             </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Trees.ServerVariablesParsingEvents">
             <summary>

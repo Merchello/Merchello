@@ -5,6 +5,7 @@
 
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Web.Models.ContentEditing.Collections;
     using Merchello.Web.Models.MapperResolvers.Offers;
     using Merchello.Web.Models.SaleHistory;
 
@@ -53,6 +54,8 @@
 
             AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
 
+            // Entity Collection
+            AutoMapper.Mapper.CreateMap<IEntityCollection, EntityCollectionDisplay>();
 
             // Gateway Provider    
             AutoMapper.Mapper.CreateMap<IGatewayProviderSettings, GatewayProviderDisplay>()
