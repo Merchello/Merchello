@@ -1057,6 +1057,20 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="endDate">End Date</key>
     <key alias="active">Active</key>
   </area>
+  <area alias="merchelloCollections">
+    <key alias="product">Product Collections</key>
+    <key alias="customer">Customer Collections</key>
+    <key alias="invoice">Invoice Collections</key>
+  </area>
+  <area alias="merchelloTree">
+    <key alias="products">Products</key>
+    <key alias="sales">Sales</key>
+    <key alias="customers">Customers</key>
+    <key alias="marketing">Marketing</key>
+    <key alias="collections">Collections</key>
+    <key alias="reports">Reports</key>
+    <key alias="gateways">Gateway Providers</key>
+  </area>
     <area alias="merchelloMarketing">
       <key alias="currentOffers">Current Offers</key>
       <key alias="offerCode">Offer Code</key>

@@ -16,6 +16,11 @@
     <key alias="endDate">End Date</key>
     <key alias="active">Active</key>
   </area>
+  <area alias="merchelloCollections">
+    <key alias="product">Product Collections</key>
+    <key alias="customer">Customer Collections</key>
+    <key alias="invoice">Invoice Collections</key>
+  </area>
     <area alias="merchelloMarketing">
       <key alias="currentOffers">Current Offers</key>
       <key alias="offerCode">Offer Code</key>
