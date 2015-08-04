@@ -8,7 +8,6 @@
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Tests.Base.DataMakers;
     using Merchello.Tests.Base.TestHelpers;
 
     using NUnit.Framework;
@@ -104,8 +103,8 @@
             customer4.AddToCollection(collection2);
 
             //// Assert
-            var c1Customers = provider1.GetEntities().ToArray();
-            var c2Customers = provider2.GetEntities().ToArray();
+            var c1Customers = collection1.GetEntities<ICustomer>().ToArray();
+            var c2Customers = collection2.GetEntities<ICustomer>().ToArray();
             Assert.IsTrue(c1Customers.Any());
             Assert.IsTrue(c2Customers.Any());
 
@@ -141,7 +140,7 @@
 
             //// Act
 
-            var ccustomers = provider.GetEntities().ToArray();
+            var ccustomers = collection1.GetEntities<ICustomer>().ToArray();
             Assert.AreEqual(4, ccustomers.Count());
 
             var remove = ccustomers.First();
@@ -150,7 +149,7 @@
             remove.RemoveFromCollection(collection1);
 
             //// Assert
-            var afterRemove = provider.GetEntities().ToArray();
+            var afterRemove = collection1.GetEntities<ICustomer>().ToArray();
             Assert.AreEqual(3, afterRemove.Count());
             Assert.False(afterRemove.Any(x => x.Key == key));
             Assert.IsFalse(collection1.Exists(remove));

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Persistence.Querying;
@@ -15,7 +16,7 @@
     /// The type of entity
     /// </typeparam>
     public abstract class EntityCollectionProviderBase<T> : EntityCollectionProviderBase, IEntityCollectionProvider<T>
-        where T : IEntity
+        where T : class, IEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionProviderBase{T}"/> class.
@@ -35,11 +36,11 @@
         /// The get entities.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable{T}"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public virtual IEnumerable<T> GetEntities()
+        public override IEnumerable<object> GetEntities()
         {
-            return this.GetPagedEntities(1, long.MaxValue).Items;
+            return this.PerformGetPagedEntities(1, long.MaxValue).Items;
         }
 
         /// <summary>
@@ -51,13 +52,13 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool Exists(T entity)
+        public virtual bool Exists(T entity)
         {
             return this.PerformExists(entity);
         }
 
         /// <summary>
-        /// The get paged entities.
+        /// Gets a generic page of entities.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -72,13 +73,22 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page{T}"/>.
+        /// The <see cref="Page{Object}"/>.
         /// </returns>
-        public Page<T> GetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        public override Page<object> GetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return this.PerformGetPagedEntities(page, itemsPerPage, sortBy, sortDirection);
-        }
+            var p = this.PerformGetPagedEntities(page, itemsPerPage, sortBy, sortDirection);
 
+            return new Page<object>()
+                {
+                    Context = p.Context,
+                    CurrentPage = p.CurrentPage,
+                    ItemsPerPage = p.ItemsPerPage,
+                    TotalItems = p.TotalItems,
+                    TotalPages = p.TotalPages,
+                    Items = p.Items.Select(x => x as object).ToList()
+                };
+        }
 
         /// <summary>
         /// Returns true if the entity exists in the collection.
@@ -113,6 +123,6 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending);        
+            SortDirection sortDirection = SortDirection.Ascending);
     }
 }

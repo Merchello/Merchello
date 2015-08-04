@@ -117,8 +117,8 @@
             invoice4.AddToCollection(collection2);
 
             //// Assert
-            var c1Invoices = provider1.GetEntities().ToArray();
-            var c2Invoices = provider2.GetEntities().ToArray();
+            var c1Invoices = collection1.GetEntities<IInvoice>().ToArray();
+            var c2Invoices = collection2.GetEntities<IInvoice>().ToArray();
             Assert.IsTrue(c1Invoices.Any());
             Assert.IsTrue(c2Invoices.Any());
 
@@ -166,8 +166,8 @@
             Assert.NotNull(provider);
 
             //// Act
-            
-            var cinvoices = provider.GetEntities().ToArray();
+
+            var cinvoices = collection1.GetEntities<IInvoice>().ToArray();
             Assert.AreEqual(4, cinvoices.Count());
 
             var remove = cinvoices.First();
@@ -176,7 +176,7 @@
             remove.RemoveFromCollection(collection1);
 
             //// Assert
-            var afterRemove = provider.GetEntities().ToArray();
+            var afterRemove = collection1.GetEntities<IInvoice>().ToArray();
             Assert.AreEqual(3, afterRemove.Count());
             Assert.False(afterRemove.Any(x => x.Key == key));
             Assert.IsFalse(collection1.Exists(remove));

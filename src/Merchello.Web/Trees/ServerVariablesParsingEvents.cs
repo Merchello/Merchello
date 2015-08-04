@@ -77,6 +77,11 @@
                     })));   
 
             merchelloUrls.Add(
+                "merchelloEntityCollectionApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<EntityCollectionApiController>(
+                controller => controller.GetEntityCollectionProviders()));
+
+            merchelloUrls.Add(
                 "merchelloFixedRateShippingApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<FixedRateShippingApiController>(
                 controller => controller.GetShipFixedRateTable(new ShipMethodDisplay())));

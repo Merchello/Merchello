@@ -13,8 +13,8 @@
     /// <typeparam name="T">
     /// The type of entity
     /// </typeparam>
-    public abstract class CachedEntityCollectionProviderBase<T> : EntityCollectionProviderBase<T>, ICachedEntityCollectionProvider
-        where T : IEntity
+    internal abstract class CachedEntityCollectionProviderBase<T> : EntityCollectionProviderBase<T>, ICachedEntityCollectionProvider
+        where T : class, IEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedEntityCollectionProviderBase{T}"/> class.

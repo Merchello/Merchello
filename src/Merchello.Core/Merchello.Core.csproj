@@ -467,11 +467,9 @@
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateCustomer2EntityCollectionTable.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateInvoice2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateProduct2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateEntityCollectionTable.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTenZero\AddTaxMethodColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTenZero\InsertNewMerchelloSettingsGlobalTaxationApplicationKey.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneEightTwo\InsertNewMerchelloSettingsMigrationKey.cs" />

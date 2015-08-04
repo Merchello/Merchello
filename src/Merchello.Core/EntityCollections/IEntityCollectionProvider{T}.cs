@@ -14,17 +14,9 @@
     /// <typeparam name="T">
     /// The type of entity
     /// </typeparam>
-    public interface IEntityCollectionProvider<T>
-        where T : IEntity
+    public interface IEntityCollectionProvider<in T>
+        where T : class, IEntity
     {
-        /// <summary>
-        /// The get entities.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{T}"/>.
-        /// </returns>
-        IEnumerable<T> GetEntities();
-
         /// <summary>
         /// Returns true if the entity exists in the collection.
         /// </summary>
@@ -35,25 +27,5 @@
         /// The <see cref="bool"/>.
         /// </returns>
         bool Exists(T entity);
-
-        /// <summary>
-        /// The get entities.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page"/>.
-        /// </returns>
-        Page<T> GetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);        
     }
 }

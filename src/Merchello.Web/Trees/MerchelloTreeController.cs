@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Web.Trees
 {
+    using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Net.Http.Formatting;
     using Core.Configuration;
@@ -12,6 +14,9 @@
     using umbraco.BusinessLogic.Actions;
 
     using Umbraco.Core;
+    using Umbraco.Core.Models.Membership;
+    using Umbraco.Core.Services;
+    using Umbraco.Web;
     using Umbraco.Web.Models.Trees;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.Trees;
@@ -23,6 +28,49 @@
     [PluginController("Merchello")]
     public class MerchelloTreeController : TreeController
     {
+        /// <summary>
+        /// The text service.
+        /// </summary>
+        private readonly ILocalizedTextService _textService;
+
+        /// <summary>
+        /// The <see cref="IUser"/>.
+        /// </summary>
+        private readonly IUser _user;
+
+        /// <summary>
+        /// The <see cref="CultureInfo"/>.
+        /// </summary>
+        private readonly CultureInfo _culture;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloTreeController"/> class.
+        /// </summary>
+        public MerchelloTreeController()
+            : this(UmbracoContext.Current)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloTreeController"/> class.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the Umbraco ApplicationContent is null
+        /// </exception>
+        public MerchelloTreeController(UmbracoContext context)
+        {
+            if (ApplicationContext == null) throw new NullReferenceException("Umbraco ApplicationContent is null");
+            Mandate.ParameterNotNull(context, "context");
+
+            //// http://issues.merchello.com/youtrack/issue/M-732
+            _textService = ApplicationContext.Services.TextService;
+
+            _culture = LocalizationHelper.GetCultureFromUser(context.Security.CurrentUser);
+        }
+
         /// <summary>
         /// The get tree nodes.
         /// </summary>
@@ -116,10 +164,28 @@
                 tree.Id,
                 parentTree == null ? string.Empty : parentTree.Id,
                 queryStrings,
-                tree.Title,
+                this.LocalizeTitle(tree),
                 tree.Icon,
                 hasSubs,
                 tree.RoutePath);
+        }
+
+        /// <summary>
+        /// The localize title.
+        /// </summary>
+        /// <param name="tree">
+        /// The tree.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private string LocalizeTitle(TreeElement tree)
+        {
+            var name = tree.LocalizeName.IsNullOrWhiteSpace() ? tree.Id : tree.LocalizeName;
+
+            var localized = _textService.Localize(string.Format("{0}/{1}", tree.LocalizeArea, name), _culture);
+
+            return localized.IsNullOrWhiteSpace() ? tree.Title : localized;
         }
 
         /// <summary>
@@ -128,6 +194,9 @@
         /// <param name="queryStrings">
         /// The query Strings.
         /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{TreeNode}"/>.
+        /// </returns>
         private IEnumerable<TreeNode> GetAttributeDefinedTrees(FormDataCollection queryStrings)
         {
             var types = ReportApiControllerResolver.Current.ResolvedTypes.ToArray();

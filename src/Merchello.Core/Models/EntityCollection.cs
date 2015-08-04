@@ -6,6 +6,7 @@
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.TypeFields;
 
     using Umbraco.Core;
 
@@ -37,6 +38,11 @@
         private static readonly PropertyInfo ParentKeySelector = ExpressionHelper.GetPropertyInfo<EntityCollection, Guid?>(x => x.ParentKey);
 
         /// <summary>
+        /// The sort info selector.
+        /// </summary>
+        private static readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, int>(x => x.SortOrder);
+
+        /// <summary>
         /// The entity type field key.
         /// </summary>
         private Guid _entityTfKey;
@@ -55,6 +61,11 @@
         /// The _parent key.
         /// </summary>
         private Guid? _parentKey;
+
+        /// <summary>
+        /// The sort order.
+        /// </summary>
+        private int _sortOrder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollection"/> class.
@@ -122,6 +133,17 @@
         }
 
         /// <summary>
+        /// Gets the entity type.
+        /// </summary>
+        public EntityType EntityType
+        {
+            get
+            {
+                return EnumTypeFieldConverter.EntityType.GetTypeField(EntityTfKey);
+            }             
+        }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [DataMember]
@@ -142,6 +164,30 @@
                    },
                    _name,
                    NameSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets the sort order.
+        /// </summary>
+        [DataMember]
+        public int SortOrder
+        {
+            get
+            {
+                return _sortOrder;
+            }
+
+            internal set
+            {
+                SetPropertyValueAndDetectChanges(
+                  o =>
+                  {
+                      _sortOrder = value;
+                      return _sortOrder;
+                  },
+                  _sortOrder,
+                  SortOrderSelector);
             }
         }
 

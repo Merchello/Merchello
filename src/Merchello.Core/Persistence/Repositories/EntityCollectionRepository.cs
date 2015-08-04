@@ -4,12 +4,15 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Querying;
-    using Merchello.Core.Persistence.UnitOfWork;    
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using umbraco.cms.presentation;
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
@@ -291,6 +294,13 @@
         /// </param>
         protected override void PersistNewItem(IEntityCollection entity)
         {
+            var query = entity.ParentKey == null
+                            ? Querying.Query<IEntityCollection>.Builder.Where(x => x.ProviderKey == entity.ProviderKey)
+                            : Querying.Query<IEntityCollection>.Builder.Where(x => x.ParentKey == entity.ParentKey);
+
+            var sortOrder = this.Count(query);
+            ((EntityCollection)entity).SortOrder = sortOrder;
+
             ((Entity)entity).AddingEntity();
 
             var factory = new EntityCollectionFactory();

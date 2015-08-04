@@ -42,6 +42,13 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the sort order.
+        /// </summary>
+        [Column("sortOrder")]
+        [Constraint(Default = "0")]
+        public int SortOrder { get; set; }
+
+        /// <summary>
         /// Gets or sets the key for the collection provider.
         /// </summary>
         [Column("providerKey")]

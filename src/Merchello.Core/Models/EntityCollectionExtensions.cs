@@ -3,14 +3,16 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.UI;
 
     using Merchello.Core.EntityCollections;
-    using Merchello.Core.EntityCollections.Providers;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Persistence.Querying;
 
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// The entity collection extensions.
@@ -32,50 +34,112 @@
         }
 
         /// <summary>
-        /// Resolves the provider for the collection.
+        /// The get entities.
         /// </summary>
         /// <param name="collection">
         /// The collection.
         /// </param>
         /// <returns>
-        /// The <see cref="EntityCollectionProviderBase"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public static EntityCollectionProviderBase ResolveProvider(this IEntityCollection collection)
+        public static IEnumerable<object> GetEntities(this IEntityCollection collection)
         {
-            if (!EntityCollectionProviderResolver.HasCurrent) return null;
- 
-            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collection.Key);
+            var resolved = collection.ResolveProvider();
 
-            if (attempt.Success) return attempt.Result;
-            
-            LogHelper.Error(typeof(EntityCollectionExtensions), "Resolver failed to resolve collection provider", attempt.Exception);
-            return null;
+            return resolved == null ? Enumerable.Empty<object>() : resolved.GetEntities();
         }
 
         /// <summary>
-        /// The resolve provider.
+        /// The get entities.
         /// </summary>
         /// <param name="collection">
         /// The collection.
         /// </param>
         /// <typeparam name="T">
-        /// The type of provider
+        /// The type of <see cref="IEntity"/>
         /// </typeparam>
         /// <returns>
-        /// The <see cref="EntityCollectionProviderBase"/>.
+        /// The <see cref="IEnumerable{T}"/>.
         /// </returns>
-        public static T ResolveProvider<T>(this IEntityCollection collection)
-            where T : class
+        public static IEnumerable<T> GetEntities<T>(this IEntityCollection collection)
+            where T : class, IEntity
         {
-            var provider = collection.ResolveProvider();
-            
-            if (provider == null) return null;
-            
-            if (provider is T) return provider as T;
-            
-            LogHelper.Debug(typeof(EntityCollectionExtensions), "Provider was resolved but was not of expected type.");
+            var resolved = collection.ResolveProvider();
 
-            return null;
+            return resolved == null ? Enumerable.Empty<T>() : resolved.GetEntities<T>();
+        }
+
+        /// <summary>
+        /// Gets a generic page of Entities.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        public static Page<object> GetPagedEntities(
+            this IEntityCollection collection,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var resolved = collection.ResolveProvider();
+
+            return resolved == null
+                       ? new Page<object>()
+                       : resolved.GetPagedEntities(page, itemsPerPage, sortBy, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets a typed Page entities.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of <see cref="IEntity"/>
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        public static Page<T> GetPagedEntities<T>(
+            this IEntityCollection collection,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending) where T : class, IEntity
+        {
+            var resolved = collection.ResolveProvider();
+
+            return resolved == null
+                       ? new Page<T>()
+                       : resolved.GetPagedEntities<T>(page, itemsPerPage, sortBy, sortDirection);
         }
 
         /// <summary>
@@ -93,7 +157,7 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public static bool Exists<T>(this IEntityCollection collection, T entity) where T : IEntity
+        public static bool Exists<T>(this IEntityCollection collection, T entity) where T : class, IEntity
         {
             var resolved = collection.ResolveValidatedProvider(entity);
 
@@ -109,44 +173,93 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEnityCollection}"/>.
         /// </returns>
-        public static IEnumerable<IEntityCollection> ChildCollections(this IEntityCollection collection)
+        internal static IEnumerable<IEntityCollection> ChildCollections(this IEntityCollection collection)
         {
             return !MerchelloContext.HasCurrent ? 
                 Enumerable.Empty<IEntityCollection>() : 
                 MerchelloContext.Current.Services.EntityCollectionService.GetChildren(collection.Key);
         }
 
-        ///// <summary>
-        ///// The save as child of.
-        ///// </summary>
-        ///// <param name="collection">
-        ///// The collection.
-        ///// </param>
-        ///// <param name="parent">
-        ///// The parent.
-        ///// </param>
-        //internal static void SetParent(this IEntityCollection collection, IEntityCollection parent)
-        //{
-        //    if (!MerchelloContext.HasCurrent) return;
+        /// <summary>
+        /// The save as child of.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        internal static void SetParent(this IEntityCollection collection, IEntityCollection parent)
+        {
+            if (!MerchelloContext.HasCurrent || collection.EntityTfKey != parent.EntityTfKey) return;
 
-        //    collection.ParentKey = parent.Key;
+            collection.ParentKey = parent.Key;
 
-        //    MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
-        //}
+            MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
+        }
 
-        ///// <summary>
-        ///// Sets the parent to root
-        ///// </summary>
-        ///// <param name="collection">
-        ///// The collection.
-        ///// </param>
-        //internal static void SetParent(this IEntityCollection collection)
-        //{
-        //    if (collection.ParentKey == null) return;
-        //    if (!MerchelloContext.HasCurrent) return;
-        //    collection.ParentKey = null;
-        //    MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
-        //}
+        /// <summary>
+        /// Sets the parent to root
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        internal static void SetParent(this IEntityCollection collection)
+        {
+            if (collection.ParentKey == null) return;
+            if (!MerchelloContext.HasCurrent) return;
+            collection.ParentKey = null;
+            MerchelloContext.Current.Services.EntityCollectionService.Save(collection);
+        }
+
+
+        /// <summary>
+        /// Resolves the provider for the collection.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderBase"/>.
+        /// </returns>
+        internal static EntityCollectionProviderBase ResolveProvider(this IEntityCollection collection)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent) return null;
+
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collection.Key);
+
+            if (attempt.Success) return attempt.Result;
+
+            LogHelper.Error(typeof(EntityCollectionExtensions), "Resolver failed to resolve collection provider", attempt.Exception);
+            return null;
+        }
+
+        /// <summary>
+        /// The resolve provider.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderBase"/>.
+        /// </returns>
+        internal static T ResolveProvider<T>(this IEntityCollection collection)
+            where T : class
+        {
+            var provider = collection.ResolveProvider();
+
+            if (provider == null) return null;
+
+            if (provider is T) return provider as T;
+
+            LogHelper.Debug(typeof(EntityCollectionExtensions), "Provider was resolved but was not of expected type.");
+
+            return null;
+        }
+
 
         /// <summary>
         /// The resolve validated provider.
@@ -163,7 +276,7 @@
         /// <returns>
         /// The <see cref="EntityCollectionProviderBase"/>.
         /// </returns>
-        internal static EntityCollectionProviderBase<T> ResolveValidatedProvider<T>(this IEntityCollection collection, T entity) where T : IEntity
+        internal static EntityCollectionProviderBase<T> ResolveValidatedProvider<T>(this IEntityCollection collection, T entity) where T : class, IEntity
         {
             var resolved = collection.ResolveProvider();
 

@@ -42,6 +42,40 @@
         }
 
         /// <summary>
+        /// Gets or sets the localize area.
+        /// </summary>
+        [ConfigurationProperty("localizeArea", IsRequired = false, DefaultValue = "merchelloTree")]
+        public string LocalizeArea
+        {
+            get
+            {
+                return (string)this["localizeArea"];
+            }
+
+            set
+            {
+                this["localizeArea"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the localize area.
+        /// </summary>
+        [ConfigurationProperty("localizeName", IsRequired = false, DefaultValue = "")]
+        public string LocalizeName
+        {
+            get
+            {
+                return (string)this["localizeName"];
+            }
+
+            set
+            {
+                this["localizeName"] = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the icon.
         /// </summary>
         [ConfigurationProperty("icon", IsRequired = true)]
