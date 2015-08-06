@@ -321,6 +321,7 @@
     <Compile Include="Models\Interfaces\IDataModifierData.cs" />
     <Compile Include="Models\Interfaces\IDetachedContentType.cs" />
     <Compile Include="Models\Interfaces\IEntityCollection.cs" />
+    <Compile Include="Models\Interfaces\IHasEntityTypeField.cs" />
     <Compile Include="Models\Interfaces\IModifiableProductVariantData.cs" />
     <Compile Include="Models\Interfaces\IDataModifierLog.cs" />
     <Compile Include="Models\Interfaces\IOfferRedeemed.cs" />

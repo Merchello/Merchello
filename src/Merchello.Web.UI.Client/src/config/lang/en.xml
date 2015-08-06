@@ -18,11 +18,15 @@
   </area>
   <area alias="merchelloCollections">
     <key alias="providers">Collection Providers</key>
+    <key alais="newCollection">New Collection</key>
     <key alias="staticProviders">Static Collections</key>
     <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>
     <key alias="product">Product Collections</key>
     <key alias="customer">Customer Collections</key>
     <key alias="invoice">Invoice Collections</key>
+  </area>
+  <area alias="merchelloCustomers">
+    <key alias="newCustomer">New Customer</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>

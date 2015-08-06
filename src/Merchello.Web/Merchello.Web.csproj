@@ -269,6 +269,7 @@
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\EntityTypeFieldResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityCollections\ManagedCollectionsResolver.cs" />
     <Compile Include="Models\MapperResolvers\GatewayProviders\TaxationByProductValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferComponentExtendedDataResolver.cs" />
@@ -344,6 +345,9 @@
     <Compile Include="Search\ICachedProductQuery.cs" />
     <Compile Include="Search\ICachedQueryProvider.cs" />
     <Compile Include="Search\QueryResultFactory.cs" />
+    <Compile Include="Trees\Actions\DeleteCollectionAction.cs" />
+    <Compile Include="Trees\Actions\NewCollectionAction.cs" />
+    <Compile Include="Trees\Actions\NewEntityAction.cs" />
     <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
     <Compile Include="Search\CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />

@@ -1529,6 +1529,72 @@ angular.module('merchello').controller('Merchello.Backoffice.CollectionProviderL
 
         }]);
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Common.Dialogs.CreateStaticCollectionController
+ * @function
+ *
+ * @description
+ * The controller for the delete confirmations
+ */
+angular.module('merchello')
+    .controller('Merchello.Common.Dialogs.CreateStaticCollectionController',
+    ['$scope', 'notificationsService', 'navigationService', 'entityCollectionHelper', 'entityCollectionResource', 'entityCollectionProviderDisplayBuilder', 'entityCollectionDisplayBuilder',
+        function($scope, notificationsService, navigationService, entityCollectionHelper, entityCollectionResource, entityCollectionProviderDisplayBuilder, entityCollectionDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.name = '';
+            $scope.wasFormSubmitted = false;
+            $scope.entityType = '';
+            $scope.provider = {};
+            $scope.dialogData = {};
+            $scope.entityCollectionProviders = [];
+
+            // exposed methods
+            $scope.save = save;
+
+            function init() {
+                $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
+                $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.tree)
+                loadProviders();
+            }
+
+            function loadProviders() {
+                var promise = entityCollectionResource.GetDefaultEntityCollectionProviders();
+                promise.then(function(results) {
+                    $scope.entityCollectionProviders = entityCollectionProviderDisplayBuilder.transform(results);
+                    $scope.provider = _.find($scope.entityCollectionProviders, function(p) { return p.entityType == $scope.entityType; });
+
+                    // todo this needs to be handled better
+                    if ($scope.provider == null || $scope.provider == undefined) {
+                        navigationService.hideNavigation();
+                    }
+
+                    $scope.loaded = true;
+                }, function(reason) {
+                    notificationsService.error("Failted to load default providers", reason.message);
+                });
+            }
+
+            function save() {
+                $scope.wasFormSubmitted = true;
+                if ($scope.collectionForm.name.$valid) {
+                    var collection = entityCollectionDisplayBuilder.createDefault();
+                    collection.providerKey = $scope.provider.key;
+                    collection.entityTfKey = $scope.provider.entityTfKey;
+                    collection.entityType = $scope.provider.entityType;
+                    collection.name = $scope.name;
+                    var promise = entityCollectionResource.AddEntityCollection(collection);
+                    promise.then(function() {
+                        navigationService.hideNavigation();
+                    });
+                }
+            }
+
+            init();
+    }]);
+
+
     /**
      * @ngdoc controller
      * @name Merchello.Common.Dialogs.DeleteConfirmationController
@@ -2296,6 +2362,47 @@ angular.module('merchello').controller('Merchello.Backoffice.CollectionProviderL
                 }
             }
 
+        }]);
+
+angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerNewCustomerController',
+    ['$scope', '$location', 'dialogDataFactory', 'customerResource', 'notificationsService', 'navigationService', 'customerDisplayBuilder',
+        function($scope, $location, dialogDataFactory, customerResource, notificationsService, navigationService, customerDisplayBuilder) {
+            $scope.wasFormSubmitted = false;
+
+            $scope.firstName = '';
+            $scope.lastName = '';
+            $scope.email = '';
+
+            // exposed methods
+            $scope.save = save;
+
+            /**
+             * @ngdoc method
+             * @name submitIfValid
+             * @function
+             *
+             * @description
+             * Submit form if valid.
+             */
+            function save() {
+                $scope.wasFormSubmitted = true;
+                if ($scope.editInfoForm.email.$valid) {
+                    var customer = customerDisplayBuilder.createDefault();
+                    customer.loginName = $scope.email;
+                    customer.email = $scope.email;
+                    customer.firstName = $scope.firstName;
+                    customer.lastName = $scope.lastName;
+
+                    var promiseSaveCustomer = customerResource.AddCustomer(customer);
+                    promiseSaveCustomer.then(function (customerResponse) {
+                        notificationsService.success("Customer Saved", "");
+                        navigationService.hideNavigation();
+                        $location.url("/merchello/merchello/customeroverview/" + customerResponse.key, true);
+                    }, function (reason) {
+                        notificationsService.error("Customer Save Failed", reason.message);
+                    });
+                }
+            }
         }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardController',

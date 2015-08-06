@@ -9,8 +9,8 @@
     using Core.Configuration.Outline;
 
     using Merchello.Web.Reporting;
+    using Merchello.Web.Trees.Actions;
 
-    using umbraco;
     using umbraco.BusinessLogic.Actions;
 
     using Umbraco.Core;
@@ -29,6 +29,11 @@
     public class MerchelloTreeController : TreeController
     {
         /// <summary>
+        /// The dialogs path.
+        /// </summary>
+        private static string _dialogsPath = "/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/";
+
+        /// <summary>
         /// The text service.
         /// </summary>
         private readonly ILocalizedTextService _textService;
@@ -42,6 +47,16 @@
         /// The <see cref="CultureInfo"/>.
         /// </summary>
         private readonly CultureInfo _culture;
+
+        /// <summary>
+        /// The root trees.
+        /// </summary>
+        private readonly IEnumerable<TreeElement> _rootTrees;
+
+        /// <summary>
+        /// The collection trees.
+        /// </summary>
+        private readonly string[] _collectiontrees = new[] { "products", "sales", "customers" };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloTreeController"/> class.
@@ -69,6 +84,8 @@
             _textService = ApplicationContext.Services.TextService;
 
             _culture = LocalizationHelper.GetCultureFromUser(context.Security.CurrentUser);
+
+            _rootTrees = MerchelloConfiguration.Current.BackOffice.GetTrees().Where(x => x.Visible).ToArray();
         }
 
         /// <summary>
@@ -86,14 +103,15 @@
         protected override TreeNodeCollection GetTreeNodes(string id, FormDataCollection queryStrings)
         {
             var collection = new TreeNodeCollection();
-            var backoffice = MerchelloConfiguration.Current.BackOffice;
-            var rootTrees = backoffice.GetTrees().Where(x => x.Visible).ToArray();
-            var currentTree = rootTrees.FirstOrDefault(x => x.Id == id && x.Visible);
+            var backoffice = MerchelloConfiguration.Current.BackOffice;            
+            var currentTree = _rootTrees.FirstOrDefault(x => x.Id == id && x.Visible);
+            var isChildCollection = id.IndexOf('-') > 0;
+            var collectionId = isChildCollection ? id.Split('-')[0] : id;
+            var collectionKey = isChildCollection ? id.Split('-')[1] : null;
 
             collection.AddRange(
                 currentTree != null
-                    ? 
-                        currentTree.Id == "reports" ? 
+                    ? currentTree.Id == "reports" ? 
                         GetAttributeDefinedTrees(queryStrings) :
                         currentTree.SubTree.GetTrees().Where(x => x.Visible)
                             .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings, currentTree))
@@ -118,23 +136,49 @@
         /// </returns>
         protected override MenuItemCollection GetMenuForNode(string id, FormDataCollection queryStrings)
         {
-            var menu = new MenuItemCollection();
+            var menu = new MenuItemCollection(); 
 
-            if (id == "settings")
+            // Products
+            if (id == "products")
             {
-                menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
-            }     
+                menu.Items.Add<NewEntityAction>(
+                    _textService.Localize(string.Format("merchelloVariant/newProduct"), _culture),
+                    false).NavigateToRoute("merchello/merchello/productedit/create");
+            }
 
-            //if (id == "orders")
-            //{
-            //    menu.Items.Add<CreateChildEntity, ActionNew>("Create Order", true).Alias = "createOrder";
-            //}
+            if (id == "customers")
+            {
+                menu.Items.Add<NewEntityAction>(
+                    _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture), false)
+                    .LaunchDialogView(_dialogsPath + "customer.newcustomer.html", _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture));
+            }
 
-            ////if (id == "catalog")
-            ////{
-            //    //create product
-            ////    menu.Items.Add<MerchelloActionNewProduct>(ui.Text("actions", MerchelloActionNewProduct.Instance.Alias));
-            ////}
+            //// child nodes will have an id separated with a hypen and key
+            //// e.g.  products-[GUID]
+
+            var isChildCollection = id.IndexOf('-') > 0;
+            var collectionId = isChildCollection ? id.Split('-')[0] : id;
+
+            if (_collectiontrees.Contains(collectionId))
+            {
+                if (isChildCollection)
+                {
+                    // add the delete button
+                    menu.Items.Add<DeleteCollectionAction>(
+                        _textService.Localize("actions/delete", _culture), false)
+                        .LaunchDialogView(_dialogsPath + "delete.cshtml", _textService.Localize("actions/delete", _culture));
+                }
+
+                menu.Items.Add<NewCollectionAction>(
+                    _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture),
+                    false,
+                    new Dictionary<string, object>()
+                        {
+                            { "dialogData", new { tree = collectionId } }
+                        }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture));                
+            }
+
+            menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), _collectiontrees.Contains(collectionId));
 
             return menu;
         }
