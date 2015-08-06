@@ -1538,9 +1538,9 @@ angular.module('merchello').controller('Merchello.Backoffice.CollectionProviderL
  * The controller for the delete confirmations
  */
 angular.module('merchello')
-    .controller('Merchello.Common.Dialogs.CreateStaticCollectionController',
-    ['$scope', 'notificationsService', 'navigationService', 'entityCollectionHelper', 'entityCollectionResource', 'entityCollectionProviderDisplayBuilder', 'entityCollectionDisplayBuilder',
-        function($scope, notificationsService, navigationService, entityCollectionHelper, entityCollectionResource, entityCollectionProviderDisplayBuilder, entityCollectionDisplayBuilder) {
+    .controller('Merchello.EntityCollections.Dialogs.CreateStaticCollectionController',
+    ['$scope', 'appState', 'treeService', 'notificationsService', 'navigationService', 'entityCollectionHelper', 'entityCollectionResource', 'entityCollectionProviderDisplayBuilder', 'entityCollectionDisplayBuilder',
+        function($scope, appState, treeService, notificationsService, navigationService, entityCollectionHelper, entityCollectionResource, entityCollectionProviderDisplayBuilder, entityCollectionDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.name = '';
@@ -1549,18 +1549,21 @@ angular.module('merchello')
             $scope.provider = {};
             $scope.dialogData = {};
             $scope.entityCollectionProviders = [];
+            $scope.nodePath = [];
 
             // exposed methods
             $scope.save = save;
 
             function init() {
                 $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
-                $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.tree)
+                $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.entityType);
+                $scope.nodePath = treeService.getPath($scope.currentNode);
+                console.info($scope.nodePath);
                 loadProviders();
             }
 
             function loadProviders() {
-                var promise = entityCollectionResource.GetDefaultEntityCollectionProviders();
+                var promise = entityCollectionResource.getDefaultEntityCollectionProviders();
                 promise.then(function(results) {
                     $scope.entityCollectionProviders = entityCollectionProviderDisplayBuilder.transform(results);
                     $scope.provider = _.find($scope.entityCollectionProviders, function(p) { return p.entityType == $scope.entityType; });
@@ -1583,10 +1586,23 @@ angular.module('merchello')
                     collection.providerKey = $scope.provider.key;
                     collection.entityTfKey = $scope.provider.entityTfKey;
                     collection.entityType = $scope.provider.entityType;
+                    collection.parentKey = $scope.dialogData.parentKey;
+
                     collection.name = $scope.name;
-                    var promise = entityCollectionResource.AddEntityCollection(collection);
+                    var promise = entityCollectionResource.addEntityCollection(collection);
                     promise.then(function() {
                         navigationService.hideNavigation();
+
+
+                        var reloadNodePromise = treeService.reloadNode($scope.currentNode);
+                        reloadNodePromise.then(function() {
+                            var promise = treeService.loadNodeChildren({ node: $scope.currentNode });
+                            promise.then(function() {
+                                notificationsService.success('New collection added.');
+
+                            });
+                        });
+
                     });
                 }
             }
@@ -1594,6 +1610,50 @@ angular.module('merchello')
             init();
     }]);
 
+
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.DeleteEntityCollectionController', [
+    '$scope', '$location', 'treeService', 'navigationService', 'notificationsService', 'entityCollectionResource', 'entityCollectionDisplayBuilder',
+    function($scope, $location, treeService, navigationService, notificationsService, entityCollectionResource, entityCollectionDisplayBuilder) {
+
+        $scope.loaded = false;
+        $scope.dialogData = {};
+        $scope.entityCollection = {};
+        $scope.refreshPath = {};
+        $scope.confirmDelete = confirmDelete;
+
+        function init() {
+            $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
+            $scope.refreshPath = treeService.getPath($scope.$parent.currentNode);
+            console.info($scope.currentNode);
+            loadEntityCollection();
+        }
+
+        function loadEntityCollection() {
+            var promise = entityCollectionResource.getByKey($scope.dialogData.collectionKey);
+            promise.then(function(collection) {
+                $scope.entityCollection = entityCollectionDisplayBuilder.transform(collection);
+                $scope.dialogData.name = $scope.entityCollection.name;
+                $scope.loaded = true;
+            }, function(reason) {
+                notificationsService.error("Failted to entity collection", reason.message);
+            });
+        }
+
+        function confirmDelete() {
+            var promise = entityCollectionResource.deleteEntityCollection($scope.dialogData.collectionKey);
+            promise.then(function(){
+                navigationService.hideNavigation();
+                //navigationService.syncTree({tree: 'merchello', path: ["-1",$scope.dialogData.entityType], forceReload: true});
+                treeService.removeNode($scope.currentNode);
+                notificationsService.success('Collection deleted');
+            }, function(reason) {
+                notificationsService.error("Failted to delete entity collection", reason.message);
+            });
+        }
+
+        // initialize the controller
+        init();
+    }]);
 
     /**
      * @ngdoc controller
@@ -5778,7 +5838,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 promise.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
                     $scope.products = queryResult.items;
-                    console.info($scope.products);
                     $scope.maxPages = queryResult.totalPages;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;

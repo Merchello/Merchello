@@ -7,9 +7,9 @@
  * The controller for the delete confirmations
  */
 angular.module('merchello')
-    .controller('Merchello.Common.Dialogs.CreateStaticCollectionController',
-    ['$scope', 'notificationsService', 'navigationService', 'entityCollectionHelper', 'entityCollectionResource', 'entityCollectionProviderDisplayBuilder', 'entityCollectionDisplayBuilder',
-        function($scope, notificationsService, navigationService, entityCollectionHelper, entityCollectionResource, entityCollectionProviderDisplayBuilder, entityCollectionDisplayBuilder) {
+    .controller('Merchello.EntityCollections.Dialogs.CreateStaticCollectionController',
+    ['$scope', 'appState', 'treeService', 'notificationsService', 'navigationService', 'entityCollectionHelper', 'entityCollectionResource', 'entityCollectionProviderDisplayBuilder', 'entityCollectionDisplayBuilder',
+        function($scope, appState, treeService, notificationsService, navigationService, entityCollectionHelper, entityCollectionResource, entityCollectionProviderDisplayBuilder, entityCollectionDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.name = '';
@@ -18,18 +18,21 @@ angular.module('merchello')
             $scope.provider = {};
             $scope.dialogData = {};
             $scope.entityCollectionProviders = [];
+            $scope.nodePath = [];
 
             // exposed methods
             $scope.save = save;
 
             function init() {
                 $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
-                $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.tree)
+                $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.entityType);
+                $scope.nodePath = treeService.getPath($scope.currentNode);
+                console.info($scope.nodePath);
                 loadProviders();
             }
 
             function loadProviders() {
-                var promise = entityCollectionResource.GetDefaultEntityCollectionProviders();
+                var promise = entityCollectionResource.getDefaultEntityCollectionProviders();
                 promise.then(function(results) {
                     $scope.entityCollectionProviders = entityCollectionProviderDisplayBuilder.transform(results);
                     $scope.provider = _.find($scope.entityCollectionProviders, function(p) { return p.entityType == $scope.entityType; });
@@ -52,10 +55,23 @@ angular.module('merchello')
                     collection.providerKey = $scope.provider.key;
                     collection.entityTfKey = $scope.provider.entityTfKey;
                     collection.entityType = $scope.provider.entityType;
+                    collection.parentKey = $scope.dialogData.parentKey;
+
                     collection.name = $scope.name;
-                    var promise = entityCollectionResource.AddEntityCollection(collection);
+                    var promise = entityCollectionResource.addEntityCollection(collection);
                     promise.then(function() {
                         navigationService.hideNavigation();
+
+
+                        var reloadNodePromise = treeService.reloadNode($scope.currentNode);
+                        reloadNodePromise.then(function() {
+                            var promise = treeService.loadNodeChildren({ node: $scope.currentNode });
+                            promise.then(function() {
+                                notificationsService.success('New collection added.');
+
+                            });
+                        });
+
                     });
                 }
             }

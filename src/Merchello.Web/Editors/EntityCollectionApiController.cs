@@ -5,6 +5,8 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Web.Http;
 
     using Merchello.Core;
@@ -80,6 +82,27 @@
         }
 
         /// <summary>
+        /// Gets an entity collection by its key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionDisplay"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the collection is not found
+        /// </exception>
+        [HttpGet]
+        public EntityCollectionDisplay GetByKey(Guid key)
+        {
+            var collection = _entityCollectionService.GetByKey(key);
+            if (collection == null) throw new NullReferenceException("EntityCollection does not exist");
+
+            return collection.ToEntityCollectionDisplay();
+        }
+
+        /// <summary>
         /// The get entity collection providers.
         /// </summary>
         /// <returns>
@@ -136,10 +159,38 @@
                 collection.EntityType,
                 collection.ProviderKey,
                 collection.Name);
+            if (collection.ParentKey != null)
+            {
+                ec.ParentKey = collection.ParentKey;
+            }
+
+            _entityCollectionService.Save(ec);
 
             return ec.ToEntityCollectionDisplay();
         }
 
+        /// <summary>
+        /// The delete entity collection.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost, HttpDelete, HttpGet]
+        public HttpResponseMessage DeleteEntityCollection(Guid key)
+        {
+            var collectionToDelete = _entityCollectionService.GetByKey(key);
+            if (collectionToDelete == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            _entityCollectionService.Delete(collectionToDelete);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
 
         /// <summary>
         /// Initializes the controller.
