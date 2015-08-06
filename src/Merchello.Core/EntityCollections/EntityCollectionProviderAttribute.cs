@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
 
     using Umbraco.Core;
@@ -10,7 +11,7 @@
     /// <summary>
     /// An attribute to decorate entity collection providers for resolution.
     /// </summary>
-    public class EntityCollectionProviderAttribute : Attribute
+    public class EntityCollectionProviderAttribute : Attribute, IHasEntityTypeField
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionProviderAttribute"/> class.
@@ -94,9 +95,9 @@
         public Guid Key { get; private set; }
 
         /// <summary>
-        /// Gets the entity type field key.
+        /// Gets or sets the entity type field key.
         /// </summary>
-        public Guid EntityTfKey { get; private set; }
+        public Guid EntityTfKey { get; set; }
 
         /// <summary>
         /// Gets the name.

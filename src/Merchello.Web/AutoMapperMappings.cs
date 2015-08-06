@@ -57,8 +57,17 @@
             AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
 
             // Entity Collection
-            AutoMapper.Mapper.CreateMap<IEntityCollection, EntityCollectionDisplay>();
+            AutoMapper.Mapper.CreateMap<IEntityCollection, EntityCollectionDisplay>()
+                .ForMember(
+                    dest => dest.EntityTypeField,
+                    opt =>
+                    opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()));
+
             AutoMapper.Mapper.CreateMap<EntityCollectionProviderAttribute, EntityCollectionProviderDisplay>()
+                .ForMember(
+                    dest => dest.EntityTypeField,
+                    opt =>
+                    opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()))
                 .ForMember(
                     dest => dest.ManagedCollections,
                     opt =>

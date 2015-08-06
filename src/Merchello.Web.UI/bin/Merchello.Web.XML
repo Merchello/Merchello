@@ -1348,6 +1348,28 @@
             The <see cref="T:System.Collections.IEnumerable"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetEntityCollections(System.Guid)">
+            <summary>
+            Gets all entity collections with the type field specified.
+            </summary>
+            <param name="entityTfKey">
+            The entity type field key.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.IEnumerable"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay)">
+            <summary>
+            The post add entity collection.
+            </summary>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.Initialize">
             <summary>
             Initializes the controller.
@@ -1637,6 +1659,11 @@
             Gets or sets the entity type field key.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.EntityTypeField">
+            <summary>
+            Gets or sets the entity type field.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.EntityType">
             <summary>
             Gets or sets the entity type.
@@ -1673,6 +1700,20 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplayExtensions.ToEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay,Merchello.Core.Models.Interfaces.IEntityCollection)">
+            <summary>
+            Maps a <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/> to an <see cref="T:Merchello.Core.Models.Interfaces.IEntityCollection"/>.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <param name="destination">
+            The destination.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.Interfaces.IEntityCollection"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay">
             <summary>
             Represents an entity collection provider.
@@ -1691,6 +1732,16 @@
         <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.Description">
             <summary>
             Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.EntityTfKey">
+            <summary>
+            Gets or sets the entity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.EntityTypeField">
+            <summary>
+            Gets or sets the entity type field.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.ManagesUniqueCollection">
@@ -2478,6 +2529,22 @@
             </param>
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.EntityTypeFieldResolver">
+            <summary>
+            The entity type field resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.EntityTypeFieldResolver.ResolveCore(Merchello.Core.Models.Interfaces.IHasEntityTypeField)">
+            <summary>
+            Resolves the type field.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver">
@@ -7329,6 +7396,166 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.DeleteCollectionAction">
+            <summary>
+            The delete collection action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.DeleteCollectionAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.DeleteCollectionAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.DeleteCollectionAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.NewCollectionAction">
+            <summary>
+            The create collection action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.NewCollectionAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.NewCollectionAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewCollectionAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.NewEntityAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.NewEntityAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewEntityAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Trees.BackOfficeTreeAttribute">
             <summary>
@@ -14453,6 +14680,11 @@
             The merchello tree controller.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._dialogsPath">
+            <summary>
+            The dialogs path.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Trees.MerchelloTreeController._textService">
             <summary>
             The text service.
@@ -14466,6 +14698,16 @@
         <member name="F:Merchello.Web.Trees.MerchelloTreeController._culture">
             <summary>
             The <see cref="T:System.Globalization.CultureInfo"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._rootTrees">
+            <summary>
+            The root trees.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._collectiontrees">
+            <summary>
+            The collection trees.
             </summary>
         </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.#ctor">

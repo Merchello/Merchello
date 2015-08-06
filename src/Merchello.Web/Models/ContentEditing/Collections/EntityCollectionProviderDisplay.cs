@@ -6,6 +6,7 @@
 
     using Merchello.Core;
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Models.TypeFields;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -29,6 +30,16 @@
         /// Gets or sets the description.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entity type field key.
+        /// </summary>
+        public Guid EntityTfKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entity type field.
+        /// </summary>
+        public TypeField EntityTypeField { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether manages unique collection.

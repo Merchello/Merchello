@@ -2,9 +2,12 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Security.Cryptography;
 
     using Merchello.Core;
+    using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.TypeFields;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -28,6 +31,11 @@
         /// Gets or sets the entity type field key.
         /// </summary>
         public Guid EntityTfKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entity type field.
+        /// </summary>
+        public TypeField EntityTypeField { get; set; }
 
         /// <summary>
         /// Gets or sets the entity type.
@@ -69,6 +77,31 @@
         public static EntityCollectionDisplay ToEntityCollectionDisplay(this IEntityCollection collection)
         {
             return AutoMapper.Mapper.Map<EntityCollectionDisplay>(collection);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="EntityCollectionDisplay"/> to an <see cref="IEntityCollection"/>.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityCollection"/>.
+        /// </returns>
+        public static IEntityCollection ToEntityCollection(
+            this EntityCollectionDisplay display,
+            IEntityCollection destination)
+        {
+            if (!Guid.Empty.Equals(display.Key)) destination.Key = display.Key;
+            destination.Name = display.Name;
+            destination.ProviderKey = display.ProviderKey;
+            destination.EntityTfKey = display.EntityTfKey;
+            destination.ParentKey = display.ParentKey.GetValueOrDefault();
+
+            return destination;
         }
     }
 }

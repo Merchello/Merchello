@@ -165,6 +165,64 @@
         }
 
         /// <summary>
+        /// The get type field.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITypeField"/>.
+        /// </returns>
+        public static ITypeField GetTypeField(this IHasEntityTypeField entity)
+        {
+            var type = EnumTypeFieldConverter.EntityType.GetTypeField(entity.EntityTfKey);
+            var typeField = EnumTypeFieldConverter.EntityType.Product;
+            switch (type)
+            {
+                case Core.EntityType.Custom:
+                    typeField =
+                        EnumTypeFieldConverter.EntityType.CustomTypeFields.FirstOrDefault(
+                            x => x.TypeKey.Equals(entity.EntityTfKey));
+                    break;
+                case Core.EntityType.Customer:
+                    typeField = EnumTypeFieldConverter.EntityType.Customer;
+                    break;
+                case Core.EntityType.Product:
+                    typeField = EnumTypeFieldConverter.EntityType.Product;
+                    break;
+                case Core.EntityType.Invoice:
+                    typeField = EnumTypeFieldConverter.EntityType.Invoice;
+                    break;
+                case Core.EntityType.EntityCollection:
+                    typeField = EnumTypeFieldConverter.EntityType.EntityCollection;
+                    break;
+                case Core.EntityType.GatewayProvider:
+                    typeField = EnumTypeFieldConverter.EntityType.GatewayProvider;
+                    break;
+                case Core.EntityType.ItemCache:
+                    typeField = EnumTypeFieldConverter.EntityType.ItemCache;
+                    break;
+                case Core.EntityType.Order:
+                    typeField = EnumTypeFieldConverter.EntityType.Order;
+                    break;
+                case Core.EntityType.Payment:
+                    typeField = EnumTypeFieldConverter.EntityType.Payment;
+                    break;
+                case Core.EntityType.Shipment:
+                    typeField = EnumTypeFieldConverter.EntityType.Shipment;
+                    break;
+                case Core.EntityType.Warehouse:
+                    typeField = EnumTypeFieldConverter.EntityType.Warehouse;
+                    break;
+                case Core.EntityType.WarehouseCatalog:
+                    typeField = EnumTypeFieldConverter.EntityType.WarehouseCatalog;
+                    break;
+            }
+
+            return typeField;
+        }
+
+        /// <summary>
         /// The child collections.
         /// </summary>
         /// <param name="collection">

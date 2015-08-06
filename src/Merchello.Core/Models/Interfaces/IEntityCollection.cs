@@ -8,19 +8,13 @@
     /// <summary>
     /// The EntityCollection interface.
     /// </summary>
-    public interface IEntityCollection : IEntity
+    public interface IEntityCollection : IHasEntityTypeField, IEntity
     {
         /// <summary>
         /// Gets or sets the parent key.
         /// </summary>
         [DataMember]
         Guid? ParentKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the entity type field key.
-        /// </summary>
-        [DataMember]
-        Guid EntityTfKey { get; set; }
 
         /// <summary>
         /// Gets the entity type.

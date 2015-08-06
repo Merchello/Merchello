@@ -377,6 +377,49 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
 
     angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);
 
+/**
+ * @ngdoc model
+ * @name EntityCollectionDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's EntityCollectionDisplay object
+ */
+var EntityCollectionDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.parentKey = '';
+    self.entityTfKey = '';
+    self.entityType = '';
+    self.entityTypeField = {};
+    self.providerKey = '';
+    self.name = '';
+    self.sortOrder = 0;
+};
+
+angular.module('merchello.models').constant('EntityCollectionDisplay', EntityCollectionDisplay);
+
+/**
+ * @ngdoc model
+ * @name EntityCollectionDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's EntityCollectionProviderDisplay object
+ */
+var EntityCollectionProviderDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.name = '';
+    self.description = '';
+    self.entityTypeField = {};
+    self.managesUniqueCollection = true;
+    self.entityType = '';
+    self.managedCollections = [];
+};
+
+
+angular.module('merchello.models').constant('EntityCollectionProviderDisplay', EntityCollectionProviderDisplay);
     /**
      * @ngdoc model
      * @name CustomerAddressDisplay
@@ -3490,6 +3533,73 @@ angular.module('merchello.models').factory('backOfficeTreeDisplayBuilder',
             }
         };
     }]);
+
+/**
+ * @ngdoc service
+ * @name entityCollectionDisplayBuilder
+ *
+ * @description
+ * A utility service that builds EntityCollectionDisplay models
+ */
+angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
+    ['genericModelBuilder', 'typeFieldDisplayBuilder', 'EntityCollectionDisplay',
+        function(genericModelBuilder, typeFieldDisplayBuilder, EntityCollectionDisplay) {
+            var Constructor = EntityCollectionDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var collections = [];
+                    if (angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var collection = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            collection.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField );
+                            collections.push(collection);
+                        }
+                    } else {
+                        collections = genericModelBuilder.transform(jsonResult, Constructor);
+                        collections.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField );
+                    }
+                    return collections;
+                }
+            };
+}]);
+
+/**
+ * @ngdoc service
+ * @name entityCollectionDisplayBuilder
+ *
+ * @description
+ * A utility service that builds EntityCollectionDisplay models
+ */
+angular.module('merchello.models').factory('entityCollectionProviderDisplayBuilder',
+    ['genericModelBuilder', 'entityCollectionDisplayBuilder',  'typeFieldDisplayBuilder', 'EntityCollectionProviderDisplay',
+        function(genericModelBuilder, entityCollectionDisplayBuilder, typeFieldDisplayBuilder, EntityCollectionProviderDisplay) {
+            var Constructor = EntityCollectionProviderDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var providers = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var provider = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            provider.managedCollections = entityCollectionDisplayBuilder.transform(jsonResult[ i ].managedCollections);
+                            provider.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[i].entityTypeField);
+                            providers.push(provider);
+                        }
+                    } else {
+                        providers = genericModelBuilder.transform(jsonResult, Constructor);
+                        providers.managedCollections = entityCollectionDisplayBuilder.transform(jsonResult.managedCollections);
+                        providers.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField);
+                    }
+                    return providers;
+                }
+            };
+        }]);
+
 
     /**
      * @ngdoc service
