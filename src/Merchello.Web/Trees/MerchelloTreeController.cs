@@ -8,6 +8,9 @@
     using Core.Configuration;
     using Core.Configuration.Outline;
 
+    using Merchello.Core.EntityCollections;
+    using Merchello.Core.EntityCollections.Providers;
+    using Merchello.Web.Models.ContentEditing.Collections;
     using Merchello.Web.Reporting;
     using Merchello.Web.Trees.Actions;
 
@@ -59,6 +62,11 @@
         private readonly string[] _collectiontrees = new[] { "products", "sales", "customers" };
 
         /// <summary>
+        /// The <see cref="EntityCollectionProviderResolver"/>.
+        /// </summary>
+        private readonly EntityCollectionProviderResolver _resolver = EntityCollectionProviderResolver.Current;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloTreeController"/> class.
         /// </summary>
         public MerchelloTreeController()
@@ -105,23 +113,32 @@
             var collection = new TreeNodeCollection();
             var backoffice = MerchelloConfiguration.Current.BackOffice;            
             var currentTree = _rootTrees.FirstOrDefault(x => x.Id == id && x.Visible);
-            var isChildCollection = id.IndexOf('-') > 0;
-            var collectionId = isChildCollection ? id.Split('-')[0] : id;
-            var collectionKey = isChildCollection ? id.Split('-')[1] : null;
+            var splitId = new SplitRoutePath(id);
 
             collection.AddRange(
                 currentTree != null
                     ? currentTree.Id == "reports" ? 
-                        GetAttributeDefinedTrees(queryStrings) :
-                        currentTree.SubTree.GetTrees().Where(x => x.Visible)
-                            .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings, currentTree))
+                        GetAttributeDefinedTrees(queryStrings) :  
+    
+                        _collectiontrees.Contains(splitId.CollectionId) ?
 
-                    : backoffice.GetTrees().Where(x => x.Visible)
+                        this.GetTreeNodesFromCollection(splitId.CollectionId, MakeCollectionRoutePathId(splitId.CollectionId, splitId.CollectionKey), queryStrings) 
+
+                            :
+                        currentTree.SubTree.GetTrees().Where(x => x.Visible)
+                            .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings, currentTree))                            
+
+                    : 
+                    _collectiontrees.Contains(splitId.CollectionId) ?
+
+                    this.GetTreeNodesFromCollection(splitId.CollectionId, MakeCollectionRoutePathId(splitId.CollectionId, splitId.CollectionKey), queryStrings, false) :
+
+                    backoffice.GetTrees().Where(x => x.Visible)
                             .Select(tree => GetTreeNodeFromConfigurationElement(tree, queryStrings)));
 
             return collection;
         }
-
+        
         /// <summary>
         /// The get menu for node.
         /// </summary>
@@ -154,19 +171,24 @@
             }
 
             //// child nodes will have an id separated with a hypen and key
-            //// e.g.  products-[GUID]
+            //// e.g.  products_[GUID]
 
-            var isChildCollection = id.IndexOf('-') > 0;
-            var collectionId = isChildCollection ? id.Split('-')[0] : id;
+            var splitId = new SplitRoutePath(id);
 
-            if (_collectiontrees.Contains(collectionId))
+
+            if (_collectiontrees.Contains(splitId.CollectionId))
             {
-                if (isChildCollection)
+                if (splitId.IsChildCollection)
                 {
                     // add the delete button
                     menu.Items.Add<DeleteCollectionAction>(
-                        _textService.Localize("actions/delete", _culture), false)
-                        .LaunchDialogView(_dialogsPath + "delete.cshtml", _textService.Localize("actions/delete", _culture));
+                        _textService.Localize("actions/delete", _culture), 
+                        false,
+                        new Dictionary<string, object>()
+                            {
+                                { "dialogData", new { entityType = splitId.CollectionId, collectionKey = splitId.CollectionKey } }
+                            })
+                        .LaunchDialogView(_dialogsPath + "delete.staticcollection.html", _textService.Localize("actions/delete", _culture));
                 }
 
                 menu.Items.Add<NewCollectionAction>(
@@ -174,13 +196,80 @@
                     false,
                     new Dictionary<string, object>()
                         {
-                            { "dialogData", new { tree = collectionId } }
+                            { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
                         }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture));                
             }
 
-            menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), _collectiontrees.Contains(collectionId));
+            menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), _collectiontrees.Contains(splitId.CollectionId));
 
             return menu;
+        }
+
+
+        /// <summary>
+        /// Constructs the route path id for collection nodes.
+        /// </summary>
+        /// <param name="collectionId">
+        /// The collection id.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string MakeCollectionRoutePathId(string collectionId, string collectionKey)
+        {
+            return collectionKey.IsNullOrWhiteSpace()
+                       ? collectionId
+                       : string.Format("{0}_{1}", collectionId, collectionKey);
+        }
+
+
+
+        /// <summary>
+        /// Gets tree nodes for collections.
+        /// </summary>
+        /// <param name="collectionId">
+        /// The collection id.
+        /// </param>
+        /// <param name="parentRouteId">
+        /// The parent route id.
+        /// </param>
+        /// <param name="queryStrings">
+        /// The query strings.
+        /// </param>
+        /// <param name="collectionRoots">
+        /// Indicates this is a collection root node
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{TreeNode}"/>.
+        /// </returns>
+        private IEnumerable<TreeNode> GetTreeNodesFromCollection(string collectionId, string parentRouteId, FormDataCollection queryStrings, bool collectionRoots = true)
+        {
+
+            var info = this.GetCollectionProviderInfo(collectionId);
+            var splitId = new SplitRoutePath(parentRouteId);
+            
+            var collections = collectionRoots
+                                  ? info.ManagedCollections.Where(x => x.ParentKey == null).OrderBy(x => x.SortOrder)
+                                  : info.ManagedCollections.Where(x => x.ParentKey == splitId.CollectionKeyAsGuid())
+                                        .OrderBy(x => x.SortOrder);
+
+
+            if (!collections.Any()) return new TreeNode[] { };
+
+            return
+                collections.Select(
+                    collection =>
+                    CreateTreeNode(
+                        MakeCollectionRoutePathId(collectionId, collection.Key.ToString()),
+                        parentRouteId,
+                        queryStrings,
+                        collection.Name,
+                        "icon-list",
+                        info.ManagedCollections.Any(x => x.ParentKey == collection.Key),
+                        string.Format("/merchello/merchello/{0}/{1}", info.ViewName, collection.Key)));
         }
 
         /// <summary>
@@ -203,6 +292,7 @@
             var hasSubs = tree.SubTree != null && tree.SubTree.GetTrees().Any();
 
             if (tree.Id == "reports" && hasSubs == false) hasSubs = ReportApiControllerResolver.Current.ResolvedTypes.Any();
+            if (_collectiontrees.Contains(tree.Id)) hasSubs = this.GetCollectionProviderInfo(tree.Id).ManagedCollections.Any();
 
             return CreateTreeNode(
                 tree.Id,
@@ -259,6 +349,106 @@
                         att.Icon,
                         false,
                         string.Format("{0}{1}", "/merchello/merchello/reports.viewreport/", att.RoutePath)));
+        }
+
+        /// <summary>
+        /// Resolves a provider and view for collection node.
+        /// </summary>
+        /// <param name="collectionId">
+        /// The collection id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CollectionProviderInfo"/>.
+        /// </returns>
+        private CollectionProviderInfo GetCollectionProviderInfo(string collectionId)
+        {
+            collectionId = collectionId.ToLowerInvariant();
+            var info = new CollectionProviderInfo();
+
+            switch (collectionId)
+            {
+                case "sales":
+                    info.ManagedCollections =
+                        _resolver.GetProviderAttribute<StaticInvoiceCollectionProvider>()
+                            .ToEntityCollectionProviderDisplay().ManagedCollections;
+                    info.ViewName = "saleslist";
+                    break;
+                case "customers":
+                    info.ManagedCollections =
+                        _resolver.GetProviderAttribute<StaticCustomerCollectionProvider>()
+                            .ToEntityCollectionProviderDisplay().ManagedCollections;
+                    info.ViewName = "customerlist";
+                    break;
+                default:
+                    info.ManagedCollections =
+                        _resolver.GetProviderAttribute<StaticProductCollectionProvider>()
+                            .ToEntityCollectionProviderDisplay().ManagedCollections;
+                    info.ViewName = "productlist";
+                    break;
+            }
+
+            return info;
+        }
+
+        /// <summary>
+        /// The split route path.
+        /// </summary>
+        private class SplitRoutePath
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SplitRoutePath"/> class.
+            /// </summary>
+            /// <param name="routePath">
+            /// The route path.
+            /// </param>
+            public SplitRoutePath(string routePath)
+            {
+                IsChildCollection = routePath.IndexOf('_') > 0;
+                CollectionId = IsChildCollection ? routePath.Split('_')[0] : routePath;
+                CollectionKey = IsChildCollection ? routePath.Split('_')[1] : string.Empty;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether is child collection.
+            /// </summary>
+            public bool IsChildCollection { get; private set; }
+            
+            /// <summary>
+            /// Gets the collection id.
+            /// </summary>
+            public string CollectionId { get; private set; }
+
+            /// <summary>
+            /// Gets the collection key.
+            /// </summary>
+            public string CollectionKey { get; private set; }
+
+            /// <summary>
+            /// The collection key as guid.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="Guid"/>.
+            /// </returns>
+            public Guid? CollectionKeyAsGuid()
+            {
+                return !CollectionKey.IsNullOrWhiteSpace() ? new Guid(CollectionKey) as Guid? : null;
+            }
+        }
+
+        /// <summary>
+        /// The collection provider info.
+        /// </summary>
+        private class CollectionProviderInfo
+        {
+            /// <summary>
+            /// Gets or sets the view name.
+            /// </summary>
+            public string ViewName { get; set; }
+
+            /// <summary>
+            /// Gets or sets the managed collections.
+            /// </summary>
+            public IEnumerable<EntityCollectionDisplay> ManagedCollections { get; set; } 
         }
     }
 }

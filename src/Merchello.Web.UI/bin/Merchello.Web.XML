@@ -1332,6 +1332,20 @@
             The umbraco context.
             </param>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetByKey(System.Guid)">
+            <summary>
+            Gets an entity collection by its key.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the collection is not found
+            </exception>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetDefaultEntityCollectionProviders">
             <summary>
             The get entity collection providers.
@@ -1368,6 +1382,17 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.DeleteEntityCollection(System.Guid)">
+            <summary>
+            The delete entity collection.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.Initialize">
@@ -14710,6 +14735,11 @@
             The collection trees.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._resolver">
+            <summary>
+            The <see cref="T:Merchello.Core.EntityCollections.EntityCollectionProviderResolver"/>.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Trees.MerchelloTreeController"/> class.
@@ -14754,6 +14784,40 @@
             The <see cref="T:Umbraco.Web.Models.Trees.MenuItemCollection"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.MakeCollectionRoutePathId(System.String,System.String)">
+            <summary>
+            Constructs the route path id for collection nodes.
+            </summary>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodesFromCollection(System.String,System.String,System.Net.Http.Formatting.FormDataCollection,System.Boolean)">
+            <summary>
+            Gets tree nodes for collections.
+            </summary>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <param name="parentRouteId">
+            The parent route id.
+            </param>
+            <param name="queryStrings">
+            The query strings.
+            </param>
+            <param name="collectionRoots">
+            Indicates this is a collection root node
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodeFromConfigurationElement(Merchello.Core.Configuration.Outline.TreeElement,System.Net.Http.Formatting.FormDataCollection,Merchello.Core.Configuration.Outline.TreeElement)">
             <summary>
             The get tree node from configuration element.
@@ -14792,6 +14856,68 @@
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetCollectionProviderInfo(System.String)">
+            <summary>
+            Resolves a provider and view for collection node.
+            </summary>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath">
+            <summary>
+            The split route path.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath"/> class.
+            </summary>
+            <param name="routePath">
+            The route path.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.CollectionKeyAsGuid">
+            <summary>
+            The collection key as guid.
+            </summary>
+            <returns>
+            The <see cref="T:System.Guid"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.IsChildCollection">
+            <summary>
+            Gets a value indicating whether is child collection.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.CollectionId">
+            <summary>
+            Gets the collection id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.CollectionKey">
+            <summary>
+            Gets the collection key.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo">
+            <summary>
+            The collection provider info.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo.ViewName">
+            <summary>
+            Gets or sets the view name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo.ManagedCollections">
+            <summary>
+            Gets or sets the managed collections.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Trees.ServerVariablesParsingEvents">
             <summary>
