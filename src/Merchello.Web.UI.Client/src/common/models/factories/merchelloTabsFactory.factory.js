@@ -11,7 +11,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
-            // creates tabs for the product editor page
+           // creates tabs for the product editor page
             function createNewProductEditorTabs() {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
@@ -20,7 +20,11 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             }
 
             // creates tabs for the product editor page
-            function createProductEditorTabs(productKey) {
+            function createProductEditorTabs(productKey, hasVariants) {
+                if (hasVariants !== undefined && hasVariants == true)
+                {
+                    return createProductEditorWithOptionsTabs(productKey);
+                }
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'Product', '#/merchello/merchello/productedit/' + productKey);
@@ -31,19 +35,21 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             function createProductEditorWithOptionsTabs(productKey) {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'Product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
                 tabs.addTab('optionslist', 'Product Options', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
             }
 
             // creates tabs for the product variant editor
-            function createProductVariantEditorTabs(productKey, productVariantKey) {
+           function createProductVariantEditorTabs(productKey, productVariantKey) {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
                 tabs.addTab('varianteditor', 'Product Variant Editor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
                 return tabs;
             }
+
 
             // creates tabs for the sales listing page
             function createSalesListTabs() {

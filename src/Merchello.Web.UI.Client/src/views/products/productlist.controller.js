@@ -209,8 +209,9 @@
             }
 
             function getEditUrl(product) {
-                return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
-                    "#/merchello/merchello/productedit/" + product.key;
+                return "#/merchello/merchello/productedit/" + product.key;
+                //return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
+                //    "#/merchello/merchello/productedit/" + product.key;
             }
 
             // Initialize the controller

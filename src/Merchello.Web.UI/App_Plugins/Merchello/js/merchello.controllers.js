@@ -5426,7 +5426,14 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                         // we use the master variant context so that we can use directives associated with variants
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
-                        $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+                        if (!$scope.product.hasVariants()) {
+                            $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+                        }
+                        else
+                        {
+                            $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
+                        }
+
                         console.info($scope.productVariant);
                     } else {
                         // this is a product variant edit
@@ -5517,11 +5524,11 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.product = productDisplayBuilder.transform(product);
                     // short pause to make sure examine index has a chance to update
                     $timeout(function() {
-                        if ($scope.product.hasVariants()) {
-                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
-                        } else {
+                       // if ($scope.product.hasVariants()) {
+                       //     $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        //} else {
                             $location.url("/merchello/merchello/productedit/" + $scope.product.key, true);
-                        }
+                        //}
                     }, 400);
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -5973,8 +5980,9 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             }
 
             function getEditUrl(product) {
-                return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
-                    "#/merchello/merchello/productedit/" + product.key;
+                return "#/merchello/merchello/productedit/" + product.key;
+                //return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
+                //    "#/merchello/merchello/productedit/" + product.key;
             }
 
             // Initialize the controller
