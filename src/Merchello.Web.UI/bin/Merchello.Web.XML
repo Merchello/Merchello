@@ -7477,6 +7477,61 @@
             Gets the icon.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Trees.Actions.NewOfferSettingsAction">
+            <summary>
+            The create collection action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.NewOfferSettingsAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.NewOfferSettingsAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewOfferSettingsAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Trees.Actions.NewCollectionAction">
             <summary>
             The create collection action.

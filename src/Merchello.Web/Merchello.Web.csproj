@@ -346,6 +346,7 @@
     <Compile Include="Search\ICachedQueryProvider.cs" />
     <Compile Include="Search\QueryResultFactory.cs" />
     <Compile Include="Trees\Actions\DeleteCollectionAction.cs" />
+    <Compile Include="Trees\Actions\NewOfferSettingsAction.cs" />
     <Compile Include="Trees\Actions\NewCollectionAction.cs" />
     <Compile Include="Trees\Actions\NewEntityAction.cs" />
     <Compile Include="Trees\BackOfficeTreeAttribute.cs" />

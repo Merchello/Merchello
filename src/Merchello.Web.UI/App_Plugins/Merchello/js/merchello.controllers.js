@@ -319,6 +319,48 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferRewardC
 
 /**
  * @ngdoc controller
+ * @name Merchello.Marketing.Dialogs.OfferProviderSelectionController
+ * @function
+ *
+ * @description
+ * The controller to handle offer provider selection
+ */
+angular.module('merchello').controller('Merchello.Marketing.Dialogs.NewOfferProviderSelectionController',
+    ['$scope', '$location', 'navigationService', 'marketingResource', 'offerProviderDisplayBuilder',
+    function($scope, $location, navigationService, marketingResource, offerProviderDisplayBuilder) {
+        
+        $scope.loaded = false;
+        $scope.offerProviders = [];
+
+        // exposed methods
+        $scope.setSelection = setSelection;
+
+        function init() {
+            loadOfferProviders();
+        }
+
+        function loadOfferProviders() {
+            var providersPromise = marketingResource.getOfferProviders();
+            providersPromise.then(function(providers) {
+                $scope.offerProviders = offerProviderDisplayBuilder.transform(providers);
+                $scope.loaded = true;
+            }, function(reason) {
+                notificationsService.error("Offer providers load failed", reason.message);
+            });
+        }
+
+        function setSelection(selectedProvider) {
+            navigationService.hideNavigation();
+            var view = selectedProvider.backOfficeTree.routePath.replace('{0}', 'create');
+            $location.url(view, true);
+        }
+
+        // initialize the controller
+        init();
+}]);
+
+/**
+ * @ngdoc controller
  * @name Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController
  * @function
  *
@@ -1256,7 +1298,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         $scope.numberOfPages = numberOfPages;
         $scope.changePage = changePage;
         $scope.getFilteredOffers = getFilteredOffers;
-        $scope.providerSelectDialogOpen = providerSelectDialogOpen;
         $scope.getOfferType = getOfferType;
         $scope.resetFilters = resetFilters;
         $scope.getOfferReward = getOfferReward;
@@ -1432,41 +1473,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
             loadOffers();
         }
 
-        //--------------------------------------------------------------------------------------
-        // Dialogs
-        //--------------------------------------------------------------------------------------
-        /**
-         * @ngdoc method
-         * @name providerSelectDialogOpen
-         * @function
-         *
-         * @description
-         * Opens the dialog to allow user to select an offer provider to use to create an offer
-         */
-        function providerSelectDialogOpen() {
-            var dialogData = dialogDataFactory.createSelectOfferProviderDialogData();
-            dialogData.offerProviders = $scope.offerProviders;
-            dialogService.open({
-                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerproviderselection.html',
-                show: true,
-                callback: providerSelectDialogConfirm,
-                dialogData: dialogData
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @name providerSelectDialogConfirm
-         * @param {dialogData} model returned from the dialog view
-         * @function
-         *
-         * @description
-         * Handles the data passed back from the provider editor dialog and redirects to the appropriate editor
-         */
-        function providerSelectDialogConfirm(dialogData) {
-            var view = dialogData.selectedProvider.backOfficeTree.routePath.replace('{0}', 'create');
-            $location.url(view, true);
-        }
 
         //--------------------------------------------------------------------------------------
         // Calculations

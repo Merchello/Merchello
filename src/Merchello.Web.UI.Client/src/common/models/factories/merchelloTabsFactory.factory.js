@@ -45,8 +45,10 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
            function createProductVariantEditorTabs(productKey, productVariantKey) {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'Product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
                 tabs.addTab('varianteditor', 'Product Variant Editor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
+                tabs.addTab('optionslist', 'Product Options', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
             }
 

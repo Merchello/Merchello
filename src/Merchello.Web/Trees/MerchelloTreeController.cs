@@ -170,11 +170,19 @@
                     .LaunchDialogView(_dialogsPath + "customer.newcustomer.html", _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture));
             }
 
+            if (id == "marketing")
+            {
+                menu.Items.Add<NewOfferSettingsAction>(
+                    _textService.Localize(string.Format("merchelloMarketing/newOffer"), _culture),
+                    false)
+                    .LaunchDialogView(
+                        _dialogsPath + "marketing.newofferproviderselection.html",
+                        _textService.Localize(string.Format("merchelloMarketing/newOffer"), _culture));
+            }
+
             //// child nodes will have an id separated with a hypen and key
             //// e.g.  products_[GUID]
-
             var splitId = new SplitRoutePath(id);
-
 
             if (_collectiontrees.Contains(splitId.CollectionId))
             {
@@ -200,8 +208,8 @@
                         }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture));                
             }
 
-            menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), _collectiontrees.Contains(splitId.CollectionId));
-
+            menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), id != "gateways");
+            // _collectiontrees.Contains(splitId.CollectionId) || id == "marketing"
             return menu;
         }
 

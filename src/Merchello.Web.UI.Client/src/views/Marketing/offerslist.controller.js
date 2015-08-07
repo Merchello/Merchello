@@ -35,7 +35,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         $scope.numberOfPages = numberOfPages;
         $scope.changePage = changePage;
         $scope.getFilteredOffers = getFilteredOffers;
-        $scope.providerSelectDialogOpen = providerSelectDialogOpen;
         $scope.getOfferType = getOfferType;
         $scope.resetFilters = resetFilters;
         $scope.getOfferReward = getOfferReward;
@@ -211,41 +210,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
             loadOffers();
         }
 
-        //--------------------------------------------------------------------------------------
-        // Dialogs
-        //--------------------------------------------------------------------------------------
-        /**
-         * @ngdoc method
-         * @name providerSelectDialogOpen
-         * @function
-         *
-         * @description
-         * Opens the dialog to allow user to select an offer provider to use to create an offer
-         */
-        function providerSelectDialogOpen() {
-            var dialogData = dialogDataFactory.createSelectOfferProviderDialogData();
-            dialogData.offerProviders = $scope.offerProviders;
-            dialogService.open({
-                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/marketing.offerproviderselection.html',
-                show: true,
-                callback: providerSelectDialogConfirm,
-                dialogData: dialogData
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @name providerSelectDialogConfirm
-         * @param {dialogData} model returned from the dialog view
-         * @function
-         *
-         * @description
-         * Handles the data passed back from the provider editor dialog and redirects to the appropriate editor
-         */
-        function providerSelectDialogConfirm(dialogData) {
-            var view = dialogData.selectedProvider.backOfficeTree.routePath.replace('{0}', 'create');
-            $location.url(view, true);
-        }
 
         //--------------------------------------------------------------------------------------
         // Calculations
