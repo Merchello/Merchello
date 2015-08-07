@@ -11,7 +11,7 @@
     /// The static entity collection collection provider.
     /// </summary>
     [EntityCollectionProvider("A8120A01-E9BF-4204-ADDD-D9553F6F24FE", "1607D643-E5E8-4A93-9393-651F83B5F1A9", "Static Customer Collection", "A static customer collection that could be used for categorizing or grouping sales", false)]
-    internal class StaticEntityCollectionCollectionProvider : EntityCollectionProviderBase<IEntityCollection>
+    internal sealed class StaticEntityCollectionCollectionProvider : EntityCollectionProviderBase<IEntityCollection>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StaticEntityCollectionCollectionProvider"/> class.
