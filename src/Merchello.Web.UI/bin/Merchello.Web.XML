@@ -1362,6 +1362,28 @@
             The <see cref="T:System.Collections.IEnumerable"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetRootEntityCollections(Merchello.Core.EntityType)">
+            <summary>
+            Gets the root level entity collections with the type field specified.
+            </summary>
+            <param name="entityType">
+            The entity Type.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetChildEntityCollections(System.Guid)">
+            <summary>
+            The get child entity collections.
+            </summary>
+            <param name="parentKey">
+            The parent key.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetEntityCollections(System.Guid)">
             <summary>
             Gets all entity collections with the type field specified.
@@ -1382,6 +1404,17 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PutUpdateSortOrders(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay})">
+            <summary>
+            Updates sort orders.
+            </summary>
+            <param name="collections">
+            The collections.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.IEnumerable"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.DeleteEntityCollection(System.Guid)">
@@ -7635,6 +7668,61 @@
         <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsSource">
             <summary>
             Gets the JS source.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.SortCollectionAction">
+            <summary>
+            The sort collection action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.SortCollectionAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.SortCollectionAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.SortCollectionAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.Icon">
+            <summary>
+            Gets the icon.
             </summary>
         </member>
         <member name="T:Merchello.Web.Trees.BackOfficeTreeAttribute">
@@ -14841,12 +14929,12 @@
         </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.MakeCollectionRoutePathId(System.String,System.String)">
             <summary>
-            Constructs the route path id for collection nodes.
             </summary>
             <param name="collectionId">
             The collection id.
             </param>
             <param name="collectionKey">
+            Constructs the route path id for collection nodes.
             The collection key.
             </param>
             <returns>

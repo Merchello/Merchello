@@ -41,7 +41,6 @@
 
             productDisplay.ProductVariants = getProductVariants(productDisplay.Key);
             productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "productOptions");
-
             return productDisplay;
         }
 

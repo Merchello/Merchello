@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -12,8 +11,6 @@
     using Merchello.Core;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.EntityCollections.Providers;
-    using Merchello.Core.Models;
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing.Collections;
     using Merchello.Web.WebApi;
@@ -128,6 +125,38 @@
         }
 
         /// <summary>
+        /// Gets the root level entity collections with the type field specified.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity Type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionDisplay}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<EntityCollectionDisplay> GetRootEntityCollections(EntityType entityType)
+        {
+            var collections = _entityCollectionService.GetRootLevelEntityCollections(entityType);
+            return collections.Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.SortOrder);
+        }
+
+        /// <summary>
+        /// The get child entity collections.
+        /// </summary>
+        /// <param name="parentKey">
+        /// The parent key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionDisplay}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<EntityCollectionDisplay> GetChildEntityCollections(Guid parentKey)
+        {
+            var collections = _entityCollectionService.GetChildren(parentKey);
+            return collections.Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.SortOrder);
+        }
+
+            /// <summary>
         /// Gets all entity collections with the type field specified.
         /// </summary>
         /// <param name="entityTfKey">
@@ -140,7 +169,7 @@
         public IEnumerable<EntityCollectionDisplay> GetEntityCollections(Guid entityTfKey)
         {
             var collections = _entityCollectionService.GetByEntityTfKey(entityTfKey);
-            throw new NotImplementedException();
+            return collections.Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
 
         /// <summary>
@@ -155,7 +184,7 @@
         [HttpPost]
         public EntityCollectionDisplay PostAddEntityCollection(EntityCollectionDisplay collection)
         {
-            var ec = _entityCollectionService.CreateEntityCollectionWithKey(
+            var ec = _entityCollectionService.CreateEntityCollection(
                 collection.EntityType,
                 collection.ProviderKey,
                 collection.Name);
@@ -167,6 +196,40 @@
             _entityCollectionService.Save(ec);
 
             return ec.ToEntityCollectionDisplay();
+        }
+
+        /// <summary>
+        /// Updates sort orders.
+        /// </summary>
+        /// <param name="collections">
+        /// The collections.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        [HttpPut, HttpPost]
+        public IEnumerable<EntityCollectionDisplay> PutUpdateSortOrders(IEnumerable<EntityCollectionDisplay> collections)
+        {
+            var collectionsArray = collections.ToArray();
+            if (!collectionsArray.Any()) return Enumerable.Empty<EntityCollectionDisplay>();
+
+            var first = collectionsArray.FirstOrDefault();
+            if (first != null)
+            {
+                var parentKey = first.ParentKey;
+                var existing = parentKey == null
+                                   ? _entityCollectionService.GetRootLevelEntityCollections(first.EntityType)
+                                   : _entityCollectionService.GetChildren(parentKey.Value);
+
+                var updates =
+                    collectionsArray.Where(x => existing.Any(y => y.SortOrder != x.SortOrder && y.Key == x.Key));
+                    
+
+                _entityCollectionService.Save(updates.Select(x => x.ToEntityCollection(existing.FirstOrDefault(y => y.Key == x.Key))));
+            }
+         
+
+            return collectionsArray;
         }
 
         /// <summary>

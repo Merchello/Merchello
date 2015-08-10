@@ -70,7 +70,8 @@
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public abstract IEnumerable<object> GetEntities();        
+        public abstract IEnumerable<object> GetEntities();
+        
 
         /// <summary>
         /// The get entities.
@@ -201,7 +202,7 @@
         /// <exception cref="InvalidCastException">
         /// Throws an exception if the type does not match the collection
         /// </exception>
-        private void ValidateType(Type type)
+        protected void ValidateType(Type type)
         {
             if (this.EnsureType(type)) return;
 

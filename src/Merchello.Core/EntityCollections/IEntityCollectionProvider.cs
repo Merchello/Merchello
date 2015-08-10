@@ -18,8 +18,8 @@
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         IEnumerable<object> GetEntities();
-
-        /// <summary>
+            
+            /// <summary>
         /// The get entities.
         /// </summary>
         /// <typeparam name="T">
