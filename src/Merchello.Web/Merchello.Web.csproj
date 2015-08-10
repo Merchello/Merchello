@@ -349,6 +349,7 @@
     <Compile Include="Trees\Actions\NewOfferSettingsAction.cs" />
     <Compile Include="Trees\Actions\NewCollectionAction.cs" />
     <Compile Include="Trees\Actions\NewEntityAction.cs" />
+    <Compile Include="Trees\Actions\SortCollectionAction.cs" />
     <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
     <Compile Include="Search\CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />

@@ -24,6 +24,24 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         }),
                         'Failed to get entity collection by key');
                 },
+                getRootCollectionsByEntityType : function(entityType) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetRootEntityCollections',
+                            method: "GET",
+                            params: { entityType: entityType }
+                        }),
+                        'Failed to get entity collection by the entity type');
+                },
+                getChildEntityCollections : function(parentKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetChildEntityCollections',
+                            method: "GET",
+                            params: { parentKey: parentKey }
+                        }),
+                        'Failed to get entity collection by the parentKey');
+                },
                 getDefaultEntityCollectionProviders : function() {
                     return umbRequestHelper.resourcePromise(
                         $http({
@@ -39,6 +57,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                             entityCollection
                         ),
                         'Failed to add an entity collection');
+                },
+                updateSortOrders : function(entityCollections) {
+                    var url = baseUrl + 'PutUpdateSortOrders';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            entityCollections
+                        ),
+                        'Failed to update sort orders');
                 },
                 deleteEntityCollection: function(key) {
                     var url = baseUrl + 'DeleteEntityCollection';

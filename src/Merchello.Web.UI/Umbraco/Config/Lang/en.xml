@@ -1056,10 +1056,12 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="startDate">Start Date</key>
     <key alias="endDate">End Date</key>
     <key alias="active">Active</key>
+    <key alias="sortOrder">Sort Order</key>
   </area>
   <area alias="merchelloCollections">
     <key alias="providers">Collection Providers</key>
     <key alias="newCollection">New Collection</key>
+    <key alias="sortCollections">Sort Collections</key>
     <key alias="staticProviders">Static Collections</key>
     <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>
     <key alias="product">Product Collections</key>

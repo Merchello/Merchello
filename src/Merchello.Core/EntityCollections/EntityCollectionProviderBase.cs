@@ -71,17 +71,6 @@
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public abstract IEnumerable<object> GetEntities();
-
-        /// <summary>
-        /// The get entities.
-        /// </summary>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        public abstract IEnumerable<object> GetEntities(Dictionary<string, object> args);
         
 
         /// <summary>
@@ -98,25 +87,6 @@
             this.ValidateType(typeof(T)); 
             
             return this.GetEntities().Select(x => x as T);
-        }
-
-        /// <summary>
-        /// The get entities.
-        /// </summary>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <typeparam name="T">
-        /// The type of entity
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="IEnumerable{T}"/>.
-        /// </returns>
-        public IEnumerable<T> GetEntities<T>(Dictionary<string, object> args) where T : class, IEntity
-        {
-            this.ValidateType(typeof(T));
-
-            return this.GetEntities(args).Select(x => x as T);
         }
 
         /// <summary>
@@ -232,7 +202,7 @@
         /// <exception cref="InvalidCastException">
         /// Throws an exception if the type does not match the collection
         /// </exception>
-        private void ValidateType(Type type)
+        protected void ValidateType(Type type)
         {
             if (this.EnsureType(type)) return;
 

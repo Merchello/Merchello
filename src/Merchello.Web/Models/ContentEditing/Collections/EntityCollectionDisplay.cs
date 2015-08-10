@@ -5,6 +5,7 @@
     using System.Security.Cryptography;
 
     using Merchello.Core;
+    using Merchello.Core.Models;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
@@ -100,6 +101,7 @@
             destination.ProviderKey = display.ProviderKey;
             destination.EntityTfKey = display.EntityTfKey;
             destination.ParentKey = display.ParentKey.GetValueOrDefault();
+            ((EntityCollection)destination).SortOrder = display.SortOrder;
 
             return destination;
         }

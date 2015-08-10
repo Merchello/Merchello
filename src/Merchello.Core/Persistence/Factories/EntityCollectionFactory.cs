@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System;
+
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
@@ -49,7 +51,7 @@
             var dto = new EntityCollectionDto()
                 {
                     Key = entity.Key,
-                    ParentKey = entity.ParentKey,
+                    ParentKey = entity.ParentKey == Guid.Empty ? null : entity.ParentKey,
                     EntityTfKey = entity.EntityTfKey,
                     Name = entity.Name,
                     SortOrder = entity.SortOrder,

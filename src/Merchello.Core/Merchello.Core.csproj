@@ -263,6 +263,7 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="EntityCollections\CachedEntityCollectionProviderBase{T}.cs" />
+    <Compile Include="EntityCollections\CachedQueryableEntityCollectionProviderBase{T}.cs" />
     <Compile Include="EntityCollections\EntityCollectionBaseExtensions.cs" />
     <Compile Include="EntityCollections\EntityCollectionEvents.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderAttribute.cs" />
@@ -273,10 +274,13 @@
     <Compile Include="EntityCollections\IEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider{T}.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
+    <Compile Include="EntityCollections\ICachedQueryableEntityCollectionProvider.cs" />
+    <Compile Include="EntityCollections\IQueryableEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticCustomerCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticEntityCollectionCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticInvoiceCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
+    <Compile Include="EntityCollections\QueryableEntityCollectionProviderBase.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="Gateways\Taxation\IProductTaxCalculationResult.cs" />

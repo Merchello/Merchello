@@ -395,7 +395,7 @@ namespace Merchello.Core
             var doc = XDocument.Parse(xml);
             if (doc.Root == null) return XDocument.Parse("<product />");
                 
-            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions).Root);
+            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions, product.GetCollectionsContaining().Select(x => x.Key)).Root);
 
             // Need to filter out the Master variant so that it does not get overwritten in the cases where
             // a product defines options.
@@ -407,8 +407,22 @@ namespace Merchello.Core
             return doc;
         }
 
-
-        internal static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null)
+        /// <summary>
+        /// Serializes a product variant for Examine indexing.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <param name="productOptionCollection">
+        /// The product option collection.
+        /// </param>
+        /// <param name="collections">
+        /// Static collections keys product belongs 
+        /// </param>
+        /// <returns>
+        /// The <see cref="XDocument"/>.
+        /// </returns>
+        internal static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null, IEnumerable<Guid> collections = null)
         {
             string xml;
             using (var sw = new StringWriter())
@@ -417,7 +431,6 @@ namespace Merchello.Core
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("productVariant");
-                   // TODO construct the id
                     writer.WriteAttributeString("id", ((ProductVariant)productVariant).ExamineId.ToString(CultureInfo.InvariantCulture));
                     writer.WriteAttributeString("productKey", productVariant.ProductKey.ToString());
                     writer.WriteAttributeString("productVariantKey", productVariant.Key.ToString());
@@ -447,6 +460,17 @@ namespace Merchello.Core
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
                     writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
                     writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
+
+                    // 1.11.0 - static collections
+                    if (collections != null)
+                    {
+                        var collectionKeys = collections as Guid[] ?? collections.ToArray();
+                        if (collectionKeys.Any())
+                        {
+                            writer.WriteAttributeString("staticCollectionKeys", string.Join(",", collectionKeys));
+                        }
+                    }
+
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
                     writer.WriteAttributeString("allDocs", "1");

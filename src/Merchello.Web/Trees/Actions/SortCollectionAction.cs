@@ -3,26 +3,26 @@
     using umbraco.interfaces;
 
     /// <summary>
-    /// The create collection action.
+    /// The sort collection action.
     /// </summary>
-    public class NewCollectionAction : IAction
+    public class SortCollectionAction : IAction
     {
-        /// <summary>
+         /// <summary>
         /// The local singleton instance.
         /// </summary>
-        private static readonly NewCollectionAction LocalInstance = new NewCollectionAction();
+        private static readonly SortCollectionAction LocalInstance = new SortCollectionAction();
 
         /// <summary>
-        /// Prevents a default instance of the <see cref="NewCollectionAction"/> class from being created.
+        /// Prevents a default instance of the <see cref="SortCollectionAction"/> class from being created.
         /// </summary>
-        private NewCollectionAction()
+        private SortCollectionAction()
         {            
         }
 
         /// <summary>
         /// Gets the singleton instance.
         /// </summary>
-        public static NewCollectionAction Instance
+        public static SortCollectionAction Instance
         {
             get { return LocalInstance; }
         }
@@ -67,7 +67,7 @@
         {
             get
             {
-                return "newMerchCollection";
+                return "sortMerchCollection";
             }
         }
 
@@ -100,8 +100,8 @@
         {
             get
             {
-                return "add";
+                return "navigation-vertical";
             }
-        }
+        } 
     }
 }

@@ -186,6 +186,15 @@
 
             if (_collectiontrees.Contains(splitId.CollectionId))
             {
+
+                menu.Items.Add<NewCollectionAction>(
+                    _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture),
+                    false,
+                    new Dictionary<string, object>()
+                        {
+                            { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
+                        }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture));                
+
                 if (splitId.IsChildCollection)
                 {
                     // add the delete button
@@ -199,28 +208,28 @@
                         .LaunchDialogView(_dialogsPath + "delete.staticcollection.html", _textService.Localize("actions/delete", _culture));
                 }
 
-                menu.Items.Add<NewCollectionAction>(
-                    _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture),
-                    false,
+                menu.Items.Add<SortCollectionAction>(
+                    _textService.Localize("actions/sort", _culture),
+                    true,
                     new Dictionary<string, object>()
                         {
-                            { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
-                        }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture));                
+                             { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
+                        }).LaunchDialogView(_dialogsPath + "sort.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/sortCollections"), _culture));                
             }
 
             menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), id != "gateways");
-            // _collectiontrees.Contains(splitId.CollectionId) || id == "marketing"
+            
             return menu;
         }
 
 
         /// <summary>
-        /// Constructs the route path id for collection nodes.
         /// </summary>
         /// <param name="collectionId">
         /// The collection id.
         /// </param>
         /// <param name="collectionKey">
+        /// Constructs the route path id for collection nodes.
         /// The collection key.
         /// </param>
         /// <returns>
